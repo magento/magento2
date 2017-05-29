@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
 
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
-/**
- * Class BlockWrapper
- */
-class HtmlContent extends AbstractComponent
+class HtmlContent extends AbstractComponent implements BlockWrapperInterface
 {
     const NAME = 'html_content';
 
@@ -21,8 +19,6 @@ class HtmlContent extends AbstractComponent
     protected $block;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param BlockInterface $block
      * @param array $components
@@ -36,20 +32,16 @@ class HtmlContent extends AbstractComponent
     ) {
         parent::__construct($context, $components, $data);
         $this->block = $block;
-        $this->block->setLayout($context->getPageLayout());
     }
 
     /**
-     * Prepare component configuration
+     * Get wrapped block
      *
-     * @return void
+     * @return BlockInterface
      */
-    public function prepare()
+    public function getBlock()
     {
-        $config = (array)$this->getData('config');
-        $config['content'] = $this->block->toHtml();
-        $this->setData('config', $config);
-        parent::prepare();
+        return $this->block;
     }
 
     /**
@@ -63,10 +55,34 @@ class HtmlContent extends AbstractComponent
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function render()
     {
-        return $this->block->toHtml();
+        return $this->getData('config/content') ?: $this->block->toHtml();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConfiguration()
+    {
+        $configuration = parent::getConfiguration();
+        if ($this->getData('wrapper/canShow') !== false) {
+            if ($this->getData('isAjaxLoaded')) {
+                $configuration['url'] = $this->getData('url');
+            } else {
+                if (!$this->getData('config/content')) { //add html block cony into cache
+                    $content = $this->block->toHtml();
+                    $this->addData(['config' => ['content' => $content]]);
+                }
+
+                $configuration['content'] = $this->getData('config/content');
+            }
+            if ($this->getData('wrapper')) {
+                $configuration = array_merge($this->getData(), $this->getData('wrapper'));
+            }
+        }
+        return $configuration;
     }
 }

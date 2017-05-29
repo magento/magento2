@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -63,7 +63,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria = $searchCriteriaBuilder->create();
 
-        $searchResult = $this->repository->getList('order', $searchCriteria);
+        $searchResult = $this->repository->getList('test', $searchCriteria);
 
         $this->assertEquals(3, $searchResult->getTotalCount());
 

@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,11 +11,11 @@
             <div class="checkout-agreement required">
                 <input type="checkbox" class="required-entry"
                        data-bind="attr: {
-                                    'id': 'agreement_' + agreementId,
+                                    'id': $parent.getCheckboxId($parentContext, agreementId),
                                     'name': 'agreement[' + agreementId + ']',
                                     'value': agreementId
                                     }"/>
-                <label data-bind="attr: {'for': 'agreement_' + agreementId}">
+                <label data-bind="attr: {'for': $parent.getCheckboxId($parentContext, agreementId)}">
                     <button type="button"
                             class="action action-show"
                             data-bind="click: function(data, event) { return $parent.showContent(data, event) }"

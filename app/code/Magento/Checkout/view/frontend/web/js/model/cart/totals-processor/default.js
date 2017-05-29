@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,9 +45,14 @@ define([
                 totals: result,
                 address: address,
                 cartVersion: customerData.get('cart')()['data_id'],
-                shippingMethodCode: quote.shippingMethod()['method_code'],
-                shippingCarrierCode: quote.shippingMethod()['carrier_code']
+                shippingMethodCode: null,
+                shippingCarrierCode: null
             };
+
+            if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
+                data.shippingMethodCode = quote.shippingMethod()['method_code'];
+                data.shippingCarrierCode = quote.shippingMethod()['carrier_code'];
+            }
 
             quote.setTotals(result);
             cartCache.set('cart-data', data);
@@ -72,9 +77,19 @@ define([
          * @param {Object} address
          */
         estimateTotals: function (address) {
+            var data = {
+                shippingMethodCode: null,
+                shippingCarrierCode: null
+            };
+
+            if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
+                data.shippingMethodCode = quote.shippingMethod()['method_code'];
+                data.shippingCarrierCode = quote.shippingMethod()['carrier_code'];
+            }
+
             if (!cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
-                !cartCache.isChanged('shippingMethodCode', quote.shippingMethod()['method_code']) &&
-                !cartCache.isChanged('shippingCarrierCode', quote.shippingMethod()['carrier_code']) &&
+                !cartCache.isChanged('shippingMethodCode', data.shippingMethodCode) &&
+                !cartCache.isChanged('shippingCarrierCode', data.shippingCarrierCode) &&
                 !cartCache.isChanged('address', address) &&
                 cartCache.get('totals')
             ) {

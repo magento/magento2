@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,6 +38,11 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
         $this->assertEquals(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
@@ -49,6 +54,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+
+        $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+
+        $this->assertEquals($expectedResults['indexerMaximumPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**
@@ -68,7 +77,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 10
                     'minimalPrice' => 5,
                     // 0.5 * 10
-                    'maximalPrice' => 5
+                    'maximalPrice' => 5,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 10
                 ]
             ],
 
@@ -81,7 +92,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
                     // 0.5 * 2 * 10
-                    'maximalPrice' => 10
+                    'maximalPrice' => 10,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 20
                 ]
             ],
 
@@ -94,7 +107,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
                     // 0.5 * (1 * 10 + 3 * 20)
-                    'maximalPrice' => 35
+                    'maximalPrice' => 35,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 70
                 ]
             ],
 
@@ -107,7 +122,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
                     // 0.5 * (1 * 10 + 3 * 20)
-                    'maximalPrice' => 35
+                    'maximalPrice' => 35,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 70
                 ]
             ],
 
@@ -120,7 +137,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
                     // 0.5 * 3 * 20
-                    'maximalPrice' => 30
+                    'maximalPrice' => 30,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 60
+
                 ]
             ],
 
@@ -133,7 +153,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (1 * 10 + 1 * 10)
                     'minimalPrice' => 10,
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
+                    'maximalPrice' => 65,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 130
                 ]
             ],
 
@@ -146,7 +168,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
+                    'maximalPrice' => 65,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 130
                 ]
             ],
 
@@ -159,7 +183,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
                     // 0.5 * (3 * 20 + 1 * 10 + 3 * 20)
-                    'maximalPrice' => 65
+                    'maximalPrice' => 65,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 130
                 ]
             ],
 
@@ -172,7 +198,9 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * 1 * 2.5
                     'minimalPrice' => 1.25,
                     // 0.5 * 3 * 20
-                    'maximalPrice' => 30
+                    'maximalPrice' => 30,
+                    'indexerMinimalPrice' => 0,
+                    'indexerMaximumPrice' => 60
                 ]
             ],
         ];

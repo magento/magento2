@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -344,7 +345,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
 
-            return $virtualCount == count($selections);
+            return $virtualCount === count($selections);
         }
 
         return false;
@@ -544,7 +545,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         $isSalable = false;
-        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
+        foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
 
             $selectionsCollection = $this->_bundleCollection->create();
@@ -972,7 +973,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             ->getAllIds();
         $collection = $this->getSelectionsCollection($optionIds, $product);
 
-        if (count($collection) > 0 || $product->getOptions()) {
+        if ($collection->getSize() > 0 || $product->getOptions()) {
             return true;
         }
 
@@ -1030,8 +1031,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $selectionIds = $product->getCustomOption('bundle_selection_ids');
         $selectionIds = $this->serializer->unserialize($selectionIds->getValue());
         $buyRequest = $product->getCustomOption('info_buyRequest');
- 	 	$buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
- 	 	$bundleOption = $buyRequest->getBundleOption();
+        $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
+        $bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());

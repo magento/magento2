@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
 use Magento\Framework\App\ObjectManager;
 
@@ -101,6 +102,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param array $data
      * @param HostChecker|null $hostChecker
+     * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +125,8 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Data\Form\FormKey $formKey,
         array $data = [],
-        HostChecker $hostChecker = null
+        HostChecker $hostChecker = null,
+        Json $serializer = null
     ) {
         $this->_encryptor = $encryptor;
         $hostChecker = $hostChecker ?: ObjectManager::getInstance()->get(HostChecker::class);
@@ -140,7 +143,8 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             $routeParamsPreprocessor,
             $scopeType,
             $data,
-            $hostChecker
+            $hostChecker,
+            $serializer
         );
         $this->_backendHelper = $backendHelper;
         $this->_menuConfig = $menuConfig;

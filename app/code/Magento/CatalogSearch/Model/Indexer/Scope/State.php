@@ -1,17 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer\Scope;
-
-
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\Framework\Search\Request\Dimension;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
 /**
  * This class represents state that defines which table should be used during indexation process

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
         $url = false;
         if ($this->getValue()) {
             $url = $this->_urlBuilder->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]
             ) . 'catalog/product/' . $this->getValue();
         }
         return $url;

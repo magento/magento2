@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ConfigurableProduct\Test\TestCase\CreateConfigurableProductEntityTest" summary="Create Configurable Product" ticketId="MAGETWO-26041">
         <variation name="CreateConfigurableProductEntityTestVariation1" summary="Create product with category and two new options">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_new_options</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_options</data>
@@ -33,7 +32,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation2" summary="Create product with two options">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_options</data>
@@ -99,7 +97,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation5" summary="Create Configurable Product and Assign it to Category" ticketId="MAGETWO-12620">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options_with_fixed_price</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
@@ -148,7 +145,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAutoincrementedSkuNoticeMessage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation9" summary="Create configurable product and assign it to custom website">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">two_options_with_assigned_product_special_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">configurable_two_new_options_with_special_price</data>
@@ -172,6 +168,73 @@
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductTierPriceOnProductPage" />
+        </variation>
+        <variation name="CreateConfigurableProductEntityTestVariation11" summary="Create Configurable Product with out of stock child" ticketId="MAGETWO-65660">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">with_out_of_stock_item</data>
+            <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/price/dataset" xsi:type="string">default</data>
+            <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+            <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
+            <data name="configData">display_out_of_stock_products</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+        </variation>
+        <variation name="CreateConfigurableProductEntityTestVariation12" summary="Create Configurable Product with disabled child" ticketId="MAGETWO-65661">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">with_disabled_item</data>
+            <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/price/dataset" xsi:type="string">default</data>
+            <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+            <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
+            <data name="configData">display_out_of_stock_products</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
+        </variation>
+        <variation name="CreateConfigurableProductEntityTestVariation13" summary="Create Configurable Product with one disabled child and with one out of stock child" ticketId="MAGETWO-65662">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">with_one_disabled_item_and_one_out_of_stock_item</data>
+            <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/price/dataset" xsi:type="string">default</data>
+            <data name="product/data/category_ids/new_category" xsi:type="string">no</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+            <data name="product/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
+            <data name="configData">display_out_of_stock_products</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+        </variation>
+        <variation name="CreateConfigurableProductEntityTestVariation14" summary="Create configurable product with images" ticketId="MAGETWO-41354">
+            <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">color_and_size_with_images</data>
+            <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">6</data>
+            <data name="product/data/weight" xsi:type="string">2</data>
+            <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+            <data name="product/data/image/0/file" xsi:type="string">Magento/Catalog/Test/_files/test1.png</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductImages" />
         </variation>
     </testCase>
 </config>

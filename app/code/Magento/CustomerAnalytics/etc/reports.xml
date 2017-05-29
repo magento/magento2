@@ -1,37 +1,17 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
     <report name="customers" connection="default">
-        <source name="customer_entity" alias="customer">
+        <source name="customer_entity">
             <attribute name="entity_id"/>
-            <attribute name="email"/>
-            <attribute name="prefix"/>
-            <attribute name="firstname"/>
-            <attribute name="lastname"/>
-            <attribute name="suffix"/>
-            <attribute name="dob"/>
-            <link-source name="customer_address_entity" alias="address" link-type="left">
-                <attribute name="city" alias="address_city"/>
-                <attribute name="company" alias="address_company"/>
-                <attribute name="country_id" alias="address_country_id"/>
-                <attribute name="firstname" alias="address_firstname"/>
-                <attribute name="lastname" alias="address_lastname"/>
-                <attribute name="middlename" alias="address_middlename"/>
-                <attribute name="postcode" alias="address_postcode"/>
-                <attribute name="prefix" alias="address_prefix"/>
-                <attribute name="region" alias="address_region"/>
-                <attribute name="street" alias="address_street"/>
-                <attribute name="suffix" alias="address_suffix"/>
-                <attribute name="telephone" alias="address_telephone"/>
-                <using glue="and">
-                    <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
-                </using>
-            </link-source>
+            <attribute name="created_at"/>
+            <attribute name="email" function="sha1"/>
+            <attribute name="store_id"/>
         </source>
     </report>
 </config>

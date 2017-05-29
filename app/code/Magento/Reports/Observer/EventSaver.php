@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Observer;
@@ -47,6 +47,7 @@ class EventSaver
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
     }
+
     /**
      * Save event
      *

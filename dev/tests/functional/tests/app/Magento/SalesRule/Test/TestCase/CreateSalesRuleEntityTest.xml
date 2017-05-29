@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -447,6 +447,8 @@
             <data name="cartPrice/sub_total" xsi:type="string">200.00</data>
             <data name="cartPrice/grand_total" xsi:type="string">140.00</data>
             <data name="cartPrice/discount" xsi:type="string">70.00</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-65554: [FT] Magento\SalesRule\Test\TestCase\CreateSalesRuleEntityTest fails on CI</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessSaveMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleForm" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsApplied" />

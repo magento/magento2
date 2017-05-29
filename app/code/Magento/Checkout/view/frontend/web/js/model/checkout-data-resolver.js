@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -164,6 +164,8 @@ define([
             if (!availableRate && window.checkoutConfig.selectedShippingMethod) {
                 availableRate = window.checkoutConfig.selectedShippingMethod;
                 selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
+
+                return;
             }
 
             //Unset selected shipping method if not available

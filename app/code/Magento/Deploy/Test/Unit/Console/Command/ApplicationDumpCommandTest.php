@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
+use Magento\Config\Model\Config\Export\Comment;
 use Magento\Deploy\Console\Command\App\ApplicationDumpCommand;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -39,12 +41,30 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     private $source;
 
     /**
+     * @var SourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sourceEnv;
+
+    /**
+     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configHashMock;
+
+    /**
+     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $commentMock;
+
+    /**
      * @var ApplicationDumpCommand
      */
     private $command;
 
     public function setUp()
     {
+        $this->configHashMock = $this->getMockBuilder(Hash::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->input = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
         $this->output = $this->getMockBuilder(OutputInterface::class)
@@ -55,11 +75,30 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->source = $this->getMockBuilder(SourceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->sourceEnv = $this->getMockBuilder(SourceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->commentMock = $this->getMockBuilder(Comment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->command = new ApplicationDumpCommand($this->writer, [[
-            'namespace' => 'system',
-            'source' => $this->source
-        ]]);
+        $this->command = new ApplicationDumpCommand(
+            $this->writer,
+            [
+                [
+                    'namespace' => 'system',
+                    'source' => $this->source,
+                    'pool' => ConfigFilePool::APP_CONFIG,
+                    'comment' => $this->commentMock
+                ],
+                [
+                    'namespace' => 'system',
+                    'source' => $this->sourceEnv,
+                    'pool' => ConfigFilePool::APP_ENV
+                ]
+            ],
+            $this->configHashMock
+        );
     }
 
     public function testExport()
@@ -67,17 +106,33 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $dump = [
             'system' => ['systemDATA']
         ];
-        $data = [ConfigFilePool::APP_CONFIG => $dump];
+        $this->configHashMock->expects($this->once())
+            ->method('regenerate');
         $this->source
             ->expects($this->once())
             ->method('get')
             ->willReturn(['systemDATA']);
-        $this->output->expects($this->once())
-            ->method('writeln')
-            ->with('<info>Done.</info>');
-        $this->writer->expects($this->once())
+        $this->sourceEnv
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn(['systemDATA']);
+        $this->commentMock->expects($this->once())
+            ->method('get')
+            ->willReturn('Some comment message');
+        $this->writer->expects($this->exactly(2))
             ->method('saveConfig')
-            ->with($data);
+            ->withConsecutive(
+                [[ConfigFilePool::APP_CONFIG => $dump]],
+                [[ConfigFilePool::APP_ENV => $dump]]
+            );
+
+        $this->output->expects($this->exactly(2))
+            ->method('writeln')
+            ->withConsecutive(
+                [['system' => 'Some comment message']],
+                ['<info>Done.</info>']
+            );
+
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');
         $method->setAccessible(true);
         $this->assertEquals(

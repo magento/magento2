@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,19 +8,19 @@ namespace Magento\Customer\Observer;
 
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Helper\Address as HelperAddress;
+use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Customer\Model\Vat;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Model\Address;
-use Magento\Customer\Model\Vat;
 
 /**
  * Customer Observer Model
@@ -190,8 +190,7 @@ class AfterAddressSaveObserver implements ObserverInterface
             return true;
         }
 
-        if (
-            $this->_coreRegistry->registry(BeforeAddressSaveObserver::VIV_CURRENTLY_SAVED_ADDRESS) != $address->getId()
+        if ($this->_coreRegistry->registry(BeforeAddressSaveObserver::VIV_CURRENTLY_SAVED_ADDRESS) != $address->getId()
         ) {
             return false;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
@@ -53,8 +53,7 @@ class SearchTermManager
         }
 
         foreach ($this->searchTerms as &$searchTerm) {
-            if (
-                $this->searchTermsUseRate[$searchTerm['term']]['use_rate'] > 0
+            if ($this->searchTermsUseRate[$searchTerm['term']]['use_rate'] > 0
                 && $currentProductIndex % $this->searchTermsUseRate[$searchTerm['term']]['use_rate'] === 0
                 && $this->searchTermsUseRate[$searchTerm['term']]['used'] < $searchTerm['count']
             ) {

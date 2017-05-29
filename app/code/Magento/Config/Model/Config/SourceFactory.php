@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config;
@@ -26,7 +26,7 @@ class SourceFactory
      * Create backend model by name
      *
      * @param string $modelName
-     * @return mixed
+     * @return \Magento\Framework\Option\ArrayInterface
      */
     public function create($modelName)
     {

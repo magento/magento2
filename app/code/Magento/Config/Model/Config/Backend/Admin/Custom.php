@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,6 @@ class Custom extends \Magento\Framework\App\Config\Value
 
     /* @var \Magento\Framework\App\Config\Storage\WriterInterface */
     protected $_configWriter;
-
 
     /**
      * @param \Magento\Framework\Model\Context $context

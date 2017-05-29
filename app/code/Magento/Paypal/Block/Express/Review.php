@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote\Address\Rate;
 /**
  * Paypal Express Onepage checkout block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Review extends \Magento\Framework\View\Element\Template

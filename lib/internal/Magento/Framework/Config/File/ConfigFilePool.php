@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,14 @@ class ConfigFilePool
     const APP_CONFIG = 'app_config';
     const APP_ENV = 'app_env';
 
+    /**
+     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     */
     const LOCAL = 'local';
+
+    /**
+     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     */
     const DIST = 'dist';
 
     /**
@@ -31,6 +38,7 @@ class ConfigFilePool
      * Initial files for configuration
      *
      * @var array
+     * @deprecated Magento does not support custom config file pools since 2.2.0 version
      */
     private $initialConfigFiles = [
         self::DIST => [
@@ -82,6 +90,7 @@ class ConfigFilePool
      * Returns application initial config files.
      *
      * @return array
+     * @deprecated Magento does not support custom config file pools since 2.2.0 version
      */
     public function getInitialFilePools()
     {
@@ -93,6 +102,7 @@ class ConfigFilePool
      *
      * @param string $pool
      * @return array
+     * @deprecated Magento does not support custom config file pools since 2.2.0 version
      */
     public function getPathsByPool($pool)
     {

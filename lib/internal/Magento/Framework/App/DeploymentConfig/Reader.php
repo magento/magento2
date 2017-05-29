@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,14 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
- * Deployment configuration reader from files: env.php, config.php (config.local.php, config.dist.php)
+ * Deployment configuration reader.
+ * Loads the merged configuration from config files.
+ *
+ * @see FileReader The reader for specific configuration file
  */
 class Reader
 {
@@ -72,124 +76,62 @@ class Reader
      */
     public function getFiles()
     {
-        $path = $this->dirList->getPath(DirectoryList::CONFIG);
-        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
-        $initialFilePools = $this->configFilePool->getInitialFilePools();
-
-        $files = [];
-        foreach ($this->files as $fileKey => $filePath) {
-            $files[$fileKey] = $filePath;
-            if (!$fileDriver->isExists($path . "/" . $filePath)) {
-                foreach ($initialFilePools as $initialFiles) {
-                    if (
-                        isset($initialFiles[$fileKey])
-                        && $fileDriver->isExists($path . '/' . $initialFiles[$fileKey])
-                    ) {
-                        $files[$fileKey] = $initialFiles[$fileKey];
-                    }
-                }
-            }
-        }
-
-        return $files;
+        return $this->files;
     }
 
     /**
-     * Loads the configuration file
+     * Method loads merged configuration within all configuration files.
+     * To retrieve specific file configuration, use FileReader.
+     * $fileKey option is deprecated since version 2.2.0.
      *
-     * @param string $fileKey
+     * @param string $fileKey The file key (deprecated)
      * @return array
-     * @throws \Exception
+     * @throws FileSystemException If file can not be read
+     * @throws \Exception If file key is not correct
+     * @see FileReader
      */
     public function load($fileKey = null)
     {
+        $path = $this->dirList->getPath(DirectoryList::CONFIG);
+        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+        $result = [];
         if ($fileKey) {
-            $pathConfig = $this->configFilePool->getPath($fileKey);
-            return $this->loadConfigFile($fileKey, $pathConfig);
+            $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
+            if ($fileDriver->isExists($filePath)) {
+                $result = include $filePath;
+            }
         } else {
             $configFiles = $this->configFilePool->getPaths();
             $allFilesData = [];
             $result = [];
-            foreach ($configFiles as $fileKey => $pathConfig) {
-                $fileData = $this->loadConfigFile($fileKey, $pathConfig);
-                if (!$fileData) {
+            foreach (array_keys($configFiles) as $fileKey) {
+                $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
+                if ($fileDriver->isExists($configFile)) {
+                    $fileData = include $configFile;
+                } else {
                     continue;
                 }
-                $allFilesData[$fileKey] = $fileData;
+                $allFilesData[$configFile] = $fileData;
                 if (!empty($fileData)) {
-                    $intersection = array_intersect_key($result, $fileData);
-                    if (!empty($intersection)) {
-                        $displayMessage = $this->findFilesWithKeys(array_keys($intersection), $allFilesData);
-                        throw new \Exception(
-                            "Key collision! The following keys occur in multiple config files:"
-                            . PHP_EOL . $displayMessage
-                        );
-                    }
-                    $result = array_merge($result, $fileData);
+                    $result = array_replace_recursive($result, $fileData);
                 }
             }
-            return $result;
         }
+        return $result ?: [];
     }
 
     /**
-     * @param string $fileKey
-     * @param string $pathConfig
-     * @param bool $ignoreInitialConfigFiles
+     * Loads the configuration file.
+     *
+     * @param string $fileKey The file key
+     * @param string $pathConfig The path config
+     * @param bool $ignoreInitialConfigFiles Whether ignore custom pools
      * @return array
+     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)
     {
-        $result = [];
-        $initialFilePools = $this->configFilePool->getInitialFilePools();
-        $path = $this->dirList->getPath(DirectoryList::CONFIG);
-        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
-
-        if (!$ignoreInitialConfigFiles) {
-            foreach ($initialFilePools as $initialFiles) {
-                if (isset($initialFiles[$fileKey]) && $fileDriver->isExists($path . '/' . $initialFiles[$fileKey])) {
-                    $fileBuffer = include $path . '/' . $initialFiles[$fileKey];
-                    if (is_array($fileBuffer)) {
-                        $result = array_replace_recursive($result, $fileBuffer);
-                    }
-                }
-            }
-        }
-
-        if ($fileDriver->isExists($path . '/' . $pathConfig)) {
-            $fileBuffer = include $path . '/' . $pathConfig;
-            $result = array_replace_recursive($result, $fileBuffer);
-        }
-
-        if ($fileDriver->isExists($path . '/' . $pathConfig)) {
-            $configResult = include $path . '/' . $pathConfig;
-            if (is_array($configResult)) {
-                $result = array_replace_recursive($result, $configResult);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Finds list of files that has the key
-     *
-     * @param array $keys
-     * @param array $allFilesData
-     * @return string
-     */
-    private function findFilesWithKeys(array $keys, array $allFilesData)
-    {
-        $displayMessage = '';
-        foreach ($keys as $key) {
-            $foundConfigFiles = [];
-            foreach ($allFilesData as $fileName => $fileValues) {
-                if (isset($fileValues[$key])) {
-                    $foundConfigFiles[] = $fileName;
-                }
-            }
-            $displayMessage .= 'Key "' . $key . '" found in ' . implode(', ', $foundConfigFiles) . PHP_EOL;
-        }
-        return $displayMessage;
+        return $this->load($fileKey);
     }
 }

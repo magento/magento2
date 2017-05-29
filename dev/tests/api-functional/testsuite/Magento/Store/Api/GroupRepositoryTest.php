@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ class GroupRepositoryTest extends WebapiAbstract
         $storeGroups = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($storeGroups);
         $this->assertGreaterThan(1, count($storeGroups));
-        $keys = ['id', 'website_id', 'root_category_id', 'default_store_id', 'name'];
+        $keys = ['id', 'website_id', 'root_category_id', 'default_store_id', 'name', 'code'];
         $this->assertEquals($keys, array_keys($storeGroups[0]));
     }
 }

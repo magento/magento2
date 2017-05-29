@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\ReportXml;
 
-use Magento\Framework\DB\Select;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class SelectHydrator
@@ -45,15 +46,22 @@ class SelectHydrator
     private $resourceConnection;
 
     /**
-     * SelectHydrator constructor.
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param ObjectManagerInterface $objectManager
      * @param array $selectParts
      */
     public function __construct(
         ResourceConnection $resourceConnection,
+        ObjectManagerInterface $objectManager,
         $selectParts = []
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->objectManager = $objectManager;
         $this->selectParts = $selectParts;
     }
 
@@ -88,9 +96,48 @@ class SelectHydrator
     public function recreate(array $selectParts)
     {
         $select = $this->resourceConnection->getConnection()->select();
+
+        $select = $this->processColumns($select, $selectParts);
+
         foreach ($selectParts as $partName => $partValue) {
             $select->setPart($partName, $partValue);
         }
+
+        return $select;
+    }
+
+    /**
+     * Process COLUMNS part values and add this part into select.
+     *
+     * If each column contains information about select expression
+     * an object with the type of this expression going to be created and assigned to this column.
+     *
+     * @param Select $select
+     * @param array $selectParts
+     * @return Select
+     */
+    private function processColumns(Select $select, array &$selectParts)
+    {
+        if (!empty($selectParts[Select::COLUMNS]) && is_array($selectParts[Select::COLUMNS])) {
+            $part = [];
+
+            foreach ($selectParts[Select::COLUMNS] as $columnEntry) {
+                list($correlationName, $column, $alias) = $columnEntry;
+                if (is_array($column) && !empty($column['class'])) {
+                    $expression = $this->objectManager->create(
+                        $column['class'],
+                        isset($column['arguments']) ? $column['arguments'] : []
+                    );
+                    $part[] = [$correlationName, $expression, $alias];
+                } else {
+                    $part[] = $columnEntry;
+                }
+            }
+
+            $select->setPart(Select::COLUMNS, $part);
+            unset($selectParts[Select::COLUMNS]);
+        }
+
         return $select;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config\Provider\Component;
@@ -78,12 +78,7 @@ class Definition
     public function getComponentData($name)
     {
         if (!$this->componentData->offsetExists($name)) {
-            throw new LocalizedException(
-                new Phrase(
-                    'The requested component ("' . $name . '") is not found. '
-                    . 'Before using, you must add the implementation.'
-                )
-            );
+            return [];
         }
         return (array) $this->componentData->offsetGet($name);
     }

@@ -1,92 +1,81 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\App\Utility\Files;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Console\ConsoleLoggerFactory;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
+use Magento\Framework\App\State;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\State;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
-use Magento\Deploy\Model\DeployManager;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Deploy\Service\DeployStaticContent;
 
 /**
  * Deploy static content command
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContentCommand extends Command
 {
-    /**
-     * Key for dry-run option
-     * @deprecated
-     * @see \Magento\Deploy\Console\Command\DeployStaticOptionsInterface::DRY_RUN
-     */
-    const DRY_RUN_OPTION = 'dry-run';
-
-    /**
-     * Key for languages parameter
-     * @deprecated
-     * @see DeployStaticContentCommand::LANGUAGES_ARGUMENT
-     */
-    const LANGUAGE_OPTION = 'languages';
-
     /**
      * Default language value
      */
     const DEFAULT_LANGUAGE_VALUE = 'en_US';
 
     /**
-     * Key for languages parameter
+     * @var InputValidator
      */
-    const LANGUAGES_ARGUMENT = 'languages';
+    private $inputValidator;
 
     /**
-     * Default jobs amount
+     * @var ConsoleLoggerFactory
      */
-    const DEFAULT_JOBS_AMOUNT = 4;
-
-    /** @var InputInterface */
-    private $input;
+    private $consoleLoggerFactory;
 
     /**
-     * @var Locale
+     * @var Options
      */
-    private $validator;
+    private $options;
 
     /**
-     * object manager to create various objects
+     * Object manager to create various objects
      *
      * @var ObjectManagerInterface
      *
      */
     private $objectManager;
 
-    /** @var \Magento\Framework\App\State */
+    /**
+     * @var \Magento\Framework\App\State
+     */
     private $appState;
 
     /**
-     * Inject dependencies
+     * StaticContentCommand constructor
      *
-     * @param Locale $validator
+     * @param InputValidator        $inputValidator
+     * @param ConsoleLoggerFactory  $consoleLoggerFactory
+     * @param Options               $options
      * @param ObjectManagerProvider $objectManagerProvider
-     * @throws \LogicException When the command name is empty
      */
     public function __construct(
-        Locale $validator,
+        InputValidator $inputValidator,
+        ConsoleLoggerFactory $consoleLoggerFactory,
+        Options $options,
         ObjectManagerProvider $objectManagerProvider
     ) {
-        $this->validator = $validator;
+        $this->inputValidator = $inputValidator;
+        $this->consoleLoggerFactory = $consoleLoggerFactory;
+        $this->options = $options;
         $this->objectManager = $objectManagerProvider->get();
 
         parent::__construct();
@@ -101,266 +90,9 @@ class DeployStaticContentCommand extends Command
     {
         $this->setName('setup:static-content:deploy')
             ->setDescription('Deploys static view files')
-            ->setDefinition([
-                new InputOption(
-                    Options::DRY_RUN,
-                    '-d',
-                    InputOption::VALUE_NONE,
-                    'If specified, then no files will be actually deployed.'
-                ),
-                new InputOption(
-                    Options::FORCE_RUN,
-                    '-f',
-                    InputOption::VALUE_NONE,
-                    'Deploy files in any mode.'
-                ),
-                new InputOption(
-                    Options::NO_JAVASCRIPT,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy JavaScript files'
-                ),
-                new InputOption(
-                    Options::NO_CSS,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy CSS files.'
-                ),
-                new InputOption(
-                    Options::NO_LESS,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy LESS files.'
-                ),
-                new InputOption(
-                    Options::NO_IMAGES,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy images.'
-                ),
-                new InputOption(
-                    Options::NO_FONTS,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy font files.'
-                ),
-                new InputOption(
-                    Options::NO_HTML,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy HTML files.'
-                ),
-                new InputOption(
-                    Options::NO_MISC,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not deploy other types of files (.md, .jbf, .csv, etc...).'
-                ),
-                new InputOption(
-                    Options::NO_HTML_MINIFY,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Do not minify HTML files.'
-                ),
-                new InputOption(
-                    Options::THEME,
-                    '-t',
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Generate static view files for only the specified themes.',
-                    ['all']
-                ),
-                new InputOption(
-                    Options::EXCLUDE_THEME,
-                    null,
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Do not generate files for the specified themes.',
-                    ['none']
-                ),
-                new InputOption(
-                    Options::LANGUAGE,
-                    '-l',
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Generate files only for the specified languages.',
-                    ['all']
-                ),
-                new InputOption(
-                    Options::EXCLUDE_LANGUAGE,
-                    null,
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Do not generate files for the specified languages.',
-                    ['none']
-                ),
-                new InputOption(
-                    Options::AREA,
-                    '-a',
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Generate files only for the specified areas.',
-                    ['all']
-                ),
-                new InputOption(
-                    Options::EXCLUDE_AREA,
-                    null,
-                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'Do not generate files for the specified areas.',
-                    ['none']
-                ),
-                new InputOption(
-                    Options::JOBS_AMOUNT,
-                    '-j',
-                    InputOption::VALUE_OPTIONAL,
-                    'Enable parallel processing using the specified number of jobs.',
-                    self::DEFAULT_JOBS_AMOUNT
-                ),
-                new InputOption(
-                    Options::SYMLINK_LOCALE,
-                    null,
-                    InputOption::VALUE_NONE,
-                    'Create symlinks for the files of those locales, which are passed for deployment, '
-                    . 'but have no customizations'
-                ),
-                new InputArgument(
-                    self::LANGUAGES_ARGUMENT,
-                    InputArgument::IS_ARRAY,
-                    'Space-separated list of ISO-636 language codes for which to output static view files.'
-                ),
-            ]);
+            ->setDefinition($this->options->getOptionsList());
 
         parent::configure();
-    }
-
-    /**
-     * @return \Magento\Framework\App\State
-     * @deprecated
-     */
-    private function getAppState()
-    {
-        if (null === $this->appState) {
-            $this->appState = $this->objectManager->get(State::class);
-        }
-        return $this->appState;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @param $magentoAreas array
-     * @param $areasInclude array
-     * @param $areasExclude array
-     * @throws \InvalidArgumentException
-     */
-    private function checkAreasInput($magentoAreas, $areasInclude, $areasExclude)
-    {
-        if ($areasInclude[0] != 'all' && $areasExclude[0] != 'none') {
-            throw new \InvalidArgumentException(
-                '--area (-a) and --exclude-area cannot be used at the same time'
-            );
-        }
-
-        if ($areasInclude[0] != 'all') {
-            foreach ($areasInclude as $area) {
-                if (!in_array($area, $magentoAreas)) {
-                    throw new \InvalidArgumentException(
-                        $area .
-                        ' argument has invalid value, available areas are: ' . implode(', ', $magentoAreas)
-                    );
-                }
-            }
-        }
-
-        if ($areasExclude[0] != 'none') {
-            foreach ($areasExclude as $area) {
-                if (!in_array($area, $magentoAreas)) {
-                    throw new \InvalidArgumentException(
-                        $area .
-                        ' argument has invalid value, available areas are: ' . implode(', ', $magentoAreas)
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     * @param $languagesInclude array
-     * @param $languagesExclude array
-     * @throws \InvalidArgumentException
-     */
-    private function checkLanguagesInput($languagesInclude, $languagesExclude)
-    {
-        if ($languagesInclude[0] != 'all') {
-            foreach ($languagesInclude as $lang) {
-                if (!$this->validator->isValid($lang)) {
-                    throw new \InvalidArgumentException(
-                        $lang .
-                        ' argument has invalid value, please run info:language:list for list of available locales'
-                    );
-                }
-            }
-        }
-
-        if ($languagesInclude[0] != 'all' && $languagesExclude[0] != 'none') {
-            throw new \InvalidArgumentException(
-                '--language (-l) and --exclude-language cannot be used at the same time'
-            );
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     * @param $magentoThemes array
-     * @param $themesInclude array
-     * @param $themesExclude array
-     * @throws \InvalidArgumentException
-     */
-    private function checkThemesInput($magentoThemes, $themesInclude, $themesExclude)
-    {
-        if ($themesInclude[0] != 'all' && $themesExclude[0] != 'none') {
-            throw new \InvalidArgumentException(
-                '--theme (-t) and --exclude-theme cannot be used at the same time'
-            );
-        }
-
-        if ($themesInclude[0] != 'all') {
-            foreach ($themesInclude as $theme) {
-                if (!in_array($theme, $magentoThemes)) {
-                    throw new \InvalidArgumentException(
-                        $theme .
-                        ' argument has invalid value, available themes are: ' . implode(', ', $magentoThemes)
-                    );
-                }
-            }
-        }
-
-        if ($themesExclude[0] != 'none') {
-            foreach ($themesExclude as $theme) {
-                if (!in_array($theme, $magentoThemes)) {
-                    throw new \InvalidArgumentException(
-                        $theme .
-                        ' argument has invalid value, available themes are: ' . implode(', ', $magentoThemes)
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     * @param $entities array
-     * @param $includedEntities array
-     * @param $excludedEntities array
-     * @return array
-     */
-    private function getDeployableEntities($entities, $includedEntities, $excludedEntities)
-    {
-        $deployableEntities = [];
-        if ($includedEntities[0] === 'all' && $excludedEntities[0] === 'none') {
-            $deployableEntities = $entities;
-        } elseif ($excludedEntities[0] !== 'none') {
-            $deployableEntities =  array_diff($entities, $excludedEntities);
-        } elseif ($includedEntities[0] !== 'all') {
-            $deployableEntities =  array_intersect($entities, $includedEntities);
-        }
-
-        return $deployableEntities;
     }
 
     /**
@@ -370,6 +102,8 @@ class DeployStaticContentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $time = microtime(true);
+
         if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
             throw new LocalizedException(
                 __(
@@ -382,95 +116,28 @@ class DeployStaticContentCommand extends Command
             );
         }
 
-        $this->input = $input;
-        $filesUtil = $this->objectManager->create(Files::class);
+        $this->inputValidator->validate($input);
 
-        list ($deployableLanguages, $deployableAreaThemeMap, $requestedThemes)
-            = $this->prepareDeployableEntities($filesUtil);
+        $options = $input->getOptions();
+        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'];
 
-        $output->writeln('Requested languages: ' . implode(', ', $deployableLanguages));
-        $output->writeln('Requested areas: ' . implode(', ', array_keys($deployableAreaThemeMap)));
-        $output->writeln('Requested themes: ' . implode(', ', $requestedThemes));
+        $verbose = $output->getVerbosity() > 1 ? $output->getVerbosity() : OutputInterface::VERBOSITY_VERBOSE;
 
-        /** @var $deployManager DeployManager */
-        $deployManager = $this->objectManager->create(
-            DeployManager::class,
-            [
-                'output' => $output,
-                'options' => $this->input->getOptions(),
-            ]
-        );
-
-        foreach ($deployableAreaThemeMap as $area => $themes) {
-            foreach ($deployableLanguages as $locale) {
-                foreach ($themes as $themePath) {
-                    $deployManager->addPack($area, $themePath, $locale);
-                }
-            }
-        }
+        $logger = $this->consoleLoggerFactory->getLogger($output, $verbose);
+        $logger->alert(PHP_EOL . "Deploy using {$options[Options::STRATEGY]} strategy");
 
         $this->mockCache();
-        return $deployManager->deploy();
-    }
 
-    /**
-     * @param Files $filesUtil
-     * @throws \InvalidArgumentException
-     * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    private function prepareDeployableEntities($filesUtil)
-    {
-        $magentoAreas = [];
-        $magentoThemes = [];
-        $magentoLanguages = [self::DEFAULT_LANGUAGE_VALUE];
-        $areaThemeMap = [];
-        $files = $filesUtil->getStaticPreProcessingFiles();
-        foreach ($files as $info) {
-            list($area, $themePath, $locale) = $info;
-            if ($themePath) {
-                $areaThemeMap[$area][$themePath] = $themePath;
-            }
-            if ($themePath && $area && !in_array($area, $magentoAreas)) {
-                $magentoAreas[] = $area;
-            }
-            if ($locale && !in_array($locale, $magentoLanguages)) {
-                $magentoLanguages[] = $locale;
-            }
-            if ($themePath && !in_array($themePath, $magentoThemes)) {
-                $magentoThemes[] = $themePath;
-            }
-        }
+        /** @var DeployStaticContent $deployService */
+        $deployService = $this->objectManager->create(DeployStaticContent::class, [
+            'logger' => $logger
+        ]);
 
-        $areasInclude = $this->input->getOption(Options::AREA);
-        $areasExclude = $this->input->getOption(Options::EXCLUDE_AREA);
-        $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
-        $deployableAreas = $this->getDeployableEntities($magentoAreas, $areasInclude, $areasExclude);
+        $deployService->deploy($options);
 
-        $languagesInclude = $this->input->getArgument(self::LANGUAGES_ARGUMENT)
-            ?: $this->input->getOption(Options::LANGUAGE);
-        $languagesExclude = $this->input->getOption(Options::EXCLUDE_LANGUAGE);
-        $this->checkLanguagesInput($languagesInclude, $languagesExclude);
-        $deployableLanguages = $languagesInclude[0] == 'all'
-            ? $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude)
-            : $languagesInclude;
+        $logger->alert(PHP_EOL . "Execution time: " . (microtime(true) - $time));
 
-        $themesInclude = $this->input->getOption(Options::THEME);
-        $themesExclude = $this->input->getOption(Options::EXCLUDE_THEME);
-        $this->checkThemesInput($magentoThemes, $themesInclude, $themesExclude);
-        $deployableThemes = $this->getDeployableEntities($magentoThemes, $themesInclude, $themesExclude);
-
-        $deployableAreaThemeMap = [];
-        $requestedThemes = [];
-        foreach ($areaThemeMap as $area => $themes) {
-            if (in_array($area, $deployableAreas) && $themes = array_intersect($themes, $deployableThemes)) {
-                $deployableAreaThemeMap[$area] = $themes;
-                $requestedThemes += $themes;
-            }
-        }
-
-        return [$deployableLanguages, $deployableAreaThemeMap, $requestedThemes];
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -485,5 +152,16 @@ class DeployStaticContentCommand extends Command
                 Cache::class => DummyCache::class
             ]
         ]);
+    }
+
+    /**
+     * @return State
+     */
+    private function getAppState()
+    {
+        if (null === $this->appState) {
+            $this->appState = $this->objectManager->get(State::class);
+        }
+        return $this->appState;
     }
 }

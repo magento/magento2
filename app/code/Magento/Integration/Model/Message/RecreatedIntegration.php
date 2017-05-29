@@ -1,20 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Model\Message;
 
 use Magento\Framework\UrlInterface;
+use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Model\Config;
 use Magento\Integration\Model\ConsolidatedConfig;
 use Magento\Integration\Model\Integration;
-use Magento\Integration\Api\IntegrationServiceInterface;
 
 /**
  * Class RecreatedIntegration to display message when a config-based integration needs to be reactivated
- *
  */
 class RecreatedIntegration implements \Magento\Framework\Notification\MessageInterface
 {
@@ -74,6 +73,7 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Retrieve unique message identity
      *
@@ -107,5 +107,6 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
     {
         return self::SEVERITY_MAJOR;
     }
+
     //@codeCoverageIgnoreEnd
 }

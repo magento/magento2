@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Block\Adminhtml\Session;
@@ -10,6 +10,8 @@ use Magento\Security\Model\ConfigInterface;
 
 /**
  * Block Session Activity
+ *
+ * @api
  */
 class Activity extends \Magento\Backend\Block\Template
 {

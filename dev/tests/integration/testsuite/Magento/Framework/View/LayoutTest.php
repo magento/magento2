@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -273,8 +273,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testAddContainerInvalidHtmlTag()
     {
         $msg = 'Html tag "span" is forbidden for usage in containers. ' .
-            'Consider to use one of the allowed: dd, div, dl, fieldset, main, header, ' .
-            'footer, ol, p, section, table, tfoot, ul, nav.';
+            'Consider to use one of the allowed: aside, dd, div, dl, fieldset, main, nav, ' .
+            'header, footer, ol, p, section, table, tfoot, ul.';
         $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $msg);
         $this->_layout->addContainer('container', 'Container', ['htmlTag' => 'span']);
     }

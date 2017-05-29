@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,11 +44,19 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTargetStorePostData()
     {
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
-        $store->expects($this->any())->method('getCode')->will($this->returnValue('new-store'));
-        $storeSwitchUrl = 'stores/store/switch';
-        $this->urlBuilder->expects($this->any())->method('getUrl')->with($storeSwitchUrl)->willReturnArgument(0);
-        $this->corePostDataHelper->expects($this->any())->method('getPostData')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())
+            ->method('getCode')
+            ->willReturn('new-store');
+        $storeSwitchUrl = 'http://domain.com/stores/store/switch';
+        $store->expects($this->atLeastOnce())
+            ->method('getCurrentUrl')
+            ->with(false)
+            ->willReturn($storeSwitchUrl);
+        $this->corePostDataHelper->expects($this->any())
+            ->method('getPostData')
             ->with($storeSwitchUrl, ['___store' => 'new-store']);
 
         $this->switcher->getTargetStorePostData($store);

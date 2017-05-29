@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Abstract block context object. Will be used as rule condition constructor modification point after release.
- * Important: Should not be modified by extension developers.
- */
 namespace Magento\Rule\Model\Condition;
 
+/**
+ * Abstract block context object. Is used as rule condition constructor modification point.
+ *
+ * Important: Should not be modified by extension developers.
+ */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**

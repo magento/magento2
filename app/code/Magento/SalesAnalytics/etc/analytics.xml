@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,24 @@
             <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="orders">
                 <parameters>
                     <name>orders</name>
+                </parameters>
+            </reportProvider>
+        </providers>
+    </file>
+    <file name="order_items">
+        <providers>
+            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="order_items">
+                <parameters>
+                    <name>order_items</name>
+                </parameters>
+            </reportProvider>
+        </providers>
+    </file>
+    <file name="order_addresses">
+        <providers>
+            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="order_addresses">
+                <parameters>
+                    <name>order_addresses</name>
                 </parameters>
             </reportProvider>
         </providers>

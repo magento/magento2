@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+/**
+ * Class Edit
+ * @deprecated
+ */
 class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**

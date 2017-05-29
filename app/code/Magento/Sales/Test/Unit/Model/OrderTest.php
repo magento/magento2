@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -357,6 +357,34 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->order->canCreditmemo());
     }
 
+    public function testCanNotCreditMemoWithAdjustmentNegative()
+    {
+        $totalPaid = 100;
+        $adjustmentNegative = 10;
+        $totalRefunded = 90;
+
+        $this->order->setTotalPaid($totalPaid);
+        $this->order->setTotalRefunded($totalRefunded);
+        $this->order->setAdjustmentNegative($adjustmentNegative);
+        $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
+        
+        $this->assertFalse($this->order->canCreditmemo());
+    }
+
+    public function testCanCreditMemoWithAdjustmentNegativeLowerThanTotalPaid()
+    {
+        $totalPaid = 100;
+        $adjustmentNegative = 9;
+        $totalRefunded = 90;
+
+        $this->order->setTotalPaid($totalPaid);
+        $this->order->setTotalRefunded($totalRefunded);
+        $this->order->setAdjustmentNegative($adjustmentNegative);
+        $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
+
+        $this->assertTrue($this->order->canCreditmemo());
+    }
+
     /**
      * @param string $state
      *
@@ -701,8 +729,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $canVoidOrder = false;
         }
         if ($orderState == \Magento\Sales\Model\Order::STATE_HOLDED && (!isset(
-                    $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
-                ) || $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false)
+            $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
+        ) || $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false)
         ) {
             $canVoidOrder = false;
         }

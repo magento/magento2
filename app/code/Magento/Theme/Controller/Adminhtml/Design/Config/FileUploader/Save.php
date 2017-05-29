@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader;
@@ -10,6 +10,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
+/**
+ * File Uploads Action Controller
+ *
+ * @api
+ */
 class Save extends Action
 {
     /**

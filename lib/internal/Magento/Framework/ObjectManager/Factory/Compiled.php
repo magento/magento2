@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory;
@@ -58,7 +58,7 @@ class Compiled extends AbstractFactory
         if ($args === []) {
             // Case 1: no arguments required
             return new $type();
-        } else if ($args !== null) {
+        } elseif ($args !== null) {
             /**
              * Case 2: arguments retrieved from pre-compiled DI cache
              *

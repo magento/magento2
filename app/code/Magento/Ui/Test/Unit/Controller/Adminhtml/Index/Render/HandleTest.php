@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index\Render;
@@ -60,7 +60,6 @@ class HandleTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->atLeastOnce())->method('getView')->willReturn($this->viewMock);
 
         $this->controller = new Handle($this->contextMock, $this->componentFactoryMock);
-
     }
 
     public function testExecuteNoButtons()

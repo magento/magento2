@@ -1,31 +1,45 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="analytics" translate="label" type="text" sortOrder="1150" showInDefault="1" showInWebsite="1" showInStore="0">
-            <label>Analytics</label>
+            <label>Advanced Reporting</label>
             <tab>general</tab>
             <resource>Magento_Analytics::analytics_settings</resource>
-            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                <label>General</label>
-                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Send the system and transaction data to Magento Analytics service</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <group id="general" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Advanced Reporting</label>
+                <comment><![CDATA[This service provides a suite of dynamic reports based on your product, order and
+                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
+                separate from your Admin Panel.</br> For more information, <a href="#">view details</a> or see our
+                <a href="#">terms and conditions</a>.]]></comment>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Advanced Reporting Service</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                     <backend_model>Magento\Analytics\Model\Config\Backend\Enabled</backend_model>
+                    <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\SubscriptionStatusLabel</frontend_model>
                     <config_path>analytics/subscription/enabled</config_path>
                 </field>
-                <field id="label" type="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\SubscriptionStatusLabel</frontend_model>
-                </field>
-                <field id="vertical" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Vertical</label>
+                <field id="vertical" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Industry</label>
                     <source_model>Magento\Analytics\Model\Config\Source\Vertical</source_model>
                     <backend_model>Magento\Analytics\Model\Config\Backend\Vertical</backend_model>
+                </field>
+                <field id="collection_time" translate="label comment" type="time" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Time of day to send data</label>
+                    <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\CollectionTimeLabel</frontend_model>
+                    <backend_model>Magento\Analytics\Model\Config\Backend\CollectionTime</backend_model>
+                </field>
+                <field id="additional_comment" translate="label comment" type="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label><![CDATA[<strong>Get more insights from Magento Business Intelligence</strong>]]></label>
+                    <comment><![CDATA[Magento Business Intelligence provides you with a simple and clear path to
+                    becoming more data driven.</br> Learn more about <a target="_blank"
+                    href="https://dashboard.rjmetrics.com/v2/magento/signup/">BI Essentials</a> tier.]]></comment>
+                    <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\AdditionalComment</frontend_model>
                 </field>
             </group>
         </section>
