@@ -6,9 +6,11 @@
 
 namespace Magento\Quote\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 
 /**
  * @api
@@ -26,14 +28,24 @@ class QuoteValidator
     private $allowedCountryReader;
 
     /**
+     * @var OrderAmountValidationMessage
+     */
+    private $minimumAmountMessage;
+
+    /**
      * QuoteValidator constructor.
      *
      * @param AllowedCountries|null $allowedCountryReader
+     * @param OrderAmountValidationMessage|null $minimumAmountMessage
      */
-    public function __construct(AllowedCountries $allowedCountryReader = null)
-    {
+    public function __construct(
+        AllowedCountries $allowedCountryReader = null,
+        OrderAmountValidationMessage $minimumAmountMessage = null
+    ) {
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);
+        $this->minimumAmountMessage = $minimumAmountMessage ?: ObjectManager::getInstance()
+            ->get(OrderAmountValidationMessage::class);
     }
 
     /**
@@ -97,6 +109,9 @@ class QuoteValidator
         }
         if (!$quote->getPayment()->getMethod()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please select a valid payment method.'));
+        }
+        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
+            throw new LocalizedException($this->minimumAmountMessage->getMessage());
         }
 
         return $this;

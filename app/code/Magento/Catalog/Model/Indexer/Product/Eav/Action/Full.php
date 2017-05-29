@@ -83,7 +83,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
                     $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
                     $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
                     if (!empty($entityIds)) {
-                        $indexer->reindexEntities($this->processRelations($indexer, $entityIds));
+                        $indexer->reindexEntities($this->processRelations($indexer, $entityIds, true));
                         $this->syncData($indexer, $mainTable);
                     }
                 }
