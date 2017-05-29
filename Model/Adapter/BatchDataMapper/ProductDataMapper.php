@@ -100,7 +100,6 @@ class ProductDataMapper implements BatchDataMapperInterface
     {
         // reset attribute data for new store
         $this->attributeData = [];
-        $productIds = array_keys($documentData);
         $documents = [];
 
         foreach ($documentData as $productId => $indexData) {
@@ -126,6 +125,7 @@ class ProductDataMapper implements BatchDataMapperInterface
             $documents[$productId] = $this->builder->build();
         }
 
+        $productIds = array_keys($documentData);
         foreach ($this->additionalFieldsProvider->getFields($productIds, $storeId) as $productId => $fields) {
             $documents[$productId] = array_merge_recursive(
                 $documents[$productId],
