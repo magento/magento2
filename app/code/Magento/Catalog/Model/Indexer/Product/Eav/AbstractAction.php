@@ -148,12 +148,13 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\AbstractEav $indexer
      * @param array $ids
      *
-     * @return $ids
+     * @param bool $onlyParents
+     * @return array $ids
      */
-    protected function processRelations($indexer, $ids)
+    protected function processRelations($indexer, $ids, $onlyParents = false)
     {
         $parentIds = $indexer->getRelationsByChild($ids);
-        $childIds = $indexer->getRelationsByParent($ids);
+        $childIds = $onlyParents ? [] : $indexer->getRelationsByParent($ids);
         return array_unique(array_merge($ids, $childIds, $parentIds));
     }
 }
