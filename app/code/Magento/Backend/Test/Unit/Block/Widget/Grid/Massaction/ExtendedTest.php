@@ -142,9 +142,6 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
             ->willReturn($collectionMock);
 
         $collectionMock->expects($this->once())
-            ->method('clear')
-            ->willReturnSelf();
-        $collectionMock->expects($this->once())
             ->method('setPageSize')
             ->with(0)
             ->willReturnSelf();
