@@ -9,6 +9,9 @@ namespace Magento\Customer\Model\Customer;
 
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Class to invalidate user credentials
+ */
 class CredentialsValidator
 {
     /**

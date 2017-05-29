@@ -9,7 +9,14 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ObjectManagerHelper
+     */
     private $objectManagerHelper;
+
+    /**
+     * @var \Magento\Customer\Model\Customer\CredentialsValidator
+     */
     private $object;
 
     protected function setUp()
