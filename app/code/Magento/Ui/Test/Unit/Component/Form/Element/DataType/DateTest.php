@@ -126,7 +126,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This tests ensures that userTimeZone is properly saved in the configuration
+     * This tests ensures that userTimeZone is properly saved in the configuration.
      */
     public function testPrepare()
     {
