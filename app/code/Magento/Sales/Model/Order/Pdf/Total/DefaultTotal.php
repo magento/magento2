@@ -165,6 +165,6 @@ class DefaultTotal extends \Magento\Framework\DataObject
      */
     public function getTitleDescription()
     {
-        return $this->getSource()->getDataUsingMethod($this->getTitleSourceField());
+        return $this->getSource()->getOrder()->getData($this->getTitleSourceField());
     }
 }
