@@ -21,7 +21,9 @@ define([
 
         if (
             quote.isVirtual() ||
-            window.checkoutConfig.activeCarriers && window.checkoutConfig.activeCarriers.length() === 0
+            window.checkoutConfig.activeCarriers &&
+            window.checkoutConfig.activeCarriers.length() === 0 &&
+            quote.shippingAddress().isEditable()
         ) {
             // update totals block when estimated address was set
             totalsProcessors['default'] = totalsDefaultProvider;
