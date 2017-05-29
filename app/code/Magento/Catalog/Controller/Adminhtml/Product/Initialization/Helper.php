@@ -268,7 +268,6 @@ class Helper
             unset($linkTypes[$productLink->getLinkType()]);
         }
 
-        /** @var \Magento\Catalog\Api\Data\ProductLinkTypeInterface $linkType */
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
                 foreach ((array) $links[$linkType] as $linkData) {
