@@ -133,7 +133,6 @@ class Bundle
 
             $option = $this->optionFactory->create(['data' => $optionData]);
             $option->setSku($product->getSku());
-            $option->setOptionId(null);
 
             $links = [];
             $bundleLinks = $product->getBundleSelectionsData();
@@ -142,8 +141,11 @@ class Bundle
             }
 
             foreach ($bundleLinks[$key] as $linkData) {
-                if ((bool)$linkData['delete']) {
+                if (!empty($linkData['delete'])) {
                     continue;
+                }
+                if (!empty($linkData['selection_id'])) {
+                    $linkData['id'] = $linkData['selection_id'];
                 }
                 $link = $this->linkFactory->create(['data' => $linkData]);
 
@@ -203,7 +205,6 @@ class Bundle
             }
             $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
             $customOption->setProductSku($product->getSku());
-            $customOption->setOptionId(null);
             $newOptions[] = $customOption;
         }
         $product->setOptions($newOptions);

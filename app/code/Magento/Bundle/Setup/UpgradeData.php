@@ -54,6 +54,68 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeShipmentType($eavSetup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.4', '<')) {
+            // Updating data of the 'catalog_product_bundle_option_value' table.
+            $tableName = $setup->getTable('catalog_product_bundle_option_value');
+
+            $select = $setup->getConnection()->select()
+                ->from(
+                    ['values' => $tableName],
+                    ['value_id']
+                )->joinLeft(
+                    ['options' => $setup->getTable('catalog_product_bundle_option')],
+                    'values.option_id = options.option_id',
+                    ['parent_product_id' => 'parent_id']
+                );
+
+            $setup->getConnection()->query(
+                $setup->getConnection()->insertFromSelect(
+                    $select,
+                    $tableName,
+                    ['value_id', 'parent_product_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                )
+            );
+
+            // Updating data of the 'catalog_product_bundle_selection_price' table.
+            $tableName = $setup->getTable('catalog_product_bundle_selection_price');
+            $oldTableName = $setup->getTable('catalog_product_bundle_selection_price_old');
+
+            $setup->getConnection()->renameTable($tableName, $oldTableName);
+
+            $tableCopy = $setup->getConnection()->createTableByDdl($oldTableName, $tableName);
+
+            foreach ($setup->getConnection()->getForeignKeys($oldTableName) as $key) {
+                $setup->getConnection()->dropForeignKey($oldTableName, $key['FK_NAME']);
+            }
+
+            $setup->getConnection()->createTable($tableCopy);
+
+            $columnsToSelect = [];
+
+            foreach ($setup->getConnection()->describeTable($oldTableName) as $column) {
+                $alias = $column['COLUMN_NAME'] == 'parent_product_id' ? 'selections.' : 'prices.';
+
+                $columnsToSelect[] = $alias . $column['COLUMN_NAME'];
+            }
+
+            $select = $setup->getConnection()->select()
+                ->from(
+                    ['prices' => $oldTableName],
+                    []
+                )->joinLeft(
+                    ['selections' => $setup->getTable('catalog_product_bundle_selection')],
+                    'prices.selection_id = selections.selection_id',
+                    []
+                )->columns($columnsToSelect);
+
+            $setup->getConnection()->query(
+                $setup->getConnection()->insertFromSelect($select, $tableName)
+            );
+
+            $setup->getConnection()->dropTable($oldTableName);
+        }
+
         $setup->endSetup();
     }
 

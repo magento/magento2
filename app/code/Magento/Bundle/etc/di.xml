@@ -170,4 +170,26 @@
             <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Bundle\Api\Data\OptionInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_bundle_option</item>
+                    <item name="identifierField" xsi:type="string">option_id</item>
+                </item>
+                <item name="Magento\Bundle\Model\Selection" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_bundle_selection</item>
+                    <item name="identifierField" xsi:type="string">selection_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\Bundle\Api\Data\OptionInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Bundle\Model\Selection" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
