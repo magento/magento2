@@ -38,17 +38,17 @@ define([
                 expect(select.getLabel({selectField : '2'})).toBe('');
             });
 
-            it('get label for existed value', function () {
+            it('get label for existing value', function () {
                 select.options = opts;
                 expect(select.getLabel({selectField : '2'})).toBe('b');
             });
 
-            it('get label for existed value in case the options are initialized as an object', function () {
+            it('get label for existing value in case the options are initialized as an object', function () {
                 select.options = optsAsObject;
                 expect(select.getLabel({selectField : '3'})).toBe('c');
             });
 
-            it('get labels for existed values in case the options are initialized as an object', function () {
+            it('get labels for existing values in case the options are initialized as an object', function () {
                 select.options = optsAsObject;
                 expect(select.getLabel({selectField : '1,3'})).toBe('a, c');
             });
