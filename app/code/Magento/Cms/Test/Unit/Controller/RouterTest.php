@@ -7,7 +7,7 @@
 namespace Magento\Cms\Test\Unit\Controller;
 
 /**
- * Tests Magento\Cms\Test\Unit\Controller\Router Class
+ * Tests Magento\Cms\Controller\Router Class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
