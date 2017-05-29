@@ -1233,6 +1233,5 @@
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
             <field name="store_code" xsi:type="string">all</field>
         </dataset>
-
     </repository>
 </config>

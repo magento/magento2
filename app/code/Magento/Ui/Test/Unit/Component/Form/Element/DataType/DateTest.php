@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
@@ -12,6 +12,9 @@ use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 
+/**
+ * Tests Magento\Ui\Test\Unit\Component\Form\Element\DataType Class
+ */
 class DateTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -42,6 +45,9 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($this->processorMock);
     }
 
+    /**
+     * This tests ensures that outputDateFormat is properly saved in the configuration with timeOffset.
+     */
     public function testPrepareWithTimeOffset()
     {
         $this->date = new Date(
@@ -75,6 +81,9 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($localeDateFormat, $config['outputDateFormat']);
     }
 
+    /**
+     * This tests ensures that outputDateFormat is properly saved in the configuration without timeOffset.
+     */
     public function testPrepareWithoutTimeOffset()
     {
         $defaultDateFormat = 'MM/dd/y';
