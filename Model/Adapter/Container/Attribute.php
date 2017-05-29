@@ -10,7 +10,8 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
 /**
  * @deprecated
- * This class is used only in deprecated \Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper and must not be used for new code
+ * This class is used only in deprecated \Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper
+ * and must not be used for new code
  */
 class Attribute
 {

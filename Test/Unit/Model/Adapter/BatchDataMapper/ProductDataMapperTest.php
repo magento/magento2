@@ -124,7 +124,6 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMapEmptyData()
     {
-        $productId = 42;
         $storeId = 1;
         $this->builderMock->expects($this->never())->method('addField');
         $this->builderMock->expects($this->never())->method('build');

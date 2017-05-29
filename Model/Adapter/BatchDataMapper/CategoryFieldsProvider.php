@@ -54,9 +54,7 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
 
         if (array_key_exists($productId, $categoryIndexData)) {
             $indexData = $categoryIndexData[$productId];
-            $categoryIds = array_map(function ($categoryData) {
-                return $categoryData['id'];
-            }, $indexData);
+            $categoryIds = array_column($indexData, 'id');
 
             if (count($categoryIds)) {
                 $result = ['category_ids' => implode(' ', $categoryIds)];

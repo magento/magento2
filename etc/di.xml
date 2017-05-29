@@ -14,6 +14,7 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Elasticsearch\Model\Adapter\DataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver" />
     <virtualType name="AdditionalFieldsForElasticsearchDataMapper" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
         <arguments>
             <argument name="fieldsProviders" xsi:type="array">
