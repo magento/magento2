@@ -114,7 +114,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(SourceInterface $source): int
+    public function save(SourceInterface $source)
     {
         try {
             $this->saveSource($source);
@@ -150,7 +150,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get(int $sourceId): SourceInterface
+    public function get($sourceId)
     {
         /** @var SourceInterface|AbstractModel $source */
         $source = $this->sourceFactory->create();
@@ -183,7 +183,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): SourceSearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
         /** @var \Magento\Inventory\Model\Resource\Source\Collection $collection */
         $collection = $this->collectionFactory->create();

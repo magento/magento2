@@ -7,6 +7,9 @@
 namespace Magento\Inventory\Test\Unit\Model;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
+use Magento\Inventory\Model\Resource\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class SourceRepositoryTest
@@ -16,7 +19,12 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Inventory\Model\Resource\Source|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resource;
+    private $resourceSource;
+
+    /**
+     * @var ResourceSourceCarrierLink|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $carrierLinkResource;
 
     /**
      * @var \Magento\Inventory\Model\SourceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -39,6 +47,16 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
     private $sourceSearchResultsFactory;
 
     /**
+     * @var CarrierLinkCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $carrierLinkCollectionFactory;
+
+    /**
+     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $loggerMock;
@@ -50,13 +68,26 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resource = $this->getMock(
+        $this->resourceSource = $this->getMock(
             \Magento\Inventory\Model\Resource\Source::class,
             [],
             [],
             '',
             false
         );
+
+        $this->carrierLinkResource = $this->getMockBuilder(ResourceSourceCarrierLink::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->carrierLinkCollectionFactory = $this->getMockBuilder(CarrierLinkCollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->sourceFactory = $this->getMock(
             \Magento\InventoryApi\Api\Data\SourceInterfaceFactory::class,
@@ -79,7 +110,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->sourceSearchResultsFactory = $this->getMock(
-            \Magento\Inventory\Model\SourceSearchResultsFactory::class,
+            \Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -94,11 +125,14 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->sourceRepository = $objectManager->getObject(
             \Magento\Inventory\Model\SourceRepository::class,
             [
-                'resource' => $this->resource,
+                'resourceSource' => $this->resourceSource,
+                'resourceSourceCarrierLink' => $this->carrierLinkResource,
                 'sourceFactory' => $this->sourceFactory,
                 'collectionProcessor' => $this->collectionProcessor,
                 'collectionFactory' => $this->collectionFactory,
+                'carrierLinkCollectionFactory' => $this->carrierLinkCollectionFactory,
                 'sourceSearchResultsFactory' => $this->sourceSearchResultsFactory,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
                 'logger' => $this->loggerMock,
             ]
         );
@@ -106,17 +140,17 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveSuccessful()
     {
-        /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceModel */
-        $sourceModel = $this->getMock(
-            \Magento\Inventory\Model\Source::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $sourceId = 42;
+        /** @var \Magento\Inventory\Model\Source|\PHPUnit_Framework_MockObject_MockObject $sourceMock */
+        $sourceMock = $this->getMockBuilder(\Magento\Inventory\Model\Source::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $result = $this->sourceRepository->save($sourceModel);
-        $this->assertNotNull($result);
+        $sourceMock->expects($this->atLeastOnce())->method('getSourceId')->willReturn($sourceId);
+        $sourceMock->expects($this->atLeastOnce())->method('getCarrierLinks')->willReturn([]);
+        $this->resourceSource->expects($this->once())->method('save')->with($sourceMock);
+
+        $this->assertEquals($sourceId, $this->sourceRepository->save($sourceMock));
     }
 
     public function testSaveErrorExpectsException()
@@ -130,12 +164,12 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->resource->expects($this->atLeastOnce())
+        $this->resourceSource->expects($this->atLeastOnce())
             ->method('save');
 
         $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class);
 
-        $this->resource->expects($this->atLeastOnce())
+        $this->resourceSource->expects($this->atLeastOnce())
             ->method('save')
             ->will($this->throwException(new \Exception('Some unit test Exception')));
 
@@ -154,6 +188,17 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $carrierLinkCollectionMock = $this->getMockBuilder(
+            \Magento\Inventory\Model\Resource\SourceCarrierLink\Collection::class
+        )->disableOriginalConstructor()->getMock();
+
+        $this->carrierLinkCollectionFactory->expects($this->atLeastOnce())->method('create')
+            ->willReturn($carrierLinkCollectionMock);
+        $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('addFilter')->willReturnSelf();
+        $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('create')->willReturn($searchCriteriaMock);
 
         $sourceModel->expects($this->atLeastOnce())
             ->method('getSourceId')
@@ -163,12 +208,12 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($sourceModel));
 
-        $this->resource->expects($this->once())
+        $this->resourceSource->expects($this->once())
             ->method('load')
             ->with(
                 $sourceModel,
-                SourceInterface::SOURCE_ID,
-                $sourceId
+                $sourceId,
+                SourceInterface::SOURCE_ID
             );
 
         $result = $this->sourceRepository->get($sourceId);
@@ -188,6 +233,17 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $carrierLinkCollectionMock = $this->getMockBuilder(
+            \Magento\Inventory\Model\Resource\SourceCarrierLink\Collection::class
+        )->disableOriginalConstructor()->getMock();
+
+        $this->carrierLinkCollectionFactory->expects($this->atLeastOnce())->method('create')
+            ->willReturn($carrierLinkCollectionMock);
+        $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('addFilter')->willReturnSelf();
+        $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('create')->willReturn($searchCriteriaMock);
 
         $sourceModel->expects($this->atLeastOnce())
             ->method('getSourceId')
@@ -197,12 +253,12 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($sourceModel));
 
-        $this->resource->expects($this->once())
+        $this->resourceSource->expects($this->once())
             ->method('load')
             ->with(
                 $sourceModel,
-                SourceInterface::SOURCE_ID,
-                $sourceId
+                $sourceId,
+                SourceInterface::SOURCE_ID
             );
 
         $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
