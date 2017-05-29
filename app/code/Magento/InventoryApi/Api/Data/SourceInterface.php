@@ -5,7 +5,7 @@
  */
 namespace Magento\InventoryApi\Api\Data;
 
-use \Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * @api
@@ -165,7 +165,7 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Set source country id.
      *
-     * @param int $countryId
+     * @param string $countryId
      * @return $this
      */
     public function setCountryId($countryId);

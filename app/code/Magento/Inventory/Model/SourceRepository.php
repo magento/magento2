@@ -6,20 +6,23 @@
 
 namespace Magento\Inventory\Model;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
+use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\Inventory\Model\SourceSearchResultsFactory;
 use Magento\Inventory\Model\Resource\Source as ResourceSource;
+use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
 use Magento\Inventory\Model\Resource\Source\CollectionFactory;
-use Magento\Inventory\Model\SourceFactoryInterface;
-use Psr\Log\LoggerInterface;
+use Magento\Inventory\Model\Resource\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
+use \Psr\Log\LoggerInterface;
 
 /**
  * Class SourceRepository
@@ -32,7 +35,12 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @var ResourceSource
      */
-    private $resource;
+    private $resourceSource;
+
+    /**
+     * @var ResourceSourceCarrierLink
+     */
+    private $resourceSourceCarrierLink;
 
     /**
      * @var SourceInterfaceFactory
@@ -50,9 +58,19 @@ class SourceRepository implements SourceRepositoryInterface
     private $collectionFactory;
 
     /**
-     * @var SourceSearchResultsFactory
+     * @var CarrierLinkCollectionFactory
+     */
+    private $carrierLinkCollectionFactory;
+
+    /**
+     * @var SourceSearchResultsInterfaceFactory
      */
     private $sourceSearchResultsFactory;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var LoggerInterface
@@ -61,26 +79,35 @@ class SourceRepository implements SourceRepositoryInterface
 
     /**
      * SourceRepository constructor.
-     * @param ResourceSource $resource
+     * @param ResourceSource $resourceSource
+     * @param ResourceSourceCarrierLink $resourceSourceCarrierLink
      * @param SourceInterfaceFactory $sourceFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
-     * @param SourceSearchResultsFactory $sourceSearchResultsFactory
+     * @param CarrierLinkCollectionFactory $carrierLinkCollectionFactory
+     * @param SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceSource $resource,
+        ResourceSource $resourceSource,
+        ResourceSourceCarrierLink $resourceSourceCarrierLink,
         SourceInterfaceFactory $sourceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $collectionFactory,
-        SourceSearchResultsFactory $sourceSearchResultsFactory,
+        CarrierLinkCollectionFactory $carrierLinkCollectionFactory,
+        SourceSearchResultsInterfaceFactory $sourceSearchResultsFactory,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         LoggerInterface $logger
     ) {
-        $this->resource = $resource;
+        $this->resourceSource = $resourceSource;
+        $this->resourceSourceCarrierLink = $resourceSourceCarrierLink;
         $this->sourceFactory = $sourceFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->collectionFactory = $collectionFactory;
+        $this->carrierLinkCollectionFactory = $carrierLinkCollectionFactory;
         $this->sourceSearchResultsFactory = $sourceSearchResultsFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->logger = $logger;
     }
 
@@ -90,13 +117,34 @@ class SourceRepository implements SourceRepositoryInterface
     public function save(SourceInterface $source)
     {
         try {
-            $this->resource->save($source);
+            $this->saveSource($source);
+            $this->saveSourceCarrierLinks($source);
+            return $source->getSourceId();
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage());
             throw new CouldNotSaveException(__('Could not save source'));
         }
+    }
 
-        return $source;
+    /**
+     * @param SourceInterface $source
+     */
+    private function saveSource(SourceInterface $source)
+    {
+        /** @var SourceInterface|AbstractModel $source */
+        $this->resourceSource->save($source);
+    }
+
+    /**
+     * @param SourceInterface $source
+     */
+    private function saveSourceCarrierLinks(SourceInterface $source)
+    {
+        /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
+        foreach ($source->getCarrierLinks() as $carrierLink) {
+            $carrierLink->setData(SourceInterface::SOURCE_ID, $source->getSourceId());
+            $this->resourceSourceCarrierLink->save($carrierLink);
+        }
     }
 
     /**
@@ -104,15 +152,32 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function get($sourceId)
     {
-        /** @var SourceInterface|AbstractModel $model */
+        /** @var SourceInterface|AbstractModel $source */
         $source = $this->sourceFactory->create();
-        $this->resource->load($source, SourceInterface::SOURCE_ID, $sourceId);
+        $this->resourceSource->load($source, $sourceId, SourceInterface::SOURCE_ID);
+        $this->addCarrierLinks($source);
 
         if (!$source->getSourceId()) {
             throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
         }
 
         return $source;
+    }
+
+    /**
+     * @param SourceInterface $source
+     */
+    private function addCarrierLinks(SourceInterface $source)
+    {
+        /** @var ResourceSourceCarrierLink\Collection $collection */
+        $collection = $this->carrierLinkCollectionFactory->create();
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceInterface::SOURCE_ID, $source->getSourceId())
+            ->create();
+
+        $this->collectionProcessor->process($searchCriteria, $collection);
+        $source->setCarrierLinks($collection->getItems());
     }
 
     /**
@@ -123,15 +188,16 @@ class SourceRepository implements SourceRepositoryInterface
         /** @var \Magento\Inventory\Model\Resource\Source\Collection $collection */
         $collection = $this->collectionFactory->create();
 
+        /** @var SourceSearchResultsInterface $searchResults */
+        $searchResults = $this->sourceSearchResultsFactory->create();
+
         // if there is a searchCriteria defined, use it to add its creterias to the collection
         if (!is_null($searchCriteria)) {
             $this->collectionProcessor->process($searchCriteria, $collection);
+            $searchResults->setSearchCriteria($searchCriteria);
         }
 
-        /** @var SourceSearchResultsInterface $searchResults */
-        $searchResults = $this->sourceSearchResultsFactory->create();
         $searchResults->setItems($collection->getItems());
-        $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }

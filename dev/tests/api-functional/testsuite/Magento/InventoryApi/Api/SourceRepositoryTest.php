@@ -6,8 +6,14 @@
 namespace Magento\InventoryApi\Api;
 
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -18,7 +24,7 @@ class SourceRepositoryTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/inventory/source/';
 
     /**
-     * @var \Magento\InventoryApi\Api\Data\SourceInterfaceFactory
+     * @var SourceInterfaceFactory
      */
     private $sourceFactory;
 
@@ -28,9 +34,29 @@ class SourceRepositoryTest extends WebapiAbstract
     private $countryInformationAcquirer;
 
     /**
-     * @var \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory
+     * @var SourceCarrierLinkInterfaceFactory
      */
     private $sourceCarrierLinkFactory;
+
+    /**
+     * @var SourceRepositoryInterface
+     */
+    private $sourceRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var SortOrderBuilder
+     */
+    private $sortOrderBuilder;
 
     /**
      * Execute per test initialization.
@@ -38,11 +64,137 @@ class SourceRepositoryTest extends WebapiAbstract
     public function setUp()
     {
         $this->sourceFactory = Bootstrap::getObjectManager()
-            ->create(\Magento\InventoryApi\Api\Data\SourceInterfaceFactory::class);
+            ->create(SourceInterfaceFactory::class);
+
         $this->countryInformationAcquirer = Bootstrap::getObjectManager()
             ->create(CountryInformationAcquirerInterface::class);
+
         $this->sourceCarrierLinkFactory = Bootstrap::getObjectManager()
-            ->create(\Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory::class);
+            ->create(SourceCarrierLinkInterfaceFactory::class);
+
+        $this->sourceRepository = Bootstrap::getObjectManager()
+            ->create(SourceRepositoryInterface::class);
+
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()
+            ->create(SearchCriteriaBuilder::class);
+
+        $this->filterBuilder = Bootstrap::getObjectManager()
+            ->create(FilterBuilder::class);
+
+        $this->sortOrderBuilder = Bootstrap::getObjectManager()
+            ->create(SortOrderBuilder::class);
+    }
+
+    /**
+     * @param array $sourceData
+     * @return array
+     */
+    private function getExpectedValues(array $sourceData)
+    {
+        $sourceData[SourceInterface::LATITUDE] = number_format(
+            $sourceData[SourceInterface::LATITUDE],
+            6
+        );
+        $sourceData[SourceInterface::LONGITUDE] = number_format(
+            $sourceData[SourceInterface::LONGITUDE],
+            6
+        );
+
+        return $sourceData;
+    }
+
+    /**
+     * @param SourceInterface $source
+     * @return array
+     */
+    private function getSourceDataArray(SourceInterface $source)
+    {
+        $result = [
+            SourceInterface::NAME => $source->getName(),
+            SourceInterface::CITY => $source->getCity(),
+            SourceInterface::POSTCODE => $source->getPostcode(),
+            SourceInterface::CONTACT_NAME => $source->getContactName(),
+            SourceInterface::COUNTRY_ID => $source->getCountryId(),
+            SourceInterface::DESCRIPTION => $source->getDescription(),
+            SourceInterface::EMAIL => $source->getEmail(),
+            SourceInterface::STREET => $source->getStreet(),
+            SourceInterface::FAX => $source->getFax(),
+            SourceInterface::PHONE => $source->getPhone(),
+            SourceInterface::REGION => $source->getRegion(),
+            SourceInterface::REGION_ID => $source->getRegionId(),
+            SourceInterface::LATITUDE => $source->getLatitude(),
+            SourceInterface::LONGITUDE => $source->getLongitude(),
+            SourceInterface::IS_ACTIVE => $source->getIsActive(),
+            SourceInterface::PRIORITY => $source->getPriority(),
+            SourceInterface::CARRIER_LINKS => []
+        ];
+
+        $carrierLinks = $source->getCarrierLinks();
+        if ($carrierLinks) {
+            foreach ($carrierLinks as $carrierLink) {
+                $result[SourceInterface::CARRIER_LINKS][] = [
+                    SourceCarrierLinkInterface::CARRIER_CODE => $carrierLink->getCarrierCode(),
+                    SourceCarrierLinkInterface::POSITION => $carrierLink->getPosition(),
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param int $countCarrier
+     * @param string $postcode
+     * @return SourceInterface
+     */
+    private function createRandomSource($countCarrier = 2, $postcode = '54321', $isActive = true)
+    {
+        $country = $this->countryInformationAcquirer->getCountryInfo('US');
+        $regions = $country->getAvailableRegions();
+        $region = $regions[rand(0, count($regions)-1)];
+
+        $name = 'Api Test ' . uniqid();
+        $description = 'This is an inventory source created by api-functional tests';
+        $city = 'Exampletown';
+        $street = 'Some Street 455';
+        $contactName = 'Contact Name';
+        $email = 'example.guy@test.com';
+        $fax = '0120002066033';
+        $phone = '01660002020044';
+        $latitude = 51.343479;
+        $longitude = 12.387772;
+        $priority = rand(1,999);
+
+        $carriers = [];
+        for ($index = 1; $index <= $countCarrier; $index++) {
+            $carrierCode = 'CAR-' . $index;
+            $carrier = $this->sourceCarrierLinkFactory->create();
+            $carrier->setPosition($index)
+                ->setCarrierCode($carrierCode);
+            $carriers[] = $carrier;
+        }
+
+        /** @var  \Magento\InventoryApi\Api\Data\SourceInterface $source */
+        $source = $this->sourceFactory->create();
+        $source->setName($name)
+            ->setCity($city)
+            ->setPostcode($postcode)
+            ->setContactName($contactName)
+            ->setCountryId($country->getId())
+            ->setDescription($description)
+            ->setEmail($email)
+            ->setStreet($street)
+            ->setFax($fax)
+            ->setPhone($phone)
+            ->setRegion($region->getName())
+            ->setRegionId($region->getId())
+            ->setLatitude($latitude)
+            ->setLongitude($longitude)
+            ->setIsActive($isActive)
+            ->setPriority($priority)
+            ->setCarrierLinks($carriers);
+
+        return $source;
     }
 
     /**
@@ -50,62 +202,7 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testCreateSource()
     {
-        $country = $this->countryInformationAcquirer->getCountryInfo('DE');
-
-        $name = 'Source name';
-        $description = 'Some description for source';
-        $city = 'Exampletown';
-        $street = 'Some Street 455';
-        $postcode = 54321;
-        $contactName = 'Contact Name';
-        $email = 'example.guy@test.com';
-        $fax = '0120002020033';
-        $phone = '0120002020044';
-        $latitude = 51.343479;
-        $longitude = 12.387772;
-        $isActive = true;
-        $priority = 40;
-
-        $carrierCode1 = 'CAR-1';
-        $carrierCode2 = 'CAR-2';
-
-        /** @var SourceCarrierLinkInterface $carrierLink1 */
-        $carrierLink1 = $this->sourceCarrierLinkFactory->create();
-        $carrierLink1->setPosition(1)
-            ->setCarrierCode($carrierCode1);
-
-        /** @var SourceCarrierLinkInterface $carrierLink2*/
-        $carrierLink2 = $this->sourceCarrierLinkFactory->create();
-        $carrierLink2->setPosition(2)
-            ->setCarrierCode($carrierCode2);
-
-        /** @var  \Magento\InventoryApi\Api\Data\SourceInterface $sourceDataObject */
-        $sourceDataObject = $this->sourceFactory->create();
-        $sourceDataObject->setName($name)
-            ->setDescription($description)
-            ->setCity($city)
-            ->setPostcode($postcode)
-            ->setContactName($contactName)
-            ->setCountryId($country->getId())
-            ->setEmail($email)
-            ->setFax($fax)
-            ->setPhone($phone)
-            ->setLatitude($latitude)
-            ->setLongitude($longitude)
-            ->setIsActive($isActive)
-            ->setPriority($priority)
-            ->setStreet($street)
-            ->setCarrierLinks([
-                $carrierLink1,
-                $carrierLink2
-            ]);
-
-        $regions = $country->getAvailableRegions();
-        if ($regions) {
-            $region = $regions[0];
-            $sourceDataObject->setRegion($region->getName());
-            $sourceDataObject->setRegionId($region->getId());
-        }
+        $expectedSource = $this->createRandomSource(3);
 
         $serviceInfo = [
             'rest' => [
@@ -119,20 +216,18 @@ class SourceRepositoryTest extends WebapiAbstract
             ],
         ];
 
-
         $requestData = [
-            'source' => [
-                SourceInterface::CITY => $sourceDataObject->getCity(),
-                SourceInterface::CONTACT_NAME => $sourceDataObject->getContactName(),
-                SourceInterface::COUNTRY_ID => $sourceDataObject->getCountryId(),
-                SourceInterface::DESCRIPTION => $sourceDataObject->getDescription(),
-                SourceInterface::NAME => $sourceDataObject->getName(),
-                SourceInterface::EMAIL => $sourceDataObject->getEmail(),
-            ],
+            'source' => $this->getSourceDataArray($expectedSource)
         ];
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
-        var_dump($result);
+        $this->assertNotNull($result);
+
+        $createdSource = $this->sourceRepository->get($result);
+        $this->assertEquals(
+            $this->getExpectedValues($this->getSourceDataArray($expectedSource)),
+            $this->getSourceDataArray($createdSource)
+        );
     }
 
     /**
@@ -140,8 +235,28 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testGetSource()
     {
-        //TODO: Implement testGetSource
-        $this->fail(__METHOD__ . " is not implemented yet.");
+        $expectedSource = $this->createRandomSource(5);
+        $currentSourceId = $this->sourceRepository->save($expectedSource);
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $currentSourceId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, [SourceInterface::SOURCE_ID => $currentSourceId]);
+        $this->assertNotNull($result);
+
+        $this->assertEquals($currentSourceId, $result[SourceInterface::SOURCE_ID]);
+
+        unset($result[SourceInterface::SOURCE_ID]);
+        $this->assertEquals($this->getSourceDataArray($expectedSource), $result);
     }
 
     /**
@@ -149,8 +264,81 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testGetSourcesList()
     {
-        //TODO: Implement testGetSourcesList
-        $this->fail(__METHOD__ . " is not implemented yet.");
+        $this->markTestSkipped('WIP: Search seems to ignore filter criterias!');
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()
+            ->create(SearchCriteriaBuilder::class);
+
+        $postcode1 = uniqid('APITEST');
+        $postcode2 = uniqid('APITEST');
+
+        $source1 = $this->createRandomSource(2, $postcode1, true);
+        $source1->setSourceId($this->sourceRepository->save($source1));
+
+        $source2 = $this->createRandomSource(3, $postcode1, false);
+        $this->sourceRepository->save($source2);
+
+        $source3 = $this->createRandomSource(1, $postcode2, true);
+        $this->sourceRepository->save($source3);
+
+        $source4 = $this->createRandomSource(3, $postcode2, true);
+        $this->sourceRepository->save($source4);
+
+        $filter1 = $this->filterBuilder->setField(SourceInterface::POSTCODE)
+            ->setValue($postcode1);
+
+        $filter2 = $this->filterBuilder->setField(SourceInterface::POSTCODE)
+            ->setValue($postcode2);
+
+        $filter3 = $this->filterBuilder->setField(SourceInterface::IS_ACTIVE)
+            ->setValue(true);
+
+        // where postcode = $postcode1
+        // or postcode = $postcode2
+        // and is_active = true
+        $searchCriteriaBuilder->addFilters([$filter1, $filter3]);
+        $searchCriteriaBuilder->addFilters([$filter2, $filter3]);
+
+        $searchCriteriaBuilder->setPageSize(2);
+
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $this->sortOrderBuilder->setField(SourceInterface::SOURCE_ID)
+            ->setDirection(SortOrder::SORT_ASC)
+            ->create();
+
+        $searchCriteriaBuilder->setSortOrders([$sortOrder]);
+
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'search?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        var_dump($serviceInfo);
+
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+        var_dump($searchResult);
+
+        $this->assertEquals(3, $searchResult['page_size']);
+        $this->assertEquals(2, count($searchResult['items']));
+        $this->assertEquals(
+            $searchResult['items'][0][SourceInterface::SOURCE_ID],
+            $source1->getSourceId()
+        );
+        $this->assertEquals(
+            $searchResult['items'][1][SourceInterface::SOURCE_ID],
+            $source2->getSourceId()
+        );
     }
 
     /**

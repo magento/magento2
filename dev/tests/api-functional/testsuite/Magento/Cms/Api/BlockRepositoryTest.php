@@ -262,6 +262,7 @@ class BlockRepositoryTest extends WebapiAbstract
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/search" . '?' . http_build_query($requestData),

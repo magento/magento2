@@ -7,6 +7,10 @@ namespace Magento\InventoryApi\Api\Data;
 
 use \Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * SourceCarrierLink interface
+ * @api
+ */
 interface SourceCarrierLinkInterface extends ExtensibleDataInterface
 {
     /**#@+
