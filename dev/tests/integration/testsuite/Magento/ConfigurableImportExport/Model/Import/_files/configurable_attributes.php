@@ -7,7 +7,10 @@
 /** @var \Magento\Eav\Model\Config $eavConfig */
 $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Setup\CategorySetup::class);
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(
+        \Magento\Catalog\Setup\CategorySetup::class
+    );
 
 /** @var $attributes array */
 $attributes = [
