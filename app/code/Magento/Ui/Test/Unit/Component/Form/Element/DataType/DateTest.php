@@ -13,7 +13,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 
 /**
- * Tests Magento\Ui\Test\Unit\Component\Form\Element\DataType Class
+ * Tests Magento\Ui\Test\Unit\Component\Form\Element\DataType Class.
  */
 class DateTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,7 +46,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This tests ensures that outputDateFormat is properly saved in the configuration with timeOffset.
+     * This test ensures that outputDateFormat is properly saved in the configuration with timeOffset.
      */
     public function testPrepareWithTimeOffset()
     {
@@ -82,7 +82,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This tests ensures that outputDateFormat is properly saved in the configuration without timeOffset.
+     * This test ensures that outputDateFormat is properly saved in the configuration without timeOffset.
      */
     public function testPrepareWithoutTimeOffset()
     {
@@ -126,7 +126,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This tests ensures that userTimeZone is properly saved in the configuration.
+     * This test ensures that userTimeZone is properly saved in the configuration.
      */
     public function testPrepare()
     {
