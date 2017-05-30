@@ -124,14 +124,15 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
         if ($this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE) {
             return true;
         }
+
         return $this->taxConfig->getPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
-        && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
-        && !$this->taxConfig->displayCartPricesBoth($store)
-        && !$this->taxConfig->displayCartSubtotalBoth($store)
-        && !$this->taxConfig->displayCartShippingBoth($store)
-        && !$this->taxConfig->displaySalesPricesBoth($store)
-        && !$this->taxConfig->displaySalesSubtotalBoth($store)
-        && !$this->taxConfig->displaySalesShippingBoth($store);
+            && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
+            && !$this->taxConfig->displayCartPricesBoth($store)
+            && !$this->taxConfig->displayCartSubtotalBoth($store)
+            && !$this->taxConfig->displayCartShippingBoth($store)
+            && !$this->taxConfig->displaySalesPricesBoth($store)
+            && !$this->taxConfig->displaySalesSubtotalBoth($store)
+            && !$this->taxConfig->displaySalesShippingBoth($store);
     }
 
     /**
