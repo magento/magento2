@@ -80,7 +80,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * This tests ensures that cms controller router match cms page before event params.
+     * This test ensures that cms controller router match cms page before event params.
+     *
+     * @return void
      */
     public function testMatchCmsControllerRouterMatchBeforeEventParams()
     {

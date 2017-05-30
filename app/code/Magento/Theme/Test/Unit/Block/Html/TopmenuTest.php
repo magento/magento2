@@ -13,7 +13,7 @@ use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Data\Tree\NodeFactory;
 
 /**
- * Tests Magento\Theme\Block\Html\Topmenu Class
+ * Tests Magento\Theme\Block\Html\Topmenu Class.
  * 
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -204,7 +204,7 @@ HTML;
     }
 
     /**
-     * Create Tree Node mock object
+     * Create Tree Node mock object.
      *
      * Helper method, that provides unified logic of creation of Tree Node mock objects.
      *
@@ -282,7 +282,9 @@ HTML;
     }
 
     /**
-     * This tests ensures that getMenu object is equal \Magento\Framework\Data\Tree\Node root node object.
+     * This test ensures that getMenu object is equal \Magento\Framework\Data\Tree\Node root node object.
+     *
+     * @return void
      */
     public function testGetMenu()
     {
