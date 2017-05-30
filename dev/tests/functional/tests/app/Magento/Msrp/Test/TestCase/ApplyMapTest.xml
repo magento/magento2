@@ -30,5 +30,21 @@
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
         </variation>
+        <variation name="ApplyMapTestVariation4" summary="Apply MAP Setting on Gesture to Simple Product with Quotes in product name" ticketId="MAGETWO-69318">
+            <data name="product" xsi:type="string">catalogProductSimple::msrp_on_gesture_for_product_with_single_quotes_in_product_name</data>
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
+        </variation>
+        <variation name="ApplyMapTestVariation5" summary="Apply MAP Setting on Gesture to Simple Product with Quotes in product name" ticketId="MAGETWO-69318">
+            <data name="product" xsi:type="string">catalogProductSimple::msrp_on_gesture_for_product_with_one_single_quote_in_product_name</data>
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnCategoryPage" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
+            <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
+        </variation>
     </testCase>
 </config>

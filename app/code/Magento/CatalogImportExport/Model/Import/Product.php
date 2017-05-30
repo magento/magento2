@@ -18,6 +18,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Catalog\Model\Config as CatalogConfig;
 
 /**
  * Import entity product model
@@ -658,6 +659,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $multiLineSeparatorForRegexp;
 
     /**
+     * Catalog config.
+     *
+     * @var CatalogConfig
+     */
+    private $catalogConfig;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -695,6 +703,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      * @param array $dateAttrCodes
+     * @param CatalogConfig $catalogConfig
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -737,7 +746,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\Url $productUrl,
         array $data = [],
-        array $dateAttrCodes = []
+        array $dateAttrCodes = [],
+        CatalogConfig $catalogConfig = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -767,6 +777,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->scopeConfig = $scopeConfig;
         $this->productUrl = $productUrl;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
+        $this->catalogConfig = $catalogConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CatalogConfig::class);
+
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -1330,7 +1343,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $entityTable = $this->_resourceFactory->create()->getEntityTable();
         }
         if ($entityRowsUp) {
-            $this->_connection->insertOnDuplicate($entityTable, $entityRowsUp, ['updated_at']);
+            $this->_connection->insertOnDuplicate($entityTable, $entityRowsUp, ['updated_at', 'attribute_set_id']);
         }
         if ($entityRowsIn) {
             $this->_connection->insertMultiple($entityTable, $entityRowsIn);
@@ -1563,9 +1576,29 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 // 1. Entity phase
                 if (isset($this->_oldSku[$rowSku])) {
                     // existing row
+                    if (isset($rowData['attribute_set_code'])) {
+                        $attributeSetId = $this->catalogConfig->getAttributeSetId(
+                            $this->getEntityTypeId(),
+                            $rowData['attribute_set_code']
+                        );
+
+                        // wrong attribute_set_code was received
+                        if (!$attributeSetId) {
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __(
+                                    'Wrong attribute set code "%1", please correct it and try again.',
+                                    $rowData['attribute_set_code']
+                                )
+                            );
+                        }
+                    } else {
+                        $attributeSetId = $this->skuProcessor->getNewSku($rowSku)['attr_set_id'];
+                    }
+
                     $entityRowsUp[] = [
                         'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
-                        $this->getProductEntityLinkField() => $this->_oldSku[$rowSku][$this->getProductEntityLinkField()],
+                        'attribute_set_id' => $attributeSetId,
+                        $this->getProductEntityLinkField() => $this->_oldSku[$rowSku][$this->getProductEntityLinkField()]
                     ];
                 } else {
                     if (!$productLimit || $productsQty < $productLimit) {

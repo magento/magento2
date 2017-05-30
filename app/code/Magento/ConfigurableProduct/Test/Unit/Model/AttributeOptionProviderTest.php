@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -95,7 +97,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'joinInner', 'joinLeft', 'where'])
+            ->setMethods(['from', 'joinInner', 'joinLeft', 'where', 'columns'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock->expects($this->any())
@@ -109,7 +111,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getBackendTable', 'getAttributeId'])
+            ->setMethods(['getBackendTable', 'getAttributeId', 'getSourceModel', 'getSource'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
@@ -157,14 +159,65 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($this->scope);
         $this->scope->expects($this->any())->method('getId')->willReturn(123);
 
-        $this->select->expects($this->any())->method('from')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinInner')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('columns')->willReturnSelf();
+        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->exactly(3))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
 
         $this->abstractAttribute->expects($this->any())
             ->method('getBackendTable')
             ->willReturn('getBackendTable value');
+        $this->abstractAttribute->expects($this->any())
+            ->method('getAttributeId')
+            ->willReturn('getAttributeId value');
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn($options);
+
+        $this->assertEquals(
+            $options,
+            $this->model->getAttributeOptions($this->abstractAttribute, 1)
+        );
+    }
+
+    /**
+     * @param array $options
+     * @dataProvider testOptionsWithBackendModelDataProvider
+     */
+    public function testGetAttributeOptionsWithBackendModel(array $options)
+    {
+        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($this->scope);
+        $this->scope->expects($this->any())->method('getId')->willReturn(123);
+
+        $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
+        $this->select->expects($this->exactly(0))->method('columns')->willReturnSelf();
+        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
+
+        $source = $this->getMockBuilder(AbstractSource::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllOptions'])
+            ->getMockForAbstractClass();
+        $source->expects($this->any())
+            ->method('getAllOptions')
+            ->willReturn([
+                ['value' => 13, 'label' => 'Option Value for index 13'],
+                ['value' => 14, 'label' => 'Option Value for index 14'],
+                ['value' => 15, 'label' => 'Option Value for index 15']
+            ]);
+
+        $this->abstractAttribute->expects($this->atLeastOnce())
+            ->method('getSource')
+            ->willReturn($source);
+        $this->abstractAttribute->expects($this->any())
+            ->method('getBackendTable')
+            ->willReturn('getBackendTable value');
+        $this->abstractAttribute->expects($this->any())
+            ->method('getSourceModel')
+            ->willReturn('getSourceModel value');
         $this->abstractAttribute->expects($this->any())
             ->method('getAttributeId')
             ->willReturn('getAttributeId value');
@@ -192,24 +245,61 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
                         'product_id' => 4,
                         'attribute_code' => 'color',
                         'value_index' => '13',
-                        'option_title' => 'Black'
+                        'option_title' => 'Black',
                     ],
                     [
                         'sku' => 'Configurable1-White',
                         'product_id' => 4,
                         'attribute_code' => 'color',
                         'value_index' => '14',
-                        'option_title' => 'White'
+                        'option_title' => 'White',
                     ],
                     [
                         'sku' => 'Configurable1-Red',
                         'product_id' => 4,
                         'attribute_code' => 'color',
                         'value_index' => '15',
-                        'option_title' => 'Red'
-                    ]
-                ]
-            ]
+                        'option_title' => 'Red',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function testOptionsWithBackendModelDataProvider()
+    {
+        return [
+            [
+                [
+                    [
+                        'sku' => 'Configurable1-Black',
+                        'product_id' => 4,
+                        'attribute_code' => 'color',
+                        'value_index' => '13',
+                        'option_title' => 'Option Value for index 13',
+                        'default_title' => 'Option Value for index 13',
+                    ],
+                    [
+                        'sku' => 'Configurable1-White',
+                        'product_id' => 4,
+                        'attribute_code' => 'color',
+                        'value_index' => '14',
+                        'option_title' => 'Option Value for index 14',
+                        'default_title' => 'Option Value for index 14',
+                    ],
+                    [
+                        'sku' => 'Configurable1-Red',
+                        'product_id' => 4,
+                        'attribute_code' => 'color',
+                        'value_index' => '15',
+                        'option_title' => 'Option Value for index 15',
+                        'default_title' => 'Option Value for index 15',
+                    ],
+                ],
+            ],
         ];
     }
 }
