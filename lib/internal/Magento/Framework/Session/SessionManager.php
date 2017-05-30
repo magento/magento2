@@ -8,7 +8,6 @@
 namespace Magento\Framework\Session;
 
 use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 
 /**
  * Session Manager
@@ -210,19 +209,22 @@ class SessionManager implements SessionManagerInterface
         if (!$this->getCookieLifetime()) {
             return $this;
         }
-        $this->cookieManager->setPublicCookie(
-            $this->getName(),
-            $this->getSessionId(),
-            $this->cookieMetadataFactory->createPublicCookieMetadata(
-                [
-                    CookieMetadata::KEY_DURATION => $this->getCookieLifetime(),
-                    CookieMetadata::KEY_DOMAIN => $this->sessionConfig->getCookieDomain(),
-                    CookieMetadata::KEY_PATH => $this->sessionConfig->getCookiePath(),
-                    CookieMetadata::KEY_SECURE => $this->sessionConfig->getCookieSecure(),
-                    CookieMetadata::KEY_HTTP_ONLY => $this->sessionConfig->getCookieHttpOnly()
-                ]
-            )
-        );
+        $cookieValue = $this->cookieManager->getCookie($this->getName());
+        if ($cookieValue) {
+            $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
+            $metadata->setPath($this->sessionConfig->getCookiePath());
+            $metadata->setDomain($this->sessionConfig->getCookieDomain());
+            $metadata->setDuration($this->sessionConfig->getCookieLifetime());
+            $metadata->setSecure($this->sessionConfig->getCookieSecure());
+            $metadata->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+
+            $this->cookieManager->setPublicCookie(
+                $this->getName(),
+                $cookieValue,
+                $metadata
+            );
+        }
+
         return $this;
     }
 
