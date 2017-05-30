@@ -131,23 +131,60 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 $objectManagerProvider = $serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
                 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
                 $objectManager = $objectManagerProvider->get();
-                $authorization = $objectManager->get(\Magento\Setup\Mvc\Bootstrap\Authorization::class);
-                if (!$authorization->authorize()) {
+                /** @var \Magento\Framework\App\State $adminAppState */
+                $adminAppState = $objectManager->get(\Magento\Framework\App\State::class);
+                $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+                /** @var \Magento\Backend\Model\Session\AdminConfig $sessionConfig */
+                $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
+                $cookiePath = $this->getSetupCookiePath($objectManager);
+                $sessionConfig->setCookiePath($cookiePath);
+                /** @var \Magento\Backend\Model\Auth\Session $adminSession */
+                $adminSession = $objectManager->create(
+                    \Magento\Backend\Model\Auth\Session::class,
+                    [
+                        'sessionConfig' => $sessionConfig,
+                        'appState' => $adminAppState
+                    ]
+                );
+                /** @var \Magento\Backend\Model\Auth $auth */
+                $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
+
+                if (!$authentication->isLoggedIn() ||
+                    !$adminSession->isAllowed('Magento_Backend::setup_wizard')
+                ) {
+                    $adminSession->destroy();
                     /** @var \Zend\Http\Response $response */
                     $response = $event->getResponse();
                     $baseUrl = Http::getDistroBaseUrlPath($_SERVER);
-                    $response->getHeaders()
-                        ->addHeaderLine(
-                            'Location',
-                            $baseUrl . 'index.php/session/unlogin'
-                        );
+                    $response->getHeaders()->addHeaderLine('Location', $baseUrl . 'index.php/session/unlogin');
                     $response->setStatusCode(302);
                     $event->stopPropagation();
+
                     return $response;
                 }
             }
         }
+
         return false;
+    }
+
+    /**
+     * Get cookie path
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @return string
+     */
+    private function getSetupCookiePath(\Magento\Framework\ObjectManagerInterface $objectManager)
+    {
+        /** @var \Magento\Backend\App\BackendAppList $backendAppList */
+        $backendAppList = $objectManager->get(\Magento\Backend\App\BackendAppList::class);
+        $backendApp = $backendAppList->getBackendApp('setup');
+        /** @var \Magento\Backend\Model\Url $url */
+        $url = $objectManager->create(\Magento\Backend\Model\Url::class);
+        $baseUrl = parse_url($url->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
+        $cookiePath = $baseUrl . $backendApp->getCookiePath();
+        return $cookiePath;
     }
 
     /**
