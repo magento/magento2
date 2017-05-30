@@ -378,4 +378,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         }
         return $this->attributeList;
     }
+
+    /**
+     * Retrieve attribute set id for customer address.
+     *
+     * @return int
+     */
+    public function getAttributeSetId()
+    {
+        return parent::getAttributeSetId() ?: AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS;
+    }
 }
