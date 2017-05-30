@@ -19,40 +19,40 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
     const COMMAND = 'info:system';
 
     /**
-     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadataInterface
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param AppState $appState
      */
     public function __construct(
-        \Magento\Framework\App\ProductMetadataInterface $productMetadataInterface,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\State $appState,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
-        \Magento\Payment\Model\Config $paymentConfig,
-        \Magento\Framework\App\State $appState
+        \Magento\Payment\Model\Config $paymentConfig
     ) {
         parent::__construct(self::COMMAND);
-        $this->productMetadataInterface = $productMetadataInterface;
+        $this->productMetadata = $productMetadata;
         $this->deploymentConfig = $deploymentConfig;
+        $this->scopeConfig = $scopeConfig;
+        $this->appState = $appState;
         $this->moduleList = $moduleList;
         $this->customerFactory = $customerFactory;
         $this->productFactory = $productFactory;
         $this->categoryFactory = $categoryFactory;
         $this->attributeFactory = $attributeFactory;
-        $this->scopeConfigInterface = $scopeConfigInterface;
         $this->paymentConfig = $paymentConfig;
-        $this->appState = $appState;
     }
 
     protected function configure()
@@ -71,27 +71,27 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
         $table = new Table($output);
 
         $table
-            ->setHeaders(array('Name', 'Value'))
-            ->setRows(array(
-                array('Application', $this->getApplicationName()),
-                array('Version', $this->productMetadataInterface->getVersion()),
+            ->setHeaders(['Item', 'Value'])
+            ->setRows([
+                ['Application', $this->getApplicationName()],
+                ['Version', $this->productMetadata->getVersion()],
                 new TableSeparator(),
 
-                array('Application Mode', $this->deploymentConfig->get(AppState::PARAM_MODE)),
-                array('Session', $this->deploymentConfig->get('session/save')),
-                array('Crypt Key', $this->deploymentConfig->get('crypt/key')),
-                array('Secure URLs at Storefront', $this->getSecurityInfo('frontend')),
-                array('Secure URLs in Admin', $this->getSecurityInfo('adminhtml')),
-                array('Install Date', $this->deploymentConfig->get('install/date')),
-                array('Module Vendors', $this->getModuleVendors()),
+                ['Application Mode', $this->deploymentConfig->get(AppState::PARAM_MODE)],
+                ['Session', $this->deploymentConfig->get('session/save')],
+                ['Crypt Key', $this->deploymentConfig->get('crypt/key')],
+                ['Secure URLs at Storefront', $this->getSecurityInfo('frontend')],
+                ['Secure URLs in Admin', $this->getSecurityInfo('adminhtml')],
+                ['Install Date', $this->deploymentConfig->get('install/date')],
+                ['Module Vendors', $this->getModuleVendors()],
                 new TableSeparator(),
 
-                array('Total Products', $this->getProductCount()),
-                array('Total Categories', $this->getProductCount()),
-                array('Total Attributes', $this->getAttributeCount()),
-                array('Total Customers', $this->getCustomerCount()),
-                array('Active Payment Methods', $this->getActivePaymentMethods()),
-            ));
+                ['Total Products', $this->getProductCount()],
+                ['Total Categories', $this->getProductCount()],
+                ['Total Attributes', $this->getAttributeCount()],
+                ['Total Customers', $this->getCustomerCount()],
+                ['Active Payment Methods', $this->getActivePaymentMethods()],
+            ]);
 
         $table->render();
     }
@@ -101,9 +101,9 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function getApplicationName()
     {
-        return $this->productMetadataInterface->getName() . ' ' . $this->productMetadataInterface->getEdition();
+        return $this->productMetadata->getName() . ' ' . $this->productMetadata->getEdition();
     }
-    
+
     /**
      * @return string
      */
@@ -176,10 +176,10 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
             'adminhtml',
             function() {
                 $payments = $this->paymentConfig->getActiveMethods();
-                $paymentTitles = array();
+                $paymentTitles = [];
 
                 foreach ($payments as $paymentCode => $paymentModel) {
-                    $paymentTitles[] = $this->scopeConfigInterface
+                    $paymentTitles[] = $this->scopeConfig
                         ->getValue('payment/'.$paymentCode.'/title');
                 }
 
@@ -193,6 +193,6 @@ class SystemInfoCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function getSecurityInfo($area)
     {
-        return $this->scopeConfigInterface->getValue('web/secure/use_in_' . $area) ? 'Yes' : 'No';
+        return $this->scopeConfig->getValue('web/secure/use_in_' . $area) ? 'Yes' : 'No';
     }
 }
