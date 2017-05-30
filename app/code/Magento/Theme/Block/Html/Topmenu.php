@@ -103,6 +103,7 @@ class Topmenu extends Template implements IdentityInterface
             ['menu' => $this->getMenu(), 'transportObject' => $transportObject]
         );
         $html = $transportObject->getHtml();
+
         return $html;
     }
 
@@ -121,6 +122,7 @@ class Topmenu extends Template implements IdentityInterface
                 $total += $this->_countItems($item->getChildren());
             }
         }
+
         return $total;
     }
 
@@ -277,6 +279,7 @@ class Topmenu extends Template implements IdentityInterface
         foreach ($attributes as $attributeName => $attributeValue) {
             $html .= ' ' . $attributeName . '="' . str_replace('"', '\"', $attributeValue) . '"';
         }
+
         return $html;
     }
 
@@ -289,6 +292,7 @@ class Topmenu extends Template implements IdentityInterface
     protected function _getMenuItemAttributes(\Magento\Framework\Data\Tree\Node $item)
     {
         $menuItemClasses = $this->_getMenuItemClasses($item);
+
         return ['class' => implode(' ', $menuItemClasses)];
     }
 
@@ -362,6 +366,7 @@ class Topmenu extends Template implements IdentityInterface
     {
         $keyInfo = parent::getCacheKeyInfo();
         $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
+
         return $keyInfo;
     }
 
@@ -394,6 +399,7 @@ class Topmenu extends Template implements IdentityInterface
                 ]
             );
         }
+
         return $this->_menu;
     }
 }
