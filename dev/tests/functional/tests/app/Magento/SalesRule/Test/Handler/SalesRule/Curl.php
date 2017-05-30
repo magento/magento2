@@ -74,6 +74,10 @@ class Curl extends Conditions implements SalesRuleInterface
             'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'shipping_method',
         ],
+        'Total Weight' => [
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+            'attribute' => 'weight',
+        ],
         'Category' => [
             'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
             'attribute' => 'category_ids',
