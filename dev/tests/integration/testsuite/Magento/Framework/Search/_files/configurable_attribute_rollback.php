@@ -24,6 +24,7 @@ if ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
 ) {
     $attribute->delete();
 }
+
 $eavConfig->clear();
 
 $registry->unregister('isSecureArea');
