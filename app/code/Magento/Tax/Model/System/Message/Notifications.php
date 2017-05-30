@@ -172,13 +172,13 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
         }
 
         return $this->taxConfig->getPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
-        && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
-        && !$this->taxConfig->displayCartPricesBoth($store)
-        && !$this->taxConfig->displayCartSubtotalBoth($store)
-        && !$this->taxConfig->displayCartShippingBoth($store)
-        && !$this->taxConfig->displaySalesPricesBoth($store)
-        && !$this->taxConfig->displaySalesSubtotalBoth($store)
-        && !$this->taxConfig->displaySalesShippingBoth($store);
+            && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
+            && !$this->taxConfig->displayCartPricesBoth($store)
+            && !$this->taxConfig->displayCartSubtotalBoth($store)
+            && !$this->taxConfig->displayCartShippingBoth($store)
+            && !$this->taxConfig->displaySalesPricesBoth($store)
+            && !$this->taxConfig->displaySalesSubtotalBoth($store)
+            && !$this->taxConfig->displaySalesShippingBoth($store);
     }
 
     /**
@@ -188,7 +188,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *      Before Discount / Excluding Tax
      *      Before Discount / Including Tax
      *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store
      * @return bool
      * @deprecated
      * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkSettings
@@ -250,6 +250,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
                 $storeNames[] = $website->getName() . '(' . $store->getName() . ')';
             }
         }
+        
         return $storeNames;
     }
 }
