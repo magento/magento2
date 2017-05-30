@@ -126,9 +126,20 @@ class Processor
                     continue;
                 }
 
+                $data = (array)$this->deploymentConfig->getConfigData($section);
+
+                $validator = $this->configImporterPool->getValidator($section);
+                if (null !== $validator) {
+                    $messages = $validator->validate($data);
+                    //Stop process next sections if current of section has wrong data
+                    if ($messages) {
+                        $output->writeln($messages);
+                        return;
+                    }
+                }
+
                 /** @var ImporterInterface $importer */
                 $importer = $this->importerFactory->create($importerClassName);
-                $data = (array)$this->deploymentConfig->getConfigData($section);
                 $warnings = $importer->getWarningMessages($data);
                 $questions = array_merge($warnings, ['Do you want to continue [yes/no]?']);
 

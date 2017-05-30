@@ -375,7 +375,9 @@
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="scopes" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Store\Model\Config\Importer</item>
+                    <item name="importer_class" xsi:type="string">Magento\Store\Model\Config\Importer</item>
+                    <item name="validator_class" xsi:type="string">Magento\Store\Model\Config\Validator</item>
+                    <item name="sort_order" xsi:type="number">10</item>
                 </item>
             </argument>
         </arguments>
