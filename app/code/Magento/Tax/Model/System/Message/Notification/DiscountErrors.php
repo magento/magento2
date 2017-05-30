@@ -85,9 +85,11 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
         if (!empty($this->getStoresWithWrongSettings()) && !$this->taxConfig->isWrongDiscountSettingsIgnored()) {
             $messageDetails .= '<strong>';
-            $messageDetails .= __('With customer tax applied “Before Discount”,' .
-                ' the final discount calculation may not match customers’ expectations.');
-            $messageDetails .= '</strong><p>';
+            $messageDetails .= __(
+                'With customer tax applied “Before Discount”,' .
+                ' the final discount calculation may not match customers’ expectations.'
+            );
+            $messageDetails .= ' </strong><p>';
             $messageDetails .= __('Store(s) affected: ');
             $messageDetails .= implode(', ', $this->getStoresWithWrongSettings());
             $messageDetails .= '</p><p>';

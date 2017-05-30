@@ -763,12 +763,11 @@ class Config
         );
     }
 
-    /*
+    /**
      * Check if admin notification related to misconfiguration of "Apply Discount On Prices" should be ignored.
-	 *
-	 * Warning is displayed in case when "Catalog Prices" = "Excluding Tax"
-	 * AND "Apply Discount On Prices" = "Including Tax"
-	 * AND "Apply Customer Tax" = "After Discount"
+     * Warning is displayed in case when "Catalog Prices" = "Excluding Tax"
+     * AND "Apply Discount On Prices" = "Including Tax"
+     * AND "Apply Customer Tax" = "After Discount"
      *
      * @param null|string|Store $store
      * @return bool
@@ -781,7 +780,6 @@ class Config
             $store
         );
     }
-
 
     /**
      * Check if do not show notification about wrong display settings
