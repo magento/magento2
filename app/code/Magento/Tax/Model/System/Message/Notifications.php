@@ -11,7 +11,7 @@ namespace Magento\Tax\Model\System\Message;
 class Notifications implements \Magento\Framework\Notification\MessageInterface
 {
     /**
-     * Store manager object
+     * Store manager object.
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated
@@ -19,19 +19,21 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     protected $storeManager;
 
     /**
+     * Store url interface object.
+     *
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * Tax configuration object
+     * Tax configuration object.
      *
      * @var \Magento\Tax\Model\Config
      */
     protected $taxConfig;
 
     /**
-     * Stores with invalid display settings
+     * Stores with invalid display settings.
      *
      * @var array
      * @deprecated
@@ -40,7 +42,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     protected $storesWithInvalidDisplaySettings;
 
     /**
-     * Websites with invalid discount settings
+     * Websites with invalid discount settings.
      *
      * @var array
      * @deprecated
@@ -49,6 +51,8 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     protected $storesWithInvalidDiscountSettings;
 
     /**
+     * Array with notification objects.
+     *
      * @var NotificationInterface[]
      */
     private $notifications = [];
@@ -119,7 +123,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * Retrieve message severity
+     * Retrieve message severity.
      *
      * @return int
      * @codeCoverageIgnore
@@ -130,7 +134,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * Get URL for the tax notification documentation
+     * Get URL for the tax notification documentation.
      *
      * @return string
      */
@@ -140,7 +144,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * Get URL to the admin tax configuration page
+     * Get URL to the admin tax configuration page.
      *
      * @return string
      */
@@ -150,13 +154,13 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * Check if tax calculation type and price display settings are compatible
+     * Check if tax calculation type and price display settings are compatible.
      *
      * Invalid settings if
      *      Tax Calculation Method Based On 'Total' or 'Row'
      *      and at least one Price Display Settings has 'Including and Excluding Tax' value
      *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store
      * @return bool
      * @deprecated
      * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkSettings
@@ -166,6 +170,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
         if ($this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE) {
             return true;
         }
+
         return $this->taxConfig->getPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
         && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
         && !$this->taxConfig->displayCartPricesBoth($store)
@@ -177,7 +182,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * Check if tax discount settings are compatible
+     * Check if tax discount settings are compatible.
      *
      * Matrix for invalid discount settings is as follows:
      *      Before Discount / Excluding Tax
@@ -194,7 +199,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * Get URL to ignore tax notifications
+     * Get URL to ignore tax notifications.
      *
      * @param string $section
      * @return string
@@ -223,6 +228,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
                 $storeNames[] = $website->getName() . '(' . $store->getName() . ')';
             }
         }
+
         return $storeNames;
     }
 

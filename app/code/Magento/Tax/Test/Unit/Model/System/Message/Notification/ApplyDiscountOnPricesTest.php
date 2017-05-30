@@ -29,17 +29,17 @@ class ApplyDiscountOnPricesTest extends \PHPUnit_Framework_TestCase
     private $applyDiscountOnPricesNotification;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var UrlInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var TaxConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var TaxConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     private $taxConfigMock;
 
