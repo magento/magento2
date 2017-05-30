@@ -15,7 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+Bootstrap::getInstance()->reinitialize();
 
 require __DIR__ . '/configurable_attribute.php';
 
@@ -33,7 +33,7 @@ $options = $attribute->getOptions();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];
-$productIds = [10, 20];
+$productIds = [10010, 10020];
 array_shift($options); //remove the first option which is empty
 
 $isFirstOption = true;
@@ -48,7 +48,7 @@ foreach ($options as $option) {
         ->setName('Configurable Option' . $option->getLabel())
         ->setSku('simple_' . $productId)
         ->setPrice($productId)
-        ->setTestConfigurable($option->getValue())
+        ->setTestConfigurableSearchable($option->getValue())
         ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Status::STATUS_ENABLED)
         ->setStockData(
@@ -116,7 +116,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 try {
-    $productToDelete = $productRepository->getById(1);
+    $productToDelete = $productRepository->getById(10001);
     $productRepository->delete($productToDelete);
 
     /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $itemResource */
@@ -133,11 +133,11 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setId(1)
+    ->setId(10001)
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product')
-    ->setSku('configurable')
+    ->setSku('configurable_searchable')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
