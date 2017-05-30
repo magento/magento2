@@ -66,11 +66,11 @@ class OptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'joinInner', 'joinLeft', 'where'])
+            ->setMethods(['from', 'joinInner', 'joinLeft', 'where', 'columns'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock->expects($this->atLeastOnce())
-            ->method('select')
+            ->method('select', 'getIfNullSql')
             ->willReturn($this->select);
 
         $this->attributeResourceMock = $this->getMockBuilder(Attribute::class)
@@ -87,7 +87,7 @@ class OptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getBackendTable', 'getAttributeId'])
+            ->setMethods(['getBackendTable', 'getAttributeId', 'getSourceModel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -110,10 +110,11 @@ class OptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSelect()
     {
-        $this->select->expects($this->any())->method('from')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinInner')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('columns')->willReturnSelf();
+        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->exactly(3))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
 
         $this->abstractAttributeMock->expects($this->atLeastOnce())
             ->method('getAttributeId')
@@ -122,7 +123,36 @@ class OptionSelectBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getBackendTable')
             ->willReturn('getMainTable value');
 
-        $this->scope->expects($this->atLeastOnce())->method('getId')->willReturn(123);
+        $this->scope->expects($this->any())->method('getId')->willReturn(123);
+
+        $this->assertEquals(
+            $this->select,
+            $this->model->getSelect($this->abstractAttributeMock, 4, $this->scope)
+        );
+    }
+
+    /**
+     * Test for method getSelect with backend table
+     */
+    public function testGetSelectWithBackendModel()
+    {
+        $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
+        $this->select->expects($this->exactly(0))->method('columns')->willReturnSelf();
+        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
+
+        $this->abstractAttributeMock->expects($this->atLeastOnce())
+            ->method('getAttributeId')
+            ->willReturn('getAttributeId value');
+        $this->abstractAttributeMock->expects($this->atLeastOnce())
+            ->method('getBackendTable')
+            ->willReturn('getMainTable value');
+        $this->abstractAttributeMock->expects($this->atLeastOnce())
+            ->method('getSourceModel')
+            ->willReturn('source model value');
+
+        $this->scope->expects($this->any())->method('getId')->willReturn(123);
 
         $this->assertEquals(
             $this->select,

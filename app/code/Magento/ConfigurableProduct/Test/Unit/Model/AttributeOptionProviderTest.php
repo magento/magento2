@@ -8,6 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
@@ -92,10 +93,10 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
         $this->optionSelectBuilder = $this->getMockBuilder(OptionSelectBuilderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        
+
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(['getSourceModel', 'getSource'])
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -141,46 +142,45 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $options
-     * @dataProvider testOptionsWithBackendModelDataProvider
+     * @dataProvider optionsWithBackendModelDataProvider
      */
     public function testGetAttributeOptionsWithBackendModel(array $options)
     {
-        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($this->scope);
-        $this->scope->expects($this->any())->method('getId')->willReturn(123);
-
-        $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
-        $this->select->expects($this->exactly(0))->method('columns')->willReturnSelf();
-        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
-        $this->select->expects($this->exactly(1))->method('joinLeft')->willReturnSelf();
-        $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
+        $this->scopeResolver->expects($this->any())
+            ->method('getScope')
+            ->willReturn($this->scope);
 
         $source = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllOptions'])
             ->getMockForAbstractClass();
-        $source->expects($this->any())
+        $source->expects($this->once())
             ->method('getAllOptions')
             ->willReturn([
                 ['value' => 13, 'label' => 'Option Value for index 13'],
                 ['value' => 14, 'label' => 'Option Value for index 14'],
                 ['value' => 15, 'label' => 'Option Value for index 15']
             ]);
-
-        $this->abstractAttribute->expects($this->atLeastOnce())
+        
+        $this->abstractAttribute->expects($this->any())
             ->method('getSource')
             ->willReturn($source);
-        $this->abstractAttribute->expects($this->any())
-            ->method('getBackendTable')
-            ->willReturn('getBackendTable value');
-        $this->abstractAttribute->expects($this->any())
+        $this->abstractAttribute->expects($this->atLeastOnce())
             ->method('getSourceModel')
             ->willReturn('getSourceModel value');
-        $this->abstractAttribute->expects($this->any())
-            ->method('getAttributeId')
-            ->willReturn('getAttributeId value');
+
+        $this->optionSelectBuilder->expects($this->any())
+            ->method('getSelect')
+            ->with($this->abstractAttribute, 1, $this->scope)
+            ->willReturn($this->select);
+
+        $this->attributeResource->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
+            ->with($this->select)
             ->willReturn($options);
 
         $this->assertEquals(
@@ -226,7 +226,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testOptionsWithBackendModelDataProvider()
+    public function optionsWithBackendModelDataProvider()
     {
         return [
             [
