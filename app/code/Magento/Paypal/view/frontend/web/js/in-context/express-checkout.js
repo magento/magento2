@@ -25,6 +25,8 @@ define(
             defaults: {
                 clientConfig: {
 
+                    checkoutInited: false,
+
                     /**
                      * @param {Object} event
                      */
@@ -33,7 +35,12 @@ define(
 
                         event.preventDefault();
 
-                        paypalExpressCheckout.checkout.initXO();
+                        if (!this.clientConfig.checkoutInited) {
+                            paypalExpressCheckout.checkout.initXO();
+                            this.clientConfig.checkoutInited = true;
+                        } else {
+                            paypalExpressCheckout.checkout.closeFlow();
+                        }
 
                         $.get(
                             this.path,
@@ -52,11 +59,11 @@ define(
                             }
                         ).fail(
                             function () {
-                                $('body').trigger('processStop');
                                 paypalExpressCheckout.checkout.closeFlow();
                             }
                         ).always(
                             function () {
+                                $('body').trigger('processStop');
                                 customerData.invalidate(['cart']);
                             }
                         );

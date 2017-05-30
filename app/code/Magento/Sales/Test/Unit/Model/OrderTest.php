@@ -357,6 +357,34 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->order->canCreditmemo());
     }
 
+    public function testCanNotCreditMemoWithAdjustmentNegative()
+    {
+        $totalPaid = 100;
+        $adjustmentNegative = 10;
+        $totalRefunded = 90;
+
+        $this->order->setTotalPaid($totalPaid);
+        $this->order->setTotalRefunded($totalRefunded);
+        $this->order->setAdjustmentNegative($adjustmentNegative);
+        $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
+        
+        $this->assertFalse($this->order->canCreditmemo());
+    }
+
+    public function testCanCreditMemoWithAdjustmentNegativeLowerThanTotalPaid()
+    {
+        $totalPaid = 100;
+        $adjustmentNegative = 9;
+        $totalRefunded = 90;
+
+        $this->order->setTotalPaid($totalPaid);
+        $this->order->setTotalRefunded($totalRefunded);
+        $this->order->setAdjustmentNegative($adjustmentNegative);
+        $this->priceCurrency->expects($this->once())->method('round')->with($totalPaid)->willReturnArgument(0);
+
+        $this->assertTrue($this->order->canCreditmemo());
+    }
+
     /**
      * @param string $state
      *

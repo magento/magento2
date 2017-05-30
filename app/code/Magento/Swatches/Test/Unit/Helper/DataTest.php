@@ -791,13 +791,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->attributeMock->method('hasData')->with('swatch_input_type')->willReturn(false);
 
-        $this->attributeMock->expects($this->exactly(2))->method('getData')->withConsecutive(
-            ['additional_data'],
-            ['swatch_input_type']
-        )->willReturnOnConsecutiveCalls(
-            $data,
-            $swatchType
-        );
+        $this->attributeMock->expects($this->exactly(2))
+            ->method('getData')
+            ->withConsecutive(
+                ['additional_data'],
+                ['swatch_input_type']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $data,
+                $swatchType
+            );
 
         $this->attributeMock
             ->expects($this->exactly($count['setData']))
