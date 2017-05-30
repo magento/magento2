@@ -6,18 +6,105 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
+use Magento\Sales\Model\Order\Invoice\Total\Shipping;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var Shipping
+     */
+    private $total;
+
+    protected function setUp()
+    {
+        $this->total = new Shipping();
+    }
+
+    /**
+     * @dataProvider collectWithNoOrZeroPrevInvoiceDataProvider
+     * @param array $prevInvoicesData
+     * @param float $orderShipping
+     * @param float $expectedShipping
+     */
+    public function testCollectWithNoOrZeroPrevInvoice(array $prevInvoicesData, $orderShipping, $expectedShipping)
+    {
+        $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
+        $invoice->expects($this->exactly(2))
+            ->method('setShippingAmount')
+            ->withConsecutive([0], [$expectedShipping]);
+
+        $this->total->collect($invoice);
+    }
+
+    /**
+     * @return array
+     */
+    public static function collectWithNoOrZeroPrevInvoiceDataProvider()
+    {
+        return [
+            'no previous invoices' => [
+                'prevInvoicesData' => [[]],
+                'orderShipping' => 10.00,
+                'expectedShipping' => 10.00,
+            ],
+            'zero shipping in previous invoices' => [
+                'prevInvoicesData' => [['shipping_amount' => '0.0000']],
+                'orderShipping' => 10.00,
+                'expectedShipping' => 10.00,
+            ],
+        ];
+    }
+
+    public function testCollectWithPreviousInvoice()
+    {
+        $orderShipping = 10.00;
+        $prevInvoicesData = [['shipping_amount' => '10.000']];
+        $invoice = $this->createInvoiceStub($prevInvoicesData, $orderShipping);
+        $invoice->expects($this->once())
+            ->method('setShippingAmount')
+            ->with(0);
+
+        $this->total->collect($invoice);
+    }
+
+    /**
+     * Create stub of an invoice
+     *
+     * @param array $prevInvoicesData
+     * @param float $orderShipping
+     * @return \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createInvoiceStub(array $prevInvoicesData, $orderShipping)
+    {
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order->expects($this->any())
+            ->method('getInvoiceCollection')
+            ->will($this->returnValue($this->getInvoiceCollection($prevInvoicesData)));
+        $order->expects($this->any())
+            ->method('getShippingAmount')
+            ->willReturn($orderShipping);
+        /** @var $invoice \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject */
+        $invoice = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoice->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($order);
+        return $invoice;
+    }
+
+    /**
      * Retrieve new invoice collection from an array of invoices' data
      *
      * @param array $invoicesData
      * @return \Magento\Framework\Data\Collection
      */
-    protected function _getInvoiceCollection(array $invoicesData)
+    private function getInvoiceCollection(array $invoicesData)
     {
         $className = \Magento\Sales\Model\Order\Invoice::class;
         $result = new \Magento\Framework\Data\Collection(
@@ -70,58 +157,5 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             $result->addItem($prevInvoice);
         }
         return $result;
-    }
-
-    /**
-     * @dataProvider collectDataProvider
-     * @param array $prevInvoicesData
-     * @param float $orderShipping
-     * @param float $expectedShipping
-     */
-    public function testCollect(array $prevInvoicesData, $orderShipping, $expectedShipping)
-    {
-        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $order->expects($this->any())
-            ->method('getInvoiceCollection')
-            ->will($this->returnValue($this->_getInvoiceCollection($prevInvoicesData)));
-        $order->expects($this->any())
-            ->method('getShippingAmount')
-            ->willReturn($orderShipping);
-        /** @var $invoice \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject */
-        $invoice = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $invoice->expects($this->any())
-            ->method('getOrder')
-            ->willReturn($order);
-        $invoice->expects($this->any())
-            ->method('setShippingAmount')
-            ->withConsecutive([0], [$expectedShipping]);
-
-        $total = new \Magento\Sales\Model\Order\Invoice\Total\Shipping();
-        $total->collect($invoice);
-    }
-
-    public static function collectDataProvider()
-    {
-        return [
-            'no previous invoices' => [
-                'prevInvoicesData' => [[]],
-                'orderShipping' => 10.00,
-                'expectedShipping' => 10.00,
-            ],
-            'zero shipping in previous invoices' => [
-                'prevInvoicesData' => [['shipping_amount' => '0.0000']],
-                'orderShipping' => 10.00,
-                'expectedShipping' => 10.00,
-            ],
-            'non-zero shipping in previous invoices' => [
-                'prevInvoicesData' => [['shipping_amount' => '10.000']],
-                'orderShipping' => 10.00,
-                'expectedShipping' => 0,
-            ]
-        ];
     }
 }
