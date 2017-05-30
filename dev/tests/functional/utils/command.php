@@ -8,7 +8,7 @@ $commandList = [
     'cache:flush',
     'cache:disable',
     'cache:enable',
-    'setup:static-content:deploy'
+    'setup:static-content:deploy',
 ];
 
 if (isset($_GET['command'])) {

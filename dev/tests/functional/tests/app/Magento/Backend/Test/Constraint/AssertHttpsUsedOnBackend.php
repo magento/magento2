@@ -34,7 +34,7 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
      *
      * @var BrowserInterface
      */
-    protected $browser;
+    private $browser;
 
     /**
      * Validations execution.
@@ -60,7 +60,7 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
      * @param string $expectedProtocol
      * @return void
      */
-    protected function assertUsedProtocol($expectedProtocol)
+    private function assertUsedProtocol($expectedProtocol)
     {
         if (substr($expectedProtocol, -3) !== "://") {
             $expectedProtocol .= '://';
@@ -78,7 +78,7 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
      *
      * @return void
      */
-    protected function assertDirectHttpUnavailable()
+    private function assertDirectHttpUnavailable()
     {
         $fakeUrl = str_replace($this->securedProtocol, $this->unsecuredProtocol, $this->browser->getUrl());
         $this->browser->open($fakeUrl);

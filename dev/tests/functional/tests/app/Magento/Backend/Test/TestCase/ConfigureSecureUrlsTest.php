@@ -65,28 +65,28 @@ class ConfigureSecureUrlsTest extends Injectable
      *
      * @var FixtureFactory
      */
-    protected $fixtureFactory;
+    private $fixtureFactory;
 
     /**
      * "Configuration" page in Admin panel.
      *
      * @var SystemConfigEdit
      */
-    protected $configurationAdminPage;
+    private $configurationAdminPage;
 
     /**
      * Cache CLI.
      *
      * @var Cache
      */
-    protected $cache;
+    private $cache;
 
     /**
      * Static content CLI.
      *
      * @var StaticContent
      */
-    protected $staticContent;
+    private $staticContent;
 
     /**
      * Prepare data for further test execution.

@@ -29,14 +29,14 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
      *
      * @var BrowserInterface
      */
-    protected $browser;
+    private $browser;
 
     /**
      * Customer account.
      *
      * @var Customer
      */
-    protected $customer;
+    private $customer;
 
     /**
      * Validations execution.
@@ -66,7 +66,7 @@ class AssertHttpUsedOnFrontend extends AbstractConstraint
      * @param string $expectedProtocol
      * @return void
      */
-    protected function assertUsedProtocol($expectedProtocol)
+    private function assertUsedProtocol($expectedProtocol)
     {
         if (substr($expectedProtocol, -3) !== "://") {
             $expectedProtocol .= '://';
