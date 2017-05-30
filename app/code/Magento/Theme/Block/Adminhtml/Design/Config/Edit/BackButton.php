@@ -9,6 +9,11 @@ use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * "Back" button data provider
+ *
+ * @api
+ */
 class BackButton implements ButtonProviderInterface
 {
     /**
@@ -28,7 +33,7 @@ class BackButton implements ButtonProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {

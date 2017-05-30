@@ -9,7 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Exception\CouldNotShipExceptionInterface;
 
 /**
- * Class CouldNotShipException
+ * @api
  */
 class CouldNotShipException extends LocalizedException implements CouldNotShipExceptionInterface
 {

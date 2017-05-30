@@ -9,11 +9,9 @@ use Magento\Framework\View;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
- * Class BundleConfig
+ * Static files bundling configuration
  *
  * Use this to get configuration settings related to JavaScript built-in bundling
- *
- * @api
  */
 class BundleConfig
 {

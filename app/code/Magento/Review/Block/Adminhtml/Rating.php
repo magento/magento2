@@ -8,6 +8,7 @@ namespace Magento\Review\Block\Adminhtml;
 /**
  * Ratings grid
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Rating extends \Magento\Backend\Block\Widget\Grid\Container

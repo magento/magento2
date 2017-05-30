@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Type;
 /**
  * EAV attribute resource collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection

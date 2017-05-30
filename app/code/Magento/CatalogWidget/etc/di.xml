@@ -13,4 +13,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogWidget\Model\Rule\Condition\Product">
+        <arguments>
+            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
+        </arguments>
+    </type>
 </config>

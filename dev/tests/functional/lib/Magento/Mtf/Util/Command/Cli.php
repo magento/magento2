@@ -41,7 +41,7 @@ class Cli
      * @param array $options [optional]
      * @return void
      */
-    protected function execute($command, $options = [])
+    public function execute($command, $options = [])
     {
         $curl = $this->transport;
         $curl->write($this->prepareUrl($command, $options), [], CurlInterface::GET);
@@ -53,10 +53,10 @@ class Cli
      * Prepare url.
      *
      * @param string $command
-     * @param array $options
+     * @param array $options [optional]
      * @return string
      */
-    private function prepareUrl($command, array $options)
+    private function prepareUrl($command, $options = [])
     {
         $command .= ' ' . implode(' ', $options);
         return $_ENV['app_frontend_url'] . self::URL . '?command=' . urlencode($command);

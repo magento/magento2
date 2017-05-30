@@ -39,13 +39,18 @@ class FullTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Block\Product\ListProduct::class
         );
 
+        /** @var \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource */
+        $indexerStockFrontendResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class
+        );
+
         $category = $categoryFactory->create()->load(2);
         $layer = $listProduct->getLayer();
         $layer->setCurrentCategory($category);
         $productCollection = $layer->getProductCollection();
         $productCollection->joinField(
             'qty',
-            'cataloginventory_stock_status_idx',
+            $indexerStockFrontendResource->getMainTable(),
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

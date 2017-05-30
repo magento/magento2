@@ -5,6 +5,12 @@
  */
 namespace Magento\Checkout\Model;
 
+/**
+ * Composite checkout configuration provider.
+ *
+ * @see \Magento\Checkout\Model\ConfigProviderInterface
+ * @api
+ */
 class CompositeConfigProvider implements ConfigProviderInterface
 {
     /**

@@ -401,8 +401,63 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsWith('list-category-page', $result);
     }
 
-    public function testGetCacheKeyInfo()
+    public function testGetCacheKeyInfoContainsDisplayMinimalPrice()
     {
         $this->assertArrayHasKey('display_minimal_price', $this->object->getCacheKeyInfo());
+    }
+
+    /**
+     * Test when is_product_list flag is not specified
+     */
+    public function testGetCacheKeyInfoContainsIsProductListFlagByDefault()
+    {
+        $cacheInfo = $this->object->getCacheKeyInfo();
+        self::assertArrayHasKey('is_product_list', $cacheInfo);
+        self::assertFalse($cacheInfo['is_product_list']);
+    }
+
+    /**
+     * Test when is_product_list flag is specified
+     *
+     * @param bool $flag
+     * @dataProvider isProductListDataProvider
+     */
+    public function testGetCacheKeyInfoContainsIsProductListFlag($flag)
+    {
+        $this->object->setData('is_product_list', $flag);
+        $cacheInfo = $this->object->getCacheKeyInfo();
+        self::assertArrayHasKey('is_product_list', $cacheInfo);
+        self::assertEquals($flag, $cacheInfo['is_product_list']);
+    }
+
+    /**
+     * Test when is_product_list flag is not specified
+     */
+    public function testIsProductListByDefault()
+    {
+        self::assertFalse($this->object->isProductList());
+    }
+
+    /**
+     * Test when is_product_list flag is specified
+     *
+     * @param bool $flag
+     * @dataProvider isProductListDataProvider
+     */
+    public function testIsProductList($flag)
+    {
+        $this->object->setData('is_product_list', $flag);
+        self::assertEquals($flag, $this->object->isProductList());
+    }
+
+    /**
+     * @return array
+     */
+    public function isProductListDataProvider()
+    {
+        return [
+            'is_not_product_list' => [false],
+            'is_product_list' => [true],
+        ];
     }
 }

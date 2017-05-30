@@ -5,7 +5,7 @@
  */
 namespace Magento\Deploy\Package\Processor\PreProcessor;
 
-use Magento\Deploy\Console\Command\DeployStaticOptions;
+use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;

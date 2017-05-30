@@ -14,6 +14,9 @@ use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 use Magento\Framework\App\ScopeResolverPool;
 
+/**
+ * Edit action controller
+ */
 class Edit extends Action
 {
     /**

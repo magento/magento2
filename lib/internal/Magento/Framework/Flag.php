@@ -114,12 +114,12 @@ class Flag extends Model\AbstractModel
     {
         if ($this->hasFlagData()) {
             $flagData = $this->getData('flag_data');
-            $data = $this->json->unserialize($flagData);
-            if (JSON_ERROR_NONE == json_last_error()) {
-                return $data;
-            } else {
-                return $this->serialize->unserialize($flagData);
+            try {
+                $data = $this->json->unserialize($flagData);
+            } catch (\InvalidArgumentException $exception) {
+                $data = $this->serialize->unserialize($flagData);
             }
+            return $data;
         }
     }
 

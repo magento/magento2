@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;

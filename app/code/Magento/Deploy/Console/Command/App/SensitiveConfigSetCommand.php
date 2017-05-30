@@ -5,15 +5,13 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
-use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory;
-use Magento\Deploy\Model\ConfigWriter;
-use Magento\Framework\App\Config\CommentParserInterface;
+use Magento\Config\App\Config\Type\System;
+use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
+use Magento\Deploy\Console\Command\App\SensitiveConfigSet\SensitiveConfigSetFacade;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Scope\ValidatorInterface;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,8 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for set sensitive variable through deploy process
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SensitiveConfigSetCommand extends Command
 {
@@ -53,52 +49,51 @@ class SensitiveConfigSetCommand extends Command
     const INPUT_ARGUMENT_VALUE = 'value';
 
     /**
-     * @var CommentParserInterface
-     */
-    private $commentParser;
-
-    /**
-     * @var ConfigFilePool
-     */
-    private $configFilePool;
-
-    /**
-     * @var ConfigWriter
-     */
-    private $configWriter;
-
-    /**
-     * @var ValidatorInterface
-     */
-    private $scopeValidator;
-
-    /**
-     * @var CollectorFactory
-     */
-    private $collectorFactory;
-
-    /**
-     * SensitiveConfigSetCommand constructor
+     * The config change detector.
      *
-     * @param ConfigFilePool $configFilePool
-     * @param CommentParserInterface $commentParser
-     * @param ConfigWriter $configWriter
-     * @param ValidatorInterface $scopeValidator
-     * @param CollectorFactory $collectorFactory
+     * @var ChangeDetector
+     */
+    private $changeDetector;
+
+    /**
+     * The hash manager.
+     *
+     * @var Hash
+     */
+    private $hash;
+
+    /**
+     * The facade for command.
+     *
+     * @var SensitiveConfigSetFacade
+     */
+    private $facade;
+
+    /**
+     * Emulator adminhtml area for CLI command.
+     *
+     * @var EmulatedAdminhtmlAreaProcessor
+     */
+    private $emulatedAreaProcessor;
+
+    /**
+     * @param SensitiveConfigSetFacade $facade The processor facade
+     * @param ChangeDetector $changeDetector The config change detector
+     * @param Hash $hash The hash manager
+     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      */
     public function __construct(
-        ConfigFilePool $configFilePool,
-        CommentParserInterface $commentParser,
-        ConfigWriter $configWriter,
-        ValidatorInterface $scopeValidator,
-        CollectorFactory $collectorFactory
+        SensitiveConfigSetFacade $facade,
+        ChangeDetector $changeDetector,
+        Hash $hash,
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor
     ) {
+        $this->facade = $facade;
+        $this->changeDetector = $changeDetector;
+        $this->hash = $hash;
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
+
         parent::__construct();
-        $this->commentParser = $commentParser;
-        $this->configFilePool = $configFilePool;
-        $this->configWriter = $configWriter;
-        $this->scopeValidator = $scopeValidator;
-        $this->collectorFactory = $collectorFactory;
     }
 
     /**
@@ -146,68 +141,30 @@ class SensitiveConfigSetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $scope = $input->getOption(self::INPUT_OPTION_SCOPE);
-        $scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
-
-        try {
-            $this->scopeValidator->isValid($scope, $scopeCode);
-            $configPaths = $this->getConfigPaths();
-            $isInteractive = $input->getOption(self::INPUT_OPTION_INTERACTIVE);
-            $collector = $this->collectorFactory->create(
-                $isInteractive ? CollectorFactory::TYPE_INTERACTIVE : CollectorFactory::TYPE_SIMPLE
+        if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
+            $output->writeln(
+                '<error>'
+                . 'This command is unavailable right now. '
+                . 'To continue working with it please run app:config:import or setup:upgrade command before.'
+                . '</error>'
             );
-            $values = $collector->getValues($input, $output, $configPaths);
-            $this->configWriter->save($values, $scope, $scopeCode);
-        } catch (LocalizedException $e) {
-            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+
             return Cli::RETURN_FAILURE;
         }
 
-        $this->writeSuccessMessage($output, $isInteractive);
-
-        return Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * Writes success message
-     *
-     * @param OutputInterface $output
-     * @param boolean $isInteractive
-     * @return void
-     */
-    private function writeSuccessMessage(OutputInterface $output, $isInteractive)
-    {
-        $output->writeln(sprintf(
-            '<info>Configuration value%s saved in app/etc/%s</info>',
-            $isInteractive ? 's' : '',
-            $this->configFilePool->getPath(ConfigFilePool::APP_ENV)
-        ));
-    }
-
-    /**
-     * Get sensitive configuration paths
-     *
-     * @return array
-     * @throws LocalizedException if configuration file not exists or sensitive configuration is empty
-     */
-    private function getConfigPaths()
-    {
-        $configFilePath = $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG);
         try {
-            $configPaths = $this->commentParser->execute($configFilePath);
-        } catch (FileSystemException $e) {
-            throw new LocalizedException(__(
-                'File app/etc/%1 can\'t be read. Please check if it exists and has read permissions.',
-                [
-                    $configFilePath
-                ]
-            ));
-        }
+            $this->emulatedAreaProcessor->process(function () use ($input, $output) {
+                $this->facade->process($input, $output);
+            });
+            $this->hash->regenerate(System::CONFIG_TYPE);
 
-        if (empty($configPaths)) {
-            throw new LocalizedException(__('There are no sensitive configurations to fill'));
-        }
+            return Cli::RETURN_SUCCESS;
+        } catch (\Exception $e) {
+            $output->writeln(
+                sprintf('<error>%s</error>', $e->getMessage())
+            );
 
-        return $configPaths;
+            return Cli::RETURN_FAILURE;
+        }
     }
 }

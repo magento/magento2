@@ -10,6 +10,8 @@ namespace Magento\ProductAlert\Model\ResourceModel;
 
 /**
  * Product alert for back in stock resource model
+ *
+ * @api
  */
 class Stock extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
 {

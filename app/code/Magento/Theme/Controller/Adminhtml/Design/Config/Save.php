@@ -12,6 +12,9 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 
+/**
+ * Save action controller
+ */
 class Save extends Action
 {
     /**

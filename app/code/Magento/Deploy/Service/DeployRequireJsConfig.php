@@ -12,9 +12,7 @@ use Magento\Framework\View\Asset\RepositoryFactory;
 use Magento\Framework\RequireJs\ConfigFactory;
 
 /**
- * Deploy RequireJS configuration
- *
- * @api
+ * Deploy RequireJS configuration service
  */
 class DeployRequireJsConfig
 {

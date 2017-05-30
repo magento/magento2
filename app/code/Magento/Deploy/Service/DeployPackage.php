@@ -14,9 +14,7 @@ use Magento\Deploy\Console\InputValidator;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class DeployPackage
- *
- * @api
+ * Deploy package service
  */
 class DeployPackage
 {

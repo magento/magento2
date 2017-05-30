@@ -13,9 +13,9 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 
 /**
- * Class Queue
+ * Deployment Queue
  *
- * @api
+ * Deploy packages in parallel forks (if available)
  */
 class Queue
 {

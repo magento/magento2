@@ -9,6 +9,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * An exception that indicates application initialization error
+ * 
+ * @api
  */
 class InitException extends LocalizedException
 {

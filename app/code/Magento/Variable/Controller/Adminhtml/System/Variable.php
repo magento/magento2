@@ -9,8 +9,6 @@ use Magento\Backend\App\Action;
 
 /**
  * Custom Variables admin controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class Variable extends Action
 {

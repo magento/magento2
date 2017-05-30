@@ -15,12 +15,10 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\RepositoryMap;
 
 /**
- * Bundle Service
+ * Deploy bundled static files service
  *
  * Read all static files from deployed packages and generate bundles. Bundle Factory can be configured to use
  * bundle format different from RequireJS used out of the box
- *
- * @api
  */
 class Bundle
 {

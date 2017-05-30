@@ -6,6 +6,10 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+/**
+ * Class Edit
+ * @deprecated
+ */
 class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**

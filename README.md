@@ -27,9 +27,33 @@ To suggest documentation improvements, click [here][4].
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
 
+<h3>Labels applied by the Magento team</h3>
+
+| Label        | Description           | 
+| ------------- |-------------|
+| ![DOC](http://devdocs.magento.com/common/images/github_DOC.png) | Affects Documentation domain. |
+| ![PROD](http://devdocs.magento.com/common/images/github_PROD.png) | Affects the Product team (mostly feature requests or business logic change). |
+| ![TECH](http://devdocs.magento.com/common/images/github_TECH.png) | Affects Architect Group (mostly to make decisions around technology changes). |
+| ![accept](http://devdocs.magento.com/common/images/github_accept.png) | The pull request has been accepted and will be merged into mainline code. |
+| ![reject](http://devdocs.magento.com/common/images/github_reject.png) | The pull request has been rejected and will not be merged into mainline code. Possible reasons can include but are not limited to: issue has already been fixed in another code contribution, or there is an issue with the code contribution. |
+| ![bug report](http://devdocs.magento.com/common/images/github_bug.png) | The Magento Team has confirmed that this issue contains the minimum required information to reproduce. |
+| ![acknowledged](http://devdocs.magento.com/common/images/gitHub_acknowledged.png) | The Magento Team has validated the issue and an internal ticket has been created. |
+| ![acknowledged](http://devdocs.magento.com/common/images/github_inProgress.png) | The internal ticket is currently in progress, fix is scheduled to be delivered. |
+| ![acknowledged](http://devdocs.magento.com/common/images/github_needsUpdate.png) | The Magento Team needs additional information from the reporter to properly prioritize and process the issue or pull request. |
+
 <h2>Reporting security issues</h2>
 
 To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
 
-Stay up-to-date on the latest vulnerabilities and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
+Stay up-to-date on the latest security news and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
+
+<h2>License</h2>
+
+Each Magento source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license
+
+http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+Please see LICENSE.txt for the full text of the OSL 3.0 license or contact license@magentocommerce.com for a copy.
+
+Subject to Licensee's payment of fees and compliance with the terms and conditions of the MEE License, the MEE License supersedes the OSL 3.0 license for each source file.
+Please see LICENSE_EE.txt for the full text of the MEE License or visit http://magento.com/legal/terms/enterprise.
 

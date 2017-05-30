@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Model\Config;
 
-use Magento\Config\Model\PreparedValueFactory;
+use Magento\Config\Model\Config\Importer\SaveProcessor;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -46,13 +46,6 @@ class Importer implements ImporterInterface
     private $flagResource;
 
     /**
-     * Builder which creates value object according to their backend models.
-     *
-     * @var PreparedValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * An array utils.
      *
      * @var ArrayUtils
@@ -81,10 +74,17 @@ class Importer implements ImporterInterface
     private $scope;
 
     /**
+     * The configuration saving processor.
+     *
+     * @var SaveProcessor
+     */
+    private $saveProcessor;
+
+    /**
      * @param FlagFactory $flagFactory The flag factory
      * @param FlagResource $flagResource The flag resource
      * @param ArrayUtils $arrayUtils An array utils
-     * @param PreparedValueFactory $valueBuilder Builder which creates value object according to their backend models
+     * @param SaveProcessor $saveProcessor Saves configuration data
      * @param ScopeConfigInterface $scopeConfig The application config storage.
      * @param State $state The application scope to run
      * @param ScopeInterface $scope The application scope
@@ -93,7 +93,7 @@ class Importer implements ImporterInterface
         FlagFactory $flagFactory,
         FlagResource $flagResource,
         ArrayUtils $arrayUtils,
-        PreparedValueFactory $valueBuilder,
+        SaveProcessor $saveProcessor,
         ScopeConfigInterface $scopeConfig,
         State $state,
         ScopeInterface $scope
@@ -101,7 +101,7 @@ class Importer implements ImporterInterface
         $this->flagFactory = $flagFactory;
         $this->flagResource = $flagResource;
         $this->arrayUtils = $arrayUtils;
-        $this->valueFactory = $valueBuilder;
+        $this->saveProcessor = $saveProcessor;
         $this->scopeConfig = $scopeConfig;
         $this->state = $state;
         $this->scope = $scope;
@@ -139,7 +139,7 @@ class Importer implements ImporterInterface
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
                 // Invoke saving of new values.
-                $this->invokeSaveAll($changedData);
+                $this->saveProcessor->process($changedData);
             });
 
             $flag->setFlagData($data);
@@ -160,62 +160,5 @@ class Importer implements ImporterInterface
     public function getWarningMessages(array $data)
     {
         return [];
-    }
-
-    /**
-     * Emulates saving of data array.
-     *
-     * @param array $data The data to be saved
-     * @return void
-     */
-    private function invokeSaveAll(array $data)
-    {
-        foreach ($data as $scope => $scopeData) {
-            if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                $this->invokeSave($scopeData, $scope);
-            } else {
-                foreach ($scopeData as $scopeCode => $scopeCodeData) {
-                    $this->invokeSave($scopeCodeData, $scope, $scopeCode);
-                }
-            }
-        }
-    }
-
-    /**
-     * Emulates saving of configuration.
-     * This is a temporary solution until Magento reworks
-     * backend models for configurations.
-     *
-     * Example of $scopeData argument:
-     *
-     * ```php
-     *  [
-     *      'web' => [
-     *          'unsecure' => [
-     *              'base_url' => "http://magento2.local/"
-     *          ]
-     *      ]
-     *  ];
-     * ```
-     *
-     * @param array $scopeData The data for specific scope
-     * @param string $scope The configuration scope (default, website, or store)
-     * @param string $scopeCode The scope code
-     * @return void
-     */
-    private function invokeSave(array $scopeData, $scope, $scopeCode = null)
-    {
-        $scopeData = array_keys($this->arrayUtils->flatten($scopeData));
-
-        foreach ($scopeData as $path) {
-            $value = $this->scopeConfig->getValue($path, $scope, $scopeCode);
-            $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
-
-            if ($backendModel instanceof Config\Value) {
-                $backendModel->setData('force_changed_value', true);
-                $backendModel->beforeSave();
-                $backendModel->afterSave();
-            }
-        }
     }
 }

@@ -14,6 +14,7 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
 /**
  * Configured price model
+ * @api
  */
 class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPriceInterface
 {

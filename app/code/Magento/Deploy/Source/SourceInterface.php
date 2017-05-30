@@ -8,11 +8,7 @@ namespace Magento\Deploy\Source;
 use Magento\Deploy\Package\PackageFile;
 
 /**
- * Interface SourceInterface
- *
  * Provide list of files located in some source location (e.g. modules directories, library, themes, else)
- *
- * @api
  */
 interface SourceInterface
 {

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -117,7 +115,8 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
             ],
-            $cookieScope->getSensitiveCookieMetadata()->__toArray());
+            $cookieScope->getSensitiveCookieMetadata()->__toArray()
+        );
     }
 
     /**

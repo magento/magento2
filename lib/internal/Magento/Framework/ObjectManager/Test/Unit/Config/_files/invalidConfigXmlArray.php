@@ -178,28 +178,10 @@ return [
         </config>',
         [
             "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '' is not accepted by the pattern '" .
-            "([a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': '' is not a valid value of the atomic type 'phpClassName'." .
-            "\nLine: 2\n",
-            "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
-            "invalid or something strange happend." .
-            "\nLine: 2\n",
-        ],
-    ],
-    'virtualtype with invalid_name' => [
-        '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <virtualType name="\\BackslashPrefix\\IsNotAllowed" type="TypeName" shared="true"/>
-        </config>',
-        [
-            "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '\\BackslashPrefix\\IsNotAllowed' " .
-            "is not accepted by the pattern '" .
-            "([a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
-            "\nLine: 2\n",
-            "Element 'virtualType', attribute 'name': '\\BackslashPrefix\\IsNotAllowed' " .
-            "is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
             "invalid or something strange happend." .
@@ -212,8 +194,8 @@ return [
         </config>',
         [
             "Element 'virtualType', attribute 'type': [facet 'pattern'] The value '' is not accepted by the pattern '" .
-            "([a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'type': '' is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
@@ -226,10 +208,28 @@ return [
         [
             "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '777Digits\\IsNotAllowed' " .
             "is not accepted by the pattern '" .
-            "([a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*" .
-            ")*'." .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': '777Digits\\IsNotAllowed' " .
+            "is not a valid value of the atomic type 'phpClassName'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
+            "invalid or something strange happend." .
+            "\nLine: 2\n",
+        ],
+    ],
+    'virtualtype with digits_and_prefix_slash' => [
+        '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <virtualType name="\\777Digits\\IsNotAllowed" type="TypeName" shared="true"/>
+        </config>',
+        [
+            "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '\\777Digits\\IsNotAllowed' " .
+            "is not accepted by the pattern '" .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': '\\777Digits\\IsNotAllowed' " .
             "is not a valid value of the atomic type 'phpClassName'." .
             "\nLine: 2\n",
             "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .

@@ -6,8 +6,8 @@
 
 namespace Magento\Analytics\Test\Unit\Model;
 
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\NotificationTime;
+use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**

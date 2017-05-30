@@ -10,8 +10,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract factory class for instances of @see \Magento\Deploy\Strategy\StrategyInterface
- *
- * @api
  */
 class DeployStrategyFactory
 {

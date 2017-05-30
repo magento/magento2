@@ -7,6 +7,8 @@ namespace Magento\Store\Model\ResourceModel;
 
 /**
  * Store group resource model
+ *
+ * @api
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -32,6 +34,17 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_updateWebsiteDefaultGroup($model->getWebsiteId(), $model->getId());
         $this->_changeWebsite($model);
 
+        return $this;
+    }
+
+    /**
+     * Initialize unique fields
+     *
+     * @return $this
+     */
+    protected function _initUniqueFields()
+    {
+        $this->_uniqueFields = [['field' => 'code', 'title' => __('Group with the same code')]];
         return $this;
     }
 

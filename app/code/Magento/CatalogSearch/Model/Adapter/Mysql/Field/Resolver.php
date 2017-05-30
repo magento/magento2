@@ -40,6 +40,7 @@ class Resolver implements ResolverInterface
     public function resolve(array $fields)
     {
         $resolvedFields = [];
+        $this->attributeCollection->addFieldToFilter('attribute_code', ['in' => $fields]);
         foreach ($fields as $field) {
             if ('*' === $field) {
                 $resolvedFields = [

@@ -6,6 +6,10 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+/**
+ * Class Save
+ * @deprecated
+ */
 class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**

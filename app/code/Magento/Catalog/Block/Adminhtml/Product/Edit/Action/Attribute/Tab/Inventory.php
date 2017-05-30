@@ -7,6 +7,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 /**
  * Products mass update inventory tab
+ *
+ * @api
  */
 class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

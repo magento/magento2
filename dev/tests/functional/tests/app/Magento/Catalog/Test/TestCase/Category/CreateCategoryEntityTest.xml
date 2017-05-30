@@ -144,7 +144,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation8_WithProducts" summary="Assign Products at the Category Level" ticketId="MAGETWO-16351">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>

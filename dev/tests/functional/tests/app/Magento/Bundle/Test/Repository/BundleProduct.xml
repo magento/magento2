@@ -35,6 +35,7 @@
             <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
             <field name="sku_type" xsi:type="string">Yes</field>
             <field name="price_type" xsi:type="string">Yes</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
@@ -235,6 +236,37 @@
             </field>
         </dataset>
 
+        <dataset name="fixed_with_required_options_and_qty_and_textarea_attribute">
+            <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
+            <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">No</field>
+            <field name="price_type" xsi:type="string">No</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">100</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="weight_type" xsi:type="string">No</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="shipment_type" xsi:type="string">Separately</field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">required_three_fixed_options_with_qty</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">custom_attribute_set_with_textarea</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_required_three_fixed_options_with_qty</item>
+            </field>
+        </dataset>
+
         <dataset name="bundle_fixed_100_dollar_product">
             <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
@@ -377,6 +409,44 @@
             <field name="attribute_set_id" xsi:type="string">Default</field>
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">bundle_low_stock_fixed</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_dynamic_product_shipment_together">
+            <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_dynamic</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="weight_type" xsi:type="string">Yes</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">Yes</item>
+                <item name="use_config_enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">Yes</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_dynamic</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="string">Default</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_default_dynamic</item>
             </field>
         </dataset>
     </repository>

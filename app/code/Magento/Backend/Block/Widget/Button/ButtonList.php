@@ -6,6 +6,9 @@
 
 namespace Magento\Backend\Block\Widget\Button;
 
+/**
+ * @api
+ */
 class ButtonList
 {
     /**

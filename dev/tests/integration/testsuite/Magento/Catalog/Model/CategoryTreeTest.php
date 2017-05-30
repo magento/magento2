@@ -125,7 +125,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren()
     {
         $this->_model->load(3);
-        $this->assertEquals('4,13', $this->_model->getChildren());
+        $this->assertEquals(array_diff([4, 13], explode(',', $this->_model->getChildren())), []);
     }
 
     public function testGetPathInStore()

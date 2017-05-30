@@ -12,11 +12,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Deploy\Package\PackageFileFactory;
 
 /**
- * Class Lib
+ * Collect files eligible for deployment from library
  *
  * Provides files collected from web library
- *
- * @api
  */
 class Lib implements SourceInterface
 {

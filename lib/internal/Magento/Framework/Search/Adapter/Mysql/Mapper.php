@@ -163,7 +163,7 @@ class Mapper
             $indexBuilder
         );
 
-        $select->limit($request->getSize());
+        $select->limit($request->getSize(), $request->getFrom());
         $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }

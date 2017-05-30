@@ -7,10 +7,15 @@ namespace Magento\Theme\Block\Adminhtml\Design\Config\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * "Save" button data provider
+ *
+ * @api
+ */
 class SaveButton implements ButtonProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {

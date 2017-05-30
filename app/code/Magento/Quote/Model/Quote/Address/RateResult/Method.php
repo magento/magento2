@@ -13,6 +13,8 @@ namespace Magento\Quote\Model\Quote\Address\RateResult;
  * - methodTitle: method title
  * - price: cost+handling
  * - cost: cost
+ *
+ * @api
  */
 class Method extends AbstractResult
 {

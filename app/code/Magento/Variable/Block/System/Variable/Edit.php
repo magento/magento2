@@ -7,6 +7,8 @@ namespace Magento\Variable\Block\System\Variable;
 
 /**
  * Custom Variable Edit Container
+ *
+ * @api
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {

@@ -13,7 +13,6 @@ use Magento\Framework\Phrase;
  * Factory class for Package Bundle Interface
  *
  * @see Bundle
- * @api
  */
 class BundleInterfaceFactory
 {

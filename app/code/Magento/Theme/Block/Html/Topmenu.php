@@ -13,6 +13,8 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * Html page top menu block
+ *
+ * @api
  */
 class Topmenu extends Template implements IdentityInterface
 {
@@ -29,15 +31,6 @@ class Topmenu extends Template implements IdentityInterface
      * @var \Magento\Framework\Data\Tree\Node
      */
     protected $_menu;
-
-    /**
-     * Core registry
-     *
-     * @var Registry
-     *
-     * @deprecated The property can be removed in a future release.
-     */
-    protected $registry;
 
     /**
      * @var NodeFactory
