@@ -247,9 +247,9 @@ class Topmenu extends Template implements IdentityInterface
             }
 
             $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
-            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $this->escapeHtml(
-                    $child->getName()
-                ) . '</span></a>' . $this->_addSubMenu(
+            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>'
+                . $this->escapeHtml($child->getName())
+                . '</span></a>' . $this->_addSubMenu(
                     $child,
                     $childLevel,
                     $childrenWrapClass,
