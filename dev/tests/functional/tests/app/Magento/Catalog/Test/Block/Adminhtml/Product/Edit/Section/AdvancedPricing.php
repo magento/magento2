@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing\Op
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product advanced pricing section.
@@ -36,6 +37,20 @@ class AdvancedPricing extends Section
      * @var string
      */
     protected $doneButton = '.action-primary[data-role="action"]';
+
+    /**
+     * Selector for field.
+     *
+     * @var string
+     */
+    private $fieldByName = '//*[contains(text(),"%s")]/preceding::div[2]/ancestor::div[1]';
+
+    /**
+     * Selector for previous field.
+     *
+     * @var string
+     */
+    private $previousField = '//*[contains(text(),"%s")]/preceding::div[2]//label';
 
     /**
      * Fill 'Advanced price' product form on tab.
@@ -103,5 +118,28 @@ class AdvancedPricing extends Section
             \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing\OptionTier::class,
             ['element' => $element]
         );
+    }
+
+    /**
+     * Check if the field is displayed correctly.
+     *
+     * @param string $fieldName
+     * @param string|null $previousFieldName
+     * @return bool
+     */
+    public function checkField($fieldName, $previousFieldName = null)
+    {
+        $field = $this->_rootElement->find(sprintf($this->fieldByName, $fieldName), Locator::SELECTOR_XPATH);
+        if ($field->isVisible()) {
+            if ($previousFieldName) {
+                return $this->_rootElement->find(
+                    sprintf($this->previousField, $fieldName),
+                    Locator::SELECTOR_XPATH
+                )->getText() == $previousFieldName;
+            } else {
+                return $field->isVisible();
+            }
+        }
+        return false;
     }
 }
