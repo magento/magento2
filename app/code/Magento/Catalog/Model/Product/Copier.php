@@ -59,7 +59,9 @@ class Copier
 
         /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
-        $duplicate->setData($product->getData());
+        $productData = $product->getData();
+        unset($productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
+        $duplicate->setData($productData);
         $duplicate->setOptions([]);
         $duplicate->setIsDuplicate(true);
         $duplicate->setOriginalLinkId($product->getData($metadata->getLinkField()));
