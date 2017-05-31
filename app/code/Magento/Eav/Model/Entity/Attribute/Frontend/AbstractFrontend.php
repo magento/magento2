@@ -12,7 +12,6 @@
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
 use Magento\Framework\App\CacheInterface;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Cache\Type as CacheType;
@@ -57,7 +56,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
      * @param CacheInterface $cache
-     * @param StoreResolverInterface $storeResolver
+     * @param $storeResolver @deprecated
      * @param array $cacheTags
      * @param StoreManagerInterface $storeManager
      * @codeCoverageIgnore
@@ -66,7 +65,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory,
         CacheInterface $cache = null,
-        StoreResolverInterface $storeResolver = null,
+        $storeResolver = null,
         array $cacheTags = null,
         StoreManagerInterface $storeManager = null
     ) {
