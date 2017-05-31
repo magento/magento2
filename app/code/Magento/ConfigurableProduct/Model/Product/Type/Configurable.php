@@ -484,8 +484,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected function hasCacheData($configurableAttributes)
     {
-        $configurableAttributes = $configurableAttributes ?: unserialize($configurableAttributes);
-        if (is_array($configurableAttributes) && count($configurableAttributes)) {
+	    $configurableAttributes = $configurableAttributes ? unserialize($configurableAttributes) : $configurableAttributes;
+        if ((is_array($configurableAttributes) || $configurableAttributes instanceof \Traversable) && count($configurableAttributes)) {
             foreach ($configurableAttributes as $attribute) {
                 /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
                 if ($attribute->getData('options')) {
