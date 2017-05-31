@@ -21,7 +21,7 @@
         "magento/module-grouped-product-sample-data": "Sample Data version:100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.1.3",
+    "version": "100.1.4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
