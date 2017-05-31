@@ -22,7 +22,6 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
