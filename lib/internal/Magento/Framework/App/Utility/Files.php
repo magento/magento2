@@ -1277,6 +1277,8 @@ class Files
             '/dev/tests/static/framework',
             '/dev/tests/static/testsuite',
             '/dev/tests/functional/tests/app',
+            '/dev/tests/functional/lib',
+            '/dev/tests/functional/vendor/magento/mtf',
             '/setup/src'
         ];
         foreach ($directories as $key => $dir) {
@@ -1302,6 +1304,10 @@ class Files
             if (count($classParts) >= 4) {
                 // Check if it's a library under framework directory
                 $trimmedFullPath = $dir . '/' . $classParts[3];
+                if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
+                    return true;
+                }
+                $trimmedFullPath = $dir . '/' . $classParts[2] . '/' . $classParts[3];
                 if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
                     return true;
                 }
