@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Bundle\V1;
+namespace Magento\Bundle\Api;
 
 /**
  * API test for creation of Invoice for order with bundle product.
