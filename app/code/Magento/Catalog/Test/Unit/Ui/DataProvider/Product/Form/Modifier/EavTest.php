@@ -446,7 +446,6 @@ class EavTest extends AbstractModifierTest
         $this->assertEquals($sourceData, $this->eav->modifyData([]));
     }
 
-
     /**
      * @param int $productId
      * @param bool $productRequired
