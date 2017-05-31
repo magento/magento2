@@ -53,6 +53,17 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Retrieve category ids where product is available
+     *
+     * @param \Magento\Framework\Model\AbstractModel $model
+     * @return array
+     */
+    protected function getAvailableInCategories($model)
+    {
+        return $this->_getAvailableInCategoriesById($model->getId());
+    }
+
+    /**
      * Retrieve value element chooser URL
      *
      * @return string

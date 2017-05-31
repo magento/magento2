@@ -518,7 +518,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attrCode = $this->getAttribute();
 
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($model->getAvailableInCategories());
+            return $this->validateAttribute($this->getAvailableInCategories($model));
         } elseif (!isset($this->_entityAttributeValues[$model->getId()])) {
             if (!$model->getResource()) {
                 return false;
@@ -621,7 +621,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     public function validateByEntityId($productId)
     {
         if ('category_ids' == $this->getAttribute()) {
-            $result = $this->validateAttribute($this->_getAvailableInCategories($productId));
+            $result = $this->validateAttribute($this->_getAvailableInCategoriesById($productId));
         } elseif ('attribute_set_id' == $this->getAttribute()) {
             $result = $this->validateAttribute($this->_getAttributeSetId($productId));
         } else {
@@ -635,10 +635,21 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve category ids where product is available
      *
+     * @param \Magento\Framework\Model\AbstractModel $model
+     * @return array
+     */
+    protected function getAvailableInCategories($model)
+    {
+        return $model->getAvailableInCategories();
+    }
+
+    /**
+     * Retrieve category ids where productId is available
+     *
      * @param int $productId
      * @return array
      */
-    protected function _getAvailableInCategories($productId)
+    protected function _getAvailableInCategoriesById($productId)
     {
         return $this->_productResource->getConnection()
             ->fetchCol(
