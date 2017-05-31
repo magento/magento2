@@ -35,14 +35,12 @@ return [
                                     "visible" => "1",
                                     "required" => "0",
                                     "label" => "Enable Product",
+                                    "default" => "1",
                                     "source" => "product-details",
                                     "scopeLabel" => "[WEBSITE]",
                                     "globalScope" => false,
                                     "code" => "status",
                                     "sortOrder" => "__placeholder__",
-                                    "service" => [
-                                        "template" => "ui/form/element/helper/service"
-                                    ],
                                     "componentType" => "field"
                                 ],
                             ],
@@ -66,9 +64,6 @@ return [
                                     "globalScope" => false,
                                     "code" => "name",
                                     "sortOrder" => "__placeholder__",
-                                    "service" => [
-                                        "template" => "ui/form/element/helper/service"
-                                    ],
                                     "componentType" => "field",
                                     "validation" => [
                                         "required-entry" => true
@@ -99,32 +94,6 @@ return [
                                     "validation" => [
                                         "required-entry" => true
                                     ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            "container_price" => [
-                "children" => [
-                    "price" => [
-                        "arguments" => [
-                            "data" => [
-                                "config" => [
-                                    "dataType" => "price",
-                                    "formElement" => "input",
-                                    "visible" => "1",
-                                    "required" => "1",
-                                    "label" => "Price",
-                                    "source" => "product-details",
-                                    "scopeLabel" => "[GLOBAL]",
-                                    "globalScope" => true,
-                                    "code" => "price",
-                                    "sortOrder" => "__placeholder__",
-                                    "componentType" => "field",
-                                    "validation" => [
-                                        "required-entry" => true
-                                    ]
                                 ],
                             ],
                         ],
