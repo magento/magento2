@@ -38,24 +38,28 @@ class Curl extends Conditions implements SalesRuleInterface
      */
     protected $mapTypeParams = [
         'Subtotal' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'base_subtotal',
         ],
         'Conditions combination' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'all',
             'value' => '1',
         ],
         'Shipping Country' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'country_id',
         ],
         'Shipping Postcode' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'postcode',
         ],
+        'Total Weight' => [
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+            'attribute' => 'weight',
+        ],
         'Category' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
             'attribute' => 'category_ids',
         ]
     ];
@@ -179,7 +183,7 @@ class Curl extends Conditions implements SalesRuleInterface
 
         if (isset($this->data['actions_serialized'])) {
             $this->mapTypeParams['Conditions combination']['type'] =
-                'Magento\SalesRule\Model\Rule\Condition\Product\Combine';
+                \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class;
             $this->data['rule']['actions'] = $this->prepareCondition($this->data['actions_serialized']);
             unset($this->data['actions_serialized']);
         }

@@ -5,6 +5,11 @@
  */
 namespace Magento\Widget\Test\Unit\Model;
 
+use Magento\CatalogWidget\Block\Product\ProductsList;
+
+/**
+ * Test class for \Magento\Widget\Model\Widget
+ */
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,19 +18,40 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     protected $dataStorageMock;
 
     /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
+    /**
      * @var \Magento\Widget\Model\Widget
      */
     protected $widget;
 
-    public function setUp()
+    /**
+     * @var \Magento\Widget\Helper\Conditions
+     */
+    private $conditionsHelper;
+
+    protected function setUp()
     {
-        $this->dataStorageMock = $this->getMockBuilder('Magento\Widget\Model\Config\Data')
+        $this->dataStorageMock = $this->getMockBuilder(\Magento\Widget\Model\Config\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->conditionsHelper = $this->getMockBuilder(\Magento\Widget\Helper\Conditions::class)
+            ->setMethods(['encode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->widget = $objectManagerHelper->getObject(
-            'Magento\Widget\Model\Widget',
-            ['dataStorage' => $this->dataStorageMock]
+            \Magento\Widget\Model\Widget::class,
+            [
+                'dataStorage' => $this->dataStorageMock,
+                'conditionsHelper' => $this->conditionsHelper,
+                'escaper' => $this->escaperMock,
+            ]
         );
     }
 
@@ -83,8 +109,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($widgets);
 
-        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+        $resultObject = $this->widget->getConfigAsObject(\Magento\Cms\Block\Widget\Page\Link::class);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultObject);
 
         $this->assertSame('CMS Page Link', $resultObject->getName());
         $this->assertSame('Link to a CMS Page', $resultObject->getDescription());
@@ -92,9 +118,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Magento_Cms::images/widget_page_link.png', $resultObject->getPlaceholderImage());
 
         $resultParameters = $resultObject->getParameters();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id' ]);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['anchor_text']);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['template']);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['page_id' ]);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['anchor_text']);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['template']);
 
         $supportedContainersExpected = [
             '0' => [
@@ -115,8 +141,54 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn([]);
 
-        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+        $resultObject = $this->widget->getConfigAsObject(\Magento\Cms\Block\Widget\Page\Link::class);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultObject);
         $this->assertSame([], $resultObject->getData());
+    }
+
+    public function testGetWidgetDeclaration()
+    {
+        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
+        $mathRandomMock->expects($this->any())->method('getRandomString')->willReturn('asdf');
+        $reflection = new \ReflectionClass(get_class($this->widget));
+        $reflectionProperty = $reflection->getProperty('mathRandom');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->widget, $mathRandomMock);
+
+        $conditions = [
+            [
+                'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
+                'aggregator' => 'all',
+                'value' => '1',
+                'new_child' => ''
+            ]
+        ];
+        $params = [
+            'title' => 'my "widget"',
+            'show_pager' => '1',
+            'products_per_page' => '5',
+            'products_count' => '10',
+            'template' => 'product/widget/content/grid.phtml',
+            'conditions' => $conditions
+        ];
+
+        $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
+            ->willReturn('encoded-conditions-string');
+        $this->escaperMock->expects($this->atLeastOnce())
+            ->method('escapeQuote')
+            ->willReturnMap([
+                ['my "widget"', false, 'my &quot;widget&quot;'],
+                ['1', false, '1'],
+                ['5', false, '5'],
+                ['10', false, '10'],
+                ['product/widget/content/grid.phtml', false, 'product/widget/content/grid.phtml'],
+                ['encoded-conditions-string', false, 'encoded-conditions-string'],
+            ]);
+
+        $result = $this->widget->getWidgetDeclaration(ProductsList::class, $params);
+        $this->assertContains('{{widget type="' . ProductsList::class .'"', $result);
+        $this->assertContains('title="my &quot;widget&quot;"', $result);
+        $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
+        $this->assertContains('page_var_name="pasdf"}}', $result);
     }
 }

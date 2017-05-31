@@ -109,7 +109,9 @@ class AttributeForm extends FormTabs
     {
         $closedToggles = $this->_rootElement->getElements($this->closedToggle);
         foreach ($closedToggles as $toggle) {
-            $toggle->click();
+            if ($toggle->isVisible()) {
+                $toggle->click();
+            }
         }
     }
 

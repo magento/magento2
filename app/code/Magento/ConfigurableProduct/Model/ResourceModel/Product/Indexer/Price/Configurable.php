@@ -86,44 +86,13 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     protected function reindex($entityIds = null)
     {
         if ($this->hasEntity() || !empty($entityIds)) {
-            if (!empty($entityIds)) {
-                $allEntityIds = $this->getRelatedProducts($entityIds);
-                $this->prepareFinalPriceDataForType($allEntityIds, null);
-            } else {
-                $this->_prepareFinalPriceData($entityIds);
-            }
+            $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
             $this->_applyCustomOption();
-            $this->_applyConfigurableOption($entityIds);
+            $this->_applyConfigurableOption();
             $this->_movePriceDataToIndexTable($entityIds);
         }
-        return $this;
-    }
 
-    /**
-     * Get related product
-     *
-     * @param int[] $entityIds
-     * @return int[]
-     */
-    private function getRelatedProducts($entityIds)
-    {
-        $select = $this->getConnection()->select()->union(
-            [
-                $this->getConnection()->select()
-                    ->from($this->getTable('catalog_product_super_link'), 'parent_id')
-                    ->where('parent_id in (?)', $entityIds),
-                $this->getConnection()->select()
-                    ->from($this->getTable('catalog_product_super_link'), 'product_id')
-                    ->where('parent_id in (?)', $entityIds),
-                $this->getConnection()->select()
-                    ->from($this->getTable('catalog_product_super_link'), 'product_id')
-                    ->where('product_id in (?)', $entityIds),
-            ]
-        );
-        return array_map(
-            'intval',
-            $this->getConnection()->fetchCol($select)
-        );
+        return $this;
     }
 
     /**
@@ -183,49 +152,27 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
 
         $this->_prepareConfigurableOptionAggregateTable();
         $this->_prepareConfigurableOptionPriceTable();
-
-        $statusAttribute = $this->_getAttribute(ProductInterface::STATUS);
-
-        $select = $connection->select()->from(
-            ['i' => $this->_getDefaultFinalPriceTable()],
-            []
-        )->join(
+        $subSelect = $this->getSelect();
+        $subSelect->join(
             ['l' => $this->getTable('catalog_product_super_link')],
-            'l.parent_id = i.entity_id',
-            ['parent_id', 'product_id']
-        )->columns(
-            ['customer_group_id', 'website_id'],
-            'i'
+            'l.product_id = e.entity_id',
+            []
         )->join(
             ['le' => $this->getTable('catalog_product_entity')],
-            'le.entity_id = l.product_id',
-            []
-        )->where(
-            'le.required_options=0'
-        )->joinLeft(
-            ['status_global_attr' => $statusAttribute->getBackendTable()],
-            "status_global_attr.entity_id = le.entity_id"
-            . ' AND status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_global_attr.store_id  = ' . Store::DEFAULT_STORE_ID,
-            []
-        )->joinLeft(
-            ['status_attr' => $statusAttribute->getBackendTable()],
-            "status_attr.entity_id = le.entity_id"
-            . ' AND status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
-            . ' AND status_attr.store_id = ' . $this->storeResolver->getCurrentStoreId(),
-            []
-        )->where(
-            'IFNULL(status_attr.value, status_global_attr.value) = ?',
-            ProductStatus::STATUS_ENABLED
-        )->group(
-            ['l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
+            'le.entity_id = l.parent_id',
+            ['parent_id' => 'entity_id']
         );
-        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
-        $tierPriceColumn = $connection->getIfNullSql('MIN(i.tier_price)', 'NULL');
 
-        $select->columns(
-            ['price' => $priceColumn, 'tier_price' => $tierPriceColumn]
-        );
+        $select = $connection->select();
+        $select->from(['sub' => new \Zend_Db_Expr('(' . (string)$subSelect . ')')], '')
+            ->columns([
+                'sub.parent_id',
+                'sub.entity_id',
+                'sub.customer_group_id',
+                'sub.website_id',
+                'sub.price',
+                'sub.tier_price',
+            ]);
 
         $query = $select->insertFromSelect($coaTable);
         $connection->query($query);

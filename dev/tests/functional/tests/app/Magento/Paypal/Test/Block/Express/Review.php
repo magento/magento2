@@ -32,8 +32,16 @@ class Review extends AbstractReview
         $shippingElement = $this->_rootElement->find(
             $this->shippingMethod,
             Locator::SELECTOR_CSS,
-            'Magento\Paypal\Test\Block\Express\Review\ShippingoptgroupElement'
+            \Magento\Paypal\Test\Block\Express\Review\ShippingoptgroupElement::class
         );
         $shippingElement->setValue($shippingMethod['shipping_service'] . '/' . $shippingMethod['shipping_method']);
+    }
+
+    /**
+     * Click "Place Order" button.
+     */
+    public function placeOrder()
+    {
+        $this->_rootElement->find('#review-button')->click();
     }
 }
