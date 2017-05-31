@@ -224,7 +224,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private function convertValues(Category $category, array $categoryData)
     {
         $imageAttributes = $this->getImageAttributes($category, $categoryData);
-        foreach ($imageAttributes as $attributeCode => $attribute) {
+        $attributeCodes = array_keys($imageAttributes);
+        foreach ($attributeCodes as $attributeCode) {
             unset($categoryData[$attributeCode]);
             $categoryData[$attributeCode][0]['name'] = $category->getData($attributeCode);
             $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);

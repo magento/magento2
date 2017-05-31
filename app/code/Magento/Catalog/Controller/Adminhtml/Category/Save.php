@@ -266,7 +266,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     public function imagePreprocessing(array $data)
     {
         $emptyImageAttributes = $this->getEmptyImageAttributes($data);
-        foreach ($emptyImageAttributes as $attributeCode => $attributeModel) {
+        $attributeCodes = array_keys($emptyImageAttributes);
+        foreach ($attributeCodes as $attributeCode) {
             $data[$attributeCode] = false;
         }
 
