@@ -66,7 +66,6 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
             '',
             false
         );
-        $this->category->expects($this->any())->method('getResource')->willReturn($this->categoryResource);
         $this->observer->expects($this->any())->method('getEvent')->willReturnSelf();
         $this->observer->expects($this->any())->method('getCategory')->willReturn($this->category);
         $this->categoryUrlPathGenerator = $this->getMock(
@@ -76,8 +75,16 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
             '',
             false
         );
+
+
         $this->childrenCategoriesProvider = $this->getMock(
-            \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider::class
+            \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider::class,
+            [
+                'getChildren'
+            ],
+            [],
+            '',
+            false
         );
 
         $this->storeViewService = $this->getMock(
@@ -94,6 +101,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
                 'categoryUrlPathGenerator' => $this->categoryUrlPathGenerator,
                 'childrenCategoriesProvider' => $this->childrenCategoriesProvider,
                 'storeViewService' => $this->storeViewService,
+                'categoryResource' => $this->categoryResource
             ]
         );
     }
