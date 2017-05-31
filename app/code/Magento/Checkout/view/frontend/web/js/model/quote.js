@@ -11,17 +11,21 @@ define([
 ], function (ko, _) {
     'use strict';
 
+    /**
+     * Get totals data from the extension attributes.
+     * @param {*} data
+     * @returns {*}
+     */
     var proceedTotalsData = function (data) {
-        if (_.isObject(data) && _.isObject(data['extension_attributes'])) {
-            _.each(data['extension_attributes'], function (element, index) {
-                data[index] = element;
-            });
-        }
+            if (_.isObject(data) && _.isObject(data['extension_attributes'])) {
+                _.each(data['extension_attributes'], function (element, index) {
+                    data[index] = element;
+                });
+            }
 
-        return data;
-    };
-
-    var billingAddress = ko.observable(null),
+            return data;
+        },
+        billingAddress = ko.observable(null),
         shippingAddress = ko.observable(null),
         shippingMethod = ko.observable(null),
         paymentMethod = ko.observable(null),
