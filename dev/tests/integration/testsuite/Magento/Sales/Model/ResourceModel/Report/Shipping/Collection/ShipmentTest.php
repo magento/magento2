@@ -13,19 +13,22 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Shipping\Collection\Shipment
      */
-    private $_collection;
+    private $collection;
 
     /**
-     * Set up.
-     *
-     * @return void
+     * @var \Magento\Framework\ObjectManagerInterface
      */
+    private $objectManager;
+
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->collection = $this->objectManager->create(
             \Magento\Sales\Model\ResourceModel\Report\Shipping\Collection\Shipment::class
         );
-        $this->_collection->setPeriod('day')->setDateRange(null, null)->addStoreFilter([1]);
+        $this->collection->setPeriod('day')
+            ->setDateRange(null, null)
+            ->addStoreFilter([1]);
     }
 
     /**
@@ -37,15 +40,22 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Sales\Model\Order::class);
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $shipmentCreatedAt = $order->getShipmentsCollection()->getFirstItem()->getCreatedAt();
         /** @var \Magento\Framework\Stdlib\DateTime\DateTime $dateTime */
-        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Stdlib\DateTime\DateTimeFactory::class
-        )
+        $dateTime = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\DateTimeFactory::class)
             ->create();
+        /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone */
+        $timezone = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $shipmentCreatedAt = $timezone->formatDateTime(
+            $shipmentCreatedAt,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            null,
+            null,
+            'yyyy-MM-dd'
+        );
         $shipmentCreatedAtDate = $dateTime->date('Y-m-d', $shipmentCreatedAt);
 
         $expectedResult = [
@@ -58,7 +68,7 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
         ];
         $actualResult = [];
         /** @var \Magento\Reports\Model\Item $reportItem */
-        foreach ($this->_collection->getItems() as $reportItem) {
+        foreach ($this->collection->getItems() as $reportItem) {
             $actualResult[] = array_intersect_key($reportItem->getData(), $expectedResult[0]);
         }
         $this->assertEquals($expectedResult, $actualResult);
