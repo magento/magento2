@@ -41,7 +41,7 @@ class TemplateHintsEnableCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Disable frontend template hints.');
+            ->setDescription('Disable frontend template hints. A cache flush might be required.');
 
         parent::configure();
     }

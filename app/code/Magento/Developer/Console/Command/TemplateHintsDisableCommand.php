@@ -20,7 +20,7 @@ class TemplateHintsDisableCommand extends Command
     /**
      * Success message
      */
-    const SUCCESS_MESSAGE = "Template hints disabled.";
+    const SUCCESS_MESSAGE = "Template hints disabled. Refresh cache types";
 
     /**
      * TemplateHintsDisableCommand constructor.
@@ -39,7 +39,7 @@ class TemplateHintsDisableCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Disable frontend template hints.');
+            ->setDescription('Disable frontend template hints. A cache flush might be required.');
 
         parent::configure();
     }
