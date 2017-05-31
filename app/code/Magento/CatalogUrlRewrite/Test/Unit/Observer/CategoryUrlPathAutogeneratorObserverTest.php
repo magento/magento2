@@ -76,7 +76,6 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
             false
         );
 
-
         $this->childrenCategoriesProvider = $this->getMock(
             \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider::class,
             [
