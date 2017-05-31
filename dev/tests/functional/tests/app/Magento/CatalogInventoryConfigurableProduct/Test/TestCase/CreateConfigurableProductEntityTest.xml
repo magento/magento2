@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ConfigurableProduct\Test\TestCase\CreateConfigurableProductEntityTest" summary="Create Configurable Product With Out Of Stock Option" ticketId="MAGETWO-64301">
-        <variation name="CreateConfigurableProductEntityTestVariation11" summary="Create configurable product with one out of stock and several in stock options">
+        <variation name="CreateConfigurableProductEntityTestVariation15" summary="Create configurable product with one out of stock and several in stock options">
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">three_new_options_with_out_of_stock_product</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
