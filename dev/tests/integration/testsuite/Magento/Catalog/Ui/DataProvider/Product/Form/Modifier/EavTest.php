@@ -70,7 +70,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
         $this->assertEquals($expectedMeta, $actualMeta);
     }
-    /*
+    /**
      * Test modifying meta on new product.
      */
     public function testModifyMetaNewProduct()

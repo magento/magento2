@@ -8,6 +8,8 @@ namespace Magento\Eav\Model\ResourceModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Class for testing update handler.
+ *
  * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
  */
@@ -223,6 +225,8 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Get custom attribute data provider.
+     *
      * @return array
      */
     public function getCustomAttributeDataProvider()
