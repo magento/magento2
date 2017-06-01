@@ -37,6 +37,18 @@
                     <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
                 </field>
             </group>
+            <group id="authentication_lock" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Auth Locks</label>
+                <field id="max_failures_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>max_failures_count</label>
+                    <comment></comment>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>timeout</label>
+                    <comment></comment>
+                </field>
+            </group>
+
         </section>
     </system>
 </config>
