@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog image helper
@@ -150,8 +149,9 @@ class Image extends AbstractHelper
         parent::__construct($context);
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
-        $this->viewAssetPlaceholderFactory = $placeholderFactory ?:
-            ObjectManager::getInstance()->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
+        $this->viewAssetPlaceholderFactory = $placeholderFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
     }
 
     /**
