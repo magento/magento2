@@ -378,6 +378,11 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
         $this->eavAttribute->afterAfterSave($this->attribute);
     }
 
+    /**
+     * Tests afterAfterSave() for test swatch attribute.
+     *
+     * @return void
+     */
     public function testDefaultTextualSwatchAfterSave()
     {
         $this->abstractSource->expects($this->once())->method('getAllOptions')
