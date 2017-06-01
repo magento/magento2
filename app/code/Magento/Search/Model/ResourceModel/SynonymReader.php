@@ -12,7 +12,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Synonym Reader resource model
- * @api
  */
 class SynonymReader extends AbstractDb
 {
