@@ -23,7 +23,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
             $this->addFailuresToAdminUserTable($setup);
             $this->createAdminPasswordsTable($setup);
         }
@@ -106,7 +106,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-            'Expires'
+            'Deprecated'
         )->addColumn(
             'last_updated',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -126,5 +126,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'Admin Passwords'
         );
         $setup->getConnection()->createTable($table);
+
+        $setup->getConnection()->modifyColumn(
+            $setup->getTable('admin_passwords'),
+            'expires',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'unsigned' => true,
+                'nullable' => false,
+                'default' => '0',
+                'comment' => 'Deprecated',
+            ]
+        );
     }
 }
