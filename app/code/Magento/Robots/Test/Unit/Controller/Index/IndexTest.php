@@ -76,7 +76,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->willReturn($resultRawMock);
 
         $this->assertInstanceOf(
-            '\Magento\Framework\Controller\Result\Raw',
+            \Magento\Framework\Controller\Result\Raw::class,
             $this->controller->execute()
         );
     }

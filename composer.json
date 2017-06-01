@@ -157,6 +157,7 @@
         "magento/module-require-js": "100.2.0-dev",
         "magento/module-review": "100.2.0-dev",
         "magento/module-review-analytics": "100.2.0-dev",
+        "magento/module-robots": "100.2.0-dev",
         "magento/module-rss": "100.2.0-dev",
         "magento/module-rule": "100.2.0-dev",
         "magento/module-sales": "100.2.0-dev",
