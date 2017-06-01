@@ -118,7 +118,7 @@ class Data
      */
     public function getCustomerTokenLifetime()
     {
-        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_expiration_period/customer');
+        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/customer');
         return $hours > 0 ? $hours : 0;
     }
 
@@ -129,7 +129,7 @@ class Data
      */
     public function getAdminTokenLifetime()
     {
-        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_expiration_period/admin');
+        $hours = (int)$this->_scopeConfig->getValue('oauth/access_token_lifetime/admin');
         return $hours > 0 ? $hours : 0;
     }
 }
