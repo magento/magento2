@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Robots\Controller;
 
 use Magento\Framework\App\ActionFactory;
@@ -42,7 +41,6 @@ class Router implements \Magento\Framework\App\RouterInterface
         ConfigInterface $routeConfig
     )
     {
-
         $this->actionFactory = $actionFactory;
         $this->actionList = $actionList;
         $this->routeConfig = $routeConfig;
