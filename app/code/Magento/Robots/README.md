@@ -1,0 +1,1 @@
+The Robots module contains router to match application action class for robots.txt requests and realizes the possibility of obtaining content of robots.txt file depending on the current website.
