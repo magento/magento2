@@ -520,6 +520,8 @@ class EavTest extends AbstractModifierTest
     }
 
     /**
+     * Setup attribute meta data provider.
+     *
      * @return array
      */
     public function setupAttributeMetaDataProvider()
