@@ -429,6 +429,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->localeFormat = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\Locale\FormatInterface::class);
         }
+        
         return $this->localeFormat;
     }
 }
