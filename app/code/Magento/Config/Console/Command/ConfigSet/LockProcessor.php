@@ -81,24 +81,13 @@ class LockProcessor implements ConfigSetProcessorInterface
             $backendModel = $this->preparedValueFactory->create($path, $value, $scope, $scopeCode);
 
             if ($backendModel instanceof Value) {
-                /**
-                 * Temporary solution until Magento introduce unified interface
-                 * for storing system configuration into database and configuration files.
-                 */
-                $backendModel->validateBeforeSave();
-                $backendModel->beforeSave();
+                $resourceModel = $backendModel->getResource();
+                $resourceModel->save($backendModel);
 
                 $value = $backendModel->getValue();
 
-                $backendModel->afterSave();
-
-                /**
-                 * Because FS does not support transactions,
-                 * we'll write value just after all validations are triggered.
-                 */
                 $this->deploymentConfigWriter->saveConfig(
-                    [ConfigFilePool::APP_ENV => $this->arrayManager->set($configPath, [], $value)],
-                    false
+                    [ConfigFilePool::APP_ENV => $this->arrayManager->set($configPath, [], $value)]
                 );
             }
         } catch (\Exception $exception) {
