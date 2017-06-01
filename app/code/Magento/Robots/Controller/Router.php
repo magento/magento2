@@ -39,8 +39,7 @@ class Router implements \Magento\Framework\App\RouterInterface
         ActionFactory $actionFactory,
         ActionList $actionList,
         ConfigInterface $routeConfig
-    )
-    {
+    ) {
         $this->actionFactory = $actionFactory;
         $this->actionList = $actionList;
         $this->routeConfig = $routeConfig;
