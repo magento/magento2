@@ -8,6 +8,9 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use \Magento\Catalog\Model\Product\Copier;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CopierTest extends \PHPUnit_Framework_TestCase
 {
     /**
