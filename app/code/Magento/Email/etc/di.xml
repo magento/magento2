@@ -59,5 +59,6 @@
     </type>
     <type name="Magento\Framework\Mail\TransportInterface">
         <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig" />
+        <plugin name="disableSending" type="Magento\Email\Model\Mail\TransportInterfacePlugin" />
     </type>
 </config>
