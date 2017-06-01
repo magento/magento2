@@ -484,8 +484,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected function hasCacheData($configurableAttributes)
     {
-        if ($configurableAttributes)
-        {
+        if ($configurableAttributes) {
             $configurableAttributes = unserialize($configurableAttributes);
         }
         $isTraversable = (is_array($configurableAttributes) || $configurableAttributes instanceof \Traversable);
