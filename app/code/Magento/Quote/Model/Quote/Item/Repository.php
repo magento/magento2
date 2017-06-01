@@ -119,6 +119,10 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                     throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
                 }
             }
+            
+            $quote->getBillingAddress()->setCollectShippingRates(true);
+            $quote->getShippingAddress()->setCollectShippingRates(true);
+            
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
             if ($e instanceof NoSuchEntityException || $e instanceof LocalizedException) {
