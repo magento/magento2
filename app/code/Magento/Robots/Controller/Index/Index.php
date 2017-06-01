@@ -34,8 +34,7 @@ class Index extends \Magento\Framework\App\Action\Action
         Context $context,
         RawFactory $resultRawFactory,
         ScopeConfigInterface $scopeConfig
-    )
-    {
+    ) {
         $this->resultRawFactory = $resultRawFactory;
         $this->scopeConfig = $scopeConfig;
 
