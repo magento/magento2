@@ -60,7 +60,12 @@ class Copier
         /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
         $productData = $product->getData();
-        unset($productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
+        if (isset($productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY])) {
+            $extensionAttributes = $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
+            if (null !== $extensionAttributes->getStockItem()) {
+                $extensionAttributes->setData('stock_item', null);
+            }
+        }
         $duplicate->setData($productData);
         $duplicate->setOptions([]);
         $duplicate->setIsDuplicate(true);
