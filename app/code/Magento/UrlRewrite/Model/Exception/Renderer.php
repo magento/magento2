@@ -20,7 +20,7 @@ class Renderer implements \Magento\Framework\Exception\RendererInterface
      *
      * @var string
      */
-    protected $template = 'Magento_UrlRewrite::messages/url_duplicate_message.phtml';
+    private $template;
 
     /**
      * @var \Magento\Framework\UrlInterface
@@ -36,11 +36,11 @@ class Renderer implements \Magento\Framework\Exception\RendererInterface
     public function __construct(
         Template $renderer,
         \Magento\Framework\UrlInterface $urlBuilder,
-        $template = null
+        $template = 'Magento_UrlRewrite::messages/url_duplicate_message.phtml'
     ) {
         $this->renderer = $renderer;
         $this->urlBuilder = $urlBuilder;
-        $this->template = $template ? $template : $this->template;
+        $this->template = $template;
     }
 
     /**
@@ -51,19 +51,16 @@ class Renderer implements \Magento\Framework\Exception\RendererInterface
      */
     public function render(\Exception $exception)
     {
-        if ($exception instanceof \Magento\UrlRewrite\Model\Storage\UrlAlreadyExistsException) {
-            $generatedUrls = [];
-            foreach ($exception->getUrls() as $id => $url) {
-                $adminEditUrl = $this->urlBuilder->getUrl(
-                    'adminhtml/url_rewrite/edit',
-                    ['id' => $id]
-                );
-                $generatedUrls[$adminEditUrl] = $url->getRequestPath();
-            }
-            $this->renderer->setTemplate($this->template);
-            $this->renderer->setData('urls', $generatedUrls);
-            return  $this->renderer->toHtml();
+        $generatedUrls = [];
+        foreach ($exception->getUrls() as $id => $url) {
+            $adminEditUrl = $this->urlBuilder->getUrl(
+                'adminhtml/url_rewrite/edit',
+                ['id' => $id]
+            );
+            $generatedUrls[$adminEditUrl] = $url->getRequestPath();
         }
-        return '';
+        $this->renderer->setTemplate($this->template);
+        $this->renderer->setData('urls', $generatedUrls);
+        return  $this->renderer->toHtml();
     }
 }

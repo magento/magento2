@@ -8,16 +8,18 @@ namespace Magento\Framework\Exception;
 class RendererPool implements RendererInterface
 {
     /**
+     * Key of instance is the exception format parameter
+     *
      * @var RendererInterface[]
      */
-    private $instances = [];
+    private $rendererInstances = [];
 
     /**
-     * @param RendererInterface[] $instances
+     * @param RendererInterface[] $rendererInstances
      */
-    public function __construct(array $instances)
+    public function __construct(array $rendererInstances)
     {
-        $this->instances = $instances;
+        $this->rendererInstances = $rendererInstances;
     }
 
     /**
@@ -28,12 +30,11 @@ class RendererPool implements RendererInterface
      */
     public function render(\Exception $exception)
     {
-        foreach (array_reverse($this->instances) as $instance) {
-            $response = $instance->render($exception);
-            if ($response) {
-                return $response;
-            }
+        if (isset($this->rendererInstances[get_class($exception)])) {
+            $instance = $this->rendererInstances[get_class($exception)];
+            return $instance->render($exception);
+        } else {
+            return $exception->getMessage();
         }
-        return '';
     }
 }
