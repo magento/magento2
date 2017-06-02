@@ -20,6 +20,7 @@
                 <item name="url" xsi:type="string">*/*/new</item>
             </item>
         </item>
+        <item name="acl" xsi:type="string">Magento_Cms::block</item>
     </argument>
     <dataSource name="cms_block_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">

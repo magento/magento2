@@ -1,7 +1,5 @@
 <?php
 /**
- * Test for \Magento\Integration\Model\AdminTokenService
- *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,6 +11,9 @@ namespace Magento\Integration\Test\Unit\Model;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
+/**
+ * Test for \Magento\Integration\Model\AdminTokenService
+ */
 class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
 {
     /** \Magento\Integration\Model\AdminTokenService */
@@ -50,7 +51,7 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->_tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
             ->disableOriginalConstructor()
-            ->setMethods(['getToken', 'loadByAdminId', 'setRevoked', 'save', '__wakeup'])->getMock();
+            ->setMethods(['getToken', 'loadByAdminId', 'delete', '__wakeup'])->getMock();
 
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
             'Magento\Integration\Model\ResourceModel\Oauth\Token\Collection'
@@ -86,9 +87,6 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
             ->method('addFilterByAdminId')
             ->with($adminId)
             ->will($this->returnValue($this->_tokenModelCollectionMock));
-        $this->_tokenModelCollectionMock->expects($this->any())
-            ->method('getSize')
-            ->will($this->returnValue(1));
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
@@ -97,30 +95,25 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
             ->with(null)
             ->will($this->returnValue(1));
         $this->_tokenMock->expects($this->once())
-            ->method('setRevoked')
+            ->method('delete')
             ->will($this->returnValue($this->_tokenMock));
-        $this->_tokenMock->expects($this->once())
-            ->method('save');
 
         $this->assertTrue($this->_tokenService->revokeAdminAccessToken($adminId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This user has no tokens.
-     */
     public function testRevokeAdminAccessTokenWithoutAdminId()
     {
+        $this->_tokenModelCollectionMock->expects($this->once())
+            ->method('getIterator')
+            ->will($this->returnValue(new \ArrayIterator()));
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByAdminId')
             ->with(null)
             ->will($this->returnValue($this->_tokenModelCollectionMock));
         $this->_tokenMock->expects($this->never())
-            ->method('save');
-        $this->_tokenMock->expects($this->never())
-            ->method('setRevoked')
+            ->method('delete')
             ->will($this->returnValue($this->_tokenMock));
-        $this->_tokenService->revokeAdminAccessToken(null);
+        $this->assertTrue($this->_tokenService->revokeAdminAccessToken(null));
     }
 
     /**
@@ -136,16 +129,11 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
             ->with($adminId)
             ->will($this->returnValue($this->_tokenModelCollectionMock));
         $this->_tokenModelCollectionMock->expects($this->once())
-            ->method('getSize')
-            ->will($this->returnValue(1));
-        $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
 
-        $this->_tokenMock->expects($this->never())
-            ->method('save');
         $this->_tokenMock->expects($this->once())
-            ->method('setRevoked')
+            ->method('delete')
             ->will($this->throwException($exception));
         $this->_tokenService->revokeAdminAccessToken($adminId);
     }

@@ -320,15 +320,16 @@ class Data
      * @param ModelProduct $product
      * @param string $imageFile
      * @return array
-     * @todo refactor to use imageBuilder which doesn't check file existence
      */
     private function getAllSizeImages(ModelProduct $product, $imageFile)
     {
         return [
-            'large' => $this->imageHelper->init($product, 'product_page_image_large_no_frame')
+            'large' => $this->imageHelper->init($product, 'product_page_image_large')
+                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                 ->setImageFile($imageFile)
                 ->getUrl(),
-            'medium' => $this->imageHelper->init($product, 'product_page_image_medium_no_frame')
+            'medium' => $this->imageHelper->init($product, 'product_page_image_medium')
+                ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
                 ->setImageFile($imageFile)
                 ->getUrl(),
             'small' => $this->imageHelper->init($product, 'product_page_image_small')

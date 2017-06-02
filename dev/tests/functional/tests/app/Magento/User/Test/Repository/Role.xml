@@ -47,5 +47,14 @@
                 <item name="Send Sales Emails" xsi:type="string">Magento_Sales::emails</item>
             </field>
         </dataset>
+
+        <dataset name="role_dashboard">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+            </field>
+        </dataset>
     </repository>
 </config>

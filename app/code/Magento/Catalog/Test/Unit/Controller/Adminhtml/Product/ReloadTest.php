@@ -79,6 +79,16 @@ class ReloadTest extends \PHPUnit_Framework_TestCase
      */
     protected $processorMock;
 
+    /**
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $store;
+
+    /**
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManager;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -86,46 +96,71 @@ class ReloadTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
+
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->productBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->resultMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['forward', 'setJsonData', 'getLayout'])
             ->getMockForAbstractClass();
+
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods([
+                'getStoreId',
+                'getTypeId'
+            ])
             ->getMockForAbstractClass();
+
         $this->uiComponentMock = $this->getMockBuilder(UiComponent::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->processorMock = $this->getMockBuilder(ProcessorInterface::class)
             ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
+
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->resultMock);
+
         $this->contextMock->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
+
         $this->productBuilderMock->expects($this->any())
             ->method('build')
             ->willReturn($this->productMock);
+
         $this->layoutMock->expects($this->any())
             ->method('getBlock')
             ->willReturn($this->uiComponentMock);
         $this->layoutMock->expects($this->any())
             ->method('getUpdate')
             ->willReturn($this->processorMock);
+
         $this->resultMock->expects($this->any())
             ->method('getLayout')
             ->willReturn($this->layoutMock);
@@ -134,6 +169,7 @@ class ReloadTest extends \PHPUnit_Framework_TestCase
             'context' => $this->contextMock,
             'productBuilder' => $this->productBuilderMock,
             'layout' => $this->layoutMock,
+            'storeManager' => $this->storeManager,
         ]);
     }
 
@@ -142,6 +178,7 @@ class ReloadTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->willReturn(false);
+
         $this->resultMock->expects($this->once())
             ->method('forward')
             ->with('noroute')
@@ -155,6 +192,10 @@ class ReloadTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->willReturn('true');
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
 
         $this->assertInstanceOf(ResultInterface::class, $this->model->execute());
     }
