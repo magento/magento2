@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Email\Model\Plugin;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -10,6 +11,9 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class TransportInterfacePlugin.
+ */
 class TransportInterfacePlugin
 {
     /**
