@@ -407,7 +407,7 @@ class Helper
     {
         if (null === $this->productRepository) {
             $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\ProductRepositoryInterface\Proxy::class);
+                ->get('\Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
         }
 
         return $this->productRepository;
