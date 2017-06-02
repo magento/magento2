@@ -95,7 +95,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $identifier = 'robots.txt';
         $moduleName = 'Magento_Robots';
-        $actionClassName = '\Magento\Robots\Controller\Index\Index';
+        $actionClassName = \Magento\Robots\Controller\Index\Index::class;
 
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods([
