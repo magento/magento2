@@ -350,7 +350,6 @@ define([
         _determineProductData: function () {
             // Check if product is in a list of products.
             var productId,
-                product,
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
@@ -358,8 +357,7 @@ define([
 
             if (!productId) {
                 // Check individual product.
-                product = document.getElementsByName('product')[0];
-                productId = product ? product.value : undefined;
+                productId = $('[name=product]').val();
                 isInProductView = productId > 0;
             }
 

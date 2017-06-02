@@ -99,10 +99,10 @@ $orderStoreDate = $block->formatDate(
                         <td><?php /* @escapeNotVerified */ echo $_order->getBaseToGlobalRate() ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($_order->getBaseCurrencyCode() != $_order->getOrderCurrencyCode()): ?>
+                <?php if ($_order->getBaseCurrencyCode() != $_order->getOrderCurrencyCode() && $_order->getGlobalCurrencyCode() != $_order->getOrderCurrencyCode()): ?>
                     <tr>
-                        <th><?php /* @escapeNotVerified */ echo __('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode()) ?></th>
-                        <th><?php /* @escapeNotVerified */ echo $_order->getBaseToOrderRate() ?></th>
+                        <th><?php echo $block->escapeHtml(__('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode())) ?></th>
+                        <td><?php echo $block->escapeHtml($_order->getBaseToOrderRate()) ?></td>
                     </tr>
                 <?php endif; ?>
             </table>

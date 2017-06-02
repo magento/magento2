@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -31,7 +32,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
 
     /**
      * @param Attribute $attributeResource
-     * @param OptionProvider $attributeOptionProvider,
+     * @param OptionProvider $attributeOptionProvider ,
      * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
@@ -49,10 +50,28 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
-        $scope  = $this->scopeResolver->getScope();
+        $scope = $this->scopeResolver->getScope();
         $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
+        $data = $this->attributeResource->getConnection()->fetchAll($select);
 
-        return $this->attributeResource->getConnection()->fetchAll($select);
+        if ($superAttribute->getSourceModel()) {
+            $options = $superAttribute->getSource()->getAllOptions(false);
+
+            $optionLabels = [];
+            foreach ($options as $option) {
+                $optionLabels[$option['value']] = $option['label'];
+            }
+
+            foreach ($data as $key => $value) {
+                $optionText = isset($optionLabels[$value['value_index']])
+                    ? $optionLabels[$value['value_index']]
+                    : false;
+                $data[$key]['default_title'] = $optionText;
+                $data[$key]['option_title'] = $optionText;
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -72,11 +91,6 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                 'product_id' => 'product_entity.entity_id',
                 'attribute_code' => 'attribute.attribute_code',
                 'value_index' => 'entity_value.value',
-                'option_title' => $this->attributeResource->getConnection()->getIfNullSql(
-                    'option_value.value',
-                    'default_option_value.value'
-                ),
-                'default_title' => 'default_option_value.value',
                 'super_attribute_label' => 'attribute_label.value',
             ]
         )->joinInner(
@@ -103,27 +117,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                     'entity_value.attribute_id = super_attribute.attribute_id',
                     'entity_value.store_id = 0',
                     "entity_value.{$this->attributeOptionProvider->getProductEntityLinkField()} = "
-                    . "entity.{$this->attributeOptionProvider->getProductEntityLinkField()}"
-                ]
-            ),
-            []
-        )->joinLeft(
-            ['option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
-            implode(
-                ' AND ',
-                [
-                    'option_value.option_id = entity_value.value',
-                    'option_value.store_id = ' . $scope->getId()
-                ]
-            ),
-            []
-        )->joinLeft(
-            ['default_option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
-            implode(
-                ' AND ',
-                [
-                    'default_option_value.option_id = entity_value.value',
-                    'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    . "entity.{$this->attributeOptionProvider->getProductEntityLinkField()}",
                 ]
             ),
             []
@@ -133,7 +127,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                 ' AND ',
                 [
                     'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
-                    'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             ),
             []
@@ -144,6 +138,38 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
             'attribute.attribute_id = ?',
             $superAttribute->getAttributeId()
         );
+
+        if (!$superAttribute->getSourceModel()) {
+            $select->columns(
+                [
+                    'option_title' => $this->attributeResource->getConnection()->getIfNullSql(
+                        'option_value.value',
+                        'default_option_value.value'
+                    ),
+                    'default_title' => 'default_option_value.value',
+                ]
+            )->joinLeft(
+                ['option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
+                implode(
+                    ' AND ',
+                    [
+                        'option_value.option_id = entity_value.value',
+                        'option_value.store_id = ' . $scope->getId(),
+                    ]
+                ),
+                []
+            )->joinLeft(
+                ['default_option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
+                implode(
+                    ' AND ',
+                    [
+                        'default_option_value.option_id = entity_value.value',
+                        'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                    ]
+                ),
+                []
+            );
+        }
 
         return $select;
     }
