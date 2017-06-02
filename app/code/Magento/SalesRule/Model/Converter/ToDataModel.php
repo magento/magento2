@@ -84,7 +84,7 @@ class ToDataModel
      * @param Rule $ruleModel
      * @return RuleDataModel
      */
-    public function toDataModel(\Magento\SalesRule\Model\Rule $ruleModel)
+    public function toDataModel(Rule $ruleModel)
     {
         $modelData = $ruleModel->getData();
         $modelData = $this->convertExtensionAttributesToObject($modelData);
@@ -99,10 +99,10 @@ class ToDataModel
 
     /**
      * @param RuleDataModel $dataModel
-     * @param \Magento\SalesRule\Model\Rule $ruleModel
+     * @param Rule $ruleModel
      * @return $this
      */
-    protected function mapConditions(RuleDataModel $dataModel, \Magento\SalesRule\Model\Rule $ruleModel)
+    protected function mapConditions(RuleDataModel $dataModel, Rule $ruleModel)
     {
         $conditionSerialized = $ruleModel->getConditionsSerialized();
         if ($conditionSerialized) {
@@ -117,10 +117,10 @@ class ToDataModel
 
     /**
      * @param RuleDataModel $dataModel
-     * @param \Magento\SalesRule\Model\Rule $ruleModel
+     * @param Rule $ruleModel
      * @return $this
      */
-    protected function mapActionConditions(RuleDataModel $dataModel, \Magento\SalesRule\Model\Rule $ruleModel)
+    protected function mapActionConditions(RuleDataModel $dataModel, Rule $ruleModel)
     {
         $actionConditionSerialized = $ruleModel->getActionsSerialized();
         if ($actionConditionSerialized) {
@@ -194,10 +194,11 @@ class ToDataModel
     }
 
     /**
-     * @param \Magento\SalesRule\Model\Rule $ruleModel
+     * @param RuleDataModel $dataModel
+     * @param Rule $ruleModel
      * @return $this
      */
-    protected function mapFields(RuleDataModel $dataModel, \Magento\SalesRule\Model\Rule $ruleModel)
+    protected function mapFields(RuleDataModel $dataModel, Rule $ruleModel)
     {
         $this->mapConditions($dataModel, $ruleModel);
         $this->mapActionConditions($dataModel, $ruleModel);
