@@ -292,14 +292,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $customerDataAttributes = [
             'attribute' => 'attribute',
             'test1' => 'test1',
-            'test33' => 'test33'
+            'test33' => 'test33',
         ];
 
         $customer = $this->getMock(
             \Magento\Customer\Model\Data\Customer::class,
             [
                 'getCustomAttributes',
-                'getId'
+                'getId',
             ],
             [],
             '',
@@ -310,7 +310,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Api\AttributeValue::class,
             [
                 'getAttributeCode',
-                'getValue'
+                'getValue',
             ],
             [],
             '',
