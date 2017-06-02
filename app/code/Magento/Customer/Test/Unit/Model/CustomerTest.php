@@ -58,6 +58,11 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\ResourceModel\Customer|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
 
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataObjectProcessor;
+
     protected function setUp()
     {
         $this->_website = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
@@ -102,6 +107,15 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
+
+        $this->dataObjectProcessor = $this->getMock(
+            \Magento\Framework\Reflection\DataObjectProcessor::class,
+            ['buildOutputDataArray'],
+            [],
+            '',
+            false
+        );
+
         $this->resourceMock->expects($this->any())
             ->method('getIdFieldName')
             ->will($this->returnValue('id'));
@@ -119,6 +133,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'attributeFactory' => $this->attributeFactoryMock,
                 'registry' => $this->registryMock,
                 'resource' => $this->resourceMock,
+                'dataObjectProcessor' => $this->dataObjectProcessor
             ]
         );
     }
@@ -270,5 +285,66 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             [1, 0, 'test2@example.com', true],
             [1, null, 'test2@example.com', true],
         ];
+    }
+
+    public function testUpdateData()
+    {
+        $customerDataAttributes = [
+            'attribute' => 'attribute',
+            'test1' => 'test1',
+            'test33' => 'test33'
+        ];
+
+        $customer = $this->getMock(
+            \Magento\Customer\Model\Data\Customer::class,
+            [
+                'getCustomAttributes',
+                'getId'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $attribute = $this->getMock(
+            \Magento\Framework\Api\AttributeValue::class,
+            [
+                'getAttributeCode',
+                'getValue'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $this->dataObjectProcessor->expects($this->once())
+            ->method('buildOutputDataArray')
+            ->withConsecutive(
+                [$customer, \Magento\Customer\Api\Data\CustomerInterface::class]
+            )->willReturn($customerDataAttributes);
+
+        $attribute->expects($this->exactly(3))
+            ->method('getAttributeCode')
+            ->willReturn('test33');
+
+        $attribute->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturn('test33');
+
+        $customer->expects($this->once())
+            ->method('getCustomAttributes')
+            ->willReturn([$attribute->getAttributeCode() => $attribute]);
+
+        $this->_model->updateData($customer);
+
+        foreach($customerDataAttributes as $key => $value) {
+            $expectedResult[strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $key), '_'))] = $value;
+        }
+
+        $expectedResult[$attribute->getAttributeCode()] = $attribute->getValue();
+        $expectedResult['attribute_set_id'] =
+            \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
+
+        $this->assertEquals($this->_model->getData(), $expectedResult);
     }
 }
