@@ -50,7 +50,7 @@
                 <input type="password" class="input-text" name="current_password" id="current-password" data-input="current-password" autocomplete="off" />
             </div>
         </div>
-        <div class="field new password required" data-container="new-password" data-mage-init='{"passwordStrengthIndicator": {}}'>
+        <div class="field new password required" data-container="new-password">
             <label class="label" for="password"><span><?php echo $block->escapeHtml(__('New Password')) ?></span></label>
             <div class="control">
                 <input type="password" class="input-text" name="password" id="password"
@@ -125,6 +125,11 @@
                 "titleChangeEmail": "<?php echo $block->escapeJs($block->escapeHtml(__('Change Email'))) ?>",
                 "titleChangePassword": "<?php echo $block->escapeJs($block->escapeHtml(__('Change Password'))) ?>",
                 "titleChangeEmailAndPassword": "<?php echo $block->escapeJs($block->escapeHtml(__('Change Email and Password'))) ?>"
+            }
+        },
+        "[data-container=new-password]": {
+            "passwordStrengthIndicator": {
+                "formSelector": "form.form-edit-account"
             }
         }
     }

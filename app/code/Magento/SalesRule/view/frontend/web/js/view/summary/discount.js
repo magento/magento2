@@ -34,6 +34,17 @@ define([
         },
 
         /**
+         * @return {*}
+         */
+        getCouponLabel: function () {
+            if (!this.totals()) {
+                return null;
+            }
+
+            return this.totals()['coupon_label'];
+        },
+
+        /**
          * @return {Number}
          */
         getPureValue: function () {
