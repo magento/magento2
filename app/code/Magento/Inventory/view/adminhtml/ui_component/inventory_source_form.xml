@@ -47,43 +47,50 @@
                 <item name="label" xsi:type="string"/>
             </item>
         </argument>
-        <field name="source_id">
+        <field name="source_id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">storelocator_form_data_source</item>
-                    <item name="dataScope" xsi:type="string">source_id</item>
                 </item>
             </argument>
+            <settings>
+                <visible>false</visible>
+                <dataType>text</dataType>
+                <dataScope>source_id</dataScope>
+            </settings>
         </field>
-        <field name="status">
+        <field name="status" sortOrder="10" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Status</item>
-                    <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">storelocator_form_data_source</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="dataScope" xsi:type="string">status</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                        <item name="validate-number" xsi:type="boolean">false</item>
-                        <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                    </item>
-                    <item name="options" xsi:type="array">
-                        <item name="0" xsi:type="array">
-                            <item name="value" xsi:type="number">0</item>
-                            <item name="label" xsi:type="string" translate="true">Inactive</item>
-                        </item>
-                        <item name="1" xsi:type="array">
-                            <item name="value" xsi:type="number">1</item>
-                            <item name="label" xsi:type="string" translate="true">Active</item>
-                        </item>
-                    </item>
                 </item>
             </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Status</label>
+                <dataScope>status</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                            <rule name="validate-number" xsi:type="boolean">false</rule>
+                            <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                        </validation>
+                        <options>
+                            <option name="0" xsi:type="array">
+                                <item name="value" xsi:type="number">0</item>
+                                <item name="label" xsi:type="string" translate="true">Inactive</item>
+                            </option>
+                            <option name="1" xsi:type="array">
+                                <item name="value" xsi:type="number">1</item>
+                                <item name="label" xsi:type="string" translate="true">Active</item>
+                            </option>
+                        </options>
+                    </settings>
+                </select>
+            </formElements>
         </field>
     </fieldset>
 </form>

@@ -10,10 +10,10 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 /**
  * Class Save
  */
-class Save extends AbstractButton implements ButtonProviderInterface
+class Save implements ButtonProviderInterface
 {
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getButtonData()
     {
