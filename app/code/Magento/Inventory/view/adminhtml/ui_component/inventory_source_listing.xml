@@ -9,39 +9,41 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">inventory_source_listing.inventory_source_listing_data_source</item>
-            <item name="deps" xsi:type="string">inventory_source_listing.inventory_source_listing_data_source</item>
-        </item>
-        <item name="spinner" xsi:type="string">inventory_source_listing_columns</item>
-        <item name="buttons" xsi:type="array">
-            <item name="add" xsi:type="array">
-                <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string">Add New Warehouse</item>
-                <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/edit</item>
-            </item>
         </item>
     </argument>
+    <settings>
+        <buttons>
+            <button name="add">
+                <label translate="true">Add New Warehouse</label>
+                <class>primary</class>
+                <url path="*/*/edit"/>
+            </button>
+        </buttons>
+        <spinner>inventory_source_listing_columns</spinner>
+        <deps>
+            <dep>inventory_source_listing.inventory_source_listing_data_source</dep>
+        </deps>
+    </settings>
     <dataSource name="inventory_source_listing_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Inventory\Ui\Component\Listing\DataProviders\Magento\Inventory\Source</argument>
-            <argument name="name" xsi:type="string">inventory_source_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">source_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
+        <dataProvider>
             <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">source_id</item>
-                    </item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                 </item>
             </argument>
-        </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
+            <settings>
+                <class>Magento\Inventory\Ui\Component\Listing\DataProviders\Magento\Inventory\Source</class>
+                <name>inventory_source_listing_data_source</name>
+                <primaryFieldName>source_id</primaryFieldName>
+                <requestFieldName>id</requestFieldName>
+                <update_url path="mui/index/render"/>
+                <storage_config>
+                    <indexField>source_id</indexField>
+                </storage_config>
+            </settings>
+        </dataProvider>
     </dataSource>
+
     <listingToolbar name="listing_top">
         <settings>
             <sticky>true</sticky>
@@ -84,7 +86,12 @@
                 <label translate="true">Name</label>
             </settings>
         </column>
-        <column name="is_active">
+        <column name="is_active" component="Magento_Ui/js/grid/columns/select" sortOrder="35">
+            <settings>
+                <label translate="true">Is Active</label>
+                <item name="filter" xsi:type="string">select</item>
+                <item name="dataType" xsi:type="string">select</item>
+            </settings>
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="array">
                     <item name="active" xsi:type="array">
@@ -95,13 +102,6 @@
                         <item name="value" xsi:type="string">0</item>
                         <item name="label" xsi:type="string" translate="true">Inactive</item>
                     </item>
-                </item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Is Active</item>
-                    <item name="sortOrder" xsi:type="number">35</item>
                 </item>
             </argument>
         </column>
