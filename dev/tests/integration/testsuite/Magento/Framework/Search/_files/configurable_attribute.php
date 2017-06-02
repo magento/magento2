@@ -8,7 +8,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 
 $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
-$attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
+$attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable_searchable');
 
 $eavConfig->clear();
 
@@ -16,15 +16,18 @@ $eavConfig->clear();
 $installer = Bootstrap::getObjectManager()->create(\Magento\Catalog\Setup\CategorySetup::class);
 
 if (!$attribute->getId()) {
+
     /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-    $attribute = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+    $attribute = Bootstrap::getObjectManager()->create(
+        \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+    );
 
     /** @var AttributeRepositoryInterface $attributeRepository */
     $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
 
     $attribute->setData(
         [
-            'attribute_code' => 'test_configurable',
+            'attribute_code' => 'test_configurable_searchable',
             'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
             'is_global' => 1,
             'is_user_defined' => 1,

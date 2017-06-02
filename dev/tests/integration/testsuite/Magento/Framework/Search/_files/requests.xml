@@ -393,14 +393,14 @@
         </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="filter_out_of_stock_child" boost="1">
-                <queryReference clause="must" ref="test_configurable"/>
+                <queryReference clause="must" ref="test_configurable_searchable"/>
             </query>
-            <query xsi:type="filteredQuery" name="test_configurable">
+            <query xsi:type="filteredQuery" name="test_configurable_searchable">
                 <filterReference clause="must" ref="test_configurable_filter"/>
             </query>
         </queries>
         <filters>
-            <filter xsi:type="termFilter" name="test_configurable_filter" field="test_configurable" value="$test_configurable$"/>
+            <filter xsi:type="termFilter" name="test_configurable_filter" field="test_configurable_searchable" value="$test_configurable_searchable$"/>
         </filters>
         <aggregations/>
         <from>0</from>
