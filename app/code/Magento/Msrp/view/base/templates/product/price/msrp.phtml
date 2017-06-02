@@ -56,7 +56,7 @@ if ($product->isSaleable()) {
         $data = ['addToCart' => [
             'origin'=> 'msrp',
             'popupId' => '#' . $popupId,
-            'productName' => $product->getName(),
+            'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
             'productId' => $productId,
             'productIdInput' => 'input[type="hidden"][name="product"]',
             'realPrice' => $block->getRealPriceHtml(),
@@ -80,7 +80,7 @@ if ($product->isSaleable()) {
     <a href="javascript:void(0);"
        id="<?php /* @escapeNotVerified */ echo($popupId);?>"
        class="action map-show-info"
-       data-mage-init='<?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)?>'><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
+       data-mage-init='<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)?>'><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
     </a>
 <?php else: ?>
     <span class="msrp-message">
