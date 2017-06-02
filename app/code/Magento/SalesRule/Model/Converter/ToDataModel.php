@@ -184,7 +184,7 @@ class ToDataModel
      * @param array $data
      * @return array
      */
-    private function convertExtensionAttributesToObject(array $data) : array
+    private function convertExtensionAttributesToObject(array $data)
     {
         if (isset($data['extension_attributes']) && is_array($data['extension_attributes'])) {
             /** @var RuleExtensionInterface $attributes */
@@ -194,7 +194,6 @@ class ToDataModel
     }
 
     /**
-     * @param RuleDataModel $dataModel
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @return $this
      */
