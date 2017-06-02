@@ -72,18 +72,26 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
     protected $isPrice = true;
 
     /**
-     * Assertion that commodity options are displayed correctly
+     * Assertion that commodity options are displayed correctly.
      *
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
      * @param BrowserInterface $browser
+     * @param FixtureInterface|null $initialProduct
+     * @param bool $assertInitialProduct
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         FixtureInterface $product,
-        BrowserInterface $browser
+        BrowserInterface $browser,
+        FixtureInterface $initialProduct = null,
+        $assertInitialProduct = false
     ) {
+        if ($assertInitialProduct && $initialProduct) {
+            $product = $initialProduct;
+        }
+
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $actualPrice = null;

@@ -14,6 +14,13 @@ use Magento\Mtf\Client\Element\SimpleElement;
  */
 class DropDown extends AbstractOptions
 {
+    /**#@+
+     * Determines if we need update option value or add new one.
+     */
+    const ACTION_ADD = 'add';
+    const ACTION_UPDATE = 'update';
+    /**#@-*/
+
     /**
      * "Add Value" button css selector.
      *
@@ -30,7 +37,14 @@ class DropDown extends AbstractOptions
      */
     public function fillOptions(array $fields, SimpleElement $element = null)
     {
-        $this->_rootElement->find($this->addValueButton)->click();
+        $actionType = self::ACTION_ADD;
+        if (isset($fields['action_type'])) {
+            $actionType = $fields['action_type'];
+            unset($fields['action_type']);
+        }
+        if ($actionType == self::ACTION_ADD) {
+            $this->_rootElement->find($this->addValueButton)->click();
+        }
 
         return parent::fillOptions($fields, $element);
     }
