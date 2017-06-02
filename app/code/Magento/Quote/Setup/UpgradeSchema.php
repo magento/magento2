@@ -89,6 +89,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 255,
                 ]
+            )->modifyColumn(
+                $setup->getTable('quote', self::$connectionName),
+                'updated_at',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    'nullable' => false,
+                    'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE,
+                ]
             );
         }
         $setup->endSetup();
