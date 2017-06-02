@@ -12,26 +12,11 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test class for \Magento\Sitemap\Model\ResourceModel\Catalog\Product.
  * - test products collection generation for sitemap
  *
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixture Magento/Sitemap/_files/sitemap_products.php
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Indexer
-     */
-    private $indexer;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        /** @var Indexer indexer */
-        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
-        $this->indexer->load('catalogsearch_fulltext');
-        $this->indexer->reindexAll();
-    }
-
     /**
      * Test getCollection None images
      * 1) Check that image attributes were not loaded
