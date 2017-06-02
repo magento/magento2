@@ -337,7 +337,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->updateData($customer);
 
-        foreach($customerDataAttributes as $key => $value) {
+        foreach ($customerDataAttributes as $key => $value) {
             $expectedResult[strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $key), '_'))] = $value;
         }
 
