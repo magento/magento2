@@ -12,7 +12,7 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class TransportInterfacePlugin.
+ * Plugin allow omit email sending if option is disabled.
  */
 class TransportInterfacePlugin
 {
