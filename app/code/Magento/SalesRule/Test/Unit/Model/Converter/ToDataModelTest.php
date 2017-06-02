@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\Converter;
+
 use Magento\SalesRule\Api\Data\RuleExtensionFactory;
 use Magento\SalesRule\Api\Data\RuleExtensionInterface;
 
@@ -175,7 +176,6 @@ class ToDataModelTest extends \PHPUnit_Framework_TestCase
         $attributesMock = $this->getMockBuilder(RuleExtensionInterface::class)
             ->getMock();
         $arrayAttributes['extension_attributes'] = $attributesMock;
-
 
         $this->extensionFactoryMock->expects($this->any())
             ->method('create')
