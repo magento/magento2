@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <interface_locale>
+            <selector>#interface_locale</selector>
+            <input>select</input>
+        </interface_locale>
+        <current_password/>
+    </fields>
+</mapping>

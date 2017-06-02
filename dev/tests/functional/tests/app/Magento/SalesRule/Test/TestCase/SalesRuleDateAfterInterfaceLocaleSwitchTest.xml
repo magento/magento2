@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\SalesRule\Test\TestCase\SalesRuleDateAfterInterfaceLocaleSwitchTest" summary="Verify Date format after switching Interface locales" ticketId="MAGETWO-65024">
+        <variation name="SalesRuleDateAfterInterfaceLocaleSwitchTestVariation1">
+            <data name="user/data/interface_locale" xsi:type="string">English (United Kingdom) / English (United Kingdom)</data>
+            <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+            <data name="defaultUser/data/interface_locale" xsi:type="string">English (United States) / English (United States)</data>
+            <data name="defaultUser/data/current_password" xsi:type="string">%current_password%</data>
+            <data name="dateFormat" xsi:type="string">d/m/Y</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_with_from_and_end_dates</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertSalesRuleDateFormatInGrid" />
+        </variation>
+        <variation name="SalesRuleDateAfterInterfaceLocaleSwitchTestVariation2">
+            <data name="user/data/interface_locale" xsi:type="string">Deutsch (Deutschland) / German (Germany)</data>
+            <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+            <data name="defaultUser/data/interface_locale" xsi:type="string">English (United States) / Englisch (Vereinigte Staaten)</data>
+            <data name="defaultUser/data/current_password" xsi:type="string">%current_password%</data>
+            <data name="dateFormat" xsi:type="string">d.m.y</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_with_from_and_end_dates</data>
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertSalesRuleDateFormatInGrid" />
+        </variation>
+    </testCase>
+</config>

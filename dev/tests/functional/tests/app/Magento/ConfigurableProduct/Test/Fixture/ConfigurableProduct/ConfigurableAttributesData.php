@@ -275,6 +275,8 @@ class ConfigurableAttributesData extends DataSource
                         'qty' => $quantityAndStockStatus['qty'],
                     ],
                     'weight' => $product->getWeight(),
+                    'price' => $product->getPrice(),
+                    'special_price' => $product->getSpecialPrice(),
                 ];
                 $this->variationsMatrix[$key] = array_replace_recursive($this->variationsMatrix[$key], $productData);
             } else {
@@ -366,6 +368,7 @@ class ConfigurableAttributesData extends DataSource
             'price',
             'quantity_and_stock_status',
             'weight',
+            'special_price',
         ];
 
         $this->data = [

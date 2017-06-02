@@ -39,6 +39,10 @@ define([
             }
         },
 
+        _FINISH_CREATE_VIDEO_TRIGGER: 'finish_create_video',
+
+        _FINISH_UPDATE_VIDEO_TRIGGER: 'finish_update_video',
+
         /**
          * @private
          */
@@ -57,16 +61,21 @@ define([
          * @returns {Boolean}
          */
         update: function () {
-            var checkVideoID = $(this.options.container).find('.' + this.options.videoClass).data('code');
+            var checkVideoID = $(this.options.container).find('.' + this.options.videoClass).data('code'),
+                eventVideoData = {
+                    oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
+                    newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
+                };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_UPDATE_VIDEO_TRIGGER, eventVideoData);
             } else if (checkVideoID && checkVideoID === this.options.videoId) {
                 return false;
             } else if (!checkVideoID) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_UPDATE_VIDEO_TRIGGER, eventVideoData);
             }
-
         },
 
         /**
@@ -303,7 +312,25 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function (e, data) {
-            var player = $(this._videoPlayerSelector).createVideoPlayer({
+            var player = $(this._videoPlayerSelector);
+
+            player.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
+                if (!this._onlyVideoPlayer ||
+                    !this._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
+                    playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
+                ) {
+                    player.updateInputFields({
+                        reset: false,
+                        data: {
+                            title: data.title,
+                            description: data.description
+                        }
+                    });
+                    this._loadRemotePreview(data.thumbnail);
+                }
+                this._onlyVideoPlayer = true;
+            }, this))
+                .createVideoPlayer({
                 videoId: data.videoId,
                 videoProvider: data.videoProvider,
                 reset: false,
@@ -324,20 +351,10 @@ define([
                         uploaderUrl: data.channelId
                     }
                 }
-            });
+            })
+                .off('finish_update_video finish_create_video');
 
             this._videoRequestComplete = true;
-
-            if (!this._isEditPage) {
-                player.updateInputFields({
-                    reset: false,
-                    data: {
-                        title: data.title,
-                        description: data.description
-                    }
-                });
-                this._loadRemotePreview(data.thumbnail);
-            }
         },
 
         /**

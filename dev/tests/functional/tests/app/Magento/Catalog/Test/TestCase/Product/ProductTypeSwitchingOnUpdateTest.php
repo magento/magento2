@@ -99,8 +99,8 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
         // Steps
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen(['sku' => $productOrigin->getSku()]);
-        $this->catalogProductEdit->getProductForm()->fill($product);
         $this->performAction($actionName);
+        $this->catalogProductEdit->getProductForm()->fill($product);
         $this->catalogProductEdit->getFormPageActions()->save($product);
 
         return ['product' => $product];
@@ -143,6 +143,22 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
         $this->catalogProductEdit->getProductForm()->openTab('downloadable_information');
         /** @var Downloadable $downloadableInfoTab */
         $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getTab('downloadable_information');
-        $downloadableInfoTab->getDownloadableBlock('Links')->clearDownloadableData();
+        $downloadableInfoTab->clearDownloadableData('Links')->setIsDownloadable('No');
+    }
+
+    /**
+     * Set "Is this downloadable Product?" value.
+     *
+     * @param string $downloadable
+     * @return void
+     *
+     * @throws \Exception
+     */
+    protected function setIsDownloadable($downloadable = 'Yes')
+    {
+        $this->catalogProductEdit->getProductForm()->openTab('downloadable_information');
+        /** @var Downloadable $downloadableInfoTab */
+        $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getTab('downloadable_information');
+        $downloadableInfoTab->setIsDownloadable($downloadable);
     }
 }

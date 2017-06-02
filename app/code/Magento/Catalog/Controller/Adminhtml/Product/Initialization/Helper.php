@@ -151,7 +151,7 @@ class Helper
             foreach ($options as &$customOptionData) {
                 if (isset($customOptionData['values'])) {
                     $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
-                        return !($valueData['option_type_id'] == '-1' && !empty($valueData['is_delete']));
+                        return !((!isset($valueData['option_type_id']) || $valueData['option_type_id'] == '-1') && !empty($valueData['is_delete']));
                     });
                 }
             }

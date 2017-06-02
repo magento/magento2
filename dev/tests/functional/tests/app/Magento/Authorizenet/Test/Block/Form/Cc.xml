@@ -5,12 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<mapping strict="1">
+<mapping strict="0">
     <wrapper>payment</wrapper>
     <fields>
-        <cc_type>
-            <input>select</input>
-        </cc_type>
         <cc_number />
         <cc_exp_month>
             <input>select</input>
