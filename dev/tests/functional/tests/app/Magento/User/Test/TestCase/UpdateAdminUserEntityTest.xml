@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\User\Test\TestCase\UpdateAdminUserEntityTest" summary="Update Admin User" ticketId="MAGETWO-24345">
         <variation name="UpdateAdminUserEntityTestVariation2">
-            <data name="issue" xsi:type="string">MAGETWO-65658: [FT] User with restricted access can't log in to Admin in UpdateAdminUserEntityTest</data>
+            <!--<data name="issue" xsi:type="string">MAGETWO-65658: [FT] User with restricted access can't log in to Admin in UpdateAdminUserEntityTest</data>-->
             <data name="initialUser/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <data name="user/data/role_id/dataset" xsi:type="string">role::role_sales</data>
             <data name="user/data/current_password" xsi:type="string">123123q</data>
