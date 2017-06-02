@@ -5,7 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Pricing\Render;
 
+use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
@@ -30,6 +32,8 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param ConfigurableOptionsProviderInterface $configurableOptionsProvider
      * @param array $data
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
+     * @param SalableResolverInterface|null $salableResolver
+     * @param MinimalPriceCalculatorInterface|null $minimalPriceCalculator
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -39,9 +43,19 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         RendererPool $rendererPool,
         ConfigurableOptionsProviderInterface $configurableOptionsProvider,
         array $data = [],
-        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
+        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null,
+        SalableResolverInterface $salableResolver = null,
+        MinimalPriceCalculatorInterface $minimalPriceCalculator = null
     ) {
-        parent::__construct($context, $saleableItem, $price, $rendererPool, $data);
+        parent::__construct(
+            $context,
+            $saleableItem,
+            $price,
+            $rendererPool,
+            $data,
+            $salableResolver,
+            $minimalPriceCalculator
+        );
         $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
             ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
     }
