@@ -14,7 +14,7 @@
     <settings>
         <buttons>
             <button name="add">
-                <label translate="true">Add New Warehouse</label>
+                <label translate="true">Add New Source</label>
                 <class>primary</class>
                 <url path="*/*/edit"/>
             </button>
@@ -91,19 +91,15 @@
                 <label translate="true">Is Active</label>
                 <item name="filter" xsi:type="string">select</item>
                 <item name="dataType" xsi:type="string">select</item>
+                <options>
+                    <option name="active" value="1">
+                        <label translate="true">Active</label>
+                    </option>
+                    <option name="inactive" value="0">
+                        <label translate="true">Inactive</label>
+                    </option>
+                </options>
             </settings>
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="array">
-                    <item name="active" xsi:type="array">
-                        <item name="value" xsi:type="string">1</item>
-                        <item name="label" xsi:type="string" translate="true">Active</item>
-                    </item>
-                    <item name="inactive" xsi:type="array">
-                        <item name="value" xsi:type="string">0</item>
-                        <item name="label" xsi:type="string" translate="true">Inactive</item>
-                    </item>
-                </item>
-            </argument>
         </column>
         <column name="contact_name" sortOrder="40">
             <settings>
