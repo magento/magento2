@@ -76,6 +76,11 @@ class Helper
     private $dateTimeFilter;
 
     /**
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     */
+    private $linkTypeProvider;
+
+    /**
      * Helper constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -83,6 +88,7 @@ class Helper
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -90,7 +96,8 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -98,6 +105,8 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
+        $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
     }
 
     /**
@@ -244,11 +253,17 @@ class Helper
 
         $product = $this->productLinks->initializeLinks($product, $links);
         $productLinks = $product->getProductLinks();
-        $linkTypes = [
-            'related' => $product->getRelatedReadonly(),
-            'upsell' => $product->getUpsellReadonly(),
-            'crosssell' => $product->getCrosssellReadonly()
-        ];
+        $linkTypes = [];
+
+        /** @var \Magento\Catalog\Api\Data\ProductLinkTypeInterface $linkTypeObject */
+        foreach ($this->linkTypeProvider->getItems() as $linkTypeObject) {
+            $linkTypes[$linkTypeObject->getName()] = $product->getData($linkTypeObject->getName() . '_readonly');
+        }
+
+        // skip linkTypes that were already processed on initializeLinks plugins
+        foreach ($productLinks as $productLink) {
+            unset($linkTypes[$productLink->getLinkType()]);
+        }
 
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
