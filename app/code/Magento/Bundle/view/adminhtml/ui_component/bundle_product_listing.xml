@@ -12,6 +12,7 @@
             <item name="deps" xsi:type="string">bundle_product_listing.bundle_product_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">product_columns</item>
+        <item name="acl" xsi:type="string">Magento_Catalog::products</item>
     </argument>
     <dataSource name="bundle_product_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">

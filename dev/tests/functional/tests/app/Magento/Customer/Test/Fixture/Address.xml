@@ -36,5 +36,6 @@
         <field name="vat_request_date" is_required="0" />
         <field name="vat_request_id" is_required="0" />
         <field name="vat_request_success" is_required="0" />
+        <field name="custom_attribute" is_required="0" source="Magento\Customer\Test\Fixture\Address\CustomAttribute" />
     </fixture>
 </config>
