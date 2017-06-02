@@ -319,7 +319,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
         $notationCode = 'Magento_Cart_EditionFromConfig';
 
         $this->scopeConfigMock->method('getValue')
-            ->with(self::equalTo('paypal/notation_code'))
+            ->with(self::equalTo('paypal/notation_code'), self::equalTo('stores'))
             ->willReturn($notationCode);
 
         self::assertEquals($notationCode, $this->config->getBuildNotationCode());
