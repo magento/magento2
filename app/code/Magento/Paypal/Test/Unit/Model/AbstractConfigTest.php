@@ -308,7 +308,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
             $productMetadata
         );
 
-        self::assertEquals('', $this->config->getBuildNotationCode());
+        self::assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
     }
 
     /**
