@@ -7,14 +7,14 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
-    <!--<rule scope="variation">-->
-        <!--<allow>-->
-            <!--<name value="UpdateAdminUserEntityTestVariation2" />-->
-        <!--</allow>-->
-    <!--</rule>-->
-    <rule scope="testsuite">
+    <rule scope="variation">
         <allow>
-            <class value="\Magento\User\Test\TestCase\UpdateAdminUserEntityTest" />
+            <name value="UpdateAdminUserEntityTestVariation2" />
         </allow>
     </rule>
+    <!--<rule scope="testsuite">-->
+        <!--<allow>-->
+            <!--<class value="\Magento\User\Test\TestCase\UpdateAdminUserEntityTest" />-->
+        <!--</allow>-->
+    <!--</rule>-->
 </config>
