@@ -578,6 +578,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $product->getData('all_items_salable');
         }
 
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
         $isSalable = false;
         foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
@@ -588,6 +592,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $selectionsCollection->setFlag('product_children', true);
             $selectionsCollection->addFilterByRequiredOptions();
             $selectionsCollection->setOptionIdsFilter([$option->getId()]);
+
+            $this->selectionCollectionFilterApplier->apply(
+                $selectionsCollection,
+                'parent_product_id',
+                $product->getData($metadata->getLinkField())
+            );
 
             foreach ($selectionsCollection as $selection) {
                 if ($selection->isSalable()) {
@@ -835,6 +845,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         sort($selectionIds);
 
+        $metadata = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        );
+
         $usedSelections = $product->getData($this->_keyUsedSelections);
         $usedSelectionsIds = $product->getData($this->_keyUsedSelectionsIds);
 
@@ -849,6 +863,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->setPositionOrder()
                 ->addFilterByRequiredOptions()
                 ->setSelectionIdsFilter($selectionIds);
+
+            $this->selectionCollectionFilterApplier->apply(
+                $usedSelections,
+                'parent_product_id',
+                $product->getData($metadata->getLinkField())
+            );
 
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
                 $websiteId = $this->_storeManager->getStore($storeId)
