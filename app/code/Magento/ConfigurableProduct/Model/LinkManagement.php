@@ -43,21 +43,27 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private $attributeFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
         $this->configurableType = $configurableType;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->attributeFactory = $attributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
     }
 
     /**
@@ -183,22 +189,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     }
 
     /**
-     * Get Attribute Factory
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
-     *
-     * @deprecated
-     */
-    private function getAttributeFactory()
-    {
-        if (!$this->attributeFactory) {
-            $this->attributeFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
-        }
-        return $this->attributeFactory;
-    }
-
-    /**
      * Get Configurable Attribute Data
      *
      * @param int[] $attributeIds
@@ -208,7 +198,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     {
         $configurableAttributesData = [];
         $attributeValues = [];
-        $attributes = $this->getAttributeFactory()->create()
+        $attributes = $this->attributeFactory->create()
             ->getCollection()
             ->addFieldToFilter('attribute_id', $attributeIds)
             ->getItems();
