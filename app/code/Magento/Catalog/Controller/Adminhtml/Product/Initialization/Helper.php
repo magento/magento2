@@ -74,6 +74,11 @@ class Helper
     private $dateTimeFilter;
 
     /**
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     */
+    private $linkTypeProvider;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\RequestInterface $request
@@ -85,6 +90,8 @@ class Helper
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory|null $customOptionFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface|null $productRepository
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider|null $linkTypeProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -95,7 +102,8 @@ class Helper
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory = null,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository = null
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository = null,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -109,6 +117,8 @@ class Helper
             ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
         $this->productRepository = $productRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
     }
 
     /**
@@ -255,11 +265,17 @@ class Helper
 
         $product = $this->productLinks->initializeLinks($product, $links);
         $productLinks = $product->getProductLinks();
-        $linkTypes = [
-            'related' => $product->getRelatedReadonly(),
-            'upsell' => $product->getUpsellReadonly(),
-            'crosssell' => $product->getCrosssellReadonly()
-        ];
+        $linkTypes = [];
+
+        /** @var \Magento\Catalog\Api\Data\ProductLinkTypeInterface $linkTypeObject */
+        foreach ($this->linkTypeProvider->getItems() as $linkTypeObject) {
+            $linkTypes[$linkTypeObject->getName()] = $product->getData($linkTypeObject->getName() . '_readonly');
+        }
+
+        // skip linkTypes that were already processed on initializeLinks plugins
+        foreach ($productLinks as $productLink) {
+            unset($linkTypes[$productLink->getLinkType()]);
+        }
 
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
