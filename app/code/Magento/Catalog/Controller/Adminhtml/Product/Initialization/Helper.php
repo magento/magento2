@@ -91,7 +91,7 @@ class Helper
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface|null $productRepository
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider|null $linkTypeProvider
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
