@@ -9,6 +9,7 @@ namespace Magento\Developer\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 
 class TemplateHintsDisableCommand extends Command
 {
@@ -23,14 +24,19 @@ class TemplateHintsDisableCommand extends Command
     const SUCCESS_MESSAGE = "Template hints disabled. Refresh cache types";
 
     /**
-     * TemplateHintsDisableCommand constructor.
-     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
+     * @var ConfigInterface
      */
-    public function __construct(
-        \Magento\Config\Model\ResourceModel\Config $resourceConfig
+    private $resourceConfig;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param ConfigInterface $resourceConfig
+     */
+    public function __construct(ConfigInterface $resourceConfig
     ) {
         parent::__construct();
-        $this->_resourceConfig = $resourceConfig;
+        $this->resourceConfig = $resourceConfig;
     }
 
     /**
@@ -50,7 +56,7 @@ class TemplateHintsDisableCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->_resourceConfig->saveConfig(
+        $this->resourceConfig->saveConfig(
                     'dev/debug/template_hints_storefront',
                     0,
                     'default',

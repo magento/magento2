@@ -9,7 +9,7 @@ namespace Magento\Developer\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 
 class TemplateHintsEnableCommand extends Command
 {
@@ -25,14 +25,19 @@ class TemplateHintsEnableCommand extends Command
     const SUCCESS_MESSAGE = "Template hints enabled.";
 
     /**
-     * TemplateHintsDisableCommand constructor.
-     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
+     * @var ConfigInterface
      */
-    public function __construct(
-        \Magento\Config\Model\ResourceModel\Config $resourceConfig
+    private $resourceConfig;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param ConfigInterface $resourceConfig
+     */
+    public function __construct(ConfigInterface $resourceConfig
     ) {
         parent::__construct();
-        $this->_resourceConfig = $resourceConfig;
+        $this->resourceConfig = $resourceConfig;
     }
 
     /**
@@ -41,7 +46,7 @@ class TemplateHintsEnableCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Disable frontend template hints. A cache flush might be required.');
+            ->setDescription('Enable frontend template hints. A cache flush might be required.');
 
         parent::configure();
     }
@@ -52,7 +57,7 @@ class TemplateHintsEnableCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->_resourceConfig->saveConfig(
+        $this->resourceConfig->saveConfig(
                     'dev/debug/template_hints_storefront',
                     1,
                     'default',
