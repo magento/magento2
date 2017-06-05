@@ -344,8 +344,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "link_type" => "related",
             "linked_product_sku" => "product_simple_500",
             "linked_product_type" => "simple",
-            "position" => 0,
-            "extension_attributes" => []
+            "position" => 0
         ];
         $productWithRelatedData = [
             ProductInterface::SKU => "product_simple_with_related_500",
@@ -373,8 +372,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "link_type" => "upsell",
             "linked_product_sku" => "product_simple_500",
             "linked_product_type" => "simple",
-            "position" => 0,
-            "extension_attributes" => []
+            "position" => 0
         ];
         $productWithUpsellData = [
             ProductInterface::SKU => "product_simple_with_related_500",

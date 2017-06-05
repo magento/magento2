@@ -11,7 +11,8 @@
         "magento/module-customer": "100.2.*",
         "magento/module-theme": "100.2.*",
         "magento/module-quote": "100.2.*",
-        "magento/framework": "100.2.*"
+        "magento/framework": "100.2.*",
+        "magento/module-directory": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",

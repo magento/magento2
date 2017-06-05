@@ -112,7 +112,11 @@ class Kernel
     public function load()
     {
         if ($this->request->isGet() || $this->request->isHead()) {
-            $responseData = $this->serializer->unserialize($this->getCache()->load($this->identifier->getValue()));
+            $responseData = $this->getCache()->load($this->identifier->getValue());
+            if (!$responseData) {
+                return false;
+            }
+            $responseData = $this->serializer->unserialize($responseData);
             if (!$responseData) {
                 return false;
             }

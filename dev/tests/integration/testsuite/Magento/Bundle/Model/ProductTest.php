@@ -10,46 +10,54 @@
  */
 namespace Magento\Bundle\Model;
 
+use Magento\Bundle\Model\Product\Price;
+use Magento\Bundle\Model\Product\Type as BundleType;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\TestFramework\Entity;
+use Magento\TestFramework\Helper\Bootstrap;
+
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var Product
      */
-    protected $_model;
+    private $model;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
-    }
+        $this->objectManager = Bootstrap::getObjectManager();
 
-    public function testGetTypeId()
-    {
-        $this->assertEquals(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $this->_model->getTypeId());
+        $this->model = $this->objectManager->create(Product::class);
+        $this->model->setTypeId(Type::TYPE_BUNDLE);
     }
 
     public function testGetSetTypeInstance()
     {
         // model getter
-        $typeInstance = $this->_model->getTypeInstance();
-        $this->assertInstanceOf(\Magento\Bundle\Model\Product\Type::class, $typeInstance);
-        $this->assertSame($typeInstance, $this->_model->getTypeInstance());
+        $typeInstance = $this->model->getTypeInstance();
+        $this->assertInstanceOf(BundleType::class, $typeInstance);
+        $this->assertSame($typeInstance, $this->model->getTypeInstance());
 
         // singleton getter
-        $otherProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $otherProduct->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
+        $otherProduct = $this->objectManager->create(Product::class);
+        $otherProduct->setTypeId(Type::TYPE_BUNDLE);
         $this->assertSame($typeInstance, $otherProduct->getTypeInstance());
 
         // model setter
-        $customTypeInstance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Bundle\Model\Product\Type::class
-        );
-        $this->_model->setTypeInstance($customTypeInstance);
-        $this->assertSame($customTypeInstance, $this->_model->getTypeInstance());
+        $customTypeInstance = $this->objectManager->create(BundleType::class);
+        $this->model->setTypeInstance($customTypeInstance);
+        $this->assertSame($customTypeInstance, $this->model->getTypeInstance());
     }
 
     /**
@@ -59,41 +67,55 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRUD()
     {
-        $this->_model->setTypeId(
-            \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-        )->setAttributeSetId(
-            4
-        )->setName(
-            'Bundle Product'
-        )->setSku(
-            uniqid()
-        )->setPrice(
-            10
-        )->setMetaTitle(
-            'meta title'
-        )->setMetaKeyword(
-            'meta keyword'
-        )->setMetaDescription(
-            'meta description'
-        )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-        )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-        );
-        $crud = new \Magento\TestFramework\Entity($this->_model, ['sku' => uniqid()]);
+        $this->model->setTypeId(Type::TYPE_BUNDLE)
+            ->setAttributeSetId(4)
+            ->setName('Bundle Product')
+            ->setSku(uniqid())
+            ->setPrice(10)
+            ->setMetaTitle('meta title')
+            ->setMetaKeyword('meta keyword')
+            ->setMetaDescription('meta description')
+            ->setVisibility(Visibility::VISIBILITY_BOTH)
+            ->setStatus(Status::STATUS_ENABLED);
+        $crud = new Entity($this->model, ['sku' => uniqid()]);
         $crud->testCrud();
     }
 
     public function testGetPriceModel()
     {
-        $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
-        $type = $this->_model->getPriceModel();
-        $this->assertInstanceOf(\Magento\Bundle\Model\Product\Price::class, $type);
-        $this->assertSame($type, $this->_model->getPriceModel());
+        $this->model->setTypeId(Type::TYPE_BUNDLE);
+        $type = $this->model->getPriceModel();
+        $this->assertInstanceOf(Price::class, $type);
+        $this->assertSame($type, $this->model->getPriceModel());
     }
 
     public function testIsComposite()
     {
-        $this->assertTrue($this->_model->isComposite());
+        $this->assertTrue($this->model->isComposite());
+    }
+
+    /**
+     * Checks a case when bundle product is should be available per multiple stores.
+     *
+     * @magentoDataFixture Magento/Bundle/_files/product_with_multiple_options.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     */
+    public function testMultipleStores()
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $bundle = $productRepository->get('bundle-product');
+
+        /** @var StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
+        $store = $storeRepository->get('fixture_second_store');
+
+        self::assertNotEquals($store->getId(), $bundle->getStoreId());
+
+        $bundle->setStoreId($store->getId())
+            ->setCopyFromView(true);
+        $updatedBundle = $productRepository->save($bundle);
+
+        self::assertEquals($store->getId(), $updatedBundle->getStoreId());
     }
 }
