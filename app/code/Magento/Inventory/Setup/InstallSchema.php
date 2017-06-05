@@ -25,7 +25,8 @@ class InstallSchema implements InstallSchemaInterface
     /**
      * Constant for decimal precision for latitude and longitude
      */
-    const LATLON_PRECISION = 10;
+    const LATLON_PRECISION_LAT = 8;
+    const LATLON_PRECISION_LON = 9;
     const LATLON_SCALE = 6;
 
     /**
@@ -118,8 +119,9 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_DECIMAL,
                 null,
                 [
-                    InstallSchema::OPTION_PRECISION => InstallSchema::LATLON_PRECISION,
+                    InstallSchema::OPTION_PRECISION => InstallSchema::LATLON_PRECISION_LAT,
                     InstallSchema::OPTION_SCALE => InstallSchema::LATLON_SCALE,
+                    InstallSchema::OPTION_UNSIGNED => false,
                     InstallSchema::OPTION_NULLABLE => true
                 ],
                 'Latitude'
@@ -128,8 +130,9 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_DECIMAL,
                 null,
                 [
-                    InstallSchema::OPTION_PRECISION => InstallSchema::LATLON_PRECISION,
+                    InstallSchema::OPTION_PRECISION => InstallSchema::LATLON_PRECISION_LON,
                     InstallSchema::OPTION_SCALE => InstallSchema::LATLON_SCALE,
+                    InstallSchema::OPTION_UNSIGNED => false,
                     InstallSchema::OPTION_NULLABLE => true
                 ],
                 'Longitude'

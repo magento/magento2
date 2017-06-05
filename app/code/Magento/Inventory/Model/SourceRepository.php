@@ -117,7 +117,7 @@ class SourceRepository implements SourceRepositoryInterface
     public function save(SourceInterface $source)
     {
         try {
-            /** @var SourceInterface|AbstractModel $source */
+            /** @var SourceInterface $source */
             $this->resourceSource->save($source);
 
             if ($source->getCarrierLinks() === null) {
@@ -127,7 +127,7 @@ class SourceRepository implements SourceRepositoryInterface
             // clean up for the old carrier links
             $this->resourceSourceCarrierLink->deleteBySource($source);
 
-            /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
+            /** @var SourceCarrierLinkInterface $carrierLink */
             foreach ($source->getCarrierLinks() as $carrierLink) {
                 $carrierLink->setData(SourceInterface::SOURCE_ID, $source->getSourceId());
                 $this->resourceSourceCarrierLink->save($carrierLink);
