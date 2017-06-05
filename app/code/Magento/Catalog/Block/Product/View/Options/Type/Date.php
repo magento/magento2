@@ -81,6 +81,9 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $yearStart = $this->_catalogProductOptionTypeDate->getYearStart();
         $yearEnd = $this->_catalogProductOptionTypeDate->getYearEnd();
 
+        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        /** Escape invisible characters which are present in some locales and may corrupt formatting */
+        $escapedDateFormat = preg_replace('/[^[:print:]]/', '', $dateFormat);
         $calendar = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Date::class
         )->setId(
@@ -92,7 +95,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         )->setImage(
             $this->getViewFileUrl('Magento_Theme::calendar.png')
         )->setDateFormat(
-            $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
+            $escapedDateFormat
         )->setValue(
             $value
         )->setYearsRange(
