@@ -344,6 +344,16 @@ class SourceRepositoryTest extends WebapiAbstract
             $searchResult['items'][1][SourceInterface::SOURCE_ID],
             $source3->getSourceId()
         );
+
+        /** @var SourceCarrierLinkInterface[] $carrierLinks */
+        $resultCarrierLink = $searchResult['items'][0][SourceInterface::CARRIER_LINKS];
+
+        $counter = 0;
+        foreach ($source1->getCarrierLinks() as $carrierLink) {
+            $carrierCode = $resultCarrierLink[$counter][SourceCarrierLinkInterface::CARRIER_CODE];
+            $this->assertEquals($carrierLink->getCarrierCode(), $carrierCode);
+            $counter++;
+        }
     }
 
     /**

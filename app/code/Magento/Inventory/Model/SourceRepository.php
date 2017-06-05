@@ -196,7 +196,13 @@ class SourceRepository implements SourceRepositoryInterface
             $searchResults->setSearchCriteria($searchCriteria);
         }
 
-        $searchResults->setItems($collection->getItems());
+        /** @var \Magento\InventoryApi\Api\Data\SourceInterface[] $sourceItems */
+        $sourceItems = $collection->getItems();
+        foreach ($sourceItems as $sourceItem) {
+            $sourceItem->setCarrierLinks($this->loadCarrierLinksBySource($sourceItem));
+        }
+
+        $searchResults->setItems($sourceItems);
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
