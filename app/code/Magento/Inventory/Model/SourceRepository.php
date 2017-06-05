@@ -117,33 +117,19 @@ class SourceRepository implements SourceRepositoryInterface
     public function save(SourceInterface $source)
     {
         try {
-            $this->saveSource($source);
-            $this->saveSourceCarrierLinks($source);
+            /** @var SourceInterface|AbstractModel $source */
+            $this->resourceSource->save($source);
+
+            /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
+            foreach ($source->getCarrierLinks() as $carrierLink) {
+                $carrierLink->setData(SourceInterface::SOURCE_ID, $source->getSourceId());
+                $this->resourceSourceCarrierLink->save($carrierLink);
+            }
+
             return $source->getSourceId();
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage());
             throw new CouldNotSaveException(__('Could not save source'));
-        }
-    }
-
-    /**
-     * @param SourceInterface $source
-     */
-    private function saveSource(SourceInterface $source)
-    {
-        /** @var SourceInterface|AbstractModel $source */
-        $this->resourceSource->save($source);
-    }
-
-    /**
-     * @param SourceInterface $source
-     */
-    private function saveSourceCarrierLinks(SourceInterface $source)
-    {
-        /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
-        foreach ($source->getCarrierLinks() as $carrierLink) {
-            $carrierLink->setData(SourceInterface::SOURCE_ID, $source->getSourceId());
-            $this->resourceSourceCarrierLink->save($carrierLink);
         }
     }
 

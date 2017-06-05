@@ -14,8 +14,8 @@ use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class SourceRepositoryTest extends WebapiAbstract
 {
@@ -151,7 +151,7 @@ class SourceRepositoryTest extends WebapiAbstract
     {
         $country = $this->countryInformationAcquirer->getCountryInfo('US');
         $regions = $country->getAvailableRegions();
-        $region = $regions[rand(0, count($regions)-1)];
+        $region = $regions[mt_rand(0, count($regions)-1)];
 
         $name = 'Api Test ' . uniqid();
         $description = 'This is an inventory source created by api-functional tests';
@@ -163,7 +163,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $phone = '01660002020044';
         $latitude = 51.343479;
         $longitude = 12.387772;
-        $priority = rand(1,999);
+        $priority = mt_rand(1,999);
 
         $carriers = [];
         for ($index = 1; $index <= $countCarrier; $index++) {
