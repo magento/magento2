@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Exception;
 
-class RendererPool implements RendererInterface
+class RendererPool
 {
     /**
      * Key of instance is the exception format parameter
@@ -26,15 +26,12 @@ class RendererPool implements RendererInterface
      * Renders an exception
      *
      * @param \Exception $exception
-     * @return string
+     * @return RendererInterface|null
      */
-    public function render(\Exception $exception)
+    public function getRenderer(\Exception $exception)
     {
         if (isset($this->rendererInstances[get_class($exception)])) {
-            $instance = $this->rendererInstances[get_class($exception)];
-            return $instance->render($exception);
-        } else {
-            return $exception->getMessage();
+            return $this->rendererInstances[get_class($exception)];
         }
     }
 }

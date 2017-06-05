@@ -7,6 +7,7 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Exception\RendererPool;
 
 /**
  * Message manager model
@@ -55,12 +56,18 @@ class Manager implements ManagerInterface
     protected $hasMessages = false;
 
     /**
+     * @var RendererPool
+     */
+    private $rendererPool;
+
+    /**
      * @param Session $session
      * @param Factory $messageFactory
      * @param CollectionFactory $messagesFactory
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
+     * @param RendererPool|null $rendererPool
      */
     public function __construct(
         Session $session,
@@ -68,7 +75,8 @@ class Manager implements ManagerInterface
         CollectionFactory $messagesFactory,
         Event\ManagerInterface $eventManager,
         LoggerInterface $logger,
-        $defaultGroup = self::DEFAULT_GROUP
+        $defaultGroup = self::DEFAULT_GROUP,
+        RendererPool $rendererPool = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;
@@ -76,6 +84,8 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
+        $this->rendererPool = $rendererPool ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(RendererPool::class);
     }
 
     /**
@@ -242,7 +252,19 @@ class Manager implements ManagerInterface
         );
 
         $this->logger->critical($message);
-        $this->addError($alternativeText, $group);
+
+        if ($this->rendererPool->getRenderer($exception)) {
+            $data = $this->rendererPool->getRenderer($exception)->render($exception);
+            $identifier = $this->rendererPool->getRenderer($exception)->getIdentifier();
+            $this->assertNotEmptyIdentifier($identifier);
+            $this->addMessage(
+                $this->createMessage(MessageInterface::TYPE_ERROR, $identifier)
+                    ->setData($data),
+                $group
+            );
+        } else {
+            $this->addErrorMessage($alternativeText, $group);
+        }
         return $this;
     }
 
@@ -274,7 +296,19 @@ class Manager implements ManagerInterface
         );
 
         $this->logger->critical($message);
-        $this->addErrorMessage($alternativeText, $group);
+
+        if ($this->rendererPool->getRenderer($exception)) {
+            $data = $this->rendererPool->getRenderer($exception)->render($exception);
+            $identifier = $this->rendererPool->getRenderer($exception)->getIdentifier();
+            $this->assertNotEmptyIdentifier($identifier);
+            $this->addMessage(
+                $this->createMessage(MessageInterface::TYPE_ERROR, $identifier)
+                    ->setData($data),
+                $group
+            );
+        } else {
+            $this->addErrorMessage($alternativeText, $group);
+        }
         return $this;
     }
 

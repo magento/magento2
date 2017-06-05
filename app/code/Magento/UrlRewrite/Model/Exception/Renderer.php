@@ -6,61 +6,60 @@
 
 namespace Magento\UrlRewrite\Model\Exception;
 
-use Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template;
-
 class Renderer implements \Magento\Framework\Exception\RendererInterface
 {
-    /**
-     * @var Template
-     */
-    private $renderer;
-
-    /**
-     * Template file
-     *
-     * @var string
-     */
-    private $template;
-
     /**
      * @var \Magento\Framework\UrlInterface
      */
     private $urlBuilder;
 
+    /**
+     * @var string
+     */
+    private $identifier;
 
     /**
-     * @param Template $renderer
+     * @param string
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param string|null $template
      */
     public function __construct(
-        Template $renderer,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        $template = 'Magento_UrlRewrite::messages/url_duplicate_message.phtml'
+        $identifier,
+        \Magento\Framework\UrlInterface $urlBuilder
     ) {
-        $this->renderer = $renderer;
         $this->urlBuilder = $urlBuilder;
-        $this->template = $template;
+        $this->identifier = $identifier;
     }
 
     /**
      * Renders an exception
      *
      * @param \Exception $exception
-     * @return string
+     * @return array
      */
     public function render(\Exception $exception)
     {
         $generatedUrls = [];
-        foreach ($exception->getUrls() as $id => $url) {
-            $adminEditUrl = $this->urlBuilder->getUrl(
-                'adminhtml/url_rewrite/edit',
-                ['id' => $id]
-            );
-            $generatedUrls[$adminEditUrl] = $url->getRequestPath();
+        if (is_array($exception->getUrls())) {
+            foreach ($exception->getUrls() as $id => $url) {
+                /** @var  $url */
+                $adminEditUrl = $this->urlBuilder->getUrl(
+                    'adminhtml/url_rewrite/edit',
+                    ['id' => $id]
+                );
+                $generatedUrls[$adminEditUrl] = $url->getRequestPath();
+            }
+            return ['urls' => $generatedUrls];
         }
-        $this->renderer->setTemplate($this->template);
-        $this->renderer->setData('urls', $generatedUrls);
-        return  $this->renderer->toHtml();
+        return [];
+    }
+
+    /**
+     * Returns the identifier towards which the renderer return data is intended
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }

@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\UrlRewrite\Model\Storage;
+namespace Magento\UrlRewrite\Model\Exception;
 
 use Magento\Framework\Phrase;
 
@@ -26,7 +26,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedEx
     {
         $this->urls = $urls;
         if ($phrase === null) {
-            $phrase = new Phrase('Unique constraint violation found');
+            $phrase = new Phrase('URL key for specified store already exists');
         }
         parent::__construct($phrase, $cause);
     }

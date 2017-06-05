@@ -9,7 +9,24 @@
     <type name="Magento\Framework\Exception\RendererPool">
         <arguments>
             <argument name="rendererInstances" xsi:type="array">
-                <item name="Magento\UrlRewrite\Model\Exception\Renderer" xsi:type="object">Magento\UrlRewrite\Model\Exception\Renderer</item>
+                <item name="Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException" xsi:type="object">Magento\UrlRewrite\Model\Exception\Renderer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Model\Exception\Renderer">
+        <arguments>
+            <argument name="identifier" xsi:type="string">addUrlDuplicateMessage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addUrlDuplicateMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_UrlRewrite::messages/url_duplicate_message.phtml</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
