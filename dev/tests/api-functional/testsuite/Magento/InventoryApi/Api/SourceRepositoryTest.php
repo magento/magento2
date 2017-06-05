@@ -264,7 +264,7 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testGetSourcesList()
     {
-        $this->markTestSkipped('WIP: Search seems to ignore filter criterias!');
+        //$this->markTestSkipped('WIP: Search seems to ignore filter criterias!');
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
@@ -274,7 +274,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $postcode2 = uniqid('APITEST');
 
         $source1 = $this->createRandomSource(2, $postcode1, true);
-        $source1->setSourceId($this->sourceRepository->save($source1));
+        $this->sourceRepository->save($source1);
 
         $source2 = $this->createRandomSource(3, $postcode1, false);
         $this->sourceRepository->save($source2);
@@ -285,29 +285,10 @@ class SourceRepositoryTest extends WebapiAbstract
         $source4 = $this->createRandomSource(3, $postcode2, true);
         $this->sourceRepository->save($source4);
 
-        $filter1 = $this->filterBuilder->setField(SourceInterface::POSTCODE)
-            ->setValue($postcode1);
-
-        $filter2 = $this->filterBuilder->setField(SourceInterface::POSTCODE)
-            ->setValue($postcode2);
-
-        $filter3 = $this->filterBuilder->setField(SourceInterface::IS_ACTIVE)
-            ->setValue(true);
-
-        // where postcode = $postcode1
-        // or postcode = $postcode2
-        // and is_active = true
-        $searchCriteriaBuilder->addFilters([$filter1, $filter3]);
-        $searchCriteriaBuilder->addFilters([$filter2, $filter3]);
-
-        $searchCriteriaBuilder->setPageSize(2);
-
-        /** @var SortOrder $sortOrder */
-        $sortOrder = $this->sortOrderBuilder->setField(SourceInterface::SOURCE_ID)
-            ->setDirection(SortOrder::SORT_ASC)
-            ->create();
-
-        $searchCriteriaBuilder->setSortOrders([$sortOrder]);
+        //  add filters to find all active items with created postcode
+        $postcodeFilter = implode(',', [$postcode1, $postcode2]);
+        $searchCriteriaBuilder->addFilter('postcode', $postcodeFilter, 'in');
+        $searchCriteriaBuilder->addFilter('is_active', 1, 'eq');
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -324,20 +305,16 @@ class SourceRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        var_dump($serviceInfo);
-
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
-        var_dump($searchResult);
 
-        $this->assertEquals(3, $searchResult['page_size']);
-        $this->assertEquals(2, count($searchResult['items']));
+        $this->assertEquals(3, count($searchResult['items']));
         $this->assertEquals(
             $searchResult['items'][0][SourceInterface::SOURCE_ID],
             $source1->getSourceId()
         );
         $this->assertEquals(
             $searchResult['items'][1][SourceInterface::SOURCE_ID],
-            $source2->getSourceId()
+            $source3->getSourceId()
         );
     }
 
