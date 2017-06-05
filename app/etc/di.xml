@@ -1326,11 +1326,4 @@
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Exception\RendererPool">
-        <arguments>
-            <argument name="instances" xsi:type="array">
-                <item name="default" xsi:type="object">Magento\Framework\Exception\DefaultRenderer</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
