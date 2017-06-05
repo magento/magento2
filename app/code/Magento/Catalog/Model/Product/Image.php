@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
+use Magento\Catalog\Model\View\Asset\ImageFactory;
 
 /**
  * @method string getFile()
@@ -186,6 +187,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Catalog\Model\View\Asset\ImageFactory $viewAssetImageFactory
      * @param array $data
      * @param \Magento\Catalog\Model\View\Asset\ImageFactory|null $viewAssetImageFactory
      * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory|null $viewAssetPlaceholderFactory
