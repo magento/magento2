@@ -8,7 +8,6 @@ namespace Magento\InventoryApi\Api;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory;
@@ -22,6 +21,7 @@ class SourceRepositoryTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     const RESOURCE_PATH = '/V1/inventory/source/';
+    const TEST_PREFIX = 'SOURCE_APITEST_';
 
     /**
      * @var SourceInterfaceFactory
@@ -153,7 +153,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $regions = $country->getAvailableRegions();
         $region = $regions[mt_rand(0, count($regions)-1)];
 
-        $name = 'Api Test ' . uniqid();
+        $name = uniqid(self::TEST_PREFIX, false);
         $description = 'This is an inventory source created by api-functional tests';
         $city = 'Exampletown';
         $street = 'Some Street 455';
@@ -195,6 +195,35 @@ class SourceRepositoryTest extends WebapiAbstract
             ->setCarrierLinks($carriers);
 
         return $source;
+    }
+
+    /**
+     * Update the given source in magento
+     *
+     * @param SourceInterface $expectedSource
+     *
+     * @return int
+     */
+    private function updateSource($expectedSource)
+    {
+        $requestData = [
+            'source' => $this->getSourceDataArray($expectedSource)
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $expectedSource->getSourceId(),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        // call the webservice to update the source
+        return $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**
@@ -270,8 +299,8 @@ class SourceRepositoryTest extends WebapiAbstract
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
             ->create(SearchCriteriaBuilder::class);
 
-        $postcode1 = uniqid('APITEST');
-        $postcode2 = uniqid('APITEST');
+        $postcode1 = uniqid(self::TEST_PREFIX, false);
+        $postcode2 = uniqid(self::TEST_PREFIX, false);
 
         $source1 = $this->createRandomSource(2, $postcode1, true);
         $this->sourceRepository->save($source1);
@@ -308,8 +337,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertEquals(3, count($searchResult['items']));
-        $this->assertEquals(
-            $searchResult['items'][0][SourceInterface::SOURCE_ID],
+        $this->assertEquals($searchResult['items'][0][SourceInterface::SOURCE_ID],
             $source1->getSourceId()
         );
         $this->assertEquals(
@@ -323,8 +351,33 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testUpdateSource()
     {
-        //TODO: Implement testUpdateSource
-        $this->fail(__METHOD__ . " is not implemented yet.");
+        // create a new source
+        $expectedSource = $this->createRandomSource(2);
+        $this->sourceRepository->save($expectedSource);
+
+        // set name and city property's in the source to update them
+        $expectedName = uniqid('UpdatedName_', false);
+        $expectedCity = uniqid('UpdatedCity_', false);
+        $expectedSource->setName($expectedName);
+        $expectedSource->setCity($expectedCity);
+        $updateSourceId = $this->updateSource($expectedSource);
+
+        // verify it's integrity
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $updateSourceId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, [SourceInterface::SOURCE_ID => $updateSourceId]);
+        $this->assertEquals($expectedName, $result[SourceInterface::NAME]);
+        $this->assertEquals($expectedCity, $result[SourceInterface::CITY]);
     }
 
     /**
@@ -332,7 +385,27 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testUpdateSourceWithoutCarriers()
     {
-        //TODO: Implement testUpdateSourceWithoutCarriers
-        $this->fail(__METHOD__ . " is not implemented yet.");
+        $expectedSource = $this->createRandomSource(2);
+        $this->sourceRepository->save($expectedSource);
+
+        $carriers = [];
+        $expectedSource->setCarrierLinks($carriers);
+        $updateSourceId = $this->updateSource($expectedSource);
+
+        // verify it's integrity
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $updateSourceId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, [SourceInterface::SOURCE_ID => $updateSourceId]);
+        $this->assertEquals($carriers, $result[SourceInterface::CARRIER_LINKS]);
     }
 }

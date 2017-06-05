@@ -6,23 +6,23 @@
 
 namespace Magento\Inventory\Model;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Inventory\Model\Resource\Source as ResourceSource;
+use Magento\Inventory\Model\Resource\Source\CollectionFactory;
+use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
+use Magento\Inventory\Model\Resource\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\Inventory\Model\Resource\Source as ResourceSource;
-use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
-use Magento\Inventory\Model\Resource\Source\CollectionFactory;
-use Magento\Inventory\Model\Resource\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SourceRepository
@@ -120,6 +120,13 @@ class SourceRepository implements SourceRepositoryInterface
             /** @var SourceInterface|AbstractModel $source */
             $this->resourceSource->save($source);
 
+            if ($source->getCarrierLinks() === null) {
+                return $source->getSourceId();
+            }
+
+            // clean up for the old carrier links
+            $this->resourceSourceCarrierLink->deleteBySource($source);
+
             /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
             foreach ($source->getCarrierLinks() as $carrierLink) {
                 $carrierLink->setData(SourceInterface::SOURCE_ID, $source->getSourceId());
@@ -141,7 +148,9 @@ class SourceRepository implements SourceRepositoryInterface
         /** @var SourceInterface|AbstractModel $source */
         $source = $this->sourceFactory->create();
         $this->resourceSource->load($source, $sourceId, SourceInterface::SOURCE_ID);
-        $this->addCarrierLinks($source);
+
+        $carrierLinks = $this->loadCarrierLinksBySource($source);
+        $source->setCarrierLinks($carrierLinks);
 
         if (!$source->getSourceId()) {
             throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
@@ -151,9 +160,13 @@ class SourceRepository implements SourceRepositoryInterface
     }
 
     /**
+     * Loads the carrier links by given source.
+     *
      * @param SourceInterface $source
+     *
+     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]
      */
-    private function addCarrierLinks(SourceInterface $source)
+    private function loadCarrierLinksBySource(SourceInterface $source)
     {
         /** @var ResourceSourceCarrierLink\Collection $collection */
         $collection = $this->carrierLinkCollectionFactory->create();
@@ -163,7 +176,7 @@ class SourceRepository implements SourceRepositoryInterface
             ->create();
 
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $source->setCarrierLinks($collection->getItems());
+        return $collection->getItems();
     }
 
     /**
