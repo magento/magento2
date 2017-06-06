@@ -19,9 +19,9 @@
         <referenceBlock name="notification.messages" remove="true"/>
         <!-- @todo ui: - end -->
 
-        <move element="messages" destination="login.content" before="-"/>
-        <move element="copyright" destination="login.footer" before="-"/>
-        <move element="logo" destination="login.header" before="-"/>
+        <move name="messages" destination="login.content" before="-"/>
+        <move name="copyright" destination="login.footer" before="-"/>
+        <move name="logo" destination="login.header" before="-"/>
         <referenceBlock name="logo">
             <arguments>
                 <argument name="logo_image_src" xsi:type="string">images/magento-logo.svg</argument>

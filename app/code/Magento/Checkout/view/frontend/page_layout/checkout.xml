@@ -12,5 +12,5 @@
             <container name="checkout.header.wrapper" label="Checkout Page Header" as="checkout_header_wrapper" htmlTag="div" htmlClass="header content"/>
         </container>
     </referenceContainer>
-    <move element="logo" destination="checkout.header.wrapper"/>
+    <move name="logo" destination="checkout.header.wrapper"/>
 </layout>

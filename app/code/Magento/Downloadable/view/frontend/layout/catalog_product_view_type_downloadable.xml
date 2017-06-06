@@ -40,7 +40,7 @@
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="downloadable_page_head_components" template="Magento_Downloadable::js/components.phtml"/>
         </referenceBlock>
-        <move element="product.info" destination="content" after="product.info.media" />
-        <move element="product.info.social" destination="product.info.options.wrapper.bottom" after="-" />
+        <move name="product.info" destination="content" after="product.info.media" />
+        <move name="product.info.social" destination="product.info.options.wrapper.bottom" after="-" />
     </body>
 </page>

@@ -7,8 +7,8 @@
 -->
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <move element="page.main.title" destination="product.info.main" before="-"/>
-        <move element="product.info.stock.sku" destination="product.info.price" after="product.price.final"/>
-        <move element="product.info.review" destination="product.info.main" before="product.info.price"/>
+        <move name="page.main.title" destination="product.info.main" before="-"/>
+        <move name="product.info.stock.sku" destination="product.info.price" after="product.price.final"/>
+        <move name="product.info.review" destination="product.info.main" before="product.info.price"/>
     </body>
 </page>

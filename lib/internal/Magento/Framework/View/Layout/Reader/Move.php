@@ -48,7 +48,7 @@ class Move implements Layout\ReaderInterface
      */
     protected function scheduleMove(Layout\ScheduledStructure $scheduledStructure, Layout\Element $currentElement)
     {
-        $elementName = (string)$currentElement->getAttribute('element');
+        $elementName = (string)$currentElement->getAttribute('name');
         $destination = (string)$currentElement->getAttribute('destination');
         $alias = (string)$currentElement->getAttribute('as') ?: '';
         if ($elementName && $destination) {
