@@ -725,6 +725,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     ) {
         $fields = [];
         $categoryFilter = [];
+        $websiteFilter = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
 
@@ -732,11 +733,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $categoryFilter[$conditionType][] = $filter->getValue();
                 continue;
             }
+            
+            if ($filter->getField() == 'website_id') {
+                $websiteFilter = $filter->getValue();
+                continue;
+            }
+            
             $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
         }
 
         if ($categoryFilter) {
             $collection->addCategoriesFilter($categoryFilter);
+        }
+
+        if ($websiteFilter) {
+            $collection->addWebsiteFilter($websiteFilter);
         }
 
         if ($fields) {
