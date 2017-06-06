@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Webapi\Test\Unit\Model\Files;
+namespace Magento\Framework\Reflection\Test\Unit;
 
 class TestDataObject implements TestDataInterface
 {
+    private $extensionAttributes;
+
+    public function __construct($extensionAttributes = null)
+    {
+        $this->extensionAttributes = $extensionAttributes;
+    }
+
     public function getId()
     {
         return '1';
@@ -26,5 +32,10 @@ class TestDataObject implements TestDataInterface
     public function isRequiredBilling()
     {
         return 'false';
+    }
+
+    public function getExtensionAttributes()
+    {
+        return $this->extensionAttributes;
     }
 }

@@ -836,6 +836,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         //mark quote if it has virtual products only
         $this->setIsVirtual($this->getIsVirtual());
 
+        if ($this->hasDataChanges()) {
+            $this->setUpdatedAt(null);
+        }
+
         parent::beforeSave();
     }
 
