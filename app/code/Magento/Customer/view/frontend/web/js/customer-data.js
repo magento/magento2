@@ -110,7 +110,7 @@ define([
                     }
                 });
                 $.cookieStorage.set('section_data_ids', newSectionDataIds);
-            }, 3000);
+            }, 250);
         });
 
         return target;
