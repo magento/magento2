@@ -1736,6 +1736,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Set order creditmemos collection
+     *
+     * @param CreditmemoCollection $creditmemos
+     * @return $this
+     */
+    public function setCreditmemosCollection(CreditmemoCollection $creditmemos)
+    {
+        $this->_creditmemos = $creditmemos;
+        return $this;
+    }
+
+    /**
      * Retrieve order tracking numbers collection
      *
      * @return TrackCollection
