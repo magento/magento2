@@ -34,11 +34,15 @@ class Base extends StreamHandler
      */
     public function __construct(
         DriverInterface $filesystem,
-        $filePath = null
+        $filePath = null,
+        $fileName = null
     ) {
         $this->filesystem = $filesystem;
+        if(null === $fileName){
+            $fileName = $this->fileName;
+        }
         parent::__construct(
-            $filePath ? $filePath . $this->fileName : BP . $this->fileName,
+            $filePath ? $filePath . $fileName : BP . $fileName,
             $this->loggerType
         );
         $this->setFormatter(new LineFormatter(null, null, true));
