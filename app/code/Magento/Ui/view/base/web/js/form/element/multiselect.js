@@ -37,8 +37,8 @@ define([
          * @inheritdoc
          */
         normalizeData: function (value) {
-            if (utils.isEmpty(value)) {
-                value = [];
+            if (utils.isEmpty(value) || (typeof value != 'undefined' && value.length == 0)) {
+                value = '';
             }
 
             return _.isString(value) ? value.split(',') : value;
@@ -104,6 +104,17 @@ define([
             this.error(false);
 
             return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        onUpdate: function () {
+            if (this.value().length == 0) {
+                this.value('');
+            }
+
+            this._super();
         }
     });
 });
