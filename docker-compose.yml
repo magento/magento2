@@ -1,0 +1,38 @@
+version: '2'
+services:
+  web:
+    build: .
+    image: codehut/magento2
+    container_name: magentoweb
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    links:
+      - "db:db"
+    working_dir: /var/www/html
+    command: ./docker/compose/entrypoint.sh
+    environment:
+      MAGENTO_LANGUAGE: en_US
+      MAGENTO_CURRENCY: EGP
+      MAGENTO_TIMEZONE: Africa/Cairo
+      MAGENTO_ADMIN_FIRSTNAME: magento
+      MAGENTO_ADMIN_LASTNAME: magento
+      MAGENTO_ADMIN_EMAIL: admin@magento.com
+      MAGENTO_ADMIN_USER: admin
+      MAGENTO_ADMIN_PASSWORD: admin123
+      MAGENTO_DB_HOST: db
+      MAGENTO_DB_NAME: magento
+      MAGENTO_DB_USER: root
+      MAGENTO_DB_PASSWORD: magento12345
+      MAGENTO_BACKEND_FRONTNAME: admin
+      MAGENTO_SESSION_SAVE: db
+    depends_on:
+      - db
+  db:
+    image: mysql
+    container_name: magentodb
+    environment:
+      MYSQL_USER: magento
+      MYSQL_DATABASE: magento
+      MYSQL_ROOT_PASSWORD: magento12345
