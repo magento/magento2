@@ -1,0 +1,127 @@
+#  Install Magento 2 into Docker Containers
+# ==========================================
+#
+# ## Getting Started
+#
+# 1. Install Docker: https://docs.docker.com/installation/
+# 2. Install Docker Compose: https://docs.docker.com/compose/install/
+# 3. Run `docker-compose run --rm setup` to get things set up.
+# 4. Run `docker-compose up -d webapp` to launch the web server.
+# 5. Browse to http://$(boot2docker ip):port/ to view Magento 2.
+#
+# ## Commands
+#
+# - Bash Shell: `docker-compose run --rm shell`
+# - MySQL Shell: `docker-compose run --rm dbshell`
+# - Magento Command: `docker-compose run --rm magento`
+#
+# ## Troubleshooting
+#
+# ### I went to http://dockerhost/ in my browser, but no page loads!
+#
+# Look at `docker-compose ps` to discover which port Compose has exposed
+# for your webapp service. It is not port 80. Specify the port in your
+# browser like http://dockerhost:port/
+#
+
+dbdata:
+    image: mysql:5
+    command: echo 'Just providing a volume for mysql data'
+db:
+    image: mysql:5
+    environment:
+        - MYSQL_DATABASE=mage
+        - MYSQL_PASSWORD=mage
+        - MYSQL_ROOT_PASSWORD=mage
+        - MYSQL_USER=mage
+    volumes_from:
+        - dbdata
+    ports:
+        - 3306
+shell:
+    build: docker
+    volumes:
+        - .:/var/www/html
+    links:
+        - db
+    command: bash -c '
+            {
+                echo "[client]";
+                echo "database=$DB_1_ENV_MYSQL_DATABASE";
+                echo "host=db_1";
+                echo "password=$DB_1_ENV_MYSQL_PASSWORD";
+                echo "user=$DB_1_ENV_MYSQL_USER";
+            } > "$HOME/.my.cnf" &&
+            PATH=/var/www/html/bin:$PATH exec bash
+        '
+dbshell:
+    build: docker
+    volumes:
+        - .:/var/www/html
+    links:
+        - db
+    command: bash -c '
+            {
+                echo "[client]";
+                echo "database=$DB_1_ENV_MYSQL_DATABASE";
+                echo "host=db_1";
+                echo "password=$DB_1_ENV_MYSQL_PASSWORD";
+                echo "user=$DB_1_ENV_MYSQL_USER";
+            } > "$HOME/.my.cnf" &&
+            exec mysql
+        '
+magento:
+    build: docker
+    volumes:
+        - .:/var/www/html
+    links:
+        - db
+    entrypoint:
+        - /var/www/html/bin/magento
+    command:
+        - list
+setup:
+    build: docker
+    links:
+        - db
+    volumes:
+        - .:/var/www/html
+    command: sh -c '
+            echo "Installing Magento 2" &&
+            composer install &&
+            bin/magento setup:install --admin-email=nobody@example.com
+                                      --admin-firstname=Nobody
+                                      --admin-lastname=Example
+                                      --admin-password=admin123
+                                      --admin-user=admin
+                                      --backend-frontname=admin
+                                      --currency=USD
+                                      --db-host=db_1
+                                      --db-name="$DB_1_ENV_MYSQL_DATABASE"
+                                      --db-password="$DB_1_ENV_MYSQL_PASSWORD"
+                                      --db-user="$DB_1_ENV_MYSQL_USER"
+                                      --language=en_US
+                                      --timezone=America/New_York &&
+            echo "Cleaning up filesystem permissions" &&
+            chown -R www-data:www-data . &&
+            find . \( -type d -exec chmod 0750 {} + \)
+                -o \( -exec chmod 0640 {} + \) &&
+            chmod +x bin/magento &&
+            exec bin/magento cache:disable --all
+        '
+webapp:
+    build: docker
+    links:
+        - db
+    volumes:
+        - .:/var/www/html
+    ports:
+        - 80
+        - 443
+    command: sh -c '
+            echo "Running Apache as whatever uid owns these files." &&
+            userdel www-data &&
+            useradd -Mru $(stat -c %u .htaccess) -d "$PWD" www-data &&
+            exec apache2ctl -DFOREGROUND
+        '
+
