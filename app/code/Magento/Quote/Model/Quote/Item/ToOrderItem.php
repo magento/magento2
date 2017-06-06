@@ -75,6 +75,7 @@ class ToOrderItem
         }
 
         $orderItem = $this->orderItemFactory->create();
+        $this->objectCopyService->copyFieldsetToTarget('quote_convert_item', 'to_order_item', $item, $orderItem);
         $this->dataObjectHelper->populateWithArray(
             $orderItem,
             array_merge($orderItemData, $data),
