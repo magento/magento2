@@ -5,9 +5,6 @@
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
-use Magento\Indexer\Model\Indexer;
-use Magento\TestFramework\Helper\Bootstrap;
-
 /**
  * Test class for \Magento\Sitemap\Model\ResourceModel\Catalog\Product.
  * - test products collection generation for sitemap
