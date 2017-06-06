@@ -15,4 +15,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="appendStoreFilterBeforeGetList" disabled="false"/>
+    </type>
 </config>

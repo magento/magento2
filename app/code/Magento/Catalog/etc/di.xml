@@ -831,6 +831,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="appendStoreFilterBeforeGetList" type="Magento\Catalog\Model\Plugin\ProductRepository\BeforeProductRepositoryGetList" disabled="true"/>
+    </type>
     <virtualType name="Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
         <arguments>
             <argument name="customFilters" xsi:type="array">
