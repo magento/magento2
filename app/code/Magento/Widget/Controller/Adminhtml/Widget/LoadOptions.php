@@ -33,7 +33,9 @@ class LoadOptions extends \Magento\Backend\App\Action
                         $optionsBlock->setWidgetType($request['widget_type']);
                     }
                     if (isset($request['values'])) {
-                        $request['values'] = array_map('htmlspecialchars_decode', $request['values']);
+                        array_walk_recursive($request['values'], function(&$value) {
+                            $value = htmlspecialchars_decode($value);
+                        });
                         if (isset($request['values']['conditions_encoded'])) {
                             $request['values']['conditions'] =
                                 $this->getConditionsHelper()->decode($request['values']['conditions_encoded']);
