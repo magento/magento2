@@ -82,12 +82,12 @@ class SwitchAction extends Action
             $error = __('Requested store is inactive');
         } catch (NoSuchEntityException $e) {
             $error = __('Requested store is not found');
-        }
-
-        if (isset($error)) {
-            $this->messageManager->addError($error);
-            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
-            return;
+        } finally {
+            if (isset($error)) {
+                $this->messageManager->addError($error);
+                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+                return;
+            }
         }
 
         $defaultStoreView = $this->storeManager->getDefaultStoreView();
