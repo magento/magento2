@@ -26,6 +26,9 @@
         <?php if ($_gender->isEnabled()): ?>
             <?php echo $_gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
         <?php endif ?>
+        
+        <?php echo $block->getChildHtml('form_additional_info'); ?>
+        
         <div class="field choice">
             <input type="checkbox" name="change_email" id="change-email" data-role="change-email" value="1" title="<?php echo $block->escapeHtmlAttr(__('Change Email')) ?>" class="checkbox" />
             <label class="label" for="change-email"><span><?php echo $block->escapeHtml(__('Change Email')) ?></span></label>
