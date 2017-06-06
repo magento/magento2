@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <div class="field required">
+            <div class="field city required">
                 <label for="city" class="label"><span><?php echo $block->escapeHtml(__('City')) ?></span></label>
                 <div class="control">
                     <input type="text" name="city" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCity()) ?>" title="<?php echo $block->escapeHtmlAttr(__('City')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city')) ?>" id="city">
@@ -127,7 +127,7 @@
     <?php endif; ?>
     <fieldset class="fieldset create account" data-hasrequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')) ?>">
         <legend class="legend"><span><?php echo $block->escapeHtml(__('Sign-in Information')) ?></span></legend><br>
-        <div class="field required">
+        <div class="field email required">
             <label for="email_address" class="label"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input type="email" name="email" autocomplete="email" id="email_address" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getEmail()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
