@@ -7,7 +7,7 @@
  @version 0.0.1
  @requires jQuery & jQuery UI
  */
-define(['jquery', 'jquery/ui'], function ($) {
+define(['jquery', 'jquery/ui', 'vimeoAPI'], function ($) {
     'use strict';
 
     var videoRegister = {
