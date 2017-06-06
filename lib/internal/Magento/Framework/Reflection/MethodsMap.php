@@ -180,9 +180,12 @@ class MethodsMap
      */
     private function isSuitableMethod($method)
     {
-        $isSuitableMethodType = !($method->isConstructor() || $method->isFinal()
-            || $method->isStatic() || $method->isDestructor());
-
+        $isSuitableMethodType = (
+            !$method->isStatic() &&
+            !$method->isFinal() &&
+            !$method->isConstructor() &&
+            !$method->isDestructor()
+        );
         $isExcludedMagicMethod = strpos($method->getName(), '__') === 0;
         return $isSuitableMethodType && !$isExcludedMagicMethod;
     }
