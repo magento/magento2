@@ -1,0 +1,35 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<if args="isAllowed()">
+    <if args="isSalable($row())">
+        <if args="hasRequiredOptions($row())">
+            <button class="action tocart primary"
+                    attr="'data-mage-init': getDataMageInit($row()),
+                           title: getLabel()"
+                    type="button">
+                <span text="getLabel()"/>
+            </button>
+        </if>
+
+        <ifnot args="hasRequiredOptions($row())">
+            <button class="action tocart primary"
+                    attr="'data-mage-init': getDataMageInit($row()),
+                          'data-post': getDataPost($row()),
+                           title: getLabel()"
+                    type="button">
+                <span text="getLabel()"/>
+            </button>
+        </ifnot>
+    </if>
+
+    <ifnot args="isSalable($row())">
+        <div class="stock unavailable">
+            <text args="$t('Availability')"/>
+            <span translate="'Out of stock'"/>
+        </div>
+    </ifnot>
+</if>

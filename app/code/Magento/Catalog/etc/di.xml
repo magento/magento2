@@ -48,6 +48,8 @@
     <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
+    <preference for="Magento\Catalog\Api\ProductRenderListInterface" type="Magento\Catalog\Model\ProductRenderList"/>
+    <preference for="Magento\Catalog\Api\Data\ProductRenderSearchResultsInterface" type="Magento\Catalog\Model\ProductRenderSearchResults"/>
     <preference for="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface" type="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver"/>
     <preference for="Magento\Catalog\Model\Product\Media\ConfigInterface" type="Magento\Catalog\Model\Product\Media\Config"/>
     <preference for="Magento\Framework\View\Asset\ContextInterface" type="Magento\Catalog\Model\View\Asset\Image\Context"/>
@@ -62,6 +64,10 @@
     <preference for="Magento\Catalog\Api\Data\PriceUpdateResultInterface" type="Magento\Catalog\Model\Product\Price\PriceUpdateResult" />
     <preference for="Magento\Catalog\Api\SpecialPriceInterface" type="Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice" />
     <preference for="Magento\Catalog\Model\ProductIdLocatorInterface" type="Magento\Catalog\Model\ProductIdLocator" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\ButtonInterface" type="Magento\Catalog\Model\ProductRender\Button" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\ImageInterface" type="Magento\Catalog\Model\ProductRender\Image" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" type="Magento\Catalog\Model\ProductRender\PriceInfo" />
+    <preference for="Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface" type="Magento\Catalog\Model\ProductRender\FormattedPriceInfo" />
     <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
@@ -616,6 +622,10 @@
                     <item name="entityTableName" xsi:type="string">catalog_category_product</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\ProductFrontendActionInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_frontend_action</item>
+                    <item name="identifierField" xsi:type="string">action_id</item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -859,6 +869,11 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ProductRenderList">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>
@@ -914,6 +929,36 @@
             <argument name="allowedProductTypes" xsi:type="array">
                 <item name="0" xsi:type="string">simple</item>
                 <item name="1" xsi:type="string">virtual</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="image" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image</item>
+                <item name="price" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price</item>
+                <item name="url" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Url</item>
+                <item name="additional_info" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\AdditionalInfo</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\FrontendStorageConfigurationPool">
+        <arguments>
+            <argument name="storageConfigurations" xsi:type="array">
+                <item name="recently_viewed_product" xsi:type="object">Magento\Catalog\Model\Widget\RecentlyViewedStorageConfiguration</item>
+                <item name="recently_compared_product" xsi:type="object">Magento\Catalog\Model\Widget\RecentlyComparedStorageConfiguration</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image">
+        <arguments>
+            <argument name="imageCodes" xsi:type="array">
+                <item name="widget_recently_viewed_grid" xsi:type="string">recently_viewed_products_grid_content_widget</item>
+                <item name="widget_recently_viewed_list" xsi:type="string">recently_viewed_products_list_content_widget</item>
+                <item name="widget_recently_viewed_sidebar" xsi:type="string">recently_viewed_products_images_names_widget</item>
+                <item name="widget_recently_compared_grid" xsi:type="string">recently_compared_products_grid_content_widget</item>
+                <item name="widget_recently_compared_list" xsi:type="string">recently_compared_products_list_content_widget</item>
+                <item name="widget_recently_compared_sidebar" xsi:type="string">recently_compared_products_images_names_widget</item>
             </argument>
         </arguments>
     </type>
@@ -1058,6 +1103,13 @@
             <argument name="batchSizeManagers" xsi:type="array">
                 <item name="decimal" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalBatchSizeManagement</item>
                 <item name="source" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceBatchSizeManagement</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\CollectionModifier">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="productVisibilityCondition" xsi:type="object">Magento\Catalog\Model\ProductVisibilityCondition</item>
             </argument>
         </arguments>
     </type>

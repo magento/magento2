@@ -60,4 +60,23 @@
     <type name="Magento\Framework\Pricing\Render\PriceBox">
         <plugin name="catalog_price_box_key" type="Magento\Catalog\Block\Category\Plugin\PriceBoxTags" />
     </type>
+    <type name="Magento\Customer\CustomerData\SectionPool">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="recently_viewed_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyViewedProductsSection</item>
+                <item name="recently_compared_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyComparedProductsSection</item>
+                <item name="products_render_info" xsi:type="string">Magento\Catalog\CustomerData\ProductsRenderInfoSection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\CustomerData\RecentlyViewedProductsSection" type="Magento\Catalog\CustomerData\ProductFrontendActionSection">
+        <arguments>
+            <argument name="typeId" xsi:type="string">recently_viewed_product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\CustomerData\RecentlyComparedProductsSection" type="Magento\Catalog\CustomerData\ProductFrontendActionSection">
+        <arguments>
+            <argument name="typeId" xsi:type="string">recently_compared_product</argument>
+        </arguments>
+    </virtualType>
 </config>

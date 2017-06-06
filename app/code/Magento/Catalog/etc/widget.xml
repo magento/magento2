@@ -162,4 +162,146 @@
             </parameter>
         </parameters>
     </widget>
+    <widget id="catalog_recently_viewed" class="Magento\Catalog\Block\Widget\RecentlyViewed"
+            placeholder_image="Magento_Catalog::images/product_widget_viewed.gif">
+        <label translate="true">Catalog Recently Viewed Products</label>
+        <description translate="true">List of Products Recently Viewed by Visitor</description>
+        <parameters>
+            <parameter name="uiComponent" xsi:type="text" required="false" visible="false">
+                <label translate="true">UI Component</label>
+                <value>widget_recently_viewed</value>
+            </parameter>
+            <parameter name="page_size" xsi:type="text" required="true" visible="true">
+                <label translate="true">Number of Products to display</label>
+                <value>5</value>
+            </parameter>
+            <parameter name="show_attributes" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Product attributes to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                    <option name="learn_more" value="learn_more">
+                        <label translate="true">Learn More Link</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="show_buttons" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Buttons to show</label>
+                <options>
+                    <option name="add_to_cart" value="add_to_cart">
+                        <label translate="true">Add to Cart</label>
+                    </option>
+                    <option name="add_to_compare" value="add_to_compare">
+                        <label translate="true">Add to Compare</label>
+                    </option>
+                    <option name="add_to_wishlist" value="add_to_wishlist">
+                        <label translate="true">Add to Wishlist</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="grid" value="product/widget/viewed/grid.phtml" selected="true">
+                        <label translate="true">Viewed Products Grid Template</label>
+                    </option>
+                    <option name="list" value="product/widget/viewed/list.phtml">
+                        <label translate="true">Viewed Products List Template</label>
+                    </option>
+                    <option name="sidebar" value="product/widget/viewed/sidebar.phtml">
+                        <label translate="true">Viewed Products Sidebar Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <containers>
+            <container name="sidebar.main">
+                <template name="default" value="sidebar" />
+            </container>
+            <container name="content">
+                <template name="grid" value="grid" />
+                <template name="list" value="list" />
+            </container>
+            <container name="sidebar.additional">
+                <template name="default" value="sidebar" />
+            </container>
+        </containers>
+    </widget>
+    <widget id="catalog_recently_compared" class="Magento\Catalog\Block\Widget\RecentlyCompared"
+            placeholder_image="Magento_Catalog::images/product_widget_viewed.gif">
+        <label translate="true">Catalog Recently Compared Products</label>
+        <description translate="true">List of Products Recently Compared by Visitor</description>
+        <parameters>
+            <parameter name="uiComponent" xsi:type="text" required="false" visible="false">
+                <label translate="true">UI Component</label>
+                <value>widget_recently_compared</value>
+            </parameter>
+            <parameter name="page_size" xsi:type="text" required="true" visible="true">
+                <label translate="true">Number of Products to display</label>
+                <value>5</value>
+            </parameter>
+            <parameter name="show_attributes" xsi:type="multiselect" required="true"  visible="true">
+                <label translate="true">Product attributes to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="show_buttons" xsi:type="multiselect" required="true"  visible="true">
+                <label translate="true">Buttons to show</label>
+                <options>
+                    <option name="add_to_cart" value="add_to_cart">
+                        <label translate="true">Add to Cart</label>
+                    </option>
+                    <option name="add_to_compare" value="add_to_compare">
+                        <label translate="true">Add to Compare</label>
+                    </option>
+                    <option name="add_to_wishlist" value="add_to_wishlist">
+                        <label translate="true">Add to Wishlist</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="grid" value="product/widget/compared/grid.phtml" selected="true">
+                        <label translate="true">Compared Products Grid Template</label>
+                    </option>
+                    <option name="list" value="product/widget/compared/list.phtml">
+                        <label translate="true">Compared Products List Template</label>
+                    </option>
+                    <option name="sidebar" value="product/widget/compared/sidebar.phtml">
+                        <label translate="true">Viewed Products Sidebar Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <containers>
+            <container name="sidebar.main">
+                <template name="default" value="list" />
+            </container>
+            <container name="content">
+                <template name="grid" value="grid" />
+                <template name="list" value="list" />
+            </container>
+            <container name="sidebar.additional">
+                <template name="default" value="sidebar" />
+            </container>
+        </containers>
+    </widget>
 </widgets>
+

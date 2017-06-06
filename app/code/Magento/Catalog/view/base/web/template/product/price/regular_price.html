@@ -1,0 +1,29 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<if args="isSalable($row())">
+    <if args="getRegularPrice($row())">
+        <span css="'old-price': hasSpecialPrice($row()), 'regular-price': !hasSpecialPrice($row())">
+            <span class="price-container"
+                  css="getAdjustmentCssClasses($row())">
+                <span if="label"
+                      class="price-label"
+                      text="label"/>
+
+                <span class="price-wrapper"
+                      css="priceWrapperCssClasses"
+                      attr="priceWrapperAttr"
+                      data-price-amount=""
+                      data-price-type=""
+                      html="getRegularPrice($row())"/>
+
+                <each args="data: getAdjustments(), as: '$adj'">
+                    <render args="$adj.getBody()"/>
+                </each>
+            </span>
+        </span>
+    </if>
+</if>

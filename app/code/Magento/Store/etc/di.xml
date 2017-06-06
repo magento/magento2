@@ -409,4 +409,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
+        <arguments>
+            <argument name="interpreters" xsi:type="array">
+                <item name="serviceUrl" xsi:type="object">Magento\Store\Model\Argument\Interpreter\ServiceUrl</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+ //@codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * @var $block \Magento\Ui\Block\Wrapper
+ */
+?>
+
+<?php /* @escapeNotVerified */ echo $block->renderApp(
+    [
+        'listing' => [
+            'displayMode' => 'list'
+        ],
+        'column' => [
+            'image' => [
+                'imageCode' => 'recently_compared_products_list_content_widget'
+            ]
+        ]
+    ]
+);

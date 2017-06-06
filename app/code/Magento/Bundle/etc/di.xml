@@ -133,6 +133,21 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice">
+        <arguments>
+            <argument name="excludeAdjustments" xsi:type="array">
+                <item name="weee" xsi:type="string">weee</item>
+                <item name="weee_tax" xsi:type="string">weee_tax</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="bundle_price" xsi:type="object">\Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
         <arguments>
             <argument name="allowedProductTypes" xsi:type="array">

@@ -46,6 +46,7 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public static function register($type, $componentName, $path)
     {
+        $path = str_replace('\\', '/', $path);
         self::validateType($type);
         if (isset(self::$paths[$type][$componentName])) {
             throw new \LogicException(

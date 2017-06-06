@@ -18,12 +18,20 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
     <div class="rating-summary">
          <span class="label"><span><?php echo $block->escapeHtml(__('Rating')) ?>:</span></span>
          <div class="rating-result" title="<?php echo $block->escapeHtmlAttr($rating); ?>%">
-             <span style="width:<?php echo $block->escapeHtmlAttr($rating); ?>%"><span><span itemprop="ratingValue"><?php echo $block->escapeHtml($rating); ?></span>% of <span itemprop="bestRating">100</span></span></span>
+             <span style="width:<?php echo $block->escapeHtmlAttr($rating); ?>%">
+                 <span>
+                     <span itemprop="ratingValue"><?php echo $block->escapeHtml($rating); ?></span>% of <span itemprop="bestRating">100</span>
+                 </span>
+             </span>
          </div>
      </div>
     <?php endif;?>
     <div class="reviews-actions">
-        <a class="action view" href="<?php echo $block->escapeUrl($url) ?>"><span itemprop="reviewCount"><?php echo $block->escapeHtml($block->getReviewsCount()) ?></span>&nbsp;<span><?php echo($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?></span></a>
+        <a class="action view"
+           href="<?php echo $block->escapeUrl($url) ?>">
+            <span itemprop="reviewCount"><?php echo $block->escapeHtml($block->getReviewsCount()) ?></span>&nbsp;
+            <span><?php echo($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?></span>
+        </a>
         <a class="action add" href="<?php echo $block->escapeUrl($urlForm) ?>"><?php echo $block->escapeHtml(__('Add Your Review')) ?></a>
     </div>
 </div>

@@ -141,4 +141,11 @@
             <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
         </arguments>
     </type>
+    <type name="\Magento\Framework\Data\CollectionModifier">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="stockStatusCondition" xsi:type="object">Magento\CatalogInventory\Model\ProductCollectionStockCondition</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
