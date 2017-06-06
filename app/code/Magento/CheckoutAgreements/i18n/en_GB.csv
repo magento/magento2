@@ -1,0 +1,33 @@
+ID,ID
+Status,Status
+Disabled,Disabled
+Enabled,Enabled
+"Store View","Store View"
+Content,Content
+Text,Text
+"Terms and Conditions","Terms and Conditions"
+"Add New Condition","Add New Condition"
+"Save Condition","Save Condition"
+"Delete Condition","Delete Condition"
+"Edit Terms and Conditions","Edit Terms and Conditions"
+"New Terms and Conditions","New Terms and Conditions"
+"Terms and Conditions Information","Terms and Conditions Information"
+"Condition Name","Condition Name"
+"Show Content as","Show Content as"
+HTML,HTML
+"Checkbox Text","Checkbox Text"
+"Content Height (css)","Content Height (css)"
+"Content Height","Content Height"
+Condition,Condition
+"This condition no longer exists.","This condition no longer exists."
+"New Condition","New Condition"
+"Edit Condition","Edit Condition"
+"The condition has been saved.","The condition has been saved."
+"Something went wrong while saving this condition.","Something went wrong while saving this condition."
+"The condition has been deleted.","The condition has been deleted."
+"Something went wrong  while deleting this condition.","Something went wrong  while deleting this condition."
+Sales,Sales
+"Checkout Conditions","Checkout Conditions"
+"Checkout Terms and Conditions","Checkout Terms and Conditions"
+"Enable Terms and Conditions","Enable Terms and Conditions"
+"Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.","Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%."

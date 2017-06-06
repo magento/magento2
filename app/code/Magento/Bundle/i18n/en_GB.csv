@@ -1,0 +1,80 @@
+None,None
+Close,Close
+Cancel,Cancel
+Product,Product
+Price,Price
+ID,ID
+SKU,SKU
+Qty,Qty
+"Excl. Tax","Excl. Vat"
+Total,Total
+"Incl. Tax","Incl. Vat"
+"Total incl. tax","Total incl. Vat"
+Delete,Delete
+Name,Name
+From,From
+To,To
+Required,Required
+Position,Position
+"Percent Discount","Percent Discount"
+"-- Select --","-- Select --"
+Dynamic,Dynamic
+Fixed,Fixed
+"Create New Option","Create New Option"
+"Bundle Items","Bundle Items"
+"Add Products to Option","Add Products to Option"
+"Delete Option","Delete Option"
+"Please enter search conditions to view products.","Please enter search conditions to view products."
+"Use Default Value","Use Default Value"
+"There is no defined renderer for ""%1"" option type.","There is no defined renderer for ""%1"" option type."
+"As Low as","As Low as"
+"Price Range","Price Range"
+"Please specify product option(s).","Please specify product option(s)."
+"Please select all required options.","Please select all required options."
+"The required options you selected are not available.","The required options you selected are not available."
+"We cannot add this item to your shopping cart.","We cannot add this item to your shopping basket."
+N/A,N/A
+Percent,Percent
+Qty:,Qty:
+"Choose a selection...","Choose a selection..."
+"Ship Bundle Items","Ship Bundle Items"
+Separately,Separately
+Together,Together
+"Option Title","Option Title"
+"Store View Title","Store View Title"
+"Input Type","Input Type"
+"There are no products in this option.","There are no products in this option."
+"New Option","New Option"
+Default,Default
+"Price Type","Price Type"
+"Default Quantity","Default Quantity"
+"User Defined","User Defined"
+Ordered,Ordered
+Invoiced,Invoiced
+Shipped,Shipped
+Refunded,Refunded
+Canceled,Canceled
+"As low as","As low as"
+From:,From:
+To:,To:
+"Buy %1 with %2 discount each","Buy %1 with %2 discount each"
+"Go back to product details","Go back to product details"
+"Customize and Add to Cart","Customize and Add to Basket"
+"* Required Fields","* Required Fields"
+"Your Customization","Your Customization"
+Availability,Availability
+"In stock","In stock"
+"Out of stock","Out of stock"
+Summary,Summary
+"%1 x %2","%1 x %2"
+Availability:,Availability:
+"Customize %1","Customize %1"
+"No options of this product are available.","No options of this product are available."
+"Gift Message","Gift Message"
+Message:,Message:
+"Excl. Tax:","Excl. Vat:"
+"Incl. Tax:","Incl. Vat:"
+"Total Incl. Tax","Total Incl. Vat"
+"Add Products to New Option","Add Products to New Option"
+"Add Products to Option ""%1""","Add Products to Option ""%1"""
+"Add Selected Products","Add Selected Products"

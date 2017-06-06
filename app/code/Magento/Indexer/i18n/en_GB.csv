@@ -1,0 +1,19 @@
+Status,Status
+Description,Description
+Never,Never
+Updated,Updated
+Mode,Mode
+"Update on Save","Update on Save"
+Ready,Ready
+Processing,Processing
+"Indexer Management","Indexer Management"
+"Update by Schedule","Update by Schedule"
+"Reindex required","Reindex required"
+"Index Management","Index Management"
+"Please select indexers.","Please select indexers."
+"A total of %1 indexer(s) have been turned Update on Save mode on.","A total of %1 indexer(s) have been turned Update on Save mode on."
+"We couldn't change indexer(s)' mode because of an error.","We couldn't change indexer(s)' mode because of an error."
+"A total of %1 indexer(s) have been turned Update by Schedule mode on.","A total of %1 indexer(s) have been turned Update by Schedule mode on."
+"State for the same indexer","State for the same indexer"
+"State for the same view","State for the same view"
+Indexer,Indexer

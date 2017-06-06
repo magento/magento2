@@ -1,0 +1,37 @@
+Back,Back
+Name,Name
+Enabled,Enabled
+"* Required Fields","* Required Fields"
+Message:,Message:
+"Email to a Friend","Email to a Friend"
+"Email Address","Email Address"
+"Email Templates","Email Templates"
+Name:,Name:
+"Email Address:","Email Address:"
+Sender:,Sender:
+Email:,Email:
+Recipient:,Recipient:
+"Add Recipient","Add Recipient"
+"Send Email","Send Email"
+"You can't send messages more than %1 times an hour.","You can't send messages more than %1 times an hour."
+"The link to a friend was sent.","The link to a friend was sent."
+"We found some problems with the data.","We found some problems with the data."
+"Some emails were not sent.","Some emails were not sent."
+"You've met your limit of %1 sends in an hour.","You've met your limit of %1 sends in an hour."
+"The sender name cannot be empty.","The sender name cannot be empty."
+"Invalid Sender Email","Invalid Sender Email"
+"The message cannot be empty.","The message cannot be empty."
+"At least one recipient must be specified.","At least one recipient must be specified."
+"Please enter a correct recipient email address.","Please enter a correct recipient email address."
+"No more than %1 emails can be sent at a time.","No more than %1 emails can be sent at a time."
+"Please define a correct Cookie instance.","Please define a correct Cookie instance."
+"Please define a correct Product instance.","Please define a correct Product instance."
+"Invalid Sender Information","Invalid Sender Information"
+"Please define the correct Sender information.","Please define the correct Sender information."
+"Remove Email","Remove Email"
+"Maximum %1 email addresses allowed.","Maximum %1 email addresses allowed."
+"Select Email Template","Select Email Template"
+"Allow for Guests","Allow for Guests"
+"Max Recipients","Max Recipients"
+"Max Products Sent in 1 Hour","Max Products Sent in 1 Hour"
+"Limit Sending By","Limit Sending By"

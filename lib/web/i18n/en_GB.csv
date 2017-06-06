@@ -1,0 +1,22 @@
+"Insert Widget...","Insert Widget..."
+"No records found.","No records found."
+"Recent items","Recent items"
+"Show all...","Show all..."
+"Method ","Method "
+"Please wait...","Please wait..."
+"Please wait...","Please wait..."
+Loading...,Loading...
+Loading...,Loading...
+Cancel,Cancel
+Save,Save
+Translate,Translate
+Submit,Submit
+Close,Close
+"Please enter a value less than or equal to %s.","Please enter a value less than or equal to %s."
+"Please enter a value greater than or equal to %s.","Please enter a value greater than or equal to %s."
+"Maximum length of this field must be equal or less than %1 symbols.","Maximum length of this field must be equal or less than %1 symbols."
+"This is a required field.","This is a required field."
+"Please enter a valid year (1900-%1).","Please enter a valid year (1900-%1)."
+"Please enter a valid day (1-%1).","Please enter a valid day (1-%1)."
+"Please enter a date in the past.","Please enter a date in the past."
+"Please enter a date between %min and %max.","Please enter a date between %min and %max."

@@ -1,0 +1,130 @@
+"Are you sure?","Are you sure?"
+Cancel,Cancel
+Back,Back
+Product,Product
+Price,Price
+Quantity,Quantity
+ID,ID
+SKU,SKU
+Action,Action
+Edit,Edit
+Customer,Customer
+Guest,Guest
+Delete,Delete
+Name,Name
+Status,Status
+"Sort Order","Sort Order"
+Title,Title
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Type,Type
+Description,Description
+Previous,Previous
+Next,Next
+Active,Active
+Visibility,Visibility
+"* Required Fields","* Required Fields"
+Summary,Summary
+"Default Value","Default Value"
+Websites,Websites
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
+"Product Name","Product Name"
+Inactive,Inactive
+"View Details","View Details"
+Created,Created
+"Product Reviews","Product Reviews"
+Pending,Pending
+Review,Review
+Reviews,Reviews
+"Save Review","Save Review"
+"Add New Review","Add New Review"
+"Review Details","Review Details"
+"Product Rating","Product Rating"
+"Visible In","Visible In"
+Nickname,Nickname
+"Summary of Review","Summary of Review"
+"Save and Previous","Save and Previous"
+"Save and Next","Save and Next"
+"Delete Review","Delete Review"
+"Edit Review '%1'","Edit Review '%1'"
+"New Review","New Review"
+"<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>","<a href=""%1"" onclick=""this.target='blank'"">%2 %3</a> <a href=""mailto:%4"">(%4)</a>"
+Administrator,Administrator
+"Posted By","Posted By"
+"Summary Rating","Summary Rating"
+"Detailed Rating","Detailed Rating"
+"Pending Reviews RSS","Pending Reviews RSS"
+"Update Status","Update Status"
+"Pending Reviews of Customer `%1`","Pending Reviews of Customer `%1`"
+"Pending Reviews","Pending Reviews"
+"All Reviews of Customer `%1`","All Reviews of Customer `%1`"
+"All Reviews of Product `%1`","All Reviews of Product `%1`"
+"All Reviews","All Reviews"
+"Product Store Name","Product Store Name"
+"Manage Ratings","Manage Ratings"
+"Add New Rating","Add New Rating"
+"Save Rating","Save Rating"
+"Delete Rating","Delete Rating"
+"Edit Rating #%1","Edit Rating #%1"
+"New Rating","New Rating"
+"Rating Title","Rating Title"
+"Rating Visibility","Rating Visibility"
+"Is Active","Is Active"
+"Please specify a rating title for a store, or we'll just use the default value.","Please specify a rating title for a store, or we'll just use the default value."
+"Rating Information","Rating Information"
+"Customer Reviews","Customer Reviews"
+"Edit Review","Edit Review"
+"The review was removed by another user or does not exist.","The review was removed by another user or does not exist."
+"You saved the review.","You saved the review."
+"Something went wrong while saving this review.","Something went wrong while saving this review."
+"The review has been deleted.","The review has been deleted."
+"Something went wrong  deleting this review.","Something went wrong  deleting this review."
+"Please select review(s).","Please select review(s)."
+"An error occurred while deleting record(s).","An error occurred while deleting record(s)."
+"An error occurred while updating the selected review(s).","An error occurred while updating the selected review(s)."
+"We can't get the product ID.","We can't get the product ID."
+"An error occurred while saving review.","An error occurred while saving review."
+"You saved the rating.","You saved the rating."
+"You deleted the rating.","You deleted the rating."
+Ratings,Ratings
+"My Product Reviews","My Product Reviews"
+"Your review has been accepted for moderation.","Your review has been accepted for moderation."
+"We cannot post the review.","We cannot post the review."
+"Storage key was not set","Storage key was not set"
+Approved,Approved
+"Not Approved","Not Approved"
+"The review summary field can't be empty.","The review summary field can't be empty."
+"The nickname field can't be empty.","The nickname field can't be empty."
+"The review field can't be empty.","The review field can't be empty."
+"Rating isn't Available","Rating isn't Available"
+"Assigned Options","Assigned Options"
+"Option Title:","Option Title:"
+Rating,Rating
+"You have submitted no reviews.","You have submitted no reviews."
+"My Recent Reviews","My Recent Reviews"
+"View All Reviews","View All Reviews"
+"Average Customer Rating:","Average Customer Rating:"
+"Your Rating:","Your Rating:"
+Rating:,Rating:
+"Your Review (submitted on %1):","Your Review (submitted on %1):"
+"Review (submitted on %1):","Review (submitted on %1):"
+"Back to My Reviews","Back to My Reviews"
+"Be the first to review this product","Be the first to review this product"
+"Write Your Own Review","Write Your Own Review"
+"You're reviewing:","You're reviewing:"
+"How do you rate this product?","How do you rate this product?"
+"%1 %2","%1 %2"
+"Summary of Your Review","Summary of Your Review"
+"Submit Review","Submit Review"
+"Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%2"">register</a>","Only registered users can write reviews. Please, <a href=""%1"">log in</a> or <a href=""%2"">register</a>"
+Review(s),Review(s)
+"Add Your Review","Add Your Review"
+"%1 Review(s)","%1 Review(s)"
+"Review by","Review by"
+"Posted on","Posted on"
+"Back to Main Product Info","Back to Main Product Info"
+"Average Customer Rating","Average Customer Rating"
+"Product Rating:","Product Rating:"
+"Product Review (submitted on %1):","Product Review (submitted on %1):"
+"Back to Product Reviews","Back to Product Reviews"
+"Allow Guests to Write Reviews","Allow Guests to Write Reviews"

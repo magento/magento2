@@ -1,0 +1,41 @@
+No,No
+Discount,Discount
+"Credit Card Type","Credit Card Type"
+"Credit Card Number","Credit Card Number"
+"Expiration Date","Expiration Date"
+"Card Verification Number","Card Verification Number"
+"--Please Select--","--Please Select--"
+"Card Verification Number Visual Reference","Card Verification Number Visual Reference"
+"What is this?","What is this?"
+Shipping,Shipping
+Yes,Yes
+N/A,N/A
+Month,Month
+Year,Year
+"Start Date","Start Date"
+"We cannot retrieve the payment method model object.","We cannot retrieve the payment method model object."
+"We cannot retrieve the payment info model object.","We cannot retrieve the payment info model object."
+"Switch/Solo/Maestro Issue Number","Switch/Solo/Maestro Issue Number"
+"Switch/Solo/Maestro Start Date","Switch/Solo/Maestro Start Date"
+"All Allowed Countries","All Allowed Countries"
+"Specific Countries","Specific Countries"
+"The payment method you requested is not available.","The payment method you requested is not available."
+"The payment disallows storing objects.","The payment disallows storing objects."
+"We cannot retrieve the payment method code.","We cannot retrieve the payment method code."
+"We cannot retrieve the payment information object instance.","We cannot retrieve the payment information object instance."
+"You can't use the payment type you selected to make payments to the billing country.","You can't use the payment type you selected to make payments to the billing country."
+"The order action is not available.","The order action is not available."
+"The authorize action is not available.","The authorise action is not available."
+"The capture action is not available.","The capture action is not available."
+"The refund action is not available.","The refund action is not available."
+"Void action is not available.","Void action is not available."
+"The payment review action is unavailable.","The payment review action is unavailable."
+"Credit card number mismatch with credit card type.","Credit card number mismatch with credit card type."
+"Invalid Credit Card Number","Invalid Credit Card Number"
+"Credit card type is not allowed for this payment method.","Credit card type is not allowed for this payment method."
+"Please enter a valid credit card verification number.","Please enter a valid credit card verification number."
+"We found an incorrect credit card expiration date.","We found an incorrect credit card expiration date."
+"Switch/Solo/Maestro Only","Switch/Solo/Maestro Only"
+"Issue Number","Issue Number"
+"%1 is not available. You still can process offline actions.","%1 is not available. You still can process offline actions."
+"Payment Methods","Payment Methods"
