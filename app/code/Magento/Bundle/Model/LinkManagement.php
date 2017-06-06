@@ -308,7 +308,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
                     continue;
                 }
                 $excludeSelectionIds[] = $selection->getSelectionId();
-                $usedProductIds[] = $selection->getProductId();
             }
         }
         if (empty($removeSelectionIds)) {
