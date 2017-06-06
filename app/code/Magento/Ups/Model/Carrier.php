@@ -1066,26 +1066,16 @@ XMLAuth;
                         if (isset($activityTag->ActivityLocation->Address->CountryCode)) {
                             $addArr[] = (string)$activityTag->ActivityLocation->Address->CountryCode;
                         }
-                        $dateArr = [];
-                        $date = (string)$activityTag->Date;
-                        //YYYYMMDD
-                        $dateArr[] = substr($date, 0, 4);
-                        $dateArr[] = substr($date, 4, 2);
-                        $dateArr[] = substr($date, -2, 2);
 
-                        $timeArr = [];
-                        $time = (string)$activityTag->Time;
-                        //HHMMSS
-                        $timeArr[] = substr($time, 0, 2);
-                        $timeArr[] = substr($time, 2, 2);
-                        $timeArr[] = substr($time, -2, 2);
+                        // YYYYMMDD HHMMSS
+                        $dateTime = \DateTime::createFromFormat('Ymd His',
+                            (string)$activityTag->Date . ' ' . (string)$activityTag->Time);
 
                         if ($index === 1) {
                             $resultArr['status'] = (string)$activityTag->Status->StatusType->Description;
-                            $resultArr['deliverydate'] = implode('-', $dateArr);
-                            //YYYY-MM-DD
-                            $resultArr['deliverytime'] = implode(':', $timeArr);
-                            //HH:MM:SS
+                            $resultArr['deliverydate'] = $dateTime->format('Y-m-d');
+                            $resultArr['deliverytime'] = $dateTime->format('H:i:s');
+
                             $resultArr['deliverylocation'] = (string)$activityTag->ActivityLocation->Description;
                             $resultArr['signedby'] = (string)$activityTag->ActivityLocation->SignedForByName;
                             if ($addArr) {
@@ -1094,10 +1084,8 @@ XMLAuth;
                         } else {
                             $tempArr = [];
                             $tempArr['activity'] = (string)$activityTag->Status->StatusType->Description;
-                            $tempArr['deliverydate'] = implode('-', $dateArr);
-                            //YYYY-MM-DD
-                            $tempArr['deliverytime'] = implode(':', $timeArr);
-                            //HH:MM:SS
+                            $tempArr['deliverydate'] = $dateTime->format('Y-m-d');
+                            $tempArr['deliverytime'] = $dateTime->format('H:i:s');
                             if ($addArr) {
                                 $tempArr['deliverylocation'] = implode(', ', $addArr);
                             }
