@@ -29,5 +29,5 @@ interface ProductLinkManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return bool
      */
-    public function setProductLinks($sku, array $items);
+    public function setProductLinks($sku, $items);
 }
