@@ -27,10 +27,10 @@ interface CartManagementInterface
     public function createEmptyCart();
 
     /**
-     * Creates an empty cart and quote for a specified customer.
+     * Creates an empty cart and quote for a specified customer if customer does not have a cart yet.
      *
      * @param int $customerId The customer ID.
-     * @return int Cart ID.
+     * @return int new cart ID if customer did not have a cart or ID of the existing cart otherwise.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
      */
     public function createEmptyCartForCustomer($customerId);
