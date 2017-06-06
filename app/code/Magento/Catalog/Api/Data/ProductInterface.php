@@ -105,6 +105,13 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     public function getPrice();
 
     /**
+     * Product final price
+     *
+     * @return float|null
+     */
+    public function getFinalPrice();
+
+    /**
      * Set product price
      *
      * @param float $price
