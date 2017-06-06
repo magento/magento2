@@ -15,7 +15,7 @@
                 <sku>{{name}}</sku>
                 <meta_title>{{name}}</meta_title>
                 <meta_keyword>{{name}}</meta_keyword>
-                <meta_description>{{name}} {{description}}</meta_description>
+                <meta_description>{{name}}</meta_description>
             </fields_masks>
             <frontend>
                 <list_mode>grid-list</list_mode>
