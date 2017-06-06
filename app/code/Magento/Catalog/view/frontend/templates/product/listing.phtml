@@ -20,7 +20,7 @@ $_productCollection = $block->getLoadedProductCollection();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
 <?php if (!$_productCollection->count()): ?>
-<p class="message note"><?php /* @escapeNotVerified */ echo __('We can\'t find products matching the selection.') ?></p>
+<p class="message note"><?= /* @escapeNotVerified */ __('We can\'t find products matching the selection.') ?></p>
 <?php else: ?>
 <?= $block->getToolbarHtml() ?>
 <?= $block->getAdditionalHtml() ?>
@@ -37,14 +37,14 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
     }
 ?>
-<div class="products wrapper <?php /* @escapeNotVerified */ echo $viewMode; ?>">
+<div class="products wrapper <?= /* @escapeNotVerified */ $viewMode ?>">
     <?php $iterator = 1; ?>
     <ol class="products list items">
         <?php foreach ($_productCollection as $_product): ?>
-        <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product">' : '</li><li class="item product">' ?>
+        <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product">' : '</li><li class="item product">' ?>
             <div class="product">
                 <?php // Product Image ?>
-                <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo">
+                <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" class="product photo">
                     <?= $block->getImage($_product, $image)->toHtml() ?>
                 </a>
                 <div class="product details">
@@ -98,4 +98,4 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
 </div>
 <?= $block->getToolbarHtml() ?>
 <?php endif; ?>
-<?php /* @escapeNotVerified */ echo $time_taken = microtime(true) - $start; ?>
+<?= /* @escapeNotVerified */ $time_taken = microtime(true) - $start ?>

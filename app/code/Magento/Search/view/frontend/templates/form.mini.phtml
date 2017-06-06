@@ -12,26 +12,26 @@
 $helper = $this->helper('Magento\Search\Helper\Data');
 ?>
 <div class="block block-search">
-    <div class="block block-title"><strong><?php /* @escapeNotVerified */ echo __('Search'); ?></strong></div>
+    <div class="block block-title"><strong><?= /* @escapeNotVerified */ __('Search') ?></strong></div>
     <div class="block block-content">
-        <form class="form minisearch" id="search_mini_form" action="<?php /* @escapeNotVerified */ echo $helper->getResultUrl() ?>" method="get">
+        <form class="form minisearch" id="search_mini_form" action="<?= /* @escapeNotVerified */ $helper->getResultUrl() ?>" method="get">
             <div class="field search">
                 <label class="label" for="search" data-role="minisearch-label">
-                    <span><?php /* @escapeNotVerified */ echo __('Search'); ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Search') ?></span>
                 </label>
                 <div class="control">
                     <input id="search"
                            data-mage-init='{"quickSearch":{
                                 "formSelector":"#search_mini_form",
-                                "url":"<?php /* @escapeNotVerified */ echo $block->getUrl('search/ajax/suggest', ['_secure' => $block->getRequest()->isSecure()]); ?>",
+                                "url":"<?= /* @escapeNotVerified */ $block->getUrl('search/ajax/suggest', ['_secure' => $block->getRequest()->isSecure()]) ?>",
                                 "destinationSelector":"#search_autocomplete"}
                            }'
                            type="text"
-                           name="<?php /* @escapeNotVerified */ echo $helper->getQueryParamName() ?>"
-                           value="<?php /* @escapeNotVerified */ echo $helper->getEscapedQueryText() ?>"
-                           placeholder="<?php /* @escapeNotVerified */ echo __('Search entire store here...'); ?>"
+                           name="<?= /* @escapeNotVerified */ $helper->getQueryParamName() ?>"
+                           value="<?= /* @escapeNotVerified */ $helper->getEscapedQueryText() ?>"
+                           placeholder="<?= /* @escapeNotVerified */ __('Search entire store here...') ?>"
                            class="input-text"
-                           maxlength="<?php /* @escapeNotVerified */ echo $helper->getMaxQueryLength();?>"
+                           maxlength="<?= /* @escapeNotVerified */ $helper->getMaxQueryLength() ?>"
                            role="combobox"
                            aria-haspopup="false"
                            aria-autocomplete="both"
@@ -44,7 +44,7 @@ $helper = $this->helper('Magento\Search\Helper\Data');
                 <button type="submit"
                         title="<?= $block->escapeHtml(__('Search')) ?>"
                         class="action search">
-                    <span><?php /* @escapeNotVerified */ echo __('Search'); ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Search') ?></span>
                 </button>
             </div>
         </form>

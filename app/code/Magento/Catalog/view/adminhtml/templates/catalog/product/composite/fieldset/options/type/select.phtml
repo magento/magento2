@@ -17,7 +17,7 @@
         <?= $block->getValuesHtml() ?>
         <?php if ($_option->getIsRequire()): ?>
             <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX): ?>
-                <span id="options-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-container"></span>
+                <span id="options-<?= /* @escapeNotVerified */ $_option->getId() ?>-container"></span>
             <?php endif; ?>
         <?php endif;?>
     </div>

@@ -13,14 +13,14 @@
     <section class="admin__page-section" id="package_template" style="display:none;">
         <div class="admin__page-section-title">
             <span class="title">
-                <?php /* @escapeNotVerified */ echo __('Package') ?> <span data-role="package-number"></span>
+                <?= /* @escapeNotVerified */ __('Package') ?> <span data-role="package-number"></span>
             </span>
             <div class="actions _primary">
                 <button type="button" class="action-secondary" data-action="package-save-items" onclick="packaging.packItems(this);">
-                    <span><?php /* @escapeNotVerified */ echo __('Add Selected Product(s) to Package') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Add Selected Product(s) to Package') ?></span>
                 </button>
                 <button type="button" class="action-secondary" data-action="package-add-items" onclick="packaging.getItemsForPack(this);">
-                    <span><?php /* @escapeNotVerified */ echo __('Add Products to Package') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Add Products to Package') ?></span>
                 </button>
             </div>
         </div>
@@ -28,22 +28,22 @@
             <table class="data-table admin__control-table">
                 <thead>
                     <tr>
-                        <th class="col-type"><?php /* @escapeNotVerified */ echo __('Type') ?></th>
+                        <th class="col-type"><?= /* @escapeNotVerified */ __('Type') ?></th>
                         <?php if ($girthEnabled == 1): ?>
-                        <th class="col-size"><?php /* @escapeNotVerified */ echo __('Size') ?></th>
-                        <th class="col-girth"><?php /* @escapeNotVerified */ echo __('Girth') ?></th>
+                        <th class="col-size"><?= /* @escapeNotVerified */ __('Size') ?></th>
+                        <th class="col-girth"><?= /* @escapeNotVerified */ __('Girth') ?></th>
                         <th>&nbsp;</th>
                         <?php endif; ?>
                         <th class="col-custom" <?= $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
-                            <?php /* @escapeNotVerified */ echo __('Customs Value') ?>
+                            <?= /* @escapeNotVerified */ __('Customs Value') ?>
                         </th>
-                        <th class="col-total-weight"><?php /* @escapeNotVerified */ echo __('Total Weight') ?></th>
-                        <th class="col-length"><?php /* @escapeNotVerified */ echo __('Length') ?></th>
-                        <th class="col-width"><?php /* @escapeNotVerified */ echo __('Width') ?></th>
-                        <th class="col-height"><?php /* @escapeNotVerified */ echo __('Height') ?></th>
+                        <th class="col-total-weight"><?= /* @escapeNotVerified */ __('Total Weight') ?></th>
+                        <th class="col-length"><?= /* @escapeNotVerified */ __('Length') ?></th>
+                        <th class="col-width"><?= /* @escapeNotVerified */ __('Width') ?></th>
+                        <th class="col-height"><?= /* @escapeNotVerified */ __('Height') ?></th>
                         <th>&nbsp;</th>
                         <?php if ($block->getDeliveryConfirmationTypes()): ?>
-                        <th class="col-signature"><?php /* @escapeNotVerified */ echo __('Signature Confirmation') ?></th>
+                        <th class="col-signature"><?= /* @escapeNotVerified */ __('Signature Confirmation') ?></th>
                             <?php endif; ?>
                         <th class="col-actions">&nbsp;</th>
                     </tr>
@@ -53,17 +53,17 @@
                         <td class="col-type">
                             <?php $containers = $block->getContainers(); ?>
                             <select name="package_container"
-                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?php /* @escapeNotVerified */ echo  $girthEnabled ?>);"
+                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?= /* @escapeNotVerified */ $girthEnabled ?>);"
                                     <?php if (empty($containers)):?>
-                                        title="<?php /* @escapeNotVerified */ echo __('USPS domestic shipments don\'t use package types.') ?>"
+                                        title="<?= /* @escapeNotVerified */ __('USPS domestic shipments don\'t use package types.') ?>"
                                         disabled=""
                                         class="admin__control-select disabled"
                                     <?php else: ?>
                                         class="admin__control-select"
                                     <?php endif; ?>>
                                 <?php foreach ($block->getContainers() as $key => $value): ?>
-                                    <option value="<?php /* @escapeNotVerified */ echo $key ?>" >
-                                        <?php /* @escapeNotVerified */ echo $value ?>
+                                    <option value="<?= /* @escapeNotVerified */ $key ?>" >
+                                        <?= /* @escapeNotVerified */ $value ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -72,10 +72,10 @@
                         <td>
                             <select name="package_size"
                                     class="admin__control-select"
-                                    onchange="packaging.checkSizeAndGirthParameter(this, <?php /* @escapeNotVerified */ echo  $girthEnabled ?>);">
+                                    onchange="packaging.checkSizeAndGirthParameter(this, <?= /* @escapeNotVerified */ $girthEnabled ?>);">
                                 <?php foreach ($sizeSource as $key => $value): ?>
-                                <option value="<?php /* @escapeNotVerified */ echo $sizeSource[$key]['value'] ?>">
-                                    <?php /* @escapeNotVerified */ echo $sizeSource[$key]['label'] ?>
+                                <option value="<?= /* @escapeNotVerified */ $sizeSource[$key]['value'] ?>">
+                                    <?= /* @escapeNotVerified */ $sizeSource[$key]['label'] ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
@@ -89,8 +89,8 @@
                             <select name="container_girth_dimension_units"
                                     class="options-units-dimensions measures admin__control-select"
                                     onchange="packaging.changeMeasures(this);">
-                                <option value="<?php /* @escapeNotVerified */ echo Zend_Measure_Length::INCH ?>" selected="selected" ><?php /* @escapeNotVerified */ echo __('in') ?></option>
-                                <option value="<?php /* @escapeNotVerified */ echo Zend_Measure_Length::CENTIMETER ?>" ><?php /* @escapeNotVerified */ echo __('cm') ?></option>
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= /* @escapeNotVerified */ __('in') ?></option>
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::CENTIMETER ?>" ><?= /* @escapeNotVerified */ __('cm') ?></option>
                             </select>
                         </td>
                             <?php endif; ?>
@@ -103,13 +103,13 @@
                             $customsValueValidation = '';
                         }
                         ?>
-                        <td class="col-custom" <?php /* @escapeNotVerified */ echo $customsValueDisplay ?>>
+                        <td class="col-custom" <?= /* @escapeNotVerified */ $customsValueDisplay ?>>
                             <div class="admin__control-addon">
                                 <input type="text"
-                                       class="customs-value input-text admin__control-text <?php /* @escapeNotVerified */ echo $customsValueValidation ?>"
+                                       class="customs-value input-text admin__control-text <?= /* @escapeNotVerified */ $customsValueValidation ?>"
                                        name="package_customs_value" />
                                 <span class="admin__addon-suffix">
-                                    <span class="customs-value-currency"><?php /* @escapeNotVerified */ echo $block->getCustomValueCurrencyCode(); ?></span>
+                                    <span class="customs-value-currency"><?= /* @escapeNotVerified */ $block->getCustomValueCurrencyCode() ?></span>
                                 </span>
                             </div>
                         </td>
@@ -121,8 +121,8 @@
                                     <select name="container_weight_units"
                                             class="options-units-weight measures admin__control-select"
                                             onchange="packaging.changeMeasures(this);">
-                                        <option value="<?php /* @escapeNotVerified */ echo Zend_Measure_Weight::POUND ?>" selected="selected"  ><?php /* @escapeNotVerified */ echo __('lb') ?></option>
-                                        <option value="<?php /* @escapeNotVerified */ echo Zend_Measure_Weight::KILOGRAM ?>" ><?php /* @escapeNotVerified */ echo __('kg') ?></option>
+                                        <option value="<?= /* @escapeNotVerified */ Zend_Measure_Weight::POUND ?>" selected="selected"  ><?= /* @escapeNotVerified */ __('lb') ?></option>
+                                        <option value="<?= /* @escapeNotVerified */ Zend_Measure_Weight::KILOGRAM ?>" ><?= /* @escapeNotVerified */ __('kg') ?></option>
                                     </select>
                                 <span class="admin__addon-prefix"></span>
                             </div>
@@ -146,16 +146,16 @@
                             <select name="container_dimension_units"
                                     class="options-units-dimensions measures admin__control-select"
                                     onchange="packaging.changeMeasures(this);">
-                                <option value="<?php /* @escapeNotVerified */ echo Zend_Measure_Length::INCH ?>" selected="selected" ><?php /* @escapeNotVerified */ echo __('in') ?></option>
-                                <option value="<?php /* @escapeNotVerified */ echo Zend_Measure_Length::CENTIMETER ?>" ><?php /* @escapeNotVerified */ echo __('cm') ?></option>
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= /* @escapeNotVerified */ __('in') ?></option>
+                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::CENTIMETER ?>" ><?= /* @escapeNotVerified */ __('cm') ?></option>
                             </select>
                         </td>
                         <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <td>
                             <select name="delivery_confirmation_types" class="admin__control-select">
                                 <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value): ?>
-                                <option value="<?php /* @escapeNotVerified */ echo $key ?>" >
-                                    <?php /* @escapeNotVerified */ echo $value ?>
+                                <option value="<?= /* @escapeNotVerified */ $key ?>" >
+                                    <?= /* @escapeNotVerified */ $value ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
@@ -163,7 +163,7 @@
                             <?php endif; ?>
                         <td class="col-actions">
                             <button type="button" class="action-delete DeletePackageBtn" onclick="packaging.deletePackage(this);">
-                                <span><?php /* @escapeNotVerified */ echo __('Delete Package') ?></span>
+                                <span><?= /* @escapeNotVerified */ __('Delete Package') ?></span>
                             </button>
                         </td>
                     </tr>
@@ -173,8 +173,8 @@
                 <table class="data-table admin__control-table" cellspacing="0">
                     <thead>
                         <tr>
-                            <th><?php /* @escapeNotVerified */ echo __('Contents') ?></th>
-                            <th><?php /* @escapeNotVerified */ echo __('Explanation') ?></th>
+                            <th><?= /* @escapeNotVerified */ __('Contents') ?></th>
+                            <th><?= /* @escapeNotVerified */ __('Explanation') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -184,8 +184,8 @@
                                     class="admin__control-select"
                                     onchange="packaging.changeContentTypes(this);">
                                 <?php foreach ($block->getContentTypes() as $key => $value): ?>
-                                    <option value="<?php /* @escapeNotVerified */ echo $key ?>" >
-                                        <?php /* @escapeNotVerified */ echo $value ?>
+                                    <option value="<?= /* @escapeNotVerified */ $key ?>" >
+                                        <?= /* @escapeNotVerified */ $value ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>

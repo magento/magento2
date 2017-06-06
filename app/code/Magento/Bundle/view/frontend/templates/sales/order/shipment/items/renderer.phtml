@@ -29,12 +29,12 @@
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="options-label">
-                <td colspan="3" class="col label"><div class="option label"><?php /* @escapeNotVerified */ echo $attributes['option_label'] ?></div></td>
+                <td colspan="3" class="col label"><div class="option label"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></div></td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr id="order-item-row-<?php /* @escapeNotVerified */ echo $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?php /* @escapeNotVerified */ echo $attributes['option_label'] ?>"<?php endif; ?>>
+    <tr id="order-item-row-<?= /* @escapeNotVerified */ $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?= /* @escapeNotVerified */ $attributes['option_label'] ?>"<?php endif; ?>>
         <?php if (!$_item->getParentItem()): ?>
             <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
                 <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
@@ -46,9 +46,9 @@
         <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Shipped')) ?>">
             <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())): ?>
                 <?php if (isset($shipItems[$_item->getId()])): ?>
-                    <?php /* @escapeNotVerified */ echo $shipItems[$_item->getId()]->getQty()*1 ?>
+                    <?= /* @escapeNotVerified */ $shipItems[$_item->getId()]->getQty()*1 ?>
                 <?php elseif ($_item->getIsVirtual()): ?>
-                    <?php /* @escapeNotVerified */ echo __('N/A') ?>
+                    <?= /* @escapeNotVerified */ __('N/A') ?>
                 <?php else: ?>
                     0
                 <?php endif; ?>
@@ -69,12 +69,12 @@
                         <?php if (!$block->getPrintStatus()): ?>
                             <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                             <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                                <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
+                                <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
                                 <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                     <div class="tooltip content">
                                         <dl class="item options">
                                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                            <dd><?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?></dd>
+                                            <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
                                         </dl>
                                     </div>
                                 <?php endif; ?>

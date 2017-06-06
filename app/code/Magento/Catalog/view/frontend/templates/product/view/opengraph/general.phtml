@@ -15,6 +15,6 @@
 <meta property="og:description" content="<?= $block->escapeHtmlAttr($block->stripTags($block->getProduct()->getShortDescription())) ?>" />
 <meta property="og:url" content="<?= $block->escapeUrl($block->getProduct()->getProductUrl()) ?>" />
 <?php if ($priceAmount = $block->getProduct()->getFinalPrice()):?>
-    <meta property="product:price:amount" content="<?php /* @escapeNotVerified */ echo $priceAmount; ?>"/>
+    <meta property="product:price:amount" content="<?= /* @escapeNotVerified */ $priceAmount ?>"/>
     <?= $block->getChildHtml('meta.currency') ?>
 <?php endif;?>

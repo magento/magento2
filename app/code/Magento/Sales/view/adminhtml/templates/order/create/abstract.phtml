@@ -9,7 +9,7 @@
 ?>
 
 <div class="admin__page-section-title">
-    <span class="title"><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></span>
+    <span class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></span>
     <?php if($block->getButtonsHtml()): ?>
         <div class="actions"><?= $block->getButtonsHtml() ?></div>
     <?php endif; ?>

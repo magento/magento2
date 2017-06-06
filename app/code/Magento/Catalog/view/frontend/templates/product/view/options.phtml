@@ -16,7 +16,7 @@
     {
         "#product_addtocart_form": {
             "priceOptions": {
-                "optionConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig()?>,
+                "optionConfig": <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>,
                 "controlContainer": ".field",
                 "priceHolderSelector": "[data-product-id='<?= $block->escapeHtml($_productId) ?>'][data-role=priceBox]"
             }

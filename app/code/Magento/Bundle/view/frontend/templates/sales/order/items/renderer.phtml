@@ -27,12 +27,12 @@
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
             <tr class="options-label">
-                <td class="col label" colspan="5"><?php /* @escapeNotVerified */ echo $attributes['option_label'] ?></td>
+                <td class="col label" colspan="5"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-<tr id="order-item-row-<?php /* @escapeNotVerified */ echo $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?php /* @escapeNotVerified */ echo $attributes['option_label'] ?>"<?php endif; ?>>
+<tr id="order-item-row-<?= /* @escapeNotVerified */ $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options-container<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?= /* @escapeNotVerified */ $attributes['option_label'] ?>"<?php endif; ?>>
     <?php if (!$_item->getParentItem()): ?>
         <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
             <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
@@ -40,7 +40,7 @@
     <?php else: ?>
         <td class="col value" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getValueHtml($_item) ?></td>
     <?php endif; ?>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?php /* @escapeNotVerified */ echo $block->prepareSku($_item->getSku()) ?></td>
+    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @escapeNotVerified */ $block->prepareSku($_item->getSku()) ?></td>
     <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
         <?php if (!$_item->getParentItem()): ?>
             <?= $block->getItemPriceHtml() ?>
@@ -58,32 +58,32 @@
             (!$_item->getParentItem() && !$block->isChildCalculated())): ?>
             <?php if ($_item->getQtyOrdered() > 0): ?>
                 <li class="item">
-                    <span class="title"><?php /* @escapeNotVerified */ echo __('Ordered'); ?></span>
-                    <span class="content"><?php /* @escapeNotVerified */ echo $_item->getQtyOrdered()*1 ?></span>
+                    <span class="title"><?= /* @escapeNotVerified */ __('Ordered') ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($_item->getQtyShipped() > 0 && !$block->isShipmentSeparately()): ?>
                 <li class="item">
-                    <span class="title"><?php /* @escapeNotVerified */ echo __('Shipped'); ?></span>
-                    <span class="content"><?php /* @escapeNotVerified */ echo $_item->getQtyShipped()*1 ?></span>
+                    <span class="title"><?= /* @escapeNotVerified */ __('Shipped') ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($_item->getQtyCanceled() > 0): ?>
                 <li class="item">
-                    <span class="title"><?php /* @escapeNotVerified */ echo __('Canceled'); ?></span>
-                    <span class="content"><?php /* @escapeNotVerified */ echo $_item->getQtyCanceled()*1 ?></span>
+                    <span class="title"><?= /* @escapeNotVerified */ __('Canceled') ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyCanceled()*1 ?></span>
                 </li>
             <?php endif; ?>
             <?php if ($_item->getQtyRefunded() > 0): ?>
                 <li class="item">
-                    <span class="title"><?php /* @escapeNotVerified */ echo __('Refunded'); ?></span>
-                    <span class="content"><?php /* @escapeNotVerified */ echo $_item->getQtyRefunded()*1 ?></span>
+                    <span class="title"><?= /* @escapeNotVerified */ __('Refunded') ?></span>
+                    <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyRefunded()*1 ?></span>
                 </li>
             <?php endif; ?>
         <?php elseif ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $block->isShipmentSeparately()): ?>
             <li class="item">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Shipped'); ?></span>
-                <span class="content"><?php /* @escapeNotVerified */ echo $_item->getQtyShipped()*1 ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Shipped') ?></span>
+                <span class="content"><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></span>
             </li>
         <?php else: ?>
             &nbsp;
@@ -114,12 +114,12 @@
                     <?php if (!$block->getPrintStatus()): ?>
                         <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                         <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                            <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
+                            <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
                             <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                 <div class="tooltip content">
                                     <dl class="item options">
                                         <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                        <dd><?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?></dd>
+                                        <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
                                     </dl>
                                 </div>
                             <?php endif; ?>

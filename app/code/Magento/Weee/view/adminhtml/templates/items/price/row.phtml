@@ -19,7 +19,7 @@ $_item = $block->getItem();
 <?php if ($block->displayBothPrices() || $block->displayPriceExclTax()): ?>
     <div class="price-excl-tax">
         <?php if ($block->displayBothPrices()): ?>
-            <span class="label"><?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>:</span>
+            <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
         <?php endif; ?>
 
         <?= $block->getRowPriceExclTaxHtml() ?>
@@ -28,14 +28,14 @@ $_item = $block->getItem();
             <?php if ($block->displayPriceWithWeeeDetails()): ?>
                 <small>
                     <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                        <span class="nobr"><?php /* @escapeNotVerified */ echo $tax['title']; ?>: <?php /* @escapeNotVerified */ echo $block->displayPrices($tax['base_row_amount'], $tax['row_amount']); ?></span>
+                        <span class="nobr"><?= /* @escapeNotVerified */ $tax['title'] ?>: <?= /* @escapeNotVerified */ $block->displayPrices($tax['base_row_amount'], $tax['row_amount']) ?></span>
                     <?php endforeach; ?>
                 </small>
             <?php endif; ?>
 
             <?php if ($block->displayFinalPrice()): ?>
                 <br />
-                <span class="nobr"><?php /* @escapeNotVerified */ echo __('Total'); ?>:<br />
+                <span class="nobr"><?= /* @escapeNotVerified */ __('Total') ?>:<br />
                     <?= $block->getFinalRowPriceExclTaxHtml() ?>
                 </span>
             <?php endif; ?>
@@ -45,7 +45,7 @@ $_item = $block->getItem();
 <?php if ($block->displayBothPrices() || $block->displayPriceInclTax()): ?>
     <div class="price-incl-tax">
         <?php if ($block->displayBothPrices()): ?>
-            <span class="label"><?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>:</span>
+            <span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
         <?php endif; ?>
         <?= $block->getRowPriceInclTaxHtml() ?>
 
@@ -54,14 +54,14 @@ $_item = $block->getItem();
             <?php if ($block->displayPriceWithWeeeDetails()): ?>
                 <small>
                     <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                        <span class="nobr"><?php /* @escapeNotVerified */ echo $tax['title']; ?>: <?php /* @escapeNotVerified */ echo $block->displayPrices($tax['base_row_amount_incl_tax'], $tax['row_amount_incl_tax']); ?></span>
+                        <span class="nobr"><?= /* @escapeNotVerified */ $tax['title'] ?>: <?= /* @escapeNotVerified */ $block->displayPrices($tax['base_row_amount_incl_tax'], $tax['row_amount_incl_tax']) ?></span>
                     <?php endforeach; ?>
                 </small>
             <?php endif; ?>
 
             <?php if ($block->displayFinalPrice()): ?>
                 <br />
-                <span class="nobr"><?php /* @escapeNotVerified */ echo __('Total'); ?>:<br />
+                <span class="nobr"><?= /* @escapeNotVerified */ __('Total') ?>:<br />
                     <?= $block->getFinalRowPriceInclTaxHtml() ?>
                 </span>
             <?php endif; ?>

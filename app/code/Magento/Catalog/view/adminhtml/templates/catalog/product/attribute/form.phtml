@@ -12,8 +12,8 @@
  * @var $block \Magento\Backend\Block\Widget\Form\Container
  */
 ?>
-<?php /* @escapeNotVerified */ echo $block->getFormInitScripts() ?>
-<div data-mage-init='{"floatingHeader": {}}' class="page-actions attribute-popup-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>>
+<?= /* @escapeNotVerified */ $block->getFormInitScripts() ?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions attribute-popup-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>>
     <?= $block->getButtonsHtml('header') ?>
 </div>
 
@@ -26,8 +26,8 @@
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?php /* @escapeNotVerified */ echo $block->getValidationUrl() ?>'});
+    jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>'});
 
 });
 </script>
-<?php /* @escapeNotVerified */ echo $block->getFormScripts() ?>
+<?= /* @escapeNotVerified */ $block->getFormScripts() ?>

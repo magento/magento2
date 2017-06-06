@@ -9,31 +9,31 @@
 ?>
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintAllInvoicesUrl($_order) ?>"
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintAllInvoicesUrl($_order) ?>"
        target="_blank"
        class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print All Invoices') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Print All Invoices') ?></span>
     </a>
 </div>
 <?php foreach ($_order->getInvoiceCollection() as $_invoice): ?>
 <div class="order-title">
-    <strong><?php /* @escapeNotVerified */ echo __('Invoice #') ?><?php /* @escapeNotVerified */ echo $_invoice->getIncrementId(); ?></strong>
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintInvoiceUrl($_invoice) ?>"
+    <strong><?= /* @escapeNotVerified */ __('Invoice #') ?><?= /* @escapeNotVerified */ $_invoice->getIncrementId() ?></strong>
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintInvoiceUrl($_invoice) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print Invoice') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Print Invoice') ?></span>
     </a>
 </div>
 <div class="table-wrapper table-order-items invoice">
-    <table class="data table table-order-items invoice" id="my-invoice-table-<?php /* @escapeNotVerified */ echo $_invoice->getId(); ?>">
-        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Invoiced') ?></caption>
+    <table class="data table table-order-items invoice" id="my-invoice-table-<?= /* @escapeNotVerified */ $_invoice->getId() ?>">
+        <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items Invoiced') ?></caption>
         <thead>
             <tr>
-                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty Invoiced') ?></th>
-                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+                <th class="col name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                <th class="col sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th class="col price"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th class="col qty"><?= /* @escapeNotVerified */ __('Qty Invoiced') ?></th>
+                <th class="col subtotal"><?= /* @escapeNotVerified */ __('Subtotal') ?></th>
             </tr>
         </thead>
         <?php $_items = $_invoice->getAllItems(); ?>

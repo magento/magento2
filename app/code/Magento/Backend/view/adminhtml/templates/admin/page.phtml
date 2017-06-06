@@ -9,7 +9,7 @@
 ?>
 <?php /** @var $block \Magento\Backend\Block\Page */ ?>
 <!doctype html>
-<html lang="<?php /* @escapeNotVerified */ echo $block->getLang() ?>" class="no-js">
+<html lang="<?= /* @escapeNotVerified */ $block->getLang() ?>" class="no-js">
 
 <head>
     <?= $block->getChildHtml('head') ?>
@@ -32,7 +32,7 @@
             </div>
             <?= $block->getChildHtml('page_main_actions') ?>
             <?php if ($block->getChildHtml('left')): ?>
-                <div id="page:main-container" class="<?php /* @escapeNotVerified */ echo $block->getContainerCssClass() ?> col-2-left-layout">
+                <div id="page:main-container" class="<?= /* @escapeNotVerified */ $block->getContainerCssClass() ?> col-2-left-layout">
                     <div class="main-col" id="content">
                         <?= $block->getChildHtml('content') ?>
                     </div>

@@ -11,7 +11,7 @@
     <div class="middle" id="anchor-content">
         <div id="page:main-container">
         <?php if ($block->getChildHtml('left')): ?>
-            <div class="columns <?php /* @escapeNotVerified */ echo $block->getContainerCssClass() ?>" id="page:container">
+            <div class="columns <?= /* @escapeNotVerified */ $block->getContainerCssClass() ?>" id="page:container">
                 <div id="page:left" class="side-col">
                     <?= $block->getChildHtml('left') ?>
                 </div>

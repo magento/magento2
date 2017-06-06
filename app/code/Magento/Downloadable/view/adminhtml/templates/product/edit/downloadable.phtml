@@ -203,8 +203,8 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 });
 </script>
 
-<div data-tab-type="tab_content_downloadableInfo" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_content"
-    <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $block->getId()) ?>
+<div data-tab-type="tab_content_downloadableInfo" id="<?= /* @escapeNotVerified */ $block->getId() ?>_content"
+    <?= /* @escapeNotVerified */ $block->getUiId('tab', 'content', $block->getId()) ?>
 >
 <div id="alert_messages_block"><?= $block->getMessageHtml() ?></div>
 <div class="admin__field admin__field-option admin__field-is-downloaodable">

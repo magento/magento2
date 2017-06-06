@@ -11,8 +11,8 @@
 <a href="#"
    title="<?= $block->escapeHtml(__('Remove item')) ?>"
    class="action action-delete"
-   data-post='<?php /* @escapeNotVerified */ echo $block->getDeletePostJson(); ?>'>
+   data-post='<?= /* @escapeNotVerified */ $block->getDeletePostJson() ?>'>
     <span>
-        <?php /* @escapeNotVerified */ echo __('Remove item')?>
+        <?= /* @escapeNotVerified */ __('Remove item') ?>
     </span>
 </a>

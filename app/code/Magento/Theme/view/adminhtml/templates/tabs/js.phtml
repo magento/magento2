@@ -21,7 +21,7 @@ require([
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url: '<?php /* @escapeNotVerified */ echo $block->getJsUploadUrl(); ?>',
+        url: '<?= /* @escapeNotVerified */ $block->getJsUploadUrl() ?>',
 
         /**
          * Add data

@@ -69,7 +69,7 @@ require(['prototype'], function(){
                     class="select admin__control-select carrier"
                     disabled="disabled">
                 <?php foreach ($block->getCarriers() as $_code => $_name): ?>
-                    <option value="<?php /* @escapeNotVerified */ echo $_code ?>"><?= $block->escapeHtml($_name) ?></option>
+                    <option value="<?= /* @escapeNotVerified */ $_code ?>"><?= $block->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
@@ -94,7 +94,7 @@ require(['prototype'], function(){
                 type="button"
                 class="action-default action-delete"
                 onclick="trackingControl.deleteRow(event);return false">
-                <span><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Delete') ?></span>
             </button>
         </td>
     </tr>
@@ -104,10 +104,10 @@ require(['prototype'], function(){
     <table class="data-table admin__control-table" id="tracking_numbers_table">
         <thead>
         <tr class="headings">
-            <th class="col-carrier"><?php /* @escapeNotVerified */ echo __('Carrier') ?></th>
-            <th class="col-title"><?php /* @escapeNotVerified */ echo __('Title') ?></th>
-            <th class="col-number"><?php /* @escapeNotVerified */ echo __('Number') ?></th>
-            <th class="col-delete"><?php /* @escapeNotVerified */ echo __('Action') ?></th>
+            <th class="col-carrier"><?= /* @escapeNotVerified */ __('Carrier') ?></th>
+            <th class="col-title"><?= /* @escapeNotVerified */ __('Title') ?></th>
+            <th class="col-number"><?= /* @escapeNotVerified */ __('Number') ?></th>
+            <th class="col-delete"><?= /* @escapeNotVerified */ __('Action') ?></th>
         </tr>
         </thead>
         <tfoot>

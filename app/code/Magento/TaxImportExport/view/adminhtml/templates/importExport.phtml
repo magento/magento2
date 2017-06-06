@@ -11,11 +11,11 @@
     <?php if (!$block->getIsReadonly()): ?>
     <div class="import-tax-rates">
         <?php if ($block->getUseContainer()): ?>
-        <form id="import-form" class="admin__fieldset" action="<?php /* @escapeNotVerified */ echo $block->getUrl('tax/rate/importPost') ?>" method="post" enctype="multipart/form-data">
+        <form id="import-form" class="admin__fieldset" action="<?= /* @escapeNotVerified */ $block->getUrl('tax/rate/importPost') ?>" method="post" enctype="multipart/form-data">
         <?php endif; ?>
             <?= $block->getBlockHtml('formkey') ?>
             <div class="fieldset admin__field">
-                <label for="import_rates_file" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Import Tax Rates') ?></span></label>
+                <label for="import_rates_file" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Import Tax Rates') ?></span></label>
                 <div class="admin__field-control">
                     <input type="file" id="import_rates_file" name="import_rates_file" class="input-file required-entry"/>
                     <?= $block->getButtonHtml(__('Import Tax Rates'), '', 'import-submit') ?>
@@ -46,11 +46,11 @@ require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
     <?php endif; ?>
     <div class="export-tax-rates <?php if ($block->getIsReadonly()): ?>box-left<?php else: ?>box-right<?php endif; ?>">
         <?php if ($block->getUseContainer()): ?>
-        <form id="export_form" class="admin__fieldset" action="<?php /* @escapeNotVerified */ echo $block->getUrl('tax/rate/exportPost') ?>" method="post" enctype="multipart/form-data">
+        <form id="export_form" class="admin__fieldset" action="<?= /* @escapeNotVerified */ $block->getUrl('tax/rate/exportPost') ?>" method="post" enctype="multipart/form-data">
         <?php endif; ?>
             <?= $block->getBlockHtml('formkey') ?>
             <div class="fieldset admin__field">
-                <span class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Export Tax Rates') ?></span></span>
+                <span class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Export Tax Rates') ?></span></span>
                 <div class="admin__field-control">
                     <?= $block->getButtonHtml(__('Export Tax Rates'), "this.form.submit()") ?>
                 </div>

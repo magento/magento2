@@ -13,7 +13,7 @@
 <?php if (count($options)): ?>
 <fieldset id="catalog_product_composite_configure_fields_bundle"
           class="fieldset admin__fieldset composite-bundle<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
-    <legend class="legend admin__legend"><span><?php /* @escapeNotVerified */ echo __('Bundle Items') ?></span></legend><br />
+    <legend class="legend admin__legend"><span><?= /* @escapeNotVerified */ __('Bundle Items') ?></span></legend><br />
     <?php foreach ($options as $option) : ?>
         <?php if ($option->getSelections()) : ?>
             <?= $block->getOptionHtml($option) ?>
@@ -71,7 +71,7 @@ require([
             }
         }
     };
-    ProductConfigure.bundleControl = new BundleControl(<?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>);
+    ProductConfigure.bundleControl = new BundleControl(<?= /* @escapeNotVerified */ $block->getJsonConfig() ?>);
 });
 </script>
 

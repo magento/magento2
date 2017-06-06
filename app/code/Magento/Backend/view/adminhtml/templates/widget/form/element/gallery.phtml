@@ -9,14 +9,14 @@
 ?>
 <tr>
 <td colspan="2">
-<label for="gallery"><?php /* @escapeNotVerified */ echo __('Images') ?></label>
+<label for="gallery"><?= /* @escapeNotVerified */ __('Images') ?></label>
 <table id="gallery" class="gallery" border="0" cellspacing="3" cellpadding="0">
 <thead id="gallery_thead" class="gallery">
     <tr class="gallery">
-        <td class="gallery" valign="middle" align="center"><?php /* @escapeNotVerified */ echo __('Big Image') ?></td>
-        <td class="gallery" valign="middle" align="center"><?php /* @escapeNotVerified */ echo __('Thumbnail') ?></td>
-        <td class="gallery" valign="middle" align="center"><?php /* @escapeNotVerified */ echo __('Sort Order') ?></td>
-        <td class="gallery" valign="middle" align="center"><?php /* @escapeNotVerified */ echo __('Delete') ?></td>
+        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Big Image') ?></td>
+        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Thumbnail') ?></td>
+        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Sort Order') ?></td>
+        <td class="gallery" valign="middle" align="center"><?= /* @escapeNotVerified */ __('Delete') ?></td>
     </tr>
 </thead>
 
@@ -30,15 +30,15 @@
 
 <?php $i = 0; if (!is_null($block->getValues())): ?>
     <?php foreach ($block->getValues() as $image): $i++; ?>
-        <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" class="gallery">
+        <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?= /* @escapeNotVerified */ $image->getValueId() ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>
             <td class="gallery" align="center" style="vertical-align:bottom;">
-            <a href="<?php /* @escapeNotVerified */ echo $image->setType($type)->getSourceUrl() ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?php /* @escapeNotVerified */ echo $type ?>_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>');return false;">
-            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?php /* @escapeNotVerified */ echo $type ?>_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" src="<?php /* @escapeNotVerified */ echo $image->setType($type)->getSourceUrl() ?>?<?php /* @escapeNotVerified */ echo time() ?>" alt="<?php /* @escapeNotVerified */ echo $image->getValue() ?>" height="25" class="small-image-preview v-middle"/></a><br/>
-            <input type="file" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_<?php /* @escapeNotVerified */ echo $type ?>[<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" size="1"></td>
+            <a href="<?= /* @escapeNotVerified */ $image->setType($type)->getSourceUrl() ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>');return false;">
+            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?= /* @escapeNotVerified */ $type ?>_<?= /* @escapeNotVerified */ $image->getValueId() ?>" src="<?= /* @escapeNotVerified */ $image->setType($type)->getSourceUrl() ?>?<?= /* @escapeNotVerified */ time() ?>" alt="<?= /* @escapeNotVerified */ $image->getValue() ?>" height="25" class="small-image-preview v-middle"/></a><br/>
+            <input type="file" name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_<?= /* @escapeNotVerified */ $type ?>[<?= /* @escapeNotVerified */ $image->getValueId() ?>]" size="1"></td>
         <?php endforeach; ?>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getParentName() ?>[position][<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" value="<?php /* @escapeNotVerified */ echo $image->getPosition() ?>" id="<?= $block->getElement()->getHtmlId() ?>_position_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" size="3"/></td>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getParentName() ?>[delete][<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" id="<?= $block->getElement()->getHtmlId() ?>_delete_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?= /* @escapeNotVerified */ $block->getElement()->getParentName() ?>[position][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" value="<?= /* @escapeNotVerified */ $image->getPosition() ?>" id="<?= $block->getElement()->getHtmlId() ?>_position_<?= /* @escapeNotVerified */ $image->getValueId() ?>" size="3"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?= /* @escapeNotVerified */ $block->getElement()->getParentName() ?>[delete][<?= /* @escapeNotVerified */ $image->getValueId() ?>]" id="<?= $block->getElement()->getHtmlId() ?>_delete_<?= /* @escapeNotVerified */ $image->getValueId() ?>"/></td>
         </tr>
     <?php endforeach; ?>
 <?php endif; ?>
@@ -56,7 +56,7 @@ require([
     'prototype'
 ], function () {
 id = 0;
-num_of_images = <?php /* @escapeNotVerified */ echo $i ?>;
+num_of_images = <?= /* @escapeNotVerified */ $i ?>;
 
 window.addNewImage = function()
 {
@@ -65,17 +65,17 @@ window.addNewImage = function()
 
     id--;
     num_of_images++;
-    new_file_input = '<input type="file" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_%j%[%id%]" size="1">';
+    new_file_input = '<input type="file" name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_%j%[%id%]" size="1">';
 
     // Sort order input
     var new_row_input = document.createElement( 'input' );
     new_row_input.type = 'text';
-    new_row_input.name = '<?php /* @escapeNotVerified */ echo $block->getElement()->getParentName() ?>[position]['+id+']';
+    new_row_input.name = '<?= /* @escapeNotVerified */ $block->getElement()->getParentName() ?>[position]['+id+']';
     new_row_input.size = '3';
     new_row_input.value = '0';
 
     // Delete button
-    new_row_button = <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getDeleteButtonHtml("this")) ?>;
+    new_row_button = <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getDeleteButtonHtml("this")) ?>;
 
     table = document.getElementById( "gallery" );
 
@@ -114,8 +114,8 @@ window.deleteImage = function(image)
         document.getElementById("gallery_thead").style.visibility="hidden";
     }
     if (image>0) {
-        document.getElementById('<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_delete_'+image).value=image;
-        document.getElementById('<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_tr_'+image).style.display='none';
+        document.getElementById('<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_delete_'+image).value=image;
+        document.getElementById('<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_tr_'+image).style.display='none';
     } else {
         image.parentNode.parentNode.parentNode.removeChild( image.parentNode.parentNode );
     }

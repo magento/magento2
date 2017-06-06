@@ -10,14 +10,14 @@
 
 <?php if ($block->canDisplayGiftMessage()): ?>
     <div class="no-display">
-        <div id="gift-message-form-data-<?php /* @escapeNotVerified */ echo $block->getItem()->getId(); ?>">
+        <div id="gift-message-form-data-<?= /* @escapeNotVerified */ $block->getItem()->getId() ?>">
             <?= $block->getFormHtml() ?>
         </div>
 
         <?php if ($block->getMessageText()): ?>
         <div class="gift-options-tooltip-content">
-            <div><strong><?php /* @escapeNotVerified */ echo __('Gift Message')?></strong>:</div>
-            <div><?php /* @escapeNotVerified */ echo $block->getMessageText(); ?></div>
+            <div><strong><?= /* @escapeNotVerified */ __('Gift Message') ?></strong>:</div>
+            <div><?= /* @escapeNotVerified */ $block->getMessageText() ?></div>
         </div>
         <?php endif; ?>
     </div>

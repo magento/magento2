@@ -14,32 +14,32 @@
 ?>
 
 <?php if ($_item = $block->getItem()): ?>
-    <div id="order_item_<?php /* @escapeNotVerified */ echo $_item->getId() ?>_title"
+    <div id="order_item_<?= /* @escapeNotVerified */ $_item->getId() ?>_title"
          class="product-title">
         <?= $block->escapeHtml($_item->getName()) ?>
     </div>
 
     <div class="product-sku-block">
-        <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))) ?>
+        <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))) ?>
     </div>
 
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
             <?php foreach ($block->getOrderOptions() as $_option): ?>
-                <dt><?php /* @escapeNotVerified */ echo $_option['label'] ?>:</dt>
+                <dt><?= /* @escapeNotVerified */ $_option['label'] ?>:</dt>
                 <dd>
                     <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                        <?php /* @escapeNotVerified */ echo $block->getCustomizedOptionValue($_option); ?>
+                        <?= /* @escapeNotVerified */ $block->getCustomizedOptionValue($_option) ?>
                     <?php else: ?>
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
-                        <?php /* @escapeNotVerified */ echo $_option['value']; ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?php /* @escapeNotVerified */ echo $_dots = 'dots' . uniqid()?>"> ...</span><span id="<?php /* @escapeNotVerified */ echo $_id = 'id' . uniqid()?>"><?php /* @escapeNotVerified */ echo $_option['remainder'] ?></span>
+                        <?= /* @escapeNotVerified */ $_option['value'] ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?= /* @escapeNotVerified */ $_dots = 'dots' . uniqid() ?>"> ...</span><span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_option['remainder'] ?></span>
                             <script>
                                 require(['prototype'], function() {
-                                    $('<?php /* @escapeNotVerified */ echo $_id ?>').hide();
-                                    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseover', function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').show();});
-                                    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseover', function(){$('<?php /* @escapeNotVerified */ echo $_dots?>').hide();});
-                                    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseout',  function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').hide();});
-                                    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseout',  function(){$('<?php /* @escapeNotVerified */ echo $_dots ?>').show();});
+                                    $('<?= /* @escapeNotVerified */ $_id ?>').hide();
+                                    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
+                                    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_dots ?>').hide();});
+                                    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
+                                    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_dots ?>').show();});
                                 });
                             </script>
                         <?php endif; ?>

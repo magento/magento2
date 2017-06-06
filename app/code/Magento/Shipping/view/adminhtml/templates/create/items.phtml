@@ -10,25 +10,25 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Items to Ship') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Items to Ship') ?></span>
     </div>
     <div class="admin__table-wrapper">
         <table class="data-table admin__table-primary order-shipment-table">
             <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?php /* @escapeNotVerified */ echo __('Product') ?></span></th>
-                    <th class="col-ordered-qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></th>
+                    <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                    <th class="col-ordered-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
                     <th class="col-qty<?php if ($block->isShipmentRegular()): ?> last<?php endif; ?>">
-                        <span><?php /* @escapeNotVerified */ echo __('Qty to Ship') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Qty to Ship') ?></span>
                     </th>
                     <?php if (!$block->canShipPartiallyItem()): ?>
-                    <th class="col-ship last"><span><?php /* @escapeNotVerified */ echo __('Ship') ?></span></th>
+                    <th class="col-ship last"><span><?= /* @escapeNotVerified */ __('Ship') ?></span></th>
                     <?php endif; ?>
                 </tr>
             </thead>
             <?php $_items = $block->getShipment()->getAllItems() ?>
             <?php $_i = 0; foreach ($_items as $_item): if ($_item->getOrderItem()->getIsVirtual() || $_item->getOrderItem()->getParentItem()): continue; endif; $_i++ ?>
-                <tbody class="<?php /* @escapeNotVerified */ echo $_i%2 ? 'odd' : 'even' ?>">
+                <tbody class="<?= /* @escapeNotVerified */ $_i%2 ? 'odd' : 'even' ?>">
                     <?= $block->getItemHtml($_item) ?>
                     <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                 </tbody>
@@ -39,24 +39,24 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Shipment Total') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Shipment Total') ?></span>
     </div>
     <div class="admin__page-section-content order-comments-history">
         <div class="admin__page-section-item">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Shipment Comments') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Shipment Comments') ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div id="order-history_form" class="admin__field">
                     <label class="admin__field-label"
                            for="shipment_comment_text">
-                        <span><?php /* @escapeNotVerified */ echo __('Comment Text') ?></span></label>
+                        <span><?= /* @escapeNotVerified */ __('Comment Text') ?></span></label>
                     <div class="admin__field-control">
                         <textarea id="shipment_comment_text"
                                   class="admin__control-textarea"
                                   name="shipment[comment_text]"
                                   rows="3"
-                                  cols="5"><?php /* @escapeNotVerified */ echo $block->getShipment()->getCommentText(); ?></textarea>
+                                  cols="5"><?= /* @escapeNotVerified */ $block->getShipment()->getCommentText() ?></textarea>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
     </div>
     <div class="admin__page-section-item order-totals order-totals-actions">
         <div class="admin__page-section-item-title">
-            <span class="title"><?php /* @escapeNotVerified */ echo __('Shipment Options') ?></span>
+            <span class="title"><?= /* @escapeNotVerified */ __('Shipment Options') ?></span>
         </div>
         <div class="admin__page-section-item-content">
             <?php if ($block->canCreateShippingLabel()): ?>
@@ -77,7 +77,7 @@
                            onclick="toggleCreateLabelCheckbox();"/>
                     <label class="admin__field-label"
                            for="create_shipping_label">
-                        <span><?php /* @escapeNotVerified */ echo __('Create Shipping Label') ?></span></label>
+                        <span><?= /* @escapeNotVerified */ __('Create Shipping Label') ?></span></label>
                 </div>
             <?php endif ?>
 
@@ -89,7 +89,7 @@
                        type="checkbox"/>
                 <label class="admin__field-label"
                        for="notify_customer">
-                    <span><?php /* @escapeNotVerified */ echo __('Append Comments') ?></span></label>
+                    <span><?= /* @escapeNotVerified */ __('Append Comments') ?></span></label>
             </div>
 
             <?php if ($block->canSendShipmentEmail()): ?>
@@ -101,7 +101,7 @@
                            type="checkbox"/>
                     <label class="admin__field-label"
                            for="send_email">
-                        <span><?php /* @escapeNotVerified */ echo __('Email Copy of Shipment') ?></span></label>
+                        <span><?= /* @escapeNotVerified */ __('Email Copy of Shipment') ?></span></label>
                 </div>
             <?php endif; ?>
             <?= $block->getChildHtml('submit_before') ?>
@@ -147,7 +147,7 @@ window.toggleCreateLabelCheckbox = function() {
 window.submitShipment = function(btn) {
     if (!validQtyItems()) {
         alert({
-            content: '<?php /* @escapeNotVerified */ echo __('Invalid value(s) for Qty to Ship') ?>'
+            content: '<?= /* @escapeNotVerified */ __('Invalid value(s) for Qty to Ship') ?>'
         });
         return;
     }

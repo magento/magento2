@@ -5,7 +5,7 @@
  */
 ?>
 <?php /** @var $block \Magento\Swatches\Block\Product\Renderer\Configurable */ ?>
-<div class="swatch-opt-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>"></div>
+<div class="swatch-opt-<?= /* @escapeNotVerified */ $block->getProduct()->getId() ?>"></div>
 <script>
     require([
         'jquery',
@@ -14,16 +14,16 @@
         'Magento_Swatches/js/catalog-add-to-cart',
         'priceBox'
     ], function ($) {
-        var jsonConfig = <?php /* @escapeNotVerified */ echo $block->getJsonConfig(); ?>;
+        var jsonConfig = <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>;
 
-        $('.swatch-opt-<?php /* @escapeNotVerified */ echo $block->getProduct()->getId() ?>').SwatchRenderer({
+        $('.swatch-opt-<?= /* @escapeNotVerified */ $block->getProduct()->getId() ?>').SwatchRenderer({
             selectorProduct: '.product-item-details',
             onlySwatches: true,
             enableControlLabel: false,
-            numberToShow: <?php /* @escapeNotVerified */ echo $block->getNumberSwatchesPerProduct(); ?>,
+            numberToShow: <?= /* @escapeNotVerified */ $block->getNumberSwatchesPerProduct() ?>,
             jsonConfig: jsonConfig,
-            jsonSwatchConfig: <?php /* @escapeNotVerified */ echo $block->getJsonSwatchConfig(); ?>,
-            mediaCallback: '<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>'
+            jsonSwatchConfig: <?= /* @escapeNotVerified */ $block->getJsonSwatchConfig() ?>,
+            mediaCallback: '<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>'
         });
 
         var dataPriceBoxSelector = '[data-role=priceBox]',

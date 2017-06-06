@@ -11,8 +11,8 @@
 <?php $_element = $block->getElement() ?>
 <?php $_jsObjectName = $block->getFieldSetId() != null ? $block->getFieldSetId() : $_element->getHtmlId() ?>
 <div class="rule-tree">
-    <fieldset id="<?php /* @escapeNotVerified */ echo $_jsObjectName ?>" <?php /* @escapeNotVerified */ echo $_element->serialize(['class']) ?> class="fieldset">
-        <legend class="legend"><span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span></legend>
+    <fieldset id="<?= /* @escapeNotVerified */ $_jsObjectName ?>" <?= /* @escapeNotVerified */ $_element->serialize(['class']) ?> class="fieldset">
+        <legend class="legend"><span><?= /* @escapeNotVerified */ $_element->getLegend() ?></span></legend>
         <br>
     <?php if ($_element->getComment()): ?>
         <div class="messages">
@@ -30,7 +30,7 @@ require([
     "prototype"
 ], function(VarienRulesForm){
 
-window.<?php /* @escapeNotVerified */ echo $_jsObjectName ?> = new VarienRulesForm('<?php /* @escapeNotVerified */ echo $_jsObjectName ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
+window.<?= /* @escapeNotVerified */ $_jsObjectName ?> = new VarienRulesForm('<?= /* @escapeNotVerified */ $_jsObjectName ?>', '<?= /* @escapeNotVerified */ $block->getNewChildUrl() ?>');
 <?php if ($_element->getReadonly()): ?>
     <?= $_element->getHtmlId() ?>.setReadonly(true);
 <?php endif; ?>

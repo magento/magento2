@@ -105,7 +105,7 @@ $stores = $block->getStoresSortedBySortOrder();
     <script type="text/x-magento-init">
         {
             "*": {
-                "Magento_Swatches/js/text": <?php /* @escapeNotVerified */ echo $block->getJsonConfig(); ?> ,
+                "Magento_Swatches/js/text": <?= /* @escapeNotVerified */ $block->getJsonConfig() ?> ,
                 "Magento_Catalog/catalog/product/attribute/unique-validate": {
                     "element": "required-text-swatch-unique",
                     "message": "<?= $block->escapeHtml(__("The value of Admin must be unique.")) ?>"

@@ -11,12 +11,12 @@
 <form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
     <fieldset class="admin__fieldset">
         <legend class="admin__legend">
-            <span><?php /* @escapeNotVerified */ echo __('Welcome, please sign in') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Welcome, please sign in') ?></span>
         </legend><br/>
-        <input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
+        <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
         <div class="admin__field _required field-username">
             <label for="username" class="admin__field-label">
-                <span><?php /* @escapeNotVerified */ echo __('Username') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Username') ?></span>
             </label>
             <div class="admin__field-control">
                 <input id="username"
@@ -26,14 +26,14 @@
                        autofocus
                        value=""
                        data-validate="{required:true}"
-                       placeholder="<?php /* @escapeNotVerified */ echo __('user name') ?>"
+                       placeholder="<?= /* @escapeNotVerified */ __('user name') ?>"
                        autocomplete="off"
                     />
             </div>
         </div>
         <div class="admin__field _required field-password">
             <label for="login" class="admin__field-label">
-                <span><?php /* @escapeNotVerified */ echo __('Password') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Password') ?></span>
             </label>
             <div class="admin__field-control">
                 <input id="login"
@@ -42,7 +42,7 @@
                        name="login[password]"
                        data-validate="{required:true}"
                        value=""
-                       placeholder="<?php /* @escapeNotVerified */ echo __('password') ?>"
+                       placeholder="<?= /* @escapeNotVerified */ __('password') ?>"
                        autocomplete="off"
                     />
             </div>

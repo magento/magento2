@@ -17,7 +17,7 @@ $currencySymbol = $block->getCurrencySymbol();
 <div id="product-variations-matrix" data-role="product-variations-matrix">
     <div data-bind="scope: 'configurableVariations'">
         <h3 class="hidden" data-bind="css: {hidden: !showVariations() }" class="title">
-            <?php /* @escapeNotVerified */ echo __('Current Variations'); ?>
+            <?= /* @escapeNotVerified */ __('Current Variations') ?>
         </h3>
 
         <script data-template-for="variation-image" type="text/x-magento-template">

@@ -8,7 +8,7 @@
 
 ?>
 <?php if ($block->getChildHtml()):?>
-    <div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>>
+    <div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>>
         <?= $block->getChildHtml() ?>
     </div>
 <?php endif; ?>

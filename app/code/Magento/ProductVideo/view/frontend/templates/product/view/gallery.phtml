@@ -14,8 +14,8 @@
     {
         "[data-gallery-role=gallery-placeholder]": {
             "Magento_ProductVideo/js/fotorama-add-video-events": {
-                "videoData": <?php /* @escapeNotVerified */ echo $block->getMediaGalleryDataJson(); ?>,
-                "videoSettings": <?php /* @escapeNotVerified */ echo $block->getVideoSettingsJson(); ?>,
+                "videoData": <?= /* @escapeNotVerified */ $block->getMediaGalleryDataJson() ?>,
+                "videoSettings": <?= /* @escapeNotVerified */ $block->getVideoSettingsJson() ?>,
                 "optionsVideoData": <?php /* @noEscape */ echo $block->getOptionsMediaGalleryDataJson(); ?>
             }
         }

@@ -37,7 +37,7 @@
         <?php /* end Excluding Tax */ ?>
     </td>
 
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?></td>
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
     <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
     <?php /* Including Tax Subtotal */ ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>

@@ -32,7 +32,7 @@ require([
         }
 
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl();?>filter/'+
+            setLocation('<?= /* @escapeNotVerified */ $block->getFilterUrl() ?>filter/'+
                 Base64.encode(Form.serializeElements(elements))+'/'
             );
         }

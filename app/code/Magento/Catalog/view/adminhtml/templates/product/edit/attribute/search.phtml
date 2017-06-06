@@ -11,7 +11,7 @@
 <div id="product-attribute-search-container" class="suggest-expandable attribute-selector">
     <div class="action-dropdown">
         <button type="button" class="action-toggle action-choose" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-            <span><?php /* @escapeNotVerified */ echo __('Add Attribute') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Add Attribute') ?></span>
         </button>
         <div class="dropdown-menu">
             <input data-role="product-attribute-search"
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-<script data-template-for="product-attribute-search-<?php /* @escapeNotVerified */ echo $block->getGroupId(); ?>" type="text/x-magento-template">
+<script data-template-for="product-attribute-search-<?= /* @escapeNotVerified */ $block->getGroupId() ?>" type="text/x-magento-template">
     <ul data-mage-init='{"menu":[]}'>
         <% if (data.items.length) { %>
         <% _.each(data.items, function(value){ %>
@@ -29,7 +29,7 @@
         <% }); %>
         <% } else { %><span class="mage-suggest-no-records"><%- data.noRecordsText %></span><% } %>
     </ul>
-    <div class="actions"><?php /* @escapeNotVerified */ echo $block->getAttributeCreate()?></div>
+    <div class="actions"><?= /* @escapeNotVerified */ $block->getAttributeCreate() ?></div>
 </script>
 
 <script>
@@ -51,13 +51,13 @@
             });
         });
 
-        $suggest.mage('suggest', <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
+        $suggest.mage('suggest', <?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions()) ?>)
             .on('suggestselect', function (e, ui) {
                 $(this).val('');
                 var templateId = $('#attribute_set_id').val();
                 if (ui.item.id) {
                     $.ajax({
-                        url: '<?php /* @escapeNotVerified */ echo $block->getAddAttributeUrl()?>',
+                        url: '<?= /* @escapeNotVerified */ $block->getAddAttributeUrl() ?>',
                         type: 'POST',
                         dataType: 'json',
                         data: {attribute_id: ui.item.id, template_id: templateId, group: $(this).data('group')},

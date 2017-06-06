@@ -16,9 +16,9 @@
         "Magento_GoogleAnalytics/js/google-analytics": {
             "isCookieRestrictionModeEnabled": <?= (int)$block->isCookieRestrictionModeEnabled() ?>,
             "currentWebsite": <?= (int)$block->getCurrentWebsiteId() ?>,
-            "cookieName": "<?php /* @escapeNotVerified */ echo \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE; ?>",
-            "ordersTrackingData": <?php /* @escapeNotVerified */ echo json_encode($block->getOrdersTrackingData()); ?>,
-            "pageTrackingData": <?php /* @escapeNotVerified */ echo json_encode($block->getPageTrackingData($accountId)); ?>
+            "cookieName": "<?= /* @escapeNotVerified */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
+            "ordersTrackingData": <?= /* @escapeNotVerified */ json_encode($block->getOrdersTrackingData()) ?>,
+            "pageTrackingData": <?= /* @escapeNotVerified */ json_encode($block->getPageTrackingData($accountId)) ?>
         }
     }
 }

@@ -20,18 +20,18 @@
             <table class="data-table admin__table-primary order-tables">
                 <thead>
                     <tr class="headings">
-                        <th class="col-product"><span><?php /* @escapeNotVerified */ echo __('Product') ?></span></th>
-                        <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
-                        <th class="col-qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></th>
-                        <th class="col-subtotal"><span><?php /* @escapeNotVerified */ echo __('Subtotal') ?></span></th>
-                        <th class="col-discount"><span><?php /* @escapeNotVerified */ echo __('Discount') ?></span></th>
-                        <th class="col-row-total"><span><?php /* @escapeNotVerified */ echo __('Row Subtotal') ?></span></th>
-                        <th class="col-action"><span><?php /* @escapeNotVerified */ echo __('Action') ?></span></th>
+                        <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                        <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                        <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                        <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                        <th class="col-discount"><span><?= /* @escapeNotVerified */ __('Discount') ?></span></th>
+                        <th class="col-row-total"><span><?= /* @escapeNotVerified */ __('Row Subtotal') ?></span></th>
+                        <th class="col-action"><span><?= /* @escapeNotVerified */ __('Action') ?></span></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="even">
-                        <td class="empty-text" colspan="100"><?php /* @escapeNotVerified */ echo __('No ordered items') ?></td>
+                        <td class="empty-text" colspan="100"><?= /* @escapeNotVerified */ __('No ordered items') ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -47,21 +47,21 @@
         <table class="data-table admin__table-primary order-tables">
             <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?php /* @escapeNotVerified */ echo __('Product') ?></span></th>
-                    <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
-                    <th class="col-qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></th>
-                    <th class="col-subtotal"><span><?php /* @escapeNotVerified */ echo __('Subtotal') ?></span></th>
-                    <th class="col-discount"><span><?php /* @escapeNotVerified */ echo __('Discount') ?></span></th>
-                    <th class="col-row-total"><span><?php /* @escapeNotVerified */ echo __('Row Subtotal') ?></span></th>
-                    <th class="col-action"><span><?php /* @escapeNotVerified */ echo __('Action') ?></span></th>
+                    <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                    <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                    <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                    <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                    <th class="col-discount"><span><?= /* @escapeNotVerified */ __('Discount') ?></span></th>
+                    <th class="col-row-total"><span><?= /* @escapeNotVerified */ __('Row Subtotal') ?></span></th>
+                    <th class="col-action"><span><?= /* @escapeNotVerified */ __('Action') ?></span></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <td class="col-total"><?php /* @escapeNotVerified */ echo __('Total %1 product(s)', count($_items)) ?></td>
-                    <td colspan="2" class="col-subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal:') ?></td>
-                    <td class="col-price"><strong><?php /* @escapeNotVerified */ echo $block->formatPrice($block->getSubtotal()) ?></strong></td>
-                    <td class="col-price"><strong><?php /* @escapeNotVerified */ echo $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
+                    <td class="col-total"><?= /* @escapeNotVerified */ __('Total %1 product(s)', count($_items)) ?></td>
+                    <td colspan="2" class="col-subtotal"><?= /* @escapeNotVerified */ __('Subtotal:') ?></td>
+                    <td class="col-price"><strong><?= /* @escapeNotVerified */ $block->formatPrice($block->getSubtotal()) ?></strong></td>
+                    <td class="col-price"><strong><?= /* @escapeNotVerified */ $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
                     <td class="col-price"><strong>
                     <?php
                         /* @escapeNotVerified */ echo $block->formatPrice($block->getSubtotalWithDiscount());
@@ -71,12 +71,12 @@
             </tfoot>
                 <?php $i = 0 ?>
                 <?php foreach ($_items as $_item):$i++ ?>
-                <tbody class="<?php /* @escapeNotVerified */ echo($i%2) ? 'even' : 'odd' ?>">
+                <tbody class="<?= /* @escapeNotVerified */ ($i%2) ? 'even' : 'odd' ?>">
                     <tr>
                         <td class="col-product">
-                            <span id="order_item_<?php /* @escapeNotVerified */ echo $_item->getId() ?>_title"><?= $block->escapeHtml($_item->getName()) ?></span>
+                            <span id="order_item_<?= /* @escapeNotVerified */ $_item->getId() ?>_title"><?= $block->escapeHtml($_item->getName()) ?></span>
                             <div class="product-sku-block">
-                                <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span>
+                                <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
                                 <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
                             </div>
                             <div class="product-configure-block">
@@ -89,27 +89,27 @@
 
                             <?php $_isCustomPrice = $block->usedCustomPriceForItem($_item) ?>
                             <?php if ($_tier = $block->getTierHtml($_item)): ?>
-                            <div id="item_tier_block_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"<?php if ($_isCustomPrice): ?> style="display:none"<?php endif; ?>>
-                                <a href="#" onclick="$('item_tier_<?php /* @escapeNotVerified */ echo $_item->getId() ?>').toggle();return false;"><?php /* @escapeNotVerified */ echo __('Tier Pricing') ?></a>
-                                <div style="display:none" id="item_tier_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"><?php /* @escapeNotVerified */ echo $_tier ?></div>
+                            <div id="item_tier_block_<?= /* @escapeNotVerified */ $_item->getId() ?>"<?php if ($_isCustomPrice): ?> style="display:none"<?php endif; ?>>
+                                <a href="#" onclick="$('item_tier_<?= /* @escapeNotVerified */ $_item->getId() ?>').toggle();return false;"><?= /* @escapeNotVerified */ __('Tier Pricing') ?></a>
+                                <div style="display:none" id="item_tier_<?= /* @escapeNotVerified */ $_item->getId() ?>"><?= /* @escapeNotVerified */ $_tier ?></div>
                             </div>
                             <?php endif; ?>
                             <?php if ($block->canApplyCustomPrice($_item)): ?>
                                 <div class="custom-price-block">
                                     <input type="checkbox"
                                            class="admin__control-checkbox"
-                                           id="item_use_custom_price_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
+                                           id="item_use_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>"
                                            <?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?>
-                                           onclick="order.toggleCustomPrice(this, 'item_custom_price_<?php /* @escapeNotVerified */ echo $_item->getId() ?>', 'item_tier_block_<?php /* @escapeNotVerified */ echo $_item->getId() ?>');"/>
+                                           onclick="order.toggleCustomPrice(this, 'item_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>', 'item_tier_block_<?= /* @escapeNotVerified */ $_item->getId() ?>');"/>
                                     <label
                                         class="normal admin__field-label"
-                                        for="item_use_custom_price_<?php /* @escapeNotVerified */ echo $_item->getId() ?>">
-                                        <span><?php /* @escapeNotVerified */ echo __('Custom Price') ?>*</span></label>
+                                        for="item_use_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>">
+                                        <span><?= /* @escapeNotVerified */ __('Custom Price') ?>*</span></label>
                                 </div>
                             <?php endif; ?>
-                            <input id="item_custom_price_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
-                                   name="item[<?php /* @escapeNotVerified */ echo $_item->getId() ?>][custom_price]"
-                                   value="<?php /* @escapeNotVerified */ echo sprintf("%.2f", $block->getOriginalEditablePrice($_item))?>"
+                            <input id="item_custom_price_<?= /* @escapeNotVerified */ $_item->getId() ?>"
+                                   name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][custom_price]"
+                                   value="<?= /* @escapeNotVerified */ sprintf("%.2f", $block->getOriginalEditablePrice($_item)) ?>"
                                    <?php if (!$_isCustomPrice): ?>
                                    style="display:none"
                                    disabled="disabled"
@@ -117,27 +117,27 @@
                                    class="input-text item-price admin__control-text"/>
                         </td>
                         <td class="col-qty">
-                            <input name="item[<?php /* @escapeNotVerified */ echo $_item->getId() ?>][qty]"
+                            <input name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
                                    class="input-text item-qty admin__control-text"
-                                   value="<?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>"
+                                   value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"
                                    maxlength="12" />
                         </td>
                         <td class="col-subtotal col-price">
                             <?= $block->getItemRowTotalHtml($_item) ?>
                         </td>
                         <td class="col-discount col-price">
-                            <?php /* @escapeNotVerified */ echo $block->formatPrice(-$_item->getTotalDiscountAmount()) ?>
+                            <?= /* @escapeNotVerified */ $block->formatPrice(-$_item->getTotalDiscountAmount()) ?>
                             <div class="discount-price-block">
-                                <input id="item_use_discount_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
+                                <input id="item_use_discount_<?= /* @escapeNotVerified */ $_item->getId() ?>"
                                        class="admin__control-checkbox"
-                                       name="item[<?php /* @escapeNotVerified */ echo $_item->getId() ?>][use_discount]"
+                                       name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][use_discount]"
                                        <?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?>
                                        value="1"
                                        type="checkbox" />
                                 <label
-                                    for="item_use_discount_<?php /* @escapeNotVerified */ echo $_item->getId() ?>"
+                                    for="item_use_discount_<?= /* @escapeNotVerified */ $_item->getId() ?>"
                                     class="normal admin__field-label">
-                                    <span><?php /* @escapeNotVerified */ echo __('Apply') ?></span></label>
+                                    <span><?= /* @escapeNotVerified */ __('Apply') ?></span></label>
                             </div>
 
                         </td>
@@ -145,19 +145,19 @@
                             <?= $block->getItemRowTotalWithDiscountHtml($_item) ?>
                         </td>
                         <td class="col-actions last">
-                            <select class="admin__control-select" name="item[<?php /* @escapeNotVerified */ echo $_item->getId() ?>][action]">
-                                <option value=""><?php /* @escapeNotVerified */ echo __('Please select') ?></option>
-                                <option value="remove"><?php /* @escapeNotVerified */ echo __('Remove') ?></option>
+                            <select class="admin__control-select" name="item[<?= /* @escapeNotVerified */ $_item->getId() ?>][action]">
+                                <option value=""><?= /* @escapeNotVerified */ __('Please select') ?></option>
+                                <option value="remove"><?= /* @escapeNotVerified */ __('Remove') ?></option>
                                 <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()): ?>
-                                    <option value="cart"><?php /* @escapeNotVerified */ echo __('Move to Shopping Cart') ?></option>
+                                    <option value="cart"><?= /* @escapeNotVerified */ __('Move to Shopping Cart') ?></option>
                                     <?php if ($block->isMoveToWishlistAllowed($_item)): ?>
                                         <?php $wishlists = $block->getCustomerWishlists();?>
                                         <?php if (count($wishlists) <= 1):?>
-                                            <option value="wishlist"><?php /* @escapeNotVerified */ echo __('Move to Wish List') ?></option>
+                                            <option value="wishlist"><?= /* @escapeNotVerified */ __('Move to Wish List') ?></option>
                                         <?php else: ?>
-                                            <optgroup label="<?php /* @escapeNotVerified */ echo __('Move to Wish List') ?>">
+                                            <optgroup label="<?= /* @escapeNotVerified */ __('Move to Wish List') ?>">
                                                 <?php foreach ($wishlists as $wishlist):?>
-                                                    <option value="wishlist_<?php /* @escapeNotVerified */ echo $wishlist->getId();?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
+                                                    <option value="wishlist_<?= /* @escapeNotVerified */ $wishlist->getId() ?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
                                                 <?php endforeach;?>
                                             </optgroup>
                                         <?php endif; ?>
@@ -195,7 +195,7 @@
                 </tbody>
                 <?php endforeach; ?>
         </table>
-        <p><small><?php /* @escapeNotVerified */ echo $block->getInclExclTaxMessage(); ?></small></p>
+        <p><small><?= /* @escapeNotVerified */ $block->getInclExclTaxMessage() ?></small></p>
     </div>
 
     <div class="order-discounts">

@@ -16,10 +16,10 @@
 use Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
 <div class="toolbar-sorter sorter">
-    <label class="sorter-label" for="sorter"><?php /* @escapeNotVerified */ echo __('Sort By') ?></label>
+    <label class="sorter-label" for="sorter"><?= /* @escapeNotVerified */ __('Sort By') ?></label>
     <select id="sorter" data-role="sorter" class="sorter-options">
         <?php foreach ($block->getAvailableOrders() as $_key => $_order): ?>
-            <option value="<?php /* @escapeNotVerified */ echo $_key; ?>"
+            <option value="<?= /* @escapeNotVerified */ $_key ?>"
                 <?php if ($block->isOrderCurrent($_key)): ?>
                     selected="selected"
                 <?php endif; ?>
@@ -29,12 +29,12 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar;
         <?php endforeach; ?>
     </select>
     <?php if ($block->getCurrentDirection() == 'desc'): ?>
-        <a title="<?php /* @escapeNotVerified */ echo __('Set Ascending Direction') ?>" href="#" class="action sorter-action sort-desc" data-role="direction-switcher" data-value="asc">
-            <span><?php /* @escapeNotVerified */ echo __('Set Ascending Direction') ?></span>
+        <a title="<?= /* @escapeNotVerified */ __('Set Ascending Direction') ?>" href="#" class="action sorter-action sort-desc" data-role="direction-switcher" data-value="asc">
+            <span><?= /* @escapeNotVerified */ __('Set Ascending Direction') ?></span>
         </a>
     <?php else: ?>
-        <a title="<?php /* @escapeNotVerified */ echo __('Set Descending Direction') ?>" href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
-            <span><?php /* @escapeNotVerified */ echo __('Set Descending Direction') ?></span>
+        <a title="<?= /* @escapeNotVerified */ __('Set Descending Direction') ?>" href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
+            <span><?= /* @escapeNotVerified */ __('Set Descending Direction') ?></span>
         </a>
     <?php endif; ?>
 </div>

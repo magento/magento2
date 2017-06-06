@@ -20,16 +20,16 @@ $data = ['fptAttribute' => [
 <div id="attribute-<?= $block->getElement()->getHtmlId() ?>-container" class="field"
      data-attribute-code="<?= $block->getElement()->getHtmlId() ?>"
      data-mage-init="<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)) ?>">
-    <label class="label"><span><?php /* @escapeNotVerified */ echo $block->getElement()->getLabel() ?></span></label>
+    <label class="label"><span><?= /* @escapeNotVerified */ $block->getElement()->getLabel() ?></span></label>
 
     <div class="control">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('Website'); ?></th>
-                    <th class="col-country required"><?php /* @escapeNotVerified */ echo __('Country/State'); ?></th>
-                    <th class="col-tax required"><?php /* @escapeNotVerified */ echo __('Tax'); ?></th>
-                    <th class="col-action"><?php /* @escapeNotVerified */ echo __('Action'); ?></th>
+                    <th class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?= /* @escapeNotVerified */ __('Website') ?></th>
+                    <th class="col-country required"><?= /* @escapeNotVerified */ __('Country/State') ?></th>
+                    <th class="col-tax required"><?= /* @escapeNotVerified */ __('Tax') ?></th>
+                    <th class="col-action"><?= /* @escapeNotVerified */ __('Action') ?></th>
                 </tr>
             </thead>
             <tfoot>
@@ -50,35 +50,35 @@ $data = ['fptAttribute' => [
     <script data-role="row-template" type="text/x-magento-template">
         <tr id="<?= $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
             <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
-                <select id="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_website"
-                        name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][website_id]"
-                        class="<?php /* @escapeNotVerified */ echo $block->getElement()->getClass() ?> website required-entry" data-role="select-website">
+                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_website"
+                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][website_id]"
+                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> website required-entry" data-role="select-website">
                     <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
-                    <option value="<?php /* @escapeNotVerified */ echo $_websiteId ?>"><?php /* @escapeNotVerified */ echo $_info['name'] ?><?php if (!empty($_info['currency'])): ?>[<?php /* @escapeNotVerified */ echo $_info['currency'] ?>]<?php endif; ?></option>
+                    <option value="<?= /* @escapeNotVerified */ $_websiteId ?>"><?= /* @escapeNotVerified */ $_info['name'] ?><?php if (!empty($_info['currency'])): ?>[<?= /* @escapeNotVerified */ $_info['currency'] ?>]<?php endif; ?></option>
                     <?php endforeach ?>
                 </select>
             </td>
             <td class="col-country">
-                <select id="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_country"
-                        name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][country]"
-                        class="<?php /* @escapeNotVerified */ echo $block->getElement()->getClass() ?> country required-entry" data-role="select-country">
+                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_country"
+                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][country]"
+                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> country required-entry" data-role="select-country">
                     <?php foreach ($block->getCountries() as $_country): ?>
-                    <option value="<?php /* @escapeNotVerified */ echo $_country['value'] ?>"><?php /* @escapeNotVerified */ echo htmlspecialchars($_country['label']) ?></option>
+                    <option value="<?= /* @escapeNotVerified */ $_country['value'] ?>"><?= /* @escapeNotVerified */ htmlspecialchars($_country['label']) ?></option>
                     <?php endforeach ?>
                 </select>
-                <select id="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_state"
-                        name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][state]"
-                        class="<?php /* @escapeNotVerified */ echo $block->getElement()->getClass() ?> state" disabled="" data-role="select-state">
+                <select id="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_state"
+                        name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][state]"
+                        class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> state" disabled="" data-role="select-state">
                     <option value="0">*</option>
                 </select>
             </td>
             <td class="col-tax">
-                <input name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][price]"
-                       class="<?php /* @escapeNotVerified */ echo $block->getElement()->getClass() ?> required-entry validate-greater-than-zero"
+                <input name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][price]"
+                       class="<?= /* @escapeNotVerified */ $block->getElement()->getClass() ?> required-entry validate-greater-than-zero"
                        type="text" value="<%- data.value %>"/>
             </td>
             <td class="col-action">
-                <input name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
+                <input name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
                 <?= $block->getChildHtml('delete_button') ?>
             </td>
         </tr>

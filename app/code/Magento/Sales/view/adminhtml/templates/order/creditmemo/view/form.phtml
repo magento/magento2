@@ -11,7 +11,7 @@
 <?= $block->getChildHtml('order_info') ?>
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Payment &amp; Shipping Method') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Payment &amp; Shipping Method') ?></span>
     </div>
     <div class="admin__page-section-content">
 
@@ -22,11 +22,11 @@
         <?php endif; ?>
             <?php /* Billing Address */?>
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Payment Information') ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
-                <div class="order-payment-currency"><?php /* @escapeNotVerified */ echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+                <div class="order-payment-currency"><?= /* @escapeNotVerified */ __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
                 <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
             </div>
         </div>
@@ -35,12 +35,12 @@
         <div class="admin__page-section-item order-shipping-address">
             <?php /* Shipping Address */ ?>
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Shipping Information') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Shipping Information') ?></span>
             </div>
             <div class="shipping-description-wrapper admin__page-section-item-content">
                 <div class="shipping-description-title"><?= $block->escapeHtml($_order->getShippingDescription()) ?></div>
                 <div class="shipping-description-content">
-                    <?php /* @escapeNotVerified */ echo __('Total Shipping Charges'); ?>:
+                    <?= /* @escapeNotVerified */ __('Total Shipping Charges') ?>:
 
                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
                         <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
@@ -49,9 +49,9 @@
                     <?php endif; ?>
                     <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
-                    <?php /* @escapeNotVerified */ echo $_excl; ?>
+                    <?= /* @escapeNotVerified */ $_excl ?>
                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                        (<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?> <?php /* @escapeNotVerified */ echo $_incl; ?>)
+                        (<?= /* @escapeNotVerified */ __('Incl. Tax') ?> <?= /* @escapeNotVerified */ $_incl ?>)
                     <?php endif; ?>
                 </div>
             </div>
@@ -68,26 +68,26 @@
 <?php else: ?>
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Items Refunded') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Items Refunded') ?></span>
     </div>
-    <div class="no-items admin__page-section-content"><?php /* @escapeNotVerified */ echo __('No Items') ?></div>
+    <div class="no-items admin__page-section-content"><?= /* @escapeNotVerified */ __('No Items') ?></div>
 </section>
 <?php endif; ?>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Memo Total') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Memo Total') ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Credit Memo History') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Credit Memo History') ?></span>
             </div>
             <div class="admin__page-section-item-content"><?= $block->getChildHtml('order_comments') ?></div>
         </div>
         <div class="admin__page-section-item order-totals" id="history_form">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Credit Memo Totals') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Credit Memo Totals') ?></span>
             </div>
             <div class="admin__page-section-content"><?= $block->getChildHtml('creditmemo_totals') ?></div>
         </div>

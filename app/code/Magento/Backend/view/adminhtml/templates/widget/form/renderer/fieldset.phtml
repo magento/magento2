@@ -39,26 +39,26 @@ if ($isField) {
 
 <?php if ($isWrapped): ?>
     <div class="fieldset-wrapper <?= ($isCollapsable) ? 'admin__collapsible-block-wrapper ' : '' ?>"
-        id="<?php /* @escapeNotVerified */ echo $containerId ? $containerId : $id . '-wrapper';?>"
-        data-role="<?php /* @escapeNotVerified */ echo $id ?>-wrapper">
+        id="<?= /* @escapeNotVerified */ $containerId ? $containerId : $id . '-wrapper' ?>"
+        data-role="<?= /* @escapeNotVerified */ $id ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
             <strong <?php /* @escapeNotVerified */ echo($isCollapsable) ?
                 'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
                 'class="title"'; ?>>
-                <span><?php /* @escapeNotVerified */ echo $element->getLegend() ?></span>
+                <span><?= /* @escapeNotVerified */ $element->getLegend() ?></span>
             </strong>
-            <?php /* @escapeNotVerified */ echo $titleActions; ?>
+            <?= /* @escapeNotVerified */ $titleActions ?>
         </div>
         <div class="fieldset-wrapper-content admin__fieldset-wrapper-content<?= ($isCollapsable) ? ' collapse' : '' ?>"
-            id="<?php /* @escapeNotVerified */ echo $id ?>-content"
-            data-role="<?php /* @escapeNotVerified */ echo $id ?>-content">
+            id="<?= /* @escapeNotVerified */ $id ?>-content"
+            data-role="<?= /* @escapeNotVerified */ $id ?>-content">
 <?php endif; ?>
 
     <?php if (!$element->getNoContainer()): ?>
-        <fieldset class="<?php /* @escapeNotVerified */ echo $cssClass ?>" id="<?php /* @escapeNotVerified */ echo $id ?>">
+        <fieldset class="<?= /* @escapeNotVerified */ $cssClass ?>" id="<?= /* @escapeNotVerified */ $id ?>">
         <?php if ($element->getLegend() && !$isWrapped): ?>
-            <legend class="<?php /* @escapeNotVerified */ echo $isField ? 'label admin__field-label' : 'admin__legend legend'?>">
-                <span><?php /* @escapeNotVerified */ echo $element->getLegend() ?></span>
+            <legend class="<?= /* @escapeNotVerified */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
+                <span><?= /* @escapeNotVerified */ $element->getLegend() ?></span>
             </legend><br />
         <?php endif; ?>
     <?php endif; ?>
@@ -78,7 +78,7 @@ if ($isField) {
     <?php else: ?>
 
         <?php if ($isField && $count > 1):?>
-            <div class="fields-group-<?php /* @escapeNotVerified */ echo $count?>">
+            <div class="fields-group-<?= /* @escapeNotVerified */ $count ?>">
         <?php endif; ?>
 
         <?= $element->getBasicChildrenHtml() ?>
@@ -91,16 +91,16 @@ if ($isField) {
 
         <?php if ($element->hasAdvanced() && !$isField): ?>
             <?= (!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : '' ?>
-            <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?php /* @escapeNotVerified */ echo $id ?>">
-                <summary class="details-summary admin__collapsible-title" id="details-summary<?php /* @escapeNotVerified */ echo $id ?>">
-                    <span><?php /* @escapeNotVerified */ echo $advancedLabel ?></span>
+            <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?= /* @escapeNotVerified */ $id ?>">
+                <summary class="details-summary admin__collapsible-title" id="details-summary<?= /* @escapeNotVerified */ $id ?>">
+                    <span><?= /* @escapeNotVerified */ $advancedLabel ?></span>
                 </summary>
-                <div class="details-content admin__fieldset" id="details-content<?php /* @escapeNotVerified */ echo $id ?>">
+                <div class="details-content admin__fieldset" id="details-content<?= /* @escapeNotVerified */ $id ?>">
                     <?= $element->getAdvancedChildrenHtml() ?>
                 </div>
             </details>
         <?php elseif ($element->hasAdvanced() && $isField): ?>
-            <div class="nested" id="nested<?php /* @escapeNotVerified */ echo $id ?>">
+            <div class="nested" id="nested<?= /* @escapeNotVerified */ $id ?>">
                 <?= $element->getAdvancedChildrenHtml() ?>
             </div>
         <?php endif; ?>

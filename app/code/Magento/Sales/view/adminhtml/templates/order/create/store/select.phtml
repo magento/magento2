@@ -46,8 +46,8 @@
                         <div class="admin__field-control">
                             <div class="nested">
                                 <div class="admin__field admin__field-option">
-                                    <input type="radio" id="store_<?php /* @escapeNotVerified */ echo $_store->getId() ?>" class="admin__control-radio" onclick="order.setStoreId('<?php /* @escapeNotVerified */ echo $_store->getId() ?>')"/>
-                                    <label class="admin__field-label" for="store_<?php /* @escapeNotVerified */ echo $_store->getId() ?>">
+                                    <input type="radio" id="store_<?= /* @escapeNotVerified */ $_store->getId() ?>" class="admin__control-radio" onclick="order.setStoreId('<?= /* @escapeNotVerified */ $_store->getId() ?>')"/>
+                                    <label class="admin__field-label" for="store_<?= /* @escapeNotVerified */ $_store->getId() ?>">
                                         <?= $block->escapeHtml($_store->getName()) ?>
                                     </label>
                                 </div>

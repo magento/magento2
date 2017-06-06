@@ -20,11 +20,11 @@
                 <?= $block->escapeHtml(__('Your order number is: ')) ?>
             <?php endif; ?>
         </span>
-        <?php foreach ($_orderIds as $orderId => $incrementId): ?><?php if ($flag): ?><?= ', ' ?><?php endif; ?><?php $flag = true ?><a href="<?php /* @escapeNotVerified */ echo $block->getViewOrderUrl($orderId) ?>"><?php /* @escapeNotVerified */ echo $incrementId ?></a><?php endforeach; ?>
+        <?php foreach ($_orderIds as $orderId => $incrementId): ?><?php if ($flag): ?><?= ', ' ?><?php endif; ?><?php $flag = true ?><a href="<?= /* @escapeNotVerified */ $block->getViewOrderUrl($orderId) ?>"><?= /* @escapeNotVerified */ $incrementId ?></a><?php endforeach; ?>
     </p>
     <?php endif; ?>
     <?= $block->getChildHtml() ?>
     <div class="actions">
-        <a class="action continue" title="<?= $block->escapeHtml(__('Continue Shopping')) ?>" href="<?php /* @escapeNotVerified */ echo $block->getContinueUrl() ?>"><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></a>
+        <a class="action continue" title="<?= $block->escapeHtml(__('Continue Shopping')) ?>" href="<?= /* @escapeNotVerified */ $block->getContinueUrl() ?>"><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></a>
     </div>
 </div>

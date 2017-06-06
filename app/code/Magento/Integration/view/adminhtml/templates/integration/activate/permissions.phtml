@@ -10,7 +10,7 @@
 
 // @codingStandardsIgnoreFile
 ?>
-<div><p><?php /* @escapeNotVerified */ echo __('The integration you selected asks you to approve access to the following:'); ?></p></div>
+<div><p><?= /* @escapeNotVerified */ __('The integration you selected asks you to approve access to the following:') ?></p></div>
 <div id="integration-activate-permissions-tabs">
     <?= $block->getChildHtml('tabs') ?>
 </div>

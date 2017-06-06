@@ -8,27 +8,27 @@
 
 /** @var \Magento\Multishipping\Block\Checkout\Overview $block */
 ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}, "validation":{}}' class="form multicheckout order-review">
+<form action="<?= /* @escapeNotVerified */ $block->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}, "validation":{}}' class="form multicheckout order-review">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="block block-billing">
-        <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Billing Information') ?></strong></div>
+        <div class="block-title"><strong><?= /* @escapeNotVerified */ __('Billing Information') ?></strong></div>
         <div class="block-content">
             <div class="box box-billing-address">
                 <?php $_address = $block->getBillingAddress() ?>
                 <strong class="box-title">
-                    <span><?php /* @escapeNotVerified */ echo __('Billing Address') ?></span>
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getEditBillingAddressUrl($_address) ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Change') ?></span></a>
+                    <span><?= /* @escapeNotVerified */ __('Billing Address') ?></span>
+                    <a href="<?= /* @escapeNotVerified */ $block->getEditBillingAddressUrl($_address) ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Change') ?></span></a>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?php /* @escapeNotVerified */ echo $_address->format('html') ?>
+                        <?= /* @escapeNotVerified */ $_address->format('html') ?>
                     </address>
                 </div>
             </div>
             <div class="box box-billing-method">
                 <strong class="box-title">
-                    <span><?php /* @escapeNotVerified */ echo __('Payment Method') ?></span>
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getEditBillingUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Change') ?></span></a>
+                    <span><?= /* @escapeNotVerified */ __('Payment Method') ?></span>
+                    <a href="<?= /* @escapeNotVerified */ $block->getEditBillingUrl() ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Change') ?></span></a>
                 </strong>
                 <div class="box-content">
                     <input type="hidden" name="payment[cc_number]" value="<?= $block->escapeHtml($block->getPayment()->getCcNumber()) ?>" />
@@ -39,28 +39,28 @@
         </div>
     </div>
     <div class="block block-shipping">
-        <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Shipping Information') ?></strong></div>
+        <div class="block-title"><strong><?= /* @escapeNotVerified */ __('Shipping Information') ?></strong></div>
         <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
         <?php foreach ($block->getShippingAddresses() as $_index => $_address): ?>
             <div class="block-content">
                 <div class="title">
-                    <strong><?php /* @escapeNotVerified */ echo __('Address %1 <span>of %2</span>', ($_index+1), $block->getShippingAddressCount()) ?></strong>
+                    <strong><?= /* @escapeNotVerified */ __('Address %1 <span>of %2</span>', ($_index+1), $block->getShippingAddressCount()) ?></strong>
                 </div>
                 <div class="box box-shipping-address">
                     <strong class="box-title">
-                        <span><?php /* @escapeNotVerified */ echo __('Shipping To') ?></span>
-                        <a href="<?php /* @escapeNotVerified */ echo $block->getEditShippingAddressUrl($_address) ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Change') ?></span></a>
+                        <span><?= /* @escapeNotVerified */ __('Shipping To') ?></span>
+                        <a href="<?= /* @escapeNotVerified */ $block->getEditShippingAddressUrl($_address) ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Change') ?></span></a>
                     </strong>
                     <div class="box-content">
                         <address>
-                            <?php /* @escapeNotVerified */ echo $_address->format('html') ?>
+                            <?= /* @escapeNotVerified */ $_address->format('html') ?>
                         </address>
                     </div>
                 </div>
                 <div class="box box-shipping-method">
                     <strong class="box-title">
-                        <span><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></span>
-                        <a href="<?php /* @escapeNotVerified */ echo $block->getEditShippingUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Change') ?></span></a>
+                        <span><?= /* @escapeNotVerified */ __('Shipping Method') ?></span>
+                        <a href="<?= /* @escapeNotVerified */ $block->getEditShippingUrl() ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Change') ?></span></a>
                     </strong>
                     <?php if ($_rate = $block->getShippingAddressRate($_address)): ?>
                         <div class="box-content">
@@ -69,14 +69,14 @@
                             <?php $_incl = $block->getShippingPriceInclTax($_address); ?>
 
                             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                            <span class="price-including-tax" data-label="<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>">
+                            <span class="price-including-tax" data-label="<?= /* @escapeNotVerified */ __('Incl. Tax') ?>">
                             <?php endif; ?>
-                                <?php /* @escapeNotVerified */ echo $_incl; ?>
+                                <?= /* @escapeNotVerified */ $_incl ?>
                             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
                             </span>
                             <?php endif; ?>
                             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                <span class="price-excluding-tax" data-label="<?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>"><?php /* @escapeNotVerified */ echo $_excl; ?></span>
+                                <span class="price-excluding-tax" data-label="<?= /* @escapeNotVerified */ __('Excl. Tax') ?>"><?= /* @escapeNotVerified */ $_excl ?></span>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
@@ -84,16 +84,16 @@
                 <div class="box box-items">
                     <div class="box-content">
                         <div class="order-review-wrapper table-wrapper">
-                            <table class="items data table table-order-review" id="overview-table-<?php /* @escapeNotVerified */ echo $_address->getId() ?>">
-                                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Order Review') ?></caption>
+                            <table class="items data table table-order-review" id="overview-table-<?= /* @escapeNotVerified */ $_address->getId() ?>">
+                                <caption class="table-caption"><?= /* @escapeNotVerified */ __('Order Review') ?></caption>
                                 <thead>
                                 <tr>
-                                    <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Item') ?>
-                                        <a href="<?php /* @escapeNotVerified */ echo $block->getAddressesEditUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Edit') ?></span></a>
+                                    <th class="col item" scope="col"><?= /* @escapeNotVerified */ __('Item') ?>
+                                        <a href="<?= /* @escapeNotVerified */ $block->getAddressesEditUrl() ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Edit') ?></span></a>
                                     </th>
-                                    <th class="col price" scope="col"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                                    <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
-                                    <th class="col subtotal" scope="col"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+                                    <th class="col price" scope="col"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                                    <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
+                                    <th class="col subtotal" scope="col"><?= /* @escapeNotVerified */ __('Subtotal') ?></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -102,7 +102,7 @@
                                 <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
-                                    <?php /* @escapeNotVerified */ echo $block->renderTotals($block->getShippingAddressTotals($_address)); ?>
+                                    <?= /* @escapeNotVerified */ $block->renderTotals($block->getShippingAddressTotals($_address)) ?>
                                 </tfoot>
                             </table>
                         </div>
@@ -114,22 +114,22 @@
 
     <?php if ($block->getQuote()->hasVirtualItems()): ?>
     <div class="block block-other">
-        <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Other items in your order') ?></strong></div>
+        <div class="block-title"><strong><?= /* @escapeNotVerified */ __('Other items in your order') ?></strong></div>
         <div class="block-content">
             <strong class="subtitle">
-                <span><?php /* @escapeNotVerified */ echo __('Items') ?></span>
-                <a href="<?php /* @escapeNotVerified */ echo $block->getVirtualProductEditUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Edit Items') ?></span></a>
+                <span><?= /* @escapeNotVerified */ __('Items') ?></span>
+                <a href="<?= /* @escapeNotVerified */ $block->getVirtualProductEditUrl() ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Edit Items') ?></span></a>
             </strong>
             <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
             <div class="order-review-wrapper table-wrapper">
                 <table class="items data table table-order-review" id="virtual-overview-table">
-                    <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items') ?></caption>
+                    <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items') ?></caption>
                     <thead>
                         <tr>
-                            <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                            <th class="col price" scope="col"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                            <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
-                            <th class="col subtotal" scope="col"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+                            <th class="col item" scope="col"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                            <th class="col price" scope="col"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                            <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
+                            <th class="col subtotal" scope="col"><?= /* @escapeNotVerified */ __('Subtotal') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,7 +138,7 @@
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
-                    <?php /* @escapeNotVerified */ echo $block->renderTotals($block->getBillinAddressTotals()); ?>
+                    <?= /* @escapeNotVerified */ $block->renderTotals($block->getBillinAddressTotals()) ?>
                     </tfoot>
                 </table>
             </div>
@@ -151,18 +151,18 @@
     <div id="checkout-review-submit" class="checkout-review">
         <?= $block->getChildHtml('agreements') ?>
         <div class="grand totals">
-            <strong class="mark"><?php /* @escapeNotVerified */ echo __('Grand Total:') ?></strong>
-            <strong class="amount"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()) ?></strong>
+            <strong class="mark"><?= /* @escapeNotVerified */ __('Grand Total:') ?></strong>
+            <strong class="amount"><?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()) ?></strong>
         </div>
         <div class="actions-toolbar" id="review-buttons-container">
             <div class="primary">
-                <button type="submit" class="action primary submit" id="review-button"><span><?php /* @escapeNotVerified */ echo __('Place Order') ?></span></button>
+                <button type="submit" class="action primary submit" id="review-button"><span><?= /* @escapeNotVerified */ __('Place Order') ?></span></button>
             </div>
             <div class="secondary">
-                <a href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>" class="action back"><span><?php /* @escapeNotVerified */ echo __('Back to Billing Information') ?></span></a>
+                <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back"><span><?= /* @escapeNotVerified */ __('Back to Billing Information') ?></span></a>
             </div>
-            <span id="review-please-wait" class="please-wait load indicator" style="display: none;" data-text="<?php /* @escapeNotVerified */ echo __('Submitting order information...') ?>">
-                <span><?php /* @escapeNotVerified */ echo __('Submitting order information...') ?></span>
+            <span id="review-please-wait" class="please-wait load indicator" style="display: none;" data-text="<?= /* @escapeNotVerified */ __('Submitting order information...') ?>">
+                <span><?= /* @escapeNotVerified */ __('Submitting order information...') ?></span>
             </span>
         </div>
     </div>

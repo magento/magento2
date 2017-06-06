@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 ?>
 
-<?php /* @escapeNotVerified */ echo $block->getSomeData();?>
+<?= /* @escapeNotVerified */ $block->getSomeData() ?>
 <?php /* @noEscape */ echo $block->getSomeData();?>
 <input name="form_key" type="hidden" value="<?= $block->escapeUrl($var) ?>" />
 <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr('value') ?>" />

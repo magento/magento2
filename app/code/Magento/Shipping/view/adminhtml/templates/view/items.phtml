@@ -11,13 +11,13 @@
     <table class="data-table admin__table-primary order-shipment-table">
         <thead>
             <tr class="headings">
-                <th class="col-product"><span><?php /* @escapeNotVerified */ echo __('Product') ?></span></th>
-                <th class="col-qty last"><span><?php /* @escapeNotVerified */ echo __('Qty Shipped') ?></span></th>
+                <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                <th class="col-qty last"><span><?= /* @escapeNotVerified */ __('Qty Shipped') ?></span></th>
             </tr>
         </thead>
         <?php $_items = $block->getShipment()->getAllItems() ?>
         <?php $_i = 0; foreach ($_items as $_item): if ($_item->getOrderItem()->getIsVirtual() || $_item->getOrderItem()->getParentItem()): continue; endif; $_i++ ?>
-            <tbody class="<?php /* @escapeNotVerified */ echo $_i%2 ? 'odd' : 'even' ?>">
+            <tbody class="<?= /* @escapeNotVerified */ $_i%2 ? 'odd' : 'even' ?>">
                 <?= $block->getItemHtml($_item) ?>
                 <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
             </tbody>

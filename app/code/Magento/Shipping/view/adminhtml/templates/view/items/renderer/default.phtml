@@ -10,5 +10,5 @@
 <?php $_item = $block->getItem() ?>
 <tr class="border">
     <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
-    <td class="col-qty last"><?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?></td>
+    <td class="col-qty last"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
 </tr>

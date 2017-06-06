@@ -35,7 +35,7 @@ require([
     );
 
     <?php $syncStorageParams = $block->getSyncStorageParams() ?>
-    addAllowedStorage(<?php /* @escapeNotVerified */ echo $syncStorageParams['storage_type'] ?>, '<?php /* @escapeNotVerified */ echo $syncStorageParams['connection_name'] ?>');
+    addAllowedStorage(<?= /* @escapeNotVerified */ $syncStorageParams['storage_type'] ?>, '<?= /* @escapeNotVerified */ $syncStorageParams['connection_name'] ?>');
 
     defaultValues   = [];
     defaultValues['system_media_storage_configuration_media_storage']   = $('system_media_storage_configuration_media_storage').value;
@@ -93,7 +93,7 @@ require([
     }
 
     var checkStatus = function() {
-        u = new Ajax.PeriodicalUpdater('', '<?php /* @escapeNotVerified */ echo $block->getAjaxStatusUpdateUrl() ?>', {
+        u = new Ajax.PeriodicalUpdater('', '<?= /* @escapeNotVerified */ $block->getAjaxStatusUpdateUrl() ?>', {
             method:     'get',
             frequency:  5,
             loaderArea: false,
@@ -103,7 +103,7 @@ require([
 
                 try {
                     response = JSON.parse(transport.responseText);
-                    if (response.state == '<?php /* @escapeNotVerified */ echo \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING ?>'
+                    if (response.state == '<?= /* @escapeNotVerified */ \Magento\MediaStorage\Model\File\Storage\Flag::STATE_RUNNING ?>'
                         && response.message
                     ) {
                         if ($('sync_span').hasClassName('no-display')) {
@@ -115,12 +115,12 @@ require([
                         enableStorageSelection();
                         $('sync_span').addClassName('no-display');
 
-                        if (response.state == '<?php /* @escapeNotVerified */ echo \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED ?>') {
+                        if (response.state == '<?= /* @escapeNotVerified */ \Magento\MediaStorage\Model\File\Storage\Flag::STATE_FINISHED ?>') {
                             addAllowedStorage(
                                 $('system_media_storage_configuration_media_storage').value,
                                 $('system_media_storage_configuration_media_database').value
                             );
-                        } else if (response.state == '<?php /* @escapeNotVerified */ echo \Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED ?>') {
+                        } else if (response.state == '<?= /* @escapeNotVerified */ \Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED ?>') {
                             if (response.has_errors) {
                                 enableSyncButton();
                             } else {
@@ -155,7 +155,7 @@ require([
             connection: $('system_media_storage_configuration_media_database').value
         };
 
-        new Ajax.Request('<?php /* @escapeNotVerified */ echo $block->getAjaxSyncUrl() ?>', {
+        new Ajax.Request('<?= /* @escapeNotVerified */ $block->getAjaxSyncUrl() ?>', {
             parameters:     params,
             loaderArea:     false,
             asynchronous:   true
@@ -179,7 +179,7 @@ require([
 
 <?= $block->getButtonHtml() ?>
 <span class="sync-indicator no-display" id="sync_span">
-    <img alt="Synchronize" style="margin:0 5px" src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/process_spinner.gif') ?>"/>
+    <img alt="Synchronize" style="margin:0 5px" src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/process_spinner.gif') ?>"/>
     <span id="sync_message_span"></span>
 </span>
 <input type="hidden" id="synchronize-validation-input" class="required-synchronize no-display"/>

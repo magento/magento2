@@ -8,12 +8,12 @@
 
 ?>
 
-<?php /* @escapeNotVerified */ echo $block->getItem()->getName() ?>
-<div><strong><?php /* @escapeNotVerified */ echo __('SKU') ?>:</strong> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getItem()->getSku()))) ?></div>
+<?= /* @escapeNotVerified */ $block->getItem()->getName() ?>
+<div><strong><?= /* @escapeNotVerified */ __('SKU') ?>:</strong> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getItem()->getSku()))) ?></div>
 <?php if ($block->getOrderOptions()): ?>
     <ul class="item-options">
     <?php foreach ($block->getOrderOptions() as $option): ?>
-        <li><strong><?php /* @escapeNotVerified */ echo $option['label'] ?>:</strong><br />
+        <li><strong><?= /* @escapeNotVerified */ $option['label'] ?>:</strong><br />
         <?php if (is_array($option['value'])): ?>
         <?php foreach ($option['value'] as $item): ?>
             <?= $block->getValueHtml($item) ?><br />

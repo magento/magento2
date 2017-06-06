@@ -25,9 +25,9 @@ $_item = $block->getItem();
                     <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                     <dd>
                         <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                            <?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?>
+                            <?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?>
                         <?php else: ?>
-                            <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
+                            <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
                         <?php endif; ?>
                     </dd>
                     <?php endforeach; ?>
@@ -50,7 +50,7 @@ $_item = $block->getItem();
                 </span>
             <?php endif; ?>
         </td>
-        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><span class="qty"><?php /* @escapeNotVerified */ echo $_item->getQty() ?></span></td>
+        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><span class="qty"><?= /* @escapeNotVerified */ $_item->getQty() ?></span></td>
         <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
                 <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">

@@ -12,7 +12,7 @@
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'" data-role="bulk-step">
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')) ?></h2>
     <div class="steps-wizard-info">
-        <?php /* @escapeNotVerified */ echo __('Based on your selections %1 new products will be created. Use this step to customize images and price for your new products.', '<span class="new-products-count" data-bind="text:countVariations"></span>') ?>
+        <?= /* @escapeNotVerified */ __('Based on your selections %1 new products will be created. Use this step to customize images and price for your new products.', '<span class="new-products-count" data-bind="text:countVariations"></span>') ?>
     </div>
 
     <div data-bind="with: sections().images" class="steps-wizard-section">

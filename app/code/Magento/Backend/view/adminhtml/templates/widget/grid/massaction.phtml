@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /* @escapeNotVerified */ echo $block->getSomething(); ?>
+<?= /* @escapeNotVerified */ $block->getSomething() ?>
 <div id="<?= $block->getHtmlId() ?>" class="admin__grid-massaction">
 
     <?php if ($block->getHideFormElement() !== true):?>
@@ -18,10 +18,10 @@
             <select
                 id="<?= $block->getHtmlId() ?>-select"
                 class="required-entry local-validation admin__control-select"
-                <?php /* @escapeNotVerified */ echo $block->getUiId('select') ?>>
-                <option class="admin__control-select-placeholder" value="" selected><?php /* @escapeNotVerified */ echo __('Actions') ?></option>
+                <?= /* @escapeNotVerified */ $block->getUiId('select') ?>>
+                <option class="admin__control-select-placeholder" value="" selected><?= /* @escapeNotVerified */ __('Actions') ?></option>
                 <?php foreach ($block->getItems() as $_item):?>
-                    <option value="<?php /* @escapeNotVerified */ echo $_item->getId() ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?php /* @escapeNotVerified */ echo $_item->getLabel() ?></option>
+                    <option value="<?= /* @escapeNotVerified */ $_item->getId() ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= /* @escapeNotVerified */ $_item->getLabel() ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-hiddens"></span>
@@ -33,7 +33,7 @@
     <?php endif ?>
     <div class="no-display">
     <?php foreach ($block->getItems() as $_item): ?>
-        <div id="<?= $block->getHtmlId() ?>-item-<?php /* @escapeNotVerified */ echo $_item->getId() ?>-block">
+        <div id="<?= $block->getHtmlId() ?>-item-<?= /* @escapeNotVerified */ $_item->getId() ?>-block">
             <?php if ('' != $_item->getBlockName()):?>
                 <?= $block->getChildHtml($_item->getBlockName()) ?>
             <?php endif;?>
@@ -47,21 +47,21 @@
             class="action-select-multiselect _disabled"
             disabled="disabled"
             data-menu="grid-mass-select">
-            <optgroup label="<?php /* @escapeNotVerified */ echo __('Mass Actions')?>">
+            <optgroup label="<?= /* @escapeNotVerified */ __('Mass Actions') ?>">
                 <option disabled selected></option>
                 <?php if ($block->getUseSelectAll()):?>
                     <option value="selectAll">
-                        <?php /* @escapeNotVerified */ echo __('Select All') ?>
+                        <?= /* @escapeNotVerified */ __('Select All') ?>
                     </option>
                     <option value="unselectAll">
-                        <?php /* @escapeNotVerified */ echo __('Unselect All') ?>
+                        <?= /* @escapeNotVerified */ __('Unselect All') ?>
                     </option>
                 <?php endif; ?>
                 <option value="selectVisible">
-                    <?php /* @escapeNotVerified */ echo __('Select Visible') ?>
+                    <?= /* @escapeNotVerified */ __('Select Visible') ?>
                 </option>
                 <option value="unselectVisible">
-                    <?php /* @escapeNotVerified */ echo __('Unselect Visible') ?>
+                    <?= /* @escapeNotVerified */ __('Unselect Visible') ?>
                 </option>
             </optgroup>
         </select>
@@ -80,23 +80,23 @@
             switch (massAction) {
                 <?php if ($block->getUseSelectAll()):?>
                 case 'selectAll':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.selectAll();
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.selectAll();
                     break;
                 case 'unselectAll':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.unselectAll();
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.unselectAll();
                     break;
                 <?php endif; ?>
                 case 'selectVisible':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.selectVisible();
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.selectVisible();
                     break;
                 case 'unselectVisible':
-                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.unselectVisible();
+                    return <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.unselectVisible();
                     break;
             }
         });
     });
     <?php if (!$block->getParentBlock()->canDisplayContainer()): ?>
-        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.setGridIds('<?php /* @escapeNotVerified */ echo $block->getGridIdsJson() ?>');
+        <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.setGridIds('<?= /* @escapeNotVerified */ $block->getGridIdsJson() ?>');
     <?php endif; ?>
 </script>
 </div>

@@ -15,7 +15,7 @@ $_item = $block->getItem();
     <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
         <?php $_incl = $_item->getPriceInclTax(); ?>
         <span class="cart-price">
-            <?php /* @escapeNotVerified */ echo $block->formatPrice($_incl) ?>
+            <?= /* @escapeNotVerified */ $block->formatPrice($_incl) ?>
         </span>
     </span>
 <?php endif; ?>
@@ -23,7 +23,7 @@ $_item = $block->getItem();
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
     <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
         <span class="cart-price">
-            <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getItemDisplayPriceExclTax()) ?>
+            <?= /* @escapeNotVerified */ $block->formatPrice($block->getItemDisplayPriceExclTax()) ?>
         </span>
     </span>
 <?php endif; ?>

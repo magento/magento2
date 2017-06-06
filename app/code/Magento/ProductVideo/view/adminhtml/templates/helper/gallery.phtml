@@ -54,7 +54,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                 </p>
             </div>
         </div>
-        <?php /* @escapeNotVerified */ echo $block->getChildHtml('additional_buttons'); ?>
+        <?= /* @escapeNotVerified */ $block->getChildHtml('additional_buttons') ?>
         <?php
     endif;
     ?>
@@ -62,76 +62,76 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
     foreach ($block->getImageTypes() as $typeData):
         ?>
         <input name="<?= $block->escapeHtml($typeData['name']) ?>"
-               data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
+               data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
                class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
                value="<?= $block->escapeHtml($typeData['value']) ?>"/>
         <?php
     endforeach;
     ?>
-    <script id="<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template" data-template="image" type="text/x-magento-template">
+    <script id="<?= /* @escapeNotVerified */ $block->getHtmlId() ?>-template" data-template="image" type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>  <% if (data.video_url) { %>video-item<% } %>"
              data-role="image">
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][position]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][position]"
                    value="<%- data.position %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
                    class="position"/>
             <% if (data.media_type !== 'external-video') {%>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][media_type]"
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
                    value="image"/>
             <% } else { %>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][media_type]"
                    value="<%- data.media_type %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <% } %>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_provider]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_provider]"
                    value="<%- data.video_provider %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][file]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][file]"
                    value="<%- data.file %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][value_id]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][value_id]"
                    value="<%- data.value_id %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][label]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][label]"
                    value="<%- data.label %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][disabled]"
                    value="<%- data.disabled %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][removed]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][removed]"
                    value="" class="is-removed"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_url]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_url]"
                    value="<%- data.video_url %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_title]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_title]"
                    value="<%- data.video_title %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_description]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_description]"
                    value="<%- data.video_description %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_metadata]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][video_metadata]"
                    value="<%- data.video_metadata %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
             <input type="hidden"
-                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][role]"
+                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][role]"
                    value="<%- data.video_description %>"
-                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"/>
 
             <div class="product-image-wrapper">
                 <img class="product-image"
@@ -215,7 +215,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
             <fieldset class="admin__fieldset fieldset-image-panel">
                 <div class="admin__field field-image-description">
                     <label class="admin__field-label" for="image-description">
-                        <span><?php /* @escapeNotVerified */ echo __('Alt Text')?></span>
+                        <span><?= /* @escapeNotVerified */ __('Alt Text') ?></span>
                     </label>
 
                     <div class="admin__field-control">
@@ -243,7 +243,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                                     <label>
                                         <input class="image-type"
                                                data-role="type-selector"
-                                               data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
+                                               data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
                                                type="checkbox"
                                                value="<?= $block->escapeHtml(
                                                    $attribute->getAttributeCode()
@@ -263,16 +263,16 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
 
                 <div class="admin__field admin__field-inline field-image-size" data-role="size">
                     <label class="admin__field-label">
-                        <span><?php /* @escapeNotVerified */ echo __('Image Size') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Image Size') ?></span>
                     </label>
-                    <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{size}') ?>"></div>
+                    <div class="admin__field-value" data-message="<?= /* @escapeNotVerified */ __('{size}') ?>"></div>
                 </div>
 
                 <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
                     <label class="admin__field-label">
-                        <span><?php /* @escapeNotVerified */ echo __('Image Resolution') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Image Resolution') ?></span>
                     </label>
-                    <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{width}^{height} px') ?>"></div>
+                    <div class="admin__field-value" data-message="<?= /* @escapeNotVerified */ __('{width}^{height} px') ?>"></div>
                 </div>
 
                 <div class="admin__field field-image-hide">
@@ -281,10 +281,10 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                             <input type="checkbox"
                                    id="hide-from-product-page"
                                    data-role="visibility-trigger"
-                                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
+                                   data-form-part="<?= /* @escapeNotVerified */ $formName ?>"
                                    value="1"
                                    class="admin__control-checkbox"
-                                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
+                                   name="<?= /* @escapeNotVerified */ $elementName ?>[<%- data.file_id %>][disabled]"
                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                             <label for="hide-from-product-page" class="admin__field-label">
@@ -299,7 +299,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
         </div>
     </script>
     <div id="<?php /* @noEscape */ echo $block->getNewVideoBlockName();?>" style="display:none">
-        <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
+        <?= /* @escapeNotVerified */ $block->getFormHtml() ?>
         <div id="video-player-preview-location" class="video-player-sidebar">
             <div class="video-player-container"></div>
             <div class="video-information title">

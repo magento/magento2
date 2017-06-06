@@ -11,20 +11,20 @@
 <?php if ($websites = $block->getWebsites()): ?>
 
 <div class="store-switcher store-view">
-    <span class="store-switcher-label"><?php /* @escapeNotVerified */ echo __('Store View:') ?></span>
+    <span class="store-switcher-label"><?= /* @escapeNotVerified */ __('Store View:') ?></span>
     <div class="actions dropdown closable">
         <input type="hidden" name="store_switcher" id="store_switcher"
-               data-role="store-view-id" data-param="<?php /* @escapeNotVerified */ echo $block->getStoreVarName() ?>"
+               data-role="store-view-id" data-param="<?= /* @escapeNotVerified */ $block->getStoreVarName() ?>"
                value="<?= $block->escapeHtml($block->getStoreId()) ?>"
-               onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
+               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
         <input type="hidden" name="store_group_switcher" id="store_group_switcher"
-               data-role="store-group-id" data-param="<?php /* @escapeNotVerified */ echo $block->getStoreGroupVarName() ?>"
+               data-role="store-group-id" data-param="<?= /* @escapeNotVerified */ $block->getStoreGroupVarName() ?>"
                value="<?= $block->escapeHtml($block->getStoreGroupId()) ?>"
-               onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
+               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
         <input type="hidden" name="website_switcher" id="website_switcher"
-               data-role="website-id" data-param="<?php /* @escapeNotVerified */ echo $block->getWebsiteVarName() ?>"
+               data-role="website-id" data-param="<?= /* @escapeNotVerified */ $block->getWebsiteVarName() ?>"
                value="<?= $block->escapeHtml($block->getWebsiteId()) ?>"
-               onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
+               onchange="switchScope(this);"<?= /* @escapeNotVerified */ $block->getUiId() ?> />
         <button
             type="button"
             class="admin__action-dropdown"
@@ -32,7 +32,7 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             id="store-change-button">
-            <?php /* @escapeNotVerified */ echo $block->getCurrentSelectionName() ?>
+            <?= /* @escapeNotVerified */ $block->getCurrentSelectionName() ?>
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
             <?php if ($block->hasDefaultOption()): ?>
@@ -44,12 +44,12 @@
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) {
                         ?>
                         <a data-role="store-view-id" data-value="" href="#">
-                            <?php /* @escapeNotVerified */ echo $block->getDefaultSelectionName() ?>
+                            <?= /* @escapeNotVerified */ $block->getDefaultSelectionName() ?>
                         </a>
                     <?php
                     } else {
                         ?>
-                        <span><?php /* @escapeNotVerified */ echo $block->getDefaultSelectionName() ?></span>
+                        <span><?= /* @escapeNotVerified */ $block->getDefaultSelectionName() ?></span>
                     <?php
                     } ?>
                 </li>
@@ -121,7 +121,7 @@
             <?php endforeach; ?>
             <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
                 <li class="dropdown-toolbar">
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getUrl('*/system_store') ?>"><?php /* @escapeNotVerified */ echo __('Stores Configuration') ?></a>
+                    <a href="<?= /* @escapeNotVerified */ $block->getUrl('*/system_store') ?>"><?= /* @escapeNotVerified */ __('Stores Configuration') ?></a>
                 </li>
             <?php endif; ?>
         </ul>
@@ -176,7 +176,7 @@ require([
             <?php if ($block->getUseConfirm()): ?>
 
             confirm({
-                content:  "<?php /* @escapeNotVerified */ echo __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>",
+                content:  "<?= /* @escapeNotVerified */ __('Please confirm scope switching. All data that hasn\'t been saved will be lost.') ?>",
                 actions: {
                     confirm: function() {
                         reload();
@@ -194,7 +194,7 @@ require([
 
         function reload() {
             <?php if (!$block->isUsingIframe()): ?>
-            var url = '<?php /* @escapeNotVerified */ echo $block->getSwitchUrl() ?>' + scopeParams;
+            var url = '<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>' + scopeParams;
             setLocation(url);
             <?php else: ?>
             jQuery('#preview_selected_store').val(scopeId);

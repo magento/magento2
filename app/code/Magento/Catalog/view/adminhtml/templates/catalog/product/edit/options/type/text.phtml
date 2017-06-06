@@ -14,11 +14,11 @@
             <thead>
             <tr>
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th class="type-price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                <th class="type-type"><?php /* @escapeNotVerified */ echo __('Price Type') ?></th>
+                <th class="type-price"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th class="type-type"><?= /* @escapeNotVerified */ __('Price Type') ?></th>
                 <?php endif; ?>
-                <th class="type-sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                <th class="type-last last"><?php /* @escapeNotVerified */ echo __('Max Characters') ?></th>
+                <th class="type-sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th class="type-last last"><?= /* @escapeNotVerified */ __('Max Characters') ?></th>
             </tr>
             </thead>
             <tr>

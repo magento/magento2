@@ -16,8 +16,8 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
     {
         "*": {
             "Magento_Catalog/catalog/category/assign-products": {
-                "selectedProducts": <?php /* @escapeNotVerified */ echo $block->getProductsJson(); ?>,
-                "gridJsObjectName": <?php /* @escapeNotVerified */ echo '"' . $gridJsObjectName . '"' ?: '{}'; ?>
+                "selectedProducts": <?= /* @escapeNotVerified */ $block->getProductsJson() ?>,
+                "gridJsObjectName": <?= /* @escapeNotVerified */ '"' . $gridJsObjectName . '"' ?: '{}' ?>
             }
         }
     }

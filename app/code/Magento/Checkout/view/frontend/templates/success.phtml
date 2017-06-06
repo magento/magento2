@@ -15,14 +15,14 @@
         <?php  else :?>
             <p><?= __('Your order # is: <span>%1</span>.', $block->escapeHtml($block->getOrderId())) ?></p>
         <?php endif;?>
-            <p><?php /* @escapeNotVerified */ echo __('We\'ll email you an order confirmation with details and tracking info.') ?></p>
+            <p><?= /* @escapeNotVerified */ __('We\'ll email you an order confirmation with details and tracking info.') ?></p>
     <?php endif;?>
 
     <?= $block->getAdditionalInfoHtml() ?>
 
     <div class="actions-toolbar">
         <div class="primary">
-            <a class="action primary continue" href="<?php /* @escapeNotVerified */ echo $block->getContinueUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Continue Shopping') ?></span></a>
+            <a class="action primary continue" href="<?= /* @escapeNotVerified */ $block->getContinueUrl() ?>"><span><?= /* @escapeNotVerified */ __('Continue Shopping') ?></span></a>
         </div>
     </div>
 </div>

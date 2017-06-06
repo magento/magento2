@@ -9,19 +9,19 @@
 ?>
 <?php $_element = $block->getElement() ?>
 <?php if ($_element->getFieldsetContainerId()): ?>
-    <div id="<?php /* @escapeNotVerified */ echo $_element->getFieldsetContainerId(); ?>">789
+    <div id="<?= /* @escapeNotVerified */ $_element->getFieldsetContainerId() ?>">789
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()): ?>
-    <fieldset class="admin__fieldset fieldset <?php /* @escapeNotVerified */ echo $_element->getClass() ?>" id="<?= $_element->getHtmlId() ?>">
+    <fieldset class="admin__fieldset fieldset <?= /* @escapeNotVerified */ $_element->getClass() ?>" id="<?= $_element->getHtmlId() ?>">
 <?php endif; ?>
 
     <?php if ($_element->getLegend()): ?>
         <legend class="admin__legend legend">
-            <span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span>
+            <span><?= /* @escapeNotVerified */ $_element->getLegend() ?></span>
             <?= $block->getHintHtml() ?>
         </legend><br/>
-        <?php /* @escapeNotVerified */ echo $_element->getHeaderBar() ?>
+        <?= /* @escapeNotVerified */ $_element->getHeaderBar() ?>
     <?php else: ?>
         <?= $block->getHintHtml() ?>
     <?php endif; ?>

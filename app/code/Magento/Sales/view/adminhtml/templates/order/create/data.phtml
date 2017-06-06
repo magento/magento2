@@ -10,7 +10,7 @@
 <div class="page-create-order">
     <script>
     require(["Magento_Sales/order/create/form"], function(){
-        order.setCurrencySymbol('<?php /* @escapeNotVerified */ echo $block->getCurrencySymbol($block->getCurrentCurrencyCode()) ?>')
+        order.setCurrencySymbol('<?= /* @escapeNotVerified */ $block->getCurrencySymbol($block->getCurrentCurrencyCode()) ?>')
     });
 </script>
     <div class="order-details<?php if ($block->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
@@ -35,7 +35,7 @@
 
         <section id="order-addresses" class="admin__page-section order-addresses">
             <div class="admin__page-section-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Address Information') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Address Information') ?></span>
             </div>
             <div class="admin__page-section-content">
                 <div id="order-billing_address" class="admin__page-section-item order-billing-address">
@@ -49,7 +49,7 @@
 
         <section id="order-methods" class="admin__page-section order-methods">
             <div class="admin__page-section-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Payment &amp; Shipping Information') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Payment &amp; Shipping Information') ?></span>
             </div>
             <div class="admin__page-section-content">
                 <div id="order-billing_method" class="admin__page-section-item order-billing-method">
@@ -71,11 +71,11 @@
 
         <section class="admin__page-section order-summary">
             <div class="admin__page-section-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Order Total') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Order Total') ?></span>
             </div>
             <div class="admin__page-section-content">
                 <fieldset class="admin__fieldset order-history" id="order-comment">
-                    <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Order History') ?></span></legend>
+                    <legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Order History') ?></span></legend>
                     <br>
                     <?= $block->getChildHtml('comment') ?>
                 </fieldset>
@@ -90,15 +90,15 @@
         <div class="order-sidebar">
             <div class="store-switcher order-currency">
                 <label class="admin__field-label" for="currency_switcher">
-                    <?php /* @escapeNotVerified */ echo __('Order Currency:') ?>
+                    <?= /* @escapeNotVerified */ __('Order Currency:') ?>
                 </label>
                 <select id="currency_switcher"
                         class="admin__control-select"
                         name="order[currency]"
                         onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
                     <?php foreach ($block->getAvailableCurrencies() as $_code): ?>
-                        <option value="<?php /* @escapeNotVerified */ echo $_code ?>"<?php if ($_code == $block->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php /* @escapeNotVerified */ echo $block->getCurrencySymbol($_code) ?>">
-                            <?php /* @escapeNotVerified */ echo $block->getCurrencyName($_code) ?>
+                        <option value="<?= /* @escapeNotVerified */ $_code ?>"<?php if ($_code == $block->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?= /* @escapeNotVerified */ $block->getCurrencySymbol($_code) ?>">
+                            <?= /* @escapeNotVerified */ $block->getCurrencyName($_code) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>

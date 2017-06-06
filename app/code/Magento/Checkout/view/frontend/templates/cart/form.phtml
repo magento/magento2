@@ -10,7 +10,7 @@
 ?>
 <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
 <?= $block->getChildHtml('form_before') ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getUrl('checkout/cart/updatePost') ?>"
+<form action="<?= /* @escapeNotVerified */ $block->getUrl('checkout/cart/updatePost') ?>"
           method="post"
           id="form-validate"
           data-mage-init='{"validation":{}}'
@@ -24,13 +24,13 @@
                class="cart items data table"
                data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
                "updateCartActionContainer": "#update_cart_action_container"}}'>
-            <caption role="heading" aria-level="2" class="table-caption"><?php /* @escapeNotVerified */ echo __('Shopping Cart Items') ?></caption>
+            <caption role="heading" aria-level="2" class="table-caption"><?= /* @escapeNotVerified */ __('Shopping Cart Items') ?></caption>
             <thead>
                 <tr>
-                    <th class="col item" scope="col"><span><?php /* @escapeNotVerified */ echo __('Item') ?></span></th>
-                    <th class="col price" scope="col"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
-                    <th class="col qty" scope="col"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></th>
-                    <th class="col subtotal" scope="col"><span><?php /* @escapeNotVerified */ echo __('Subtotal') ?></span></th>
+                    <th class="col item" scope="col"><span><?= /* @escapeNotVerified */ __('Item') ?></span></th>
+                    <th class="col price" scope="col"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                    <th class="col qty" scope="col"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
+                    <th class="col subtotal" scope="col"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
                 </tr>
             </thead>
             <?php foreach ($block->getItems() as $_item): ?>
@@ -46,7 +46,7 @@
             <a class="action continue"
                href="<?= $block->escapeUrl($block->getContinueShoppingUrl()) ?>"
                title="<?= $block->escapeHtml(__('Continue Shopping')) ?>">
-                <span><?php /* @escapeNotVerified */ echo __('Continue Shopping') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Continue Shopping') ?></span>
             </a>
         <?php endif; ?>
         <button type="submit"
@@ -55,7 +55,7 @@
                 value="empty_cart"
                 title="<?= $block->escapeHtml(__('Clear Shopping Cart')) ?>"
                 class="action clear" id="empty_cart_button">
-            <span><?php /* @escapeNotVerified */ echo __('Clear Shopping Cart'); ?></span>
+            <span><?= /* @escapeNotVerified */ __('Clear Shopping Cart') ?></span>
         </button>
         <button type="submit"
                 name="update_cart_action"
@@ -63,7 +63,7 @@
                 value="update_qty"
                 title="<?= $block->escapeHtml(__('Update Shopping Cart')) ?>"
                 class="action update">
-            <span><?php /* @escapeNotVerified */ echo __('Update Shopping Cart'); ?></span>
+            <span><?= /* @escapeNotVerified */ __('Update Shopping Cart') ?></span>
         </button>
         <input type="hidden" value="" id="update_cart_action_container" data-cart-item-update=""/>
     </div>

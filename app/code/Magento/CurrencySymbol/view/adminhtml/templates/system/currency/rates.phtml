@@ -13,7 +13,7 @@
  */
 ?>
 
-<form action="<?php /* @escapeNotVerified */ echo $block->getImportFormAction() ?>" method="post" class="import-service">
+<form action="<?= /* @escapeNotVerified */ $block->getImportFormAction() ?>" method="post" class="import-service">
     <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset admin__fieldset-import-service">
         <?= $block->getServicesHtml() ?>

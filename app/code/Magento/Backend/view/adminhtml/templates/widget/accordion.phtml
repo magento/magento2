@@ -23,7 +23,7 @@ $items = $block->getItems();
         require([
             'mage/adminhtml/accordion'
         ], function(){
-        	tab_content_<?= $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?= $block->getHtmlId() ?>', '<?php /* @escapeNotVerified */ echo $block->getShowOnlyOne() ?>');
+        	tab_content_<?= $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?= $block->getHtmlId() ?>', '<?= /* @escapeNotVerified */ $block->getShowOnlyOne() ?>');
     	});
     </script>
 <?php endif; ?>

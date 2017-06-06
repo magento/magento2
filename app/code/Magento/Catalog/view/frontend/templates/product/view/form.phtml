@@ -16,9 +16,9 @@
 <?php $_product = $block->getProduct(); ?>
 
 <div class="product-add-form">
-    <form action="<?php /* @escapeNotVerified */ echo $block->getSubmitUrl($_product) ?>" method="post"
+    <form action="<?= /* @escapeNotVerified */ $block->getSubmitUrl($_product) ?>" method="post"
           id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-        <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $_product->getId() ?>" />
+        <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $_product->getId() ?>" />
         <input type="hidden" name="selected_configurable_option" value="" />
         <input type="hidden" name="related_product" id="related-products-field" value="" />
         <?= $block->getBlockHtml('formkey') ?>
@@ -50,6 +50,6 @@
             return !$(elem).find('.price-from').length;
         });
 
-        priceBoxes.priceBox({'priceConfig': <?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>});
+        priceBoxes.priceBox({'priceConfig': <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>});
     });
 </script>

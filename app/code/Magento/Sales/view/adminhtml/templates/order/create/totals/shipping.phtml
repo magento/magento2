@@ -13,37 +13,37 @@
 ?>
 <?php if ($block->displayBoth()):?>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo $block->getExcludeTaxLabel() ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+        <?= /* @escapeNotVerified */ $block->getExcludeTaxLabel() ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingExcludeTax()) ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo $block->getIncludeTaxLabel() ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+        <?= /* @escapeNotVerified */ $block->getIncludeTaxLabel() ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingIncludeTax()) ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php elseif ($block->displayIncludeTax()) : ?>
 <tr>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+        <?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingIncludeTax()) ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php else:?>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
         <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingExcludeTax()) ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <?php endif;?>

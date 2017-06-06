@@ -21,14 +21,14 @@
         </button>
 
         <?php if (!$block->getDisabled()): ?>
-            <ul class="dropdown-menu" <?php /* @escapeNotVerified */ echo $block->getUiId("dropdown-menu"); ?>>
+            <ul class="dropdown-menu" <?= /* @escapeNotVerified */ $block->getUiId("dropdown-menu") ?>>
                 <?php foreach ($block->getOptions() as $key => $option): ?>
                 <li>
                     <span <?= $block->getOptionAttributesHtml($key, $option) ?>>
                         <?= $block->escapeHtml($option['label']) ?>
                     </span>
                     <?php if (isset($option['hint'])): ?>
-                    <div class="tooltip" <?php /* @escapeNotVerified */ echo $block->getUiId('item', $key, 'tooltip'); ?>>
+                    <div class="tooltip" <?= /* @escapeNotVerified */ $block->getUiId('item', $key, 'tooltip') ?>>
                         <a href="<?= $block->escapeHtml($option['hint']['href']) ?>" class="help">
                             <?= $block->escapeHtml($option['hint']['label']) ?>
                         </a>

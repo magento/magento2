@@ -8,7 +8,7 @@
 ?>
 <div class="cart-empty">
     <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
-    <p><?php /* @escapeNotVerified */ echo __('You have no items in your shopping cart.') ?></p>
+    <p><?= /* @escapeNotVerified */ __('You have no items in your shopping cart.') ?></p>
     <p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.',
             $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>
     <?= $block->getChildHtml('shopping.cart.table.after') ?>

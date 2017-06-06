@@ -16,8 +16,8 @@ $_product = $block->getProduct();
 $block->getConfigJson();
 ?>
 <fieldset class="admin__fieldset downloadable-form" data-ui-id="downloadable-samples">
-    <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Samples')?></span></legend><br>
-    <p class="note"><?php /* @escapeNotVerified */ echo __('Add product preview files here.')?></p>
+    <legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Samples') ?></span></legend><br>
+    <p class="note"><?= /* @escapeNotVerified */ __('Add product preview files here.') ?></p>
     <div class="admin__field"<?= !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : '' ?>>
         <label class="admin__field-label" for="downloadable_samples_title"><span><?= /* @noEscape */ __('Title') ?></span></label>
         <div class="admin__field-control">
@@ -79,14 +79,14 @@ require([
                 <?php if($_product->getStoreId()): ?>
                     '<div class="admin__field admin__field-option">'+
                         '<input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
-                        '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>'+
+                        '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Use Default Value') ?></span></label>'+
                     '</div>' +
                 <?php endif; ?>
             '</td>'+
             '<td class="col-file">'+
                 '<div class="admin__field admin__field-option">'+
                     '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_file_type" name="downloadable[sample][<%- data.id %>][type]" value="file"<%- data.file_checked %> />' +
-                    '<label for="downloadable_sample_<%- data.id %>_file_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('File'); ?>:</span></label>'+
+                    '<label for="downloadable_sample_<%- data.id %>_file_type" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('File') ?>:</span></label>'+
                     '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_<%- data.id %>_file_save" name="downloadable[sample][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
                     '<div id="downloadable_sample_<%- data.id %>_file" class="admin__field-uploader">'+
                         '<div id="downloadable_sample_<%- data.id %>_file-old" class="file-row-info"></div>'+
@@ -104,15 +104,15 @@ require([
                 '</div>'+
                 '<div class="admin__field admin__field-option admin__field-file-url">'+
                     '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_url_type" name="downloadable[sample][<%- data.id %>][type]" value="url"<%- data.url_checked %> />' +
-                    '<label for="downloadable_sample_<%- data.id %>_url_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('URL'); ?></span></label>' +
-                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" placeholder="<?php /* @escapeNotVerified */ echo __('URL'); ?>" />'+
+                    '<label for="downloadable_sample_<%- data.id %>_url_type" class="admin__field-label"><span><?= /* @escapeNotVerified */ __('URL') ?></span></label>' +
+                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" placeholder="<?= /* @escapeNotVerified */ __('URL') ?>" />'+
                 '</div>'+
                 '<div>'+
                     '<span id="downloadable_sample_<%- data.id %>_container"></span>'+
                 '</div>'+
             '</td>'+
             '<td class="col-actions">'+
-                '<button type="button" class="action-delete" title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Delete')) ?>"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?></span></button>'+
+                '<button type="button" class="action-delete" title="<?= /* @escapeNotVerified */ $block->escapeHtml(__('Delete')) ?>"><span><?= /* @escapeNotVerified */ __('Delete') ?></span></button>'+
             '</td>'+
         '</tr>';
         sampleItems = {

@@ -155,24 +155,24 @@ switch ($type = $block->getType()) {
 
     <?php if ($type == 'related' || $type == 'upsell'): ?>
         <?php if ($type == 'related'): ?>
-            <div class="block <?php /* @escapeNotVerified */ echo $class; ?>" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}' data-limit="<?php /* @escapeNotVerified */ echo $limit; ?>" data-shuffle="<?php /* @escapeNotVerified */ echo $shuffle; ?>">
+            <div class="block <?= /* @escapeNotVerified */ $class ?>" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}' data-limit="<?= /* @escapeNotVerified */ $limit ?>" data-shuffle="<?= /* @escapeNotVerified */ $shuffle ?>">
         <?php else: ?>
-            <div class="block <?php /* @escapeNotVerified */ echo $class; ?>" data-mage-init='{"upsellProducts":{}}' data-limit="<?php /* @escapeNotVerified */ echo $limit; ?>" data-shuffle="<?php /* @escapeNotVerified */ echo $shuffle; ?>">
+            <div class="block <?= /* @escapeNotVerified */ $class ?>" data-mage-init='{"upsellProducts":{}}' data-limit="<?= /* @escapeNotVerified */ $limit ?>" data-shuffle="<?= /* @escapeNotVerified */ $shuffle ?>">
         <?php endif; ?>
     <?php else: ?>
-        <div class="block <?php /* @escapeNotVerified */ echo $class; ?>">
+        <div class="block <?= /* @escapeNotVerified */ $class ?>">
     <?php endif; ?>
     <div class="block-title title">
-        <strong id="block-<?php /* @escapeNotVerified */ echo $class?>-heading" role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo $title; ?></strong>
+        <strong id="block-<?= /* @escapeNotVerified */ $class ?>-heading" role="heading" aria-level="2"><?= /* @escapeNotVerified */ $title ?></strong>
     </div>
-    <div class="block-content content" aria-labelledby="block-<?php /* @escapeNotVerified */ echo $class?>-heading">
+    <div class="block-content content" aria-labelledby="block-<?= /* @escapeNotVerified */ $class ?>-heading">
         <?php if ($type == 'related' && $canItemsAddToCart): ?>
         <div class="block-actions">
-            <?php /* @escapeNotVerified */ echo __('Check items to add to the cart or') ?>
-            <button type="button" class="action select" role="select-all"><span><?php /* @escapeNotVerified */ echo __('select all') ?></span></button>
+            <?= /* @escapeNotVerified */ __('Check items to add to the cart or') ?>
+            <button type="button" class="action select" role="select-all"><span><?= /* @escapeNotVerified */ __('select all') ?></span></button>
         </div>
         <?php endif; ?>
-        <div class="products wrapper grid products-grid products-<?php /* @escapeNotVerified */ echo $type; ?>">
+        <div class="products wrapper grid products-grid products-<?= /* @escapeNotVerified */ $type ?>">
             <ol class="products list items product-items">
                 <?php $iterator = 1; ?>
                 <?php foreach ($items as $_item): ?>
@@ -183,21 +183,21 @@ switch ($type = $block->getType()) {
                     <?php endif; ?>
                 <?php endif; ?>
                 <?php if ($type == 'related' || $type == 'upsell'): ?>
-                    <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item" style="display: none;">' : '</li><li class="item product product-item" style="display: none;">' ?>
+                    <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item" style="display: none;">' : '</li><li class="item product product-item" style="display: none;">' ?>
                 <?php else: ?>
-                    <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+                    <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <?php endif; ?>
-                <div class="product-item-info <?php /* @escapeNotVerified */ echo $available; ?>">
-                    <?php /* @escapeNotVerified */ echo '<!-- ' . $image . '-->' ?>
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>" class="product photo product-item-photo">
+                <div class="product-item-info <?= /* @escapeNotVerified */ $available ?>">
+                    <?= /* @escapeNotVerified */ '<!-- ' . $image . '-->' ?>
+                    <a href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>" class="product photo product-item-photo">
                         <?= $block->getImage($_item, $image)->toHtml() ?>
                     </a>
                     <div class="product details product-item-details">
-                        <strong class="product name product-item-name"><a class="product-item-link" title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>">
+                        <strong class="product name product-item-name"><a class="product-item-link" title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?= /* @escapeNotVerified */ $block->getProductUrl($_item) ?>">
                             <?= $block->escapeHtml($_item->getName()) ?></a>
                         </strong>
 
-                        <?php /* @escapeNotVerified */ echo $block->getProductPrice($_item); ?>
+                        <?= /* @escapeNotVerified */ $block->getProductPrice($_item) ?>
 
                             <?php if ($templateType): ?>
                                 <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
@@ -206,8 +206,8 @@ switch ($type = $block->getType()) {
                             <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
                                 <?php if (!$_item->getRequiredOptions()): ?>
                                     <div class="field choice related">
-                                        <input type="checkbox" class="checkbox related" id="related-checkbox<?php /* @escapeNotVerified */ echo $_item->getId() ?>" name="related_products[]" value="<?php /* @escapeNotVerified */ echo $_item->getId() ?>" />
-                                        <label class="label" for="related-checkbox<?php /* @escapeNotVerified */ echo $_item->getId() ?>"><span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span></label>
+                                        <input type="checkbox" class="checkbox related" id="related-checkbox<?= /* @escapeNotVerified */ $_item->getId() ?>" name="related_products[]" value="<?= /* @escapeNotVerified */ $_item->getId() ?>" />
+                                        <label class="label" for="related-checkbox<?= /* @escapeNotVerified */ $_item->getId() ?>"><span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span></label>
                                     </div>
                                 <?php endif; ?>
                             <?php endif; ?>
@@ -218,24 +218,24 @@ switch ($type = $block->getType()) {
                                         <div class="actions-primary">
                                             <?php if ($_item->isSaleable()): ?>
                                                 <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
-                                                    <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?php /* @escapeNotVerified */ echo $block->getAddToCartUrl($_item) ?>"}}' type="button" title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>">
-                                                        <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                                                    <button class="action tocart primary" data-mage-init='{"redirectUrl": {"url": "<?= /* @escapeNotVerified */ $block->getAddToCartUrl($_item) ?>"}}' type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
+                                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                                                     </button>
                                                 <?php else: ?>
                                                     <?php $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                                     $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                     ?>
                                                     <button class="action tocart primary"
-                                                            data-post='<?php /* @escapeNotVerified */ echo $postData; ?>'
-                                                            type="button" title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>">
-                                                        <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                                                            data-post='<?= /* @escapeNotVerified */ $postData ?>'
+                                                            type="button" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>">
+                                                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                                                     </button>
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <?php if ($_item->getIsSalable()): ?>
-                                                    <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                                                    <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
                                                 <?php else: ?>
-                                                    <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
+                                                    <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                         </div>

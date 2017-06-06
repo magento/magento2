@@ -18,7 +18,7 @@
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#<?php /* @escapeNotVerified */ echo $form->getForm()->getId() ?>').mage('form').mage('validation');
+    jQuery('#<?= /* @escapeNotVerified */ $form->getForm()->getId() ?>').mage('form').mage('validation');
 
 });
 </script>

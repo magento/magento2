@@ -18,7 +18,7 @@
 <?php if ($block->canShowBlock()): ?>
     <div class="block filter">
         <div class="block-title filter-title">
-            <strong><?php /* @escapeNotVerified */ echo __('Shop By') ?></strong>
+            <strong><?= /* @escapeNotVerified */ __('Shop By') ?></strong>
         </div>
 
         <div class="block-content filter-content">
@@ -26,18 +26,18 @@
 
             <?php if ($block->getLayer()->getState()->getFilters()): ?>
                 <div class="block-actions filter-actions">
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getClearUrl() ?>" class="action clear filter-clear"><span><?php /* @escapeNotVerified */ echo __('Clear All') ?></span></a>
+                    <a href="<?= /* @escapeNotVerified */ $block->getClearUrl() ?>" class="action clear filter-clear"><span><?= /* @escapeNotVerified */ __('Clear All') ?></span></a>
                 </div>
             <?php endif; ?>
             <?php $wrapOptions = false; ?>
             <?php foreach ($block->getFilters() as $filter): ?>
                 <?php if (!$wrapOptions): ?>
-                    <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?php /* @escapeNotVerified */ echo __('Shopping Options') ?></strong>
+                    <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?= /* @escapeNotVerified */ __('Shopping Options') ?></strong>
                     <dl class="filter-options" id="narrow-by-list">
                 <?php $wrapOptions = true; endif; ?>
                     <?php if ($filter->getItemsCount()): ?>
                         <dt role="heading" aria-level="3" class="filter-options-title"><?= $block->escapeHtml(__($filter->getName())) ?></dt>
-                        <dd class="filter-options-content"><?php /* @escapeNotVerified */ echo $block->getChildBlock('renderer')->render($filter); ?></dd>
+                        <dd class="filter-options-content"><?= /* @escapeNotVerified */ $block->getChildBlock('renderer')->render($filter) ?></dd>
                     <?php endif; ?>
             <?php endforeach; ?>
             <?php if ($wrapOptions): ?>

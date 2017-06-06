@@ -14,13 +14,13 @@
         $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
             ->getPostData($block->getReorderUrl($_order))
         ?>' class="action order">
-            <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Reorder') ?></span>
         </a>
     <?php endif ?>
     <a class="action print"
-       href="<?php /* @escapeNotVerified */ echo $block->getPrintUrl($_order) ?>"
+       href="<?= /* @escapeNotVerified */ $block->getPrintUrl($_order) ?>"
        onclick="this.target='_blank';">
-        <span><?php /* @escapeNotVerified */ echo __('Print Order') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Print Order') ?></span>
     </a>
     <?= $block->getChildHtml() ?>
 </div>

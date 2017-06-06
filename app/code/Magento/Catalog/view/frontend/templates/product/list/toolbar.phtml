@@ -16,7 +16,7 @@
 use Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
 <?php if ($block->getCollection()->getSize()): ?>
-    <div class="toolbar toolbar-products" data-mage-init='<?php /* @escapeNotVerified */ echo $block->getWidgetOptionsJson(); ?>'>
+    <div class="toolbar toolbar-products" data-mage-init='<?= /* @escapeNotVerified */ $block->getWidgetOptionsJson() ?>'>
         <?php if ($block->isExpanded()): ?>
             <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
         <?php endif; ?>
