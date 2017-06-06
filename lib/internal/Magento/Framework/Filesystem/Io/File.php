@@ -889,4 +889,37 @@ class File extends AbstractIo
     {
         return pathinfo($path);
     }
+    
+    /**
+     * Open file in stream mode
+     * For set folder for file use open method
+     *
+     * @param string $fileName
+     * @param string $mode
+     * @param int $chmod
+     * @return bool
+     * @throws \Exception
+     */
+    public function streamOpen($fileName, $mode = 'w+', $chmod = 0666)
+    {
+        $writeableMode = preg_match('#^[wax]#i', $mode);
+        if ($writeableMode && !is_writeable($this->_cwd)) {
+            throw new \Exception('Permission denied for write to ' . $this->_cwd);
+        }
+
+        if (!ini_get('auto_detect_line_endings')) {
+            ini_set('auto_detect_line_endings', 1);
+        }
+
+        @chdir($this->_cwd);
+        $this->_streamHandler = @fopen($fileName, $mode);
+        @chdir($this->_iwd);
+        if ($this->_streamHandler === false) {
+            throw new \Exception('Error write to file ' . $fileName);
+        }
+
+        $this->_streamFileName = $fileName;
+        $this->_streamChmod = $chmod;
+        return true;
+    }
 }
