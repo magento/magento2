@@ -39,7 +39,7 @@ $params = $block->getParams();
                     var parent = window.top;
                     $(parent).trigger('clearTimeout');
                     globalMessageList.addErrorMessage({
-                        message: $t('An error occurred on the server. Please try to place the order again.')
+                        message: $t("<?php echo $params['error_msg']; ?>.")
                     });
                 }
             );
