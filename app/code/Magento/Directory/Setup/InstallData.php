@@ -221,6 +221,7 @@ class InstallData implements InstallDataInterface
             ['PH', 'PH', 'PHL'],
             ['PK', 'PK', 'PAK'],
             ['PL', 'PL', 'POL'],
+            ['PR', 'PR', 'PRI'],
             ['PM', 'PM', 'SPM'],
             ['PN', 'PN', 'PCN'],
             ['PS', 'PS', 'PSE'],
