@@ -223,7 +223,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             ],
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
-            'images' => isset($options['images']) ? $options['images'] : [],
+            'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
         ];
 
@@ -234,6 +234,33 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = array_merge($config, $this->_getAdditionalConfig());
 
         return $this->jsonEncoder->encode($config);
+    }
+
+    /**
+     * Get product images for configurable variations
+     *
+     * @return array
+     */
+    protected function getOptionImages()
+    {
+        $images = [];
+        foreach ($this->getAllowProducts() as $product) {
+
+            $productImages = $this->helper->getGalleryImages($product) ?: [];
+            foreach ($productImages as $image) {
+                $images[$product->getId()][] =
+                    [
+                        'thumb' => $image->getData('small_image_url'),
+                        'img' => $image->getData('medium_image_url'),
+                        'full' => $image->getData('large_image_url'),
+                        'caption' => $image->getLabel(),
+                        'position' => $image->getPosition(),
+                        'isMain' => $image->getFile() == $product->getImage(),
+                    ];
+            }
+        }
+
+        return $images;
     }
 
     /**

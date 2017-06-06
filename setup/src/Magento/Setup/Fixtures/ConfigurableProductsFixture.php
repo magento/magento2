@@ -673,10 +673,10 @@ class ConfigurableProductsFixture extends Fixture
             array_column($attributes, 'options'),
             function ($index, $attribute) use ($attributeSetName, $attributes) {
                 $swatch = [];
-                $timeStamp = time();
+                $attributeCode = substr(uniqid(sprintf('custom_attribute_%s_', $index)), 0, 30);
                 $data = [
-                    'attribute_code' => sprintf('custom_attribute_%s_%s', $index, $timeStamp),
-                    'frontend_label' => 'Dynamic Attribute ' . sprintf('custom_attribute_%s_%s', $index, $timeStamp),
+                    'attribute_code' => $attributeCode,
+                    'frontend_label' => 'Dynamic Attribute ' . $attributeCode,
                 ];
 
                 if (isset($attributes[$index-1]['swatches'])) {
@@ -713,7 +713,7 @@ class ConfigurableProductsFixture extends Fixture
      */
     private function getAttributeSetName($attributesCount, $optionsCount)
     {
-        return sprintf('Dynamic Attribute Set %s-%s', $attributesCount, $optionsCount);
+        return uniqid(sprintf('Dynamic Attribute Set %s-%s-', $attributesCount, $optionsCount)) ;
     }
 
     /**
