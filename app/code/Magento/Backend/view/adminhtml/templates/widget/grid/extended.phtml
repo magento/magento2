@@ -64,7 +64,11 @@ $numColumns = sizeof($block->getColumns());
                         <span id="<?php echo $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?php /* @escapeNotVerified */ echo $block->getUiId('total-count') ?>>
                             <?php /* @escapeNotVerified */ echo $countRecords ?>
                         </span>
-                    <?php /* @escapeNotVerified */ echo __('records found') ?>
+                    <?php if($countRecords > 1): ?>
+                        <?php /* @escapeNotVerified */ echo __('records found') ?>
+                    <?php else: ?>
+                        <?php /* @escapeNotVerified */ echo __('record found') ?>
+                    <?php endif; ?>
                     <span id="<?php echo $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
                           class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?php /* @escapeNotVerified */ echo __('selected') ?></span></span>
                 </div>
