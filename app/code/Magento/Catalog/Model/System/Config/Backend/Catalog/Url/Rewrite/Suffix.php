@@ -65,6 +65,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->urlRewriteHelper = $urlRewriteHelper;
         $this->connection = $appResource->getConnection();
+        $this->appResource = $appResource;
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
     }
@@ -118,7 +119,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
                 ? [UrlRewrite::REQUEST_PATH => preg_replace($oldSuffixPattern, $suffix, $urlRewrite->getRequestPath())]
                 : [UrlRewrite::TARGET_PATH => preg_replace($oldSuffixPattern, $suffix, $urlRewrite->getTargetPath())];
             $this->connection->update(
-                DbStorage::TABLE_NAME,
+                $this->appResource->getTableName(DbStorage::TABLE_NAME),
                 $bind,
                 $this->connection->quoteIdentifier(UrlRewrite::URL_REWRITE_ID) . ' = ' . $urlRewrite->getUrlRewriteId()
             );
