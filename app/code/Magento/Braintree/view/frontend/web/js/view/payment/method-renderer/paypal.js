@@ -300,6 +300,10 @@ define([
 
                 return {};
             }
+            
+            // In case there is no shipping address we need to make sure that address.street[0] 
+            // doesn't throw an exception but simply retuns undefined
+            if (!address.hasOwnProperty('street')) address.street = [];
 
             return {
                 recipientName: address.firstname + ' ' + address.lastname,
