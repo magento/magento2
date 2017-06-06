@@ -725,11 +725,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     ) {
         $fields = [];
         $categoryFilter = [];
+        $storeFilter = null;
         foreach ($filterGroup->getFilters() as $filter) {
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
 
             if ($filter->getField() == 'category_id') {
                 $categoryFilter[$conditionType][] = $filter->getValue();
+                continue;
+            } elseif ($filter->getField() == 'store_id' && $conditionType === 'eq') {
+                $storeFilter = $filter->getValue();
                 continue;
             }
             $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
@@ -737,6 +741,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         if ($categoryFilter) {
             $collection->addCategoriesFilter($categoryFilter);
+        }
+
+        if ($storeFilter) {
+            $collection->addStoreFilter($storeFilter);
         }
 
         if ($fields) {
