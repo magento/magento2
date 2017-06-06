@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -57,11 +56,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     private $valueMock;
 
     /**
-     * @var AbstractResource|Mock
-     */
-    private $resourceMock;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -79,13 +73,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
-            ->setMethods(['save', 'getResource', 'setValue', 'getValue', 'afterSave'])
+            ->setMethods(['validateBeforeSave', 'beforeSave', 'setValue', 'getValue', 'afterSave'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['save'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
 
         $this->model = new LockProcessor(
             $this->preparedValueFactory,
@@ -130,12 +120,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->valueMock->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-        $this->valueMock->expects($this->once())
-            ->method('getResource')
-            ->willReturn($this->resourceMock);
-        $this->resourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->valueMock);
         $this->deploymentConfigWriterMock->expects($this->once())
             ->method('saveConfig')
             ->with(
@@ -154,6 +138,12 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
                 ],
                 false
             );
+        $this->valueMock->expects($this->once())
+            ->method('validateBeforeSave');
+        $this->valueMock->expects($this->once())
+            ->method('beforeSave');
+        $this->valueMock->expects($this->once())
+            ->method('afterSave');
 
         $this->model->process($path, $value, $scope, $scopeCode);
     }
@@ -185,12 +175,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->valueMock->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-        $this->valueMock->expects($this->once())
-            ->method('getResource')
-            ->willReturn($this->resourceMock);
-        $this->resourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->valueMock);
         $this->configPathResolver->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
@@ -223,10 +207,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->arrayManagerMock->expects($this->never())
             ->method('set');
         $this->valueMock->expects($this->once())
-            ->method('getResource')
-            ->willReturn($this->resourceMock);
-        $this->resourceMock->expects($this->once())
-            ->method('save')
+            ->method('getValue');
+        $this->valueMock->expects($this->once())
+            ->method('afterSave')
             ->willThrowException(new \Exception('Invalid values'));
         $this->deploymentConfigWriterMock->expects($this->never())
             ->method('saveConfig');
