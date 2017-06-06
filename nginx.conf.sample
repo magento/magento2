@@ -8,7 +8,7 @@
 # }
 # server {
 #    listen 80;
-#    server_name mage.dev;
+#    server_name magento2.dev;
 #    set $MAGE_ROOT /var/www/magento2;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
