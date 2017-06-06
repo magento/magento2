@@ -304,7 +304,7 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object.
      *
-     * @return \Magento\InventoryApi\Api\Data\SourceExtensionInterface
+     * @return \Magento\InventoryApi\Api\Data\SourceExtensionInterface|null
      */
     public function getExtensionAttributes();
 
