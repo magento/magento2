@@ -246,7 +246,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory
      */
-    protected $_memoCollectionFactory;
+    protected $_creditmemoCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory
@@ -288,7 +288,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory $historyCollectionFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory $shipmentCollectionFactory
-     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $memoCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $creditmemoCollectionFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
      * @param ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
@@ -318,7 +318,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory $historyCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory $invoiceCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory $shipmentCollectionFactory,
-        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory $creditmemoCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
@@ -343,7 +343,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_historyCollectionFactory = $historyCollectionFactory;
         $this->_invoiceCollectionFactory = $invoiceCollectionFactory;
         $this->_shipmentCollectionFactory = $shipmentCollectionFactory;
-        $this->_memoCollectionFactory = $memoCollectionFactory;
+        $this->_creditmemoCollectionFactory = $creditmemoCollectionFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->salesOrderCollectionFactory = $salesOrderCollectionFactory;
         $this->priceCurrency = $priceCurrency;
@@ -1727,7 +1727,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         if (empty($this->_creditmemos)) {
             if ($this->getId()) {
-                $this->_creditmemos = $this->_memoCollectionFactory->create()->setOrderFilter($this)->load();
+                $this->_creditmemos = $this->_creditmemoCollectionFactory->create()->setOrderFilter($this)->load();
             } else {
                 return false;
             }
