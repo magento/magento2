@@ -54,11 +54,11 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
                 <?php
                 if ($block->areMultipleSessionsActive()): ?>
                     data-mage-init='{"confirmRedirect":{
-                        "message": "<?php
-                            echo $block->escapeJs(__('Are you sure that you want to log out all other sessions?'))
+                        "message": "<?=
+                            $block->escapeJs(__('Are you sure that you want to log out all other sessions?'))
                         ?>",
-                        "url":"<?php
-                            echo $block->escapeJs($block->escapeUrl($block->getUrl('security/session/logoutAll')))
+                        "url":"<?=
+                            $block->escapeJs($block->escapeUrl($block->getUrl('security/session/logoutAll')))
                         ?>"
                     }}'
                 <?php
@@ -69,7 +69,6 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
             </button>
         </div>
 
-        <div><?php
-            echo $block->escapeHtml(__('This computer is using IP address %1.', $block->getRemoteIp())) ?></div>
+        <div><?= $block->escapeHtml(__('This computer is using IP address %1.', $block->getRemoteIp())) ?></div>
     </div>
 </div>

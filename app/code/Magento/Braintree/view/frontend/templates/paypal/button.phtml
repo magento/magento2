@@ -21,8 +21,7 @@ $config = [
 
 ?>
 <div data-mage-init='<?= /* @noEscape */ json_encode($config) ?>'
-     class="paypal checkout paypal-logo braintree-paypal-logo<?php
-     /* @noEscape */ echo $block->getContainerId(); ?>-container">
+    class="paypal checkout paypal-logo braintree-paypal-logo<?= /* @noEscape */ $block->getContainerId() ?>-container">
     <button data-currency="<?= /* @noEscape */ $block->getCurrency() ?>"
        data-locale="<?= /* @noEscape */ $block->getLocale() ?>"
        data-amount="<?= /* @noEscape */ $block->getAmount() ?>"

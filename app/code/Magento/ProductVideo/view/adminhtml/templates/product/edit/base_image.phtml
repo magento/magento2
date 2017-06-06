@@ -23,8 +23,7 @@
      data-max-file-size="<?= /* @escapeNotVerified */ $fileMaxSize ?>"
     >
     <div class="image image-placeholder">
-        <input type="file" name="image" data-url="<?php 
-        /* @escapeNotVerified */ echo $uploadUrl;?>" multiple="multiple" />
+        <input type="file" name="image" data-url="<?= /* @escapeNotVerified */ $uploadUrl ?>" multiple="multiple" />
         <img class="spacer" src="<?= /* @escapeNotVerified */ $spacerImage ?>"/>
         <p class="image-placeholder-text"><?= /* @escapeNotVerified */ $imagePlaceholderText ?></p>
     </div>
