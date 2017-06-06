@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\Resource\SourceCarrierLink;
+namespace Magento\Inventory\Model\ResourceModel\SourceCarrierLink;
 
-use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as ResourceSourceCarrierLink;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Inventory\Model\SourceCarrierLink as SourceCarrierLinkModel;
 

@@ -11,15 +11,15 @@ use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\Inventory\Model\Source;
-use Magento\Inventory\Model\Resource\Source as SourceResource;
-use Magento\Inventory\Model\Resource\Source\CollectionFactory as SourceCollectionFactory;
-use Magento\Inventory\Model\Resource\Source\Collection as SourceCollection;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResource;
+use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory as SourceCollectionFactory;
+use Magento\Inventory\Model\ResourceModel\Source\Collection as SourceCollection;
 use Magento\Inventory\Model\SourceCarrierLink;
-use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
-use Magento\Inventory\Model\Resource\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as ResourceSourceCarrierLink;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Inventory\Model\Resource\SourceCarrierLink\Collection as CarrierLinkCollection;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\Collection as CarrierLinkCollection;
 
 /**
  * Class SourceRepositoryTest
@@ -171,7 +171,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $carrierLinkCollectionMock = $this->getMockBuilder(
-            \Magento\Inventory\Model\Resource\SourceCarrierLink\Collection::class
+            \Magento\Inventory\Model\ResourceModel\SourceCarrierLink\Collection::class
         )->disableOriginalConstructor()->getMock();
 
         $this->carrierLinkCollectionFactory->expects($this->atLeastOnce())->method('create')
@@ -211,7 +211,7 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $carrierLinkCollectionMock = $this->getMockBuilder(
-            \Magento\Inventory\Model\Resource\SourceCarrierLink\Collection::class
+            \Magento\Inventory\Model\ResourceModel\SourceCarrierLink\Collection::class
         )->disableOriginalConstructor()->getMock();
 
         $this->carrierLinkCollectionFactory->expects($this->atLeastOnce())->method('create')

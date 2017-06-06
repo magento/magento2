@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Inventory\Setup;
 
 use Magento\Framework\DB\Ddl\Table;
@@ -9,6 +12,9 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class InstallSchema implements InstallSchemaInterface
 {
 
@@ -43,10 +49,9 @@ class InstallSchema implements InstallSchemaInterface
     const OPTION_PRECISION = 'precision';
 
     /**
-     * Generates needed database structure for source and sourcecarrierlink implementation from this module
-     *
-     * @param SchemaSetupInterface $setup
-     * @param ModuleContextInterface $context
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

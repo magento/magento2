@@ -24,7 +24,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\Resource\Source::class);
+        $this->_init(\Magento\Inventory\Model\ResourceModel\Source::class);
     }
 
     /**

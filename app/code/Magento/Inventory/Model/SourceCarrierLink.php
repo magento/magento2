@@ -21,7 +21,7 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\Resource\SourceCarrierLink::class);
+        $this->_init(\Magento\Inventory\Model\ResourceModel\SourceCarrierLink::class);
     }
 
     /**

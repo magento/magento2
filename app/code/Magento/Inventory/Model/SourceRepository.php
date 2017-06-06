@@ -12,10 +12,10 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Inventory\Model\Resource\Source as ResourceSource;
-use Magento\Inventory\Model\Resource\Source\CollectionFactory;
-use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierLink;
-use Magento\Inventory\Model\Resource\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
+use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
+use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as ResourceSourceCarrierLink;
+use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
@@ -184,7 +184,7 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
-        /** @var \Magento\Inventory\Model\Resource\Source\Collection $collection */
+        /** @var \Magento\Inventory\Model\ResourceModel\Source\Collection $collection */
         $collection = $this->collectionFactory->create();
 
         /** @var SourceSearchResultsInterface $searchResults */

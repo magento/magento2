@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\Resource;
+namespace Magento\Inventory\Model\ResourceModel;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
