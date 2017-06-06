@@ -154,7 +154,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets any additional information for the transaction.
      *
-     * @return string[]|null Array of additional information. Otherwise, null.
+     * @return array|null|mixed Array of additional information. Otherwise, null.
      */
     public function getAdditionalInformation();
 

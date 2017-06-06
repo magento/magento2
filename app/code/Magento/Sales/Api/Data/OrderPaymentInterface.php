@@ -261,7 +261,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the additional information for the order payment.
      *
-     * @return string[] Array of additional information.
+     * @return array|null|mixed Array of additional information.
      */
     public function getAdditionalInformation();
 
