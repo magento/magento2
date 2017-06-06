@@ -58,8 +58,7 @@ class CartItemPersister
         $itemId = $item->getItemId();
         try {
             /** Update existing item */
-            if (isset($itemId)) {
-                $currentItem = $quote->getItemById($itemId);
+            if (isset($itemId) && $currentItem = $quote->getItemById($itemId)) {
                 if (!$currentItem) {
                     throw new NoSuchEntityException(
                         __('Cart %1 does not contain item %2', $cartId, $itemId)
