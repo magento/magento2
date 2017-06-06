@@ -39,7 +39,7 @@ class ActionFlag
      *
      * @param   string $action
      * @param   string $flag
-     * @param   string $value
+     * @param   bool $value
      * @return void
      */
     public function set($action, $flag, $value)
