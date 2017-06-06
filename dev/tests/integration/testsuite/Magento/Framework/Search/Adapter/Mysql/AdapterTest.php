@@ -449,6 +449,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $queryResponse->count());
     }
 
+    /**
+     * @return array
+     */
     public function dateDataProvider()
     {
         return [
@@ -456,6 +459,38 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             [['from' => '2000-01-01T00:00:00Z', 'to' => ''], 1],
             [['from' => '1999-12-31T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1],
             [['from' => '2000-02-01T00:00:00Z', 'to' => ''], 0],
+        ];
+    }
+
+    /**
+     * Search request using custom price attribute.
+     *
+     * @param $rangeFilter
+     * @param $expectedRecordsCount
+     * @magentoDataFixture Magento/Framework/Search/_files/price_attribute.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @dataProvider priceDataProvider
+     */
+    public function testSearchCustomPriceField($rangeFilter, $expectedRecordsCount)
+    {
+        $this->requestBuilder->bind('price.from', $rangeFilter['from']);
+        $this->requestBuilder->bind('price.to', $rangeFilter['to']);
+        $this->requestBuilder->setRequestName('search_custom_price_field');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals($expectedRecordsCount, $queryResponse->count());
+    }
+
+    /**
+     * @return array
+     */
+    public function priceDataProvider()
+    {
+        return [
+            [['from' => '19.8900', 'to' => '19.8900'], 1],
+            [['from' => '19.8900', 'to' => ''], 1],
+            [['from' => '19.0000', 'to' => '19.8900'], 1],
+            [['from' => '', 'to' => '19.8900'], 1],
         ];
     }
 }
