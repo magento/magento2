@@ -66,12 +66,12 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
         \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory,
         CacheInterface $cache = null,
         $storeResolver = null,
-        array $cacheTags = null,
+        array $cacheTags = [],
         StoreManagerInterface $storeManager = null
     ) {
         $this->_attrBooleanFactory = $attrBooleanFactory;
         $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
-        $this->cacheTags = $cacheTags ?: self::$defaultCacheTags;
+        $this->cacheTags = !empty($cacheTags) ? $cacheTags : self::$defaultCacheTags;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
