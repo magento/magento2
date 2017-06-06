@@ -395,7 +395,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Product Option
      */
-    const KEY_PRODUCT_OPTION = 'product_option';
+    const KEY_PRODUCT_OPTION = 'product_options';
 
     /**
      * Gets the additional data for the order item.
