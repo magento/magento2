@@ -109,6 +109,8 @@ define([
             });
 
             registry.async('checkoutProvider')(function (checkoutProvider) {
+                // set initial empty for new address template
+                checkoutData.setShippingAddressFromData(null);
                 var shippingAddressData = checkoutData.getShippingAddressFromData();
 
                 if (shippingAddressData) {
