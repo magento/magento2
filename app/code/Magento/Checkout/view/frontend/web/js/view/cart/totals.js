@@ -19,10 +19,22 @@ define([
         initialize: function () {
             this._super();
             totalsService.totals.subscribe(function () {
-                $(window).trigger('resize');
+                if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+                     var evt = document.createEvent('UIEvents');
+                     evt.initUIEvent('resize', true, false, window, 0);
+                     window.dispatchEvent(evt);
+                } else {
+                     window.dispatchEvent(new Event('resize'));
+                }
             });
             shippingService.getShippingRates().subscribe(function () {
-                $(window).trigger('resize');
+                if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+                     var evt = document.createEvent('UIEvents');
+                     evt.initUIEvent('resize', true, false, window, 0);
+                     window.dispatchEvent(evt);
+                } else {
+                     window.dispatchEvent(new Event('resize'));
+                }
             });
         }
     });
