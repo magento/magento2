@@ -24,6 +24,8 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesInvoiceGridFullTextSearch">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66292: Magento\Ui\Test\TestCase\GridFullTextSearchTest.test with data set "SalesInvoiceGridFullTextSearch" failed on Jenkins</data>
             <data name="description" xsi:type="string">Verify sales invoice grid full text search</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
@@ -40,6 +42,8 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesShipmentGridFullTextSearch">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66293: Magento\Ui\Test\TestCase\GridFullTextSearchTest.test with data set "SalesShipmentGridFullTextSearch" failed on Jenkins</data>
             <data name="description" xsi:type="string">Verify sales shipment grid full text search</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
@@ -56,6 +60,8 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFullTextSearch"/>
         </variation>
         <variation name="SalesCreditMemoGridFullTextSearch">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66294: Magento\Ui\Test\TestCase\GridFullTextSearchTest.test with data set "SalesCreditMemoGridFullTextSearch" failed on Jenkins</data>
             <data name="description" xsi:type="string">Verify sales credit memo grid full text search</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="array">

@@ -83,7 +83,7 @@ class DeleteAdminUserEntityTest extends Injectable
      * @param UserEdit $userEdit
      * @param Dashboard $dashboard
      * @param AdminAuthLogin $adminAuthLogin
-     * @return array
+     * @return void
      */
     public function __inject(
         UserIndex $userIndex,

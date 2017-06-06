@@ -13,7 +13,12 @@
     <!-- ko text: address().telephone --><!-- /ko --><br/>
     <!-- ko foreach: { data: address().customAttributes, as: 'element' } -->
         <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
-            <!-- ko text: element[attribute].value --><!-- /ko -->
+            <!-- ko if: element[attribute].value != null -->
+                <!-- ko text: element[attribute].value --><!-- /ko --><br/>
+            <!-- /ko -->
+            <!-- ko if: element[attribute].value == null -->
+                <!-- ko text: element[attribute] --><!-- /ko --><br/>
+            <!-- /ko -->
         <!-- /ko -->
     <!-- /ko -->
 <!-- /ko -->

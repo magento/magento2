@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Swatches\Test\TestCase\CheckSwatchesInCategoryPageTest" summary="Check Swathes visibility in category page" ticketId="MAGETWO-65485">
         <variation name="CheckSwatchesInCategoryPageTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66710: [FT] CheckSwatchesInCategoryPageTest::CheckSwatchesInCategoryPageTestVariation1 failed</data>
             <data name="product/dataset" xsi:type="string">product_with_text_swatch</data>
             <constraint name="Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory" />
         </variation>
