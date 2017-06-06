@@ -6,10 +6,12 @@
 
 namespace Magento\Catalog\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * @api
  */
-interface ProductCustomOptionValuesInterface
+interface ProductCustomOptionValuesInterface extends ExtensibleDataInterface
 {
     /**
      * Get option title
