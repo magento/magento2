@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use \Magento\Framework\Translate;
+use Magento\Framework\Translate;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -202,7 +202,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'module original' => 'module translated',
             'module theme' => 'theme translated overwrite',
-            'module pack' => 'pack translated overwrite',
+            'module pack' => 'theme-pack translated overwrite',
             'module db' => 'db translated overwrite',
             'theme original' => 'theme translated',
             'pack original' => 'pack translated',

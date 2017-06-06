@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,33 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 /**
  * Fixture generator for Order entities with configurable number of different types of order items.
  * Optionally generates inactive quotes for generated orders.
+ *
+ * Support the following format:
+ * <!-- Is is nescessary to enable quotes for orders -->
+ * <order_quotes_enable>{bool}</order_quotes_enable>
+ *
+ * <!-- Min number of simple products per each order -->
+ * <order_simple_product_count_from>{int}</order_simple_product_count_from>
+ *
+ * <!-- Max number of simple products per each order -->
+ * <order_simple_product_count_to>{int}</order_simple_product_count_to>
+ *
+ * <!-- Min number of configurable products per each order -->
+ * <order_configurable_product_count_from>{int}</order_configurable_product_count_from>
+ *
+ * <!-- Max number of configurable products per each order -->
+ * <order_configurable_product_count_to>{int}</order_configurable_product_count_to>
+ *
+ * <!-- Min number of big configurable products (with big amount of options) per each order -->
+ * <order_big_configurable_product_count_from>{int}</order_big_configurable_product_count_from>
+ *
+ * <!-- Max number of big configurable products (with big amount of options) per each order -->
+ * <order_big_configurable_product_count_to>{int}</order_big_configurable_product_count_to>
+ *
+ * <!-- Number of orders to generate -->
+ * <orders>{int}</orders>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -247,7 +274,6 @@ class OrdersFixture extends Fixture
                 ]),
                 $productsResult
             ];
-
         }
 
         $productStoreId = function ($index) use ($result) {
@@ -657,7 +683,6 @@ class OrdersFixture extends Fixture
                 'order' => $this->serializer->serialize($simpleBuyRequest),
                 'quote' => $this->serializer->serialize($quoteSimpleBuyRequest),
             ];
-
         }
         return $productsResult;
     }

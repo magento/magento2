@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -66,7 +66,7 @@ class CanViewNotificationTest extends \PHPUnit_Framework_TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('getTimestamp')
             ->willReturn(10005000);
-        $this->assertTrue($this->canViewNotification->validate());
+        $this->assertTrue($this->canViewNotification->isVisible([]));
     }
 
     public function testValidateFlagRemoved()
@@ -76,6 +76,6 @@ class CanViewNotificationTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
         $this->dateTimeFactoryMock->expects($this->never())
             ->method('create');
-        $this->assertFalse($this->canViewNotification->validate());
+        $this->assertFalse($this->canViewNotification->isVisible([]));
     }
 }

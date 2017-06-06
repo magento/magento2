@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1482,9 +1482,9 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected function _applyStreetAndRegionWorkarounds(\Magento\Framework\DataObject $address)
     {
         // merge street addresses into 1
-        if ($address->hasStreet2()) {
-            $address->setStreet(implode("\n", [$address->getStreet(), $address->getStreetLine(2)]));
-            $address->unsStreet2();
+        if ($address->getData('street2') !== null) {
+            $address->setStreet(implode("\n", [$address->getData('street'), $address->getData('street2')]));
+            $address->unsetData('street2');
         }
         // attempt to fetch region_id from directory
         if ($address->getCountryId() && $address->getRegion()) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -73,6 +73,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation15" summary="Search for simple product name using 129 symbols query length" ticketId="MAGETWO-36542">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::product_with_long_name::name</data>
             <data name="queryLength" xsi:type="string">129</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchQueryLength" />
@@ -97,6 +98,11 @@
                 <item name="product_2" xsi:type="string">catalogProductSimple::search_weight_term_twice_weight_1</item>
             </data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResultOrder" />
+        </variation>
+        <variation name="SearchEntityResultsTestVariation18" summary="Search Configurable Product with Enabled and Disabled Children." ticketId="MAGETWO-69181">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">configurableProduct::one_simple_product_not_visible_individually::name</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertConfigurableWithDisabledOtpionCatalogSearchNoResult" />
         </variation>
     </testCase>
 </config>

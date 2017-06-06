@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
@@ -30,6 +30,8 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
 {
@@ -584,21 +586,18 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if ($this->isTelephoneRequired()) {
             if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
                 $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
-
             }
         }
 
         if ($this->isFaxRequired()) {
             if (!\Zend_Validate::is($this->getFax(), 'NotEmpty')) {
                 $errors[] = __('%fieldName is a required field.', ['fieldName' => 'fax']);
-
             }
         }
 
         if ($this->isCompanyRequired()) {
             if (!\Zend_Validate::is($this->getCompany(), 'NotEmpty')) {
                 $errors[] = __('%fieldName is a required field.', ['fieldName' => 'company']);
-
             }
         }
 

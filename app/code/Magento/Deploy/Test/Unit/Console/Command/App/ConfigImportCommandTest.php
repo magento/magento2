@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Console\Command\App;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
+use Magento\Deploy\Console\Command\App\ConfigImport\Processor;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Importer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $importerMock;
+    private $processorMock;
 
     /**
      * @var CommandTester
@@ -28,13 +28,11 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->importerMock = $this->getMockBuilder(Importer::class)
+        $this->processorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configImportCommand = new ConfigImportCommand(
-            $this->importerMock
-        );
+        $configImportCommand = new ConfigImportCommand($this->processorMock);
 
         $this->commandTester = new CommandTester($configImportCommand);
     }
@@ -44,8 +42,8 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $this->importerMock->expects($this->once())
-            ->method('import');
+        $this->processorMock->expects($this->once())
+            ->method('execute');
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute([]));
     }
@@ -55,9 +53,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithException()
     {
-        $this->importerMock->expects($this->once())
-            ->method('import')
-            ->willThrowException(new LocalizedException(__('Some error')));
+        $this->processorMock->expects($this->once())
+            ->method('execute')
+            ->willThrowException(new RuntimeException(__('Some error')));
 
         $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->execute([]));
         $this->assertContains('Some error', $this->commandTester->getDisplay());

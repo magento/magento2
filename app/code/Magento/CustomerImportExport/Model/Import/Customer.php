@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -9,6 +9,10 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
+ * Customer entity import
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Customer extends AbstractCustomer
@@ -569,11 +573,11 @@ class Customer extends AbstractCustomer
      */
     public function getValidColumnNames()
     {
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->customerFields
+        return array_unique(
+            array_merge(
+                $this->validColumnNames,
+                $this->customerFields
+            )
         );
-
-        return $this->validColumnNames;
     }
 }

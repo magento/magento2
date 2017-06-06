@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,7 +63,6 @@ class ColumnsResolver
             if (isset($attributeData['group'])) {
                 $group[$columnAlias] = $expression;
             }
-
         }
         $selectBuilder->setGroup(array_merge($selectBuilder->getGroup(), $group));
         return $columns;

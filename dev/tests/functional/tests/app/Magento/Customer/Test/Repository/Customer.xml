@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -222,6 +222,20 @@
             <field name="password_confirmation" xsi:type="string">123123^q</field>
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">UK_address_default_billing</item>
+            </field>
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="customer_DE_default_billing_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123^q</field>
+            <field name="password_confirmation" xsi:type="string">123123^q</field>
+            <field name="address" xsi:type="array">
+                <item name="dataset" xsi:type="string">DE_address_default</item>
             </field>
             <field name="website_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>

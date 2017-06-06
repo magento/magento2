@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Import entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\Theme\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @api
+ */
 class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

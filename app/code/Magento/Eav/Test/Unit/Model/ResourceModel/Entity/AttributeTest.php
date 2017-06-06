@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -201,6 +201,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
         $resourceModel->save($model);
     }
@@ -250,7 +251,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'beginTransaction',
                 'commit',
                 'rollback',
-                'select'
+                'select',
+                'getTransactionLevel'
             ],
             [],
             '',

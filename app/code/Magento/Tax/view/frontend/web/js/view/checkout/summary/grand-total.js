@@ -1,6 +1,10 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 
 define([
@@ -62,7 +66,7 @@ define([
                 return 0;
             }
 
-            return this.getFormattedPrice(totals['grand_total']);
+            return this.getFormattedPrice(total['grand_total']);
         },
 
         /**
@@ -75,7 +79,7 @@ define([
                 return false;
             }
 
-            return totals['base_currency_code'] != totals['quote_currency_code']; //eslint-disable-line eqeqeq
+            return total['base_currency_code'] != total['quote_currency_code']; //eslint-disable-line eqeqeq
         }
     });
 });

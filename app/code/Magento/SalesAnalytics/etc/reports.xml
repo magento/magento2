@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -24,6 +24,10 @@
             <attribute name="shipping_method"/>
             <attribute name="shipping_address_id"/>
             <attribute name="customer_email" function="sha1"/>
+            <attribute name="base_total_online_refunded"/>
+            <attribute name="base_total_offline_refunded"/>
+            <attribute name="base_currency_code"/>
+            <attribute name="billing_address_id"/>
         </source>
     </report>
     <report name="order_items" connection="sales">

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -214,8 +214,7 @@ class TierPriceValidator
      */
     private function checkPrice(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
     {
-        if (
-            null === $price->getPrice()
+        if (null === $price->getPrice()
             || $price->getPrice() < 0
             || ($price->getPriceType() === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
                 && $price->getPrice() > 100
@@ -260,14 +259,13 @@ class TierPriceValidator
         $key,
         Result $validationResult
     ) {
-        if (
-            !in_array(
-                $price->getPriceType(),
-                [
+        if (!in_array(
+            $price->getPriceType(),
+            [
                     \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_FIXED,
                     \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
                 ]
-            )
+        )
             || (array_search(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $ids)
                 && $price->getPriceType() !== \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT)
         ) {

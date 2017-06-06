@@ -1,18 +1,16 @@
 <?php
 /**
- * Connection adapter factory
- *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module;
 
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
-use Magento\Framework\Stdlib;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Class ConnectionFactory
+ * Connection adapter factory
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface
@@ -37,67 +35,56 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
      */
     public function create(array $connectionConfig)
     {
-
         $quote = new \Magento\Framework\DB\Platform\Quote();
         $selectFactory = new \Magento\Framework\DB\SelectFactory(
             new \Magento\Framework\DB\Select\SelectRenderer(
                 [
-                    'distinct' =>
-                        [
+                    'distinct' => [
                             'renderer' => new \Magento\Framework\DB\Select\DistinctRenderer(),
                             'sort' => 100,
                             'part' => 'distinct'
                         ],
-                    'columns' =>
-                        [
+                    'columns' => [
                             'renderer' => new \Magento\Framework\DB\Select\ColumnsRenderer($quote),
                             'sort' => 200,
                             'part' => 'columns'
                         ],
-                    'union' =>
-                        [
+                    'union' => [
                             'renderer' => new \Magento\Framework\DB\Select\UnionRenderer(),
                             'sort' => 300,
                             'part' => 'union'
                         ],
-                    'from' =>
-                        [
+                    'from' => [
                             'renderer' => new \Magento\Framework\DB\Select\FromRenderer($quote),
                             'sort' => 400,
                             'part' => 'from'
                         ],
-                    'where' =>
-                        [
+                    'where' => [
                             'renderer' => new \Magento\Framework\DB\Select\WhereRenderer(),
                             'sort' => 500,
                             'part' => 'where'
                         ],
-                    'group' =>
-                        [
+                    'group' => [
                             'renderer' => new \Magento\Framework\DB\Select\GroupRenderer($quote),
                             'sort' => 600,
                             'part' => 'group'
                         ],
-                    'having' =>
-                        [
+                    'having' => [
                             'renderer' => new \Magento\Framework\DB\Select\HavingRenderer(),
                             'sort' => 700,
                             'part' => 'having'
                         ],
-                    'order' =>
-                        [
+                    'order' => [
                             'renderer' => new \Magento\Framework\DB\Select\OrderRenderer($quote),
                             'sort' => 800,
                             'part' => 'order'
                         ],
-                    'limit' =>
-                        [
+                    'limit' => [
                             'renderer' => new \Magento\Framework\DB\Select\LimitRenderer(),
                             'sort' => 900,
                             'part' => 'limitcount'
                         ],
-                    'for_update' =>
-                        [
+                    'for_update' => [
                             'renderer' => new \Magento\Framework\DB\Select\ForUpdateRenderer(),
                             'sort' => 1000,
                             'part' => 'forupdate'
@@ -105,13 +92,12 @@ class ConnectionFactory implements \Magento\Framework\Model\ResourceModel\Type\D
                 ]
             )
         );
-        $resourceInstance = new Mysql(
-            new Stdlib\StringUtils(),
-            new Stdlib\DateTime(),
-            $selectFactory,
-            $connectionConfig
+        $objectManagerProvider = $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $mysqlFactory = new \Magento\Framework\DB\Adapter\Pdo\MysqlFactory($objectManagerProvider->get());
+        $resourceInstance = new Mysql($connectionConfig, $mysqlFactory);
+        return $resourceInstance->getConnection(
+            $this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class),
+            $selectFactory
         );
-
-        return $resourceInstance->getConnection($this->serviceLocator->get(\Magento\Framework\DB\Logger\Quiet::class));
     }
 }

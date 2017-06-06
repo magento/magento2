@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code;
 
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
 /**
  * Regenerates generated code and DI configuration
@@ -64,7 +64,6 @@ class GeneratedFiles
     public function cleanGeneratedFiles()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
-
             $enabledCacheTypes = [];
 
             //TODO: to be removed in scope of MAGETWO-53476

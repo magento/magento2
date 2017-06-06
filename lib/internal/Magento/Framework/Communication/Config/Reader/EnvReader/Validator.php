@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication\Config\Reader\EnvReader;
 
-use Magento\Framework\Communication\ConfigInterface;
-use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Communication\Config\Validator as ConfigValidator;
-use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Communication\ConfigInterface;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Communication configuration validator. Validates data, that have been read from env.php.
@@ -178,8 +178,7 @@ class Validator extends ConfigValidator
                 )
             );
         }
-        if (
-            $this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]) &&
+        if ($this->booleanUtils->toBoolean($configDataItem[ConfigInterface::TOPIC_IS_SYNCHRONOUS]) &&
             count($configDataItem[ConfigInterface::TOPIC_HANDLERS]) != 1
         ) {
             throw new \LogicException(

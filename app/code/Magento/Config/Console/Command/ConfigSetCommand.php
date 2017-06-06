@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Console\Command;
 
-use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
-use Magento\Config\Model\Config\PathValidatorFactory;
-use Magento\Framework\App\Area;
+use Magento\Config\App\Config\Type\System;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Scope\ValidatorInterface;
-use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,49 +33,49 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
-     * The factory for config:set processors.
+     * Emulator adminhtml area for CLI command.
      *
-     * @var ConfigSetProcessorFactory
+     * @var EmulatedAdminhtmlAreaProcessor
      */
-    private $configSetProcessorFactory;
+    private $emulatedAreaProcessor;
 
     /**
-     * Scope validator.
+     * The config change detector.
      *
-     * @var ValidatorInterface
+     * @var ChangeDetector
      */
-    private $validator;
+    private $changeDetector;
 
     /**
-     * Scope manager.
+     * The hash manager.
      *
-     * @var ScopeInterface
+     * @var Hash
      */
-    private $scope;
+    private $hash;
 
     /**
-     * The factory for path validator.
+     * The factory for processor facade.
      *
-     * @var PathValidatorFactory
+     * @var ProcessorFacadeFactory
      */
-    private $pathValidatorFactory;
+    private $processorFacadeFactory;
 
     /**
-     * @param ConfigSetProcessorFactory $configSetProcessorFactory The factory for config:set processors
-     * @param ValidatorInterface $validator Scope validator
-     * @param ScopeInterface $scope Scope manager
-     * @param PathValidatorFactory $pathValidatorFactory The factory for path validator
+     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
+     * @param ChangeDetector $changeDetector The config change detector
+     * @param Hash $hash The hash manager
+     * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
      */
     public function __construct(
-        ConfigSetProcessorFactory $configSetProcessorFactory,
-        ValidatorInterface $validator,
-        ScopeInterface $scope,
-        PathValidatorFactory $pathValidatorFactory
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
+        ChangeDetector $changeDetector,
+        Hash $hash,
+        ProcessorFacadeFactory $processorFacadeFactory
     ) {
-        $this->configSetProcessorFactory = $configSetProcessorFactory;
-        $this->validator = $validator;
-        $this->scope = $scope;
-        $this->pathValidatorFactory = $pathValidatorFactory;
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
+        $this->changeDetector = $changeDetector;
+        $this->hash = $hash;
+        $this->processorFacadeFactory = $processorFacadeFactory;
 
         parent::__construct();
     }
@@ -126,37 +125,29 @@ class ConfigSetCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($this->changeDetector->hasChanges(System::CONFIG_TYPE)) {
+            $output->writeln(
+                '<error>'
+                . 'This command is unavailable right now. '
+                . 'To continue working with it please run app:config:import or setup:upgrade command before.'
+                . '</error>'
+            );
+
+            return Cli::RETURN_FAILURE;
+        }
+
         try {
-            $this->validator->isValid(
-                $input->getOption(static::OPTION_SCOPE),
-                $input->getOption(static::OPTION_SCOPE_CODE)
-            );
+            $message = $this->emulatedAreaProcessor->process(function () use ($input) {
+                return $this->processorFacadeFactory->create()->process(
+                    $input->getArgument(static::ARG_PATH),
+                    $input->getArgument(static::ARG_VALUE),
+                    $input->getOption(static::OPTION_SCOPE),
+                    $input->getOption(static::OPTION_SCOPE_CODE),
+                    $input->getOption(static::OPTION_LOCK)
+                );
+            });
 
-            // Emulating adminhtml scope to be able to read configs.
-            $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
-
-            /**
-             * Validates the entered config path.
-             * Requires emulated area.
-             */
-            $this->pathValidatorFactory->create()->validate(
-                $input->getArgument(ConfigSetCommand::ARG_PATH)
-            );
-
-            $processor = $input->getOption(static::OPTION_LOCK)
-                ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
-                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
-            $message = $input->getOption(static::OPTION_LOCK)
-                ? 'Value was saved and locked.'
-                : 'Value was saved.';
-
-            // The processing flow depends on --lock option.
-            $processor->process(
-                $input->getArgument(ConfigSetCommand::ARG_PATH),
-                $input->getArgument(ConfigSetCommand::ARG_VALUE),
-                $input->getOption(ConfigSetCommand::OPTION_SCOPE),
-                $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE)
-            );
+            $this->hash->regenerate(System::CONFIG_TYPE);
 
             $output->writeln('<info>' . $message . '</info>');
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -141,6 +141,20 @@
             </field>
         </dataset>
 
+        <dataset name="attribute_type_dropdown_one_option_without_view">
+            <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string"></item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="color">
             <field name="frontend_label" xsi:type="string">color_%isolation%</field>
             <field name="attribute_code" xsi:type="string">color_%isolation%</field>
@@ -202,6 +216,11 @@
                     <item name="view" xsi:type="string">xxl_%isolation%</item>
                 </item>
             </field>
+        </dataset>
+
+        <dataset name="attribute_type_textarea">
+            <field name="frontend_label" xsi:type="string">textarea_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Area</field>
         </dataset>
 
         <dataset name="attribute_type_fpt">
@@ -307,6 +326,14 @@
             <field name="is_searchable" xsi:type="string">Yes</field>
             <field name="search_weight" xsi:type="string">1</field>
             <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit Alaska amet</field>
+        </dataset>
+
+        <dataset name="free_shipping">
+            <field name="frontend_label" xsi:type="string">free_shipping_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">free_shipping_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Yes/No</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_used_for_promo_rules" xsi:type="string">Yes</field>
         </dataset>
     </repository>
 </config>

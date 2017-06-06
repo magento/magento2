@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
-use Magento\Catalog\Model\Product\Option\Type\DefaultType;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\DataObject;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Bundle\Model\Selection;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class TypeTest
@@ -1834,7 +1834,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @param int $getSelectionsIdsIndex
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-
     protected function getSelectionsByIdsMock($selectionIds, $productMock, $getSelectionsIndex, $getSelectionsIdsIndex)
     {
         $usedSelectionsMock = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
@@ -2592,7 +2591,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->mockBundleCollection();
         $product = $this->getProductMock();
         $product->method('getCustomOption')->willReturnMap([
-            ['bundle_selection_ids', new DataObject(['value' => ''])],
+            ['bundle_selection_ids', new DataObject(['value' => '[]'])],
             ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => ''])])],
         ]);
         $product->setCustomOption(json_encode([]));

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 /**
  * Products mass update inventory tab
+ *
+ * @api
  */
 class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {

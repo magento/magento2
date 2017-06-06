@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 
 use Magento\Analytics\ReportXml\DB\ConditionResolver;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Sql\Expression;
 

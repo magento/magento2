@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,11 +10,6 @@ use \Magento\Setup\Model\AdminAccount;
 
 class AdminAccountTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\Setup
-     */
-    private $setUpMock;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
@@ -30,20 +25,18 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
      */
     private $adminAccount;
 
+    /**
+     * @var string
+     */
+    private $prefix;
+
     public function setUp()
     {
-        $this->setUpMock = $this->getMock(\Magento\Setup\Module\Setup::class, [], [], '', false);
-
         $this->dbAdapterMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
 
-        $this->setUpMock
+        $this->dbAdapterMock
             ->expects($this->any())
-            ->method('getConnection')
-            ->will($this->returnValue($this->dbAdapterMock));
-
-        $this->setUpMock
-            ->expects($this->any())
-            ->method('getTable')
+            ->method('getTableName')
             ->will($this->returnCallback(
                 function ($table) {
                     return $table;
@@ -59,9 +52,16 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             AdminAccount::KEY_EMAIL => 'john.doe@test.com',
             AdminAccount::KEY_PASSWORD => '123123q',
             AdminAccount::KEY_USER => 'admin',
+            AdminAccount::KEY_PREFIX => 'pre_',
         ];
 
-        $this->adminAccount = new AdminAccount($this->setUpMock, $this->encryptor, $data);
+        $this->prefix = $data[AdminAccount::KEY_PREFIX];
+
+        $this->adminAccount = new AdminAccount(
+            $this->dbAdapterMock,
+            $this->encryptor,
+            $data
+        );
     }
 
     public function testSaveUserExistsAdminRoleExists()
@@ -86,20 +86,29 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
         $returnValueMap = [
             [
-                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                'SELECT user_id, username, email FROM ' . $this->prefix .
+                'admin_user WHERE username = :username OR email = :email',
                 ['username' => 'admin', 'email' => 'john.doe@test.com'],
                 null,
                 $existingUserData,
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                'SELECT user_id, username, email FROM ' . $this->prefix .
+                'admin_user WHERE username = :username OR email = :email',
+                ['username' => 'admin', 'email' => 'john.doe@test.com'],
+                null,
+                $existingUserData,
+            ],
+            [
+                'SELECT * FROM ' . $this->prefix .
+                'authorization_role WHERE user_id = :user_id AND user_type = :user_type',
                 ['user_id' => 1, 'user_type' => 2],
                 null,
                 $existingAdminRoleData,
             ],
         ];
         $this->dbAdapterMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('fetchRow')
             ->will($this->returnValueMap($returnValueMap));
         $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
@@ -133,19 +142,29 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
         $returnValueMap = [
             [
-                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                'SELECT user_id, username, email FROM ' . $this->prefix .
+                'admin_user WHERE username = :username OR email = :email',
                 ['username' => 'admin', 'email' => 'john.doe@test.com'],
                 null,
                 $existingUserData,
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                'SELECT user_id, username, email FROM ' . $this->prefix .
+                'admin_user WHERE username = :username OR email = :email',
+                ['username' => 'admin', 'email' => 'john.doe@test.com'],
+                null,
+                $existingUserData,
+            ],
+            [
+                'SELECT * FROM ' . $this->prefix .
+                'authorization_role WHERE user_id = :user_id AND user_type = :user_type',
                 ['user_id' => 1, 'user_type' => 2],
                 null,
                 [],
             ],
             [
-                'SELECT * FROM authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
+                'SELECT * FROM ' . $this->prefix .
+                'authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
                 'AND role_type = :role_type AND user_id = :user_id ' .
                 'AND user_type = :user_type AND role_name = :role_name',
                 [
@@ -162,7 +181,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->dbAdapterMock
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(4))
             ->method('fetchRow')
             ->will($this->returnValueMap($returnValueMap));
         $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
@@ -189,13 +208,15 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
         $returnValueMap = [
             [
-                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                'SELECT user_id, username, email FROM ' . $this->prefix .
+                'admin_user WHERE username = :username OR email = :email',
                 ['username' => 'admin', 'email' => 'john.doe@test.com'],
                 null,
                 [],
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                'SELECT * FROM ' . $this->prefix .
+                'authorization_role WHERE user_id = :user_id AND user_type = :user_type',
                 ['user_id' => 1, 'user_type' => 2],
                 null,
                 $existingAdminRoleData,
@@ -229,19 +250,22 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
         $returnValueMap = [
             [
-                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                'SELECT user_id, username, email FROM ' . $this->prefix .
+                'admin_user WHERE username = :username OR email = :email',
                 ['username' => 'admin', 'email' => 'john.doe@test.com'],
                 null,
                 [],
             ],
             [
-                'SELECT * FROM authorization_role WHERE user_id = :user_id AND user_type = :user_type',
+                'SELECT * FROM ' . $this->prefix .
+                'authorization_role WHERE user_id = :user_id AND user_type = :user_type',
                 ['user_id' => 1, 'user_type' => 2],
                 null,
                 [],
             ],
             [
-                'SELECT * FROM authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
+                'SELECT * FROM ' . $this->prefix .
+                'authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
                 'AND role_type = :role_type AND user_id = :user_id ' .
                 'AND user_type = :user_type AND role_name = :role_name',
                 [
@@ -283,7 +307,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             'username' => 'Another.name',
         ];
 
-        $this->dbAdapterMock->expects($this->once())->method('fetchRow')->will($this->returnValue($existingUserData));
+        $this->dbAdapterMock->expects($this->exactly(2))
+            ->method('fetchRow')->will($this->returnValue($existingUserData));
         // should not alter db
         $this->dbAdapterMock->expects($this->never())->method('update');
         $this->dbAdapterMock->expects($this->never())->method('insert');
@@ -302,7 +327,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             'username' => 'admin',
         ];
 
-        $this->dbAdapterMock->expects($this->once())->method('fetchRow')->will($this->returnValue($existingUserData));
+        $this->dbAdapterMock->expects($this->exactly(2))
+            ->method('fetchRow')->will($this->returnValue($existingUserData));
         // should not alter db
         $this->dbAdapterMock->expects($this->never())->method('update');
         $this->dbAdapterMock->expects($this->never())->method('insert');
@@ -316,9 +342,104 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveExceptionSpecialAdminRoleNotFound()
     {
-        $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
         $this->dbAdapterMock->expects($this->exactly(3))->method('fetchRow')->will($this->returnValue([]));
+        $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
         $this->adminAccount->save();
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Password is a required field
+     */
+    public function testSaveExceptionPasswordEmpty()
+    {
+        // alternative data must be used for this test
+        $data = [
+            AdminAccount::KEY_FIRST_NAME => 'John',
+            AdminAccount::KEY_LAST_NAME => 'Doe',
+            AdminAccount::KEY_EMAIL => 'john.doe@test.com',
+            AdminAccount::KEY_PASSWORD => '',
+            AdminAccount::KEY_USER => 'admin',
+            AdminAccount::KEY_PREFIX => '',
+        ];
+
+        $adminAccount = new AdminAccount(
+            $this->dbAdapterMock,
+            $this->encryptor,
+            $data
+        );
+
+        // existing user data
+        $existingUserData = [
+            'email' => 'john.doe@test.com',
+            'username' => 'passMatch2Username',
+            'user_id' => 1,
+        ];
+
+        $returnValueMap = [
+            [
+                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                ['username' => 'admin', 'email' => 'john.doe@test.com'],
+                null,
+                $existingUserData,
+            ]
+
+        ];
+        $this->dbAdapterMock
+            ->expects($this->exactly(1))
+            ->method('fetchRow')
+            ->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->never())->method('insert');
+        $this->dbAdapterMock->expects($this->never())->method('update');
+
+        $adminAccount->save();
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Password cannot be the same as the user name.
+     */
+    public function testSaveExceptionPasswordAndUsernameEqual()
+    {
+        // alternative data must be used for this test
+        $data = [
+            AdminAccount::KEY_FIRST_NAME => 'John',
+            AdminAccount::KEY_LAST_NAME => 'Doe',
+            AdminAccount::KEY_EMAIL => 'john.doe@test.com',
+            AdminAccount::KEY_PASSWORD => 'passMatch2Username',
+            AdminAccount::KEY_USER => 'passMatch2Username',
+            AdminAccount::KEY_PREFIX => '',
+        ];
+
+        $adminAccount = new AdminAccount(
+            $this->dbAdapterMock,
+            $this->encryptor,
+            $data
+        );
+
+        // existing user data
+        $existingUserData = [
+            'email' => 'john.doe@test.com',
+            'username' => 'passMatch2Username',
+            'user_id' => 1,
+        ];
+
+        $returnValueMap = [
+            [
+                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                ['username' => 'passMatch2Username', 'email' => 'john.doe@test.com'],
+                null,
+                $existingUserData,
+            ]
+        ];
+        $this->dbAdapterMock
+            ->expects($this->exactly(1))
+            ->method('fetchRow')
+            ->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->never())->method('insert');
+        $this->dbAdapterMock->expects($this->never())->method('update');
+
+        $adminAccount->save();
     }
 }

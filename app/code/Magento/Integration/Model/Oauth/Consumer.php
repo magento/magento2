@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Oauth;
@@ -10,6 +10,7 @@ use Magento\Framework\Oauth\ConsumerInterface;
 /**
  * Consumer model
  *
+ * @api
  * @author Magento Core Team <core@magentocommerce.com>
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer _getResource()
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer getResource()

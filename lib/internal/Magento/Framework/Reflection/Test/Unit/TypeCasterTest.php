@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Reflection\TypeCaster;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Type caster Test
@@ -18,15 +21,25 @@ class TypeCasterTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
+     * @var Json|MockObject
+     */
+    private $serializer;
+
+    /**
      * Set up helper.
      */
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Framework\Reflection\TypeCaster::class);
+        $objectManager = new ObjectManager($this);
+        $this->serializer = $this->getMockBuilder(Json::class)
+            ->getMock();
+
+        $this->model = $objectManager->getObject(TypeCaster::class, ['serializer' => $this->serializer]);
     }
 
     /**
+     * Checks type casting for different php data types.
+     *
      * @param mixed $origValue
      * @param string $typeToCast
      * @param mixed $expectedValue
@@ -34,8 +47,31 @@ class TypeCasterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCastValues($origValue, $typeToCast, $expectedValue)
     {
+        $this->serializer->expects(self::never())
+            ->method('serialize');
+
         $value = $this->model->castValueToType($origValue, $typeToCast);
-        $this->assertTrue($value === $expectedValue);
+        self::assertEquals($expectedValue, $value);
+    }
+
+    /**
+     * Checks a test case when array should be converted to json string representation.
+     *
+     * @covers \Magento\Framework\Reflection\TypeCaster::castValueToType
+     * @param array $origValue
+     * @param string $typeToCast
+     * @param string $expected
+     * @dataProvider arraysDataProvider
+     */
+    public function testCastValueToType(array $origValue, $typeToCast, $expected)
+    {
+        $this->serializer->expects(self::once())
+            ->method('serialize')
+            ->with(self::equalTo($origValue))
+            ->willReturn(json_encode($origValue));
+
+        $actual = $this->model->castValueToType($origValue, $typeToCast);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -56,6 +92,22 @@ class TypeCasterTest extends \PHPUnit_Framework_TestCase
             'false' => ['0', 'false', false],
             'float' => ['1.03', 'float', 1.03],
             'double' => ['1.30', 'double', 1.30],
+            'array of objects' => [[1, 2.0, '3b'], \stdClass::class, [1, 2.0, '3b']],
+            'array of interfaces' => [['a', 23, '1.a'], \Traversable::class, ['a', 23, '1.a']],
+        ];
+    }
+
+    /**
+     * Gets list of variations for testing array encoding.
+     *
+     * @return array
+     */
+    public function arraysDataProvider()
+    {
+        return [
+            [['type' => 'VI', 'masked' => 1111], 'string', '{"type":"VI","masked":1111}'],
+            [['status' => 'processing', 'parent_id' => 2], 'int', '{"status":"processing","parent_id":2}'],
+            [['parent' => ['children' => [1, 2]], 'node' => 2], 'mixed', '{"parent":{"children":[1,2]},"node":2}'],
         ];
     }
 }

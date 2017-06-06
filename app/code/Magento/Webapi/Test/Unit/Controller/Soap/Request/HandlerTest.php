@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,6 +104,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $this->_dataObjectConverter->expects($this->once())
             ->method('convertStdObjectToArray')
             ->will($this->returnValue(['field' => 1]));
+        $this->_methodsMapProcessorMock->method('getMethodReturnType')->willReturn('string');
         $operationName = 'soapOperation';
         $className = \Magento\Framework\DataObject::class;
         $methodName = 'testMethod';

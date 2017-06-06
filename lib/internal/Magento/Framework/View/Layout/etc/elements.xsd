@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!-- Redefine section -->
     <xs:redefine schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd">
         <xs:complexType name="argumentType" abstract="true" mixed="true">
             <xs:complexContent>
@@ -17,6 +18,321 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:redefine>
+    <!-- Defined the types of elements -->
+
+    <!-- Elements -->
+    <xs:element type="blockType" name="block">
+        <xs:annotation>
+            <xs:documentation>
+                Argument name must be unique in scope of block.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:key name="blockArgumentName">
+            <xs:selector xpath="./arguments/argument"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
+        </xs:key>
+    </xs:element>
+
+    <xs:element type="blockReferenceType" name="referenceBlock">
+        <xs:annotation>
+            <xs:documentation>
+                Argument name must be unique in scope of reference.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:unique name="referenceBlockArgumentName">
+            <xs:selector xpath="./arguments/argument"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
+        </xs:unique>
+    </xs:element>
+
+    <xs:element type="containerReferenceType" name="referenceContainer"/>
+
+    <xs:element type="uiComponentType" name="uiComponent">
+        <xs:annotation>
+            <xs:documentation>
+                Argument name must be unique in scope of all Blocks, Containers and other UI Components.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:key name="uiElementArgumentName">
+            <xs:selector xpath="./argument"/>
+            <xs:field xpath="@name"/>
+        </xs:key>
+    </xs:element>
+
+    <xs:element name="arguments" type="argumentsType"/>
+
+    <xs:element name="update" type="updateType"/>
+
+    <xs:element name="remove" type="removeType"/>
+
+    <xs:element name="move" type="moveType"/>
+
+    <!-- Simple types -->
+    <xs:simpleType name="handlePageType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="page"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="componentNameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="elementNameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9][a-zA-Z\d\-_\.]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="elementAliasType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="elementPositionType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*|-"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="elementOutputType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="htmlIdentifierType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_:]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="htmlClassType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_]*(\s[a-zA-Z][a-zA-Z\d\-_]*)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="htmlTagType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="aside"/>
+            <xs:enumeration value="dd"/>
+            <xs:enumeration value="div"/>
+            <xs:enumeration value="dl"/>
+            <xs:enumeration value="fieldset"/>
+            <xs:enumeration value="main"/>
+            <xs:enumeration value="nav"/>
+            <xs:enumeration value="header"/>
+            <xs:enumeration value="footer"/>
+            <xs:enumeration value="ol"/>
+            <xs:enumeration value="p"/>
+            <xs:enumeration value="section"/>
+            <xs:enumeration value="table"/>
+            <xs:enumeration value="tfoot"/>
+            <xs:enumeration value="ul"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="blockClassType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z][a-zA-Z\d]*(\\[A-Z][a-zA-Z\d]*)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Complex types -->
+    <xs:complexType name="containerType">
+        <xs:annotation>
+            <xs:documentation>
+                Container for structuring elements of a page.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="container" type="containerType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="uiComponent" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute type="elementNameType" name="name"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="elementOutputType" name="output"/>
+        <xs:attribute type="elementAliasType" name="as"/>
+        <xs:attribute type="elementPositionType" name="after"/>
+        <xs:attribute type="elementPositionType" name="before"/>
+        <xs:attribute type="htmlTagType" name="htmlTag"/>
+        <xs:attribute type="htmlClassType" name="htmlClass"/>
+        <xs:attribute type="htmlIdentifierType" name="htmlId"/>
+    </xs:complexType>
+
+    <xs:complexType name="blockType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>
+                Part of view that can generate appropriate content.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="action" type="actionType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Argument name must be unique in scope of action.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:key name="blockActionArgumentName">
+                    <xs:selector xpath="argument"></xs:selector>
+                    <xs:field xpath="@name"></xs:field>
+                </xs:key>
+            </xs:element>
+            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="container" type="containerType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="uiComponent" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute type="elementNameType" name="name" use="optional"/>
+        <xs:attribute type="blockClassType" name="class" use="optional"/>
+        <xs:attribute type="elementAliasType" name="as" use="optional"/>
+        <xs:attribute type="xs:string" name="template" use="optional"/>
+        <xs:attribute type="elementPositionType" name="before" use="optional"/>
+        <xs:attribute type="elementPositionType" name="after" use="optional"/>
+        <xs:attribute type="elementOutputType" name="output" use="optional"/>
+        <xs:attribute type="xs:string" name="acl" use="optional"/>
+        <xs:attribute type="xs:string" name="aclResource" use="optional"/>
+        <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
+        <xs:attribute type="xs:string" name="group" use="optional" />
+        <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
+        <xs:attribute type="xs:int" name="ttl" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="uiComponentType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>
+                Part of view that can generate appropriate content.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="visibilityCondition" type="visibilityConditionType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute type="componentNameType" name="component" use="optional"/>
+        <xs:attribute type="elementNameType" name="name" use="optional"/>
+        <xs:attribute type="elementAliasType" name="as" use="optional"/>
+        <xs:attribute type="elementPositionType" name="before" use="optional"/>
+        <xs:attribute type="elementPositionType" name="after" use="optional"/>
+        <xs:attribute type="elementOutputType" name="output" use="optional"/>
+        <xs:attribute type="xs:string" name="aclResource" use="optional"/>
+        <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
+        <xs:attribute type="xs:string" name="group" use="optional" />
+        <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
+        <xs:attribute type="xs:int" name="ttl" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="actionType">
+        <xs:annotation>
+            <xs:documentation>
+                Call public PHP methods of the block class.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded">
+                <xs:key name="actionArgumentItemName">
+                    <xs:selector xpath="item"></xs:selector>
+                    <xs:field xpath="@name"></xs:field>
+                </xs:key>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="method" use="required"/>
+        <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="visibilityConditionType">
+        <xs:annotation>
+            <xs:documentation>
+                Apply visibility rules.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="className" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="updateType">
+        <xs:annotation>
+            <xs:documentation>
+                Include another Handle's tags.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute type="xs:string" name="handle" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="removeType">
+        <xs:annotation>
+            <xs:documentation>
+                Remove Element directive.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute type="elementNameType" name="name" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="moveType">
+        <xs:annotation>
+            <xs:documentation>
+                Move Element directive.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute type="elementNameType" name="element" use="required"/>
+        <xs:attribute type="elementNameType" name="destination" use="required"/>
+        <xs:attribute type="elementAliasType" name="as" use="optional"/>
+        <xs:attribute type="elementPositionType" name="after" use="optional"/>
+        <xs:attribute type="elementPositionType" name="before" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="blockReferenceType" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="action" type="actionType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Argument name must be unique in scope of action.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:key name="blockReferenceActionArgumentName">
+                    <xs:selector xpath="argument"></xs:selector>
+                    <xs:field xpath="@name"></xs:field>
+                </xs:key>
+            </xs:element>
+            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="block" minOccurs="0"/>
+            <xs:element name="container" type="containerType" minOccurs="0"/>
+            <xs:element ref="referenceBlock" minOccurs="0" />
+            <xs:element ref="referenceContainer" minOccurs="0"/>
+            <xs:element ref="uiComponent" minOccurs="0" />
+        </xs:choice>
+        <xs:attribute type="elementNameType" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="template" use="optional"/>
+        <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
+        <xs:attribute type="xs:boolean" name="remove" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="containerReferenceType" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="referenceContainer" minOccurs="0" />
+            <xs:element ref="block" minOccurs="0" />
+            <xs:element name="container" type="containerType" minOccurs="0" />
+            <xs:element ref="referenceBlock" minOccurs="0" />
+            <xs:element ref="uiComponent" minOccurs="0" />
+        </xs:choice>
+        <xs:attribute type="elementNameType" name="name" use="required"/>
+        <xs:attribute type="htmlTagType" name="htmlTag"/>
+        <xs:attribute type="htmlClassType" name="htmlClass"/>
+        <xs:attribute type="htmlIdentifierType" name="htmlId"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
+        <xs:attribute type="xs:boolean" name="remove" use="optional"/>
+    </xs:complexType>
 
     <xs:complexType name="options">
         <xs:complexContent>
@@ -69,290 +385,4 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
-
-    <xs:element type="actionType" name="action">
-        <xs:annotation>
-            <xs:documentation>
-                Argument name must be unique in scope of action.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:key name="actionArgumentName">
-            <xs:selector xpath="argument"></xs:selector>
-            <xs:field xpath="@name"></xs:field>
-        </xs:key>
-    </xs:element>
-
-    <xs:element type="blockType" name="block">
-        <xs:annotation>
-            <xs:documentation>
-                Argument name must be unique in scope of block.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:key name="blockArgumentName">
-            <xs:selector xpath="./arguments/argument"></xs:selector>
-            <xs:field xpath="@name"></xs:field>
-        </xs:key>
-    </xs:element>
-
-    <xs:element type="blockReferenceType" name="referenceBlock">
-        <xs:annotation>
-            <xs:documentation>
-                Argument name must be unique in scope of reference.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:unique name="referenceBlockArgumentName">
-            <xs:selector xpath="./arguments/argument"></xs:selector>
-            <xs:field xpath="@name"></xs:field>
-        </xs:unique>
-    </xs:element>
-
-    <xs:element type="containerReferenceType" name="referenceContainer"/>
-
-    <xs:element type="uiComponentType" name="uiComponent">
-        <xs:annotation>
-            <xs:documentation>
-                Argument name must be unique in scope of all Blocks, Containers and other UI Components.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:key name="uiElementArgumentName">
-            <xs:selector xpath="./argument"/>
-            <xs:field xpath="@name"/>
-        </xs:key>
-    </xs:element>
-
-    <xs:element name="arguments" type="argumentsType"/>
-    <xs:element name="container" type="containerType"/>
-    <xs:element name="update" type="updateType"/>
-    <xs:element name="remove" type="removeType"/>
-    <xs:element name="move" type="moveType"/>
-
-    <xs:simpleType name="handlePageType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="page"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="componentNameType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="elementNameType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9][a-zA-Z\d\-_\.]*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="elementAliasType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="elementPositionType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*|-"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="elementOutputType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="1"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="htmlIdentifierType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_:]*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="htmlClassType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_]*(\s[a-zA-Z][a-zA-Z\d\-_]*)*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="containerType">
-        <xs:annotation>
-            <xs:documentation>
-                Container for structuring elements of a page.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="uiComponent" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute type="elementNameType" name="name"/>
-        <xs:attribute type="xs:string" name="label"/>
-        <xs:attribute type="elementOutputType" name="output"/>
-        <xs:attribute type="elementAliasType" name="as"/>
-        <xs:attribute type="elementPositionType" name="after"/>
-        <xs:attribute type="elementPositionType" name="before"/>
-        <xs:attribute type="htmlTagType" name="htmlTag"/>
-        <xs:attribute type="htmlClassType" name="htmlClass"/>
-        <xs:attribute type="htmlIdentifierType" name="htmlId"/>
-    </xs:complexType>
-
-    <xs:simpleType name="blockClassType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z][a-zA-Z\d]*(\\[A-Z][a-zA-Z\d]*)*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="blockType" mixed="true">
-        <xs:annotation>
-            <xs:documentation>
-                Part of view that can generate appropriate content.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="action" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
-            <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="uiComponent" minOccurs="0" />
-        </xs:sequence>
-        <xs:attribute type="elementNameType" name="name" use="optional"/>
-        <xs:attribute type="blockClassType" name="class" use="optional"/>
-        <xs:attribute type="elementAliasType" name="as" use="optional"/>
-        <xs:attribute type="xs:string" name="template" use="optional"/>
-        <xs:attribute type="elementPositionType" name="before" use="optional"/>
-        <xs:attribute type="elementPositionType" name="after" use="optional"/>
-        <xs:attribute type="elementOutputType" name="output" use="optional"/>
-        <xs:attribute type="xs:string" name="acl" use="optional"/>
-        <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
-        <xs:attribute type="xs:string" name="group" use="optional" />
-        <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
-        <xs:attribute type="xs:int" name="ttl" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="uiComponentType" mixed="true">
-        <xs:annotation>
-            <xs:documentation>
-                Part of view that can generate appropriate content.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute type="componentNameType" name="component" use="optional"/>
-        <xs:attribute type="elementNameType" name="name" use="optional"/>
-        <xs:attribute type="elementAliasType" name="as" use="optional"/>
-        <xs:attribute type="elementPositionType" name="before" use="optional"/>
-        <xs:attribute type="elementPositionType" name="after" use="optional"/>
-        <xs:attribute type="elementOutputType" name="output" use="optional"/>
-        <xs:attribute type="xs:string" name="acl" use="optional"/>
-        <xs:attribute type="xs:string" name="condition" use="optional"/>
-        <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
-        <xs:attribute type="xs:string" name="group" use="optional" />
-        <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
-        <xs:attribute type="xs:int" name="ttl" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="actionType">
-        <xs:annotation>
-            <xs:documentation>
-                Call public PHP methods of the block class.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="argument" type="argumentType" minOccurs="0" maxOccurs="unbounded">
-                <xs:key name="actionArgumentItemName">
-                    <xs:selector xpath="item"></xs:selector>
-                    <xs:field xpath="@name"></xs:field>
-                </xs:key>
-            </xs:element>
-        </xs:sequence>
-        <xs:attribute type="xs:string" name="method" use="required"/>
-        <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="updateType">
-        <xs:annotation>
-            <xs:documentation>
-                Include another Handle's tags.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:attribute type="xs:string" name="handle" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="removeType">
-        <xs:annotation>
-            <xs:documentation>
-                Remove Element directive.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:attribute type="elementNameType" name="name" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="moveType">
-        <xs:annotation>
-            <xs:documentation>
-                Move Element directive.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:attribute type="elementNameType" name="element" use="required"/>
-        <xs:attribute type="elementNameType" name="destination" use="required"/>
-        <xs:attribute type="elementAliasType" name="as" use="optional"/>
-        <xs:attribute type="elementPositionType" name="after" use="optional"/>
-        <xs:attribute type="elementPositionType" name="before" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="blockReferenceType" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="action" minOccurs="0" />
-            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
-            <xs:element ref="block" minOccurs="0"/>
-            <xs:element ref="container" minOccurs="0"/>
-            <xs:element ref="referenceBlock" minOccurs="0" />
-            <xs:element ref="referenceContainer" minOccurs="0"/>
-            <xs:element ref="uiComponent" minOccurs="0" />
-        </xs:choice>
-        <xs:attribute type="elementNameType" name="name" use="required"/>
-        <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
-        <xs:attribute type="xs:boolean" name="remove" use="optional"/>
-    </xs:complexType>
-
-    <xs:complexType name="containerReferenceType" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="referenceContainer" minOccurs="0" />
-            <xs:element ref="block" minOccurs="0" />
-            <xs:element ref="container" minOccurs="0" />
-            <xs:element ref="referenceBlock" minOccurs="0" />
-            <xs:element ref="uiComponent" minOccurs="0" />
-        </xs:choice>
-        <xs:attribute type="elementNameType" name="name" use="required"/>
-        <xs:attribute type="htmlTagType" name="htmlTag"/>
-        <xs:attribute type="htmlClassType" name="htmlClass"/>
-        <xs:attribute type="htmlIdentifierType" name="htmlId"/>
-        <xs:attribute type="xs:string" name="label"/>
-        <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
-        <xs:attribute type="xs:boolean" name="remove" use="optional"/>
-    </xs:complexType>
-
-    <xs:simpleType name="htmlTagType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="aside"/>
-            <xs:enumeration value="dd"/>
-            <xs:enumeration value="div"/>
-            <xs:enumeration value="dl"/>
-            <xs:enumeration value="fieldset"/>
-            <xs:enumeration value="main"/>
-            <xs:enumeration value="nav"/>
-            <xs:enumeration value="header"/>
-            <xs:enumeration value="footer"/>
-            <xs:enumeration value="ol"/>
-            <xs:enumeration value="p"/>
-            <xs:enumeration value="section"/>
-            <xs:enumeration value="table"/>
-            <xs:enumeration value="tfoot"/>
-            <xs:enumeration value="ul"/>
-        </xs:restriction>
-    </xs:simpleType>
 </xs:schema>

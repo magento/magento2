@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * AdminNotification Inbox model
@@ -18,7 +16,7 @@ class Collection extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Co
     /**
      * Add remove filter
      *
-     * @return \Magento\AdminNotification\Model\ResourceModel\Grid\Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected function _initSelect()
     {

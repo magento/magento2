@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -60,5 +60,16 @@
     <type name="Magento\Framework\Mail\TransportInterface">
         <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig" />
         <plugin name="disableSending" type="Magento\Email\Model\Mail\TransportInterfacePlugin" />
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="system/smtp/host" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="system/smtp/host" xsi:type="string">1</item>
+                <item name="system/smtp/port" xsi:type="string">1</item>
+            </argument>
+        </arguments>
     </type>
 </config>

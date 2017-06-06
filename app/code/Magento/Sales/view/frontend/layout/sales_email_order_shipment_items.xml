@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" label="Email Shipment Items List" design_abstraction="custom">
     <update handle="sales_email_order_shipment_renderers"/>
     <body>
-        <block class="Magento\Sales\Block\Order\Email\Shipment\Items" name="items" template="email/shipment/items.phtml">
+        <block class="Magento\Sales\Block\Order\Email\Shipment\Items" name="items" template="Magento_Sales::email/shipment/items.phtml">
             <block class="Magento\Framework\View\Element\RendererList" name="sales.email.order.shipment.renderers" as="renderer.list"/>
         </block>
         <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>

@@ -1,14 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
@@ -17,12 +17,12 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -141,6 +141,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $collectionProcessor;
 
     /**
+     * @var int
+     */
+    private $cacheLimit = 0;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
@@ -162,7 +172,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionProcessorInterface $collectionProcessor [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param int $cacheLimit [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -187,7 +199,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        $cacheLimit = 1000
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -207,6 +221,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->cacheLimit = (int)$cacheLimit;
     }
 
     /**
@@ -229,8 +246,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('store_id', $storeId);
             }
             $product->load($productId);
-            $this->instances[$sku][$cacheKey] = $product;
-            $this->instancesById[$product->getId()][$cacheKey] = $product;
+            $this->cacheProduct($cacheKey, $product);
         }
         return $this->instances[$sku][$cacheKey];
     }
@@ -253,8 +269,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if (!$product->getId()) {
                 throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
             }
-            $this->instancesById[$productId][$cacheKey] = $product;
-            $this->instances[$product->getSku()][$cacheKey] = $product;
+            $this->cacheProduct($cacheKey, $product);
         }
         return $this->instancesById[$productId][$cacheKey];
     }
@@ -275,8 +290,27 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $serializeData[$key] = $value;
             }
         }
+        $serializeData = $this->serializer->serialize($serializeData);
+        return md5($serializeData);
+    }
 
-        return md5(serialize($serializeData));
+    /**
+     * Add product to internal cache and truncate cache if it has more than cacheLimit elements.
+     *
+     * @param string $cacheKey
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return void
+     */
+    private function cacheProduct($cacheKey, \Magento\Catalog\Api\Data\ProductInterface $product)
+    {
+        $this->instancesById[$product->getId()][$cacheKey] = $product;
+        $this->instances[$product->getSku()][$cacheKey] = $product;
+
+        if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
+            $offset = round($this->cacheLimit / -2);
+            $this->instancesById = array_slice($this->instancesById, $offset, null, true);
+            $this->instances = array_slice($this->instances, $offset);
+        }
     }
 
     /**
@@ -530,6 +564,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $this->resourceModel->getLinkField(),
                 $existingProduct->getData($this->resourceModel->getLinkField())
             );
+            if (!$product->hasData(Product::STATUS)) {
+                $product->setStatus($existingProduct->getStatus());
+            }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
         }
@@ -645,9 +682,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
 
-        foreach ($this->metadataService->getList($this->searchCriteriaBuilder->create())->getItems() as $metadata) {
-            $collection->addAttributeToSelect($metadata->getAttributeCode());
-        }
+        $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
 
@@ -660,6 +695,19 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
+
+        foreach ($collection->getItems() as $product) {
+            $this->cacheProduct(
+                $this->getCacheKey(
+                    [
+                        false,
+                        $product->hasData(\Magento\Catalog\Model\Product::STORE_ID) ? $product->getStoreId() : null
+                    ]
+                ),
+                $product
+            );
+        }
+
         return $searchResult;
     }
 

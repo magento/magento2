@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Config;
 
-use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Framework\App\Config as AppConfig;
-use Magento\Theme\Model\Design\Config\ValueProcessor;
+use Magento\Framework\App\ScopeFallbackResolverInterface;
 
 class ValueChecker
 {
@@ -79,7 +78,7 @@ class ValueChecker
      * @param mixed $defaultValue
      * @return bool
      */
-    protected function isEqual ($value, $defaultValue)
+    protected function isEqual($value, $defaultValue)
     {
         switch (gettype($value)) {
             case 'array':

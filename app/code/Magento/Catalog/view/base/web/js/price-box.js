@@ -1,8 +1,11 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'Magento_Catalog/js/price-utils',
@@ -21,7 +24,6 @@ define([
 
     $.widget('mage.priceBox', {
         options: globalOptions,
-        cache: {},
 
         /**
          * Widget initialisation.
@@ -41,6 +43,7 @@ define([
         _create: function createPriceBox() {
             var box = this.element;
 
+            this.cache = {};
             this._setDefaultsFromPriceConfig();
             this._setDefaultsFromDataSet();
 

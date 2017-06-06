@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Model;
 
-use Magento\Framework\Webapi\Exception;
-use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+use Magento\Framework\Webapi\Exception;
+use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Builder
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Builder
@@ -104,7 +106,6 @@ class Builder
         $this->logger = $logger;
         $this->data = array_flip($this->pattern);
     }
-
 
     /**
      * @param string $entityType

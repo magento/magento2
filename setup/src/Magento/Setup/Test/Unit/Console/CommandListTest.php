@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
     public function testGetCommands()
     {
         $this->serviceManager->expects($this->atLeastOnce())
-            ->method('create');
+            ->method('get');
 
         $this->commandList->getCommands();
     }

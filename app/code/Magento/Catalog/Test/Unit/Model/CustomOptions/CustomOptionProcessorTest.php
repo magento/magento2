@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
@@ -41,7 +41,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Quote\Model\Quote\ProductOption|\PHPUnit_Framework_MockObject_MockObject */
     protected $productOption;
-    
+
     /** @var \Magento\Catalog\Model\CustomOptions\CustomOption|\PHPUnit_Framework_MockObject_MockObject */
     protected $customOption;
 
@@ -104,7 +104,6 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
             $this->customOptionFactory,
             $this->serializer
         );
-
     }
 
     public function testConvertToBuyRequest()

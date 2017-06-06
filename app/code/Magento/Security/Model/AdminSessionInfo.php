@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
@@ -13,6 +13,8 @@ namespace Magento\Security\Model;
  * @method int getStatus()
  * @method string getUpdatedAt()
  * @method string getCreatedAt()
+ *
+ * @api
  */
 class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
 {

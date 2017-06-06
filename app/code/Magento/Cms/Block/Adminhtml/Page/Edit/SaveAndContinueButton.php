@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Edit;
@@ -12,7 +12,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  */
 class SaveAndContinueButton extends GenericButton implements ButtonProviderInterface
 {
-
     /**
      * @return array
      */

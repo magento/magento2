@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model;
 
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Deploy\Model\ConfigWriter;
+use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -24,6 +27,21 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
     private $arrayManagerMock;
 
     /**
+     * @var PreparedValueFactory|MockObject
+     */
+    private $preparedValueFactoryMock;
+
+    /**
+     * @var ValueInterface|MockObject
+     */
+    private $valueInterfaceMock;
+
+    /**
+     * @var Value|MockObject
+     */
+    private $valueMock;
+
+    /**
      * @var ConfigWriter
      */
     private $model;
@@ -39,10 +57,21 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
         $this->writerMock = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->preparedValueFactoryMock = $this->getMockBuilder(PreparedValueFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->valueInterfaceMock = $this->getMockBuilder(ValueInterface::class)
+            ->getMockForAbstractClass();
+        $this->valueMock = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validateBeforeSave', 'beforeSave', 'getValue', 'afterSave'])
+            ->getMock();
 
         $this->model = new ConfigWriter(
             $this->writerMock,
-            $this->arrayManagerMock
+            $this->arrayManagerMock,
+            $this->preparedValueFactoryMock
         );
     }
 
@@ -54,6 +83,29 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
             'some3/config3/path3' => 'someValue3'
         ];
         $config = ['system' => []];
+
+        $this->preparedValueFactoryMock->expects($this->exactly(3))
+            ->method('create')
+            ->withConsecutive(
+                ['some1/config1/path1', 'someValue1', 'scope', 'scope_code'],
+                ['some2/config2/path2', 'someValue2', 'scope', 'scope_code'],
+                ['some3/config3/path3', 'someValue3', 'scope', 'scope_code']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->valueInterfaceMock,
+                $this->valueMock,
+                $this->valueMock
+            );
+
+        $this->valueMock->expects($this->exactly(2))
+            ->method('validateBeforeSave');
+        $this->valueMock->expects($this->exactly(2))
+            ->method('beforeSave');
+        $this->valueMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls('someValue2', 'someValue3');
+        $this->valueMock->expects($this->exactly(2))
+            ->method('afterSave');
 
         $this->arrayManagerMock->expects($this->exactly(3))
             ->method('set')
@@ -78,6 +130,29 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
             'some3/config3/path3' => 'someValue3'
         ];
         $config = ['system' => []];
+
+        $this->preparedValueFactoryMock->expects($this->exactly(3))
+            ->method('create')
+            ->withConsecutive(
+                ['some1/config1/path1', 'someValue1', 'default'],
+                ['some2/config2/path2', 'someValue2', 'default'],
+                ['some3/config3/path3', 'someValue3', 'default']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->valueInterfaceMock,
+                $this->valueMock,
+                $this->valueMock
+            );
+
+        $this->valueMock->expects($this->exactly(2))
+            ->method('validateBeforeSave');
+        $this->valueMock->expects($this->exactly(2))
+            ->method('beforeSave');
+        $this->valueMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls('someValue2', 'someValue3');
+        $this->valueMock->expects($this->exactly(2))
+            ->method('afterSave');
 
         $this->arrayManagerMock->expects($this->exactly(3))
             ->method('set')

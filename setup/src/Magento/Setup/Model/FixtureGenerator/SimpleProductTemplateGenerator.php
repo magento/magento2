@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model\FixtureGenerator;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
 
 /**
  * Simple product template generator. Return newly created simple product for specified attribute set

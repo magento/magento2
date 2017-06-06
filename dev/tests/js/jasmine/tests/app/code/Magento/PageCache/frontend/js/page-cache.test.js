@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,7 +60,7 @@ define([
 
         it('on iframe from other host returns empty Array', function () {
             iframe.contents().find('body').html(comment);
-            iframe.attr('src', '//' + host + '.otherHost/');
+            iframe.attr('src', '//' + host + '.otherHost/?origin_url=' + host);
 
             expect(iframe.comments().length).toEqual(0);
         });
