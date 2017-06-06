@@ -2489,7 +2489,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     || ($this->urlKeys[$storeId][$urlPath] == $rowData[self::COL_SKU])
                 ) {
                     $this->urlKeys[$storeId][$urlPath] = $rowData[self::COL_SKU];
-                    $this->rowNumbers[$storeId][$urlPath] = $rowNum;
+                    $this->rowNumbers[$storeId][strtolower($urlPath)] = $rowNum;
                 } else {
                     $message = sprintf(
                         $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
@@ -2783,7 +2783,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
             foreach ($urlKeyDuplicates as $entityData) {
-                $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
+                $rowNum = $this->rowNumbers[$entityData['store_id']][strtolower($entityData['request_path'])];
                 $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum);
             }
         }
