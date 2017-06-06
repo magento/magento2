@@ -12,9 +12,11 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
+use Magento\Theme\Model\View\Design;
 
 /**
  * PreProcessor responsible for providing js translation dictionary
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PreProcessor implements PreProcessorInterface
 {
@@ -43,21 +45,29 @@ class PreProcessor implements PreProcessorInterface
     protected $translate;
 
     /**
+     * @var Design
+     */
+    protected $design;
+
+    /**
      * @param Config $config
      * @param DataProviderInterface $dataProvider
      * @param AreaList $areaList
      * @param TranslateInterface $translate
+     * @param Design $design
      */
     public function __construct(
         Config $config,
         DataProviderInterface $dataProvider,
         AreaList $areaList,
-        TranslateInterface $translate
+        TranslateInterface $translate,
+        Design $design
     ) {
         $this->config = $config;
         $this->dataProvider = $dataProvider;
         $this->areaList = $areaList;
         $this->translate = $translate;
+        $this->design = $design;
     }
 
     /**
@@ -78,6 +88,7 @@ class PreProcessor implements PreProcessorInterface
                 $themePath = $context->getThemePath();
                 $areaCode = $context->getAreaCode();
                 $this->translate->setLocale($context->getLocale());
+                $this->design->setDesignTheme($themePath);
             }
 
             $area = $this->areaList->getArea($areaCode);
