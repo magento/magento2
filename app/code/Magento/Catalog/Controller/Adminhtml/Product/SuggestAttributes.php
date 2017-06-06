@@ -6,7 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class SuggestAttributes extends \Magento\Backend\App\Action
+class SuggestAttributes extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * Authorization level of a basic admin session
