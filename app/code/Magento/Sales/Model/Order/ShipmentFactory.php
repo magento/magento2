@@ -132,8 +132,8 @@ class ShipmentFactory
                     $qty = 1;
                 }
             } else {
-                if (isset($items[$orderItem->getId()])) {
-                    $qty = min($items[$orderItem->getId()], $orderItem->getQtyToShip());
+                if (isset($items[$orderItem->getProductId()])) {
+                    $qty = min($items[$orderItem->getProductId()], $orderItem->getQtyToShip());
                 } elseif (!count($items)) {
                     $qty = $orderItem->getQtyToShip();
                 } else {
