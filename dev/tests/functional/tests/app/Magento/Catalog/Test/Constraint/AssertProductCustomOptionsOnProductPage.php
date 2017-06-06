@@ -254,5 +254,3 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
         return 'Value of custom option on the page is correct.';
     }
 }
-
-
