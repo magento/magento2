@@ -257,6 +257,16 @@ class Builder extends \Magento\SalesSequence\Model\Builder
         $metadata->setHasDataChanges(true);
         try {
             $this->resourceMetadata->save($metadata);
+            $connection = $this->appResource->getConnection('sales');
+
+            if (!$connection->isTableExists($this->data['sequence_table'])) {
+                $connection->query(
+                    $this->ddlSequence->getCreateSequenceDdl(
+                        $this->data['sequence_table'],
+                        $this->data['start_value']
+                    )
+                );
+            }
         } catch (Exception $e) {
             $this->resourceMetadata->delete($metadata);
             throw $e;
