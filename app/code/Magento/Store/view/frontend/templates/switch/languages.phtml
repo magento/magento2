@@ -27,7 +27,7 @@
             <?php foreach ($block->getStores() as $_lang): ?>
                 <?php if ($_lang->getId() != $block->getCurrentStoreId()): ?>
                     <li class="view-<?= $block->escapeHtml($_lang->getCode()) ?> switcher-option">
-                        <a href="#" data-post='<?php /* @noEscape */ echo $block->getTargetStorePostData($_lang); ?>'>
+                        <a href="#" data-post='<?= /* @noEscape */ $block->getTargetStorePostData($_lang) ?>'>
                             <?= $block->escapeHtml($_lang->getName()) ?>
                         </a>
                     </li>

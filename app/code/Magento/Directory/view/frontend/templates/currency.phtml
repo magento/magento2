@@ -32,7 +32,7 @@
             <?php foreach ($currencies as $_code => $_name): ?>
                 <?php if ($_code != $currentCurrencyCode): ?>
                     <li class="currency-<?= $block->escapeHtmlAttr($_code) ?> switcher-option">
-                        <a href="#" data-post='<?php /* @noEscape */ echo $block->getSwitchCurrencyPostData($_code); ?>'><?= $block->escapeHtml($_code) ?> - <?= $block->escapeHtml($_name) ?></a>
+                        <a href="#" data-post='<?= /* @noEscape */ $block->getSwitchCurrencyPostData($_code) ?>'><?= $block->escapeHtml($_code) ?> - <?= $block->escapeHtml($_name) ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>

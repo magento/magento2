@@ -15,9 +15,9 @@ $url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
 <!-- PayPal Logo -->
 <img src="<?= $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
      alt="<?= $block->escapeHtml(__('Acceptance Mark')) ?>" class="paypal icon"/>
-<a href="<?php /* @noEscape */ echo $url; ?>"
+<a href="<?= /* @noEscape */ $url ?>"
    onclick="javascript:window.open(
-           '<?php /* @noEscape */ echo $url; ?>',
+           '<?= /* @noEscape */ $url ?>',
            'olcwhatispaypal',
            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
            'left=0, top=0, width=400, height=350'

@@ -28,7 +28,7 @@
 <form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php /* @noEscape */ echo $block->getIsTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->getIsTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />

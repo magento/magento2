@@ -38,7 +38,7 @@
         <a href="javascript:void(0);"
            id="<?= /* @escapeNotVerified */ ($popupId) ?>"
            data-mage-init='{"addToCart":{"popupId": "#<?= /* @escapeNotVerified */ ($popupId) ?>",
-                                         "productName": "<?php /* @noEscape */ echo $block->escapeJs($block->escapeHtml($_product->getName())) ?>",
+                                         "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>",
                                          "realPrice": <?= /* @escapeNotVerified */ $block->getRealPriceJs($_product) ?>,
                                          "msrpPrice": "<?= /* @escapeNotVerified */ $_msrpPrice ?>",
                                          "priceElementId":"<?= /* @escapeNotVerified */ $priceElementId ?>",
@@ -51,5 +51,5 @@
         </span>
     <?php endif; ?>
     <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
-    <a href="javascript:void(0);" id="<?= /* @escapeNotVerified */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @escapeNotVerified */ ($helpLinkId) ?>", "productName": "<?php /* @noEscape */ echo $block->escapeJs($block->escapeHtml($_product->getName())) ?>"}}' class="link tip"><?= /* @escapeNotVerified */ __("What's this?") ?></a>
+    <a href="javascript:void(0);" id="<?= /* @escapeNotVerified */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @escapeNotVerified */ ($helpLinkId) ?>", "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>"}}' class="link tip"><?= /* @escapeNotVerified */ __("What's this?") ?></a>
 </div>

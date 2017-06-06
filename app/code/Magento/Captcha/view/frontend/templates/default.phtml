@@ -23,7 +23,7 @@ $captcha = $block->getCaptchaModel();
                                             "imageLoader": "<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>",
                                              "type": "<?= $block->escapeHtmlAttr($block->getFormId()) ?>"}}'>
                 <div class="control captcha-image">
-                    <img alt="<?= $block->escapeHtmlAttr(__('Please type the letters below')) ?>" class="captcha-img" height="<?php /* @noEscape */ echo (float) $block->getImgHeight() ?>" src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>"/>
+                    <img alt="<?= $block->escapeHtmlAttr(__('Please type the letters below')) ?>" class="captcha-img" height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>" src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>"/>
                     <button type="button" class="action reload captcha-reload" title="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>"><span><?= $block->escapeHtml(__('Reload captcha')) ?></span></button>
                 </div>
             </div>

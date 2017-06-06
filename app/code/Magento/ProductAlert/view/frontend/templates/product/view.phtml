@@ -6,7 +6,7 @@
 ?>
 <?php /* @var $block \Magento\ProductAlert\Block\Product\View */?>
 <div class="product alert <?= $block->getHtmlClass() ?>">
-    <a href="#" data-post='<?php /* @noEscape */ echo $block->getPostAction(); ?>'
+    <a href="#" data-post='<?= /* @noEscape */ $block->getPostAction() ?>'
        title="<?= $block->escapeHtml(__($block->getSignupLabel())) ?>" class="action alert">
         <?= $block->escapeHtml(__($block->getSignupLabel())) ?>
     </a>

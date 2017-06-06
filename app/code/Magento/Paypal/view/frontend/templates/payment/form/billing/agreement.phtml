@@ -10,12 +10,12 @@
  */
 $code = $block->escapeHtml($block->getMethodCode());
 ?>
-<div class="field items required" id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display:none;">
-    <label for="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id" class="label">
+<div class="field items required" id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none;">
+    <label for="<?= /* @noEscape */ $code ?>_ba_agreement_id" class="label">
         <span><?= $block->escapeHtml(__('Billing Agreement')) ?></span>
     </label>
     <div class="control">
-        <select id="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id"
+        <select id="<?= /* @noEscape */ $code ?>_ba_agreement_id"
                 name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]" class="select">
             <option value=""><?= $block->escapeHtml(__('-- Please Select Billing Agreement--')) ?></option>
             <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>

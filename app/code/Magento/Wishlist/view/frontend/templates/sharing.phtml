@@ -20,13 +20,13 @@
         <div class="field emails required">
             <label class="label" for="email_address"><span><?= $block->escapeHtml(__('Email addresses, separated by commas')) ?></span></label>
             <div class="control">
-                <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?php /* @noEscape */ echo $block->getEnteredData('emails') ?></textarea>
+                <textarea name="emails" cols="60" rows="5" id="email_address" data-validate="{required:true,'validate-emails':true}"><?= /* @noEscape */ $block->getEnteredData('emails') ?></textarea>
             </div>
         </div>
         <div class="field text">
             <label class="label" for="message"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
             <div class="control">
-                <textarea id="message" name="message" cols="60" rows="5"><?php /* @noEscape */ echo $block->getEnteredData('message') ?></textarea>
+                <textarea id="message" name="message" cols="60" rows="5"><?= /* @noEscape */ $block->getEnteredData('message') ?></textarea>
             </div>
         </div>
         <?php if ($this->helper('Magento\Wishlist\Helper\Rss')->isRssAllow()): ?>

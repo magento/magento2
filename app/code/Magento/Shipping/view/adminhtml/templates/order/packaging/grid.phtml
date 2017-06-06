@@ -16,11 +16,11 @@
                     <th class="data-grid-checkbox-cell">
                         <label class="data-grid-checkbox-cell-inner">
                             <input type="checkbox"
-                                   id="select-items-<?php /* @noEscape */ echo $randomId; ?>"
+                                   id="select-items-<?= /* @noEscape */ $randomId ?>"
                                    onchange="packaging.checkAllItems(this);"
                                    class="checkbox admin__control-checkbox"
                                    title="<?= /* @escapeNotVerified */ __('Select All') ?>">
-                            <label for="select-items-<?php /* @noEscape */ echo $randomId; ?>"></label>
+                            <label for="select-items-<?= /* @noEscape */ $randomId ?>"></label>
                         </label>
                     </th>
                     <th class="data-grid-th"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
@@ -50,10 +50,10 @@
                         <label class="data-grid-checkbox-cell-inner">
                             <input type="checkbox"
                                    name=""
-                                   id="select-item-<?php /* @noEscape */ echo $randomId . '-' . $id; ?>"
+                                   id="select-item-<?= /* @noEscape */ $randomId . '-' . $id ?>"
                                    value="<?= /* @escapeNotVerified */ $id ?>"
                                    class="checkbox admin__control-checkbox">
-                            <label for="select-item-<?php /* @noEscape */ echo $randomId . '-' . $id; ?>"></label>
+                            <label for="select-item-<?= /* @noEscape */ $randomId . '-' . $id ?>"></label>
                         </label>
                     </td>
                     <td>

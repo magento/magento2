@@ -24,7 +24,7 @@
                             <option
                                 value="<?= $block->escapeHtml($block->renderShippingRateValue($rate)) ?>"
                                     <?= ($currentRate === $rate) ? ' selected="selected"' : '' ?>>
-                                <?php /* @noEscape */ echo $block->renderShippingRateOption($rate); ?>
+                                <?= /* @noEscape */ $block->renderShippingRateOption($rate) ?>
                             </option>
                         <?php endforeach; ?>
                     </optgroup>
@@ -40,7 +40,7 @@
     <?php else: ?>
         <p>
             <strong>
-                <?php /* @noEscape */ echo $block->renderShippingRateOption($block->getCurrentShippingRate()); ?>
+                <?= /* @noEscape */ $block->renderShippingRateOption($block->getCurrentShippingRate()) ?>
             </strong>
         </p>
     <?php endif; ?>

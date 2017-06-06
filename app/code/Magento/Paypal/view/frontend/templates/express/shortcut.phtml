@@ -23,12 +23,12 @@ if ($block->getIsInCatalogProduct()) {
 }
 ?>
 <div data-label="<?= $block->escapeHtml(__('or')) ?>"
-     class="paypal checkout <?php /* @noEscape */ echo $labelPosition; ?> paypal-logo
-        <?php /* @noEscape */ echo $shortcutHtmlId; ?>"
+     class="paypal checkout <?= /* @noEscape */ $labelPosition ?> paypal-logo
+        <?= /* @noEscape */ $shortcutHtmlId ?>"
      data-mage-init='{
      "paypalCheckout": {
-                "isCatalogProduct": "<?php /* @noEscape */ echo !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false;?>",
-                "shortcutContainerClass": "<?php /* @noEscape */ echo "." . $shortcutHtmlId; ?>"
+                "isCatalogProduct": "<?= /* @noEscape */ !empty($isInCatalogProduct) ? (bool)$isInCatalogProduct : false ?>",
+                "shortcutContainerClass": "<?= /* @noEscape */ "." . $shortcutHtmlId ?>"
             }
      }'
     >

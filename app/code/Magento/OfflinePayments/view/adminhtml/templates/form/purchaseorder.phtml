@@ -15,7 +15,7 @@
         <div class="admin__field-control">
             <input type="text" id="po_number" name="payment[po_number]"
                    title="<?= $block->escapeHtml(__("Purchase Order Number")) ?>" class="required-entry admin__control-text"
-                   value="<?php /* @noEscape */ echo $block->getInfoData('po_number') ?>"/>
+                   value="<?= /* @noEscape */ $block->getInfoData('po_number') ?>"/>
         </div>
     </div>
 </fieldset>

@@ -23,16 +23,16 @@
     $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
     $description = false;
 ?>
-    <div class="block widget block-products-list <?php /* @noEscape */ echo $mode; ?>">
+    <div class="block widget block-products-list <?= /* @noEscape */ $mode ?>">
         <?php if ($block->getTitle()): ?>
         <div class="block-title">
             <strong><?= $block->escapeHtml(__($block->getTitle())) ?></strong>
         </div>
         <?php endif ?>
         <div class="block-content">
-            <?php /* @noEscape */ echo '<!-- ' . $image . '-->' ?>
-            <div class="products-<?php /* @noEscape */ echo $mode; ?> <?php /* @noEscape */ echo $mode; ?>">
-                <ol class="product-items <?php /* @noEscape */ echo $type; ?>">
+            <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+            <div class="products-<?= /* @noEscape */ $mode ?> <?= /* @noEscape */ $mode ?>">
+                <ol class="product-items <?= /* @noEscape */ $type ?>">
                     <?php $iterator = 1; ?>
                     <?php foreach ($items as $_item): ?>
                         <?php if ($iterator++ != 1): ?></li><?php endif ?>
@@ -71,7 +71,7 @@
                                                             $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
                                                             $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
                                                         ?>
-                                                        <button class="action tocart primary" data-post='<?php /* @noEscape */ echo $postData; ?>' type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                        <button class="action tocart primary" data-post='<?= /* @noEscape */ $postData ?>' type="button" title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>">
                                                             <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                         </button>
                                                     <?php endif; ?>
@@ -88,13 +88,13 @@
                                             <div class="actions-secondary" data-role="add-to-links">
                                                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist): ?>
                                                     <a href="#"
-                                                       data-post='<?php /* @noEscape */ echo $block->getAddToWishlistParams($_item); ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                       data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
                                                         <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                                                     </a>
                                                 <?php endif; ?>
                                                 <?php if ($block->getAddToCompareUrl() && $showCompare): ?>
                                                     <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
-                                                    <a href="#" class="action tocompare" data-post='<?php /* @noEscape */ echo $compareHelper->getPostDataParams($_item);?>' title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">
+                                                    <a href="#" class="action tocompare" data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>' title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">
                                                         <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
                                                     </a>
                                                 <?php endif; ?>

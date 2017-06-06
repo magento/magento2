@@ -298,7 +298,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
             </fieldset>
         </div>
     </script>
-    <div id="<?php /* @noEscape */ echo $block->getNewVideoBlockName();?>" style="display:none">
+    <div id="<?= /* @noEscape */ $block->getNewVideoBlockName() ?>" style="display:none">
         <?= /* @escapeNotVerified */ $block->getFormHtml() ?>
         <div id="video-player-preview-location" class="video-player-sidebar">
             <div class="video-player-container"></div>

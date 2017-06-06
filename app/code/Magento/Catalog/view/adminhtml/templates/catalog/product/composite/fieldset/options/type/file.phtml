@@ -68,7 +68,7 @@ require(['prototype'], function(){
     </label>
     <div class="admin__field-control control">
         <?php if ($_fileExists): ?>
-            <span class="<?php /* @noEscape */ echo $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
+            <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
             <a href="javascript:void(0)" class="label" onclick="opFile<?= /* @escapeNotVerified */ $_rand ?>.toggleFileChange($(this).next('.input-box'))">
                 <?= /* @escapeNotVerified */ __('Change') ?>
             </a>&nbsp;
@@ -79,7 +79,7 @@ require(['prototype'], function(){
         <?php endif; ?>
         <div class="input-box" <?= $_fileExists ? 'style="display:none"' : '' ?>>
             <!-- ToDo UI: add appropriate file class when z-index issue in ui dialog will be resolved  -->
-            <input type="file" name="<?php /* @noEscape */ echo $_fileName; ?>" class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>" <?= $_fileExists ? 'disabled="disabled"' : '' ?>/>
+            <input type="file" name="<?= /* @noEscape */ $_fileName ?>" class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>" <?= $_fileExists ? 'disabled="disabled"' : '' ?>/>
             <input type="hidden" name="<?= /* @escapeNotVerified */ $_fieldNameAction ?>" value="<?= /* @escapeNotVerified */ $_fieldValueAction ?>" />
 
             <?php if ($_option->getFileExtension()): ?>

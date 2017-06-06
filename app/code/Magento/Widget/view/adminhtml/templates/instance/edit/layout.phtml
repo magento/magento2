@@ -34,7 +34,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<label for="widget_instance[<%- data.id %>][page_group]">Display on <span class="required">*</span></label>'+
         '<?= $block->getDisplayOnSelectHtml() ?>'+
         '<div class="actions">'+
-        <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
+        <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getRemoveLayoutButtonHtml()) ?> +
         '</div>'+
     '</div>'+
     '<div class="fieldset-wrapper-content">'+
@@ -135,7 +135,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</thead>'+
         '<tbody>'+
             '<tr>'+
-                '<td><?php /* @noEscape */ echo $block->getLayoutsChooser() ?></td>'+
+                '<td><?= /* @noEscape */ $block->getLayoutsChooser() ?></td>'+
                 '<td>'+
                     '<div class="block_reference_container">'+
                         '<div class="block_reference"></div>'+
@@ -166,7 +166,7 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '</thead>'+
         '<tbody>'+
             '<tr>'+
-                '<td><?php /* @noEscape */ echo $block->getPageLayoutsPageChooser() ?></td>'+
+                '<td><?= /* @noEscape */ $block->getPageLayoutsPageChooser() ?></td>'+
                 '<td>'+
                     '<div class="block_reference_container">'+
                         '<div class="block_reference"></div>'+
@@ -487,7 +487,7 @@ window.WidgetInstance = WidgetInstance;
 
 jQuery(function(){
     <?php foreach ($block->getPageGroups() as $pageGroup): ?>
-        WidgetInstance.addPageGroup(<?php /* @noEscape */ echo $pageGroup ?>);
+        WidgetInstance.addPageGroup(<?= /* @noEscape */ $pageGroup ?>);
     <?php endforeach; ?>
     Event.observe(document, 'product:changed', function(event){
         WidgetInstance.checkProduct(event);

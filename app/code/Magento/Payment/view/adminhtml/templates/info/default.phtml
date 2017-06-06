@@ -19,7 +19,7 @@ $specificInfo = $block->getSpecificInformation();
         <tr>
             <th><?= $block->escapeHtml($label) ?>:</th>
             <td>
-                <?php /* @noEscape */ echo nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true))));?>
+                <?= /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true)))) ?>
             </td>
         </tr>
     <?php endforeach; ?>

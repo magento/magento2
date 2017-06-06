@@ -11,7 +11,7 @@
 
 <div class="product-addto-links" data-role="add-to-links">
     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-        <a href="#" data-post='<?php /* @noEscape */ echo $block->getUpdateParams(); ?>' class="action towishlist updated" data-action="add-to-wishlist">
+        <a href="#" data-post='<?= /* @noEscape */ $block->getUpdateParams() ?>' class="action towishlist updated" data-action="add-to-wishlist">
             <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
         </a>
     <?php endif; ?>
@@ -26,7 +26,7 @@
 <script type="text/x-magento-init">
     {
         "body": {
-            "addToWishlist": <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
+            "addToWishlist": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions()) ?>
         }
     }
 </script>

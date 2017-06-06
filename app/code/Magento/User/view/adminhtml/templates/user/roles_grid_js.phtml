@@ -79,7 +79,7 @@ require([
             "[data-role=delete-user]" : {
                 "deleteUserAccount" : {
                     "message": "<?= $editBlock->escapeHtml($editBlock->getDeleteMessage()) ?>",
-                    "url": "<?php /* @noEscape */ echo $editBlock->getDeleteUrl(); ?>",
+                    "url": "<?= /* @noEscape */ $editBlock->getDeleteUrl() ?>",
                     "objId": "<?= $editBlock->escapeHtml($editBlock->getObjectId()) ?>"
                 }
             }

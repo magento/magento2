@@ -10,7 +10,7 @@
  */
 $methodCode = $block->escapeHtml($block->getMethodCode());
 ?>
-<fieldset class="fieldset items <?php /* @noEscape */ echo $methodCode ?>" id="payment_form_<?php /* @noEscape */ echo $methodCode ?>" style="display: none">
+<fieldset class="fieldset items <?= /* @noEscape */ $methodCode ?>" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display: none">
     <div class="field number required">
         <label for="po_number" class="label"><span><?= $block->escapeHtml(__('Purchase Order Number')) ?></span></label>
         <div class="control">

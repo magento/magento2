@@ -31,7 +31,7 @@
             <?php foreach ($block->getGroups() as $_group): ?>
             <?php if (!($_group->getId() == $block->getCurrentGroupId())): ?>
                 <li class="switcher-option">
-                    <a href="#" data-post='<?php /* @noEscape */ echo $block->getTargetStorePostData($_group->getDefaultStore()); ?>'>
+                    <a href="#" data-post='<?= /* @noEscape */ $block->getTargetStorePostData($_group->getDefaultStore()) ?>'>
                         <?= $block->escapeHtml($_group->getName()) ?>
                     </a>
                 </li>

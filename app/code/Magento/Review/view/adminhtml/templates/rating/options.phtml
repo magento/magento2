@@ -14,8 +14,8 @@
 <?php if (!$options): ?>
     <?php for ($_i = 1; $_i <= 5; $_i++): ?>
         <span class="field-row">
-            <label for="option_<?php /* @noEscape */ echo $_i ?>"><?= $block->escapeHtml(__('Option Title:')) ?></label>
-            <input id="option_<?php /* @noEscape */ echo $_i ?>" name="option[<?php /* @noEscape */ echo $_i ?>][code]" value="<?php /* @noEscape */ echo $_i ?>" class="input-text" type="text" />
+            <label for="option_<?= /* @noEscape */ $_i ?>"><?= $block->escapeHtml(__('Option Title:')) ?></label>
+            <input id="option_<?= /* @noEscape */ $_i ?>" name="option[<?= /* @noEscape */ $_i ?>][code]" value="<?= /* @noEscape */ $_i ?>" class="input-text" type="text" />
         </span>
     <?php endfor; ?>
 <?php elseif ($options->getSize() > 0): ?>

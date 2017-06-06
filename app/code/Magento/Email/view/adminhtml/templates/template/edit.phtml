@@ -24,7 +24,7 @@ use Magento\Framework\App\TemplateTypesInterface;
                             <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
                         <?php endif; ?>
                         <?php foreach ($options as $option): ?>
-                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?php /* @noEscape */ echo $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?></option>
+                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?></option>
                         <?php endforeach; ?>
                         <?php if ($group): ?>
                             </optgroup>
@@ -36,7 +36,7 @@ use Magento\Framework\App\TemplateTypesInterface;
         <div class="admin__field required">
             <span class="admin__field-label"></span>
             <div class="admin__field-control">
-                <?php /* @noEscape */ echo $block->getLoadButtonHtml() ?>
+                <?= /* @noEscape */ $block->getLoadButtonHtml() ?>
             </div>
         </div>
     </fieldset>
@@ -44,16 +44,16 @@ use Magento\Framework\App\TemplateTypesInterface;
 <?php endif ?>
 
 <form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="email_template_edit_form">
-    <?php /* @noEscape */ echo $block->getBlockHtml('formkey')?>
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
     <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?= $block->escapeHtmlAttr($block->getOrigTemplateCode()) ?>" />
-    <?php /* @noEscape */ echo $block->getFormHtml() ?>
+    <?= /* @noEscape */ $block->getFormHtml() ?>
 </form>
 
 <form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form" target="_blank">
-    <?php /* @noEscape */ echo $block->getBlockHtml('formkey')?>
+    <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php /* @noEscape */ echo $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
     </div>
@@ -93,7 +93,7 @@ require([
 
             this.bindEvents();
 
-            this.renderPaths(<?php /* @noEscape */ echo $block->getCurrentlyUsedForPaths(); ?>, 'currently_used_for');
+            this.renderPaths(<?= /* @noEscape */ $block->getCurrentlyUsedForPaths() ?>, 'currently_used_for');
         },
 
         bindEvents: function(){
@@ -146,7 +146,7 @@ require([
         },
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = <?php /* @noEscape */ echo TemplateTypesInterface::TYPE_TEXT ?>;
+                $('preview_type').value = <?= /* @noEscape */ TemplateTypesInterface::TYPE_TEXT ?>;
             } else {
                 $('preview_type').value = <?= (int) $block->getTemplateType() ?>;
             }

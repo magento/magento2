@@ -16,7 +16,7 @@ $fieldClass .= $element->getRequired() ? ' required' : '';
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     . $block->getUiId('form-field', $block->escapeHtmlAttr($element->getId()));
 ?>
-<div<?php /* @noEscape */ echo $fieldAttributes ?>>
+<div<?= /* @noEscape */ $fieldAttributes ?>>
     <?= $element->getLabelHtml() ?>
     <div class="control admin__field-control">
         <div class="rule-tree">

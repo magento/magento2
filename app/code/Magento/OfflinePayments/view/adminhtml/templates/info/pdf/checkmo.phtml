@@ -20,7 +20,7 @@
     <?php if ($block->getMailingAddress()): ?>
         <?= $block->escapeHtml(__('Send Check to:')) ?>
         {{pdf_row_separator}}
-        <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
+        <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMailingAddress())) ?>
         {{pdf_row_separator}}
     <?php endif; ?>
 <?php endif; ?>

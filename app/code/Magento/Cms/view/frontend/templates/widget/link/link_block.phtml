@@ -9,7 +9,7 @@
  */
 ?>
 <div class="widget block block-cms-link">
-    <a <?php /* @noEscape */ echo $block->getLinkAttributes() ?>>
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>>
         <span><?= $block->escapeHtml($block->getLabel()) ?></span>
     </a>
 </div>

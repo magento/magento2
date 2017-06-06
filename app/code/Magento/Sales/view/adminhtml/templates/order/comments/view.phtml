@@ -53,8 +53,8 @@
     <ul class="note-list">
         <?php foreach ($_entity->getCommentsCollection(true) as $_comment): ?>
             <li>
-                <span class="note-list-date"><?php /* @noEscape */ echo $block->formatDate($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-                <span class="note-list-time"><?php /* @noEscape */ echo $block->formatTime($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+                <span class="note-list-date"><?= /* @noEscape */ $block->formatDate($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+                <span class="note-list-time"><?= /* @noEscape */ $block->formatTime($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
                 <span class="note-list-customer">
                     <?= /* @escapeNotVerified */ __('Customer') ?>
                     <?php if ($_comment->getIsCustomerNotified()): ?>

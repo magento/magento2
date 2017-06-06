@@ -8,7 +8,7 @@
 ?>
 
 <?= /* @escapeNotVerified */ $block->getSomeData() ?>
-<?php /* @noEscape */ echo $block->getSomeData();?>
+<?= /* @noEscape */ $block->getSomeData() ?>
 <input name="form_key" type="hidden" value="<?= $block->escapeUrl($var) ?>" />
 <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr('value') ?>" />
 <input name="form_key" type="hidden" value="<?= $block->escapeJs('value') ?>" />
@@ -30,7 +30,7 @@ echo $var;
     (bool)$var .
     $block->escapeUrl("some value");
 ?>
-<?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\''; ?>
+<?= /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
 <?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
 <?php

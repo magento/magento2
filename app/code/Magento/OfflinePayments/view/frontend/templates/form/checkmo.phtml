@@ -19,7 +19,7 @@
             <dt class="title"><?= $block->escapeHtml(__('Send Check to:')) ?></dt>
             <dd class="content">
                 <address class="checkmo mailing address">
-                    <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
+                    <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
                 </address>
             </dd>
         <?php endif; ?>

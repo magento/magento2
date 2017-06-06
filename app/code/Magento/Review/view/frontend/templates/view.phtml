@@ -35,7 +35,7 @@
                                 <td class="label"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></td>
                                 <td class="value">
                                     <div class="rating-box">
-                                        <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getPercent()) ?>%;"></div>
+                                        <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getPercent()) ?>%;"></div>
                                     </div></td>
                             </tr>
                         <?php endif; ?>

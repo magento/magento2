@@ -17,7 +17,7 @@
                 <tr>
                     <th scope="col" class="col id"><?= /* @escapeNotVerified */ __('Order #') ?></th>
                     <th scope="col" class="col date"><?= /* @escapeNotVerified */ __('Date') ?></th>
-                    <?php /* @noEscape */ echo $block->getChildHtml('extra.column.header');?>
+                    <?= /* @noEscape */ $block->getChildHtml('extra.column.header') ?>
                     <th scope="col" class="col shipping"><?= /* @escapeNotVerified */ __('Ship To') ?></th>
                     <th scope="col" class="col total"><?= /* @escapeNotVerified */ __('Order Total') ?></th>
                     <th scope="col" class="col status"><?= /* @escapeNotVerified */ __('Status') ?></th>
@@ -32,7 +32,7 @@
                         <?php $extra = $block->getChildBlock('extra.container'); ?>
                         <?php if ($extra): ?>
                             <?php $extra->setOrder($_order); ?>
-                            <?php /* @noEscape */ echo $extra->getChildHtml() ?>
+                            <?= /* @noEscape */ $extra->getChildHtml() ?>
                         <?php endif; ?>
                         <td data-th="<?= $block->escapeHtml(__('Ship To')) ?>" class="col shipping"><?= $_order->getShippingAddress() ? $block->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
                         <td data-th="<?= $block->escapeHtml(__('Order Total')) ?>" class="col total"><?= /* @escapeNotVerified */ $_order->formatPrice($_order->getGrandTotal()) ?></td>

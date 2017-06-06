@@ -13,6 +13,6 @@
 <dl class="payment-method">
     <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
 <?php if ($block->getInstructions()): ?>
-    <dd class="content"><?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getInstructions())); ?></dd>
+    <dd class="content"><?= /* @noEscape */ nl2br($block->escapeHtml($block->getInstructions())) ?></dd>
 <?php endif; ?>
 </dl>

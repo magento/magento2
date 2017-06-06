@@ -19,7 +19,7 @@ $_validateButton = $block->getValidateButton();
     <div class="hidden"><?= $_element->getElementHtml() ?></div>
     <?php else: ?>
     <?= $_element->getLabelHtml() ?>
-    <div class="admin__field-control <?php /* @noEscape */ echo $_element->hasValueClass() ? $block->escapeHtmlAttr($_element->getValueClass()) : 'value'; ?><?= $_class ? $block->escapeHtmlAttr($_class) . '-value' : '' ?>">
+    <div class="admin__field-control <?= /* @noEscape */ $_element->hasValueClass() ? $block->escapeHtmlAttr($_element->getValueClass()) : 'value' ?><?= $_class ? $block->escapeHtmlAttr($_class) . '-value' : '' ?>">
         <?= $_element->getElementHtml() ?>
         <?php if ($_note): ?>
             <div class="admin__field-note<?= $_class ? " {$_class}-note" : '' ?>" id="note_<?= $block->escapeHtmlAttr($_element->getId()) ?>">

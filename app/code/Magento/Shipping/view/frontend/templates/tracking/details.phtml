@@ -21,7 +21,7 @@ $fields = [
 ];
 $number = is_object($track) ? $track->getTracking() : $track['number'];
 ?>
-<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $number; ?>">
+<table class="data table order tracking" id="tracking-table-popup-<?= /* @noEscape */ $number ?>">
     <caption class="table-caption"><?= $block->escapeHtml(__('Order tracking')) ?></caption>
     <tbody>
     <?php if (is_object($track)): ?>
@@ -48,7 +48,7 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
                         <?= $block->escapeHtml(__(' for more information or ')) ?>
                     <?php endif; ?>
                     <?= $block->escapeHtml(__('email us at ')) ?>
-                    <a href="mailto:<?php /* @noEscape */ echo $email; ?>"><?php /* @noEscape */ echo $email; ?></a>
+                    <a href="mailto:<?= /* @noEscape */ $email ?>"><?= /* @noEscape */ $email ?></a>
                 </td>
             </tr>
         <?php elseif ($track->getTrackSummary()): ?>
@@ -69,7 +69,7 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
             <?php foreach ($fields as $title => $property): ?>
                 <?php if (!empty($track->$property())): ?>
                     <tr>
-                        <th class="col label" scope="row"><?php /* @noEscape */ echo $block->escapeHtml(__($title . ':')); ?></th>
+                        <th class="col label" scope="row"><?= /* @noEscape */ $block->escapeHtml(__($title . ':')) ?></th>
                         <td class="col value"><?= $block->escapeHtml($track->$property()) ?></td>
                     </tr>
                 <?php endif;?>
@@ -79,7 +79,7 @@ $number = is_object($track) ? $track->getTracking() : $track['number'];
                 <tr>
                     <th class="col label" scope="row"><?= $block->escapeHtml(__('Delivered on:')) ?></th>
                     <td class="col value">
-                        <?php /* @noEscape */ echo $parentBlock->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()); ?>
+                        <?= /* @noEscape */ $parentBlock->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()) ?>
                     </td>
                 </tr>
             <?php endif; ?>

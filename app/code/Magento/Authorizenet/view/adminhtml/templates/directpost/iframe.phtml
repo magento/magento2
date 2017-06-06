@@ -22,7 +22,7 @@ $helper = $block->getHelper('adminhtml');
             window.top.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
         <?php endif; ?>
         <?php if (isset($params['error_msg'])): ?>
-            window.top.directPostModel.showError(<?php /* @noEscape */ echo json_encode((array)$params['error_msg']); ?>);
+            window.top.directPostModel.showError(<?= /* @noEscape */ json_encode((array)$params['error_msg']) ?>);
             <?php if (isset($params['x_invoice_num'])): ?>
                 window.top.directPostModel.successUrl="<?= $block->escapeUrl($helper->getSuccessOrderUrl($params)) ?>";
             <?php endif; ?>

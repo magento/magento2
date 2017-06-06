@@ -17,7 +17,7 @@
                     class="search-global-input"
                     id="search-global"
                     name="query"
-                    data-mage-init='<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()) ?>'>
+                    data-mage-init='<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()) ?>'>
             <button
                 type="submit"
                 class="search-global-action"

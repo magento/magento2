@@ -94,7 +94,7 @@
         "mage/mage"
     ], function($){
         var dataForm = $('#form-validate');
-        var ignore = <?php /* @noEscape */ echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
+        var ignore = <?= /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ?>;
         
         dataForm.mage('validation', {
         <?php if ($_dob->isEnabled()): ?>

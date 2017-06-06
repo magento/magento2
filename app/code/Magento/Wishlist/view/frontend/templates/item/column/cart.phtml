@@ -13,7 +13,7 @@ $item = $block->getItem();
 $product = $item->getProduct();
 ?>
 <?php foreach ($block->getChildNames() as $childName): ?>
-    <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false); ?>
+    <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
 <?php endforeach;?>
 <div class="box-tocart">
     <fieldset class="fieldset">
@@ -22,14 +22,14 @@ $product = $item->getProduct();
             <label class="label" for="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]"><span><?= $block->escapeHtml(__('Qty')) ?></span></label>
             <div class="control">
                 <input type="number" data-role="qty" id="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true}"
-               name="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" value="<?php /* @noEscape */ echo (int)($block->getAddToCartQty($item) * 1) ?>">
+               name="qty[<?= $block->escapeHtmlAttr($item->getId()) ?>]" value="<?= /* @noEscape */ (int)($block->getAddToCartQty($item) * 1) ?>">
             </div>
         </div>
     <?php endif; ?>
     <?php if ($product->isSaleable()): ?>
     <div class="product-item-actions">
         <div class="actions-primary">
-            <button type="button" data-role="tocart" data-post='<?php /* @noEscape */ echo $block->getItemAddToCartParams($item)?>' title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>" data-item-id="<?= $block->escapeHtmlAttr($item->getId()) ?>" class="action tocart primary">
+            <button type="button" data-role="tocart" data-post='<?= /* @noEscape */ $block->getItemAddToCartParams($item) ?>' title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>" data-item-id="<?= $block->escapeHtmlAttr($item->getId()) ?>" class="action tocart primary">
                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
             </button>
         </div>

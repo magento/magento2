@@ -55,14 +55,14 @@
                     <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
                     <?php for ($_i = 1, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
-                            <label class="label" for="street_<?php /* @noEscape */ echo $_i + 1 ?>">
+                            <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
                                 <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
                             </label>
                             <div class="control">
                                 <input type="text" name="street[]"
                                        value="<?= $block->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
                                        title="<?= $block->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
-                                       id="street_<?php /* @noEscape */ echo $_i + 1 ?>"
+                                       id="street_<?= /* @noEscape */ $_i + 1 ?>"
                                        class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>">
                             </div>
                         </div>
@@ -104,7 +104,7 @@
             <div class="control">
                 <select id="region_id" name="region_id"
                         title="<?= $block->escapeHtmlAttr(__('State/Province')) ?>"
-                        class="validate-select" <?php /* @noEscape */ echo !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : ''; ?>>
+                        class="validate-select" <?= /* @noEscape */ !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>>
                     <option value=""><?= $block->escapeHtml(__('Please select a region, state or province.')) ?></option>
                 </select>
                 <input type="text"
@@ -188,14 +188,14 @@
         },
         "#country": {
             "regionUpdater": {
-                "optionalRegionAllowed": <?php /* @noEscape */ echo $block->getConfig('general/region/display_all') ? 'true' : 'false'; ?>,
+                "optionalRegionAllowed": <?= /* @noEscape */ $block->getConfig('general/region/display_all') ? 'true' : 'false' ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson() ?>,
+                "regionJson": <?= /* @noEscape */ $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson() ?>,
                 "defaultRegion": "<?= (int) $block->getRegionId() ?>",
-                "countriesWithOptionalZip": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getCountriesWithOptionalZip(true) ?>
+                "countriesWithOptionalZip": <?= /* @noEscape */ $this->helper(\Magento\Directory\Helper\Data::class)->getCountriesWithOptionalZip(true) ?>
             }
         }
     }

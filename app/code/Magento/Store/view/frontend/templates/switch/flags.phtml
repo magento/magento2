@@ -14,7 +14,7 @@
     <select id="select-language" title="<?= $block->escapeHtmlAttr(__('Your Language')) ?>" onchange="window.location.href=this.value" class="flags">
     <?php foreach ($block->getStores() as $_lang): ?>
         <?php $_selected = ($_lang->getId() == $block->getCurrentStoreId()) ? ' selected="selected"' : '' ?>
-        <option value="<?= $block->escapeUrl($_lang->getCurrentUrl()) ?>" style="background-image:url('<?= $block->escapeUrl($block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif')) ?>');"<?php /* @noEscape */ echo $_selected ?>><?= $block->escapeHtml($_lang->getName()) ?></option>
+        <option value="<?= $block->escapeUrl($_lang->getCurrentUrl()) ?>" style="background-image:url('<?= $block->escapeUrl($block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif')) ?>');"<?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($_lang->getName()) ?></option>
     <?php endforeach; ?>
     </select>
 </div>

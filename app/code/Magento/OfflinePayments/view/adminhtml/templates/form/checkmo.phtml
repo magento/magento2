@@ -17,7 +17,7 @@
         <div class="admin__field">
             <label class="admin__field-label"><span><?= $block->escapeHtml(__('Send Check to:')) ?></span></label>
             <div class="admin__field-control checkmo-mailing-address">
-                <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
+                <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
             </div>
         </div>
     <?php endif; ?>

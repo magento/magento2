@@ -20,13 +20,13 @@ $config = [
 ];
 
 ?>
-<div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
+<div data-mage-init='<?= /* @noEscape */ json_encode($config) ?>'
      class="paypal checkout paypal-logo braintree-paypal-logo<?php
      /* @noEscape */ echo $block->getContainerId(); ?>-container">
-    <button data-currency="<?php /* @noEscape */ echo $block->getCurrency(); ?>"
-       data-locale="<?php /* @noEscape */ echo $block->getLocale(); ?>"
-       data-amount="<?php /* @noEscape */ echo $block->getAmount(); ?>"
-       id="<?php /* @noEscape */ echo $id; ?>"
+    <button data-currency="<?= /* @noEscape */ $block->getCurrency() ?>"
+       data-locale="<?= /* @noEscape */ $block->getLocale() ?>"
+       data-amount="<?= /* @noEscape */ $block->getAmount() ?>"
+       id="<?= /* @noEscape */ $id ?>"
        class="action-braintree-paypal-logo" disabled>
         <img class="braintree-paypal-button-hidden"
              src="https://checkout.paypal.com/pwpp/2.17.6/images/pay-with-paypal.png"

@@ -72,8 +72,8 @@
     <ul class="note-list">
     <?php foreach ($block->getOrder()->getStatusHistoryCollection(true) as $_item): ?>
         <li class="note-list-item">
-            <span class="note-list-date"><?php /* @noEscape */ echo $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-            <span class="note-list-time"><?php /* @noEscape */ echo $block->formatTime($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+            <span class="note-list-date"><?= /* @noEscape */ $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+            <span class="note-list-time"><?= /* @noEscape */ $block->formatTime($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
             <span class="note-list-status"><?= /* @escapeNotVerified */ $_item->getStatusLabel() ?></span>
             <span class="note-list-customer">
                 <?= /* @escapeNotVerified */ __('Customer') ?>

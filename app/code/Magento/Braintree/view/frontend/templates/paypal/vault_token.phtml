@@ -14,9 +14,9 @@ $confirmDeleteMessage = sprintf('%s: %s?', __('Are you sure you want to delete t
 ?>
 <tr>
     <td data-th="<?= $block->escapeHtml(__('PayPal Account')) ?>" class="col paypal-account">
-        <img src="<?php /* @noEscape */ echo $block->getIconUrl(); ?>"
-             width="<?php /* @noEscape */ echo $block->getIconWidth(); ?>"
-             height="<?php /* @noEscape */ echo $block->getIconHeight(); ?>"
+        <img src="<?= /* @noEscape */ $block->getIconUrl() ?>"
+             width="<?= /* @noEscape */ $block->getIconWidth() ?>"
+             height="<?= /* @noEscape */ $block->getIconHeight() ?>"
              alt="<?= $block->escapeHtml(__('PayPal Logo')) ?>">
         <span><?= $block->escapeHtml($payerEmail) ?></span>
     </td>
@@ -27,8 +27,8 @@ $confirmDeleteMessage = sprintf('%s: %s?', __('Are you sure you want to delete t
             method="post">
             <?= $block->getBlockHtml('formkey') ?>
             <input
-                name="<?php /* @noEscape */ echo PaymentTokenInterface::PUBLIC_HASH; ?>"
-                value="<?php /* @noEscape */ echo $block->getToken()->getPublicHash(); ?>"
+                name="<?= /* @noEscape */ PaymentTokenInterface::PUBLIC_HASH ?>"
+                value="<?= /* @noEscape */ $block->getToken()->getPublicHash() ?>"
                 type="hidden"/>
             <button type="submit"
                     class="action delete"

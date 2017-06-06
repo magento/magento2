@@ -16,7 +16,7 @@
             "Magento_ProductVideo/js/fotorama-add-video-events": {
                 "videoData": <?= /* @escapeNotVerified */ $block->getMediaGalleryDataJson() ?>,
                 "videoSettings": <?= /* @escapeNotVerified */ $block->getVideoSettingsJson() ?>,
-                "optionsVideoData": <?php /* @noEscape */ echo $block->getOptionsMediaGalleryDataJson(); ?>
+                "optionsVideoData": <?= /* @noEscape */ $block->getOptionsMediaGalleryDataJson() ?>
             }
         }
     }

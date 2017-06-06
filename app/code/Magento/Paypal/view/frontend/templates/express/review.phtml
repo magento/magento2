@@ -162,8 +162,8 @@
                 "shippingSubmitFormSelector": "#shipping-method-form",
                 "shippingSelector": "#shipping-method",
                 "shippingMethodUpdateUrl": "<?= $block->escapeUrl($block->getUpdateShippingMethodsUrl()) ?>",
-                "isAjax": <?php /* @noEscape */ echo $block->getUseAjax() ? 'true' : 'false' ?>,
-                "canEditShippingMethod": <?php /* @noEscape */ echo $block->canEditShippingMethod() ? 'true' : 'false' ?>
+                "isAjax": <?= /* @noEscape */ $block->getUseAjax() ? 'true' : 'false' ?>,
+                "canEditShippingMethod": <?= /* @noEscape */ $block->canEditShippingMethod() ? 'true' : 'false' ?>
             }
         }
     }

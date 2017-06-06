@@ -13,15 +13,15 @@ $ccNumberView = $block->escapeHtml($block->getNumberLast4Digits());
 ?>
 <tr>
     <td data-th="<?= $block->escapeHtml(__('Card Number')) ?>" class="col card-number">
-        <span><?= $block->escapeHtml(__('ending')) ?></span> <?php /* @noEscape */ echo $ccNumberView ?>
+        <span><?= $block->escapeHtml(__('ending')) ?></span> <?= /* @noEscape */ $ccNumberView ?>
     </td>
     <td data-th="<?= $block->escapeHtml(__('Expiration Date')) ?>" class="col card-expire">
         <?= $block->escapeHtml($block->getExpDate()) ?>
     </td>
     <td data-th="<?= $block->escapeHtml(__('Type')) ?>" class="col card-type">
-        <img src="<?php /* @noEscape */ echo $block->getIconUrl(); ?>"
-             width="<?php /* @noEscape */ echo $block->getIconWidth(); ?>"
-             height="<?php /* @noEscape */ echo $block->getIconHeight(); ?>"
+        <img src="<?= /* @noEscape */ $block->getIconUrl() ?>"
+             width="<?= /* @noEscape */ $block->getIconWidth() ?>"
+             height="<?= /* @noEscape */ $block->getIconHeight() ?>"
         >
     </td>
     <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
@@ -32,8 +32,8 @@ $ccNumberView = $block->escapeHtml($block->getNumberLast4Digits());
             >
             <?= $block->getBlockHtml('formkey') ?>
             <input
-                name="<?php /* @noEscape */ echo PaymentTokenInterface::PUBLIC_HASH?>"
-                value="<?php /* @noEscape */ echo $block->getToken()->getPublicHash()?>"
+                name="<?= /* @noEscape */ PaymentTokenInterface::PUBLIC_HASH ?>"
+                value="<?= /* @noEscape */ $block->getToken()->getPublicHash() ?>"
                 type="hidden"/>
             <button type="submit"
                     class="action delete"

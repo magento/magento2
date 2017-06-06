@@ -17,14 +17,14 @@
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 
 <div class="field file<?= /* @escapeNotVerified */ $class ?>">
-    <label class="label" for="<?php /* @noEscape */ echo $_fileName; ?>" id="<?php /* @noEscape */ echo $_fileName; ?>-label">
+    <label class="label" for="<?= /* @noEscape */ $_fileName ?>" id="<?= /* @noEscape */ $_fileName ?>-label">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
         <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
     <?php if ($_fileExists): ?>
     <div class="control">
-        <span class="<?php /* @noEscape */ echo $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
-        <a href="javascript:void(0)" class="label" id="change-<?php /* @noEscape */ echo $_fileName ?>" >
+        <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
+        <a href="javascript:void(0)" class="label" id="change-<?= /* @noEscape */ $_fileName ?>" >
             <?= /* @escapeNotVerified */ __('Change') ?>
         </a>
         <?php if (!$_option->getIsRequire()): ?>
@@ -35,8 +35,8 @@
     <?php endif; ?>
     <div class="control" id="input-box-<?= /* @escapeNotVerified */ $_fileName ?>"
              data-mage-init='{"priceOptionFile":{
-                "fileName":"<?php /* @noEscape */ echo $_fileName ?>",
-                "fileNamed":"<?php /* @noEscape */ echo $_fileNamed ?>",
+                "fileName":"<?= /* @noEscape */ $_fileName ?>",
+                "fileNamed":"<?= /* @noEscape */ $_fileNamed ?>",
                 "fieldNameAction":"<?= /* @escapeNotVerified */ $_fieldNameAction ?>",
                 "changeFileSelector":"#change-<?= /* @escapeNotVerified */ $_fileName ?>",
                 "deleteFileSelector":"#delete-<?= /* @escapeNotVerified */ $_fileName ?>"}

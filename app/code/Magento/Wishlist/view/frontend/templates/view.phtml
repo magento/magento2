@@ -13,8 +13,8 @@
     <?= ($block->getChildHtml('wishlist.rss.link')) ?>
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
-          "addToCartUrl":<?php /* @noEscape */ echo $block->getItemAddToCartParams("%item%");?>,
-          "addAllToCartUrl":<?php /* @noEscape */ echo $block->getAddAllToCartParams(); ?>,
+          "addToCartUrl":<?= /* @noEscape */ $block->getItemAddToCartParams("%item%") ?>,
+          "addAllToCartUrl":<?= /* @noEscape */ $block->getAddAllToCartParams() ?>,
           "commentString":""},
           "validation": {}}' action="<?= $block->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
         <?= $block->getChildHtml('top') ?>

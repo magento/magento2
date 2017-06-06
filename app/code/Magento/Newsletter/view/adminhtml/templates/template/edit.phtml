@@ -17,12 +17,12 @@ use Magento\Framework\App\TemplateTypesInterface;
         <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
         <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?= $block->escapeHtmlAttr($block->getSaveAsFlag()) ?>" />
     </div>
-    <?php /* @noEscape */ echo $block->getForm() ?>
+    <?= /* @noEscape */ $block->getForm() ?>
 </form>
 <form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_template_preview_form" target="_blank">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php /* @noEscape */ echo $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />

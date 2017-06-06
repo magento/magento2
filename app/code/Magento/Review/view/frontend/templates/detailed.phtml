@@ -19,7 +19,7 @@
                         <th class="label" scope="row"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></th>
                         <td class="value">
                             <div class="rating box">
-                                <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getSummary()) ?>%;"></div>
+                                <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getSummary()) ?>%;"></div>
                             </div>
                         </td>
                     </tr>

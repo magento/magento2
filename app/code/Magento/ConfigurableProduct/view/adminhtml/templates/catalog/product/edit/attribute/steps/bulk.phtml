@@ -163,7 +163,7 @@
                                     ) ?>" class="item-role item-role-<?= $block->escapeHtml(
                                         $attribute->getAttributeCode()
                                     ) ?>">
-                                        <?php /* @noEscape */ echo $attribute->getFrontendLabel() ?>
+                                        <?= /* @noEscape */ $attribute->getFrontendLabel() ?>
                                     </li>
                                     <?php
                                 endforeach;

@@ -34,8 +34,8 @@
                     <?php if ($_review->getSum()): ?>
                         <div class="rating-summary">
                             <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-                            <div class="rating-result" title="<?php /* @noEscape */ echo ((int)$_review->getSum() / (int)$_review->getCount()) ?>%">
-                                <span style="width:<?php /* @noEscape */ echo((int)$_review->getSum() / (int)$_review->getCount()) ?>%;"><span><?php /* @noEscape */ echo((int)$_review->getSum() / (int)$_review->getCount()) ?>%</span></span>
+                            <div class="rating-result" title="<?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%">
+                                <span style="width:<?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%;"><span><?= /* @noEscape */ ((int)$_review->getSum() / (int)$_review->getCount()) ?>%</span></span>
                             </div>
                         </div>
                     <?php endif; ?>

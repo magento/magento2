@@ -18,7 +18,7 @@
 <form id="token_form" method="POST" action="<?= $block->escapeUrl($block->getTransactionUrl()) ?>">
     <input type="hidden" name="SECURETOKEN" value="<?= $block->escapeHtml($block->getSecureToken()) ?>"/>
     <input type="hidden" name="SECURETOKENID" value="<?= $block->escapeHtml($block->getSecureTokenId()) ?>"/>
-    <input type="hidden" name="MODE" value="<?php /* @noEscape */ echo $block->isTestMode() ? 'TEST' : 'LIVE'; ?>"/>
+    <input type="hidden" name="MODE" value="<?= /* @noEscape */ $block->isTestMode() ? 'TEST' : 'LIVE' ?>"/>
 </form>
 <script>
     document.getElementById('token_form').submit();

@@ -37,8 +37,8 @@ $captcha = $block->getCaptchaModel();
         alt="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>"/>
     <img
         id="<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
-        width="<?php /* @noEscape */ echo (float) $block->getImgWidth() ?>"
-        height="<?php /* @noEscape */ echo (float) $block->getImgHeight() ?>"
+        width="<?= /* @noEscape */ (float) $block->getImgWidth() ?>"
+        height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>"
         src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>" />
 </div>
 <script>

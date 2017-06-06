@@ -19,7 +19,7 @@ $config = [
 ];
 
 ?>
-<div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
+<div data-mage-init='<?= /* @noEscape */ json_encode($config) ?>'
      class="paypal checkout paypal-logo <?= $block->escapeHtml($block->getContainerId()) ?>-container">
     <a data-action="<?= $block->escapeHtml($block->getLinkAction()) ?>" href="#">
         <img class="paypal-button-hidden"

@@ -19,7 +19,7 @@ $tokens = $block->getPaymentTokens();
             </thead>
             <tbody>
             <?php foreach($tokens as $token): ?>
-                <?php /* @noEscape */ echo $block->renderTokenHtml($token); ?>
+                <?= /* @noEscape */ $block->renderTokenHtml($token) ?>
             <?php endforeach; ?>
             </tbody>
         </table>

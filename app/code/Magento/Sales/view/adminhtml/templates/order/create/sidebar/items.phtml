@@ -68,9 +68,9 @@
                         <?php if ($block->canDisplayPrice()): ?>
                             <td class="col-price">
                                 <?php if ($block->getDataId() == 'cart'): ?>
-                                    <?php /* @noEscape */ echo $block->getItemPrice($_item->getProduct()) ?>
+                                    <?= /* @noEscape */ $block->getItemPrice($_item->getProduct()) ?>
                                 <?php else: ?>
-                                    <?php /* @noEscape */ echo $block->getItemPrice($_item) ?>
+                                    <?= /* @noEscape */ $block->getItemPrice($_item) ?>
                                 <?php endif; ?>
                             </td>
                         <?php endif; ?>

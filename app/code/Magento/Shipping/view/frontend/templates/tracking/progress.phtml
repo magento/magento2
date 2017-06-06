@@ -11,7 +11,7 @@ $parentBlock = $block->getParentBlock();
 $track = $block->getData('track');
 ?>
 <div class="table-wrapper">
-    <table class="data table order tracking" id="track-history-table-<?php /* @noEscape */ echo $track->getTracking(); ?>">
+    <table class="data table order tracking" id="track-history-table-<?= /* @noEscape */ $track->getTracking() ?>">
         <caption class="table-caption"><?= $block->escapeHtml(__('Track history')) ?></caption>
         <thead>
         <tr>
@@ -30,10 +30,10 @@ $track = $block->getData('track');
                     <?= (!empty($detail['deliverylocation']) ? $block->escapeHtml($detail['deliverylocation']) : '') ?>
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date">
-                    <?php /* @noEscape */ echo $detailDate; ?>
+                    <?= /* @noEscape */ $detailDate ?>
                 </td>
                 <td data-th="<?= $block->escapeHtml(__('Local Time')) ?>" class="col time">
-                    <?php /* @noEscape */ echo $detailTime; ?></td>
+                    <?= /* @noEscape */ $detailTime ?></td>
                 <td data-th="<?= $block->escapeHtml(__('Description')) ?>" class="col description">
                     <?= (!empty($detail['activity']) ? $block->escapeHtml($detail['activity']) : '') ?>
                 </td>

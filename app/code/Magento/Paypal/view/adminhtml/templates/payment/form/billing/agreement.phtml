@@ -9,14 +9,14 @@
 ?>
 <?php $code = $block->escapeHtml($block->getMethodCode()) ?>
 <fieldset class="admin__fieldset payment-method form-list"
-          id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display:none;">
+          id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none;">
     <div class="admin__field _required">
         <label class="admin__field-label"
-               for="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id">
+               for="<?= /* @noEscape */ $code ?>_ba_agreement_id">
             <span><?= $block->escapeHtml(__('Billing Agreement')) ?></span>
         </label>
         <div class="admin__field-control">
-            <select id="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id"
+            <select id="<?= /* @noEscape */ $code ?>_ba_agreement_id"
                     name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]"
                     class="required-entry admin__control-select">
                 <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>

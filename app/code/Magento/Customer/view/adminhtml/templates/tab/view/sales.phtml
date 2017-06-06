@@ -72,7 +72,7 @@ $singleStoreMode = $block->isSingleStoreMode();
         </tbody>
         <?php else: ?>
         <tbody>
-        <tr class="hidden"><td colspan="<?php /* @noEscape */ echo $singleStoreMode ? 2 : 5; ?>"></td></tr>
+        <tr class="hidden"><td colspan="<?= /* @noEscape */ $singleStoreMode ? 2 : 5 ?>"></td></tr>
         </tbody>
         <?php endif; ?>
     </table>
