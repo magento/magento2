@@ -242,6 +242,9 @@
         "files": [
             "app/etc/NonComposerComponentRegistration.php"
         ],
+        "classmap": [
+            "var/generation/Magento/"
+        ],
         "exclude-from-classmap": [
             "**/dev/**",
             "**/update/**",
