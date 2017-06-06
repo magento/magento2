@@ -24,6 +24,11 @@ class Invoice extends AbstractPdf
     protected $_localeResolver;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    protected $_appEmulation;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -36,6 +41,7 @@ class Invoice extends AbstractPdf
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -53,10 +59,12 @@ class Invoice extends AbstractPdf
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
         $this->_localeResolver = $localeResolver;
+        $this->_appEmulation = $appEmulation;
         parent::__construct(
             $paymentData,
             $string,
@@ -127,6 +135,7 @@ class Invoice extends AbstractPdf
 
         foreach ($invoices as $invoice) {
             if ($invoice->getStoreId()) {
+                $this->_appEmulation->startEnvironmentEmulation($invoice->getStoreId(), \Magento\Framework\App\Area::AREA_FRONTEND, true);
                 $this->_localeResolver->emulate($invoice->getStoreId());
                 $this->_storeManager->setCurrentStore($invoice->getStoreId());
             }
@@ -162,6 +171,7 @@ class Invoice extends AbstractPdf
             /* Add totals */
             $this->insertTotals($page, $invoice);
             if ($invoice->getStoreId()) {
+                $this->_appEmulation->stopEnvironmentEmulation();
                 $this->_localeResolver->revert();
             }
         }
