@@ -27,7 +27,7 @@ define([
                 values = values.split(',');
             }
 
-            if (!Array.isArray(values)) {
+            if (!_.isArray(values)) {
                 values = [values];
             }
 
@@ -54,6 +54,10 @@ define([
          */
         flatOptions: function (options) {
             var self = this;
+
+            if (!_.isArray(options)) {
+                options = _.values(options);
+            }
 
             return options.reduce(function (opts, option) {
                 if (_.isArray(option.value)) {

@@ -1188,6 +1188,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->quote->beforeSave();
         $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
+        $this->assertNull($this->quote->getUpdatedAt());
     }
 
     /**

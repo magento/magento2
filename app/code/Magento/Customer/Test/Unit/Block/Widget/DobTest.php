@@ -464,4 +464,23 @@ class DobTest extends \PHPUnit_Framework_TestCase
             );
         $this->assertNull($this->_block->getMaxDateRange());
     }
+    
+    public function testGetHtmlExtraParamsWithoutRequiredOption() {
+        $this->attribute->expects($this->once())
+            ->method("isRequired")
+            ->willReturn(false);
+
+        $this->assertEquals($this->_block->getHtmlExtraParams(), 'data-validate="{\'validate-date-au\':true}"');
+    }
+
+    public function testGetHtmlExtraParamsWithRequiredOption() {
+        $this->attribute->expects($this->once())
+            ->method("isRequired")
+            ->willReturn(true);
+
+        $this->assertEquals(
+            $this->_block->getHtmlExtraParams(),
+            'data-validate="{\'validate-date-au\':true, required:true}"'
+        );
+    }
 }

@@ -21,8 +21,8 @@
         "lib-libxml": "*",
         "ext-xsl": "*",
         "symfony/process": "~2.1",
-        "zendframework/zend-stdlib": "~2.5.0",
-        "zendframework/zend-http": "~2.5.0"
+        "zendframework/zend-stdlib": "^2.7.7",
+        "zendframework/zend-http": "^2.6.0"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
