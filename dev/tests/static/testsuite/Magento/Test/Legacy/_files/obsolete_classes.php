@@ -4073,6 +4073,10 @@ return [
     ['Magento\Persistent\Model\Observer\PreventExpressCheckout', 'Magento\Persistent\Observer\*'],
     ['Magento\Persistent\Model\Observer\PreventClearCheckoutSession', 'Magento\Persistent\Observer\*'],
     ['Magento\Persistent\Model\Observer\MakePersistentQuoteGuest', 'Magento\Persistent\Observer\*'],
+    [
+        'Magento\Persistent\Observer\RemovePersistentCookieObserver',
+        '\Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver'
+    ],
     ['Magento\CmsUrlRewrite\Model\Observer', 'Magento\CmsUrlRewrite\Observer\*'],
     ['Magento\Cms\Model\Observer', 'Magento\Cms\Observer\*'],
     ['Magento\OfflinePayments\Model\Observer', 'Magento\OfflinePayments\Observer\*'],

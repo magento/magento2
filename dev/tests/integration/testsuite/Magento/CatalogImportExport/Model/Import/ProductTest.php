@@ -22,6 +22,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
+use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlRewrite;
@@ -1710,6 +1711,26 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->setSource($source)->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
+    }
+
+    /**
+     * Tests situation when images for importing products are already present in filesystem.
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/import_with_filesystem_images.php
+     * @magentoAppIsolation enabled
+     */
+    public function testImportWithFilesystemImages()
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = ObjectManager::getInstance()->get(Filesystem::class);
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $writeAdapter */
+        $writeAdapter = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+
+        if (!$writeAdapter->isWritable()) {
+            $this->markTestSkipped('Due to unwritable media directory');
+        }
+
+        $this->importDataForMediaTest('import_media_existing_images.csv');
     }
 
     /**
