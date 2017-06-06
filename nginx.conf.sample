@@ -38,6 +38,7 @@ error_page 404 403 = /errors/404.php;
 location ~* ^/setup($|/) {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
+        fastcgi_split_path_info ^(/setup/index.php)(/.+)$;
         fastcgi_pass   fastcgi_backend;
 
         fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
