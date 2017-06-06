@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Liip\CustomerHierarchy\Api\RoleManagerInterface" type="Liip\CustomerHierarchy\Model\Role\Manager" />
+    <preference for="Liip\CustomerHierarchy\Api\PermissionManagerInterface" type="Liip\CustomerHierarchy\Model\Role\Permission\Manager" />
+    <preference for="Liip\CustomerHierarchy\Model\Role\Permission\PoolInterface" type="Liip\CustomerHierarchy\Model\Role\Permission\Pool" />
+
+    <type name="Liip\CustomerHierarchy\Model\Role\Permission\Login">
+        <arguments>
+            <argument name="type" xsi:type="string">boolean</argument>
+            <argument name="code" xsi:type="string">login</argument>
+        </arguments>
+    </type>
+    <type name="Liip\CustomerHierarchy\Model\Role\Permission\PriceView">
+        <arguments>
+            <argument name="type" xsi:type="string">boolean</argument>
+            <argument name="code" xsi:type="string">price_view</argument>
+        </arguments>
+    </type>
+
+    <type name="Liip\CustomerHierarchy\Model\Role\Permission\Pool">
+        <arguments>
+            <argument name="permissions" xsi:type="array">
+                <item name="login" xsi:type="object">Liip\CustomerHierarchy\Model\Role\Permission\Login</item>
+                <item name="price_view" xsi:type="object">Liip\CustomerHierarchy\Model\Role\Permission\PriceView</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

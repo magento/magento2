@@ -1,0 +1,58 @@
+<?php
+/**
+ * @var $block \Liip\CustomerHierarchy\Block\Customer\Accounts
+ */
+?>
+<?php $accounts = $block->getAccounts(); ?>
+<?php echo $block->getChildHtml('info');?>
+<?php if ($accounts && count($accounts)): ?>
+    <div class="table-wrapper customer-accounts">
+        <table class="data table table-customer-accounts" id="my-accounts-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Accounts') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col first-name"><?php echo __('First Name'); ?></th>
+                    <th scope="col" class="col last-name"><?php echo __('Last Name'); ?></th>
+                    <th scope="col" class="col email"><?php echo __('Email Address'); ?></th>
+                    <?php /* @noEscape */ echo $block->getChildHtml('extra.column.header');?>
+                    <th scope="col" class="col created-at"><?php echo __('Created At'); ?></th>
+                    <th scope="col" class="col actions"><?php echo __('Action'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($accounts as $account): ?>
+                    <tr>
+                        <td data-th="<?php echo $block->escapeHtml(__('First Name')) ?>" class="col id"><?php echo $account->getFirstname(); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Last Name')) ?>" class="col date"><?php echo $account->getLastname(); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Email Address')) ?>" class="col date"><?php echo $account->getEmail(); ?></td>
+                        <?php $extra = $block->getChildBlock('extra.container'); ?>
+                        <?php if ($extra): ?>
+                            <?php $extra->setCustomer($account); ?>
+                            <?php /* @noEscape */ echo $extra->getChildHtml() ?>
+                        <?php endif; ?>
+                        <td data-th="<?php echo $block->escapeHtml(__('Created At')) ?>" class="col date"><?php echo $block->formatDate($account->getCreatedAt()); ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                            <a href="<?php echo $block->getViewUrl($account); ?>" class="action view">
+                                <span><?php echo __('View'); ?></span>
+                            </a>
+                            <a href="<?php echo $block->getEditUrl($account); ?>" class="action edit">
+                                <span><?php echo __('Edit'); ?></span>
+                            </a>
+                            <a href="<?php echo $block->getDisableUrl($account); ?>" class="action disable">
+                                <span><?php echo __('Disable'); ?></span>
+                            </a>
+                            <a href="<?php echo $block->getDeleteUrl($account); ?>" class="action delete">
+                                <span><?php echo __('Delete'); ?></span>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="customer-accounts-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have no accounts yet.'); ?></span></div>
+<?php endif ?>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<update handle="customer_account"/>
+<body>
+    <referenceContainer name="content">
+        <block class="Liip\CustomerHierarchy\Block\Customer\Accounts" name="customerhierarchy.customer.accounts" cacheable="false" template="customer/hierarchy/accounts.phtml">
+            <container name="customerhierarchy.customer.accounts.info" as="info" label="Customer Accounts Info"/>
+            <container name="customerhierarchy.customer.accounts.extra.column.header" as="extra.column.header" label="Customer Accounts Extra Column Header"/>
+            <block class="Liip\CustomerHierarchy\Block\Customer\Accounts\Container"
+                   name="customerhierarchy.customer.accounts.extra.container" as="extra.container">
+                <block class="Magento\Framework\View\Element\Template"
+                        name="customerhierarchy.customer.accounts.extra.container.data" as="extra.container.data"/>
+            </block>
+        </block>
+        <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml" cacheable="false"/>
+    </referenceContainer>
+</body>
+</page>
