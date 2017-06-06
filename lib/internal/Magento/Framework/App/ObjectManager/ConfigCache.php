@@ -41,11 +41,15 @@ class ConfigCache implements \Magento\Framework\ObjectManager\ConfigCacheInterfa
      * Retrieve configuration from cache
      *
      * @param string $key
-     * @return array
+     * @return array|false
      */
     public function get($key)
     {
-        return $this->getSerializer()->unserialize($this->_cacheFrontend->load($this->_prefix . $key));
+        $data = $this->_cacheFrontend->load($this->_prefix . $key);
+        if (!$data) {
+            return false;
+        }
+        return $this->getSerializer()->unserialize($data);
     }
 
     /**

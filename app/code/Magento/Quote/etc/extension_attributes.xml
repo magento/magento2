@@ -9,4 +9,8 @@
     <extension_attributes for="Magento\Quote\Api\Data\CartInterface">
         <attribute code="shipping_assignments" type="Magento\Quote\Api\Data\ShippingAssignmentInterface[]" />
     </extension_attributes>
+
+    <extension_attributes for="Magento\Quote\Api\Data\TotalsInterface">
+        <attribute code="coupon_label" type="string" />
+    </extension_attributes>
 </config>
