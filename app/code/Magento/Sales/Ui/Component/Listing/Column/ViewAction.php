@@ -50,7 +50,8 @@ class ViewAction extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                if (isset($item['entity_id'])) {
+                $indexField = $this->getData('config/indexField') ?: 'entity_id';
+                if (isset($item[$indexField])) {
                     $viewUrlPath = $this->getData('config/viewUrlPath') ?: '#';
                     $urlEntityParamName = $this->getData('config/urlEntityParamName') ?: 'entity_id';
                     $item[$this->getData('name')] = [
@@ -58,7 +59,7 @@ class ViewAction extends Column
                             'href' => $this->urlBuilder->getUrl(
                                 $viewUrlPath,
                                 [
-                                    $urlEntityParamName => $item['entity_id']
+                                    $urlEntityParamName => $item[$indexField]
                                 ]
                             ),
                             'label' => __('View')
