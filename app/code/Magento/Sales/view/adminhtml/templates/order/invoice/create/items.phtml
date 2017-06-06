@@ -32,7 +32,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="2">&nbsp;</td>
-                        <td colspan="3"><?php echo $block->getUpdateButtonHtml() ?></td>
+                        <td colspan="3"><?= $block->getUpdateButtonHtml() ?></td>
                         <td colspan="3">&nbsp;</td>
                     </tr>
                 </tfoot>
@@ -45,8 +45,8 @@
                     $_i++;
                 } ?>
                     <tbody class="<?php /* @escapeNotVerified */ echo $_i%2 ? 'even' : 'odd' ?>">
-                        <?php echo $block->getItemHtml($_item) ?>
-                        <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                        <?= $block->getItemHtml($_item) ?>
+                        <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                     </tbody>
                 <?php endforeach; ?>
             </table>
@@ -89,13 +89,13 @@
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Invoice Totals') ?></span>
             </div>
             <div class="admin__page-section-item-content order-totals-actions">
-                <?php echo $block->getChildHtml('invoice_totals') ?>
+                <?= $block->getChildHtml('invoice_totals') ?>
                 <?php if ($block->isCaptureAllowed()): ?>
                 <?php if ($block->canCapture()):?>
                     <div class="admin__field">
                         <?php
                         /*
-                        <label for="invoice_do_capture" class="normal"><?php echo __('Capture Amount') ?></label>
+                        <label for="invoice_do_capture" class="normal"><?= __('Capture Amount') ?></label>
                         <input type="checkbox" name="invoice[do_capture]" id="invoice_do_capture" value="1" checked/>
                         */
                         ?>
@@ -123,10 +123,10 @@
                     <label class="admin__field-label" for="send_email"><?php /* @escapeNotVerified */ echo __('Email Copy of Invoice') ?></label>
                 </div>
                 <?php endif; ?>
-                <?php echo $block->getChildHtml('submit_before') ?>
+                <?= $block->getChildHtml('submit_before') ?>
                 <div class="actions">
-                    <?php echo $block->getChildHtml('submit_button') ?>
-                    <?php echo $block->getChildHtml('submit_after') ?>
+                    <?= $block->getChildHtml('submit_button') ?>
+                    <?= $block->getChildHtml('submit_after') ?>
                 </div>
             </div>
         </div>
@@ -139,7 +139,7 @@ require(['jquery', 'prototype'], function(jQuery){
 //<![CDATA[
 var submitButtons = $$('.submit-button');
 var updateButtons = $$('.update-button');
-var enableSubmitButtons = <?php echo (int) !$block->getDisableSubmitButton() ?>;
+var enableSubmitButtons = <?= (int) !$block->getDisableSubmitButton() ?>;
 var fields = $$('.qty-input');
 
 updateButtons.each(function (elem) {elem.disabled=true;elem.addClassName('disabled');});

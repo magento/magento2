@@ -15,7 +15,7 @@ $numColumns = sizeof($block->getColumns());
     <?php if ($block->canDisplayContainer()): ?>
     <div id="<?php /* @escapeNotVerified */ echo $block->getId() ?>">
         <?php else: ?>
-            <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+            <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
         <?php endif; ?>
         <?php if ($block->getStoreSwitcherVisibility() || $block->getDateFilterVisibility()): ?>
             <div class="admin__data-grid-header admin__data-grid-toolbar">
@@ -58,7 +58,7 @@ $numColumns = sizeof($block->getColumns());
                                         <option value="<?php /* @escapeNotVerified */ echo $_value ?>" <?php if ($block->getFilter('report_period') == $_value): ?> selected<?php endif; ?>><?php /* @escapeNotVerified */ echo $_label ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <?php echo $block->getRefreshButtonHtml() ?>
+                                <?= $block->getRefreshButtonHtml() ?>
                             </span>
                             <script>
                                 require([
@@ -81,14 +81,14 @@ $numColumns = sizeof($block->getColumns());
                         </div>
                     <?php endif; ?>
                     <?php if ($block->getChildBlock('grid.export')): ?>
-                        <?php echo $block->getChildHtml('grid.export');?>
+                        <?= $block->getChildHtml('grid.export') ?>
                     <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
         <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
             <table class="data-grid" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_table">
-                <?php echo $block->getChildHtml('grid.columnSet'); ?>
+                <?= $block->getChildHtml('grid.columnSet') ?>
             </table>
         </div>
     </div>

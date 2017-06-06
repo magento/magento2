@@ -21,7 +21,7 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
     <div class="message message-warning warning"><p><?php /* @escapeNotVerified */ echo __('You must first configure currency options before being able to see currency rates.');?></p></div>
 <?php else: ?>
     <form name="rateForm" id="rate-form" method="post" action="<?php /* @escapeNotVerified */ echo $block->getRatesFormAction(); ?>">
-        <?php echo $block->getBlockHtml('formkey')?>
+        <?= $block->getBlockHtml('formkey') ?>
         <div class="admin__control-table-wrapper">
             <table class="admin__control-table">
                 <thead>
@@ -41,9 +41,9 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
                                 <td>
                                     <input type="text"
                                            name="rate[<?php /* @escapeNotVerified */ echo $_currencyCode ?>][<?php /* @escapeNotVerified */ echo $_rate ?>]"
-                                           value="<?php echo($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
+                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
                                            class="admin__control-text"
-                                            <?php echo($_currencyCode == $_rate) ? ' disabled' : '' ?> />
+                                            <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
                                     <?php if (isset($_newRates) && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>
                                     <div class="admin__field-note"><?php /* @escapeNotVerified */ echo __('Old rate:') ?> <b><?php /* @escapeNotVerified */ echo $_oldRates[$_currencyCode][$_rate] ?></b></div>
                                     <?php endif; ?>
@@ -52,9 +52,9 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
                                 <td>
                                     <input type="text"
                                            name="rate[<?php /* @escapeNotVerified */ echo $_currencyCode ?>][<?php /* @escapeNotVerified */ echo $_rate ?>]"
-                                           value="<?php echo($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
+                                           value="<?= ($_currencyCode == $_rate) ? '1.0000' : ($_value>0 ? $_value : (isset($_oldRates[$_currencyCode][$_rate]) ? $_oldRates[$_currencyCode][$_rate] : '')) ?>"
                                            class="admin__control-text"
-                                           <?php echo($_currencyCode == $_rate) ? ' disabled' : '' ?> />
+                                           <?= ($_currencyCode == $_rate) ? ' disabled' : '' ?> />
                                     <?php if (isset($_newRates)  && $_currencyCode != $_rate && isset($_oldRates[$_currencyCode][$_rate])): ?>
                                     <div class="admin__field-note"><?php /* @escapeNotVerified */ echo __('Old rate:') ?> <b><?php /* @escapeNotVerified */ echo $_oldRates[$_currencyCode][$_rate] ?></b></div>
                                     <?php endif; ?>

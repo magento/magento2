@@ -9,7 +9,7 @@
 ?>
 <?php /** @var $block \Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup */ ?>
 
-<div style="display:none" id="system_messages_list" data-role="system_messages_list" title="<?php echo $block->escapeHtml($block->getPopupTitle()); ?>">
+<div style="display:none" id="system_messages_list" data-role="system_messages_list" title="<?= $block->escapeHtml($block->getPopupTitle()) ?>">
     <ul class="message-system-list messages">
         <?php foreach ($block->getUnreadMessages() as $message): ?>
             <li class="message message-warning <?php /* @escapeNotVerified */ echo $block->getItemClass($message);?>">

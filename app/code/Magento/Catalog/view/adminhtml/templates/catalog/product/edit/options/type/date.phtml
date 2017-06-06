@@ -32,7 +32,7 @@
                         <?php endif; ?>>
                 </td>
                 <td class="opt-price-type">
-                    <?php echo $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %>
+                    <?= $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %>
                 </td>
                 <?php else : ?>
                 <input id="product_option_<%- data.option_id %>_price" name="product[options][<%- data.option_id %>][price]" type="hidden">

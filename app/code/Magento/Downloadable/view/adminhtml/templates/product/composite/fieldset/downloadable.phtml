@@ -13,7 +13,7 @@
 <?php if (($block->getProduct()->isSaleable() || $_skipSaleableCheck) && $block->hasLinks()):?>
 
 <fieldset id="catalog_product_composite_configure_fields_downloadable"
-          class="fieldset admin__fieldset downloadable information<?php echo $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
+          class="fieldset admin__fieldset downloadable information<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
     <legend class="legend admin__legend"><span><?php /* @escapeNotVerified */ echo __('Downloadable Information') ?></span></legend><br />
     <?php $_links = $block->getLinks(); ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
@@ -30,9 +30,9 @@
                            price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_link->getPrice()); ?>"/>
                     <?php endif; ?>
                     <label for="links_<?php /* @escapeNotVerified */ echo $_link->getId() ?>" class="label">
-                        <?php echo $block->escapeHtml($_link->getTitle()) ?>
+                        <?= $block->escapeHtml($_link->getTitle()) ?>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                            &nbsp;(<a href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?php echo $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php /* @escapeNotVerified */ echo __('sample') ?></a>)
+                            &nbsp;(<a href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?= $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':'' ?>><?php /* @escapeNotVerified */ echo __('sample') ?></a>)
                         <?php endif; ?>
                         <?php if ($_linksPurchasedSeparately): ?>
                         <?php /* @escapeNotVerified */ echo $block->getFormattedLinkPrice($_link); ?>

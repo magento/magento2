@@ -147,8 +147,8 @@ require([
 
 //<![CDATA[
     backup = new AdminBackup();
-    backup.rollbackUrl = '<?php echo $block->escapeUrl($rollbackUrl); ?>';
-    backup.backupUrl = '<?php echo $block->escapeUrl($backupUrl); ?>';
+    backup.rollbackUrl = '<?= $block->escapeUrl($rollbackUrl) ?>';
+    backup.backupUrl = '<?= $block->escapeUrl($backupUrl) ?>';
 //]]>
 
 });

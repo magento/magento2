@@ -11,7 +11,7 @@
 $_item = $block->getItem();
 ?>
 <?php if (($block->displayPriceInclTax() || $block->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
-    <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax'));?>">
+    <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
         <span class="cart-price">
             <?php /* @escapeNotVerified */ echo $block->formatPrice($_item->getRowTotalInclTax()) ?>
         </span>
@@ -19,7 +19,7 @@ $_item = $block->getItem();
 <?php endif; ?>
 
 <?php if (($block->displayPriceExclTax() || $block->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
-    <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax'));?>">
+    <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
         <span class="cart-price">
             <?php /* @escapeNotVerified */ echo $block->formatPrice($_item->getRowTotal()) ?>
         </span>

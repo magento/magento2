@@ -17,7 +17,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
           id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display: none;">
     <div class="field type required">
         <label for="<?php /* @noEscape */ echo $code; ?>_cc_type" class="label">
-            <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
+            <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
         </label>
         <div class="control">
             <select id="<?php /* @noEscape */ echo $code; ?>_cc_type"
@@ -29,11 +29,11 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                         "validate-cc-type-select":"#<?php /* @noEscape */ echo $code; ?>_cc_number"
                     }'
                     class="select">
-                <option value=""><?php echo $block->escapeHtml(__('--Please Select--')); ?></option>
+                <option value=""><?= $block->escapeHtml(__('--Please Select--')) ?></option>
             <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
-                <option value="<?php echo $block->escapeHtml($typeCode); ?>"
+                <option value="<?= $block->escapeHtml($typeCode) ?>"
                     <?php if ($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
-                    <?php echo $block->escapeHtml($typeName); ?>
+                    <?= $block->escapeHtml($typeName) ?>
                 </option>
             <?php endforeach; ?>
             </select>
@@ -41,11 +41,11 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
     </div>
     <div class="field number required">
         <label for="<?php /* @noEscape */ echo $code; ?>_cc_number" class="label">
-            <span><?php echo $block->escapeHtml(__('Credit Card Number')); ?></span>
+            <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
         </label>
         <div class="control">
             <input type="number" id="<?php /* @noEscape */ echo $code; ?>_cc_number" name="payment[cc_number]"
-                   title="<?php echo $block->escapeHtml(__('Credit Card Number')); ?>" class="input-text" value=""
+                   title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="input-text" value=""
                    data-validate='{
                        "required-number":true,
                        "validate-cc-number":"#<?php /* @noEscape */ echo $code; ?>_cc_type",
@@ -55,7 +55,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
     </div>
     <div class="field date required" id="<?php /* @noEscape */ echo $code; ?>_cc_type_exp_div">
         <label for="<?php /* @noEscape */ echo $code; ?>_expiration" class="label">
-            <span><?php echo $block->escapeHtml(__('Expiration Date')); ?></span>
+            <span><?= $block->escapeHtml(__('Expiration Date')) ?></span>
         </label>
         <div class="control">
             <div class="fields group group-2">
@@ -66,7 +66,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                             <?php foreach ($block->getCcMonths() as $k => $v): ?>
                                 <option value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>"
                                     <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
-                                    <?php echo $block->escapeHtml($v); ?>
+                                    <?= $block->escapeHtml($v) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -79,7 +79,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                             <?php foreach ($block->getCcYears() as $k => $v): ?>
                                 <option value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>
                                 "<?php if ($k == $ccExpYear): ?> selected="selected"<?php endif; ?>>
-                                    <?php echo $block->escapeHtml($v); ?>
+                                    <?= $block->escapeHtml($v) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -91,23 +91,23 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
     <?php if ($block->hasVerification()): ?>
     <div class="field cvv required" id="<?php /* @noEscape */ echo $code; ?>_cc_type_cvv_div">
         <label for="<?php /* @noEscape */ echo $code; ?>_cc_cid" class="label">
-            <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
+            <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
         </label>
         <div class="control">
-            <input type="number" title="<?php echo $block->escapeHtml(__('Card Verification Number')); ?>"
+            <input type="number" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
                    class="input-text cvv" id="<?php /* @noEscape */ echo $code; ?>_cc_cid" name="payment[cc_cid]" value=""
                    data-validate='{"required-number":true, "validate-cc-cvn":"#<?php /* @noEscape */ echo $code; ?>_cc_type"}' />
             <?php $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
                 $block->escapeHtml(__('Card Verification Number Visual Reference')) .
                 '\" title=\"' . $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />'; ?>
             <div class="note">
-                <a href="#" class="action cvv" title="<?php echo $block->escapeHtml(__('What is this?')); ?>"
+                <a href="#" class="action cvv" title="<?= $block->escapeHtml(__('What is this?')) ?>"
                    data-mage-init='{"tooltip": {"content": "<?php /* @noEscape */ echo $content; ?>"}}'>
-                    <span><?php echo $block->escapeHtml(__('What is this?')); ?></span>
+                    <span><?= $block->escapeHtml(__('What is this?')) ?></span>
                 </a>
             </div>
         </div>
     </div>
     <?php endif; ?>
-    <?php echo $block->getChildHtml() ?>
+    <?= $block->getChildHtml() ?>
 </fieldset>

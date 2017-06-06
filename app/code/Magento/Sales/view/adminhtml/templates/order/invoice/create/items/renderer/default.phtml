@@ -10,11 +10,11 @@
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer */ ?>
 <?php $_item = $block->getItem() ?>
 <?php $block->setPriceDataObject($_item)?>
-    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
     <td class="col-price">
-        <?php echo $block->getColumnHtml($_item, 'price'); ?>
+        <?= $block->getColumnHtml($_item, 'price') ?>
     </td>
-    <td class="col-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
+    <td class="col-qty"><?= $block->getColumnHtml($_item, 'qty') ?></td>
     <td class="col-qty-invoice">
     <?php if ($block->canEditQty()) : ?>
         <input type="text" class="input-text admin__control-text qty-input"
@@ -25,10 +25,10 @@
     <?php endif; ?>
     </td>
     <td class="col-subtotal">
-        <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
+        <?= $block->getColumnHtml($_item, 'subtotal') ?>
     </td>
     <td class="col-tax"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('tax_amount') ?></td>
     <td class="col-discount"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
-        <?php echo $block->getColumnHtml($_item, 'total'); ?>
+        <?= $block->getColumnHtml($_item, 'total') ?>
     </td>

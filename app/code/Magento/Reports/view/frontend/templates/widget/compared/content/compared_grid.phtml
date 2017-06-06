@@ -42,13 +42,13 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                         <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                         <div class="product-item-info">
                             <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>" class="product-item-photo">
-                                <?php echo $block->getImage($_item, $image)->toHtml(); ?>
+                                <?= $block->getImage($_item, $image)->toHtml() ?>
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">
-                                    <a title="<?php echo $block->escapeHtml($_item->getName()) ?>"
+                                    <a title="<?= $block->escapeHtml($_item->getName()) ?>"
                                        href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>" class="product-item-link">
-                                        <?php echo $block->escapeHtml($_item->getName()) ?>
+                                        <?= $block->escapeHtml($_item->getName()) ?>
                                     </a>
                                 </strong>
                                 <?php /* @escapeNotVerified */ echo $block->getProductPriceHtml(
@@ -60,7 +60,7 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                     ]
                                 ) ?>
                                 <?php if ($rating): ?>
-                                    <?php echo $block->getReviewsSummaryHtml($_item, $rating) ?>
+                                    <?= $block->getReviewsSummaryHtml($_item, $rating) ?>
                                 <?php endif; ?>
                                 <?php if ($showWishlist || $showCompare || $showCart): ?>
                                     <div class="product-item-actions">
@@ -119,11 +119,11 @@ if ($exist = $block->getRecentlyComparedProducts()) {
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?php echo($iterator == count($items)+1) ? '</li>' : '' ?>
+                        <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
                     <?php endforeach ?>
                 </ol>
             </div>
-            <?php echo $block->getPagerHtml() ?>
+            <?= $block->getPagerHtml() ?>
         </div>
     </div>
 <?php endif;?>

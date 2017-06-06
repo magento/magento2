@@ -43,13 +43,13 @@
     continue;
 } ?>
         <tbody>
-            <?php echo $block->getItemHtml($_item) ?>
+            <?= $block->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
         <tfoot>
-            <?php echo $block->getInvoiceTotalsHtml($_invoice)?>
+            <?= $block->getInvoiceTotalsHtml($_invoice) ?>
         </tfoot>
     </table>
 </div>
-<?php echo $block->getInvoiceCommentsHtml($_invoice)?>
+<?= $block->getInvoiceCommentsHtml($_invoice) ?>
 <?php endforeach; ?>

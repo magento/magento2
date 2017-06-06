@@ -160,7 +160,7 @@ jQuery(function()
         selModel:         new Ext.tree.CheckNodeMultiSelectionModel(),
         rootVisible:      '<?php /* @escapeNotVerified */ echo $block->getRoot()->getIsVisible() ?>',
         useAjax:          <?php /* @escapeNotVerified */ echo $block->getUseAjax() ?>,
-        currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
+        currentNodeId:    <?= (int) $block->getCategoryId() ?>,
         addNodeTo:        false,
         rootUIProvider:   Ext.tree.CheckboxNodeUI
     });
@@ -177,9 +177,9 @@ jQuery(function()
         checked:'<?php /* @escapeNotVerified */ echo $block->getRoot()->getChecked() ?>',
         uiProvider: Ext.tree.CheckboxNodeUI,
         allowDrop:   <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-        id:          <?php echo (int) $block->getRoot()->getId() ?>,
-        expanded:    <?php echo (int) $block->getIsWasExpanded() ?>,
-        category_id: <?php echo (int) $block->getCategoryId() ?>
+        id:          <?= (int) $block->getRoot()->getId() ?>,
+        expanded:    <?= (int) $block->getIsWasExpanded() ?>,
+        category_id: <?= (int) $block->getCategoryId() ?>
     };
 
     tree.loadTree({parameters:parameters, data:<?php /* @escapeNotVerified */ echo $block->getTreeJson() ?>},true);

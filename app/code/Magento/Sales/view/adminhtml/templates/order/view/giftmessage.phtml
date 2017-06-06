@@ -9,7 +9,7 @@
 ?>
 <?php if ($block->canDisplayGiftmessage()): ?>
 <?php $_required = $block->getMessage()->getMessage() != ''?>
-<div id="<?php echo $block->getHtmlId() ?>" class="admin__page-section-content giftmessage-whole-order-container">
+<div id="<?= $block->getHtmlId() ?>" class="admin__page-section-content giftmessage-whole-order-container">
     <form class="entry-edit form-inline" id="<?php /* @escapeNotVerified */ echo $block->getFieldId('form') ?>" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>">
         <fieldset class="admin__fieldset">
             <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Gift Message for the Entire Order'); ?></span></legend>
@@ -19,27 +19,27 @@
                    name="<?php /* @escapeNotVerified */ echo $block->getFieldName('type'); ?>"
                    value="order"/>
 
-            <div class="admin__field field-from-name<?php echo $_required ? ' required' : ''; ?>">
+            <div class="admin__field field-from-name<?= $_required ? ' required' : '' ?>">
                 <label class="admin__field-label"
                        for="<?php /* @escapeNotVerified */ echo $block->getFieldId('sender'); ?>"><span><?php /* @escapeNotVerified */ echo __('From Name'); ?></span></label>
 
                 <div class="admin__field-control">
-                    <input class="admin__control-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text"
+                    <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
                            id="<?php /* @escapeNotVerified */ echo $block->getFieldId('sender'); ?>"
                            name="<?php /* @escapeNotVerified */ echo $block->getFieldName('sender'); ?>"
-                           value="<?php echo $block->escapeHtml($block->getMessage()->getSender()); ?>"/>
+                           value="<?= $block->escapeHtml($block->getMessage()->getSender()) ?>"/>
                 </div>
             </div>
 
-            <div class="admin__field field-to-name<?php echo $_required ? ' required' : ''; ?>">
+            <div class="admin__field field-to-name<?= $_required ? ' required' : '' ?>">
                 <label class="admin__field-label"
                        for="<?php /* @escapeNotVerified */ echo $block->getFieldId('recipient'); ?>"><span><?php /* @escapeNotVerified */ echo __('To Name'); ?></span></label>
 
                 <div class="admin__field-control">
-                    <input class="admin__control-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text"
+                    <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
                            id="<?php /* @escapeNotVerified */ echo $block->getFieldId('recipient'); ?>"
                            name="<?php /* @escapeNotVerified */ echo $block->getFieldName('recipient'); ?>"
-                           value="<?php echo $block->escapeHtml($block->getMessage()->getRecipient()); ?>"/>
+                           value="<?= $block->escapeHtml($block->getMessage()->getRecipient()) ?>"/>
                 </div>
             </div>
 
@@ -51,12 +51,12 @@
                               name="<?php /* @escapeNotVerified */ echo $block->getFieldName('message') ?>"
                               class="admin__control-textarea"
                               rows="2"
-                              cols="15"><?php echo $block->escapeHtml($block->getMessage()->getMessage()); ?></textarea>
+                              cols="15"><?= $block->escapeHtml($block->getMessage()->getMessage()) ?></textarea>
                 </div>
             </div>
 
             <div class="actions">
-                <?php echo $block->getSaveButtonHtml(); ?>
+                <?= $block->getSaveButtonHtml() ?>
             </div>
         </fieldset>
     </form>

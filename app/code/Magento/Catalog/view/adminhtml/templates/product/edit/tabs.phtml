@@ -32,7 +32,7 @@
                 $activeCollapsible = $block->isAdvancedTabGroupActive() ? true : false;
             ?>
 
-            <div class="admin__page-nav <?php if (!$isBasic): ?> <?php echo '_collapsed';?> <?php endif;?>"
+            <div class="admin__page-nav <?php if (!$isBasic): ?> <?= '_collapsed' ?> <?php endif;?>"
                 data-role="container"
                 id="<?php /* @escapeNotVerified */ echo $tabGroupId ?>"
                 <?php if (!$isBasic): ?>
@@ -46,7 +46,7 @@
                 <?php endif;?>>
 
                 <div class="admin__page-nav-title-wrap" <?php /* @escapeNotVerified */ echo $block->getUiId('title') ?> data-role="title">
-                    <div class="admin__page-nav-title <?php if (!$isBasic): ?> <?php echo '_collapsible';?><?php endif;?>"
+                    <div class="admin__page-nav-title <?php if (!$isBasic): ?> <?= '_collapsible' ?><?php endif;?>"
                         data-role="trigger">
                         <strong>
                             <?php /* @escapeNotVerified */ echo $isBasic ? __('Basic Settings') : __('Advanced Settings') ?>
@@ -64,14 +64,14 @@
                         <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
                         <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
                         <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
-                        <li class="admin__page-nav-item <?php if ($block->getTabIsHidden($_tab)): ?> <?php echo "no-display"; ?> <?php endif; ?> " <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'item', $_tab->getId()) ?>>
+                        <li class="admin__page-nav-item <?php if ($block->getTabIsHidden($_tab)): ?> <?= "no-display" ?> <?php endif; ?> " <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'item', $_tab->getId()) ?>>
                             <a href="<?php /* @escapeNotVerified */ echo $_tabHref ?>" id="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab) ?>"
                                name="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab, false) ?>"
                                title="<?php /* @escapeNotVerified */ echo $block->getTabTitle($_tab) ?>"
                                class="admin__page-nav-link <?php /* @escapeNotVerified */ echo $_tabClass;?>"
                                data-tab-type="<?php /* @escapeNotVerified */ echo $_tabType;?>" <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'link', $_tab->getId()) ?>
                             >
-                                <span><?php echo $block->escapeHtml($block->getTabLabel($_tab)); ?></span>
+                                <span><?= $block->escapeHtml($block->getTabLabel($_tab)) ?></span>
                                 <span class="admin__page-nav-item-messages" data-role="item-messages">
                                    <span class="admin__page-nav-item-message _changed">
                                        <span class="admin__page-nav-item-message-icon"></span>
@@ -98,7 +98,7 @@
                                 <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $_tab->getId()) ?>
                             >
                                 <?php /* @escapeNotVerified */ echo $block->getTabContent($_tab); ?>
-                                <?= /* @noEscape */ $block->getAccordion($_tab); ?>
+                                <?= /* @noEscape */ $block->getAccordion($_tab) ?>
                             </div>
                         </li>
                     <?php endforeach; ?>

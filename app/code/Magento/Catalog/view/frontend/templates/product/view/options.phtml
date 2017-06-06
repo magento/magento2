@@ -18,12 +18,12 @@
             "priceOptions": {
                 "optionConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig()?>,
                 "controlContainer": ".field",
-                "priceHolderSelector": "[data-product-id='<?php echo $block->escapeHtml($_productId)?>'][data-role=priceBox]"
+                "priceHolderSelector": "[data-product-id='<?= $block->escapeHtml($_productId) ?>'][data-role=priceBox]"
             }
         }
     }
 </script>
     <?php foreach ($_options as $_option): ?>
-        <?php echo $block->getOptionHtml($_option) ?>
+        <?= $block->getOptionHtml($_option) ?>
     <?php endforeach; ?>
 <?php endif; ?>

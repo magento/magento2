@@ -37,7 +37,7 @@
                 <tr>
                     <td colspan="3">&nbsp;</td>
                     <td colspan="3">
-                        <?php echo $block->getUpdateButtonHtml() ?>
+                        <?= $block->getUpdateButtonHtml() ?>
                     </td>
                     <td colspan="3" class="last">&nbsp;</td>
                 </tr>
@@ -50,8 +50,8 @@
                 $i++;
             } ?>
                 <tbody class="<?php /* @escapeNotVerified */ echo $i%2 ? 'even' : 'odd' ?>">
-                    <?php echo $block->getItemHtml($_item) ?>
-                    <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    <?= $block->getItemHtml($_item) ?>
+                    <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                 </tbody>
             <?php endforeach; ?>
         </table>
@@ -100,7 +100,7 @@
             <div class="admin__page-section-item-title">
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Refund Totals') ?></span>
             </div>
-            <?php echo $block->getChildHtml('creditmemo_totals') ?>
+            <?= $block->getChildHtml('creditmemo_totals') ?>
             <div class="order-totals-actions">
                 <div class="field choice admin__field admin__field-option field-append-comments">
                     <input id="notify_customer"
@@ -124,11 +124,11 @@
                     </label>
                 </div>
                 <?php endif; ?>
-                <?php echo $block->getChildHtml('submit_before') ?>
+                <?= $block->getChildHtml('submit_before') ?>
                 <div class="actions">
-                    <?php echo $block->getChildHtml('submit_offline') ?>
-                    <?php echo $block->getChildHtml('submit_button') ?>
-                    <?php echo $block->getChildHtml('submit_after') ?>
+                    <?= $block->getChildHtml('submit_offline') ?>
+                    <?= $block->getChildHtml('submit_button') ?>
+                    <?= $block->getChildHtml('submit_after') ?>
                 </div>
             </div>
         </div>

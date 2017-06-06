@@ -17,9 +17,9 @@ $data = ['fptAttribute' => [
     'bundlePriceType' => '#price_type',
 ]];
 ?>
-<div id="attribute-<?php echo $block->getElement()->getHtmlId(); ?>-container" class="field"
-     data-attribute-code="<?php echo $block->getElement()->getHtmlId(); ?>"
-     data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data))?>">
+<div id="attribute-<?= $block->getElement()->getHtmlId() ?>-container" class="field"
+     data-attribute-code="<?= $block->getElement()->getHtmlId() ?>"
+     data-mage-init="<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)) ?>">
     <label class="label"><span><?php /* @escapeNotVerified */ echo $block->getElement()->getLabel() ?></span></label>
 
     <div class="control">
@@ -34,7 +34,7 @@ $data = ['fptAttribute' => [
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="4" class="col-actions-add"><?php echo $block->getAddButtonHtml(); ?></td>
+                    <td colspan="4" class="col-actions-add"><?= $block->getAddButtonHtml() ?></td>
                 </tr>
             </tfoot>
             <tbody data-role="fpt-item-container" class="fpt-item-container">
@@ -44,11 +44,11 @@ $data = ['fptAttribute' => [
             Hidden field below with attribute code id is necessary for jQuery validation plugin.
             Validation message will be displayed after this field.
         -->
-        <input type="hidden" name="<?php echo $block->getElement()->getHtmlId(); ?>" id="<?php echo $block->getElement()->getHtmlId(); ?>" disabled="disabled">
+        <input type="hidden" name="<?= $block->getElement()->getHtmlId() ?>" id="<?= $block->getElement()->getHtmlId() ?>" disabled="disabled">
     </div>
 
     <script data-role="row-template" type="text/x-magento-template">
-        <tr id="<?php echo $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
+        <tr id="<?= $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
             <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
                 <select id="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_website"
                         name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][website_id]"
@@ -79,7 +79,7 @@ $data = ['fptAttribute' => [
             </td>
             <td class="col-action">
                 <input name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
-                <?php echo $block->getChildHtml('delete_button') ?>
+                <?= $block->getChildHtml('delete_button') ?>
             </td>
         </tr>
     </script>

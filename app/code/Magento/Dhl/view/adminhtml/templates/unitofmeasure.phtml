@@ -11,11 +11,11 @@
     //<![CDATA[
     require(["prototype"], function(){
         function changeDimensions() {
-            var dimensionUnit = "(<?php echo $block->escapeHtml($block->getInch()); ?>)";
-            var dhlUnitOfMeasureNote = "<?php echo $block->escapeHtml($block->getDivideOrderWeightNoteLbp()); ?>";
+            var dimensionUnit = "(<?= $block->escapeHtml($block->getInch()) ?>)";
+            var dhlUnitOfMeasureNote = "<?= $block->escapeHtml($block->getDivideOrderWeightNoteLbp()) ?>";
             if ($("carriers_dhl_unit_of_measure").value == "K") {
-                dimensionUnit = "(<?php echo $block->escapeHtml($block->getCm()); ?>)";
-                dhlUnitOfMeasureNote = "<?php echo $block->escapeHtml($block->getDivideOrderWeightNoteKg()); ?>";
+                dimensionUnit = "(<?= $block->escapeHtml($block->getCm()) ?>)";
+                dhlUnitOfMeasureNote = "<?= $block->escapeHtml($block->getDivideOrderWeightNoteKg()) ?>";
             }
             $$('[for="carriers_dhl_height"]')[0].innerHTML = "<?php
                 echo $block->escapeHtml($block->getHeight()); ?> " + dimensionUnit;

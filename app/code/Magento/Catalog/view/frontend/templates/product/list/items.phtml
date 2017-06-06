@@ -190,17 +190,17 @@ switch ($type = $block->getType()) {
                 <div class="product-item-info <?php /* @escapeNotVerified */ echo $available; ?>">
                     <?php /* @escapeNotVerified */ echo '<!-- ' . $image . '-->' ?>
                     <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>" class="product photo product-item-photo">
-                        <?php echo $block->getImage($_item, $image)->toHtml(); ?>
+                        <?= $block->getImage($_item, $image)->toHtml() ?>
                     </a>
                     <div class="product details product-item-details">
-                        <strong class="product name product-item-name"><a class="product-item-link" title="<?php echo $block->escapeHtml($_item->getName()) ?>" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>">
-                            <?php echo $block->escapeHtml($_item->getName()) ?></a>
+                        <strong class="product name product-item-name"><a class="product-item-link" title="<?= $block->escapeHtml($_item->getName()) ?>" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>">
+                            <?= $block->escapeHtml($_item->getName()) ?></a>
                         </strong>
 
                         <?php /* @escapeNotVerified */ echo $block->getProductPrice($_item); ?>
 
                             <?php if ($templateType): ?>
-                                <?php echo $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                                <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                             <?php endif; ?>
 
                             <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
@@ -244,7 +244,7 @@ switch ($type = $block->getType()) {
                                     <?php if ($showAddTo): ?>
                                         <div class="secondary-addto-links actions-secondary" data-role="add-to-links">
                                             <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
-                                                <?php echo $addToBlock->setProduct($_item)->getChildHtml(); ?>
+                                                <?= $addToBlock->setProduct($_item)->getChildHtml() ?>
                                             <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
@@ -252,7 +252,7 @@ switch ($type = $block->getType()) {
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?php echo($iterator == count($items)+1) ? '</li>' : '' ?>
+                    <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
                 <?php endforeach ?>
             </ol>
         </div>

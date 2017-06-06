@@ -13,9 +13,9 @@
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
-<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
+<div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
     <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
-        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
         <?php if ($block->showSingle()): ?>

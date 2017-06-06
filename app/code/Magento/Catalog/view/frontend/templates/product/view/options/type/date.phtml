@@ -14,20 +14,20 @@
     data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
     <fieldset class="fieldset fieldset-product-options-inner<?php /* @escapeNotVerified */ echo $class; ?>">
         <legend class="legend">
-            <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
+            <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
             <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
         </legend>
         <div class="control">
             <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
                 || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
 
-                <?php echo $block->getDateHtml() ?>
+                <?= $block->getDateHtml() ?>
 
             <?php endif; ?>
 
             <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
                 || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
-                <?php echo $block->getTimeHtml() ?>
+                <?= $block->getTimeHtml() ?>
             <?php endif; ?>
 
             <?php if ($_option->getIsRequire()): ?>

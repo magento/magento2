@@ -162,7 +162,7 @@ jQuery(function()
         containerScroll:  true,
         rootVisible:      '<?php /* @escapeNotVerified */ echo $block->getRoot()->getIsVisible() ?>',
         useAjax:          true,
-        currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
+        currentNodeId:    <?= (int) $block->getCategoryId() ?>,
         addNodeTo:        false
     });
 
@@ -176,9 +176,9 @@ jQuery(function()
     var parameters = {
         text:        'Psw',
         draggable:   false,
-        id:          <?php echo (int) $block->getRoot()->getId() ?>,
-        expanded:    <?php echo (int) $block->getIsWasExpanded() ?>,
-        category_id: <?php echo (int) $block->getCategoryId() ?>
+        id:          <?= (int) $block->getRoot()->getId() ?>,
+        expanded:    <?= (int) $block->getIsWasExpanded() ?>,
+        category_id: <?= (int) $block->getCategoryId() ?>
     };
 
     tree<?php /* @escapeNotVerified */ echo $block->getId() ?>.loadTree({parameters:parameters, data:<?php /* @escapeNotVerified */ echo $block->getTreeJson() ?>},true);

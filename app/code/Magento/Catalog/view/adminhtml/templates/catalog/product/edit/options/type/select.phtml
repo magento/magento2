@@ -26,7 +26,7 @@
             <tbody id="select_option_type_row_<%- data.option_id %>"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6"><?php echo $block->getAddButtonHtml() ?>
+                    <td colspan="6"><?= $block->getAddButtonHtml() ?>
                         <input name="validation_<%- data.option_id %>_result" class="required-option-select-type-rows" type="hidden" value="">
                     </td>
                 </tr>
@@ -67,6 +67,6 @@
         <td class="col-sku">
             <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][sku]" class="input-text" type="text" value="<%- data.sku %>">
         </td>
-        <td class="col-actions col-delete"> <?php echo $block->getDeleteButtonHtml() ?></td>
+        <td class="col-actions col-delete"> <?= $block->getDeleteButtonHtml() ?></td>
     </tr>
 </script>

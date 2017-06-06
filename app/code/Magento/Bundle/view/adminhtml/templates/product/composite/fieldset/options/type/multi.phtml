@@ -12,7 +12,7 @@
 <?php $_selections = $_option->getSelections(); ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
 <div class="field admin__field <?php if ($_option->getRequired()) echo ' required' ?><?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
-    <label class="label admin__field-label"><span><?php echo $block->escapeHtml($_option->getTitle()) ?></span></label>
+    <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if (count($_selections) == 1 && $_option->getRequired()): ?>
             <?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selections[0]) ?>

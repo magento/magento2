@@ -18,12 +18,12 @@
 
 <div class="field file<?php /* @escapeNotVerified */ echo $class; ?>">
     <label class="label" for="<?php /* @noEscape */ echo $_fileName; ?>" id="<?php /* @noEscape */ echo $_fileName; ?>-label">
-        <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
         <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
     </label>
     <?php if ($_fileExists): ?>
     <div class="control">
-        <span class="<?php /* @noEscape */ echo $_fileNamed ?>"><?php echo $block->escapeHtml($_fileInfo->getTitle()); ?></span>
+        <span class="<?php /* @noEscape */ echo $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
         <a href="javascript:void(0)" class="label" id="change-<?php /* @noEscape */ echo $_fileName ?>" >
             <?php /* @escapeNotVerified */ echo __('Change') ?>
         </a>
@@ -41,12 +41,12 @@
                 "changeFileSelector":"#change-<?php /* @escapeNotVerified */ echo $_fileName ?>",
                 "deleteFileSelector":"#delete-<?php /* @escapeNotVerified */ echo $_fileName ?>"}
              }'
-            <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
+            <?= $_fileExists ? 'style="display:none"' : '' ?>>
         <input type="file"
                name="<?php /* @escapeNotVerified */ echo $_fileName; ?>"
                id="<?php /* @escapeNotVerified */ echo $_fileName; ?>"
-               class="product-custom-option<?php echo $_option->getIsRequire() ? ' required' : '' ?>"
-               <?php echo $_fileExists ? 'disabled="disabled"' : '' ?> />
+               class="product-custom-option<?= $_option->getIsRequire() ? ' required' : '' ?>"
+               <?= $_fileExists ? 'disabled="disabled"' : '' ?> />
         <input type="hidden" name="<?php /* @escapeNotVerified */ echo $_fieldNameAction; ?>" value="<?php /* @escapeNotVerified */ echo $_fieldValueAction; ?>" />
         <?php if ($_option->getFileExtension()): ?>
             <p class="note">

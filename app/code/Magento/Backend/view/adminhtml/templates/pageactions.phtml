@@ -9,6 +9,6 @@
 ?>
 <?php if ($block->getChildHtml()):?>
     <div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>>
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
     </div>
 <?php endif; ?>

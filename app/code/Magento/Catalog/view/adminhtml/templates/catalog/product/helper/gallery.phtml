@@ -10,18 +10,18 @@
 $elementName = $block->getElement()->getName() . '[images]';
 $formName = $block->getFormName();
 ?>
-<div id="<?php echo $block->getHtmlId() ?>"
+<div id="<?= $block->getHtmlId() ?>"
      class="gallery"
-     data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
-     data-parent-component="<?php echo $block->escapeHtml($block->getData('config/parentComponent')) ?>"
-     data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
-     data-types="<?php echo $block->escapeHtml(
+     data-mage-init='{"productGallery":{"template":"#<?= $block->getHtmlId() ?>-template"}}'
+     data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
+     data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
+     data-types="<?= $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
     >
     <?php if (!$block->getElement()->getReadonly()) {?>
         <div class="image image-placeholder">
-            <?php echo $block->getUploaderHtml(); ?>
+            <?= $block->getUploaderHtml() ?>
             <div class="product-image-wrapper">
                 <p class="image-placeholder-text">
                     <?php /* @escapeNotVerified */ echo __('Browse to find or drag image here'); ?>
@@ -31,16 +31,16 @@ $formName = $block->getFormName();
     <?php } ?>
     <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
-        <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
+        <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
-               class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
+               class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
-               value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
+               value="<?= $block->escapeHtml($typeData['value']) ?>"/>
     <?php
 
 } ?>
 
-    <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
+    <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="image item<% if (data.disabled == 1) { %> hidden-for-front<% } %>"
              data-role="image">
             <input type="hidden"
@@ -214,7 +214,7 @@ $formName = $block->getFormName();
                 </fieldset>
             </div>
     </script>
-    <?php echo $block->getChildHtml('new-video'); ?>
+    <?= $block->getChildHtml('new-video') ?>
 </div>
 <script>
     jQuery('body').trigger('contentUpdated');

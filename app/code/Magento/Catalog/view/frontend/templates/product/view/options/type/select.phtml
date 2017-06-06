@@ -15,10 +15,10 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
 ?>
 <div class="field<?php /* @escapeNotVerified */ echo $class; ?>">
     <label class="label" for="select_<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
-        <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
-        <?php echo $block->getValuesHtml() ?>
+        <?= $block->getValuesHtml() ?>
         <?php if ($_option->getIsRequire()): ?>
             <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX): ?>
                 <span id="options-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-container"></span>

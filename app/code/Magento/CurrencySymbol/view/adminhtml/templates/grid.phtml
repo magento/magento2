@@ -27,14 +27,14 @@
                 <input id="custom_currency_symbol<?php /* @escapeNotVerified */ echo $code; ?>"
                        class="required-entry admin__control-text"
                        type="text"
-                       value="<?php echo $block->escapeHtmlAttr($data['displaySymbol']); ?>"
-                       <?php echo $data['inherited'] ? ' disabled="disabled"' : '';?>
+                       value="<?= $block->escapeHtmlAttr($data['displaySymbol']) ?>"
+                       <?= $data['inherited'] ? ' disabled="disabled"' : '' ?>
                        name="custom_currency_symbol[<?php /* @escapeNotVerified */ echo $code; ?>]">
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?php /* @escapeNotVerified */ echo $code; ?>"
                            class="admin__control-checkbox" type="checkbox"
                            onclick="toggleUseDefault(<?php /* @escapeNotVerified */ echo '\'' . $code . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\''; ?>)"
-                            <?php echo $data['inherited'] ? ' checked="checked"' : ''; ?>
+                            <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?php /* @escapeNotVerified */ echo $code; ?>]">
                     <label class="admin__field-label" for="custom_currency_symbol_inherit<?php /* @escapeNotVerified */ echo $code; ?>"><span><?php /* @escapeNotVerified */ echo $block->getInheritText(); ?></span></label>

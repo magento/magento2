@@ -12,7 +12,7 @@
     <dt id="dt-<?php /* @escapeNotVerified */ echo $id ?>-<?php /* @escapeNotVerified */ echo $sectionId ?>">
         <strong><?php /* @escapeNotVerified */ echo $section['title'] ?></strong>
     </dt>
-    <dd id="dd-<?php /* @escapeNotVerified */ echo $id ?>-<?php /* @escapeNotVerified */ echo $section['id'] ?>" class="section-menu <?php echo !empty($section['active']) ? 'open' : '' ?>">
+    <dd id="dd-<?php /* @escapeNotVerified */ echo $id ?>-<?php /* @escapeNotVerified */ echo $section['id'] ?>" class="section-menu <?= !empty($section['active']) ? 'open' : '' ?>">
         <ul>
         <?php foreach ($section['children'] as $menuId => $menuItem): ?>
             <li id="li-<?php /* @escapeNotVerified */ echo $id ?>-<?php /* @escapeNotVerified */ echo $sectionId ?>-<?php /* @escapeNotVerified */ echo $menuId ?>">

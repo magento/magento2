@@ -24,14 +24,14 @@ $taxAmount = $block->getTotal()->getValue();
                 <?php foreach ($rates as $rate): ?>
                 <tr class="summary-details-<?php /* @escapeNotVerified */ echo $taxIter; ?> summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                     <td class="admin__total-mark" style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-                        <?php echo $block->escapeHtml($rate['title']); ?>
+                        <?= $block->escapeHtml($rate['title']) ?>
                         <?php if (!is_null($rate['percent'])): ?>
-                            (<?php echo (float)$rate['percent']; ?>%)
+                            (<?= (float)$rate['percent'] ?>%)
                         <?php endif; ?>
                         <br />
                     </td>
                     <?php if ($isFirst): ?>
-                        <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-amount" rowspan="<?php echo count($rates); ?>">
+                        <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-amount" rowspan="<?= count($rates) ?>">
                             <?php /* @escapeNotVerified */ echo $block->formatPrice($amount); ?>
                         </td>
                     <?php endif; ?>

@@ -108,7 +108,7 @@ require(["prototype"], function(){
             while (freeMethod.length > 0) {
                 freeMethod.remove(0);
             }
-            freeMethod.insert(new Element('option', {value:''}).update('<?php echo $block->escapeHtml(__('None')); ?>'));
+            freeMethod.insert(new Element('option', {value:''}).update('<?= $block->escapeHtml(__('None')) ?>'));
 
             var code, option;
             for (code in originShipment) {

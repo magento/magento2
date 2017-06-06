@@ -21,7 +21,7 @@ $element = $block->getElement();
 <?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
 <?php $_showWebsite = $block->isMultiWebsites(); ?>
 <div class="field" id="attribute-<?php /* @escapeNotVerified */ echo $_htmlId?>-container" data-attribute-code="<?php /* @escapeNotVerified */ echo $_htmlId?>"
-     data-apply-to="<?php echo $block->escapeHtml(
+     data-apply-to="<?= $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
              $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
          )
@@ -41,7 +41,7 @@ $element = $block->getElement();
             <tbody id="<?php /* @escapeNotVerified */ echo $_htmlId ?>_container"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>" class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
+                    <td colspan="<?php if (!$_showWebsite): ?>4<?php else: ?>5<?php endif; ?>" class="col-actions-add"><?= $block->getAddButtonHtml() ?></td>
                 </tr>
             </tfoot>
         </table>
@@ -58,12 +58,12 @@ var tierPriceRowTemplate = '<tr>'
     + '<td class="col-websites"<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
     + '<select class="<?php /* @escapeNotVerified */ echo $_htmlClass ?> required-entry" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][website_id]" id="tier_price_row_<%- data.index %>_website">'
     <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
-    + '<option value="<?php /* @escapeNotVerified */ echo $_websiteId ?>"><?php echo $block->escapeJs($_info['name']) ?><?php if (!empty($_info['currency'])): ?> [<?php echo $block->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
+    + '<option value="<?php /* @escapeNotVerified */ echo $_websiteId ?>"><?= $block->escapeJs($_info['name']) ?><?php if (!empty($_info['currency'])): ?> [<?= $block->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-customer-group"><select class="<?php /* @escapeNotVerified */ echo $_htmlClass ?> custgroup required-entry" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][cust_group]" id="tier_price_row_<%- data.index %>_cust_group">'
     <?php foreach ($block->getCustomerGroups() as $_groupId => $_groupName): ?>
-    + '<option value="<?php /* @escapeNotVerified */ echo $_groupId ?>"><?php echo $block->escapeJs($_groupName) ?></option>'
+    + '<option value="<?php /* @escapeNotVerified */ echo $_groupId ?>"><?= $block->escapeJs($_groupName) ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-qty">'
@@ -151,7 +151,7 @@ var tierPriceControl = {
     }
 };
 <?php foreach ($block->getValues() as $_item): ?>
-tierPriceControl.addItem('<?php /* @escapeNotVerified */ echo $_item['website_id'] ?>', '<?php /* @escapeNotVerified */ echo $_item['cust_group'] ?>', '<?php /* @escapeNotVerified */ echo $_item['price_qty']*1 ?>', '<?php /* @escapeNotVerified */ echo $_item['price'] ?>', <?php echo (int)!empty($_item['readonly'])?>);
+tierPriceControl.addItem('<?php /* @escapeNotVerified */ echo $_item['website_id'] ?>', '<?php /* @escapeNotVerified */ echo $_item['cust_group'] ?>', '<?php /* @escapeNotVerified */ echo $_item['price_qty']*1 ?>', '<?php /* @escapeNotVerified */ echo $_item['price'] ?>', <?= (int)!empty($_item['readonly']) ?>);
 <?php endforeach; ?>
 <?php if ($_readonly): ?>
 $('<?php /* @escapeNotVerified */ echo $_htmlId ?>_container').up('table').select('button')

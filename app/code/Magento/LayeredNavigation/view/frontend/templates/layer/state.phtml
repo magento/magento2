@@ -20,11 +20,11 @@
     <strong class="block-subtitle filter-current-subtitle"
             role="heading"
             aria-level="2"
-            data-count="<?php echo count($_filters); ?>"><?php /* @escapeNotVerified */ echo __('Now Shopping by') ?></strong>
+            data-count="<?= count($_filters) ?>"><?php /* @escapeNotVerified */ echo __('Now Shopping by') ?></strong>
     <ol class="items">
         <?php foreach ($_filters as $_filter): ?>
             <li class="item">
-                <span class="filter-label"><?php echo $block->escapeHtml(__($_filter->getName())); ?></span>
+                <span class="filter-label"><?= $block->escapeHtml(__($_filter->getName())) ?></span>
                 <span class="filter-value"><?php /* @escapeNotVerified */ echo $block->stripTags($_filter->getLabel()) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
@@ -36,9 +36,9 @@
                         <span><?php /* @escapeNotVerified */ echo __('Previous') ?></span>
                     </a>
                     <a class="action remove"
-                       title="<?php echo $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
+                       title="<?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
                        href="<?php /* @escapeNotVerified */ echo $clearLinkUrl ?>">
-                        <span><?php echo $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                        <span><?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
                     </a>
                 <?php else: ?>
                     <a class="action remove" href="<?php /* @escapeNotVerified */ echo $_filter->getRemoveUrl() ?>"

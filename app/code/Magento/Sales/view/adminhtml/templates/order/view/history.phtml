@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="order-history-comments-actions">
-                    <?php echo $block->getChildHtml('submit_button') ?>
+                    <?= $block->getChildHtml('submit_button') ?>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
                 <?php endif; ?>
             </span>
             <?php if ($_item->getComment()): ?>
-                <div class="note-list-comment"><?php echo $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                <div class="note-list-comment"><?= $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>

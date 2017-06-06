@@ -16,11 +16,11 @@
         <br>
     <?php if ($_element->getComment()): ?>
         <div class="messages">
-            <div class="message message-notice"><?php echo $block->escapeHtml($_element->getComment()) ?></div>
+            <div class="message message-notice"><?= $block->escapeHtml($_element->getComment()) ?></div>
         </div>
     <?php endif; ?>
     <div class="rule-tree-wrapper">
-        <?php echo $_element->getChildrenHtml() ?>
+        <?= $_element->getChildrenHtml() ?>
     </div>
     </fieldset>
 </div>
@@ -32,7 +32,7 @@ require([
 
 window.<?php /* @escapeNotVerified */ echo $_jsObjectName ?> = new VarienRulesForm('<?php /* @escapeNotVerified */ echo $_jsObjectName ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
 <?php if ($_element->getReadonly()): ?>
-    <?php echo $_element->getHtmlId() ?>.setReadonly(true);
+    <?= $_element->getHtmlId() ?>.setReadonly(true);
 <?php endif; ?>
 
 });

@@ -46,7 +46,7 @@
                         <li class="admin__page-nav-item item
                             <?php /* @escapeNotVerified */ echo $_section->getClass() ?>
                             <?php if ($block->isSectionActive($_section)): ?> _active<?php endif ?>
-                            <?php echo $_tab->getChildren()->isLast($_section) ? ' _last' : '' ?>">
+                            <?= $_tab->getChildren()->isLast($_section) ? ' _last' : '' ?>">
                             <a href="<?php /* @escapeNotVerified */ echo $block->getSectionUrl($_section) ?>"
                                class="admin__page-nav-link item-nav">
                                <span><?php /* @escapeNotVerified */ echo $_section->getLabel() ?></span>

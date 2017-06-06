@@ -22,11 +22,11 @@ $rating = 'short';
         <div class="product">
             <?php /* @escapeNotVerified */ echo '<!-- ' . $image . '-->' ?>
             <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>" class="product photo">
-                <?php echo $block->getImage($item, $image)->toHtml(); ?>
+                <?= $block->getImage($item, $image)->toHtml() ?>
             </a>
             <div class="product details">
-                <strong class="product name"><a title="<?php echo $block->escapeHtml($item->getName()) ?>" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>">
-                    <?php echo $block->escapeHtml($item->getName()) ?></a>
+                <strong class="product name"><a title="<?= $block->escapeHtml($item->getName()) ?>" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>">
+                    <?= $block->escapeHtml($item->getName()) ?></a>
                 </strong>
 
                 <?php /* @escapeNotVerified */ echo $block->getProductPriceHtml(
@@ -39,7 +39,7 @@ $rating = 'short';
                 ) ?>
 
                 <?php if ($rating): ?>
-                    <?php echo $block->getReviewsSummaryHtml($item, $rating) ?>
+                    <?= $block->getReviewsSummaryHtml($item, $rating) ?>
                 <?php endif; ?>
 
                 <div class="product actions">

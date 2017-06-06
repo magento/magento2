@@ -8,7 +8,7 @@
 
 ?>
 <p class="switcher"><label for="store_switcher"><?php /* @escapeNotVerified */ echo __('View Statistics For:') ?></label>
-<?php echo $block->getHintHtml() ?>
+<?= $block->getHintHtml() ?>
 <select name="store_switcher" id="store_switcher" class="left-col-block" onchange="return switchStore(this);">
     <option value=""><?php /* @escapeNotVerified */ echo __('All Websites') ?></option>
     <?php foreach ($block->getWebsiteCollection() as $_website): ?>

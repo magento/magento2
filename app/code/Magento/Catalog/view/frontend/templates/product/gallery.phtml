@@ -30,7 +30,7 @@
             ->setImageFile($block->getImageFile())
             ->getUrl();
     ?>
-    <img src="<?php /* @escapeNotVerified */ echo $imageUrl; ?>"<?php if ($_width): ?> width="<?php /* @escapeNotVerified */ echo $_width ?>"<?php endif; ?> alt="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
+    <img src="<?php /* @escapeNotVerified */ echo $imageUrl; ?>"<?php if ($_width): ?> width="<?php /* @escapeNotVerified */ echo $_width ?>"<?php endif; ?> alt="<?= $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?= $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php /* @escapeNotVerified */ echo __('Close Window') ?></span></a></div>
     <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
         <div class="nav">

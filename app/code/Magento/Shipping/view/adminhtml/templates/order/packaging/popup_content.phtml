@@ -34,7 +34,7 @@
                         <th class="col-girth"><?php /* @escapeNotVerified */ echo __('Girth') ?></th>
                         <th>&nbsp;</th>
                         <?php endif; ?>
-                        <th class="col-custom" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+                        <th class="col-custom" <?= $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
                             <?php /* @escapeNotVerified */ echo __('Customs Value') ?>
                         </th>
                         <th class="col-total-weight"><?php /* @escapeNotVerified */ echo __('Total Weight') ?></th>

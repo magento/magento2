@@ -14,7 +14,7 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
 ?>
 <header>
     <div class="page-title-wrapper">
-        <h1 class="page-title" align="center"><?php echo $block->escapeHtml(__('Account Activity')) ?></h1>
+        <h1 class="page-title" align="center"><?= $block->escapeHtml(__('Account Activity')) ?></h1>
         <?php
         if ($block->areMultipleSessionsActive()) {
             echo $block->escapeHtml(__(
@@ -26,22 +26,22 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
 </header>
 
 <div class="page-content">
-    <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+    <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <div>
-        <div class="information-title"><?php echo $block->escapeHtml(__('Concurrent session information:'))?></div>
+        <div class="information-title"><?= $block->escapeHtml(__('Concurrent session information:')) ?></div>
         <table cellspacing="0" border="1" class="information-table">
             <thead>
                 <tr>
-                    <th><?php echo $block->escapeHtml(__('IP Address')) ?></th>
-                    <th><?php echo $block->escapeHtml(__('Time of session start')) ?></th>
+                    <th><?= $block->escapeHtml(__('IP Address')) ?></th>
+                    <th><?= $block->escapeHtml(__('Time of session start')) ?></th>
                 </tr>
             </thead>
             <tbody>
             <?php
             foreach ($sessionInfoCollection as $item):?>
                 <tr>
-                    <td><?php echo $block->escapeHtml($item->getFormattedIp()) ?></td>
-                    <td><?php echo $block->escapeHtml($block->formatDateTime($item->getCreatedAt())) ?></td>
+                    <td><?= $block->escapeHtml($item->getFormattedIp()) ?></td>
+                    <td><?= $block->escapeHtml($block->formatDateTime($item->getCreatedAt())) ?></td>
                 </tr>
             <?php
             endforeach;
@@ -64,8 +64,8 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
                 <?php
                 else: ?>disabled<?php
                 endif ?>
-                title="<?php echo $block->escapeHtmlAttr(__('Log out all other sessions')) ?>">
-                <?php echo $block->escapeHtml(__('Log out all other sessions')) ?>
+                title="<?= $block->escapeHtmlAttr(__('Log out all other sessions')) ?>">
+                <?= $block->escapeHtml(__('Log out all other sessions')) ?>
             </button>
         </div>
 

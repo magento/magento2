@@ -26,7 +26,7 @@
 
             <?php if ($block->getCriticalCount()): ?>
                 <div class="message message-warning error">
-                    <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Critical System Messages'));?>">
+                    <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Critical System Messages')) ?>">
                         <?php /* @escapeNotVerified */ echo $block->getCriticalCount();?>
                     </a>
                 </div>
@@ -34,12 +34,12 @@
 
             <?php if ($block->getMajorCount()): ?>
                <div class="message message-warning warning">
-                   <a class="message-link" href="#" title="<?php echo $block->escapeHtml(__('Major System Messages'));?>">
+                   <a class="message-link" href="#" title="<?= $block->escapeHtml(__('Major System Messages')) ?>">
                        <?php /* @escapeNotVerified */ echo $block->getMajorCount();?>
                    </a>
                </div>
             <?php endif;?>
         </div>
-        <div id="message-system-all" title="<?php echo $block->escapeHtml(__('System messages'));?>" data-mage-init='<?php echo $block->escapeHtml($block->getSystemMessageDialogJson());?>'></div>
+        <div id="message-system-all" title="<?= $block->escapeHtml(__('System messages')) ?>" data-mage-init='<?= $block->escapeHtml($block->getSystemMessageDialogJson()) ?>'></div>
     </div>
 </div>

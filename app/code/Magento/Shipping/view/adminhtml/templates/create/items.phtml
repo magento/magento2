@@ -29,8 +29,8 @@
             <?php $_items = $block->getShipment()->getAllItems() ?>
             <?php $_i = 0; foreach ($_items as $_item): if ($_item->getOrderItem()->getIsVirtual() || $_item->getOrderItem()->getParentItem()): continue; endif; $_i++ ?>
                 <tbody class="<?php /* @escapeNotVerified */ echo $_i%2 ? 'odd' : 'even' ?>">
-                    <?php echo $block->getItemHtml($_item) ?>
-                    <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    <?= $block->getItemHtml($_item) ?>
+                    <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                 </tbody>
             <?php endforeach; ?>
         </table>
@@ -104,10 +104,10 @@
                         <span><?php /* @escapeNotVerified */ echo __('Email Copy of Shipment') ?></span></label>
                 </div>
             <?php endif; ?>
-            <?php echo $block->getChildHtml('submit_before') ?>
+            <?= $block->getChildHtml('submit_before') ?>
             <div class="order-history-comments-actions actions">
-                <?php echo $block->getChildHtml('submit_button') ?>
-                <?php echo $block->getChildHtml('submit_after') ?>
+                <?= $block->getChildHtml('submit_button') ?>
+                <?= $block->getChildHtml('submit_after') ?>
             </div>
         </div>
     </div>

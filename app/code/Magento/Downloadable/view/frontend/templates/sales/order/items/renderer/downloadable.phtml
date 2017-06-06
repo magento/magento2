@@ -10,12 +10,12 @@
 ?>
 <?php $_item = $block->getItem() ?>
 <tr id="order-item-row-<?php /* @escapeNotVerified */ echo $_item->getId() ?>">
-    <td class="col name" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>">
-        <strong class="product name product-item-name"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
+        <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
         <?php if ($_options = $block->getItemOptions()): ?>
             <dl class="item-options links">
                 <?php foreach ($_options as $_option) : ?>
-                    <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                    <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                     <?php if (!$block->getPrintStatus()): ?>
                         <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                         <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
@@ -23,7 +23,7 @@
                             <?php if (isset($_formatedOptionValue['full_view'])): ?>
                                 <div class="tooltip content">
                                     <dl class="item options">
-                                        <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                                        <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                                         <dd><?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?></dd>
                                     </dl>
                                 </div>
@@ -31,7 +31,7 @@
                         </dd>
                     <?php else: ?>
                         <dd>
-                            <?php echo nl2br($block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value']))) ?>
+                            <?= nl2br($block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value']))) ?>
                         </dd>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -42,22 +42,22 @@
             <dl class="item-options links">
                 <dt><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></dt>
                 <?php foreach ($links->getPurchasedItems() as $link): ?>
-                    <dd><?php echo $block->escapeHtml($link->getLinkTitle()); ?></dd>
+                    <dd><?= $block->escapeHtml($link->getLinkTitle()) ?></dd>
                 <?php endforeach; ?>
             </dl>
         <?php endif; ?>
         <?php /* EOF downloadable */ ?>
         <?php $addtInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addtInfoBlock) :?>
-            <?php echo $addtInfoBlock->setItem($_item)->toHtml(); ?>
+            <?= $addtInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif; ?>
-        <?php echo $block->escapeHtml($_item->getDescription()) ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?php echo $block->escapeHtml(__('SKU')); ?>"><?php /* @escapeNotVerified */ echo $block->prepareSku($block->getSku()) ?></td>
-    <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
-        <?php echo $block->getItemPriceHtml(); ?>
+    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?php /* @escapeNotVerified */ echo $block->prepareSku($block->getSku()) ?></td>
+    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+        <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty')); ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
         <ul class="items-qty">
             <?php if ($block->getItem()->getQtyOrdered() > 0): ?>
                 <li class="item">
@@ -85,7 +85,7 @@
             <?php endif; ?>
         </ul>
     </td>
-    <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal')); ?>">
-        <?php echo $block->getItemRowTotalHtml(); ?>
+    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+        <?= $block->getItemRowTotalHtml() ?>
     </td>
 </tr>

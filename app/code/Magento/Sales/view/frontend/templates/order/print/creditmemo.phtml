@@ -40,11 +40,11 @@
     continue;
 } ?>
             <tbody>
-                <?php echo $block->getItemHtml($_item) ?>
+                <?= $block->getItemHtml($_item) ?>
             </tbody>
             <?php endforeach; ?>
             <tfoot>
-                <?php echo $block->getTotalsHtml($_creditmemo);?>
+                <?= $block->getTotalsHtml($_creditmemo) ?>
             </tfoot>
         </table>
     </div>
@@ -68,7 +68,7 @@
                     <strong><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></strong>
                 </div>
                 <div class="box-content">
-                    <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                    <?= $block->escapeHtml($_order->getShippingDescription()) ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -86,7 +86,7 @@
                     <strong><?php /* @escapeNotVerified */ echo __('Payment Method') ?></strong>
                 </div>
                 <div class="box-content">
-                    <?php echo $block->getPaymentInfoHtml() ?>
+                    <?= $block->getPaymentInfoHtml() ?>
                 </div>
             </div>
         </div>

@@ -10,29 +10,29 @@
 ?>
 
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-    <?php echo($block->getChildHtml('wishlist.rss.link'));?>
+    <?= ($block->getChildHtml('wishlist.rss.link')) ?>
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
           "addToCartUrl":<?php /* @noEscape */ echo $block->getItemAddToCartParams("%item%");?>,
           "addAllToCartUrl":<?php /* @noEscape */ echo $block->getAddAllToCartParams(); ?>,
           "commentString":""},
-          "validation": {}}' action="<?php echo $block->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
-        <?php echo $block->getChildHtml('top'); ?>
+          "validation": {}}' action="<?= $block->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
+        <?= $block->getChildHtml('top') ?>
         <?php if ($block->hasWishlistItems()): ?>
-            <?php echo $block->getBlockHtml('formkey');?>
+            <?= $block->getBlockHtml('formkey') ?>
             <?php $block->getChildBlock('items')->setItems($block->getWishlistItems()); ?>
-            <?php echo $block->getChildHtml('items');?>
+            <?= $block->getChildHtml('items') ?>
         <?php else: ?>
-            <div class="message info empty"><span><?php echo $block->escapeHtml(__('You have no items in your wish list.')) ?></span></div>
+            <div class="message info empty"><span><?= $block->escapeHtml(__('You have no items in your wish list.')) ?></span></div>
         <?php endif ?>
-        <?php echo $block->getChildHtml('bottom'); ?>
+        <?= $block->getChildHtml('bottom') ?>
         <div class="actions-toolbar">
             <div class="primary">
-                <?php echo $block->getChildHtml('control_buttons');?>
+                <?= $block->getChildHtml('control_buttons') ?>
             </div>
             <div class="secondary">
-                <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-                    <span><?php echo $block->escapeHtml(__('Back')) ?></span>
+                <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                    <span><?= $block->escapeHtml(__('Back')) ?></span>
                 </a>
             </div>
         </div>

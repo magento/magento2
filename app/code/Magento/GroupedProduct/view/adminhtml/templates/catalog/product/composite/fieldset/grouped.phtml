@@ -10,7 +10,7 @@
 
 <?php /* @var $block \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
-<div id="catalog_product_composite_configure_fields_grouped" class="<?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+<div id="catalog_product_composite_configure_fields_grouped" class="<?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
     <h4><?php /* @escapeNotVerified */ echo __('Associated Products') ?></h4>
     <div class="product-options">
         <?php $_product = $block->getProduct(); ?>
@@ -40,8 +40,8 @@
             <?php foreach ($_associatedProducts as $_item): ?>
                 <tr class="<?php /* @escapeNotVerified */ echo(++$i % 2) ? 'even' : 'odd' ?>">
                     <td class="col-id"><?php /* @escapeNotVerified */ echo $_item->getId() ?></td>
-                    <td class="col-sku"><?php echo $block->escapeHtml($_item->getSku()) ?></td>
-                    <td class="col-name"><?php echo $block->escapeHtml($_item->getName()) ?></td>
+                    <td class="col-sku"><?= $block->escapeHtml($_item->getSku()) ?></td>
+                    <td class="col-name"><?= $block->escapeHtml($_item->getName()) ?></td>
                     <?php if ($block->getCanShowProductPrice($_product)): ?>
                     <td class="col-price">
                         <?php if ($block->getCanShowProductPrice($_item)): ?>

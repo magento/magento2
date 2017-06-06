@@ -16,6 +16,6 @@
     $lastItemNumber = count($columns) ?>
     <?php foreach ($columns as $columnName => $columnClass):?>
         <?php $i++; ?>
-        <td class="<?php echo /* @noEscape */ $columnClass?><?php /* @noEscape */ echo ($i === $lastItemNumber ? ' last' : '')?>"><?php /* @escapeNotVerified */ echo $block->getColumnHtml($_item, $columnName) ?></td>
+        <td class="<?= /* @noEscape */ $columnClass ?><?php /* @noEscape */ echo ($i === $lastItemNumber ? ' last' : '')?>"><?php /* @escapeNotVerified */ echo $block->getColumnHtml($_item, $columnName) ?></td>
     <?php endforeach; ?>
 </tr>

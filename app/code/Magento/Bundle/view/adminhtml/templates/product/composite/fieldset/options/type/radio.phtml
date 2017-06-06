@@ -15,7 +15,7 @@
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
 <div class="field admin__field options<?php if ($_option->getRequired()) echo ' required' ?>">
-    <label class="label admin__field-label"><span><?php echo $block->escapeHtml($_option->getTitle()) ?></span></label>
+    <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <div class="nested<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
         <?php if ($block->showSingle()): ?>
@@ -30,7 +30,7 @@
                     <input type="radio"
                            class="radio admin__control-radio"
                            id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
-                           name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"<?php echo ($_default && $_default->isSalable()) ? '' : ' checked="checked" ' ?>
+                           name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"<?= ($_default && $_default->isSalable()) ? '' : ' checked="checked" ' ?>
                            value=""
                            onclick="ProductConfigure.bundleControl.changeSelection(this)" />
                     <label class="admin__field-label"
@@ -41,7 +41,7 @@
             <?php foreach ($_selections as $_selection): ?>
                 <div class="field choice admin__field admin__field-option">
                     <input type="radio"
-                           class="radio admin__control-radio <?php echo $_option->getRequired() ? ' validate-one-required-by-name' : '' ?> change-container-classname"
+                           class="radio admin__control-radio <?= $_option->getRequired() ? ' validate-one-required-by-name' : '' ?> change-container-classname"
                            id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                            name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                            <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>

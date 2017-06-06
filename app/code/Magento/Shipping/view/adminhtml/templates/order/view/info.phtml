@@ -21,7 +21,7 @@
             <p><a href="#" id="linkId" onclick="popWin('<?php /* @escapeNotVerified */ echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($order) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php /* @escapeNotVerified */ echo __('Track Order') ?>"><?php /* @escapeNotVerified */ echo __('Track Order') ?></a></p>
         <?php endif; ?>
         <?php if ($order->getShippingDescription()): ?>
-            <strong><?php echo $block->escapeHtml($order->getShippingDescription()) ?></strong>
+            <strong><?= $block->escapeHtml($order->getShippingDescription()) ?></strong>
 
             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
                 <?php $_excl = $block->displayShippingPriceInclTax($order); ?>

@@ -20,24 +20,24 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
 <iframe width="0" height="0" id="<?php /* @noescape */ echo $code; ?>-transparent-iframe"
         data-container="<?php /* @noEscape */ echo $code; ?>-transparent-iframe" allowtransparency="true"
         frameborder="0"  name="iframeTransparent" style="display:none;width:100%;background-color:transparent"
-        src="<?php echo $block->escapeUrl($block->getViewFileUrl('blank.html')) ?>"></iframe>
+        src="<?= $block->escapeUrl($block->getViewFileUrl('blank.html')) ?>"></iframe>
 <form class="form" id="co-transparent-form" action="#" method="post" data-mage-init='{
     "transparent":{
-        "controller":"<?php echo $block->escapeHtml($block->getRequest()->getControllerName()); ?>",
+        "controller":"<?= $block->escapeHtml($block->getRequest()->getControllerName()) ?>",
         "gateway":"<?php /* @noEscape */ echo $code; ?>",
-        "orderSaveUrl":"<?php echo $block->escapeUrl($block->getOrderUrl()); ?>",
-        "cgiUrl":"<?php echo $block->escapeUrl($block->getCgiUrl()); ?>",
-        "dateDelim":"<?php echo $block->escapeHtml($block->getDateDelim()); ?>",
-        "cardFieldsMap":<?php echo $block->escapeHtml($block->getCardFieldsMap()); ?>,
-        "nativeAction":"<?php echo $block->escapeUrl($block->getUrl('checkout/onepage/saveOrder', ['_secure' => $block->getRequest()->isSecure()])); ?>"
+        "orderSaveUrl":"<?= $block->escapeUrl($block->getOrderUrl()) ?>",
+        "cgiUrl":"<?= $block->escapeUrl($block->getCgiUrl()) ?>",
+        "dateDelim":"<?= $block->escapeHtml($block->getDateDelim()) ?>",
+        "cardFieldsMap":<?= $block->escapeHtml($block->getCardFieldsMap()) ?>,
+        "nativeAction":"<?= $block->escapeUrl($block->getUrl('checkout/onepage/saveOrder', ['_secure' => $block->getRequest()->isSecure()])) ?>"
     }, "validation":[]}'>
     <fieldset class="fieldset ccard <?php /* @noEscape */ echo $code; ?>" id="payment_form_<?php /* @noEscape */ echo $code; ?>">
         <legend class="legend">
-            <span><?php echo $block->escapeHtml(__('Credit Card Information')); ?></span>\
+            <span><?= $block->escapeHtml(__('Credit Card Information')) ?></span>\
         </legend><br />
         <div class="field required type">
             <label for="<?php /* @noEscape */ echo $code;?>_cc_type" class="label">
-                <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
+                <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
             </label>
             <div class="control">
                 <select id="<?php /* @noEscape */ echo $code; ?>_cc_type" data-container="<?php /* @noEscape */ echo $code; ?>-cc-type"
@@ -46,23 +46,23 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
                             required:true,
                             "validate-cc-type-select":"#<?php /* @noEscape */ echo $code; ?>_cc_number"
                         }'>
-                    <option value=""><?php echo $block->escapeHtml(__('--Please Select--'));?></option>
+                    <option value=""><?= $block->escapeHtml(__('--Please Select--')) ?></option>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
-                    <option value="<?php echo $block->escapeHtml($typeCode); ?>"
+                    <option value="<?= $block->escapeHtml($typeCode) ?>"
                         <?php if ($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
-                        <?php echo $block->escapeHtml($typeName); ?></option>
+                        <?= $block->escapeHtml($typeName) ?></option>
                 <?php endforeach ?>
                 </select>
             </div>
         </div>
         <div class="field required number">
             <label for="<?php /* @noEscape */ echo $code; ?>_cc_number" class="label">
-                <span><?php echo $block->escapeHtml(__('Credit Card Number')); ?></span>
+                <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
             </label>
             <div class="control">
                 <input type="number" id="<?php /* @noEscape */ echo $code; ?>_cc_number"
                        data-container="<?php /* @noEscape */ echo $code; ?>-cc-number" name="payment[cc_number]"
-                       title="<?php echo $block->escapeHtml(__('Credit Card Number')); ?>" class="input-text" value=""
+                       title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="input-text" value=""
                        data-validate='{
                            "required-number":true,
                            "validate-cc-number":"#<?php /* @noEscape */ echo $code; ?>_cc_type",
@@ -73,7 +73,7 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
         </div>
         <div class="field required date" id="<?php /* @noEscape */ echo $code; ?>_cc_type_exp_div">
             <label for="<?php /* @noEscape */ echo $code; ?>_expiration" class="label">
-                <span><?php echo $block->escapeHtml(__('Expiration Date')); ?></span>
+                <span><?= $block->escapeHtml(__('Expiration Date')) ?></span>
             </label>
             <div class="control">
                 <div class="fields group group-2">
@@ -88,7 +88,7 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
                             <?php foreach ($block->getCcMonths() as $k => $v): ?>
                                 <option value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : '' ?>"
                                     <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
-                                    <?php echo $block->escapeHtml($v); ?>
+                                    <?= $block->escapeHtml($v) ?>
                                 </option>
                             <?php endforeach ?>
                             </select>
@@ -102,7 +102,7 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
                             <?php foreach ($block->getCcYears() as $k => $v): ?>
                                 <option value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>"
                                     <?php if ($k == $ccExpYear): ?> selected="selected"<?php endif; ?>>
-                                    <?php echo $block->escapeHtml($v); ?>
+                                    <?= $block->escapeHtml($v) ?>
                                 </option>
                             <?php endforeach ?>
                             </select>
@@ -114,10 +114,10 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
         <?php if ($block->hasVerification()): ?>
         <div class="field required cvv" id="<?php /* @noEscape */ echo $code; ?>_cc_type_cvv_div">
             <label for="<?php /* @noEscape */ echo $code; ?>_cc_cid" class="label">
-                <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
+                <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
             </label>
             <div class="control">
-                <input type="number" title="<?php echo $block->escapeHtml(__('Card Verification Number')); ?>"
+                <input type="number" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
                        data-container="<?php /* @noEscape */ echo $code; ?>-cc-cvv" class="input-text cvv"
                        id="<?php /* @noEscape */ echo $code; ?>_cc_cid" name="payment[cc_cid]" value=""
                        data-validate='{
@@ -126,15 +126,15 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
                        }' autocomplete="off"/>
                 <div class="note">
                     <a href="#" id="<?php /* @noEscape */ echo $code; ?>-cvv-what-is-this" class="action cvv"
-                       title="<?php echo $block->escapeHtml(__('What is this?'));?>" data-mage-init='{
+                       title="<?= $block->escapeHtml(__('What is this?')) ?>" data-mage-init='{
                            "tooltip": {"content": "<?php /* @noEscape */ echo $content; ?>"}
                        }'>
-                        <span><?php echo $block->escapeHtml(__('What is this?')); ?></span>
+                        <span><?= $block->escapeHtml(__('What is this?')) ?></span>
                     </a>
                 </div>
             </div>
         </div>
         <?php endif; ?>
-    <?php echo $block->getChildHtml() ?>
+    <?= $block->getChildHtml() ?>
 </fieldset>
 </form>

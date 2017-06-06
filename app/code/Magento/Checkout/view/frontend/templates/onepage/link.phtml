@@ -11,7 +11,7 @@
             data-role="proceed-to-checkout"
             title="<?php /* @escapeNotVerified */ echo __('Proceed to Checkout') ?>"
             data-mage-init='{"Magento_Checkout/js/proceed-to-checkout":{"checkoutUrl":"<?php /* @escapeNotVerified */ echo $block->getCheckoutUrl(); ?>"}}'
-            class="action primary checkout<?php echo($block->isDisabled()) ? ' disabled' : ''; ?>"
+            class="action primary checkout<?= ($block->isDisabled()) ? ' disabled' : '' ?>"
             <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>>
         <span><?php /* @escapeNotVerified */ echo __('Proceed to Checkout') ?></span>
     </button>

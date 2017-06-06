@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="order-history-comments-actions">
-                <?php echo $block->getChildHtml('submit_button') ?>
+                <?= $block->getChildHtml('submit_button') ?>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
                         <span class="note-list-customer-not-notified"><?php /* @escapeNotVerified */ echo __('Not Notified') ?></span>
                     <?php endif; ?>
                 </span>
-                <div class="note-list-comment"><?php echo $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                <div class="note-list-comment"><?= $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             </li>
         <?php endforeach; ?>
     </ul>

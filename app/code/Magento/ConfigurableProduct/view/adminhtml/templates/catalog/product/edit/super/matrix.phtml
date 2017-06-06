@@ -47,22 +47,22 @@ $currencySymbol = $block->getCurrencySymbol();
                         <thead>
                             <tr>
                                 <th class="data-grid-th data-grid-thumbnail-cell col-image" data-column="image">
-                                    <?= /* @escapeNotVerified */  __('Image'); ?>
+                                    <?= /* @escapeNotVerified */  __('Image') ?>
                                 </th>
                                 <th class="data-grid-th col-name" data-column="name">
-                                    <?= /* @escapeNotVerified */  __('Name'); ?>
+                                    <?= /* @escapeNotVerified */  __('Name') ?>
                                 </th>
                                 <th class="data-grid-th col-sku" data-column="sku">
-                                    <?= /* @escapeNotVerified */  __('SKU'); ?>
+                                    <?= /* @escapeNotVerified */  __('SKU') ?>
                                 </th>
                                 <th class="data-grid-th col-price" data-column="price">
-                                    <?= /* @escapeNotVerified */  __('Price'); ?>
+                                    <?= /* @escapeNotVerified */  __('Price') ?>
                                 </th>
                                 <th class="data-grid-th col-qty" data-column="qty">
-                                    <?= /* @escapeNotVerified */  __('Quantity'); ?>
+                                    <?= /* @escapeNotVerified */  __('Quantity') ?>
                                 </th>
                                 <th class="data-grid-th col-weight" data-column="weight">
-                                    <?= /* @escapeNotVerified */  __('Weight'); ?>
+                                    <?= /* @escapeNotVerified */  __('Weight') ?>
                                 </th>
                                 <!-- ko foreach: getAttributesOptions() -->
                                     <th data-bind="attr: {class:'data-grid-th col-' + $data.attribute_code},
@@ -70,7 +70,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                     </th>
                                 <!-- /ko -->
                                 <th class="data-grid-th">
-                                    <?= /* @escapeNotVerified */  __('Actions'); ?>
+                                    <?= /* @escapeNotVerified */  __('Actions') ?>
                                 </th>
                             </tr>
                         </thead>
@@ -88,10 +88,10 @@ $currencySymbol = $block->getCurrencySymbol();
                                                 <input type="hidden" data-bind="
                                                     attr: {id: $parent.getRowId(variation, 'image'),
                                                     name: $parent.getVariationRowName(variation, 'image')}"/>
-                                                <span><?= /* @escapeNotVerified */  __('Upload Image'); ?></span>
+                                                <span><?= /* @escapeNotVerified */  __('Upload Image') ?></span>
                                                 <input name="image" type="file"
                                                        data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                                       title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
+                                                       title="<?= $block->escapeHtml(__('Upload image')) ?>"/>
                                             <!-- /ko -->
                                         </div>
                                         <!-- ko if: variation.editable -->
@@ -102,11 +102,11 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <!-- /ko -->
                                         <button type="button" class="action toggle no-display" data-toggle="dropdown"
                                                 data-mage-init='{"dropdown":{}}'>
-                                            <span><?= /* @escapeNotVerified */  __('Select'); ?></span>
+                                            <span><?= /* @escapeNotVerified */  __('Select') ?></span>
                                         </button>
                                         <ul class="dropdown">
                                             <li>
-                                                <a class="item" data-action="no-image"><?= /* @escapeNotVerified */  __('No Image'); ?></a>
+                                                <a class="item" data-action="no-image"><?= /* @escapeNotVerified */  __('No Image') ?></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -208,7 +208,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                                     "
                                                    data-action="choose"
                                                    href="#">
-                                                    <?= /* @escapeNotVerified */  __('Choose a different Product');?>
+                                                    <?= /* @escapeNotVerified */  __('Choose a different Product') ?>
                                                 </a>
                                             </li>
                                             <li>
@@ -219,7 +219,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                             </li>
                                             <li>
                                                 <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
-                                                    <?= /* @escapeNotVerified */  __('Remove Product');?>
+                                                    <?= /* @escapeNotVerified */  __('Remove Product') ?>
                                                 </a>
                                             </li>
                                         </ul>

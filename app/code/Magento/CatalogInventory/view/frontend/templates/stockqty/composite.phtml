@@ -35,8 +35,8 @@
                     <?php $childProductStockQty = $block->getProductStockQty($childProduct); ?>
                     <?php if ($childProductStockQty > 0) : ?>
                         <tr>
-                            <td data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>" class="col item"><?php /* @escapeNotVerified */ echo $childProduct->getName() ?></td>
-                            <td data-th="<?php echo $block->escapeHtml(__('Qty')); ?>" class="col qty"><?php /* @escapeNotVerified */ echo $childProductStockQty ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $childProduct->getName() ?></td>
+                            <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty"><?php /* @escapeNotVerified */ echo $childProductStockQty ?></td>
                         </tr>
                     <?php endif ?>
                 <?php endforeach ?>

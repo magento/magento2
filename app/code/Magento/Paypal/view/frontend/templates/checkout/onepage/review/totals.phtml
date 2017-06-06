@@ -19,7 +19,7 @@
         <th class="mark" colspan="<?php /* @escapeNotVerified */ echo $_colspan; ?>" scope="row">
             <?php /* @escapeNotVerified */ echo __('Your credit card will be charged for') ?>
         </th>
-        <td class="amount" data-th="<?php echo $block->escapeHtml(__('Your credit card will be charged for')); ?>">
+        <td class="amount" data-th="<?= $block->escapeHtml(__('Your credit card will be charged for')) ?>">
             <?php /* @escapeNotVerified */ echo $block->displayBaseGrandtotal() ?>
         </td>
     </tr>

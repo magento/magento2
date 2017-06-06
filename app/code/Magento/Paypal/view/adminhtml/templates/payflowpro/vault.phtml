@@ -14,20 +14,20 @@ $id = $block->escapeHtml($block->getData('id'));
 <div data-mage-init='{
         "Magento_Paypal/js/payflowpro/vault": {
             "container": "payment_<?php /* @noEscape */ echo $id; ?>",
-            "publicHash": "<?php echo $block->escapeHtml(
+            "publicHash": "<?= $block->escapeHtml(
                                 $block->getData(TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH)
                             ); ?>"
         }
     }' id="payment_<?php /* @noEscape */ echo $id;?>" class="admin__field">
     <div class="admin__field-control control">
         <input type="radio" id="token_switcher_<?php /* @noEscape */ echo $id; ?>" name="payment[token_switcher]"/>
-        <img src="<?php echo $block->escapeUrl($icon['url']); ?>"
-             width="<?php echo $block->escapeHtml($icon['width']); ?>"
-             height="<?php echo $block->escapeHtml($icon['height']); ?>"
+        <img src="<?= $block->escapeUrl($icon['url']) ?>"
+             width="<?= $block->escapeHtml($icon['width']) ?>"
+             height="<?= $block->escapeHtml($icon['height']) ?>"
              class="payment-icon" >
-        <span><?php echo $block->escapeHtml(__('ending'));?></span>
-        <span><?php echo $block->escapeHtml($details['cc_last_4']); ?></span>
-        (<span><?php echo $block->escapeHtml(__('expires'));?></span>:
+        <span><?= $block->escapeHtml(__('ending')) ?></span>
+        <span><?= $block->escapeHtml($details['cc_last_4']) ?></span>
+        (<span><?= $block->escapeHtml(__('expires')) ?></span>:
         <span><?php /* @noEscape */ echo $block->escapeHtml(
                 $details['cc_exp_month'] . "/" . $details['cc_exp_year']
             ); ?></span>)

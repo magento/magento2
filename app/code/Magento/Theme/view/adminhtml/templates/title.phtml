@@ -16,5 +16,5 @@ $title = $block->escapeHtml($block->getPageTitle());
 
 <div class="page-title-wrapper<?php /* @escapeNotVerified */ echo $titleClass; ?>">
     <h1 class="page-title"<?php /* @escapeNotVerified */ echo $titleId?>><?php /* @escapeNotVerified */ echo $title ?></h1>
-    <?php echo $block->getChildHtml(); ?>
+    <?= $block->getChildHtml() ?>
 </div>

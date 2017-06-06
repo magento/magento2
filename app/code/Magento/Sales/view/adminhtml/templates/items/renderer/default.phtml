@@ -9,20 +9,20 @@
 ?>
 
 <?php /* @escapeNotVerified */ echo $block->getItem()->getName() ?>
-<div><strong><?php /* @escapeNotVerified */ echo __('SKU') ?>:</strong> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getItem()->getSku()))); ?></div>
+<div><strong><?php /* @escapeNotVerified */ echo __('SKU') ?>:</strong> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getItem()->getSku()))) ?></div>
 <?php if ($block->getOrderOptions()): ?>
     <ul class="item-options">
     <?php foreach ($block->getOrderOptions() as $option): ?>
         <li><strong><?php /* @escapeNotVerified */ echo $option['label'] ?>:</strong><br />
         <?php if (is_array($option['value'])): ?>
         <?php foreach ($option['value'] as $item): ?>
-            <?php echo $block->getValueHtml($item) ?><br />
+            <?= $block->getValueHtml($item) ?><br />
             <?php endforeach; ?>
         <?php else: ?>
-            <?php echo $block->escapeHtml($option['value']); ?>
+            <?= $block->escapeHtml($option['value']) ?>
         <?php endif; ?>
         </li>
     <?php endforeach; ?>
     </ul>
 <?php endif; ?>
-<?php echo $block->escapeHtml($block->getItem()->getDescription()) ?>
+<?= $block->escapeHtml($block->getItem()->getDescription()) ?>

@@ -32,8 +32,8 @@ $_order = $block->getOrder() ?>
                 $i++;
             }?>
             <tbody class="<?php /* @noEscape */ echo $i%2 ? 'even' : 'odd' ?>">
-                <?php echo $block->getItemHtml($_item) ?>
-                <?php echo $block->getItemExtraInfoHtml($_item) ?>
+                <?= $block->getItemHtml($_item) ?>
+                <?= $block->getItemExtraInfoHtml($_item) ?>
             </tbody>
         <?php endforeach; ?>
     </table>

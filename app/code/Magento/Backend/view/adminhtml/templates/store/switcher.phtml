@@ -15,15 +15,15 @@
     <div class="actions dropdown closable">
         <input type="hidden" name="store_switcher" id="store_switcher"
                data-role="store-view-id" data-param="<?php /* @escapeNotVerified */ echo $block->getStoreVarName() ?>"
-               value="<?php echo $block->escapeHtml($block->getStoreId()) ?>"
+               value="<?= $block->escapeHtml($block->getStoreId()) ?>"
                onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
         <input type="hidden" name="store_group_switcher" id="store_group_switcher"
                data-role="store-group-id" data-param="<?php /* @escapeNotVerified */ echo $block->getStoreGroupVarName() ?>"
-               value="<?php echo $block->escapeHtml($block->getStoreGroupId()) ?>"
+               value="<?= $block->escapeHtml($block->getStoreGroupId()) ?>"
                onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
         <input type="hidden" name="website_switcher" id="website_switcher"
                data-role="website-id" data-param="<?php /* @escapeNotVerified */ echo $block->getWebsiteVarName() ?>"
-               value="<?php echo $block->escapeHtml($block->getWebsiteId()) ?>"
+               value="<?= $block->escapeHtml($block->getWebsiteId()) ?>"
                onchange="switchScope(this);"<?php /* @escapeNotVerified */ echo $block->getUiId()?> />
         <button
             type="button"
@@ -68,13 +68,13 @@
                             } ?>">
                                 <?php if ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website)) {
                                     ?>
-                                    <a data-role="website-id" data-value="<?php echo $block->escapeHtml($website->getId()) ?>" href="#">
-                                        <?php echo $block->escapeHtml($website->getName()) ?>
+                                    <a data-role="website-id" data-value="<?= $block->escapeHtml($website->getId()) ?>" href="#">
+                                        <?= $block->escapeHtml($website->getName()) ?>
                                     </a>
                                 <?php
                                 } else {
                                     ?>
-                                    <span><?php echo $block->escapeHtml($website->getName()) ?></span>
+                                    <span><?= $block->escapeHtml($website->getName()) ?></span>
                                 <?php
                                 } ?>
                             </li>
@@ -88,13 +88,13 @@
                             } ?>">
                                 <?php if ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group)) {
                                     ?>
-                                    <a data-role="store-group-id" data-value="<?php echo $block->escapeHtml($group->getId()) ?>" href="#">
-                                        <?php echo $block->escapeHtml($group->getName()) ?>
+                                    <a data-role="store-group-id" data-value="<?= $block->escapeHtml($group->getId()) ?>" href="#">
+                                        <?= $block->escapeHtml($group->getName()) ?>
                                     </a>
                                 <?php
                                 } else {
                                     ?>
-                                    <span><?php echo $block->escapeHtml($group->getName()) ?></span>
+                                    <span><?= $block->escapeHtml($group->getName()) ?></span>
                                 <?php
                                 } ?>
                             </li>
@@ -106,13 +106,13 @@
                         } ?>">
                             <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)) {
                                 ?>
-                                <a data-role="store-view-id" data-value="<?php echo $block->escapeHtml($store->getId()) ?>" href="#">
-                                    <?php echo $block->escapeHtml($store->getName()) ?>
+                                <a data-role="store-view-id" data-value="<?= $block->escapeHtml($store->getId()) ?>" href="#">
+                                    <?= $block->escapeHtml($store->getName()) ?>
                                 </a>
                             <?php
                             } else {
                                 ?>
-                                <span><?php echo $block->escapeHtml($store->getName()) ?></span>
+                                <span><?= $block->escapeHtml($store->getName()) ?></span>
                             <?php
                             } ?>
                         </li>
@@ -126,7 +126,7 @@
             <?php endif; ?>
         </ul>
     </div>
-    <?php echo $block->getHintHtml() ?>
+    <?= $block->getHintHtml() ?>
 </div>
 
 <script>
@@ -168,7 +168,7 @@ require([
             var switcherParams = {
                 scopeId: scopeId,
                 scopeParams: scopeParams,
-                useConfirm: <?php echo (int)$block->getUseConfirm() ?>
+                useConfirm: <?= (int)$block->getUseConfirm() ?>
             };
             scopeSwitcherHandler(switcherParams);
         } else {
@@ -182,7 +182,7 @@ require([
                         reload();
                     },
                     cancel: function() {
-                        obj.value = '<?php echo $block->escapeHtml($block->getStoreId()) ?>';
+                        obj.value = '<?= $block->escapeHtml($block->getStoreId()) ?>';
                     }
                 }
             });

@@ -17,17 +17,17 @@
             <?php if ($_option['is_close']): ?>
                 </optgroup>
             <?php else: ?>
-                <optgroup label="<?php echo $block->escapeHtml($_option['label']) ?>" style="<?php /* @escapeNotVerified */ echo $_option['style'] ?>">
+                <optgroup label="<?= $block->escapeHtml($_option['label']) ?>" style="<?php /* @escapeNotVerified */ echo $_option['style'] ?>">
             <?php endif; ?>
             <?php continue ?>
         <?php endif; ?>
-          <option value="<?php echo $block->escapeHtml($_value) ?>" url="<?php /* @escapeNotVerified */ echo $_option['url'] ?>" <?php echo $_option['selected'] ? 'selected="selected"' : '' ?> style="<?php /* @escapeNotVerified */ echo $_option['style'] ?>">
-              <?php echo $block->escapeHtml($_option['label']) ?>
+          <option value="<?= $block->escapeHtml($_value) ?>" url="<?php /* @escapeNotVerified */ echo $_option['url'] ?>" <?= $_option['selected'] ? 'selected="selected"' : '' ?> style="<?php /* @escapeNotVerified */ echo $_option['style'] ?>">
+              <?= $block->escapeHtml($_option['label']) ?>
           </option>
         <?php endforeach ?>
         </select>
     </div>
-    <?php echo $block->getHintHtml() ?>
+    <?= $block->getHintHtml() ?>
     <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
         <div class="actions">
             <a href="<?php /* @escapeNotVerified */ echo $block->getUrl('*/system_store') ?>"><?php /* @escapeNotVerified */ echo __('Stores') ?></a>

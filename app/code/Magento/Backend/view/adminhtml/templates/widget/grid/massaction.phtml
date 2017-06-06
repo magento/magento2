@@ -8,34 +8,34 @@
 
 ?>
 <?php /* @escapeNotVerified */ echo $block->getSomething(); ?>
-<div id="<?php echo $block->getHtmlId() ?>" class="admin__grid-massaction">
+<div id="<?= $block->getHtmlId() ?>" class="admin__grid-massaction">
 
     <?php if ($block->getHideFormElement() !== true):?>
-    <form action="" id="<?php echo $block->getHtmlId() ?>-form" method="post">
+    <form action="" id="<?= $block->getHtmlId() ?>-form" method="post">
     <?php endif ?>
         <div class="admin__grid-massaction-form">
-    <?php echo $block->getBlockHtml('formkey')?>
+    <?= $block->getBlockHtml('formkey') ?>
             <select
-                id="<?php echo $block->getHtmlId() ?>-select"
+                id="<?= $block->getHtmlId() ?>-select"
                 class="required-entry local-validation admin__control-select"
                 <?php /* @escapeNotVerified */ echo $block->getUiId('select') ?>>
                 <option class="admin__control-select-placeholder" value="" selected><?php /* @escapeNotVerified */ echo __('Actions') ?></option>
                 <?php foreach ($block->getItems() as $_item):?>
-                    <option value="<?php /* @escapeNotVerified */ echo $_item->getId() ?>"<?php echo($_item->getSelected() ? ' selected="selected"' : '')?>><?php /* @escapeNotVerified */ echo $_item->getLabel() ?></option>
+                    <option value="<?php /* @escapeNotVerified */ echo $_item->getId() ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?php /* @escapeNotVerified */ echo $_item->getLabel() ?></option>
                 <?php endforeach; ?>
             </select>
-            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-hiddens"></span>
-            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-additional"></span>
-            <?php echo $block->getApplyButtonHtml() ?>
+            <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-hiddens"></span>
+            <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-additional"></span>
+            <?= $block->getApplyButtonHtml() ?>
         </div>
     <?php if ($block->getHideFormElement() !== true):?>
     </form>
     <?php endif ?>
     <div class="no-display">
     <?php foreach ($block->getItems() as $_item): ?>
-        <div id="<?php echo $block->getHtmlId() ?>-item-<?php /* @escapeNotVerified */ echo $_item->getId() ?>-block">
+        <div id="<?= $block->getHtmlId() ?>-item-<?php /* @escapeNotVerified */ echo $_item->getId() ?>-block">
             <?php if ('' != $_item->getBlockName()):?>
-                <?php echo $block->getChildHtml($_item->getBlockName());?>
+                <?= $block->getChildHtml($_item->getBlockName()) ?>
             <?php endif;?>
         </div>
     <?php endforeach; ?>
@@ -43,7 +43,7 @@
 
     <div class="mass-select-wrap">
         <select
-            id="<?php echo $block->getHtmlId() ?>-mass-select"
+            id="<?= $block->getHtmlId() ?>-mass-select"
             class="action-select-multiselect _disabled"
             disabled="disabled"
             data-menu="grid-mass-select">
@@ -65,13 +65,13 @@
                 </option>
             </optgroup>
         </select>
-        <label for="<?php echo $block->getHtmlId() ?>-mass-select"></label>
+        <label for="<?= $block->getHtmlId() ?>-mass-select"></label>
     </div>
 
 <script>
     require(['jquery', 'domReady!'], function($){
         'use strict';
-        $('#<?php echo $block->getHtmlId() ?>-mass-select')
+        $('#<?= $block->getHtmlId() ?>-mass-select')
             .removeClass('_disabled')
             .prop('disabled', false)
             .change(function () {

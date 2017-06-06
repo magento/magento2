@@ -16,9 +16,9 @@
  *  getForm() - html
  */
 ?>
-<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getSaveButtonHtml() ?></div>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?= $block->getSaveButtonHtml() ?></div>
 <form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
-    <?php echo $block->getBlockHtml('formkey')?>
+    <?= $block->getBlockHtml('formkey') ?>
 
     <script>
     window.setCacheAction = function(id, button) {
@@ -31,7 +31,7 @@
     <input type="hidden" id="catalog_action" name="catalog_action" value="" />
     <input type="hidden" id="jscss_action" name="jscss_action" value="" />
 
-    <?php echo $block->getChildHtml('form') ?>
+    <?= $block->getChildHtml('form') ?>
     <div class="entry-edit">
         <div class="entry-edit-head">
             <h4 class="icon-head head-edit-form fieldset-legend"><?php /* @escapeNotVerified */ echo __('Catalog') ?></h4>

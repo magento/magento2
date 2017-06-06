@@ -8,18 +8,18 @@
 
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form $block */
 ?>
-<form id="edit_form" data-order-config='<?php echo $block->escapeHtml($block->getOrderDataJson()) ?>' data-load-base-url="<?php /* @escapeNotVerified */ echo $block->getLoadBlockUrl() ?>" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" enctype="multipart/form-data">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form id="edit_form" data-order-config='<?= $block->escapeHtml($block->getOrderDataJson()) ?>' data-load-base-url="<?php /* @escapeNotVerified */ echo $block->getLoadBlockUrl() ?>" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" enctype="multipart/form-data">
+    <?= $block->getBlockHtml('formkey') ?>
     <div id="order-message">
-        <?php echo $block->getChildHtml('message') ?>
+        <?= $block->getChildHtml('message') ?>
     </div>
     <div id="order-customer-selector" class="fieldset-wrapper order-customer-selector" style="display:<?php /* @escapeNotVerified */ echo $block->getCustomerSelectorDisplay() ?>">
-        <?php echo $block->getChildHtml('customer.grid.container') ?>
+        <?= $block->getChildHtml('customer.grid.container') ?>
     </div>
     <div id="order-store-selector" class="fieldset-wrapper" style="display:<?php /* @escapeNotVerified */ echo $block->getStoreSelectorDisplay() ?>">
-        <?php echo $block->getChildHtml('store') ?>
+        <?= $block->getChildHtml('store') ?>
     </div>
     <div id="order-data" style="display:<?php /* @escapeNotVerified */ echo $block->getDataSelectorDisplay() ?>">
-        <?php echo $block->getChildHtml('data') ?>
+        <?= $block->getChildHtml('data') ?>
     </div>
 </form>

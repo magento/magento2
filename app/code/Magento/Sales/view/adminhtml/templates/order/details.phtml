@@ -14,8 +14,8 @@ store name = $_order->getStore()->getGroup()->getName()
 ?>
 <?php $_order = $block->getOrder() ?>
 <div>
-<?php echo __('Customer Name: %1', $block->escapeHtml($_order->getCustomerFirstname() ? $_order->getCustomerName() : $_order->getBillingAddress()->getName())) ?><br />
-<?php echo __('Purchased From: %1', $block->escapeHtml($_order->getStore()->getGroup()->getName())) ?><br />
+<?= __('Customer Name: %1', $block->escapeHtml($_order->getCustomerFirstname() ? $_order->getCustomerName() : $_order->getBillingAddress()->getName())) ?><br />
+<?= __('Purchased From: %1', $block->escapeHtml($_order->getStore()->getGroup()->getName())) ?><br />
 </div>
 <table cellpadding="0" border="0" width="100%" style="border:1px solid #bebcb7; background:#f8f7f5;">
     <thead>
@@ -28,13 +28,13 @@ store name = $_order->getStore()->getGroup()->getName()
 
     <tbody>
 <?php $i = 0; foreach ($_order->getAllItems() as $_item): $i++ ?>
-        <tr <?php echo $i%2 ? 'bgcolor="#eeeded"' : '' ?>>
-            <td align="left" valign="top" style="padding:3px 9px"><strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+        <tr <?= $i%2 ? 'bgcolor="#eeeded"' : '' ?>>
+            <td align="left" valign="top" style="padding:3px 9px"><strong><?= $block->escapeHtml($_item->getName()) ?></strong>
             <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
             <br /><strong><?php /* @escapeNotVerified */ echo __('Gift Message') ?></strong>
-            <br /><?php /* @escapeNotVerified */ echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+            <br /><?php /* @escapeNotVerified */ echo __('From:'); ?> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><?php /* @escapeNotVerified */ echo __('To:'); ?> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><?php /* @escapeNotVerified */ echo __('Message:'); ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
             <?php endif; ?>
             </td>
             <td align="center" valign="top" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo $_item->getQtyOrdered()*1 ?></td>
@@ -48,9 +48,9 @@ store name = $_order->getStore()->getGroup()->getName()
         <tr>
             <td colspan="3" align="left" style="padding:3px 9px">
             <strong><?php /* @escapeNotVerified */ echo __('Gift Message') ?></strong>
-            <br /><?php /* @escapeNotVerified */ echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+            <br /><?php /* @escapeNotVerified */ echo __('From:'); ?> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><?php /* @escapeNotVerified */ echo __('To:'); ?> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><?php /* @escapeNotVerified */ echo __('Message:'); ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
             </td>
         </tr>
      <?php endif; ?>

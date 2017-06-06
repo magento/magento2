@@ -22,7 +22,7 @@ $_item = $block->getItem();
             <span class="label"><?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>:</span>
         <?php endif; ?>
 
-        <?php echo $block->getRowPriceExclTaxHtml() ?>
+        <?= $block->getRowPriceExclTaxHtml() ?>
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <?php if ($block->displayPriceWithWeeeDetails()): ?>
@@ -36,7 +36,7 @@ $_item = $block->getItem();
             <?php if ($block->displayFinalPrice()): ?>
                 <br />
                 <span class="nobr"><?php /* @escapeNotVerified */ echo __('Total'); ?>:<br />
-                    <?php echo $block->getFinalRowPriceExclTaxHtml(); ?>
+                    <?= $block->getFinalRowPriceExclTaxHtml() ?>
                 </span>
             <?php endif; ?>
         <?php endif; ?>
@@ -47,7 +47,7 @@ $_item = $block->getItem();
         <?php if ($block->displayBothPrices()): ?>
             <span class="label"><?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>:</span>
         <?php endif; ?>
-        <?php echo $block->getRowPriceInclTaxHtml(); ?>
+        <?= $block->getRowPriceInclTaxHtml() ?>
 
         <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
             <br />
@@ -62,7 +62,7 @@ $_item = $block->getItem();
             <?php if ($block->displayFinalPrice()): ?>
                 <br />
                 <span class="nobr"><?php /* @escapeNotVerified */ echo __('Total'); ?>:<br />
-                    <?php echo $block->getFinalRowPriceInclTaxHtml(); ?>
+                    <?= $block->getFinalRowPriceInclTaxHtml() ?>
                 </span>
             <?php endif; ?>
         <?php endif; ?>

@@ -62,8 +62,8 @@
             <?php endif; ?>/>
     </td>
     <td class="col-price price-type-box">
-        <?php echo $block->getPriceTypeSelectHtml() ?>
-        <div><?php echo $block->getCheckboxScopeHtml() ?></div>
+        <?= $block->getPriceTypeSelectHtml() ?>
+        <div><?= $block->getCheckboxScopeHtml() ?></div>
     </td>
 <?php else: ?>
     <input type="hidden" id="<?php /* @escapeNotVerified */ echo $block->getFieldId(); ?>_<%- data.index %>_price_value"
@@ -82,7 +82,7 @@
     </td>
     <td class="col-uqty qty-box">
         <input type="checkbox" class="is-user-defined-qty" checked="checked" />
-        <span style="display:none"><?php echo $block->getQtyTypeSelectHtml() ?></span>
+        <span style="display:none"><?= $block->getQtyTypeSelectHtml() ?></span>
     </td>
     <td class="col-order type-order" style="display:none">
         <input class="input-text required-entry validate-zero-or-greater" type="text"
@@ -91,7 +91,7 @@
     </td>
     <td class="col-actions">
         <span title="Delete Row">
-            <?php echo $block->getSelectionDeleteButtonHtml() ?>
+            <?= $block->getSelectionDeleteButtonHtml() ?>
         </span>
     </td>
 </script>
@@ -107,7 +107,7 @@ var bundleTemplateBox = jQuery('#bundle-option-selection-box-template').html(),
 Bundle.Selection = Class.create();
 Bundle.Selection.prototype = {
     idLabel : '<?php /* @escapeNotVerified */ echo $block->getFieldId() ?>',
-    scopePrice : <?php echo (int)$block->isUsedWebsitePrice() ?>,
+    scopePrice : <?= (int)$block->isUsedWebsitePrice() ?>,
     templateBox : '',
     templateRow : '',
     itemsCount : 0,

@@ -11,10 +11,10 @@
 <?php $_order = $block->getOrder() ?>
 
 <div id="order-messages">
-    <?php echo $block->getChildHtml('order_messages') ?>
+    <?= $block->getChildHtml('order_messages') ?>
 </div>
 
-<?php echo $block->getChildHtml('order_info') ?>
+<?= $block->getChildHtml('order_info') ?>
 <input type="hidden" name="order_id" value="<?php /* @escapeNotVerified */ echo $_order->getId() ?>"/>
 
 <section class="admin__page-section order-view-billing-shipping">
@@ -28,27 +28,27 @@
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <div class="order-payment-method-title"><?php echo $block->getPaymentHtml() ?></div>
+                <div class="order-payment-method-title"><?= $block->getPaymentHtml() ?></div>
                 <div class="order-payment-currency"><?php /* @escapeNotVerified */ echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
                 <div class="order-payment-additional">
-                    <?php echo $block->getChildHtml('order_payment_additional'); ?>
-                    <?php echo $block->getChildHtml('payment_additional_info'); ?>
+                    <?= $block->getChildHtml('order_payment_additional') ?>
+                    <?= $block->getChildHtml('payment_additional_info') ?>
                 </div>
             </div>
         </div>
-        <?php echo $block->getChildHtml('order_shipping_view') ?>
+        <?= $block->getChildHtml('order_shipping_view') ?>
     </div>
 </section>
 
-<?php echo $block->getChildHtml('order_additional_info') ?>
+<?= $block->getChildHtml('order_additional_info') ?>
 
-<?php echo $block->getGiftOptionsHtml() ?>
+<?= $block->getGiftOptionsHtml() ?>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
         <span class="title"><?php /* @escapeNotVerified */ echo __('Items Ordered') ?></span>
     </div>
-    <?php echo $block->getItemsHtml() ?>
+    <?= $block->getItemsHtml() ?>
 </section>
 
 <section class="admin__page-section">
@@ -60,19 +60,19 @@
             <div class="admin__page-section-item-title">
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Notes for this Order') ?></span>
             </div>
-            <?php echo $block->getChildHtml('order_history') ?>
+            <?= $block->getChildHtml('order_history') ?>
         </div>
 
         <div class="admin__page-section-item order-totals">
             <div class="admin__page-section-item-title">
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Order Totals') ?></span>
             </div>
-            <?php echo $block->getChildHtml('order_totals') ?>
+            <?= $block->getChildHtml('order_totals') ?>
         </div>
     </div>
 </section>
 
-<?php echo $block->getChildHtml('popup_window');?>
+<?= $block->getChildHtml('popup_window') ?>
 
 <script>
 require([

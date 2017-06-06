@@ -17,9 +17,9 @@
  */
 ?>
 <form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
-    <?php echo $block->getBlockHtml('formkey')?>
+    <?= $block->getBlockHtml('formkey') ?>
     <div class="accordion">
-        <?php echo $block->getChildHtml('form') ?>
+        <?= $block->getChildHtml('form') ?>
     </div>
 </form>
 <script>

@@ -17,15 +17,15 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
           style="display:none">
     <div class="field-type admin__field _required">
         <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_cc_type">
-            <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
+            <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
         </label>
         <div class="admin__field-control">
             <select id="<?php /* @noEscape */ echo $code; ?>_cc_type" name="payment[cc_type]"
                     class="required-entry validate-cc-type-select admin__control-select">
                 <option value=""></option>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
-                    <option value="<?php echo $block->escapeHtml($typeCode); ?>" <?php if ($typeCode == $ccType): ?>selected="selected"<?php endif ?>>
-                        <?php echo $block->escapeHtml($typeName); ?>
+                    <option value="<?= $block->escapeHtml($typeCode) ?>" <?php if ($typeCode == $ccType): ?>selected="selected"<?php endif ?>>
+                        <?= $block->escapeHtml($typeName) ?>
                     </option>
                 <?php endforeach ?>
             </select>
@@ -33,25 +33,25 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
     </div>
     <div class="field-number admin__field _required">
         <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_cc_number">
-            <span><?php echo $block->escapeHtml(__('Credit Card Number')); ?></span>
+            <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
         </label>
         <div class="admin__field-control">
             <input type="text" id="<?php /* @noEscape */ echo $code; ?>_cc_number" name="payment[cc_number]"
-                   title="<?php echo $block->escapeHtml(__('Credit Card Number')); ?>" class="admin__control-text validate-cc-number"
+                   title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="admin__control-text validate-cc-number"
                    value="<?php /* @noEscape */ echo $block->getInfoData('cc_number'); ?>"/>
         </div>
     </div>
     <div class="field-date admin__field _required">
         <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_expiration">
-            <span><?php echo $block->escapeHtml(__('Expiration Date')); ?></span>
+            <span><?= $block->escapeHtml(__('Expiration Date')) ?></span>
         </label>
         <div class="admin__field-control">
             <select id="<?php /* @noEscape */ echo $code ?>_expiration" name="payment[cc_exp_month]"
                     class="admin__control-select admin__control-select-month validate-cc-exp required-entry">
                 <?php foreach ($block->getCcMonths() as $k => $v): ?>
-                    <option value="<?php echo $block->escapeHtml($k); ?>"
+                    <option value="<?= $block->escapeHtml($k) ?>"
                             <?php if ($k == $ccExpMonth): ?>selected="selected"<?php endif ?>>
-                        <?php echo $block->escapeHtml($v); ?>
+                        <?= $block->escapeHtml($v) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -60,7 +60,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                 <?php foreach ($block->getCcYears() as $k => $v): ?>
                     <option value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : '' ?>"
                             <?php if ($k == $ccExpYear): ?>selected="selected"<?php endif ?>>
-                        <?php echo $block->escapeHtml($v); ?>
+                        <?= $block->escapeHtml($v) ?>
                     </option>
                 <?php endforeach ?>
             </select>
@@ -70,10 +70,10 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
     <?php if ($block->hasVerification()): ?>
         <div class="field-number required admin__field _required">
             <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_cc_cid">
-                <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
+                <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
             </label>
             <div class="admin__field-control">
-                <input type="text" title="<?php echo $block->escapeHtml(__('Card Verification Number')); ?>"
+                <input type="text" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
                        class="required-entry validate-cc-cvn admin__control-cvn admin__control-text"
                        id="<?php /* @noEscape */ echo $code; ?>_cc_cid"
                        name="payment[cc_cid]" value="<?php /* @noEscape */ echo $block->getInfoData('cc_cid') ?>"/>

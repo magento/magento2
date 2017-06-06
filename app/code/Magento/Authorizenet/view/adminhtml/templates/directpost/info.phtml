@@ -20,18 +20,18 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
 <!-- IFRAME for request to our server -->
 <iframe id="order-directpost-iframe" allowtransparency="true" frameborder="0" name="iframeSubmitOrder"
         style="display:none;width:100%;background-color:transparent"
-        src="<?php echo $block->escapeUrl($block->getViewFileUrl('blank.html')); ?>">
+        src="<?= $block->escapeUrl($block->getViewFileUrl('blank.html')) ?>">
 </iframe>
 <!-- IFRAME for request to Authorize.net -->
 <iframe id="directpost-iframe" allowtransparency="true" frameborder="0"  name="iframeDirectPost"
         style="display:none;width:100%;background-color:transparent"
-        src="<?php echo $block->escapeUrl($block->getViewFileUrl('blank.html')); ?>">
+        src="<?= $block->escapeUrl($block->getViewFileUrl('blank.html')) ?>">
 </iframe>
 <fieldset class="admin__fieldset payment-method" id="payment_form_<?php /* @noEscape */ echo $code; ?>"
           style="display:none;">
     <div class="admin__field _required">
         <label for="<?php /* @noEscape */ echo $code; ?>_cc_type" class="admin__field-label">
-            <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
+            <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
         </label>
         <div class="admin__field-control">
             <select id="<?php /* @noEscape */ echo $code; ?>_cc_type" name="payment[cc_type]"
@@ -40,11 +40,11 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                         'required':true,
                         'validate-cc-type-select':'#<?php /* @noEscape */ echo $code; ?>_cc_number'
                         }">
-                <option value=""><?php echo $block->escapeHtml(__('Please Select')); ?></option>
+                <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
-                    <option value="<?php echo $block->escapeHtml($typeCode); ?>"
+                    <option value="<?= $block->escapeHtml($typeCode) ?>"
                             <?php if ($typeCode == $ccType): ?>selected="selected"<?php endif; ?>>
-                        <?php echo $block->escapeHtml($typeName); ?>
+                        <?= $block->escapeHtml($typeName) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -53,7 +53,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
 
     <div class="admin__field _required">
         <label for="<?php /* @noEscape */ echo $code; ?>_cc_number" class="admin__field-label">
-            <span><?php echo $block->escapeHtml(__('Credit Card Number')); ?></span>
+            <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
         </label>
         <div class="admin__field-control">
             <input type="text" id="<?php /* @noEscape */ echo $code; ?>_cc_number"
@@ -70,7 +70,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
 
     <div class="admin__field _required field-date" id="<?php /* @noEscape */ echo $code; ?>_cc_type_exp_div">
         <label for="<?php /* @noEscape */ echo $code; ?>_expiration" class="admin__field-label">
-            <span><?php echo $block->escapeHtml(__('Expiration Date')); ?></span>
+            <span><?= $block->escapeHtml(__('Expiration Date')) ?></span>
         </label>
 
         <div class="admin__field-control">
@@ -82,9 +82,9 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                         'validate-cc-exp':'#<?php /* @noEscape */ echo $code; ?>_expiration_yr'
                         }">
                 <?php foreach ($block->getCcMonths() as $k => $v): ?>
-                    <option value="<?php echo $block->escapeHtml($k); ?>"
+                    <option value="<?= $block->escapeHtml($k) ?>"
                             <?php if ($k == $ccExpMonth): ?>selected="selected"<?php endif; ?>>
-                        <?php echo $block->escapeHtml($v); ?>
+                        <?= $block->escapeHtml($v) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -96,7 +96,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                 <?php foreach ($block->getCcYears() as $k => $v): ?>
                     <option value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>"
                             <?php if ($k == $ccExpYear): ?>selected="selected"<?php endif; ?>>
-                        <?php echo $block->escapeHtml($v); ?>
+                        <?= $block->escapeHtml($v) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -108,13 +108,13 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         <label class="admin__field-label"
                for="<?php /* @noEscape */ echo $code; ?>_cc_cid"
                id="<?php /* @noEscape */ echo $code; ?>_cc_type_cvv_div">
-            <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
+            <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
         </label>
 
         <div class="admin__field-control">
             <input type="text"
                    data-container="<?php /* @noEscape */ echo $code; ?>-cc-cvv"
-                   title="<?php echo $block->escapeHtml(__('Card Verification Number')); ?>"
+                   title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
                    class="admin__control-text cvv"
                    id="<?php /* @noEscape */ echo $code; ?>_cc_cid" name="payment[cc_cid]"
                    value="<?php /* @noEscape */ echo $block->getInfoData('cc_cid') ?>"
@@ -149,8 +149,8 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             'directpost-iframe',
             '<?php /* @noEscape */ echo $controller; ?>',
             '<?php /* @noEscape */ echo $orderUrl; ?>',
-            '<?php echo $block->escapeUrl($method->getCgiUrl()); ?>',
-            '<?php echo $block->escapeUrl($block->getUrl('*/*/save', [
+            '<?= $block->escapeUrl($method->getCgiUrl()) ?>',
+            '<?= $block->escapeUrl($block->getUrl('*/*/save', [
                 '_secure' => $block->getRequest()->isSecure()
             ]));?>');
 

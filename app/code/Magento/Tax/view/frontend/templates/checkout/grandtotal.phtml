@@ -15,7 +15,7 @@
     <th style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
         <strong><?php /* @escapeNotVerified */ echo __('Grand Total Excl. Tax')?></strong>
     </th>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml(__('Grand Total Excl. Tax')); ?>">
+    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml(__('Grand Total Excl. Tax')) ?>">
         <strong><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotalExclTax()) ?></strong>
     </td>
 </tr>
@@ -24,7 +24,7 @@
     <th style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
         <strong><?php /* @escapeNotVerified */ echo __('Grand Total Incl. Tax')?></strong>
     </th>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml(__('Grand Total Incl. Tax')); ?>">
+    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml(__('Grand Total Incl. Tax')) ?>">
         <strong><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></strong>
     </td>
 </tr>
@@ -33,7 +33,7 @@
     <th style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
         <strong><?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?></strong>
     </th>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml($block->getTotal()->getTitle()) ?>">
         <strong><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></strong>
     </td>
 </tr>

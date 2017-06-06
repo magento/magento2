@@ -8,7 +8,7 @@
 
 ?>
 <?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */ ?>
-<?php echo $block->getTemplatesHtml() ?>
+<?= $block->getTemplatesHtml() ?>
 <script id="custom-option-base-template" type="text/x-magento-template">
     <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="option_<%- data.id %>">
         <div class="fieldset-wrapper-title">
@@ -58,7 +58,7 @@
                             <?php /* @escapeNotVerified */ echo __('Input Type') ?>
                         </label>
                         <div class="control opt-type">
-                            <?php echo $block->getTypeSelectHtml() ?>
+                            <?= $block->getTypeSelectHtml() ?>
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
                             <label for="field-option-req">
                                 <?php /* @escapeNotVerified */ echo __('Required')?>
                             </label>
-                            <span style="display:none"><?php echo $block->getRequireSelectHtml() ?></span>
+                            <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
                         </div>
                     </div>
                 </fieldset>

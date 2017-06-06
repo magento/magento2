@@ -22,11 +22,11 @@
                 $baseAmount = $info['base_tax_amount'];
                 $title      = $info['title'];
             ?>
-            <tr class="totals tax details details-<?php /* @escapeNotVerified */ echo $taxIter; ?> <?php echo($block->getIsPlaneMode()) ? ' plane' : '';?>">
+            <tr class="totals tax details details-<?php /* @escapeNotVerified */ echo $taxIter; ?> <?= ($block->getIsPlaneMode()) ? ' plane' : '' ?>">
                 <td <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?>>
-                    <?php echo $block->escapeHtml($title); ?>
+                    <?= $block->escapeHtml($title) ?>
                     <?php if (!is_null($percent)): ?>
-                        (<?php echo (float)$percent; ?>%)
+                        (<?= (float)$percent ?>%)
                     <?php endif; ?>
                     <br />
                 </td>
@@ -51,7 +51,7 @@
             <?php /* @escapeNotVerified */ echo __('Tax'); ?>
         <?php endif;?>
     </th>
-    <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?> data-th="<?php echo $block->escapeHtml(__('Tax')); ?>">
+    <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?> data-th="<?= $block->escapeHtml(__('Tax')) ?>">
         <?php /* @escapeNotVerified */ echo $_order->formatPrice($_source->getTaxAmount()) ?>
     </td>
 </tr>

@@ -9,7 +9,7 @@
 /** @var \Magento\Multishipping\Block\Checkout\Overview $block */
 ?>
 <form action="<?php /* @escapeNotVerified */ echo $block->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}, "validation":{}}' class="form multicheckout order-review">
-    <?php echo $block->getBlockHtml('formkey'); ?>
+    <?= $block->getBlockHtml('formkey') ?>
     <div class="block block-billing">
         <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Billing Information') ?></strong></div>
         <div class="block-content">
@@ -31,9 +31,9 @@
                     <a href="<?php /* @escapeNotVerified */ echo $block->getEditBillingUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Change') ?></span></a>
                 </strong>
                 <div class="box-content">
-                    <input type="hidden" name="payment[cc_number]" value="<?php echo $block->escapeHtml($block->getPayment()->getCcNumber())?>" />
-                    <input type="hidden" name="payment[cc_cid]" value="<?php echo $block->escapeHtml($block->getPayment()->getCcCid())?>" />
-                    <?php echo $block->getPaymentHtml() ?>
+                    <input type="hidden" name="payment[cc_number]" value="<?= $block->escapeHtml($block->getPayment()->getCcNumber()) ?>" />
+                    <input type="hidden" name="payment[cc_cid]" value="<?= $block->escapeHtml($block->getPayment()->getCcCid()) ?>" />
+                    <?= $block->getPaymentHtml() ?>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                     </strong>
                     <?php if ($_rate = $block->getShippingAddressRate($_address)): ?>
                         <div class="box-content">
-                            <?php echo $block->escapeHtml($_rate->getCarrierTitle()) ?> (<?php echo $block->escapeHtml($_rate->getMethodTitle()) ?>)
+                            <?= $block->escapeHtml($_rate->getCarrierTitle()) ?> (<?= $block->escapeHtml($_rate->getMethodTitle()) ?>)
                             <?php $_excl = $block->getShippingPriceExclTax($_address); ?>
                             <?php $_incl = $block->getShippingPriceInclTax($_address); ?>
 
@@ -98,7 +98,7 @@
                                 </thead>
                                 <tbody>
                                 <?php foreach ($block->getShippingAddressItems($_address) as $_item): ?>
-                                    <?php echo $block->getRowItemHtml($_item); ?>
+                                    <?= $block->getRowItemHtml($_item) ?>
                                 <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
@@ -134,7 +134,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($block->getVirtualItems() as $_item): ?>
-                            <?php echo $block->getRowItemHtml($_item); ?>
+                            <?= $block->getRowItemHtml($_item) ?>
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
@@ -146,10 +146,10 @@
     </div>
     <?php endif; ?>
 
-    <?php echo $block->getChildHtml('items_after'); ?>
+    <?= $block->getChildHtml('items_after') ?>
 
     <div id="checkout-review-submit" class="checkout-review">
-        <?php echo $block->getChildHtml('agreements') ?>
+        <?= $block->getChildHtml('agreements') ?>
         <div class="grand totals">
             <strong class="mark"><?php /* @escapeNotVerified */ echo __('Grand Total:') ?></strong>
             <strong class="amount"><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()) ?></strong>

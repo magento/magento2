@@ -19,16 +19,16 @@
                 <?php foreach ($block->getWebsiteCollection() as $_website): ?>
                     <div class="website-name">
                         <input name="add_website_ids[]" value="<?php /* @escapeNotVerified */ echo $_website->getId() ?>" <?php if ($block->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="add_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>" type="checkbox" />
-                        <label for="add_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>"><?php echo $block->escapeHtml($_website->getName()) ?></label>
+                        <label for="add_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>"><?= $block->escapeHtml($_website->getName()) ?></label>
                     </div>
                     <dl class="webiste-groups" id="add_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>_data">
                         <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
-                            <dt><?php echo $block->escapeHtml($_group->getName()) ?></dt>
+                            <dt><?= $block->escapeHtml($_group->getName()) ?></dt>
                             <dd class="group-stores">
                                 <ul>
                                 <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
                                     <li>
-                                        <?php echo $block->escapeHtml($_store->getName()) ?>
+                                        <?= $block->escapeHtml($_store->getName()) ?>
                                     </li>
                                 <?php endforeach; ?>
                                 </ul>
@@ -57,16 +57,16 @@
                 <?php foreach ($block->getWebsiteCollection() as $_website): ?>
                     <div class="website-name">
                         <input name="remove_website_ids[]" value="<?php /* @escapeNotVerified */ echo $_website->getId() ?>" <?php if ($block->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>" type="checkbox" />
-                        <label for="remove_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>"><?php echo $block->escapeHtml($_website->getName()) ?></label>
+                        <label for="remove_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>"><?= $block->escapeHtml($_website->getName()) ?></label>
                     </div>
                     <dl class="webiste-groups" id="remove_product_website_<?php /* @escapeNotVerified */ echo $_website->getId() ?>_data">
                         <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
-                            <dt><?php echo $block->escapeHtml($_group->getName()) ?></dt>
+                            <dt><?= $block->escapeHtml($_group->getName()) ?></dt>
                             <dd class="group-stores">
                                 <ul>
                                 <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
                                     <li>
-                                        <?php echo $block->escapeHtml($_store->getName()) ?>
+                                        <?= $block->escapeHtml($_store->getName()) ?>
                                     </li>
                                 <?php endforeach; ?>
                                 </ul>

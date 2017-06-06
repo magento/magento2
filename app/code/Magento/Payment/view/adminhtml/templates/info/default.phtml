@@ -11,13 +11,13 @@
  */
 $specificInfo = $block->getSpecificInformation();
 ?>
-<?php echo $block->escapeHtml($block->getMethod()->getTitle()); ?>
+<?= $block->escapeHtml($block->getMethod()->getTitle()) ?>
 
 <?php if ($specificInfo): ?>
     <table class="data-table admin__table-secondary">
     <?php foreach ($specificInfo as $label => $value):?>
         <tr>
-            <th><?php echo $block->escapeHtml($label)?>:</th>
+            <th><?= $block->escapeHtml($label) ?>:</th>
             <td>
                 <?php /* @noEscape */ echo nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true))));?>
             </td>
@@ -26,4 +26,4 @@ $specificInfo = $block->getSpecificInformation();
     </table>
 <?php endif;?>
 
-<?php echo $block->getChildHtml()?>
+<?= $block->getChildHtml() ?>

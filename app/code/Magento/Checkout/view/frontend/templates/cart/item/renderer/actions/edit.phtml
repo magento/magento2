@@ -11,7 +11,7 @@
 <?php if ($block->isProductVisibleInSiteVisibility()): ?>
     <a class="action action-edit"
        href="<?php /* @escapeNotVerified */ echo $block->getConfigureUrl() ?>"
-       title="<?php echo $block->escapeHtml(__('Edit item parameters')); ?>">
+       title="<?= $block->escapeHtml(__('Edit item parameters')) ?>">
         <span>
             <?php /* @escapeNotVerified */ echo __('Edit') ?>
         </span>

@@ -8,12 +8,12 @@
 
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?php echo $block->getBackButtonHtml() ?>
-    <?php echo $block->getResetButtonHtml() ?>
-    <?php echo $block->getSaveButtonHtml() ?>
+    <?= $block->getBackButtonHtml() ?>
+    <?= $block->getResetButtonHtml() ?>
+    <?= $block->getSaveButtonHtml() ?>
 </div>
 <?php if ($form): ?>
-<?php echo $form->toHtml(); ?>
+<?= $form->toHtml() ?>
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 

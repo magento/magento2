@@ -12,7 +12,7 @@
 /** @var $block \Magento\User\Block\Role\Tab\Edit */
 ?>
 
-<?php echo $block->getChildHtml(); ?>
+<?= $block->getChildHtml() ?>
 
 <fieldset class="fieldset form-inline entry-edit">
     <legend class="legend">
@@ -24,8 +24,8 @@
 
         <div class="control">
             <select id="all" name="all" onchange="jQuery('[data-role=tree-resources-container]').toggle()" class="select">
-                <option value="0" <?php echo($block->isEverythingAllowed() ? '' : 'selected="selected"'); ?>><?php /* @escapeNotVerified */ echo __('Custom') ?></option>
-                <option value="1" <?php echo($block->isEverythingAllowed() ? 'selected="selected"' : ''); ?>><?php /* @escapeNotVerified */ echo __('All') ?></option>
+                <option value="0" <?= ($block->isEverythingAllowed() ? '' : 'selected="selected"') ?>><?php /* @escapeNotVerified */ echo __('Custom') ?></option>
+                <option value="1" <?= ($block->isEverythingAllowed() ? 'selected="selected"' : '') ?>><?php /* @escapeNotVerified */ echo __('All') ?></option>
             </select>
         </div>
     </div>

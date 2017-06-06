@@ -31,7 +31,7 @@
                            disabled="disabled"
                         <?php endif; ?>>
                 </td>
-                <td class="opt-price-type"><?php echo $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %></td>
+                <td class="opt-price-type"><?= $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %></td>
                 <?php else : ?>
                 <input name="product[options][<%- data.option_id %>][price]" type="hidden">
                 <input id="product_option_<%- data.option_id %>_price_type" name="product[options][<%- data.option_id %>][price_type]" type="hidden">

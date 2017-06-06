@@ -10,9 +10,9 @@
 <ul class="dropdown-menu">
     <?php foreach ($items as $item): ?>
     <li id="<?php /* @escapeNotVerified */ echo $item['id'] ?>" class="item">
-        <a href="<?php /* @escapeNotVerified */ echo $item['url'] ?>" class="title"><?php echo $block->escapeHtml($item['name']) ?></a>
+        <a href="<?php /* @escapeNotVerified */ echo $item['url'] ?>" class="title"><?= $block->escapeHtml($item['name']) ?></a>
         <div class="type"><?php /* @escapeNotVerified */ echo $item['type'] ?></div>
-        <?php echo $block->escapeHtml($item['description']) ?>
+        <?= $block->escapeHtml($item['description']) ?>
     </li>
     <?php endforeach ?>
 </ul>

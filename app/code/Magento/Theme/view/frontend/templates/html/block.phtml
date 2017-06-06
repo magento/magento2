@@ -10,6 +10,6 @@
 <div class="block <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>">
     <div class="block-title <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>-title"><strong><?php /* @escapeNotVerified */ echo $block->getBlockTitle(); ?></strong></div>
     <div class="block-content <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>-content">
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
     </div>
 </div>

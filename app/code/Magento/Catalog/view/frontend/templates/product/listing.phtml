@@ -22,8 +22,8 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
 <?php if (!$_productCollection->count()): ?>
 <p class="message note"><?php /* @escapeNotVerified */ echo __('We can\'t find products matching the selection.') ?></p>
 <?php else: ?>
-<?php echo $block->getToolbarHtml() ?>
-<?php echo $block->getAdditionalHtml() ?>
+<?= $block->getToolbarHtml() ?>
+<?= $block->getAdditionalHtml() ?>
 <?php
     if ($block->getMode() == 'grid') {
         $viewMode = 'grid';
@@ -45,7 +45,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
             <div class="product">
                 <?php // Product Image ?>
                 <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo">
-                    <?php echo $block->getImage($_product, $image)->toHtml(); ?>
+                    <?= $block->getImage($_product, $image)->toHtml() ?>
                 </a>
                 <div class="product details">
                 <?php
@@ -92,10 +92,10 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
 
                 </div>
             </div>
-        <?php echo($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
+        <?= ($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
         <?php endforeach; ?>
     </ol>
 </div>
-<?php echo $block->getToolbarHtml() ?>
+<?= $block->getToolbarHtml() ?>
 <?php endif; ?>
 <?php /* @escapeNotVerified */ echo $time_taken = microtime(true) - $start; ?>

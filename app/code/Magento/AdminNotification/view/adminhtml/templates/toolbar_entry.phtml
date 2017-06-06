@@ -40,7 +40,7 @@
                     $notificationDescriptionLength = $block->getNotificationDescriptionLength();
                 ?>
                 <strong class="notifications-entry-title">
-                    <?php echo $block->escapeHtml($notification->getTitle()); ?>
+                    <?= $block->escapeHtml($notification->getTitle()) ?>
                 </strong>
                 <?php if (strlen($notificationDescription) > $notificationDescriptionLength) : ?>
                     <p class="notifications-entry-description _cutted">

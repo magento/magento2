@@ -46,13 +46,13 @@
     continue;
 } ?>
         <tbody>
-            <?php echo $block->getItemHtml($_item) ?>
+            <?= $block->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
         <tfoot>
-            <?php echo $block->getTotalsHtml($_creditmemo);?>
+            <?= $block->getTotalsHtml($_creditmemo) ?>
         </tfoot>
     </table>
 </div>
-<?php echo $block->getCommentsHtml($_creditmemo)?>
+<?= $block->getCommentsHtml($_creditmemo) ?>
 <?php endforeach; ?>

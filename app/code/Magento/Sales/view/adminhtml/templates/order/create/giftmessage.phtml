@@ -15,7 +15,7 @@
         <br>
         <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('main', $block->getQuote(), $block->getStoreId())): ?>
             <p><?php /* @escapeNotVerified */ echo __('Leave this box blank if you don\'t want to leave a gift message for the entire order.') ?></p>
-            <?php echo $block->getFormHtml($block->getQuote(), 'main') ?>
+            <?= $block->getFormHtml($block->getQuote(), 'main') ?>
         <?php endif; ?>
     </fieldset>
 <script>

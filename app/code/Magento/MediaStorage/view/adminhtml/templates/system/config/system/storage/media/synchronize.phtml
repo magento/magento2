@@ -177,7 +177,7 @@ require([
 });
 </script>
 
-<?php echo $block->getButtonHtml() ?>
+<?= $block->getButtonHtml() ?>
 <span class="sync-indicator no-display" id="sync_span">
     <img alt="Synchronize" style="margin:0 5px" src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/process_spinner.gif') ?>"/>
     <span id="sync_message_span"></span>

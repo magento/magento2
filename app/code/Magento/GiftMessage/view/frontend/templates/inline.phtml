@@ -82,9 +82,9 @@
                                  <?php /* @escapeNotVerified */ echo __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?>
                              </div>
                              <div class="img photo container">
-                                 <?php echo $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml(); ?>
+                                 <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
                              </div>
-                             <strong class="product name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
+                             <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
                          </div>
                          <div class="options">
                              <div class="options-items-container" id="options-items-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"></div>
@@ -209,9 +209,9 @@
                          <div class="product">
                              <div class="number"><?php /* @escapeNotVerified */ echo __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?></div>
                              <div class="img photo container">
-                                 <?php echo $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml(); ?>
+                                 <?= $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
                              </div>
-                             <strong class="product-name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
+                             <strong class="product-name"><?= $block->escapeHtml($_product->getName()) ?></strong>
                          </div>
                          <div class="options">
                              <div class="options-items-container" id="options-items-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"></div>

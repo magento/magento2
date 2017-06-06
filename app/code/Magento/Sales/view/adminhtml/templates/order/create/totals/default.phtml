@@ -10,7 +10,7 @@
 <tr class="<?php /* @escapeNotVerified */ echo $block->getTotal()->getCode(); ?> row-totals">
     <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>
+            <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
     </td>
     <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="admin__total-amount">

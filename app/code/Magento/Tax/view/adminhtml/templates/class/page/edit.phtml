@@ -5,12 +5,12 @@
  */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?php echo $block->getBackButtonHtml(); ?>
-    <?php echo $block->getResetButtonHtml(); ?>
-    <?php echo $block->getDeleteButtonHtml(); ?>
-    <?php echo $block->getSaveButtonHtml(); ?>
+    <?= $block->getBackButtonHtml() ?>
+    <?= $block->getResetButtonHtml() ?>
+    <?= $block->getDeleteButtonHtml() ?>
+    <?= $block->getSaveButtonHtml() ?>
 </div>
-<?php echo $block->getRenameFormHtml(); ?>
+<?= $block->getRenameFormHtml() ?>
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 

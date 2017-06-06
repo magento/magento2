@@ -50,8 +50,8 @@ require([
             showTime: false,
             showHour: false,
             showMinute: false,
-            serverTimezoneSeconds: <?php echo (int) $block->getStoreTimestamp(); ?>,
-            serverTimezoneOffset: <?php echo (int) $block->getTimezoneOffsetSeconds(); ?>,
+            serverTimezoneSeconds: <?= (int) $block->getStoreTimestamp() ?>,
+            serverTimezoneOffset: <?= (int) $block->getTimezoneOffsetSeconds() ?>,
             yearRange: '<?php /* @escapeNotVerified */ echo $block->getYearRange() ?>'
         }
     });

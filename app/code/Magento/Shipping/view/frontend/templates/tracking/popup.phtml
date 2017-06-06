@@ -43,21 +43,21 @@ $results = $block->getTrackingInfo();
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="message info empty">
-                    <div><?php echo $block->escapeHtml(__('There is no tracking available for this shipment.')); ?></div>
+                    <div><?= $block->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php else: ?>
         <div class="message info empty">
-            <div><?php echo $block->escapeHtml(__('There is no tracking available.')); ?></div>
+            <div><?= $block->escapeHtml(__('There is no tracking available.')) ?></div>
         </div>
     <?php endif; ?>
     <div class="actions">
         <button type="button"
-                title="<?php echo $block->escapeHtml(__('Close Window')); ?>"
+                title="<?= $block->escapeHtml(__('Close Window')) ?>"
                 class="action close"
                 onclick="window.close(); window.opener.focus();">
-            <span><?php echo $block->escapeHtml(__('Close Window')); ?></span>
+            <span><?= $block->escapeHtml(__('Close Window')) ?></span>
         </button>
     </div>
 </div>

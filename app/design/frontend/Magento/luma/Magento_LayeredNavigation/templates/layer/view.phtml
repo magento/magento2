@@ -21,7 +21,7 @@
             <strong data-role="title"><?php /* @escapeNotVerified */ echo __('Shop By') ?></strong>
         </div>
         <div class="block-content filter-content">
-            <?php echo $block->getChildHtml('state') ?>
+            <?= $block->getChildHtml('state') ?>
 
             <?php if ($block->getLayer()->getState()->getFilters()): ?>
                 <div class="block-actions filter-actions">

@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="edit-attribute-set attribute-set-col">
-        <?php echo $block->getSetFormHtml() ?>
+        <?= $block->getSetFormHtml() ?>
         <script>
             require([
                 "jquery",
@@ -38,8 +38,8 @@
             <p class="note-block"><?php /* @escapeNotVerified */ echo __('Double click on a group to rename it.') ?></p>
         <?php endif; ?>
 
-        <?php echo $block->getSetsFilterHtml() ?>
-        <?php echo $block->getGroupTreeHtml() ?>
+        <?= $block->getSetsFilterHtml() ?>
+        <?= $block->getGroupTreeHtml() ?>
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
@@ -216,7 +216,7 @@
 
                             if( editSet.SystemNodesExists(editSet.currentNode) ) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>'
+                                    content: '<?= $block->escapeJs(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>'
                                 });
                                 return;
                             }
@@ -243,7 +243,7 @@
                         SystemNodesExists : function(currentNode) {
                             if (!currentNode) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('Please select a node.')) ?>'
+                                    content: '<?= $block->escapeJs(__('Please select a node.')) ?>'
                                 });
                                 return;
                             }
@@ -368,7 +368,7 @@
 
                         failure : function(o) {
                             alert({
-                                content: '<?php echo $block->escapeJs(__('Sorry, we\'re unable to complete this request.')) ?>'
+                                content: '<?= $block->escapeJs(__('Sorry, we\'re unable to complete this request.')) ?>'
                             });
                         },
 
@@ -385,7 +385,7 @@
                         rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                             if (node.attributes.is_user_defined == 0) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                    content: '<?= $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
                                 });
                                 return false;
                             } else {
@@ -401,7 +401,7 @@
 
                             if (node.attributes.is_unassignable == 0) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                    content: '<?= $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
                                 });
                                 return false;
                             } else {

@@ -23,16 +23,16 @@ $columns = $block->getColumns();
                     <?php $column->setItem($item); echo $column->toHtml($item);?>
                 <?php endforeach; ?>
             </div>
-        <?php echo($iterator == count($block->getItems())+1) ? '</li>' : '' ?>
+        <?= ($iterator == count($block->getItems())+1) ? '</li>' : '' ?>
         <?php endforeach; ?>
     </ol>
     <?php else: ?>
         <div class="message info empty">
-            <span><?php echo $block->escapeHtml(__('This Wish List has no Items'));?></span>
+            <span><?= $block->escapeHtml(__('This Wish List has no Items')) ?></span>
         </div>
     <?php endif; ?>
 </div>
 
 <?php foreach ($columns as $column): ?>
-    <?php echo $column->getAdditionalHtml();?>
+    <?= $column->getAdditionalHtml() ?>
 <?php endforeach; ?>

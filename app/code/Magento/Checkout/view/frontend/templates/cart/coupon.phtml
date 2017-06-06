@@ -19,12 +19,12 @@
                                                "removeCouponSelector": "#remove-coupon",
                                                "applyButton": "button.action.apply",
                                                "cancelButton": "button.action.cancel"}}'>
-            <div class="fieldset coupon<?php echo strlen($block->getCouponCode()) ? ' applied' : ''?>">
+            <div class="fieldset coupon<?= strlen($block->getCouponCode()) ? ' applied' : '' ?>">
                 <input type="hidden" name="remove" id="remove-coupon" value="0" />
                 <div class="field">
                     <label for="coupon_code" class="label"><span><?php /* @escapeNotVerified */ echo __('Enter discount code') ?></span></label>
                     <div class="control">
-                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $block->escapeHtml($block->getCouponCode()) ?>" placeholder="<?php echo $block->escapeHtml(__('Enter discount code'));?>" />
+                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?= $block->escapeHtml($block->getCouponCode()) ?>" placeholder="<?= $block->escapeHtml(__('Enter discount code')) ?>" />
                     </div>
                 </div>
                 <div class="actions-toolbar">

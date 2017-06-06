@@ -11,7 +11,7 @@
 </div>
 
 <div class="form-inline" id="<?php /* @escapeNotVerified */ echo $block->getNameInLayout() ?>" style="display:none">
-    <?php echo $block->getFormHtml();?>
-    <?php echo $block->getChildHtml('form_after');?>
+    <?= $block->getFormHtml() ?>
+    <?= $block->getChildHtml('form_after') ?>
 </div>
 

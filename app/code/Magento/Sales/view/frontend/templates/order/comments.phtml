@@ -19,7 +19,7 @@
         <dl class="order comments">
             <?php foreach ($block->getComments() as $_commentItem): ?>
                 <dt class="comment date"><?php /* @escapeNotVerified */ echo $block->formatDate($_commentItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?></dt>
-                <dd class="comment text"><?php echo $block->escapeHtml($_commentItem->getComment()) ?></dd>
+                <dd class="comment text"><?= $block->escapeHtml($_commentItem->getComment()) ?></dd>
             <?php endforeach; ?>
         </dl>
     </div>

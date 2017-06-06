@@ -12,6 +12,6 @@ if ($block->hasRequiredOptions()) {
 ?>
 <div class="product-options-wrapper" id="product-options-wrapper"<?php /* @escapeNotVerified */ echo $required; ?>>
     <div class="fieldset" tabindex="0">
-        <?php echo $block->getChildHtml('', true);?>
+        <?= $block->getChildHtml('', true) ?>
     </div>
 </div>

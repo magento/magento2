@@ -33,8 +33,8 @@
                         $i++;
                     } ?>
                     <tbody class="<?php /* @escapeNotVerified */ echo $i%2 ? 'even' : 'odd' ?>">
-                        <?php echo $block->getItemHtml($_item) ?>
-                        <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                        <?= $block->getItemHtml($_item) ?>
+                        <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                     </tbody>
                 <?php endforeach; ?>
             </table>

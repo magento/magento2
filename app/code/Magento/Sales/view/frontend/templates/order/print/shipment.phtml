@@ -27,7 +27,7 @@
                 </thead>
                 <?php foreach ($block->getShipmentItems($shipment) as $item): ?>
                 <tbody>
-                    <?php echo $block->getItemHtml($item) ?>
+                    <?= $block->getItemHtml($item) ?>
                 </tbody>
                 <?php endforeach; ?>
             </table>
@@ -42,7 +42,7 @@
                         <strong><?php /* @escapeNotVerified */ echo __('Shipping Address') ?></strong>
                     </div>
                     <div class="box-content">
-                        <address><?php echo $block->getShipmentAddressFormattedHtml($shipment); ?></address>
+                        <address><?= $block->getShipmentAddressFormattedHtml($shipment) ?></address>
                     </div>
                 </div>
 
@@ -51,13 +51,13 @@
                         <strong><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></strong>
                     </div>
                     <div class="box-content">
-                    <?php echo $block->escapeHtml($block->getObjectData($order, 'shipping_description')); ?>
+                    <?= $block->escapeHtml($block->getObjectData($order, 'shipping_description')) ?>
                     <?php $tracks = $block->getShipmentTracks($shipment);
                     if ($tracks): ?>
                         <dl class="order-tracking">
                         <?php foreach ($tracks as $track): ?>
-                            <dt class="tracking-title"><?php echo $block->escapeHtml($block->getObjectData($track, 'title')); ?></dt>
-                            <dd class="tracking-content"><?php echo $block->escapeHtml($block->getObjectData($track, 'number')); ?></dd>
+                            <dt class="tracking-title"><?= $block->escapeHtml($block->getObjectData($track, 'title')) ?></dt>
+                            <dd class="tracking-content"><?= $block->escapeHtml($block->getObjectData($track, 'number')) ?></dd>
                             <?php endforeach; ?>
                         </dl>
                     <?php endif; ?>
@@ -69,7 +69,7 @@
                         <strong><?php /* @escapeNotVerified */ echo __('Billing Address') ?></strong>
                     </div>
                     <div class="box-content">
-                        <address><?php echo $block->getBillingAddressFormattedHtml($order); ?></address>
+                        <address><?= $block->getBillingAddressFormattedHtml($order) ?></address>
                     </div>
                 </div>
 
@@ -78,7 +78,7 @@
                         <strong><?php /* @escapeNotVerified */ echo __('Payment Method') ?></strong>
                     </div>
                     <div class="box-content">
-                        <?php echo $block->getPaymentInfoHtml() ?>
+                        <?= $block->getPaymentInfoHtml() ?>
                     </div>
                 </div>
             </div>

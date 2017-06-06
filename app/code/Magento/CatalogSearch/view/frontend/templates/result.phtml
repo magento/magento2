@@ -8,7 +8,7 @@
 
 ?>
 <?php if ($block->getResultCount()): ?>
-<?php echo $block->getChildHtml('tagged_product_list_rss_link'); ?>
+<?= $block->getChildHtml('tagged_product_list_rss_link') ?>
 <div class="search results">
     <?php if ($messages = $block->getNoteMessages()):?>
     <div class="message notice">
@@ -19,14 +19,14 @@
         </div>
     </div>
     <?php endif; ?>
-    <?php echo $block->getProductListHtml() ?>
+    <?= $block->getProductListHtml() ?>
 </div>
 <?php else: ?>
 
 <div class="message notice">
     <div>
         <?php /* @escapeNotVerified */ echo($block->getNoResultText()) ? $block->getNoResultText() : __('Your search returned no results.') ?>
-        <?php echo $block->getAdditionalHtml() ?>
+        <?= $block->getAdditionalHtml() ?>
         <?php if ($messages = $block->getNoteMessages()):?>
             <?php foreach ($messages as $message):?>
                 <br /><?php /* @escapeNotVerified */ echo $message?>

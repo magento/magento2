@@ -38,25 +38,25 @@
                     <?php else: ?>
                     <dl class="items methods-shipping">
                         <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-                            <dt class="item-title"><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></dt>
+                            <dt class="item-title"><?= $block->escapeHtml($block->getCarrierName($code)) ?></dt>
                             <dd class="item-content">
                                 <fieldset class="fieldset">
                                     <legend class="legend">
-                                        <span><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></span>
+                                        <span><?= $block->escapeHtml($block->getCarrierName($code)) ?></span>
                                     </legend><br>
                                     <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
                                     <div class="field choice">
                                     <?php if ($_rate->getErrorMessage()): ?>
-                                        <strong><?php echo $block->escapeHtml($_rate->getCarrierTitle()) ?>: <?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></strong>
+                                        <strong><?= $block->escapeHtml($_rate->getCarrierTitle()) ?>: <?= $block->escapeHtml($_rate->getErrorMessage()) ?></strong>
                                     <?php else: ?>
                                         <div class="control">
                                             <?php if ($_sole) : ?>
-                                                <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?php echo $block->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" class="radio solo method" checked="checked"/>
+                                                <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?= $block->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" class="radio solo method" checked="checked"/>
                                             <?php else: ?>
                                                 <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$block->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
                                             <?php endif; ?>
                                         </div>
-                                        <label for="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"><?php echo $block->escapeHtml($_rate->getMethodTitle()) ?>
+                                        <label for="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"><?= $block->escapeHtml($_rate->getMethodTitle()) ?>
                                             <?php $_excl = $block->getShippingPrice($_address, $_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
                                             <?php $_incl = $block->getShippingPrice($_address, $_rate->getPrice(), true); ?>
                                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
@@ -99,8 +99,8 @@
                             <tbody>
                             <?php foreach ($block->getAddressItems($_address) as $_item): ?>
                                 <tr>
-                                    <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>"><?php echo $block->getItemHtml($_item->getQuoteItem()) ?></td>
-                                    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>"><?php /* @escapeNotVerified */ echo $_item->getQty() ?></td>
+                                    <td class="col item" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getItemHtml($_item->getQuoteItem()) ?></td>
+                                    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?php /* @escapeNotVerified */ echo $_item->getQty() ?></td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -111,7 +111,7 @@
         </div>
     </div>
     <?php endforeach; ?>
-    <?php echo $block->getChildHtml('checkout_billing_items') ?>
+    <?= $block->getChildHtml('checkout_billing_items') ?>
     <div class="actions-toolbar">
         <div class="primary">
             <button class="action primary continue" type="submit"><span><?php /* @escapeNotVerified */ echo __('Continue to Billing Information') ?></span></button>

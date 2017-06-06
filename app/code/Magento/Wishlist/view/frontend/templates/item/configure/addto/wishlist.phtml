@@ -10,7 +10,7 @@
 ?>
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
     <a href="#" data-post='<?php /* @noEscape */ echo $block->getUpdateParams(); ?>' class="action towishlist updated" data-action="add-to-wishlist">
-        <span><?php echo $block->escapeHtml(__('Update Wish List')) ?></span>
+        <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
     </a>
 <?php endif; ?>
 <script type="text/x-magento-init">

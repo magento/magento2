@@ -36,22 +36,22 @@
         </div>
 
         <?php if ($block->getProductId()): ?>
-            <?php echo $block->getDeleteButtonHtml() ?>
+            <?= $block->getDeleteButtonHtml() ?>
         <?php endif; ?>
         <?php if ($block->getProductSetId()): ?>
-            <?php echo $block->getChangeAttributeSetButtonHtml() ?>
-            <?php echo $block->getSaveSplitButtonHtml(); ?>
+            <?= $block->getChangeAttributeSetButtonHtml() ?>
+            <?= $block->getSaveSplitButtonHtml() ?>
         <?php endif; ?>
-        <?php echo $block->getBackButtonHtml() ?>
+        <?= $block->getBackButtonHtml() ?>
     </div>
 </div>
 <?php if ($block->getUseContainer()): ?>
 <form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" enctype="multipart/form-data"
       data-form="edit-product" data-product-id="<?php /* @escapeNotVerified */ echo $block->getProduct()->getId()?>">
 <?php endif; ?>
-    <?php echo $block->getBlockHtml('formkey')?>
+    <?= $block->getBlockHtml('formkey') ?>
     <div data-role="tabs" id="product-edit-form-tabs"></div> <?php /* @TODO: remove id after elimination of setDestElementId('product-edit-form-tabs') */?>
-    <?php echo $block->getChildHtml('product-type-tabs') ?>
+    <?= $block->getChildHtml('product-type-tabs') ?>
     <input type="hidden" id="product_type_id" value="<?php /* @escapeNotVerified */ echo $block->getProduct()->getTypeId()?>"/>
     <input type="hidden" id="attribute_set_id" value="<?php /* @escapeNotVerified */ echo $block->getProduct()->getAttributeSetId()?>"/>
     <button type="submit" class="hidden"></button>

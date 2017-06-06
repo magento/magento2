@@ -13,29 +13,29 @@
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()): ?>
-    <fieldset class="admin__fieldset fieldset <?php /* @escapeNotVerified */ echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+    <fieldset class="admin__fieldset fieldset <?php /* @escapeNotVerified */ echo $_element->getClass() ?>" id="<?= $_element->getHtmlId() ?>">
 <?php endif; ?>
 
     <?php if ($_element->getLegend()): ?>
         <legend class="admin__legend legend">
             <span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span>
-            <?php echo $block->getHintHtml() ?>
+            <?= $block->getHintHtml() ?>
         </legend><br/>
         <?php /* @escapeNotVerified */ echo $_element->getHeaderBar() ?>
     <?php else: ?>
-        <?php echo $block->getHintHtml() ?>
+        <?= $block->getHintHtml() ?>
     <?php endif; ?>
         <div class="admin__fieldset tree-store-scope">
             <?php if ($_element->getComment()): ?>
-            <p class="comment"><?php echo $block->escapeHtml($_element->getComment()) ?></p>
+            <p class="comment"><?= $block->escapeHtml($_element->getComment()) ?></p>
             <?php endif; ?>
             <?php if ($_element->hasHtmlContent()): ?>
-               <?php echo $_element->getHtmlContent(); ?>
+               <?= $_element->getHtmlContent() ?>
             <?php else: ?>
-                <?php echo $_element->getChildrenHtml(); ?>
+                <?= $_element->getChildrenHtml() ?>
             <?php endif; ?>
         </div>
-<?php echo $_element->getSubFieldsetHtml() ?>
+<?= $_element->getSubFieldsetHtml() ?>
 
 <?php if (!$_element->getNoContainer()): ?>
     </fieldset>

@@ -26,7 +26,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             </thead>
             <tfoot>
             <tr>
-                <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
+                <td colspan="<?= count($block->getColumns())+$_colspan ?>" class="col-actions-add">
                     <button id="addToEndBtn<?php /* @escapeNotVerified */ echo $_htmlId; ?>" class="action-add" title="<?php /* @escapeNotVerified */ echo __('Add'); ?>" type="button">
                         <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?></span>
                     </button>

@@ -34,10 +34,10 @@
                                value="<?php /* @escapeNotVerified */ echo $_link->getId(); ?>" <?php /* @escapeNotVerified */ echo $block->getLinkCheckedValue($_link); ?> />
                     <?php endif; ?>
                     <label class="label" for="links_<?php /* @escapeNotVerified */ echo $_link->getId() ?>">
-                        <span><?php echo $block->escapeHtml($_link->getTitle()); ?></span>
+                        <span><?= $block->escapeHtml($_link->getTitle()) ?></span>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
                             <a class="sample link"
-                               href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?php echo $block->getIsOpenInNewWindow() ? 'target="_blank"' : ''; ?>>
+                               href="<?php /* @escapeNotVerified */ echo $block->getLinkSampleUrl($_link) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
                                 <?php /* @escapeNotVerified */ echo __('sample') ?>
                             </a>
                         <?php endif; ?>

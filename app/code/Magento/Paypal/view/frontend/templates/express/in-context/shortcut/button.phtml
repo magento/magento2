@@ -20,10 +20,10 @@ $config = [
 
 ?>
 <div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
-     class="paypal checkout paypal-logo <?php echo $block->escapeHtml($block->getContainerId()); ?>-container">
-    <a data-action="<?php echo $block->escapeHtml($block->getLinkAction()); ?>" href="#">
+     class="paypal checkout paypal-logo <?= $block->escapeHtml($block->getContainerId()) ?>-container">
+    <a data-action="<?= $block->escapeHtml($block->getLinkAction()) ?>" href="#">
         <img class="paypal-button-hidden"
-             src="<?php echo $block->escapeHtml($block->getImageUrl()); ?>"
+             src="<?= $block->escapeHtml($block->getImageUrl()) ?>"
              alt="Check out with PayPal" />
     </a>
 </div>

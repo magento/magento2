@@ -10,12 +10,12 @@
  ?>
 <?php /* @escapeNotVerified */ echo $block->getFormInitScripts() ?>
 <?php if ($block->getButtonsHtml('header')): ?>
-    <div class="page-form-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>><?php echo $block->getButtonsHtml('header') ?></div>
+    <div class="page-form-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>><?= $block->getButtonsHtml('header') ?></div>
 <?php endif; ?>
-<?php echo $block->getFormHtml() ?>
+<?= $block->getFormHtml() ?>
 <?php if ($block->hasFooterButtons()): ?>
     <div class="content-footer">
-        <p class="form-buttons"><?php echo $block->getButtonsHtml('footer') ?></p>
+        <p class="form-buttons"><?= $block->getButtonsHtml('footer') ?></p>
     </div>
 <?php endif; ?>
 <script>

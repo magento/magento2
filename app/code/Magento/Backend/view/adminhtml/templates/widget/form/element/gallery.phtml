@@ -22,7 +22,7 @@
 
 <tfoot class="gallery">
 <tr class="gallery">
-<td class="gallery v-middle a-left"colspan="5"><?php echo $block->getAddButtonHtml() ?></td>
+<td class="gallery v-middle a-left"colspan="5"><?= $block->getAddButtonHtml() ?></td>
 </tr>
 </tfoot>
 
@@ -30,15 +30,15 @@
 
 <?php $i = 0; if (!is_null($block->getValues())): ?>
     <?php foreach ($block->getValues() as $image): $i++; ?>
-        <tr id="<?php echo $block->getElement()->getHtmlId() ?>_tr_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" class="gallery">
+        <tr id="<?= $block->getElement()->getHtmlId() ?>_tr_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>
             <td class="gallery" align="center" style="vertical-align:bottom;">
-            <a href="<?php /* @escapeNotVerified */ echo $image->setType($type)->getSourceUrl() ?>" target="_blank" onclick="imagePreview('<?php echo $block->getElement()->getHtmlId() ?>_image_<?php /* @escapeNotVerified */ echo $type ?>_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>');return false;">
-            <img id="<?php echo $block->getElement()->getHtmlId() ?>_image_<?php /* @escapeNotVerified */ echo $type ?>_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" src="<?php /* @escapeNotVerified */ echo $image->setType($type)->getSourceUrl() ?>?<?php /* @escapeNotVerified */ echo time() ?>" alt="<?php /* @escapeNotVerified */ echo $image->getValue() ?>" height="25" class="small-image-preview v-middle"/></a><br/>
+            <a href="<?php /* @escapeNotVerified */ echo $image->setType($type)->getSourceUrl() ?>" target="_blank" onclick="imagePreview('<?= $block->getElement()->getHtmlId() ?>_image_<?php /* @escapeNotVerified */ echo $type ?>_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>');return false;">
+            <img id="<?= $block->getElement()->getHtmlId() ?>_image_<?php /* @escapeNotVerified */ echo $type ?>_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" src="<?php /* @escapeNotVerified */ echo $image->setType($type)->getSourceUrl() ?>?<?php /* @escapeNotVerified */ echo time() ?>" alt="<?php /* @escapeNotVerified */ echo $image->getValue() ?>" height="25" class="small-image-preview v-middle"/></a><br/>
             <input type="file" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_<?php /* @escapeNotVerified */ echo $type ?>[<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" size="1"></td>
         <?php endforeach; ?>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getParentName() ?>[position][<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" value="<?php /* @escapeNotVerified */ echo $image->getPosition() ?>" id="<?php echo $block->getElement()->getHtmlId() ?>_position_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" size="3"/></td>
-        <td class="gallery" align="center" style="vertical-align:bottom;"><?php echo $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getParentName() ?>[delete][<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" id="<?php echo $block->getElement()->getHtmlId() ?>_delete_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><input type="input" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getParentName() ?>[position][<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" value="<?php /* @escapeNotVerified */ echo $image->getPosition() ?>" id="<?= $block->getElement()->getHtmlId() ?>_position_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>" size="3"/></td>
+        <td class="gallery" align="center" style="vertical-align:bottom;"><?= $block->getDeleteButtonHtml($image->getValueId()) ?><input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getParentName() ?>[delete][<?php /* @escapeNotVerified */ echo $image->getValueId() ?>]" id="<?= $block->getElement()->getHtmlId() ?>_delete_<?php /* @escapeNotVerified */ echo $image->getValueId() ?>"/></td>
         </tr>
     <?php endforeach; ?>
 <?php endif; ?>

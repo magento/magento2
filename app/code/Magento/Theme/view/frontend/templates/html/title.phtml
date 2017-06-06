@@ -25,6 +25,6 @@ if (trim($block->getPageHeading())) {
         <?php endif; ?>>
         <?php /* @escapeNotVerified */ echo $title ?>
     </h1>
-    <?php echo $block->getChildHtml(); ?>
+    <?= $block->getChildHtml() ?>
 </div>
 <?php endif; ?>

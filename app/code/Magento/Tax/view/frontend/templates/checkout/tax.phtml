@@ -32,7 +32,7 @@
             <?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?>
         <?php endif;?>
     </th>
-    <td style="<?php /* @escapeNotVerified */ echo $_style ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+    <td style="<?php /* @escapeNotVerified */ echo $_style ?>" class="amount" data-th="<?= $block->escapeHtml($block->getTotal()->getTitle()) ?>">
         <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?>
     </td>
 </tr>
@@ -51,14 +51,14 @@
         <?php foreach ($rates as $rate): ?>
             <tr class="totals-tax-details details-<?php /* @escapeNotVerified */ echo $taxIter; ?>">
                 <th class="mark" style="<?php /* @escapeNotVerified */ echo $_style ?>" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" scope="row">
-                    <?php echo $block->escapeHtml($rate['title']); ?>
+                    <?= $block->escapeHtml($rate['title']) ?>
                     <?php if (!is_null($rate['percent'])): ?>
-                        (<?php echo (float)$rate['percent']; ?>%)
+                        (<?= (float)$rate['percent'] ?>%)
                     <?php endif; ?>
                 </th>
                 <?php if ($isFirst): ?>
-                    <td style="<?php /* @escapeNotVerified */ echo $_style ?>" class="amount" rowspan="<?php echo count($rates); ?>"
-                       data-th="<?php echo $block->escapeHtml($rate['title']); ?><?php if (!is_null($rate['percent'])): ?>(<?php echo (float)$rate['percent']; ?>%)<?php endif; ?>">
+                    <td style="<?php /* @escapeNotVerified */ echo $_style ?>" class="amount" rowspan="<?= count($rates) ?>"
+                       data-th="<?= $block->escapeHtml($rate['title']) ?><?php if (!is_null($rate['percent'])): ?>(<?= (float)$rate['percent'] ?>%)<?php endif; ?>">
                         <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
                     </td>
                 <?php endif; ?>

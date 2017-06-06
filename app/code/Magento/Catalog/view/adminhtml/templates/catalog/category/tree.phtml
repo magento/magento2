@@ -10,8 +10,8 @@
 <div class="categories-side-col">
     <div class="sidebar-actions">
         <?php if ($block->getRoot()): ?>
-            <?php echo $block->getAddRootButtonHtml() ?><br/>
-            <?php echo $block->getAddSubButtonHtml() ?>
+            <?= $block->getAddRootButtonHtml() ?><br/>
+            <?= $block->getAddSubButtonHtml() ?>
         <?php endif; ?>
     </div>
     <div class="tree-actions">
@@ -399,11 +399,11 @@
                         text: <?php /* @escapeNotVerified */ echo json_encode(htmlentities($block->getRoot()->getName())) ?>,
                         draggable: false,
                         allowDrop: <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-                        id: <?php echo (int)$block->getRoot()->getId() ?>,
-                        expanded: <?php echo (int)$block->getIsWasExpanded() ?>,
-                        store_id: <?php echo (int)$block->getStore()->getId() ?>,
-                        category_id: <?php echo (int)$block->getCategoryId() ?>,
-                        parent: <?php echo (int)$block->getRequest()->getParam('parent') ?>
+                        id: <?= (int)$block->getRoot()->getId() ?>,
+                        expanded: <?= (int)$block->getIsWasExpanded() ?>,
+                        store_id: <?= (int)$block->getStore()->getId() ?>,
+                        category_id: <?= (int)$block->getCategoryId() ?>,
+                        parent: <?= (int)$block->getRequest()->getParam('parent') ?>
                     },
                     data: <?php  /* @escapeNotVerified */ echo $block->getTreeJson() ?>
                 };

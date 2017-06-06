@@ -31,13 +31,13 @@
             <div class="product-create-configuration-action" data-bind="scope: 'configurableProductGrid'">
                 <button class="action-tertiary action-menu-item" type="button" data-action="choose"
                         data-bind="click: showManuallyGrid, visible: button">
-                    <?= /* @noEscape */ __('Add Products Manually');?>
+                    <?= /* @noEscape */ __('Add Products Manually') ?>
                 </button>
             </div>
         </div>
     </div>
     <div class="fieldset">
-        <?php echo $block->getChildHtml('matrix'); ?>
+        <?= $block->getChildHtml('matrix') ?>
 
         <!-- Select Associated Product popup -->
         <div data-grid-id="associated-products-container">
@@ -66,14 +66,14 @@
                         "productsProvider": "configurable_associated_product_listing.data_source",
                         "productsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
                         "productsColumns": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns",
-                        "productsGridUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
+                        "productsGridUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/associated_grid', ['componentJson' => true]) ?>",
                         "configurableVariations": "configurableVariations"
                     }
                 }
             },
             "Magento_ConfigurableProduct/js/configurable-type-handler": {
-                "blockId": "#<?= /* @noEscape */ $block->getId()?>",
-                "tabId": "<?= /* @noEscape */ $block->getTabId()?>",
+                "blockId": "#<?= /* @noEscape */ $block->getId() ?>",
+                "tabId": "<?= /* @noEscape */ $block->getTabId() ?>",
                 "hasVariations": <?= /* @noEscape */ $block->isHasVariations() ? 'true' : 'false' ?>
             }
         }

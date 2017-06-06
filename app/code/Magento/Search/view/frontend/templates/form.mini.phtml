@@ -37,12 +37,12 @@ $helper = $this->helper('Magento\Search\Helper\Data');
                            aria-autocomplete="both"
                            autocomplete="off"/>
                     <div id="search_autocomplete" class="search-autocomplete"></div>
-                    <?php echo $block->getChildHtml() ?>
+                    <?= $block->getChildHtml() ?>
                 </div>
             </div>
             <div class="actions">
                 <button type="submit"
-                        title="<?php echo $block->escapeHtml(__('Search')) ?>"
+                        title="<?= $block->escapeHtml(__('Search')) ?>"
                         class="action search">
                     <span><?php /* @escapeNotVerified */ echo __('Search'); ?></span>
                 </button>

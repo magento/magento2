@@ -29,12 +29,12 @@ $helper = $this->helper('Magento\Catalog\Helper\Output');
             <legend id="customizeTitle" class="legend title">
                 <span><?php /* @escapeNotVerified */ echo __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>
             </legend><br />
-            <?php echo $block->getChildHtml('product_info_bundle_options_top');?>
+            <?= $block->getChildHtml('product_info_bundle_options_top') ?>
             <?php foreach ($options as $option): ?>
                 <?php if (!$option->getSelections()): ?>
                     <?php continue; ?>
                 <?php endif; ?>
-                <?php echo $block->getOptionHtml($option) ?>
+                <?= $block->getOptionHtml($option) ?>
             <?php endforeach; ?>
         </fieldset>
     <?php else: ?>

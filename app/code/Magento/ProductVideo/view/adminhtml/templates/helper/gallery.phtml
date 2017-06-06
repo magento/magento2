@@ -14,12 +14,12 @@ $formName = $block->getFormName();
 <div class="row">
     <div class="add-video-button-container">
         <button id="add_video_button"
-                title="<?php echo $block->escapeHtml(__('Add Video'));?>"
+                title="<?= $block->escapeHtml(__('Add Video')) ?>"
                 data-role="add-video-button"
                 type="button"
                 class="action-secondary"
                 data-ui-id="widget-button-1">
-            <span><?php echo $block->escapeHtml(__('Add Video')) ?></span>
+            <span><?= $block->escapeHtml(__('Add Video')) ?></span>
         </button>
     </div>
 </div>
@@ -30,12 +30,12 @@ $element = $block->getElement();
 $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
 ?>
 
-<div id="<?php echo $block->getHtmlId() ?>"
+<div id="<?= $block->getHtmlId() ?>"
      class="gallery"
      data-mage-init='{"openVideoModal":{}}'
-     data-parent-component="<?php echo $block->escapeHtml($block->getData('config/parentComponent')) ?>"
-     data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
-     data-types="<?php echo $block->escapeHtml(
+     data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
+     data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
+     data-types="<?= $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
 >
@@ -48,7 +48,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
             ?>
             <div class="product-image-wrapper">
                 <p class="image-placeholder-text">
-                    <?php echo $block->escapeHtml(
+                    <?= $block->escapeHtml(
                         __('Browse to find or drag image here')
                     ); ?>
                 </p>
@@ -61,11 +61,11 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
     <?php
     foreach ($block->getImageTypes() as $typeData):
         ?>
-        <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
+        <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
-               class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
+               class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
-               value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
+               value="<?= $block->escapeHtml($typeData['value']) ?>"/>
         <?php
     endforeach;
     ?>
@@ -144,21 +144,21 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                             class="action-remove"
                             data-role="delete-button"
                             title="<% if (data.media_type == 'external-video') {%>
-                            <?php echo $block->escapeHtml(
+                            <?= $block->escapeHtml(
                                 __('Delete video')
                             ); ?>
                         <%} else {%>
-                            <?php echo $block->escapeHtml(
+                            <?= $block->escapeHtml(
                                 __('Delete image')
                             ); ?>
                         <%}%>">
                     <span>
                         <% if (data.media_type == 'external-video') { %>
-                        <?php echo $block->escapeHtml(
+                        <?= $block->escapeHtml(
                             __('Delete video')
                         ); ?>
                         <% } else {%>
-                        <?php echo $block->escapeHtml(
+                        <?= $block->escapeHtml(
                             __('Delete image')
                         ); ?>
                         <%} %>
@@ -166,7 +166,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                     </button>
                     <div class="draggable-handle"></div>
                 </div>
-                <div class="image-fade"><span><?php echo $block->escapeHtml(
+                <div class="image-fade"><span><?= $block->escapeHtml(
                             __('Hidden')
                         ); ?></span></div>
             </div>
@@ -186,12 +186,12 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                 <?php
                 foreach ($block->getImageTypes() as $typeData):
                     ?>
-                    <li data-role-code="<?php echo $block->escapeHtml(
+                    <li data-role-code="<?= $block->escapeHtml(
                         $typeData['code']
-                    ) ?>" class="item-role item-role-<?php echo $block->escapeHtml(
+                    ) ?>" class="item-role item-role-<?= $block->escapeHtml(
                         $typeData['code']
                     ) ?>">
-                        <?php echo $block->escapeHtml($typeData['label']) ?>
+                        <?= $block->escapeHtml($typeData['label']) ?>
                     </li>
                     <?php
                 endforeach;
@@ -230,7 +230,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
 
                 <div class="admin__field field-image-role">
                     <label class="admin__field-label">
-                            <span><?php echo $block->escapeHtml(
+                            <span><?= $block->escapeHtml(
                                     __('Role')
                                 ); ?></span>
                     </label>
@@ -245,7 +245,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                                                data-role="type-selector"
                                                data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                                type="checkbox"
-                                               value="<?php echo $block->escapeHtml(
+                                               value="<?= $block->escapeHtml(
                                                    $attribute->getAttributeCode()
                                                ) ?>"
                                         />
@@ -288,7 +288,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                             <label for="hide-from-product-page" class="admin__field-label">
-                                <?php echo $block->escapeHtml(
+                                <?= $block->escapeHtml(
                                     __('Hide from Product Page')
                                 ); ?>
                             </label>
@@ -303,29 +303,29 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
         <div id="video-player-preview-location" class="video-player-sidebar">
             <div class="video-player-container"></div>
             <div class="video-information title">
-                <label><?php echo $block->escapeHtml(
+                <label><?= $block->escapeHtml(
                         __('Title:')
                     ); ?> </label><span></span>
             </div>
             <div class="video-information uploaded">
-                <label><?php echo $block->escapeHtml(
+                <label><?= $block->escapeHtml(
                         __('Uploaded:')
                     ); ?> </label><span></span>
             </div>
             <div class="video-information uploader">
-                <label><?php echo $block->escapeHtml(
+                <label><?= $block->escapeHtml(
                         __('Uploader:')
                     ); ?> </label><span></span>
             </div>
             <div class="video-information duration">
-                <label><?php echo $block->escapeHtml(
+                <label><?= $block->escapeHtml(
                         __('Duration:')
                     ); ?> </label><span></span>
             </div>
         </div>
     </div>
 
-    <?php echo $block->getChildHtml('new-video'); ?>
+    <?= $block->getChildHtml('new-video') ?>
 </div>
 <script>
     jQuery('body').trigger('contentUpdated');

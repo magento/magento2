@@ -22,7 +22,7 @@
     <?php $_code = $_attribute->getAttributeCode() ?>
         <div class="field <?php /* @escapeNotVerified */ echo $_code ?>">
             <label class="label" for="<?php /* @escapeNotVerified */ echo $_code ?>">
-                <span><?php echo $block->escapeHtml(__($block->getAttributeLabel($_attribute))) ?></span>
+                <span><?= $block->escapeHtml(__($block->getAttributeLabel($_attribute))) ?></span>
             </label>
             <div class="control">
             <?php switch ($block->getAttributeInputType($_attribute)):
@@ -32,9 +32,9 @@
                         <div class="control">
                             <input type="text"
                                    name="<?php /* @escapeNotVerified */ echo $_code ?>[from]"
-                                   value="<?php echo $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
+                                   value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
                                    id="<?php /* @escapeNotVerified */ echo $_code ?>"
-                                   title="<?php echo $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                   title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?php /* @escapeNotVerified */ echo $maxQueryLength;?>"
                                    data-validate="{number:true, 'less-than-equals-to':'#<?php /* @escapeNotVerified */ echo $_code ?>_to'}" />
@@ -44,9 +44,9 @@
                         <div class="control">
                             <input type="text"
                                    name="<?php /* @escapeNotVerified */ echo $_code ?>[to]"
-                                   value="<?php echo $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
+                                   value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
                                    id="<?php /* @escapeNotVerified */ echo $_code ?>_to"
-                                   title="<?php echo $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                   title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?php /* @escapeNotVerified */ echo $maxQueryLength;?>"
                                    data-validate="{number:true, 'greater-than-equals-to':'#<?php /* @escapeNotVerified */ echo $_code ?>'}" />
@@ -59,9 +59,9 @@
                     <div class="field no-label">
                         <div class="control">
                             <input name="<?php /* @escapeNotVerified */ echo $_code ?>[from]"
-                                   value="<?php echo $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
+                                   value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'from')) ?>"
                                    id="<?php /* @escapeNotVerified */ echo $_code ?>"
-                                   title="<?php echo $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                   title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    type="text"
                                    maxlength="<?php /* @escapeNotVerified */ echo $maxQueryLength;?>"
@@ -72,9 +72,9 @@
                         <div class="control">
                             <div class="addon">
                                 <input name="<?php /* @escapeNotVerified */ echo $_code ?>[to]"
-                                       value="<?php echo $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
+                                       value="<?= $block->escapeHtml($block->getAttributeValue($_attribute, 'to')) ?>"
                                        id="<?php /* @escapeNotVerified */ echo $_code ?>_to"
-                                       title="<?php echo $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                                       title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                        class="input-text"
                                        type="text"
                                        maxlength="<?php /* @escapeNotVerified */ echo $maxQueryLength;?>"
@@ -112,8 +112,8 @@
                 <input type="text"
                        name="<?php /* @escapeNotVerified */ echo $_code ?>"
                        id="<?php /* @escapeNotVerified */ echo $_code ?>"
-                       value="<?php echo $block->escapeHtml($block->getAttributeValue($_attribute)) ?>"
-                       title="<?php echo $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
+                       value="<?= $block->escapeHtml($block->getAttributeValue($_attribute)) ?>"
+                       title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                        class="input-text <?php /* @escapeNotVerified */ echo $block->getAttributeValidationClass($_attribute) ?>"
                        maxlength="<?php /* @escapeNotVerified */ echo $maxQueryLength;?>" />
             <?php endswitch; ?>
@@ -125,7 +125,7 @@
   <div class="primary">
     <button type="submit"
             class="action search primary"
-            title="<?php echo $block->escapeHtml(__('Search')) ?>">
+            title="<?= $block->escapeHtml(__('Search')) ?>">
         <span><?php /* @escapeNotVerified */ echo __('Search') ?></span>
     </button>
   </div>

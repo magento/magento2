@@ -14,7 +14,7 @@
 
 <div class="field admin__field options<?php if ($_option->getRequired()) echo ' required _required' ?>">
     <label class="label admin__field-label">
-        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
 
     <div class="control admin__field-control">
@@ -36,10 +36,10 @@
                             type="checkbox"
                             name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][<?php /* @escapeNotVerified */ echo $_selection->getId() ?>]"
                             <?php if ($block->isSelected($_selection)):?>
-                                <?php echo ' checked="checked"'; ?>
+                                <?= ' checked="checked"' ?>
                             <?php endif;?>
                             <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck):?>
-                                <?php echo ' disabled="disabled"'; ?>
+                                <?= ' disabled="disabled"' ?>
                             <?php endif;?>
                             value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                             onclick="ProductConfigure.bundleControl.changeSelection(this)"

@@ -25,7 +25,7 @@
                     </th>
                     <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
                     <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Weight') ?></th>
-                    <th class="data-grid-th" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+                    <th class="data-grid-th" <?= $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
                         <?php /* @escapeNotVerified */ echo __('Customs Value') ?>
                     </th>
                     <th class="data-grid-th"><?php /* @escapeNotVerified */ echo __('Qty Ordered') ?></th>
@@ -44,7 +44,7 @@
                     || (!$_orderItem->isShipSeparately() && ($_orderItem->getParentItemId() || $_orderItem->getParentItem()))): ?>
                     <?php continue; ?>
                 <?php endif; ?>
-                <tr class="data-grid-controls-row data-row <?php echo ($i++ % 2 != 0) ? '_odd-row' : ''; ?>">
+                <tr class="data-grid-controls-row data-row <?= ($i++ % 2 != 0) ? '_odd-row' : '' ?>">
                     <td class="data-grid-checkbox-cell">
                         <?php $id = $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>
                         <label class="data-grid-checkbox-cell-inner">

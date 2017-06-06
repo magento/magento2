@@ -15,7 +15,7 @@
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
 <div class="field admin__field option<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?><?php if ($_option->getRequired()) echo ' required _required' ?>">
-    <label class="label admin__field-label"><span><?php echo $block->escapeHtml($_option->getTitle()) ?></span></label>
+    <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if ($block->showSingle()): ?>
             <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selections[0]) ?>

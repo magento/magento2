@@ -29,21 +29,21 @@
             <tbody>
             <?php foreach ($_items as $_item): ?>
                 <tr>
-                    <td data-th="<?php echo $block->escapeHtml(__('Order #')) ?>" class="col id">
+                    <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="col id">
                         <a href="<?php /* @escapeNotVerified */ echo $block->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>"
-                            title="<?php echo $block->escapeHtml(__('View Order')) ?>">
+                            title="<?= $block->escapeHtml(__('View Order')) ?>">
                             <?php /* @escapeNotVerified */ echo $_item->getPurchased()->getOrderIncrementId() ?>
                         </a>
                     </td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Title')) ?>" class="col title">
-                        <strong class="product-name"><?php echo $block->escapeHtml($_item->getPurchased()->getProductName()) ?></strong>
+                    <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Title')) ?>" class="col title">
+                        <strong class="product-name"><?= $block->escapeHtml($_item->getPurchased()->getProductName()) ?></strong>
                         <?php if ($_item->getStatus() == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE): ?>
-                        <a href="<?php /* @escapeNotVerified */ echo $block->getDownloadUrl($_item) ?>" title="<?php echo $block->escapeHtml(__('Start Download')) ?>" class="action download" <?php echo $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : ''; ?>><?php echo $block->escapeHtml($_item->getLinkTitle()) ?></a>
+                        <a href="<?php /* @escapeNotVerified */ echo $block->getDownloadUrl($_item) ?>" title="<?= $block->escapeHtml(__('Start Download')) ?>" class="action download" <?= $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>><?= $block->escapeHtml($_item->getLinkTitle()) ?></a>
                         <?php endif; ?>
                     </td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo __(ucfirst($_item->getStatus())) ?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Remaining Downloads')) ?>" class="col remaining"><?php /* @escapeNotVerified */ echo $block->getRemainingDownloads($_item) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo __(ucfirst($_item->getStatus())) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Remaining Downloads')) ?>" class="col remaining"><?php /* @escapeNotVerified */ echo $block->getRemainingDownloads($_item) ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -51,7 +51,7 @@
     </div>
     <?php if ($block->getChildHtml('pager')): ?>
         <div class="toolbar downloadable-products-toolbar bottom">
-            <?php echo $block->getChildHtml('pager'); ?>
+            <?= $block->getChildHtml('pager') ?>
         </div>
     <?php endif; ?>
 <?php else: ?>
@@ -60,7 +60,7 @@
 
 <div class="actions-toolbar">
     <div class="secondary">
-        <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
             <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
         </a>
     </div>

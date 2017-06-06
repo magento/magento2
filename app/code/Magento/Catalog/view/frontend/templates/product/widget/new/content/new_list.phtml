@@ -45,20 +45,20 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                         <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                         <div class="product-item-info">
                             <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>" class="product-item-photo">
-                                <?php echo $block->getImage($_item, $image)->toHtml(); ?>
+                                <?= $block->getImage($_item, $image)->toHtml() ?>
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">
-                                    <a title="<?php echo $block->escapeHtml($_item->getName()) ?>"
+                                    <a title="<?= $block->escapeHtml($_item->getName()) ?>"
                                        href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>"
                                        class="product-item-link">
-                                        <?php echo $block->escapeHtml($_item->getName()) ?>
+                                        <?= $block->escapeHtml($_item->getName()) ?>
                                     </a>
                                 </strong>
-                                <?php echo $block->getProductPriceHtml($_item, $type); ?>
+                                <?= $block->getProductPriceHtml($_item, $type) ?>
 
                                 <?php if ($templateType): ?>
-                                    <?php echo $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                                    <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
                                 <?php endif; ?>
 
                                 <?php if ($showWishlist || $showCompare || $showCart): ?>
@@ -117,18 +117,18 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                 <?php if ($description):?>
                                     <div class="product-item-description">
                                         <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_item, $_item->getShortDescription(), 'short_description') ?>
-                                        <a title="<?php echo $block->escapeHtml($_item->getName()) ?>"
+                                        <a title="<?= $block->escapeHtml($_item->getName()) ?>"
                                            href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>"
                                            class="action more"><?php /* @escapeNotVerified */ echo __('Learn More') ?></a>
                                     </div>
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?php echo($iterator == count($items)+1) ? '</li>' : '' ?>
+                        <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
                     <?php endforeach ?>
                 </ol>
             </div>
-            <?php echo $block->getPagerHtml() ?>
+            <?= $block->getPagerHtml() ?>
         </div>
     </div>
 <?php endif;?>

@@ -13,8 +13,8 @@
 $url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
 ?>
 <!-- PayPal Logo -->
-<img src="<?php echo $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
-     alt="<?php echo $block->escapeHtml(__('Acceptance Mark')); ?>" class="paypal icon"/>
+<img src="<?= $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
+     alt="<?= $block->escapeHtml(__('Acceptance Mark')) ?>" class="paypal icon"/>
 <a href="<?php /* @noEscape */ echo $url; ?>"
    onclick="javascript:window.open(
            '<?php /* @noEscape */ echo $url; ?>',

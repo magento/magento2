@@ -9,7 +9,7 @@
 ?>
 
 <form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
-    <?php echo $block->getBlockHtml('formkey')?>
+    <?= $block->getBlockHtml('formkey') ?>
 </form>
 <script>
 require(['jquery', "mage/mage"], function(jQuery){

@@ -23,7 +23,7 @@
                        value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
                        title="<?php /* @escapeNotVerified */ echo __('Qty') ?>"
                        class="input-text qty"
-                       data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
                        />
             </div>
         </div>
@@ -35,7 +35,7 @@
                     id="product-addtocart-button">
                 <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
             </button>
-            <?php echo $block->getChildHtml('', true) ?>
+            <?= $block->getChildHtml('', true) ?>
         </div>
     </div>
 </div>

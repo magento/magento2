@@ -13,6 +13,6 @@
         <strong><?php /* @escapeNotVerified */ echo $block->getBlockTitle(); ?></strong>
     </div>
     <div class="content <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>-content" id="<?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>">
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
     </div>
 </div>

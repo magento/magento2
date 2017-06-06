@@ -13,7 +13,7 @@
     <div id="order-shipping-method-choose" class="control" style="display:none">
         <dl class="admin__order-shipment-methods">
         <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-            <dt class="admin__order-shipment-methods-title"><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></dt>
+            <dt class="admin__order-shipment-methods-title"><?= $block->escapeHtml($block->getCarrierName($code)) ?></dt>
             <dd class="admin__order-shipment-methods-options">
                 <ul class="admin__order-shipment-methods-options-list">
                 <?php foreach ($_rates as $_rate): ?>
@@ -23,7 +23,7 @@
                        <?php if ($_rate->getErrorMessage()): ?>
                            <div class="messages">
                                <div class="message message-error error">
-                                   <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
+                                   <div><?= $block->escapeHtml($_rate->getErrorMessage()) ?></div>
                                </div>
                            </div>
                        <?php else: ?>
@@ -32,7 +32,7 @@
                                                                  id="s_method_<?php /* @escapeNotVerified */ echo $_code ?>" <?php /* @escapeNotVerified */ echo $_checked ?>
                                                                  class="admin__control-radio required-entry"/>
                             <label class="admin__field-label" for="s_method_<?php /* @escapeNotVerified */ echo $_code ?>">
-                                <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                                <?= $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
                                 <strong>
                                     <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
                                     <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
@@ -55,10 +55,10 @@
         <div id="order-shipping-method-info" class="order-shipping-method-info">
             <dl class="admin__order-shipment-methods">
                 <dt class="admin__order-shipment-methods-title">
-                    <?php echo $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?>
+                    <?= $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?>
                 </dt>
                 <dd class="admin__order-shipment-methods-options">
-                    <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                    <?= $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
                     <strong>
                         <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
                         <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>

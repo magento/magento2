@@ -40,7 +40,7 @@
 <?php else:?>
 <tr class="row-totals">
     <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php echo $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
     <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
         <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getShippingExcludeTax()) ?>

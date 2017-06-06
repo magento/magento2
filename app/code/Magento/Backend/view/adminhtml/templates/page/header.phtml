@@ -17,7 +17,7 @@
             <?php /* @escapeNotVerified */ echo $edition; ?>
             class="logo">
             <img class="logo-img" src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl($logoSrc) ?>"
-            alt="<?php echo $block->escapeHtml(__('Magento Admin Panel')) ?>"/>
+            alt="<?= $block->escapeHtml(__('Magento Admin Panel')) ?>"/>
         </a>
     <?php break; ?>
     <?php case 'user': ?>
@@ -25,11 +25,11 @@
             <a
                 href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/system_account/index') ?>"
                 class="admin__action-dropdown"
-                title="<?php echo $block->escapeHtml(__('My Account')) ?>"
+                title="<?= $block->escapeHtml(__('My Account')) ?>"
                 data-mage-init='{"dropdown":{}}'
                 data-toggle="dropdown">
                 <span class="admin__action-dropdown-text">
-                    <span class="admin-user-account-text"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>
+                    <span class="admin-user-account-text"><?= $block->escapeHtml($block->getUser()->getUsername()) ?></span>
                 </span>
             </a>
             <ul class="admin__action-dropdown-menu">
@@ -38,15 +38,15 @@
                     <a
                         href="<?php /* @escapeNotVerified */ echo $block->getUrl('adminhtml/system_account/index') ?>"
                         <?php /* @escapeNotVerified */ echo $block->getUiId('user', 'account', 'settings')?>
-                        title="<?php echo $block->escapeHtml(__('Account Setting')) ?>">
-                        <?php /* @escapeNotVerified */ echo __('Account Setting') ?> (<span class="admin-user-name"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>)
+                        title="<?= $block->escapeHtml(__('Account Setting')) ?>">
+                        <?php /* @escapeNotVerified */ echo __('Account Setting') ?> (<span class="admin-user-name"><?= $block->escapeHtml($block->getUser()->getUsername()) ?></span>)
                     </a>
                 </li>
                 <?php endif; ?>
                 <li>
                     <a
                         href="<?php /* @escapeNotVerified */ echo $block->getBaseUrl(); ?>"
-                        title="<?php echo $block->escapeHtml(__('Customer View')); ?>"
+                        title="<?= $block->escapeHtml(__('Customer View')) ?>"
                         target="_blank" class="store-front">
                         <?php /* @escapeNotVerified */ echo __('Customer View'); ?>
                     </a>
@@ -55,7 +55,7 @@
                     <a
                         href="<?php /* @escapeNotVerified */ echo $block->getLogoutLink() ?>"
                         class="account-signout"
-                        title="<?php echo $block->escapeHtml(__('Sign Out')) ?>">
+                        title="<?= $block->escapeHtml(__('Sign Out')) ?>">
                         <?php /* @escapeNotVerified */ echo __('Sign Out') ?>
                     </a>
                 </li>
@@ -63,6 +63,6 @@
         </div>
     <?php break; ?>
     <?php case 'other': ?>
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
     <?php break; ?>
 <?php endswitch; ?>

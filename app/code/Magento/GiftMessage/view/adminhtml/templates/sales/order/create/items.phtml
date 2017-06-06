@@ -11,7 +11,7 @@
 <?php if ($block->canDisplayGiftMessage()): ?>
     <div class="no-display">
         <div id="gift-message-form-data-<?php /* @escapeNotVerified */ echo $block->getItem()->getId(); ?>">
-            <?php echo $block->getFormHtml();?>
+            <?= $block->getFormHtml() ?>
         </div>
 
         <?php if ($block->getMessageText()): ?>

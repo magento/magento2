@@ -19,7 +19,7 @@
         <dt class="admin__field-option">
         <?php if ($_methodsCount > 1): ?>
             <input id="p_method_<?php /* @escapeNotVerified */ echo $_code ?>" value="<?php /* @escapeNotVerified */ echo $_code ?>" type="radio" name="payment[method]"
-                   title="<?php echo $block->escapeHtml($_method->getTitle()) ?>"
+                   title="<?= $block->escapeHtml($_method->getTitle()) ?>"
                    onclick="payment.switchMethod('<?php /* @escapeNotVerified */ echo $_code ?>')"<?php if ($block->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?>
                    class="admin__control-radio<?php if ($_counter == $_methodsCount) : ?> validate-one-required-by-name<?php endif; ?>"/>
         <?php else :?>
@@ -30,7 +30,7 @@
             </span>
         <?php endif;?>
 
-            <label class="admin__field-label" for="p_method_<?php /* @escapeNotVerified */ echo $_code ?>"><?php echo $block->escapeHtml($_method->getTitle()) ?></label>
+            <label class="admin__field-label" for="p_method_<?php /* @escapeNotVerified */ echo $_code ?>"><?= $block->escapeHtml($_method->getTitle()) ?></label>
         </dt>
         <dd class="admin__payment-method-wrapper">
             <?php /* @escapeNotVerified */ echo $block->getChildHtml('payment.method.' . $_code) ?>

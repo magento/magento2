@@ -9,8 +9,8 @@
 ?>
 <?php $_item = $block->getItem() ?>
 <tr>
-    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
-    <td class="col-ordered-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-ordered-qty"><?= $block->getColumnHtml($_item, 'qty') ?></td>
     <td class="col-qty <?php if ($block->isShipmentRegular()): ?>last<?php endif; ?>">
         <?php if ($block->canShipPartiallyItem()): ?>
             <input type="text"

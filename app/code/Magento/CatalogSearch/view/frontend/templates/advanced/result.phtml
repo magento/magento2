@@ -34,7 +34,7 @@
         <?php if (@$searchCriterias[$side]): ?>
             <ul class="items">
                 <?php foreach ($searchCriterias[$side] as $criteria): ?>
-                    <li class="item"><strong><?php echo $block->escapeHtml(__($criteria['name'])); ?>:</strong> <?php echo $block->escapeHtml($criteria['value']); ?></li>
+                    <li class="item"><strong><?= $block->escapeHtml(__($criteria['name'])) ?>:</strong> <?= $block->escapeHtml($criteria['value']) ?></li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
@@ -49,6 +49,6 @@
     </div>
 <?php endif; ?>
 <?php if ($block->getResultCount()): ?>
-    <div class="search results"><?php echo $block->getProductListHtml() ?></div>
+    <div class="search results"><?= $block->getProductListHtml() ?></div>
 <?php endif; ?>
 <?php $block->getSearchCriterias(); ?>

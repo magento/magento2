@@ -8,17 +8,17 @@
 
 ?>
 <div class="product details">
-    <strong class="product name"><a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl() ?>"><?php echo $block->escapeHtml($block->getProductName()) ?></a></strong>
+    <strong class="product name"><a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl() ?>"><?= $block->escapeHtml($block->getProductName()) ?></a></strong>
     <?php if ($_options = $block->getOptionList()): ?>
         <dl class="item options">
             <?php foreach ($_options as $_option) : ?>
                 <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
                     <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                         <dl class="item options tooltip content">
-                            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+                            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                             <dd><?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?></dd>
                         </dl>
                     <?php endif; ?>
@@ -27,6 +27,6 @@
         </dl>
     <?php endif; ?>
     <?php if ($addtInfoBlock = $block->getProductAdditionalInformationBlock()): ?>
-        <?php echo $addtInfoBlock->setItem($block->getItem())->toHtml() ?>
+        <?= $addtInfoBlock->setItem($block->getItem())->toHtml() ?>
     <?php endif; ?>
 </div>

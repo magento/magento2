@@ -11,7 +11,7 @@
 <?php  $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
     <?php if ($_order->getTracksCollection()->count()) : ?>
-        <?php echo $block->getChildHtml('track-all-link') ?>
+        <?= $block->getChildHtml('track-all-link') ?>
     <?php endif; ?>
     <a href="<?php /* @escapeNotVerified */ echo $block->getPrintAllShipmentsUrl($_order) ?>"
        onclick="this.target='_blank'"
@@ -45,10 +45,10 @@
             $i = 1;
             $_size = $tracks->count();
             foreach ($tracks as $track): ?>
-                <?php if ($track->isCustom()): ?><?php echo $block->escapeHtml($track->getNumber()) ?><?php else: ?><a
+                <?php if ($track->isCustom()): ?><?= $block->escapeHtml($track->getNumber()) ?><?php else: ?><a
                     href="#"
                     data-mage-init='{"popupWindow": {"windowURL":"<?php /* @escapeNotVerified */ echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
-                    class="action track"><span><?php echo $block->escapeHtml($track->getNumber()) ?></span>
+                    class="action track"><span><?= $block->escapeHtml($track->getNumber()) ?></span>
                     </a><?php endif; ?><?php if ($i != $_size): ?>, <?php endif; ?>
                 <?php $i++;
             endforeach; ?>
@@ -72,10 +72,10 @@
     continue;
 } ?>
         <tbody>
-            <?php echo $block->getItemHtml($_item) ?>
+            <?= $block->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
     </table>
 </div>
-<?php echo $block->getCommentsHtml($_shipment)?>
+<?= $block->getCommentsHtml($_shipment) ?>
 <?php endforeach; ?>

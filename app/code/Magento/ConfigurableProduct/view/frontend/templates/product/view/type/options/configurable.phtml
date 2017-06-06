@@ -17,7 +17,7 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
     <?php foreach ($_attributes as $_attribute): ?>
         <div class="field configurable required">
             <label class="label" for="attribute<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>">
-                <span><?php echo $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
+                <span><?= $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
             </label>
             <div class="control">
                 <select name="super_attribute[<?php /* @escapeNotVerified */ echo $_attribute->getAttributeId() ?>]"

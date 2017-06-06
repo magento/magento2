@@ -28,7 +28,7 @@
             </strong>
             <div class="box-content">
             <?php if ($_order->getShippingDescription()): ?>
-                <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                <?= $block->escapeHtml($_order->getShippingDescription()) ?>
             <?php else: ?>
                 <?php /* @escapeNotVerified */ echo __('No shipping information available'); ?>
             <?php endif; ?>
@@ -49,7 +49,7 @@
                 <span><?php /* @escapeNotVerified */ echo __('Payment Method') ?></span>
             </strong>
             <div class="box-content">
-                <?php echo $block->getPaymentInfoHtml() ?>
+                <?= $block->getPaymentInfoHtml() ?>
             </div>
         </div>
     </div>

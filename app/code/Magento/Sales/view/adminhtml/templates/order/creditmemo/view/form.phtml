@@ -8,7 +8,7 @@
 
 ?>
 <?php  $_order = $block->getCreditmemo()->getOrder() ?>
-<?php echo $block->getChildHtml('order_info') ?>
+<?= $block->getChildHtml('order_info') ?>
 <section class="admin__page-section">
     <div class="admin__page-section-title">
         <span class="title"><?php /* @escapeNotVerified */ echo __('Payment &amp; Shipping Method') ?></span>
@@ -25,9 +25,9 @@
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <div class="order-payment-method-title"><?php echo $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
                 <div class="order-payment-currency"><?php /* @escapeNotVerified */ echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-                <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
+                <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
             </div>
         </div>
 
@@ -38,7 +38,7 @@
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Shipping Information') ?></span>
             </div>
             <div class="shipping-description-wrapper admin__page-section-item-content">
-                <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
+                <div class="shipping-description-title"><?= $block->escapeHtml($_order->getShippingDescription()) ?></div>
                 <div class="shipping-description-content">
                     <?php /* @escapeNotVerified */ echo __('Total Shipping Charges'); ?>:
 
@@ -63,7 +63,7 @@
 
 <?php if (count($_items)): ?>
 <div id="creditmemo_items_container">
-    <?php echo $block->getChildHtml('creditmemo_items') ?>
+    <?= $block->getChildHtml('creditmemo_items') ?>
 </div>
 <?php else: ?>
 <section class="admin__page-section">
@@ -83,13 +83,13 @@
             <div class="admin__page-section-item-title">
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Credit Memo History') ?></span>
             </div>
-            <div class="admin__page-section-item-content"><?php echo $block->getChildHtml('order_comments') ?></div>
+            <div class="admin__page-section-item-content"><?= $block->getChildHtml('order_comments') ?></div>
         </div>
         <div class="admin__page-section-item order-totals" id="history_form">
             <div class="admin__page-section-item-title">
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Credit Memo Totals') ?></span>
             </div>
-            <div class="admin__page-section-content"><?php echo $block->getChildHtml('creditmemo_totals') ?></div>
+            <div class="admin__page-section-content"><?= $block->getChildHtml('creditmemo_totals') ?></div>
         </div>
     </div>
 </section>

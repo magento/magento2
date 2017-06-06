@@ -27,7 +27,7 @@
         });
 
         var dataPriceBoxSelector = '[data-role=priceBox]',
-            dataProductIdSelector = '[data-product-id=<?php echo $block->escapeHtml($block->getProduct()->getId())?>]',
+            dataProductIdSelector = '[data-product-id=<?= $block->escapeHtml($block->getProduct()->getId()) ?>]',
             priceBoxes = $(dataPriceBoxSelector + dataProductIdSelector);
 
         priceBoxes.priceBox({

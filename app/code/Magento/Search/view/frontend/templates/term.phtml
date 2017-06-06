@@ -13,7 +13,7 @@
             <li class="item">
                 <a href="<?php /* @escapeNotVerified */ echo $block->getSearchUrl($_term) ?>"
                    style="font-size:<?php /* @escapeNotVerified */ echo $_term->getRatio()*70+75 ?>%;">
-                    <?php echo $block->escapeHtml($_term->getName()) ?>
+                    <?= $block->escapeHtml($_term->getName()) ?>
                 </a>
             </li>
         <?php endforeach; ?>

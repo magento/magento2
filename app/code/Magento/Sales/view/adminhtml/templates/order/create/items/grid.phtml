@@ -41,7 +41,7 @@
     <div class="admin__table-wrapper" id="order-items_grid">
     <?php if (count($_items)>10): ?>
         <div class="actions update actions-update">
-            <?php echo $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary'); ?>
+            <?= $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary') ?>
         </div>
     <?php endif; ?>
         <table class="data-table admin__table-primary order-tables">
@@ -74,18 +74,18 @@
                 <tbody class="<?php /* @escapeNotVerified */ echo($i%2) ? 'even' : 'odd' ?>">
                     <tr>
                         <td class="col-product">
-                            <span id="order_item_<?php /* @escapeNotVerified */ echo $_item->getId() ?>_title"><?php echo $block->escapeHtml($_item->getName()) ?></span>
+                            <span id="order_item_<?php /* @escapeNotVerified */ echo $_item->getId() ?>_title"><?= $block->escapeHtml($_item->getName()) ?></span>
                             <div class="product-sku-block">
                                 <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span>
-                                <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
+                                <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
                             </div>
                             <div class="product-configure-block">
-                                <?php echo $block->getConfigureButtonHtml($_item) ?>
+                                <?= $block->getConfigureButtonHtml($_item) ?>
                             </div>
                         </td>
                         <td class="col-price">
 
-                            <?php echo $block->getItemUnitPriceHtml($_item); ?>
+                            <?= $block->getItemUnitPriceHtml($_item) ?>
 
                             <?php $_isCustomPrice = $block->usedCustomPriceForItem($_item) ?>
                             <?php if ($_tier = $block->getTierHtml($_item)): ?>
@@ -123,7 +123,7 @@
                                    maxlength="12" />
                         </td>
                         <td class="col-subtotal col-price">
-                            <?php echo $block->getItemRowTotalHtml($_item); ?>
+                            <?= $block->getItemRowTotalHtml($_item) ?>
                         </td>
                         <td class="col-discount col-price">
                             <?php /* @escapeNotVerified */ echo $block->formatPrice(-$_item->getTotalDiscountAmount()) ?>
@@ -142,7 +142,7 @@
 
                         </td>
                         <td class="col-price col-row-subtotal">
-                            <?php echo $block->getItemRowTotalWithDiscountHtml($_item); ?>
+                            <?= $block->getItemRowTotalWithDiscountHtml($_item) ?>
                         </td>
                         <td class="col-actions last">
                             <select class="admin__control-select" name="item[<?php /* @escapeNotVerified */ echo $_item->getId() ?>][action]">
@@ -157,7 +157,7 @@
                                         <?php else: ?>
                                             <optgroup label="<?php /* @escapeNotVerified */ echo __('Move to Wish List') ?>">
                                                 <?php foreach ($wishlists as $wishlist):?>
-                                                    <option value="wishlist_<?php /* @escapeNotVerified */ echo $wishlist->getId();?>"><?php echo $block->escapeHtml($wishlist->getName());?></option>
+                                                    <option value="wishlist_<?php /* @escapeNotVerified */ echo $wishlist->getId();?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
                                                 <?php endforeach;?>
                                             </optgroup>
                                         <?php endif; ?>
@@ -184,14 +184,14 @@
                                     }
                                     ?>
                                     <div class="message <?php if ($_item->getHasError()): ?>message-error<?php else: ?>message-notice<?php endif; ?>">
-                                        <?php echo $block->escapeHtml($message); ?>
+                                        <?= $block->escapeHtml($message) ?>
                                     </div>
                                 <?php endforeach; ?>
                             </td>
                         </tr>
                     <?php endif;?>
 
-                    <?php echo $block->getItemExtraInfo($_item)->toHtml(); ?>
+                    <?= $block->getItemExtraInfo($_item)->toHtml() ?>
                 </tbody>
                 <?php endforeach; ?>
         </table>
@@ -199,8 +199,8 @@
     </div>
 
     <div class="order-discounts">
-        <?php echo $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary'); ?>
-        <div id="order-coupons" class="order-coupons"><?php echo $block->getChildHtml();?></div>
+        <?= $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary') ?>
+        <div id="order-coupons" class="order-coupons"><?= $block->getChildHtml() ?></div>
     </div>
 
     <script>

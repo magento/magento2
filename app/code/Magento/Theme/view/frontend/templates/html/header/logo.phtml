@@ -15,12 +15,12 @@
 <?php if ($block->isHomePage()):?>
     <strong class="logo">
 <?php else: ?>
-    <a class="logo" href="<?php echo $block->getUrl(''); ?>" title="<?php /* @escapeNotVerified */ echo $storeName ?>">
+    <a class="logo" href="<?= $block->getUrl('') ?>" title="<?php /* @escapeNotVerified */ echo $storeName ?>">
 <?php endif ?>
         <img src="<?php /* @escapeNotVerified */ echo $block->getLogoSrc() ?>"
              alt="<?php /* @escapeNotVerified */ echo $block->getLogoAlt() ?>"
-             <?php echo $block->getLogoWidth() ? 'width="' . $block->getLogoWidth() . '"' : '' ?>
-             <?php echo $block->getLogoHeight() ? 'height="' . $block->getLogoHeight() . '"' : '' ?>
+             <?= $block->getLogoWidth() ? 'width="' . $block->getLogoWidth() . '"' : '' ?>
+             <?= $block->getLogoHeight() ? 'height="' . $block->getLogoHeight() . '"' : '' ?>
         />
 <?php if ($block->isHomePage()):?>
     </strong>

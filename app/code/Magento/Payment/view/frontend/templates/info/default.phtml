@@ -21,7 +21,7 @@ $title = $block->escapeHtml($block->getMethod()->getTitle());
             <caption class="table-caption"><?php /* @noEscape */ echo $title; ?></caption>
             <?php foreach ($specificInfo as $label => $value):?>
                 <tr>
-                    <th scope="row"><?php echo $block->escapeHtml($label)?></th>
+                    <th scope="row"><?= $block->escapeHtml($label) ?></th>
                     <td>
                         <?php /* @noEscape */ echo nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true))));?>
                     </td>
@@ -31,4 +31,4 @@ $title = $block->escapeHtml($block->getMethod()->getTitle());
     </dd>
 <?php endif;?>
 </dl>
-<?php echo $block->getChildHtml()?>
+<?= $block->getChildHtml() ?>

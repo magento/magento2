@@ -16,9 +16,9 @@ $_gridPopupBlock->setRowClickCallback('function(){}');
     <div class="no-products-message">
         <?php /* @escapeNotVerified */ echo __('There are no grouped products.')?>
     </div>
-    <?php echo $block->getChildHtml('list'); ?>
+    <?= $block->getChildHtml('list') ?>
     <div data-role="add-product-dialog" class="no-display">
-        <?php echo $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid');?>
+        <?= $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid') ?>
     </div>
     <button type="button" data-role="add-product">Add Products to Group</button>
 </div>

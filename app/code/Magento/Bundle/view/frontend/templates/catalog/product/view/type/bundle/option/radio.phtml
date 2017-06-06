@@ -13,19 +13,19 @@
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
-<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
+<div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
     <label class="label">
-        <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
         <div class="nested options-list">
             <?php if ($block->showSingle()): ?>
                 <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selections[0]) ?>
                 <input type="hidden"
-                    class="bundle-option-<?php echo (int)$_option->getId() ?>  product bundle option"
-                    name="bundle_option[<?php echo (int)$_option->getId() ?>]"
-                    value="<?php echo (int)$_selections[0]->getSelectionId() ?>"
-                    id="bundle-option-<?php echo (int)$_option->getId() ?>-<?php echo (int)$_selections[0]->getSelectionId() ?>"
+                    class="bundle-option-<?= (int)$_option->getId() ?>  product bundle option"
+                    name="bundle_option[<?= (int)$_option->getId() ?>]"
+                    value="<?= (int)$_selections[0]->getSelectionId() ?>"
+                    id="bundle-option-<?= (int)$_option->getId() ?>-<?= (int)$_selections[0]->getSelectionId() ?>"
                     checked="checked"
                 />
             <?php else:?>
@@ -36,7 +36,7 @@
                                id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
                                name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                                data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                               <?php echo ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
+                               <?= ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
                                value=""/>
                         <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
                             <span><?php /* @escapeNotVerified */ echo __('None') ?></span>

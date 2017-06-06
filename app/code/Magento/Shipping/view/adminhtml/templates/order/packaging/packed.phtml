@@ -92,7 +92,7 @@
                             <tr>
                                 <th><?php /* @escapeNotVerified */ echo __('Contents') ?></th>
                                 <?php if ($params->getContentType() == 'OTHER'): ?>
-                                    <td><?php echo $block->escapeHtml($params->getContentTypeOther()) ?></td>
+                                    <td><?= $block->escapeHtml($params->getContentTypeOther()) ?></td>
                                 <?php else: ?>
                                     <td><?php /* @escapeNotVerified */ echo $block->getContentTypeByCode($params->getContentType()) ?></td>
                                 <?php endif; ?>
@@ -164,7 +164,7 @@
             "Magento_Shipping/js/packages":{
                 "type":"slide",
                 "title":"<?= /* @escapeNotVerified */  __('Packages') ?>",
-                "url": "<?= /* @escapeNotVerified */ $block->getPrintButton(); ?>"
+                "url": "<?= /* @escapeNotVerified */ $block->getPrintButton() ?>"
             }
         }
     }

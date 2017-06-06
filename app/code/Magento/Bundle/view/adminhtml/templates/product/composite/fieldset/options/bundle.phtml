@@ -12,11 +12,11 @@
 <?php $options = $block->decorateArray($block->getOptions(true)); ?>
 <?php if (count($options)): ?>
 <fieldset id="catalog_product_composite_configure_fields_bundle"
-          class="fieldset admin__fieldset composite-bundle<?php echo $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
+          class="fieldset admin__fieldset composite-bundle<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
     <legend class="legend admin__legend"><span><?php /* @escapeNotVerified */ echo __('Bundle Items') ?></span></legend><br />
     <?php foreach ($options as $option) : ?>
         <?php if ($option->getSelections()) : ?>
-            <?php echo $block->getOptionHtml($option); ?>
+            <?= $block->getOptionHtml($option) ?>
         <?php endif; ?>
     <?php endforeach; ?>
 </fieldset>

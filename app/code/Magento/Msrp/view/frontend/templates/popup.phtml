@@ -33,13 +33,13 @@
                 <form action="" method="POST" id="product_addtocart_form_from_popup" class="map-form-addtocart">
                     <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
                     <button type="button"
-                            title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                            title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
                             class="action tocart primary"
                             id="map-popup-button">
                         <span><?php /* @escapeNotVerified */ echo __('Add to Cart'); ?></span>
                     </button>
                     <div class="additional-addtocart-box">
-                        <?php echo $block->getChildHtml(); ?>
+                        <?= $block->getChildHtml() ?>
                     </div>
                 </form>
             </div>

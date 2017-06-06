@@ -27,8 +27,8 @@
                 <tbody>
                 <?php foreach ($block->getVirtualQuoteItems() as $_item): ?>
                     <tr>
-                        <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>"><?php echo $block->getItemHtml($_item) ?></td>
-                        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>"><?php /* @escapeNotVerified */ echo $_item->getQty() ?></td>
+                        <td class="col item" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getItemHtml($_item) ?></td>
+                        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?php /* @escapeNotVerified */ echo $_item->getQty() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

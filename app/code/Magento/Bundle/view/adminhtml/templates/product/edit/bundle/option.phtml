@@ -16,7 +16,7 @@
                     <span><%- data.default_title %></span>
                 </strong>
                 <div class="actions">
-                    <?php echo $block->getOptionDeleteButtonHtml() ?>
+                    <?= $block->getOptionDeleteButtonHtml() ?>
                 </div>
                 <div data-role="draggable-handle" class="draggable-handle"></div>
             </div>
@@ -71,7 +71,7 @@
                                 <?php /* @escapeNotVerified */ echo __('Input Type') ?>
                             </label>
                             <div class="control">
-                                <?php echo $block->getTypeSelectHtml() ?>
+                                <?= $block->getTypeSelectHtml() ?>
                             </div>
                         </div>
                         <div class="field field-option-req">
@@ -83,7 +83,7 @@
                                 <label for="field-option-req">
                                     <?php /* @escapeNotVerified */ echo __('Required')?>
                                 </label>
-                                <span style="display:none"><?php echo $block->getRequireSelectHtml() ?></span>
+                                <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
                             </div>
                         </div>
                         <div class="field field-option-position no-display">
@@ -103,7 +103,7 @@
                     <div class="no-products-message">
                         <?php /* @escapeNotVerified */ echo __('There are no products in this option.')?>
                     </div>
-                    <?php echo $block->getAddSelectionButtonHtml() ?>
+                    <?= $block->getAddSelectionButtonHtml() ?>
                 </fieldset>
             </div>
         </div>
@@ -111,7 +111,7 @@
     </div>
 </script>
 
-<?php echo $block->getSelectionHtml() ?>
+<?= $block->getSelectionHtml() ?>
 
 <script>
 require([

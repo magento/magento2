@@ -9,7 +9,7 @@
 ?>
 <?php $_invoice = $block->getInvoice() ?>
 <?php $_order = $_invoice->getOrder() ?>
-<?php echo $block->getChildHtml('order_info') ?>
+<?= $block->getChildHtml('order_info') ?>
 
 <section class="admin__page-section order-view-billing-shipping">
     <div class="admin__page-section-title">
@@ -22,11 +22,11 @@
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <div class="order-payment-method-title"><?php echo $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
                 <div class="order-payment-currency">
                     <?php /* @escapeNotVerified */ echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?>
                 </div>
-                <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
+                <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
             </div>
         </div>
 
@@ -38,7 +38,7 @@
                 </div>
                 <div class="admin__page-section-item-content shipping-description-wrapper">
                     <div class="shipping-description-title">
-                        <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                        <?= $block->escapeHtml($_order->getShippingDescription()) ?>
                     </div>
                     <div class="shipping-description-content">
                         <?php /* @escapeNotVerified */ echo __('Total Shipping Charges'); ?>:
@@ -54,7 +54,7 @@
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
                             (<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?> <?php /* @escapeNotVerified */ echo $_incl; ?>)
                         <?php endif; ?>
-                        <div><?php echo $block->getChildHtml('shipment_tracking') ?></div>
+                        <div><?= $block->getChildHtml('shipment_tracking') ?></div>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
     </div>
 
     <div id="invoice_item_container" class="admin__page-section-content">
-        <?php echo $block->getChildHtml('invoice_items') ?>
+        <?= $block->getChildHtml('invoice_items') ?>
     </div>
 </section>
 
@@ -83,7 +83,7 @@
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Invoice History') ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <?php echo $block->getChildHtml('order_comments') ?>
+                <?= $block->getChildHtml('order_comments') ?>
             </div>
         </div>
 
@@ -91,7 +91,7 @@
             <div class="admin__page-section-item-title">
                 <span class="title"><?php /* @escapeNotVerified */ echo __('Invoice Totals') ?></span>
             </div>
-            <?php echo $block->getChildHtml('invoice_totals') ?>
+            <?= $block->getChildHtml('invoice_totals') ?>
         </div>
     </div>
 </section>

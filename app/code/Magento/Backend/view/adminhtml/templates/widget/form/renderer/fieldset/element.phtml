@@ -28,15 +28,15 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
 
 <?php if (!$element->getNoDisplay()): ?>
     <?php if ($element->getType() == 'hidden'): ?>
-        <?php echo $element->getElementHtml() ?>
+        <?= $element->getElementHtml() ?>
     <?php else: ?>
     <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
         <?php if ($elementBeforeLabel): ?>
-            <?php echo $element->getElementHtml() ?>
-            <?php echo $element->getLabelHtml('', $element->getScopeLabel()) ?>
+            <?= $element->getElementHtml() ?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <?php /* @escapeNotVerified */ echo $note ?>
         <?php else: ?>
-            <?php echo $element->getLabelHtml('', $element->getScopeLabel()) ?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <div class="admin__field-control control">
                 <?php /* @escapeNotVerified */ echo($addOn) ? '<div class="admin__field">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
                 <?php /* @escapeNotVerified */ echo $note ?>

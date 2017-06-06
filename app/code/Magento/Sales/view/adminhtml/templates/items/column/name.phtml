@@ -16,11 +16,11 @@
 <?php if ($_item = $block->getItem()): ?>
     <div id="order_item_<?php /* @escapeNotVerified */ echo $_item->getId() ?>_title"
          class="product-title">
-        <?php echo $block->escapeHtml($_item->getName()) ?>
+        <?= $block->escapeHtml($_item->getName()) ?>
     </div>
 
     <div class="product-sku-block">
-        <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span> <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))); ?>
+        <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span> <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))) ?>
     </div>
 
     <?php if ($block->getOrderOptions()): ?>
@@ -48,5 +48,5 @@
             <?php endforeach; ?>
         </dl>
     <?php endif; ?>
-    <?php echo $block->escapeHtml($_item->getDescription()) ?>
+    <?= $block->escapeHtml($_item->getDescription()) ?>
 <?php endif; ?>

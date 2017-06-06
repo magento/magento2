@@ -11,5 +11,5 @@
 
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
     <?php /* @escapeNotVerified */ echo __('<a href="%1" onclick="this.target=\'_blank\'" class="print">Print receipt</a>', $block->getPrintUrl()) ?>
-    <?php echo $block->getChildHtml() ?>
+    <?= $block->getChildHtml() ?>
 <?php endif;?>

@@ -11,11 +11,11 @@
 <?php $_item = $block->getItem() ?>
 <?php $block->setPriceDataObject($_item); ?>
 <tr>
-    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
     <td class="col-price">
-        <?php echo $block->getColumnHtml($_item, 'price'); ?>
+        <?= $block->getColumnHtml($_item, 'price') ?>
     </td>
-    <td class="col-ordered-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
+    <td class="col-ordered-qty"><?= $block->getColumnHtml($_item, 'qty') ?></td>
     <?php if ($block->canParentReturnToStock($_item)) : ?>
         <td class="col-return-to-stock">
         <?php if ($block->canReturnItemToStock($_item)) : ?>
@@ -38,11 +38,11 @@
     <?php endif; ?>
     </td>
     <td class="col-subtotal">
-        <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
+        <?= $block->getColumnHtml($_item, 'subtotal') ?>
     </td>
     <td class="col-tax-amount"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('tax_amount') ?></td>
     <td class="col-discont"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
-        <?php echo $block->getColumnHtml($_item, 'total'); ?>
+        <?= $block->getColumnHtml($_item, 'total') ?>
     </td>
 </tr>

@@ -44,22 +44,22 @@
         <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?php echo(++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
+    <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
         <?php if (!$_item->getOrderItem()->getParentItem()): ?>
         <td class="col-product">
-            <div class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
+            <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
                 <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span>
-                <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
+                <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
             </div>
         <?php else: ?>
         <td class="col-product">
-            <div class="option-value"><?php echo $block->getValueHtml($_item)?></div>
+            <div class="option-value"><?= $block->getValueHtml($_item) ?></div>
         </td>
         <?php endif; ?>
         <td class="col-price">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php echo $block->getColumnHtml($_item, 'price'); ?>
+                <?= $block->getColumnHtml($_item, 'price') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
@@ -73,7 +73,7 @@
         </td>
         <td class="col-subtotal">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
+                <?= $block->getColumnHtml($_item, 'subtotal') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
@@ -94,7 +94,7 @@
         </td>
         <td class="col-total last">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php echo $block->getColumnHtml($_item, 'total'); ?>
+                <?= $block->getColumnHtml($_item, 'total') ?>
              <?php else: ?>
                  &nbsp;
             <?php endif; ?>
@@ -112,7 +112,7 @@
                     <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
                         <?php /* @escapeNotVerified */ echo $option['value'];?>
                     <?php else: ?>
-                        <?php echo $block->truncateString($option['value'], 55, '', $_remainder);?>
+                        <?= $block->truncateString($option['value'], 55, '', $_remainder) ?>
                         <?php if ($_remainder):?>
                             ... <span id="<?php /* @escapeNotVerified */ echo $_id = 'id' . uniqid()?>"><?php /* @escapeNotVerified */ echo $_remainder ?></span>
                             <script>
@@ -130,7 +130,7 @@ require(['protoype'], function(){
                 <?php endforeach; ?>
                 </dl>
             <?php endif; ?>
-            <?php echo $block->escapeHtml($block->getItem()->getDescription()) ?>
+            <?= $block->escapeHtml($block->getItem()->getDescription()) ?>
         </td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>

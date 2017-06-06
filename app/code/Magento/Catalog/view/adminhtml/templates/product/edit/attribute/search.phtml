@@ -15,7 +15,7 @@
         </button>
         <div class="dropdown-menu">
             <input data-role="product-attribute-search"
-                   data-group="<?php echo $block->escapeHtml($block->getGroupCode()); ?>"
+                   data-group="<?= $block->escapeHtml($block->getGroupCode()) ?>"
                    class="search" type="text"
                    placeholder="<?php /* @noEscape */ echo __('start typing to search attribute'); ?>" />
         </div>
@@ -34,7 +34,7 @@
 
 <script>
     require(["jquery","mage/mage","mage/backend/suggest"], function($) {
-        var $suggest = $('[data-role="product-attribute-search"][data-group="<?php echo $block->escapeHtml($block->getGroupCode()); ?>"]');
+        var $suggest = $('[data-role="product-attribute-search"][data-group="<?= $block->escapeHtml($block->getGroupCode()) ?>"]');
 
         $suggest.on('suggestclose', function(e) {
             $suggest.closest('.dropdown-menu').siblings('[data-toggle=dropdown]').trigger('close.dropdown');

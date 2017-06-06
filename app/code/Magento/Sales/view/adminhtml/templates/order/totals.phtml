@@ -11,8 +11,8 @@
 <?php $block->setPriceDataObject($_source) ?>
 <?php if ($_source): ?>
 <table width="100%">
-    <?php echo $block->getChildHtml('main'); ?>
-    <?php echo $block->getChildHtml('footer'); ?>
+    <?= $block->getChildHtml('main') ?>
+    <?= $block->getChildHtml('footer') ?>
 </table>
 <?php endif;*/ ?>
 <table class="data-table admin__table-secondary order-subtotal-table">
@@ -22,11 +22,11 @@
         <tfoot>
             <?php foreach ($block->getTotals('footer') as $_code => $_total): ?>
                 <?php if ($_total->getBlockName()): ?>
-                    <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
+                    <?= $block->getChildHtml($_total->getBlockName(), false) ?>
                 <?php else:?>
                 <tr class="col-<?php /* @escapeNotVerified */ echo $_code?>">
                     <td <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?> class="label">
-                        <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
+                        <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
                     </td>
                     <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?>>
                         <strong><?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?></strong>
@@ -42,14 +42,14 @@
         <tbody>
             <?php foreach ($_totals as $_code => $_total): ?>
                 <?php if ($_total->getBlockName()): ?>
-                    <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
+                    <?= $block->getChildHtml($_total->getBlockName(), false) ?>
                 <?php else:?>
                     <tr class="col-<?php /* @escapeNotVerified */ echo $_code?>">
                         <td <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?> class="label">
                             <?php if ($_total->getStrong()):?>
-                            <strong><?php echo $block->escapeHtml($_total->getLabel()); ?></strong>
+                            <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
                             <?php else:?>
-                            <?php echo $block->escapeHtml($_total->getLabel()); ?>
+                            <?= $block->escapeHtml($_total->getLabel()) ?>
                             <?php endif?>
                         </td>
 

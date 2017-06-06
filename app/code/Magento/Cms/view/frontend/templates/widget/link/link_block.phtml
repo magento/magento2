@@ -10,6 +10,6 @@
 ?>
 <div class="widget block block-cms-link">
     <a <?php /* @noEscape */ echo $block->getLinkAttributes() ?>>
-        <span><?php echo $block->escapeHtml($block->getLabel()) ?></span>
+        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
     </a>
 </div>
