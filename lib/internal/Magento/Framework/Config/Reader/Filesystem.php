@@ -139,14 +139,10 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected function _readFiles($fileList)
     {
         /** @var \Magento\Framework\Config\Dom $configMerger */
-        $configMerger = null;
+        $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $fileList[0]);
         foreach ($fileList as $key => $content) {
             try {
-                if (!$configMerger) {
-                    $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $content);
-                } else {
-                    $configMerger->merge($content);
-                }
+                    $configMerger->merge($content);    
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
