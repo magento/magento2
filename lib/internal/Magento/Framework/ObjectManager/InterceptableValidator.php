@@ -37,10 +37,19 @@ class InterceptableValidator
      */
     private function isInterceptable($instanceName)
     {
-        return !is_subclass_of(
-            $instanceName,
-            '\\' . \Magento\Framework\ObjectManager\Code\Generator\Proxy::NON_INTERCEPTABLE_INTERFACE
-        );
+        try {
+            /**
+             * Catch exceptions for virtual classes on autoloading:
+             *      Source class "...Collection" for "...CollectionFactory" generation does not exist.
+             */
+            $result = !is_subclass_of(
+                $instanceName,
+                \Magento\Framework\ObjectManager\Code\Generator\Proxy::NON_INTERCEPTABLE_INTERFACE
+            );
+        } catch (\RuntimeException $e) {
+            $result = true; // interceptable by default
+        }
+        return $result;
     }
 
     /**
