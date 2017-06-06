@@ -76,13 +76,15 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
      * @param int $templateType
      * @param string $messageType
      * @param string $bodyText
+     * @param string $templateNamespace
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetTransport(
         $templateType = TemplateTypesInterface::TYPE_HTML,
         $messageType = MessageInterface::TYPE_HTML,
-        $bodyText = '<h1>Html message</h1>'
+        $bodyText = '<h1>Html message</h1>',
+        $templateNamespace
     ) {
         $filter = $this->getMock(\Magento\Email\Model\Template\Filter::class, [], [], '', false);
         $data = [
