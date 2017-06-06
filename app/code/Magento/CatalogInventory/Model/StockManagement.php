@@ -100,7 +100,7 @@ class StockManagement implements StockManagementInterface
                 continue;
             }
             if (!$stockItem->hasAdminArea()
-                && !$this->stockState->checkQty($productId, $orderedQty, $stockItem->getWebsiteId())
+                && !$this->stockState->checkQty($productId, $orderedQty)
             ) {
                 $this->getResource()->rollBack();
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -111,11 +111,8 @@ class StockManagement implements StockManagementInterface
                 $stockItem->setQty($stockItem->getQty() - $orderedQty);
             }
             $registeredItems[$productId] = $orderedQty;
-            if (!$this->stockState->verifyStock($productId, $stockItem->getWebsiteId())
-                || $this->stockState->verifyNotification(
-                    $productId,
-                    $stockItem->getWebsiteId()
-                )
+            if (!$this->stockState->verifyStock($productId)
+                || $this->stockState->verifyNotification($productId)
             ) {
                 $fullSaveItems[] = $stockItem;
             }
