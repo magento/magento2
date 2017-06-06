@@ -500,6 +500,12 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             ) ? $this->_localeFormat->getNumber(
                 $arr['is_value_parsed']
             ) : false;
+        } else if ($attribute && $attribute->getBackendType() == 'varchar' && $isContainsOperator) {
+            $value = $arr['value'];
+
+            if ($attribute->getFrontendInput() == 'multiselect' && is_array($value) && count($value) == 1) {
+                $arr['value'] = explode(',', reset($value));
+            }
         }
 
         return parent::loadArray($arr);
