@@ -119,7 +119,7 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
     }
 
     /**
-     * Verify fixture and form data.
+     * Verify fixture and form data
      *
      * @param array $fixtureData
      * @param array $formData
