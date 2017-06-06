@@ -124,7 +124,7 @@ class SourceRepositoryTest extends WebapiAbstract
             SourceInterface::REGION_ID => $source->getRegionId(),
             SourceInterface::LATITUDE => $source->getLatitude(),
             SourceInterface::LONGITUDE => $source->getLongitude(),
-            SourceInterface::IS_ACTIVE => $source->getIsActive(),
+            SourceInterface::ENABLED => $source->isEnabled(),
             SourceInterface::PRIORITY => $source->getPriority(),
             SourceInterface::CARRIER_LINKS => []
         ];
@@ -147,7 +147,7 @@ class SourceRepositoryTest extends WebapiAbstract
      * @param string $postcode
      * @return SourceInterface
      */
-    private function createRandomSource($countCarrier = 2, $postcode = '54321', $isActive = true)
+    private function createRandomSource($countCarrier = 2, $postcode = '54321', $enabled = true)
     {
         $country = $this->countryInformationAcquirer->getCountryInfo('US');
         $regions = $country->getAvailableRegions();
@@ -169,30 +169,30 @@ class SourceRepositoryTest extends WebapiAbstract
         for ($index = 1; $index <= $countCarrier; $index++) {
             $carrierCode = 'CAR-' . $index;
             $carrier = $this->sourceCarrierLinkFactory->create();
-            $carrier->setPosition($index)
-                ->setCarrierCode($carrierCode);
+            $carrier->setPosition($index);
+            $carrier->setCarrierCode($carrierCode);
             $carriers[] = $carrier;
         }
 
         /** @var  \Magento\InventoryApi\Api\Data\SourceInterface $source */
         $source = $this->sourceFactory->create();
-        $source->setName($name)
-            ->setCity($city)
-            ->setPostcode($postcode)
-            ->setContactName($contactName)
-            ->setCountryId($country->getId())
-            ->setDescription($description)
-            ->setEmail($email)
-            ->setStreet($street)
-            ->setFax($fax)
-            ->setPhone($phone)
-            ->setRegion($region->getName())
-            ->setRegionId($region->getId())
-            ->setLatitude($latitude)
-            ->setLongitude($longitude)
-            ->setIsActive($isActive)
-            ->setPriority($priority)
-            ->setCarrierLinks($carriers);
+        $source->setName($name);
+        $source->setCity($city);
+        $source->setPostcode($postcode);
+        $source->setContactName($contactName);
+        $source->setCountryId($country->getId());
+        $source->setDescription($description);
+        $source->setEmail($email);
+        $source->setStreet($street);
+        $source->setFax($fax);
+        $source->setPhone($phone);
+        $source->setRegion($region->getName());
+        $source->setRegionId($region->getId());
+        $source->setLatitude($latitude);
+        $source->setLongitude($longitude);
+        $source->setEnabled($enabled);
+        $source->setPriority($priority);
+        $source->setCarrierLinks($carriers);
 
         return $source;
     }
@@ -317,7 +317,7 @@ class SourceRepositoryTest extends WebapiAbstract
         //  add filters to find all active items with created postcode
         $postcodeFilter = implode(',', [$postcode1, $postcode2]);
         $searchCriteriaBuilder->addFilter('postcode', $postcodeFilter, 'in');
-        $searchCriteriaBuilder->addFilter('is_active', 1, 'eq');
+        $searchCriteriaBuilder->addFilter('enabled', 1, 'eq');
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];

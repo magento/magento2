@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
-use \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
+use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
 /**
  * @codeCoverageIgnore
@@ -38,7 +37,6 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     public function setCarrierCode($carrierCode)
     {
         $this->setData(SourceCarrierLinkInterface::CARRIER_CODE, $carrierCode);
-        return $this;
     }
 
     /**
@@ -55,7 +53,6 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
     public function setPosition($position)
     {
         $this->setData(SourceCarrierLinkInterface::POSITION, $position);
-        return $this;
     }
 
     /**
@@ -63,7 +60,12 @@ class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrier
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(SourceCarrierLinkInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
     }
 
     /**
