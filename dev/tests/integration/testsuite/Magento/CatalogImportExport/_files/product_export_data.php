@@ -41,7 +41,7 @@ $customOptions = [
                 'title' => 'Option 1 & Value 3"',
                 'price' => '3.00',
                 'price_type' => 'fixed'
-            ]
+            ],
         ]
     ],
     [

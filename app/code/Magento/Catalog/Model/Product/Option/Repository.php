@@ -135,11 +135,9 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         /** @var string $productSku */
         $productSku = $option->getProductSku();
-
         if (!$productSku) {
             throw new CouldNotSaveException(__('ProductSku should be specified'));
         }
-
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku);
         /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
@@ -148,13 +146,10 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $option->setData('store_id', $product->getStoreId());
 
         if ($option->getOptionId()) {
-
             $options = $product->getOptions();
-
             if (!$options) {
                 $options = $this->getProductOptions($product);
             }
-
             $persistedOption = array_filter(
                 $options,
                 function ($iOption) use ($option) {
@@ -171,7 +166,6 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
             $originalValues = $persistedOption->getValues();
             /** @var array $newValues */
             $newValues = $option->getData('values');
-
             if ($newValues) {
                 $newValues = $this->markRemovedValues($newValues, $originalValues);
                 $option->setData('values', $newValues);

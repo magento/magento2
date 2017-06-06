@@ -114,7 +114,8 @@ class CustomOptionsTest extends AbstractModifierTest
                             CustomOptions::FIELD_TITLE_NAME => 'option1',
                             CustomOptions::FIELD_STORE_TITLE_NAME => 'Option Store Title',
                             CustomOptions::FIELD_IS_USE_DEFAULT => false
-                        ], [
+                        ],
+                        [
                             CustomOptions::FIELD_TITLE_NAME => 'option2',
                             CustomOptions::FIELD_STORE_TITLE_NAME => null,
                             CustomOptions::FIELD_IS_USE_DEFAULT => true,
@@ -123,7 +124,8 @@ class CustomOptionsTest extends AbstractModifierTest
                                     CustomOptions::FIELD_TITLE_NAME => 'value1',
                                     CustomOptions::FIELD_STORE_TITLE_NAME => 'Option Value Store Title',
                                     CustomOptions::FIELD_IS_USE_DEFAULT => false
-                                ], [
+                                ],
+                                [
                                     CustomOptions::FIELD_TITLE_NAME => 'value2',
                                     CustomOptions::FIELD_STORE_TITLE_NAME => null,
                                     CustomOptions::FIELD_IS_USE_DEFAULT => true

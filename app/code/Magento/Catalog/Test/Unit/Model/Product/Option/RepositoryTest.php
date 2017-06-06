@@ -41,7 +41,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      *
      * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $optionCollectionFactory;
+    private $optionCollectionFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
