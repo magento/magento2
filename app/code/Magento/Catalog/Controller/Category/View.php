@@ -62,7 +62,7 @@ class View extends \Magento\Framework\App\Action\Action
      *
      * @var Resolver
      */
-    private $layerResolver;
+    protected $layerResolver;
 
     /**
      * @var CategoryRepositoryInterface
