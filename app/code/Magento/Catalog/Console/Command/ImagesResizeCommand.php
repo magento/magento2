@@ -77,8 +77,7 @@ class ImagesResizeCommand extends Command
         $productCollection = $this->productCollectionFactory->create();
         $productIds = $productCollection->getAllIds();
         if (!count($productIds)) {
-            $output->writeln("<info>No product images to resize</info>");
-            // we must have an exit code higher than zero to indicate something was wrong
+            $output->writeln('<info>No product images to resize</info>');
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         }
 
@@ -95,7 +94,9 @@ class ImagesResizeCommand extends Command
                 $imageCache = $this->imageCacheFactory->create();
                 $imageCache->generate($product);
 
-                $output->write(".");
+                $this->productRepository->cleanCache();
+
+                $output->write('.');
             }
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
@@ -103,7 +104,7 @@ class ImagesResizeCommand extends Command
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        $output->write("\n");
-        $output->writeln("<info>Product images resized successfully</info>");
+        $output->writeln('');
+        $output->writeln('<info>Product images resized successfully</info>');
     }
 }

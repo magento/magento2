@@ -72,4 +72,11 @@ interface ProductRepositoryInterface
      * @return \Magento\Catalog\Api\Data\ProductSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * Clean internal product cache
+     *
+     * @return void
+     */
+    public function cleanCache();
 }

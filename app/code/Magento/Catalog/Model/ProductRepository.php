@@ -657,9 +657,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * Clean internal product cache
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function cleanCache()
     {
