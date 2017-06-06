@@ -15,12 +15,6 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
 
     const ADDITIONAL_IMAGES = 'additional_images';
 
-    /**
-     * @deprecated
-     * @see \Magento\CatalogImportExport\Model\Import\Product::getMultipleValueSeparator()
-     */
-    const ADDITIONAL_IMAGES_DELIMITER = ',';
-
     /** @var array */
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
