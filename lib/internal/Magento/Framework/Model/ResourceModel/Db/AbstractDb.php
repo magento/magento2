@@ -585,13 +585,19 @@ abstract class AbstractDb extends AbstractResource
 
             foreach ($fields as $unique) {
                 $select->reset(\Magento\Framework\DB\Select::WHERE);
+                $hasNull = false;
                 foreach ((array)$unique['field'] as $field) {
                     $value = $data->getData($field);
                     if ($value === null) {
-                        $select->where($field . ' IS NULL');
+                        $hasNull = true;
+                        break;
                     } else {
                         $select->where($field . '=?', trim($value));
                     }
+                }
+                
+                if($hasNull) {
+                    continue;
                 }
 
                 if ($object->getId() || $object->getId() === '0') {
