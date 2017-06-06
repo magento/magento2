@@ -56,7 +56,8 @@ class FrontController implements FrontControllerInterface
                         } else {
                             $result = $actionInstance->execute();
                         }
-                        break;
+                       \Magento\Framework\Profiler::stop('routers_match');
+                        return $result;
                     }
                 } catch (\Magento\Framework\Exception\NotFoundException $e) {
                     $request->initForward();
