@@ -1849,6 +1849,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $labelsForUpdate
             );
 
+            $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
+
             $this->_eventManager->dispatch(
                 'catalog_product_import_bunch_save_after',
                 ['adapter' => $this, 'bunch' => $bunch]
