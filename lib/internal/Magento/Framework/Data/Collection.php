@@ -514,17 +514,29 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
-     * @param string|array $objMethod
+     * Call method or callback on each item in the collection.
+     * 
+     * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void
      */
     public function each($objMethod, $args = [])
     {
-        foreach ($args->_items as $k => $item) {
-            $args->_items[$k] = call_user_func($objMethod, $item);
+        if ($objMethod instanceof \Closure) {
+            foreach ($this->getItems() as $item) {
+                $objMethod($item, ...$args);
+            }
+        } elseif (is_array($objMethod)) {
+            foreach ($this->getItems() as $item) {
+                call_user_func($objMethod, $item, ...$args);
+            }
+        } else {
+            foreach ($this->getItems() as $item) {
+                $item->$objMethod(...$args);
+            }
         }
     }
-
+    
     /**
      * Setting data for all collection items
      *

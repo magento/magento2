@@ -12,17 +12,19 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Zend\Mvc\MvcEvent;
 
 /**
- * Tests Magento\Setup\Mvc\Bootstrap\InitParamListener
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InitParamListenerTest extends \PHPUnit_Framework_TestCase
 {
 
-    /** @var  InitParamListener */
+    /**
+     * @var InitParamListener
+     */
     private $listener;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $callbackHandler;
 
     protected function setUp()
@@ -248,6 +250,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthPreDispatch()
     {
+        $cookiePath = 'test';
         $eventMock = $this->getMockBuilder(\Zend\Mvc\MvcEvent::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -282,11 +285,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $backendAppMock = $this->getMockBuilder(\Magento\Backend\App\BackendApp::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $backendUrlFactoryMock = $this->getMockBuilder(\Magento\Backend\Model\UrlFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backendUrlMock = $this->getMockBuilder(\Magento\Backend\Model\Url::class)
+        $urlMock = $this->getMockBuilder(\Magento\Backend\Model\Url::class)
             ->disableOriginalConstructor()
             ->getMock();
         $authenticationMock = $this->getMockBuilder(\Magento\Backend\Model\Auth::class)
@@ -347,10 +346,6 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
                         $backendAppListMock,
                     ],
                     [
-                        \Magento\Backend\Model\UrlFactory::class,
-                        $backendUrlFactoryMock,
-                    ],
-                    [
                         \Magento\Backend\Model\Auth::class,
                         $authenticationMock,
                     ],
@@ -358,7 +353,23 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
             );
         $objectManagerMock->expects($this->any())
             ->method('create')
-            ->willReturn($adminSessionMock);
+            ->willReturnMap(
+                [
+                    [
+                        \Magento\Backend\Model\Auth\Session::class,
+                        [
+                            'sessionConfig' => $sessionConfigMock,
+                            'appState' => $adminAppStateMock
+                        ],
+                        $adminSessionMock,
+                    ],
+                    [
+                        \Magento\Backend\Model\Url::class,
+                        [],
+                        $urlMock,
+                    ],
+                ]
+            );
         $omProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManagerMock);
@@ -370,10 +381,13 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($serviceManagerMock);
         $backendAppMock->expects($this->once())
             ->method('getCookiePath')
-            ->willReturn('');
-        $backendUrlFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($backendUrlMock);
+            ->willReturn($cookiePath);
+        $urlMock->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('http://base-url/');
+        $sessionConfigMock->expects($this->once())
+            ->method('setCookiePath')
+            ->with('/' . $cookiePath);
         $backendAppListMock->expects($this->once())
             ->method('getBackendApp')
             ->willReturn($backendAppMock);
