@@ -58,6 +58,12 @@ class RemoteAddress
             if (!$this->remoteAddress) {
                 $this->remoteAddress = $this->request->getServer('REMOTE_ADDR');
             }
+
+            if ((filter_var($this->remoteAddress, FILTER_VALIDATE_IP) !== true) && (strpos($this->remoteAddress, ',') !== true)) {
+                $ipList = explode(',', $this->remoteAddress);
+                $this->remoteAddress = reset($ipList);
+            }
+
         }
 
         if (!$this->remoteAddress) {
