@@ -136,6 +136,7 @@ class QuoteManager
     public function expire()
     {
         $quote = $this->checkoutSession->setLoadInactive()->getQuote();
+        $this->checkoutSession->setLoadInactive(false);
         if ($quote->getIsActive() && $quote->getCustomerId()) {
             $this->checkoutSession->setCustomerData(null)->clearQuote()->clearStorage();
         } else {
