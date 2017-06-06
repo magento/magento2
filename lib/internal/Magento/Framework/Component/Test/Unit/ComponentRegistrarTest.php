@@ -42,6 +42,12 @@ class ComponentRegistrarTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($expected['test_module_one'], $this->object->getPaths(ComponentRegistrar::MODULE));
         $this->assertContains($expected['test_module_two'], $this->object->getPaths(ComponentRegistrar::MODULE));
     }
+    
+    public function testDuplicateRegistrationIsNullOp()
+    {
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_three", "some/path/name/three");
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_three", "some/path/name/three");
+    }
 
     /**
      * @expectedException \LogicException
