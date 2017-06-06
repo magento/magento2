@@ -16,6 +16,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Class BlockRepository
@@ -137,6 +139,28 @@ class BlockRepository implements BlockRepositoryInterface
             throw new NoSuchEntityException(__('CMS Block with id "%1" does not exist.', $blockId));
         }
         return $block;
+    }
+
+    /**
+     * Load Block data by given Block identifier
+     *
+     * @param string $blockIdentifier
+     * @param int $storeId
+     * @return Block
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getByIdentifier($blockIdentifier, $storeId = null)
+    {
+        $storeIdentifier = $storeId === null ? Store::DEFAULT_STORE_ID : $storeId;
+        $result = $this->resource->getByIdentifier($blockIdentifier, $storeIdentifier);
+
+        if(empty($result)) {
+            throw new NoSuchEntityException(
+                __('CMS Block with identifier "%1" and store id "%2" does not exist.', $blockIdentifier, $storeId)
+            );
+        }
+
+        return $this->blockFactory->create()->setData($result);
     }
 
     /**
