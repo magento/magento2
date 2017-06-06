@@ -74,9 +74,9 @@ class ShortEchoSyntaxSniffTest extends \PHPUnit_Framework_TestCase
     public function processDataProvider()
     {
         return [
-            ['incorrect_echotag.phtml', 1, 1],
-            ['correct_noecho.phtml', 1, 0],
-            ['correct_echotag.phtml', 1, 0]
+            ['incorrect_echotag.txt', 1, 1],
+            ['correct_noecho.txt', 1, 0],
+            ['correct_echotag.txt', 1, 0]
         ];
     }
 }
