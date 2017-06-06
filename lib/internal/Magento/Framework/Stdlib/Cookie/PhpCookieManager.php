@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  */
 class PhpCookieManager implements CookieManagerInterface
 {
-    /**#@+
+    /**
      * Constants for Cookie manager.
      * RFC 2109 - Page 15
      * http://www.ietf.org/rfc/rfc6265.txt
@@ -33,13 +33,11 @@ class PhpCookieManager implements CookieManagerInterface
     const MAX_COOKIE_SIZE = 4096;
     const EXPIRE_NOW_TIME = 1;
     const EXPIRE_AT_END_OF_SESSION_TIME = 0;
-    /**#@-*/
 
-    /**#@+
+    /**
      * Constant for metadata array key
      */
     const KEY_EXPIRE_TIME = 'expiry';
-    /**#@-*/
 
     /**
      * @var CookieScopeInterface
