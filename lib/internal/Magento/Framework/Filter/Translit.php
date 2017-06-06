@@ -152,6 +152,8 @@ class Translit implements \Zend_Filter_Interface
         'ŉ' => 'n',
         'Ŋ' => 'n',
         'ŋ' => 'n',
+        'ñ' => 'n',
+        'Ñ' => 'n',
         'Ō' => 'o',
         'ō' => 'o',
         'Ŏ' => 'o',
