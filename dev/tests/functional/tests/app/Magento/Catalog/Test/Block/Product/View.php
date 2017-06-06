@@ -303,10 +303,6 @@ class View extends AbstractConfigureBlock
      */
     public function clickAddToCart()
     {
-        sleep(2); //there can be many sections in customer data and when we click on "Add to Cart"
-        //button to earlier, than parallel request to customer data can grab messages
-        //and display it, and next request (when response for adding products come back)
-        // will take empty messages and remove "Success message"
         $this->_rootElement->find($this->addToCart, Locator::SELECTOR_CSS)->click();
     }
 
