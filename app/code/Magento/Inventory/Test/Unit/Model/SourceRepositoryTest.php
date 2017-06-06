@@ -19,6 +19,7 @@ use Magento\Inventory\Model\Resource\SourceCarrierLink as ResourceSourceCarrierL
 use Magento\Inventory\Model\Resource\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Inventory\Model\Resource\SourceCarrierLink\Collection as CarrierLinkCollection;
 
 /**
  * Class SourceRepositoryTest
@@ -244,11 +245,19 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(Source::class)->disableOriginalConstructor()->getMock(),
             $this->getMockBuilder(Source::class)->disableOriginalConstructor()->getMock()
         ];
+        $carrierLinkCollectionMock = $this->getMockBuilder(CarrierLinkCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($sourceCollection);
         $sourceCollection->expects($this->atLeastOnce())->method('getItems')->willReturn($sources);
         $this->sourceSearchResultsFactory->expects($this->once())->method('create')->willReturn($searchResults);
         $searchResults->expects($this->once())->method('setItems')->with($sources);
+
+        $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('addFilter')->willReturnSelf();
+        $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('create')->willReturn($searchCriteria);
+        $this->carrierLinkCollectionFactory->expects($this->atLeastOnce())->method('create')
+            ->willReturn($carrierLinkCollectionMock);
 
         $this->assertSame($searchResults, $this->model->getList($searchCriteria));
     }
