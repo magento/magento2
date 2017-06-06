@@ -11,7 +11,7 @@ class Logo extends Image
      * The tail part of directory path for uploading
      *
      */
-    const UPLOAD_DIR = 'logo';
+    const UPLOAD_DIR = 'email/logo';
 
     /**
      * Return path to directory for upload file
