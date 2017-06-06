@@ -232,8 +232,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $_fieldsMap = [
         'image' => 'base_image',
-        'image_label' => "base_image_label",
-        'image' => 'base_image',
         'image_label' => 'base_image_label',
         'thumbnail' => 'thumbnail_image',
         'thumbnail_label' => 'thumbnail_image_label',
