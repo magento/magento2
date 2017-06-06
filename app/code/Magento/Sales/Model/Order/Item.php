@@ -500,7 +500,7 @@ class Item extends AbstractModel implements OrderItemInterface
         if (isset($options[$code])) {
             return $options[$code];
         }
-        return null;
+        return [];
     }
 
     /**
