@@ -43,6 +43,14 @@
         .media-width('max', @screen__m);
     }
 
+    @media only screen and (max-width: (@screen__l - 1)) {
+        .media-width('max', @screen__l);
+    }
+
+    @media only screen and (max-width: (@screen__xl - 1)) {
+        .media-width('max', @screen__xl);
+    }
+
     @media only screen and (max-width: @screen__m) {
         .media-width('max', (@screen__m + 1));
     }
