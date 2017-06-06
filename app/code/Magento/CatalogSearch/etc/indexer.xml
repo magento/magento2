@@ -10,7 +10,7 @@
         <title translate="true">Catalog Search</title>
         <description translate="true">Rebuild Catalog product fulltext search index</description>
 
-        <saveHandler class="Magento\CatalogSearch\Model\Indexer\IndexHandler" />
+        <saveHandler class="Magento\CatalogSearch\Model\Indexer\IndexerHandler" />
         <structure class="Magento\CatalogSearch\Model\Indexer\IndexStructure" />
     </indexer>
 </config>
