@@ -1042,9 +1042,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
-                        'Entity type model must be an instance of '
+                        "Entity type model must be an instance of '%1'",
+                        \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
                     )
-                    . \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
                 );
             }
             if ($model->isSuitable()) {
