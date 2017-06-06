@@ -856,7 +856,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->create('Magento\Catalog\Model\Product');
+        $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
         $id = $product->getIdBySku('Configurable 03');
         $product->load($id);
         $this->assertEquals('1', $product->getHasOptions());
@@ -1276,7 +1276,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $productId = $resource->getIdBySku('simple4');
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load($productId);
         $productLinks = [
@@ -1326,7 +1326,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
@@ -1366,7 +1366,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($products as $sku => $manageStockUseConfig) {
             /** @var \Magento\CatalogInventory\Model\StockRegistry $stockRegistry */
             $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\CatalogInventory\Model\StockRegistry'
+                \Magento\CatalogInventory\Model\StockRegistry::class
             );
             $stockItem = $stockRegistry->getStockItemBySku($sku);
             $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());
