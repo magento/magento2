@@ -7,9 +7,11 @@
  */
 namespace Magento\CatalogInventory\Model\Quote\Item;
 
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\CatalogInventory\Model\Stock;
 
+/**
+ * Quantity validation.
+ */
 class QuantityValidator
 {
     /**
@@ -23,26 +25,30 @@ class QuantityValidator
     protected $stockItemInitializer;
 
     /**
-     * @var StockRegistryInterface
+     * Stock registry.
+     *
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
     protected $stockRegistry;
 
     /**
-     * @var StockStateInterface
+     * Stock state.
+     *
+     * @var \Magento\CatalogInventory\Api\StockStateInterface
      */
     protected $stockState;
 
     /**
      * @param QuantityValidator\Initializer\Option $optionInitializer
      * @param QuantityValidator\Initializer\StockItem $stockItemInitializer
-     * @param StockRegistryInterface $stockRegistry
-     * @param StockStateInterface $stockState
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      */
     public function __construct(
         QuantityValidator\Initializer\Option $optionInitializer,
         QuantityValidator\Initializer\StockItem $stockItemInitializer,
-        StockRegistryInterface $stockRegistry,
-        StockStateInterface $stockState
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockStateInterface $stockState
     ) {
         $this->optionInitializer = $optionInitializer;
         $this->stockItemInitializer = $stockItemInitializer;
@@ -65,7 +71,6 @@ class QuantityValidator
     {
         /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getItem();
-
         if (!$quoteItem ||
             !$quoteItem->getProductId() ||
             !$quoteItem->getQuote() ||
@@ -73,7 +78,7 @@ class QuantityValidator
         ) {
             return;
         }
-
+        $product = $quoteItem->getProduct();
         $qty = $quoteItem->getQty();
 
         /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
@@ -81,26 +86,32 @@ class QuantityValidator
             $quoteItem->getProduct()->getId(),
             $quoteItem->getProduct()->getStore()->getWebsiteId()
         );
-        /* @var $stockItem \Magento\CatalogInventory\Api\Data\StockItemInterface */
+
         if (!$stockItem instanceof \Magento\CatalogInventory\Api\Data\StockItemInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The stock item for Product is not valid.'));
         }
 
-        $parentStockItem = false;
+        /** @var \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus */
+        $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $product->getStore()->getWebsiteId());
+
+        /** @var \Magento\CatalogInventory\Api\Data\StockStatusInterface|bool $parentStockStatus */
+        $parentStockStatus = false;
 
         /**
          * Check if product in stock. For composite products check base (parent) item stock status
          */
         if ($quoteItem->getParentItem()) {
             $product = $quoteItem->getParentItem()->getProduct();
-            $parentStockItem = $this->stockRegistry->getStockItem(
+            $parentStockStatus = $this->stockRegistry->getStockStatus(
                 $product->getId(),
                 $product->getStore()->getWebsiteId()
             );
         }
 
-        if ($stockItem) {
-            if (!$stockItem->getIsInStock() || $parentStockItem && !$parentStockItem->getIsInStock()) {
+        if ($stockStatus) {
+            if ($stockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
+                || $parentStockStatus && $parentStockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
+            ) {
                 $quoteItem->addErrorInfo(
                     'cataloginventory',
                     \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
@@ -123,13 +134,13 @@ class QuantityValidator
          * Check item for options
          */
         if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
-            $qty = $quoteItem->getProduct()->getTypeInstance()->prepareQuoteItemQty($qty, $quoteItem->getProduct());
+            $qty = $product->getTypeInstance()->prepareQuoteItemQty($qty, $product);
             $quoteItem->setData('qty', $qty);
-            if ($stockItem) {
+            if ($stockStatus) {
                 $result = $this->stockState->checkQtyIncrements(
-                    $quoteItem->getProduct()->getId(),
+                    $product->getId(),
                     $qty,
-                    $quoteItem->getProduct()->getStore()->getWebsiteId()
+                    $product->getStore()->getWebsiteId()
                 );
                 if ($result->getHasError()) {
                     $quoteItem->addErrorInfo(
@@ -172,7 +183,10 @@ class QuantityValidator
                     );
                 } else {
                     // Delete error from item and its quote, if it was set due to qty lack
-                    $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
+                    $this->_removeErrorsFromQuoteAndItem(
+                        $quoteItem,
+                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY
+                    );
                 }
             }
         } else {

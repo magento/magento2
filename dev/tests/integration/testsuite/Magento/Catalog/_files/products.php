@@ -4,9 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$product = Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Model\Product::class);
 $product
     ->setTypeId('simple')
     ->setId(1)
@@ -23,8 +25,8 @@ $product
     ->setStockData(['use_config_manage_stock' => 0])
     ->save();
 
-$customDesignProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product', ['data' => $product->getData()]);
+$customDesignProduct = Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Model\Product::class, ['data' => $product->getData()]);
 
 $customDesignProduct->setUrlKey('custom-design-simple-product')
     ->setId(2)
