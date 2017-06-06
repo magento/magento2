@@ -59,7 +59,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         );
 
         if ($this->getCreditmemo()->canRefund()) {
-            if ($this->getCreditmemo()->getInvoice() && $this->getCreditmemo()->getInvoice()->getTransactionId()) {
+            if (($this->getCreditmemo()->getInvoice() && $this->getCreditmemo()->getInvoice()->getTransactionId()) || ($this->getCreditmemo()->getOrder()->getRealOrderId())) {
                 $this->addChild(
                     'submit_button',
                     \Magento\Backend\Block\Widget\Button::class,
