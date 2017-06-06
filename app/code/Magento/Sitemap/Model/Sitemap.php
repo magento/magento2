@@ -277,6 +277,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
                 self::CLOSE_TAG_KEY => '</urlset>',
             ],
         ];
+        
+        $eventData = new \Magento\Framework\DataObject(['items' => $this->_sitemapItems]);
+        $this->_eventManager->dispatch(
+            'sitemap_prepare_items',
+            [
+                'collection' => $eventData,
+                'store_id' => $this->getStoreId(),
+            ]
+        );
+        $this->_sitemapItems = $eventData->getData('items');
     }
 
     /**
