@@ -122,9 +122,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
-                'thumb' => $this->getImage($this->getProduct(), 'product_thumbnail_image')->getImageUrl(),
-                'img' => $this->getImage($this->getProduct(), 'product_base_image')->getImageUrl(),
-                'full' => $this->getImage($this->getProduct(), 'product_page_image_large')->getImageUrl(),
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
+                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'full' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
