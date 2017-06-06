@@ -19,22 +19,22 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $persistentDataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
 
@@ -49,7 +49,7 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
     protected $abstractCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteRepositoryMock;
 
@@ -247,5 +247,72 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->quoteMock));
 
         $this->model->expire();
+    }
+
+    public function testConvertCustomerCartToGuest()
+    {
+        $quoteId = 1;
+        $addressArgs = ['customerAddressId' => null];
+        $customerIdArgs = ['customerId' => null];
+        $emailArgs = ['email' => null];
+
+        $this->checkoutSessionMock->expects($this->once())
+            ->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->exactly(2))->method('getId')->willReturn($quoteId);
+        $this->quoteRepositoryMock->expects($this->once())->method('get')->with($quoteId)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())
+            ->method('setIsActive')->with(true)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerId')->with(null)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerEmail')->with(null)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerFirstname')->with(null)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerLastname')->with(null)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('setCustomerGroupId')
+            ->with(\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID)
+            ->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())
+            ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->exactly(3))
+            ->method('getAddressesCollection')->willReturn($this->abstractCollectionMock);
+        $this->abstractCollectionMock->expects($this->exactly(3))->method('walk')->with($this->logicalOr(
+            $this->equalTo('setCustomerAddressId'),
+            $this->equalTo($addressArgs),
+            $this->equalTo('setCustomerId'),
+            $this->equalTo($customerIdArgs),
+            $this->equalTo('setEmail'),
+            $this->equalTo($emailArgs)
+        ));
+        $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
+        $this->persistentSessionMock->expects($this->once())
+            ->method('getSession')->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())
+            ->method('removePersistentCookie')->willReturn($this->sessionMock);
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
+
+        $this->model->convertCustomerCartToGuest();
+    }
+
+    public function testConvertCustomerCartToGuestWithEmptyQuote()
+    {
+        $this->checkoutSessionMock->expects($this->once())
+            ->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getId')->willReturn(null);
+        $this->quoteRepositoryMock->expects($this->once())->method('get')->with(null)->willReturn(null);
+
+        $this->model->convertCustomerCartToGuest();
+    }
+
+    public function testConvertCustomerCartToGuestWithEmptyQuoteId()
+    {
+        $this->checkoutSessionMock->expects($this->once())
+            ->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())->method('getId')->willReturn(1);
+        $quoteWithNoId = $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteWithNoId->expects($this->once())->method('getId')->willReturn(null);
+        $this->quoteRepositoryMock->expects($this->once())->method('get')->with(1)->willReturn($quoteWithNoId);
+        $this->model->convertCustomerCartToGuest();
     }
 }
