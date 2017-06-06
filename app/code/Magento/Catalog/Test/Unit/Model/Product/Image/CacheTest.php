@@ -44,6 +44,11 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     protected $themeCollection;
 
     /**
+     * @var \Magento\Theme\Model\Config\Customization|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $themeCustomizationConfig;
+
+    /**
      * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $imageHelper;
@@ -70,6 +75,10 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->themeCustomizationConfig = $this->getMockBuilder(\Magento\Theme\Model\Config\Customization::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,6 +93,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             [
                 'viewConfig' => $this->viewConfig,
                 'themeCollection' => $this->themeCollection,
+                'themeCustomizationConfig' => $this->themeCustomizationConfig,
                 'imageHelper' => $this->imageHelper,
             ]
         );
@@ -125,6 +135,12 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->themeCollection->expects($this->once())
             ->method('loadRegisteredThemes')
             ->willReturn([$themeMock]);
+
+        $this->themeCustomizationConfig->expects($this->once())
+            ->method('getStoresByThemes')
+            ->willReturn([
+                $themeMock->getThemeId() => [1]
+            ]);
 
         $this->viewConfig->expects($this->once())
             ->method('getViewConfig')
