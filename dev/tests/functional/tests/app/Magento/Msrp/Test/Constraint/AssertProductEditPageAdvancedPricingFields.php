@@ -16,13 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertProductEditPageAdvancedPricingFields extends AbstractConstraint
 {
     /**
-     * Title of "Price View".
-     *
-     * @var string
-     */
-    private $priceFieldTitle = 'Price View';
-
-    /**
      * Title of "Manufacturer's Suggested Retail Price" field.
      *
      * @var string
@@ -41,7 +34,7 @@ class AssertProductEditPageAdvancedPricingFields extends AbstractConstraint
         $advancedPricing = $catalogProductEdit->getProductForm()->getSection('advanced-pricing');
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $advancedPricing->checkField($this->manufacturerFieldTitle, $this->priceFieldTitle),
+            $advancedPricing->checkField($this->manufacturerFieldTitle),
             '"Manufacturer\'s Suggested Retail Price" field is not correct.'
         );
     }

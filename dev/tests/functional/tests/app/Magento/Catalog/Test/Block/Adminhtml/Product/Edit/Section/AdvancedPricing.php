@@ -124,22 +124,10 @@ class AdvancedPricing extends Section
      * Check if the field is displayed correctly.
      *
      * @param string $fieldName
-     * @param string|null $previousFieldName
      * @return bool
      */
-    public function checkField($fieldName, $previousFieldName = null)
+    public function checkField($fieldName)
     {
-        $field = $this->_rootElement->find(sprintf($this->fieldByName, $fieldName), Locator::SELECTOR_XPATH);
-        if ($field->isVisible()) {
-            if ($previousFieldName) {
-                return $this->_rootElement->find(
-                    sprintf($this->previousField, $fieldName),
-                    Locator::SELECTOR_XPATH
-                )->getText() == $previousFieldName;
-            } else {
-                return $field->isVisible();
-            }
-        }
-        return false;
+        return $this->_rootElement->find(sprintf($this->fieldByName, $fieldName), Locator::SELECTOR_XPATH)->isVisible();
     }
 }
