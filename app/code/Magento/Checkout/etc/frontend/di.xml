@@ -55,6 +55,7 @@
             <argument name="layoutProcessors" xsi:type="array">
                 <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Checkout\LayoutProcessor</item>
                 <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Checkout\TotalsProcessor</item>
+                <item name="directoryData" xsi:type="object">Magento\Checkout\Block\Checkout\DirectoryDataProcessor</item>
             </argument>
         </arguments>
     </type>

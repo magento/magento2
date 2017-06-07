@@ -70,7 +70,13 @@ class Adapter implements AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Process Search Request.
+     *
+     * @param RequestInterface $request
+     *
+     * @return \Magento\Framework\Search\Response\QueryResponse
+     *
+     * @throws \LogicException
      */
     public function query(RequestInterface $request)
     {

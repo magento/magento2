@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
+/**
+ * Catalog product copier.
+ */
 class Copier
 {
     /**
@@ -54,12 +57,15 @@ class Copier
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
+        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+
         /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
         $duplicate->setData($product->getData());
         $duplicate->setOptions([]);
         $duplicate->setIsDuplicate(true);
-        $duplicate->setOriginalId($product->getEntityId());
+        $duplicate->setOriginalLinkId($product->getData($metadata->getLinkField()));
         $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
         $duplicate->setCreatedAt(null);
         $duplicate->setUpdatedAt(null);
@@ -81,11 +87,11 @@ class Copier
             }
         } while (!$isDuplicateSaved);
         $this->getOptionRepository()->duplicate($product, $duplicate);
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $product->getResource()->duplicate(
             $product->getData($metadata->getLinkField()),
             $duplicate->getData($metadata->getLinkField())
         );
+
         return $duplicate;
     }
 
@@ -97,8 +103,9 @@ class Copier
     {
         if (null === $this->optionRepository) {
             $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Option\Repository');
+                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
         }
+        
         return $this->optionRepository;
     }
 
@@ -110,8 +117,9 @@ class Copier
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
+        
         return $this->metadataPool;
     }
 }

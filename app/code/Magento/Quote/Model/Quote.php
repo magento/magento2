@@ -487,7 +487,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote::class);
     }
 
     /**
@@ -962,7 +962,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             )
         );
         $customer->setAddresses($origAddresses);
@@ -1568,6 +1568,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if (!$request instanceof \Magento\Framework\DataObject) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid request for adding product to quote.')
+            );
+        }
+        if (!$product->isSalable()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Product that you are trying to add is not available.')
             );
         }
 
