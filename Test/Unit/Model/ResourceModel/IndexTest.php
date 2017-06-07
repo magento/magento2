@@ -10,7 +10,6 @@ use Magento\AdvancedSearch\Model\ResourceModel\Index;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -41,16 +40,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $frontendResourceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $categoryProductIndexerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $adapterMock;
 
     /**
@@ -69,22 +58,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->adapterMock = $this->getMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
         $this->metadataPoolMock = $this->getMock(MetadataPool::class, [], [], '', false);
-        $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
-        $this->categoryProductIndexerMock = $this->getMock(
-            FrontendResource::class,
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->model = new Index(
             $this->resourceContextMock,
             $this->storeManagerMock,
-            $this->metadataPoolMock,
-            null,
-            $this->frontendResourceMock,
-            $this->categoryProductIndexerMock
+            $this->metadataPoolMock
         );
     }
 
@@ -100,9 +78,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
         $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
         $this->adapterMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn([]);
-
-        // verify that frontend indexer table is used
-        $this->frontendResourceMock->expects($this->once())->method('getMainTable');
 
         $this->assertEmpty($this->model->getPriceIndexData([1], $storeId));
     }
