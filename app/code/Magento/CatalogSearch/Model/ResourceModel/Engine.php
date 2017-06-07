@@ -12,7 +12,7 @@ class Engine implements EngineInterface
 {
     /**
      * @deprecated
-     * @see EngineInterface::ATTRIBUTE_PREFIX
+     * @see EngineInterface::FIELD_PREFIX
      */
     const ATTRIBUTE_PREFIX = 'attr_';
 
@@ -20,7 +20,7 @@ class Engine implements EngineInterface
      * Scope identifier
      *
      * @deprecated
-     * @see EngineInterface::SCOPE_FIELD_NAME
+     * @see EngineInterface::SCOPE_IDENTIFIER
      */
     const SCOPE_FIELD_NAME = 'scope';
 
