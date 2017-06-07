@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
-use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Tests Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
@@ -52,6 +53,16 @@ class CollectionTest extends BaseCollectionTest
     private $eavConfig;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerFrontendMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryProductIndexerMock;
+
+    /**
      * setUp method for CollectionTest
      */
     protected function setUp()
@@ -74,9 +85,19 @@ class CollectionTest extends BaseCollectionTest
         $productLimitationMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
-        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
+
+        $this->indexerFrontendMock = $this->getMockBuilder(FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->categoryProductIndexerMock = $this->getMockBuilder(FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->advancedCollection = $this->objectManager->getObject(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
@@ -89,6 +110,8 @@ class CollectionTest extends BaseCollectionTest
                 'temporaryStorageFactory' => $this->temporaryStorageFactory,
                 'search' => $this->search,
                 'productLimitationFactory' => $productLimitationFactoryMock,
+                'indexerFrontendResource' => $this->indexerFrontendMock,
+                'categoryProductIndexerFrontend' => $this->categoryProductIndexerMock,
             ]
         );
     }

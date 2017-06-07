@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ $columns = $block->getColumns();
     <ol class="product-items">
         <?php foreach ($block->getItems() as $item): ?>
         <?php /* @noEscape */ echo($iterator++ == 1) ? '<li data-row="product-item" class="product-item" id="item_' . $block->escapeHtmlAttr($item->getId()) . '">' : '</li><li class="product-item" id="item_' . $block->escapeHtmlAttr($item->getId()) . '">' ?>
-            <div class="product-item-info">
+            <div class="product-item-info" data-container="product-grid">
                 <?php foreach ($columns as $column): ?>
                     <?php $column->setItem($item); echo $column->toHtml($item);?>
                 <?php endforeach; ?>

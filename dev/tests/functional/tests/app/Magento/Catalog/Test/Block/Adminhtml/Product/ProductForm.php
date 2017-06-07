@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Product form on backend product page.
@@ -73,6 +73,13 @@ class ProductForm extends FormSections
     protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
 
     /**
+     * Website checkbox xpath selector.
+     *
+     * @var string
+     */
+    protected $websiteCheckbox = '//label[text()="%s"]/../input';
+
+    /**
      * Fill the product form.
      *
      * @param FixtureInterface $product
@@ -96,13 +103,22 @@ class ProductForm extends FormSections
             $this->callRender($typeId, 'fill', $renderArguments);
         } else {
             $sections = $this->getFixtureFieldsByContainers($product);
-            $category = $product->hasData('category_ids')
-                ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0] : $category;
-            if ($category) {
-                if ((int)$category->getId()) {
-                    $sections['product-details']['category_ids']['value'] = $category->getName();
-                } else {
-                    $this->getNewCategoryModalForm()->addNewCategory($category);
+            if ($product->hasData('category_ids') || $category) {
+                $sections['product-details']['category_ids']['value'] = [];
+                $categories = $product->hasData('category_ids')
+                    ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
+                    : [$category];
+                foreach ($categories as $category) {
+                    if ((int)$category->getId()) {
+                        $sections['product-details']['category_ids']['value'][] = $category->getName();
+                    } else {
+                        $this->getNewCategoryModalForm()->addNewCategory($category);
+                    }
+                }
+                if (empty($sections['product-details']['category_ids']['value'])) {
+                    // We need to clear 'category_ids' key in case of category(es) absence in Product Fixture
+                    // to avoid force clear related form input on edit product page
+                    unset($sections['product-details']['category_ids']);
                 }
             }
             $this->fillContainers($sections, $element);
@@ -122,10 +138,22 @@ class ProductForm extends FormSections
         $sectionElement = $this->getContainerElement($sectionName);
         if ($sectionElement->getAttribute('type') == 'button') {
             $sectionElement->click();
+            sleep(2); // according to animation timeout in JS
         } else {
             parent::openSection($sectionName);
         }
         return $this;
+    }
+
+    /**
+     * Unassign product from website by website name.
+     *
+     * @param string $name
+     */
+    public function unassignFromWebsite($name)
+    {
+        $this->openSection('websites');
+        $this->_rootElement->find(sprintf($this->websiteCheckbox, $name), Locator::SELECTOR_XPATH)->click();
     }
 
     /**

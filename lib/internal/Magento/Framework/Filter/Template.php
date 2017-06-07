@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\Filter;
 
+/**
+ * @api
+ */
 class Template implements \Zend_Filter_Interface
 {
     /**
@@ -318,8 +321,7 @@ class Template implements \Zend_Filter_Interface
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
-            } elseif (
-                    isset($stackVars[$i - 1]['variable'])
+            } elseif (isset($stackVars[$i - 1]['variable'])
                     && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
             ) {
                 // If object calling methods or getting properties
@@ -333,8 +335,7 @@ class Template implements \Zend_Filter_Interface
                     );
                 } elseif ($stackVars[$i]['type'] == 'method') {
                     // Calling of object method
-                    if (
-                            method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
+                    if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
                             || substr($stackVars[$i]['name'], 0, 3) == 'get'
                     ) {
                         $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);

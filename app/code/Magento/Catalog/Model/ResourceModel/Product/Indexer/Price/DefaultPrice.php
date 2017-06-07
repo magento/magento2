@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
@@ -11,7 +11,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
  * Default Product Type Price Indexer Resource model
  * For correctly work need define product type id
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
 {
@@ -44,14 +47,25 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected $_eventManager = null;
 
     /**
-     * Class constructor
+     * @var bool|null
+     */
+    private $hasEntity = null;
+
+    /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory
+     */
+    private $indexerStateFactory;
+
+    /**
+     * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param string $connectionName
+     * @param string|null $connectionName
+     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -59,10 +73,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
+        $this->indexerStateFactory = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
@@ -235,11 +252,30 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param string|null $type product type, all if null
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
         $this->_prepareDefaultFinalPriceTable();
+
+        $select = $this->getSelect($entityIds, $type);
+        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
+        $this->getConnection()->query($query);
+        return $this;
+    }
+
+    /**
+     * Forms Select for collecting price related data for final price index table
+     * Next types of prices took into account: default, special, tier price
+     * Moved to protected for possible reusing
+     *
+     * @param int|array $entityIds Ids for filtering output result
+     * @param string|null $type Type for filtering output result by specified product type (all if null)
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function getSelect($entityIds = null, $type = null)
+    {
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $select = $connection->select()->from(
@@ -371,10 +407,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
-
-        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
-        $connection->query($query);
-        return $this;
+        return $select;
     }
 
     /**
@@ -661,16 +694,36 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function hasEntity()
     {
-        $reader = $this->getConnection();
+        if ($this->hasEntity === null) {
+            $reader = $this->getConnection();
 
-        $select = $reader->select()->from(
-            [$this->getTable('catalog_product_entity')],
-            ['count(entity_id)']
-        )->where(
-            'type_id=?',
-            $this->getTypeId()
+            $select = $reader->select()->from(
+                [$this->getTable('catalog_product_entity')],
+                ['count(entity_id)']
+            )->where(
+                'type_id=?',
+                $this->getTypeId()
+            );
+            $this->hasEntity = (int)$reader->fetchOne($select) > 0;
+        }
+
+        return $this->hasEntity;
+    }
+
+    /**
+     * Returns main table name based on the suffix stored in the 'indexer_state' table
+     *
+     * {@inheritdoc}
+     */
+    public function getMainTable()
+    {
+        $table = parent::getMainTable();
+        $indexerState = $this->indexerStateFactory->create()->loadByIndexer(
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID
         );
-
-        return (int)$reader->fetchOne($select) > 0;
+        $destinationTableSuffix = ($indexerState->getTableSuffix() === '')
+            ? \Magento\Framework\Indexer\StateInterface::ADDITIONAL_TABLE_SUFFIX
+            : '';
+        return $table . $destinationTableSuffix;
     }
 }

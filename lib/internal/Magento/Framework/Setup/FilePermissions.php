@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
-use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 
+/**
+ * Checks permissions to files and folders.
+ */
 class FilePermissions
 {
     /**
@@ -82,6 +85,7 @@ class FilePermissions
                 DirectoryList::VAR_DIR,
                 DirectoryList::MEDIA,
                 DirectoryList::STATIC_VIEW,
+                DirectoryList::GENERATED,
             ];
             foreach ($data as $code) {
                 $this->installationWritableDirectories[$code] = $this->directoryList->getPath($code);
@@ -130,20 +134,21 @@ class FilePermissions
     }
 
     /**
-     * Check all sub-directories and files except for var/generation and var/di
+     * Check all sub-directories and files except for generated/code and generated/metadata
      *
      * @param string $directory
      * @return bool
      */
     private function checkRecursiveDirectories($directory)
     {
+        /** @var $directoryIterator \RecursiveIteratorIterator   */
         $directoryIterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
         );
         $noWritableFilesFolders = [
-            $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) . '/',
+            $this->directoryList->getPath(DirectoryList::GENERATED_CODE) . '/',
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/',
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
@@ -154,6 +159,8 @@ class FilePermissions
                 $this->directoryList->getPath(DirectoryList::SESSION) . '/',
             ]
         );
+
+        $directoryIterator->setMaxDepth(1);
 
         $foundNonWritable = false;
 
@@ -253,6 +260,31 @@ class FilePermissions
             $missingPaths = array_merge($required, $missingPaths);
         }
         return $missingPaths;
+    }
+
+    /**
+     * Checks writable paths for database upgrade, returns array of directory paths that requires write permission
+     *
+     * @return array List of directories that requires write permission for database upgrade
+     */
+    public function getMissingWritableDirectoriesForDbUpgrade()
+    {
+        $writableDirectories = [
+            DirectoryList::CONFIG,
+            DirectoryList::VAR_DIR
+        ];
+
+        $requireWritePermission = [];
+        foreach ($writableDirectories as $code) {
+            if (!$this->isWritable($code)) {
+                $path = $this->directoryList->getPath($code);
+                if (!$this->checkRecursiveDirectories($path)) {
+                    $requireWritePermission[] = $path;
+                }
+            }
+        }
+
+        return $requireWritePermission;
     }
 
     /**

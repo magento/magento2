@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Reports\Test\Page\Adminhtml\RefundsReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
@@ -46,14 +47,23 @@ class SalesRefundsReportEntityTest extends Injectable
     protected $refundsReport;
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Inject pages.
      *
+     * @param FixtureFactory $fixtureFactory
      * @param RefundsReport $refundsReport
      * @return void
      */
-    public function __inject(RefundsReport $refundsReport)
+    public function __inject(FixtureFactory $fixtureFactory, RefundsReport $refundsReport)
     {
         $this->refundsReport = $refundsReport;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -73,14 +83,17 @@ class SalesRefundsReportEntityTest extends Injectable
         $initialRefundsResult = $this->refundsReport->getGridBlock()->getLastResult();
 
         $order->persist();
+        $products = $order->getEntityId()['products'];
+        $cart['data']['items'] = ['products' => $products];
+        $cart = $this->fixtureFactory->createByCode('cart', $cart);
         $invoice = $this->objectManager->create(
             \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
-            ['order' => $order]
+            ['order' => $order, 'cart' => $cart]
         );
         $invoice->run();
         $creditMemo = $this->objectManager->create(
             \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
-            ['order' => $order]
+            ['order' => $order, 'cart' => $cart]
         );
         $creditMemo->run();
 

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Cart\Totals;
@@ -33,6 +33,9 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->configPoolMock = $this->getMock(
@@ -52,11 +55,14 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+
         $this->model = new \Magento\Quote\Model\Cart\Totals\ItemConverter(
             $this->configPoolMock,
             $this->eventManagerMock,
             $this->totalsFactoryMock,
-            $this->dataObjectHelperMock
+            $this->dataObjectHelperMock,
+            $this->serializerMock
         );
     }
 
@@ -91,6 +97,19 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
         ];
         $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray')
             ->with(null, $expectedData, \Magento\Quote\Api\Data\TotalsItemInterface::class);
+
+        $optionData = [
+            '1' => [
+                'data' => 'optionsData',
+                'label' => 'option1'
+            ],
+            '2' => [
+                'data' => 'optionsData',
+                'label' => 'option2'
+            ]
+        ];
+        $this->serializerMock->expects($this->once())->method('serialize')
+            ->will($this->returnValue(json_encode($optionData)));
 
         $this->model->modelToDataObject($itemMock);
     }

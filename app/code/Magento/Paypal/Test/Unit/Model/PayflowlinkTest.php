@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Payflowlink;
-use Magento\Paypal\Model\Config;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -190,5 +190,13 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
             [false, '0'],
             [true, '1']
         ];
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Payflowlink::getInfoBlockType()
+     */
+    public function testGetInfoBlockType()
+    {
+        static::assertEquals(Info::class, $this->model->getInfoBlockType());
     }
 }

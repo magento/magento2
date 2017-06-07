@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,4 +26,9 @@
             <argument name="urlModel" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
+    <type name="Magento\Review\Model\ResourceModel\Rating\Option">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>    
 </config>

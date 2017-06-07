@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogWidget\Model;
@@ -9,7 +9,9 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
- * Class Rule
+ * Rule for catalog widget
+ *
+ * @api
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
@@ -32,6 +34,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
      *
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -44,7 +47,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null
+        AttributeValueFactory $customAttributeFactory = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->conditionsFactory = $conditionsFactory;
         parent::__construct(
@@ -56,7 +60,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $resourceCollection,
             $data,
             $extensionFactory,
-            $customAttributeFactory
+            $customAttributeFactory,
+            $serializer
         );
     }
 

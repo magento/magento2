@@ -1,39 +1,48 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments;
 
+use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+
 /**
- * Class Grid
- * Shipments grid on order view page
+ * Shipments grid on order view page.
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends DataGrid
 {
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
     protected $editLink = '[data-column="real_shipment_id"]';
 
     /**
-     * Locator for shipment ids
+     * Css selector for shipment ids.
      *
      * @var string
      */
-    protected $shipmentId = 'tbody td[data-column="real_shipment_id"]';
+    protected $shipmentId = 'tbody td:nth-child(2)';
 
     /**
-     * Filters array mapping
+     * Shipments data grid loader Xpath locator.
+     *
+     * @var string
+     */
+    protected $loader = '//div[contains(@data-component, "sales_order_view_shipment_grid")]';
+
+    /**
+     * Filters array mapping.
      *
      * @var array
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="real_shipment_id"]',
+            'selector' => 'input[name="increment_id"]',
         ],
         'qty_from' => [
             'selector' => '[name="total_qty[from]"]',
@@ -44,13 +53,15 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     ];
 
     /**
-     * Get shipment ids
+     * Get shipment ids.
      *
      * @return array
      */
     public function getIds()
     {
+        $this->resetFilter();
         $result = [];
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $shipmentIds = $this->_rootElement->getElements($this->shipmentId);
         foreach ($shipmentIds as $shipmentId) {
             $result[] = trim($shipmentId->getText());

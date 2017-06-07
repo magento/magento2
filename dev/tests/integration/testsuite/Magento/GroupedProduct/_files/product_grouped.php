@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,3 +61,12 @@ $productLink->setSku($product->getSku())
 $newLinks[] = $productLink;
 $product->setProductLinks($newLinks);
 $product->save();
+
+/** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
+$categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [2]
+);

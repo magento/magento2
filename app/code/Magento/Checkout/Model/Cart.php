@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -8,13 +8,14 @@ namespace Magento\Checkout\Model;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Checkout\Model\Cart\CartInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Shopping cart model
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 
+ * @deprecated
  */
 class Cart extends DataObject implements CartInterface
 {
@@ -358,11 +359,10 @@ class Cart extends DataObject implements CartInterface
         if ($productId) {
             $stockItem = $this->stockRegistry->getStockItem($productId, $product->getStore()->getWebsiteId());
             $minimumQty = $stockItem->getMinSaleQty();
-            //If product was not found in cart and there is set minimal qty for it
+            //If product quantity is not specified in request and there is set minimal qty for it
             if ($minimumQty
                 && $minimumQty > 0
                 && !$request->getQty()
-                && !$this->getQuote()->hasProductId($productId)
             ) {
                 $request->setQty($minimumQty);
             }

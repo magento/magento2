@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,18 +45,21 @@
         <fieldset class="fieldset address">
             <legend class="legend"><span><?php echo $block->escapeHtml(__('Address Information')) ?></span></legend><br>
             <input type="hidden" name="create_address" value="1" />
-            <div class="field company">
-                <label for="company" class="label"><span><?php echo $block->escapeHtml(__('Company')) ?></span></label>
-                <div class="control">
-                    <input type="text" name="company" id="company" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCompany()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Company')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company')) ?>">
-                </div>
-            </div>
-            <div class="field telephone">
-                <label for="telephone" class="label"><span><?php echo $block->escapeHtml(__('Phone Number')) ?></span></label>
-                <div class="control">
-                    <input type="text" name="telephone" id="telephone" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getTelephone()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Phone Number')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone')) ?>">
-                </div>
-            </div>
+
+            <?php $_company = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Company') ?>
+            <?php if ($_company->isEnabled()): ?>
+                <?php echo $_company->setCompany($block->getFormData()->getCompany())->toHtml() ?>
+            <?php endif ?>
+
+            <?php $_telephone = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Telephone') ?>
+            <?php if ($_telephone->isEnabled()): ?>
+                <?php echo $_telephone->setTelephone($block->getFormData()->getTelephone())->toHtml() ?>
+            <?php endif ?>
+
+            <?php $_fax = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Fax') ?>
+            <?php if ($_fax->isEnabled()): ?>
+                <?php echo $_fax->setFax($block->getFormData()->getFax())->toHtml() ?>
+            <?php endif ?>
 
             <?php $_streetValidationClass = $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('street'); ?>
 
@@ -130,7 +133,7 @@
                 <input type="email" name="email" autocomplete="email" id="email_address" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getEmail()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
             </div>
         </div>
-        <div class="field password required" data-mage-init='{"passwordStrengthIndicator": {}}'>
+        <div class="field password required">
             <label for="password" class="label"><span><?php echo $block->escapeHtml(__('Password')) ?></span></label>
             <div class="control">
                 <input type="password" name="password" id="password"
@@ -176,7 +179,7 @@ require([
 
     var dataForm = $('#form-validate');
     var ignore = <?php /* @noEscape */ echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
-    
+
     dataForm.mage('validation', {
     <?php if ($_dob->isEnabled()): ?>
         errorPlacement: function(error, element) {
@@ -217,3 +220,13 @@ require([
     }
 </script>
 <?php endif; ?>
+
+<script type="text/x-magento-init">
+    {
+        ".field.password": {
+            "passwordStrengthIndicator": {
+                "formSelector": "form.form-create-account"
+            }
+        }
+    }
+</script>

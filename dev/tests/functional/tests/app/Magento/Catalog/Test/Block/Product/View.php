@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Block\Product;
 
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Block\Cart\Sidebar;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Checkout\Test\Block\Cart\Sidebar;
 
 /**
  * Product view block on the product page.
@@ -68,7 +68,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $inContextPaypalCheckout = '#paypal-express-in-context-mini-cart';
+    protected $inContextPaypalCheckout = 'ul.checkout-methods-items a[data-action="paypal-in-context-checkout"]';
 
     /**
      * Product name element.
@@ -209,6 +209,33 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * Threshold message selector.
+     *
+     * @var string
+     */
+    private $thresholdMessage = '.availability.only';
+
+    /**
+     * Checks if threshold message is displayed.
+     *
+     * @return bool
+     */
+    public function isThresholdMessageDisplayed()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->isVisible();
+    }
+
+    /**
+     * Gets threshold message.
+     *
+     * @return string
+     */
+    public function getThresholdMessage()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->getText();
+    }
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -337,7 +364,7 @@ class View extends AbstractConfigureBlock
 
     /**
      * Press 'Check out with Braintree PayPal' button.
-     * 
+     *
      * @return string
      */
     public function braintreePaypalCheckout()
@@ -518,7 +545,10 @@ class View extends AbstractConfigureBlock
      */
     public function waitLoader()
     {
-        $this->waitForElementNotVisible($this->ajaxLoading);
+        try {
+            $this->waitForElementNotVisible($this->ajaxLoading);
+        } catch (\Exception $e) {
+        }
     }
 
     /**

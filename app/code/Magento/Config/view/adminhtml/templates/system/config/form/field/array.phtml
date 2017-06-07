@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 
 <div class="design_theme_ua_regexp" id="grid<?php /* @escapeNotVerified */ echo $_htmlId; ?>">
     <div class="admin__control-table-wrapper">
-        <table class="admin__control-table">
+        <table class="admin__control-table" id="<?php /* @escapeNotVerified */ echo $block->getElement()->getId(); ?>">
             <thead>
             <tr>
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
@@ -28,7 +28,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             <tr>
                 <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
                     <button id="addToEndBtn<?php /* @escapeNotVerified */ echo $_htmlId; ?>" class="action-add" title="<?php /* @escapeNotVerified */ echo __('Add'); ?>" type="button">
-                        <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?><?php /* @escapeNotVerified */ echo __('Add'); ?></span>
+                        <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?></span>
                     </button>
                 </td>
             </tr>
@@ -93,7 +93,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             var rowInputElementNames = Object.keys(rowData.column_values);
             for (var i = 0; i < rowInputElementNames.length; i++) {
                 if ($(rowInputElementNames[i])) {
-                    $(rowInputElementNames[i]).value = rowData.column_values[rowInputElementNames[i]];
+                    $(rowInputElementNames[i]).setValue(rowData.column_values[rowInputElementNames[i]]);
                 }
             }
         }

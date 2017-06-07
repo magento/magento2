@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
@@ -126,8 +126,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -157,7 +160,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $searchRequestName = 'catalog_view_container',
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
     ) {
         $this->queryFactory = $catalogSearchData;
         if ($searchResultFactory === null) {
@@ -186,7 +191,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection,
             $productLimitationFactory,
-            $metadataPool
+            $metadataPool,
+            $indexerFrontendResource,
+            $categoryProductIndexerFrontend
         );
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -354,8 +361,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
             []
         );
-
-        $this->_totalRecords = $this->searchResult->getTotalCount();
 
         if ($this->order && 'relevance' === $this->order['field']) {
             $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);

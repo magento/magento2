@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Catalog category image attribute backend model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
+/**
+ * @api
+ */
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -97,7 +102,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($imageName = $this->getUploadedImageName($value)) {
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
-        } else if (!is_string($value)) {
+        } elseif (!is_string($value)) {
             $object->setData($attributeName, '');
         }
 

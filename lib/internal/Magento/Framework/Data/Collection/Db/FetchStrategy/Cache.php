@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Retrieving collection data from cache, failing over to another fetch strategy, if cache not yet exists
  */
 namespace Magento\Framework\Data\Collection\Db\FetchStrategy;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Retrieve collection data from cache, fail over to another fetch strategy, if cache does not exist yet
+ */
 class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
 {
     /**
@@ -39,6 +40,11 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
     protected $_cacheLifetime = null;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -46,19 +52,22 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
      * @param string $cacheIdPrefix
      * @param array $cacheTags
      * @param int|bool|null $cacheLifetime
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         $cacheIdPrefix = '',
         array $cacheTags = [],
-        $cacheLifetime = null
+        $cacheLifetime = null,
+        SerializerInterface $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_fetchStrategy = $fetchStrategy;
         $this->_cacheIdPrefix = $cacheIdPrefix;
         $this->_cacheTags = $cacheTags;
         $this->_cacheLifetime = $cacheLifetime;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -69,10 +78,15 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
         $cacheId = $this->_getSelectCacheId($select);
         $result = $this->_cache->load($cacheId);
         if ($result) {
-            $result = unserialize($result);
+            $result = $this->serializer->unserialize($result);
         } else {
             $result = $this->_fetchStrategy->fetchAll($select, $bindParams);
-            $this->_cache->save(serialize($result), $cacheId, $this->_cacheTags, $this->_cacheLifetime);
+            $this->_cache->save(
+                $this->serializer->serialize($result),
+                $cacheId,
+                $this->_cacheTags,
+                $this->_cacheLifetime
+            );
         }
         return $result;
     }

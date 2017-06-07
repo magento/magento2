@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,15 +15,13 @@ define([
         var elWithStaticText = $('<span />'),
             elWithVariable = $('<span />'),
             staticText = 'staticText',
-            staticTextTranslated = 'staticTextTranslated',
-            staticTextTranslatedRaw = '{{{staticTextTranslated}}{{staticTextTranslated}}{{staticText}}{{theme}}}',
             variableText = 'variableText',
             variable = ko.observable(variableText),
-            variableTranslated = 'variableTextTranslated',
-            variableTranslatedRaw = '{{{variableTextTranslated}}{{variableTextTranslated}}{{variableText}}{{theme}}}',
             dataTranslateAttr = '[{"shown":"&","translated":"&","original":"$","location":"Span element"}]',
             dataTranslateAttrName = 'data-translate',
             context = require.s.contexts._,
+
+            /** Stub */
             manageInlineTranslation = function (state) {
                 context.config.config = {
                     'Magento_Ui/js/lib/knockout/bindings/i18n': {
@@ -31,9 +29,13 @@ define([
                     }
                 };
             },
+
+            /** Stub */
             turnOnInlineTranslation = function () {
                 manageInlineTranslation(true);
             },
+
+            /** Stub */
             turnOffInlineTranslation = function () {
                 manageInlineTranslation(false);
             };

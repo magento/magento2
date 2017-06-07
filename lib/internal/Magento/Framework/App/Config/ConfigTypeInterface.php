@@ -2,7 +2,7 @@
 /**
  * Application configuration object. Used to access configuration when application is initialized and installed.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -13,10 +13,13 @@ namespace Magento\Framework\App\Config;
 interface ConfigTypeInterface
 {
     /**
-     * Retrieve configuration raw data array.
+     * Retrieve configuration data.
+     *
+     * Returns full configuration array in case $path is empty.
+     * In case $path is not empty return value can be either array or scalar
      *
      * @param string $path
-     * @return array
+     * @return array|int|string|boolean
      */
     public function get($path = '');
 

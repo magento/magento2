@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
@@ -8,7 +8,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 /**
  * Import entity virtual product type
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Virtual extends \Magento\CatalogImportExport\Model\Import\Product\Type\Simple
 {

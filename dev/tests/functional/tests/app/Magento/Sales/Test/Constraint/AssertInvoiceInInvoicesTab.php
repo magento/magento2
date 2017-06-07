@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that invoice is present in the invoices tab of the order with corresponding amount(Grand Total)
@@ -37,7 +37,7 @@ class AssertInvoiceInInvoicesTab extends AbstractConstraint
         $salesOrderView->getOrderForm()->openTab('invoices');
         /** @var Grid $grid */
         $grid = $salesOrderView->getOrderInvoiceGrid();
-        $amount = $order->getPrice();
+        $amount = $order->getPrice()['invoice'];
         foreach ($ids['invoiceIds'] as $key => $invoiceId) {
             $filter = [
                 'id' => $invoiceId,

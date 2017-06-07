@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Config\Processor;
@@ -9,9 +9,7 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Store\App\Config\Type\Scopes;
 
 /**
- * Fallback throguh different scopes and merge them
- *
- * @package Magento\Store\Model\Config\Processor
+ * Fallback through different scopes and merge them
  */
 class Fallback implements PostProcessorInterface
 {
@@ -60,7 +58,7 @@ class Fallback implements PostProcessorInterface
     private function prepareWebsitesConfig(array $defaultConfig, array $websitesConfig)
     {
         $result = [];
-        foreach ($this->scopes->get('websites') as $websiteData) {
+        foreach ((array)$this->scopes->get('websites') as $websiteData) {
             $code = $websiteData['code'];
             $id = $websiteData['website_id'];
             $websiteConfig = isset($websitesConfig[$code]) ? $websitesConfig[$code] : [];
@@ -81,7 +79,7 @@ class Fallback implements PostProcessorInterface
     private function prepareStoresConfig(array $defaultConfig, array $websitesConfig, array $storesConfig)
     {
         $result = [];
-        foreach ($this->scopes->get('stores') as $storeData) {
+        foreach ((array)$this->scopes->get('stores') as $storeData) {
             $code = $storeData['code'];
             $id = $storeData['store_id'];
             $websiteConfig = [];

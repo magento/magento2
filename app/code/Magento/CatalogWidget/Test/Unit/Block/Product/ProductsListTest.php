@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogWidget\Test\Unit\Block\Product;
 
-use \Magento\CatalogWidget\Block\Product\ProductsList;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Visibility;
+
+use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ProductsListTest
@@ -78,6 +78,11 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
      */
     private $priceCurrency;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->collectionFactory =
@@ -88,10 +93,13 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getVisibleInCatalogIds'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class);
+        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
         $this->builder = $this->getMock(\Magento\Rule\Model\Condition\Sql\Builder::class, [], [], '', false);
         $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
-        $this->widgetConditionsHelper = $this->getMock(\Magento\Widget\Helper\Conditions::class);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $this->widgetConditionsHelper = $this->getMockBuilder(\Magento\Widget\Helper\Conditions::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->design = $this->getMock(\Magento\Framework\View\DesignInterface::class);
 
@@ -106,7 +114,8 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'rule' => $this->rule,
                 'conditionsHelper' => $this->widgetConditionsHelper,
                 'storeManager' => $this->storeManager,
-                'design' => $this->design
+                'design' => $this->design,
+                'json' => $this->serializer
             ]
         );
         $this->request = $arguments['context']->getRequest();
@@ -140,6 +149,12 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())->method('getParams')->willReturn('request_params');
         $this->priceCurrency->expects($this->once())->method('getCurrencySymbol')->willReturn('$');
 
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(function ($value) {
+                return json_encode($value);
+            });
+
         $cacheKey = [
             'CATALOG_PRODUCTS_LIST_WIDGET',
             '$',
@@ -149,7 +164,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             1,
             5,
             'some_serialized_conditions',
-            serialize('request_params')
+            json_encode('request_params')
         ];
         $this->assertEquals($cacheKey, $this->productsList->getCacheKeyInfo());
     }

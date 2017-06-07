@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Website;
@@ -93,7 +93,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->method('insertMultiple')
             ->with('catalog_product_website', [
                 ['product_id' => $productId, 'website_id' => 3]
-        ]);
+            ]);
 
         $this->connection->expects($this->once())
             ->method('delete')

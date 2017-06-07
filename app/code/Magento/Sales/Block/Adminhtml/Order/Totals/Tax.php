@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Totals;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Totals;
 /**
  * Adminhtml order tax totals block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tax extends \Magento\Tax\Block\Sales\Order\Tax

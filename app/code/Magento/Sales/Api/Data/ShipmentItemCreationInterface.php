@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,9 @@ namespace Magento\Sales\Api\Data;
  *
  * @api
  */
-interface ShipmentItemCreationInterface extends LineItemInterface,
-\Magento\Framework\Api\ExtensibleDataInterface
+interface ShipmentItemCreationInterface extends
+    LineItemInterface,
+    \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\CommentParser;
 use Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -17,65 +17,87 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * @covers \Magento\Framework\App\DeploymentConfig\Writer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @package Magento\Framework\App\Test\Unit\DeploymentConfig
  */
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Writer */
+    /**
+     * @var Writer
+     */
     private $object;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var DeploymentConfig\Reader|Mock
+     */
     private $reader;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var WriteInterface|Mock
+     */
     private $dirWrite;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ReadInterface|Mock
+     */
     private $dirRead;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var FormatterInterface|Mock
+     */
     protected $formatter;
 
-    /** @var ConfigFilePool */
+    /**
+     * @var ConfigFilePool|Mock
+     */
     private $configFilePool;
 
-    /** @var DeploymentConfig */
+    /**
+     * @var DeploymentConfig|Mock
+     */
     private $deploymentConfig;
 
-    /** @var Filesystem */
+    /**
+     * @var Filesystem|Mock
+     */
     private $filesystem;
+
+    /**
+     * @var CommentParser|Mock
+     */
+    private $commentParserMock;
 
     protected function setUp()
     {
-        $this->reader = $this->getMock(Reader::class, [], [], '', false);
-        $this->filesystem = $this->getMock(Filesystem::class, [], [], '', false);
+        $this->commentParserMock = $this->getMockBuilder(CommentParser::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->reader = $this->getMockBuilder(Reader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->formatter = $this->getMockForAbstractClass(FormatterInterface::class);
-        $this->configFilePool = $this->getMock(ConfigFilePool::class, [], [], '', false);
-        $this->deploymentConfig = $this->getMock(DeploymentConfig::class, [], [], '', false);
+        $this->configFilePool = $this->getMockBuilder(ConfigFilePool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dirWrite = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->dirRead = $this->getMockForAbstractClass(ReadInterface::class);
+
         $this->object = new Writer(
             $this->reader,
             $this->filesystem,
             $this->configFilePool,
             $this->deploymentConfig,
-            $this->formatter
+            $this->formatter,
+            $this->commentParserMock
         );
-        $this->reader->expects($this->any())->method('getFiles')->willReturn('test.php');
-        $this->dirWrite = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->dirRead = $this->getMockForAbstractClass(ReadInterface::class);
-        $this->dirRead->expects($this->any())
-            ->method('getAbsolutePath');
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::CONFIG)
-            ->willReturn($this->dirWrite);
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::CONFIG)
-            ->willReturn($this->dirRead);
     }
 
     public function testSaveConfig()
@@ -83,7 +105,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $configFiles = [
             ConfigFilePool::APP_CONFIG => 'config.php'
         ];
-
         $testSetExisting = [
             ConfigFilePool::APP_CONFIG => [
                 'foo' => 'bar',
@@ -94,7 +115,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
         ];
-
         $testSetUpdate = [
             ConfigFilePool::APP_CONFIG => [
                 'baz' => [
@@ -102,7 +122,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
         ];
-
         $testSetExpected = [
             ConfigFilePool::APP_CONFIG => [
                 'foo' => 'bar',
@@ -113,20 +132,57 @@ class WriterTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
         ];
+        $testComments = [
+            'baz' => 'Baz comment2',
+            'bar' => 'Bar comment'
+        ];
+        $existedComments = [
+            'foo' => 'Foo comment',
+            'baz' => 'Baz comment',
+        ];
+        $expectedComments = [
+            'foo' => 'Foo comment',
+            'baz' => 'Baz comment2',
+            'bar' => 'Bar comment'
+        ];
 
-        $this->deploymentConfig->expects($this->once())->method('resetData');
-        $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
-        $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
-        $this->reader->expects($this->once())->method('loadConfigFile')
+        $this->deploymentConfig->expects($this->once())
+            ->method('resetData');
+        $this->configFilePool->expects($this->once())
+            ->method('getPaths')
+            ->willReturn($configFiles);
+        $this->dirWrite->expects($this->any())
+            ->method('isExist')
+            ->willReturn(true);
+        $this->reader->expects($this->once())
+            ->method('load')
             ->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
-        $this->formatter
-            ->expects($this->once())
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('config.php')
+            ->willReturn($existedComments);
+        $this->formatter->expects($this->once())
             ->method('format')
-            ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
+            ->with($testSetExpected[ConfigFilePool::APP_CONFIG], $expectedComments)
             ->willReturn([]);
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('config.php', []);
+        $this->dirWrite->expects($this->once())
+            ->method('writeFile')
+            ->with('config.php', []);
+        $this->reader->expects($this->any())
+            ->method('getFiles')
+            ->willReturn('test.php');
+        $this->dirRead->expects($this->any())
+            ->method('getAbsolutePath');
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirWrite);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirRead);
 
-        $this->object->saveConfig($testSetUpdate);
+        $this->object->saveConfig($testSetUpdate, false, null, $testComments);
     }
 
     public function testSaveConfigOverride()
@@ -134,7 +190,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $configFiles = [
             ConfigFilePool::APP_CONFIG => 'config.php'
         ];
-
         $testSetUpdate = [
             ConfigFilePool::APP_CONFIG => [
                 'baz' => [
@@ -142,7 +197,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
         ];
-
         $testSetExpected = [
             ConfigFilePool::APP_CONFIG => [
                 'baz' => [
@@ -151,15 +205,38 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->deploymentConfig->expects($this->once())->method('resetData');
-        $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
-        $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
-        $this->formatter
-            ->expects($this->once())
+        $this->deploymentConfig->expects($this->once())
+            ->method('resetData');
+        $this->configFilePool->expects($this->once())
+            ->method('getPaths')
+            ->willReturn($configFiles);
+        $this->dirWrite->expects($this->any())
+            ->method('isExist')
+            ->willReturn(true);
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('config.php')
+            ->willReturn([]);
+        $this->formatter->expects($this->once())
             ->method('format')
             ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
             ->willReturn([]);
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('config.php', []);
+        $this->dirWrite->expects($this->once())
+            ->method('writeFile')
+            ->with('config.php', []);
+        $this->reader->expects($this->any())
+            ->method('getFiles')
+            ->willReturn('test.php');
+        $this->dirRead->expects($this->any())
+            ->method('getAbsolutePath');
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirWrite);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirRead);
 
         $this->object->saveConfig($testSetUpdate, true);
     }
@@ -170,9 +247,33 @@ class WriterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveConfigException()
     {
-        $this->configFilePool->method('getPaths')->willReturn([ConfigFilePool::APP_ENV => 'env.php']);
         $exception = new FileSystemException(new Phrase('error when writing file config file'));
-        $this->dirWrite->method('writeFile')->willThrowException($exception);
+
+        $this->configFilePool->method('getPaths')
+            ->willReturn([ConfigFilePool::APP_ENV => 'env.php']);
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('env.php')
+            ->willReturn([]);
+        $this->dirWrite->method('writeFile')
+            ->willThrowException($exception);
+        $this->reader->expects($this->any())
+            ->method('getFiles')
+            ->willReturn('test.php');
+        $this->dirRead->expects($this->any())
+            ->method('getAbsolutePath');
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirWrite);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirRead);
+        $this->dirWrite->expects($this->any())
+            ->method('isExist')
+            ->willReturn(true);
+
         $this->object->saveConfig([ConfigFilePool::APP_ENV => ['key' => 'value']]);
     }
 }

@@ -1,12 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Country collection
- */
 namespace Magento\Directory\Model\ResourceModel\Region;
 
 use Magento\Directory\Model\AllowedCountries;
@@ -14,8 +11,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Collection
+ * Regions collection
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -253,7 +253,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (count($options) > 0) {
             array_unshift(
                 $options,
-                ['title' => null, 'value' => null, 'label' => __('Please select a region, state or province.')]
+                ['title' => '', 'value' => '', 'label' => __('Please select a region, state or province.')]
             );
         }
         return $options;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,15 +13,12 @@ use Magento\User\Model\User as ModelUser;
 
 /**
  * ACL user resource
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    /**
-     * @var \Magento\Framework\Acl\CacheInterface
-     */
-    protected $_aclCache;
-
     /**
      * Role model
      *
@@ -35,25 +32,32 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Acl\Data\CacheInterface
+     */
+    private $aclDataCache;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Acl\CacheInterface $aclCache
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
+     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Acl\CacheInterface $aclCache,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
+        $this->aclDataCache = $aclDataCache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Acl\Data\CacheInterface::class
+        );
     }
 
     /**
@@ -162,7 +166,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $user)
     {
-        $user->setExtra(unserialize($user->getExtra()));
+        $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
         if ($user->hasRoleId()) {
             $this->_clearUserRoles($user);
             $this->_createUserRole($user->getRoleId(), $user);
@@ -214,7 +218,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
             $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
-            $this->_aclCache->clean();
+            $this->aclDataCache->clean();
         }
     }
 
@@ -227,7 +231,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $user)
     {
         if (is_string($user->getExtra())) {
-            $user->setExtra(unserialize($user->getExtra()));
+            $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
         }
         return parent::_afterLoad($user);
     }

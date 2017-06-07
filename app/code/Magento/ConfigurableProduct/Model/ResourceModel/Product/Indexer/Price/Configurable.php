@@ -2,46 +2,51 @@
 /**
  * Configurable Products Price Indexer Resource model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
-     * Reindex temporary (price result data) for all products
-     *
-     * @return $this
-     * @throws \Exception
+     * @var StoreResolverInterface
      */
-    public function reindexAll()
-    {
-        $this->tableStrategy->setUseIdxTable(true);
-        $this->beginTransaction();
-        try {
-            $this->reindex();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
-        return $this;
-    }
+    private $storeResolver;
 
     /**
-     * Reindex temporary (price result data) for defined product(s)
+     * Class constructor
      *
-     * @param int|array $entityIds
-     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\Configurable
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param string|null $connectionName
+     * @param StoreResolverInterface|null $storeResolver
      */
-    public function reindexEntity($entityIds)
-    {
-        $this->reindex($entityIds);
-        return $this;
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        $connectionName = null,
+        StoreResolverInterface $storeResolver = null
+    ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $moduleManager, $connectionName);
+        $this->storeResolver = $storeResolver ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            StoreResolverInterface::class
+        );
     }
 
     /**
@@ -51,61 +56,12 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
     protected function reindex($entityIds = null)
     {
         if ($this->hasEntity() || !empty($entityIds)) {
-            if (!empty($entityIds)) {
-                $allEntityIds = $this->getRelatedProducts($entityIds);
-                $this->prepareFinalPriceDataForType($allEntityIds, null);
-            } else {
-                $this->_prepareFinalPriceData($entityIds);
-            }
+            $this->prepareFinalPriceDataForType($entityIds, $this->getTypeId());
             $this->_applyCustomOption();
-            $this->_applyConfigurableOption($entityIds);
+            $this->_applyConfigurableOption();
             $this->_movePriceDataToIndexTable($entityIds);
         }
         return $this;
-    }
-
-    /**
-     * Get related product
-     *
-     * @param int[] $entityIds
-     * @return int[]
-     */
-    private function getRelatedProducts($entityIds)
-    {
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-        $select = $this->getConnection()->select()->union(
-            [
-                $this->getConnection()->select()
-                    ->from(
-                        ['e' => $this->getTable('catalog_product_entity')],
-                        'e.entity_id'
-                    )->join(
-                        ['cpsl' => $this->getTable('catalog_product_super_link')],
-                        'cpsl.parent_id = e.' . $metadata->getLinkField(),
-                        []
-                    )->where(
-                        'e.entity_id IN (?)',
-                        $entityIds
-                    ),
-                $this->getConnection()->select()
-                    ->from(
-                        ['cpsl' => $this->getTable('catalog_product_super_link')],
-                        'cpsl.product_id'
-                    )->join(
-                        ['e' => $this->getTable('catalog_product_entity')],
-                        'cpsl.parent_id = e.' . $metadata->getLinkField(),
-                        []
-                    )->where(
-                        'e.entity_id IN (?)',
-                        $entityIds
-                    ),
-                $this->getConnection()->select()
-                    ->from($this->getTable('catalog_product_super_link'), 'product_id')
-                    ->where('product_id in (?)', $entityIds),
-            ]
-        );
-
-        return array_map('intval', $this->getConnection()->fetchCol($select));
     }
 
     /**
@@ -163,52 +119,33 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         $connection = $this->getConnection();
         $coaTable = $this->_getConfigurableOptionAggregateTable();
         $copTable = $this->_getConfigurableOptionPriceTable();
+        $linkField = $metadata->getLinkField();
 
         $this->_prepareConfigurableOptionAggregateTable();
         $this->_prepareConfigurableOptionPriceTable();
 
-        $statusAttribute = $this->_getAttribute(ProductInterface::STATUS);
-        $linkField = $metadata->getLinkField();
-
-        $select = $connection->select()->from(
-            ['i' => $this->_getDefaultFinalPriceTable()],
-            []
-        )->join(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = i.entity_id',
-            ['parent_id' => 'e.entity_id']
-        )->join(
+        $subSelect = $this->getSelect();
+        $subSelect->join(
             ['l' => $this->getTable('catalog_product_super_link')],
-            'l.parent_id = e.' . $linkField,
-            ['product_id']
-        )->columns(
-            ['customer_group_id', 'website_id'],
-            'i'
+            'l.product_id = e.entity_id',
+            []
         )->join(
             ['le' => $this->getTable('catalog_product_entity')],
-            'le.entity_id = l.product_id',
-            []
-        )->where(
-            'le.required_options=0'
-        )->join(
-            ['product_status' => $this->getTable($statusAttribute->getBackend()->getTable())],
-            sprintf(
-                'le.%1$s = product_status.%1$s AND product_status.attribute_id = %2$s',
-                $linkField,
-                $statusAttribute->getAttributeId()
-            ),
-            []
-        )->where(
-            'product_status.value=' . ProductStatus::STATUS_ENABLED
-        )->group(
-            ['e.entity_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
+            'le.' . $linkField . ' = l.parent_id',
+            ['parent_id' => 'entity_id']
         );
-        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'le.' . $linkField, 0, null, true);
-        $tierPriceColumn = $connection->getIfNullSql('MIN(i.tier_price)', 'NULL');
 
-        $select->columns(
-            ['price' => $priceColumn, 'tier_price' => $tierPriceColumn]
-        );
+        $select = $connection->select();
+        $select
+            ->from(['sub' => new \Zend_Db_Expr('(' . (string)$subSelect . ')')], '')
+            ->columns([
+                'sub.parent_id',
+                'sub.entity_id',
+                'sub.customer_group_id',
+                'sub.website_id',
+                'sub.price',
+                'sub.tier_price'
+            ]);
 
         $query = $select->insertFromSelect($coaTable);
         $connection->query($query);

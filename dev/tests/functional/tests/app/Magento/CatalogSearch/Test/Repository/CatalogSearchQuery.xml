@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,8 @@
     <repository class="Magento\CatalogSearch\Test\Repository\CatalogSearchQuery">
         <dataset name="default">
             <field name="query_text" xsi:type="array">
-                <item name="value" xsi:type="string">Query text %isolation%</item>
+                <item name="search_query" xsi:type="string">Query text %isolation%</item>
+                <item name="value" xsi:type="string">catalogProductSimple::default</item>
             </field>
             <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
             <field name="redirect" xsi:type="string">http://example.com/</field>

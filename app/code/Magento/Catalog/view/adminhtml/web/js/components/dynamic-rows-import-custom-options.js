@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,17 +54,27 @@ define([
             if (!data) {
                 return;
             }
-            data.each(function (item) {
+            _.each(data, function (item) {
                 if (!item.options) {
                     return;
                 }
-                item.options.each(function (option) {
+                _.each(item.options, function (option) {
                     currentOption = utils.copy(option);
 
                     if (currentOption.hasOwnProperty('sort_order')) {
                         delete currentOption['sort_order'];
                     }
-                    currentOption['option_id'] = ++maxId;
+
+                    if (currentOption.hasOwnProperty('option_id')) {
+                        delete currentOption['option_id'];
+                    }
+
+                    if (currentOption.values.length > 0) {
+                        _.each(currentOption.values, function (optionValue) {
+                            delete optionValue['option_id'];
+                            delete optionValue['option_type_id'];
+                        });
+                    }
                     options.push(currentOption);
                 });
             });
@@ -73,7 +83,7 @@ define([
                 return;
             }
             this.cacheGridData = options;
-            options.each(function (opt) {
+            _.each(options, function (opt) {
                 this.mappingValue(opt);
             }, this);
 

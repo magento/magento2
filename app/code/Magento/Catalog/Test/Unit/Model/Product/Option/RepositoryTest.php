@@ -1,10 +1,8 @@
 <?php
 /**
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use \Magento\Catalog\Model\Product\Option\Repository;
@@ -93,16 +91,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->optionRepository = new Repository(
             $this->productRepositoryMock,
             $this->optionResourceMock,
-            $this->converterMock
-        );
-
-        $this->setProperties(
-            $this->optionRepository,
-            [
-                'optionFactory' => $optionFactory,
-                'collectionFactory' => $this->optionCollectionFactory,
-                'metadataPool' => $metadataPool
-            ]
+            $this->converterMock,
+            $this->optionCollectionFactory,
+            $optionFactory,
+            $metadataPool
         );
     }
 
@@ -227,22 +219,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock)
             ->willThrowException(new \Exception());
         $this->assertTrue($this->optionRepository->deleteByIdentifier($productSku, $optionId));
-    }
-
-    /**
-     * @param $object
-     * @param array $properties
-     */
-    private function setProperties($object, $properties = [])
-    {
-        $reflectionClass = new \ReflectionClass(get_class($object));
-        foreach ($properties as $key => $value) {
-            if ($reflectionClass->hasProperty($key)) {
-                $reflectionProperty = $reflectionClass->getProperty($key);
-                $reflectionProperty->setAccessible(true);
-                $reflectionProperty->setValue($object, $value);
-            }
-        }
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,13 +12,12 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertReorderStatusIsCorrect
- * Assert that status is correct on order page in backend
+ * Assert that status is correct on order page in admin panel.
  */
 class AssertReorderStatusIsCorrect extends AbstractConstraint
 {
     /**
-     * Assert that status is correct on order page in backend (same with value of orderStatus variable)
+     * Assert that status is correct on order page in admin panel (same with value of orderStatus variable).
      *
      * @param string $previousOrderStatus
      * @param OrderInjectable $order
@@ -35,15 +34,17 @@ class AssertReorderStatusIsCorrect extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
 
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         \PHPUnit_Framework_Assert::assertEquals(
             $previousOrderStatus,
-            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
+            $infoTab->getOrderStatus(),
             'Order status is incorrect on order page in backend.'
         );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

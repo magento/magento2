@@ -1,10 +1,12 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+
+/* @api */
 (function (factory) {
+    'use strict';
+
     if (typeof define === 'function' && define.amd) {
         define([
             'jquery',
@@ -18,8 +20,8 @@
     } else {
         factory(jQuery);
     }
-}(function ($, cvvValidator, creditCardNumberValidator, expirationDateValidator, monthValidator, creditCardData) {
-    "use strict";
+}(function ($, cvvValidator, creditCardNumberValidator, yearValidator, monthValidator, creditCardData) {
+    'use strict';
 
     $.each({
         'validate-card-type': [
@@ -30,61 +32,71 @@
 
                 if (!creditCardNumberValidator(number).isValid) {
                     return false;
-                } else {
-                    cardInfo = creditCardNumberValidator(number).card;
-
-                    for (i = 0, l = allowedTypes.length; i < l; i++) {
-                        if (cardInfo.title == allowedTypes[i].type) {
-                            return true;
-                        }
-                    }
-                    return false;
                 }
+
+                cardInfo = creditCardNumberValidator(number).card;
+
+                for (i = 0, l = allowedTypes.length; i < l; i++) {
+                    if (cardInfo.title == allowedTypes[i].type) { //eslint-disable-line eqeqeq
+                        return true;
+                    }
+                }
+
+                return false;
             },
             $.mage.__('Please enter a valid credit card type number.')
         ],
         'validate-card-number': [
+
             /**
              * Validate credit card number based on mod 10
-             * @param number - credit card number
-             * @return {boolean}
+             *
+             * @param {*} number - credit card number
+             * @return {Boolean}
              */
-                function (number) {
+            function (number) {
                 return creditCardNumberValidator(number).isValid;
             },
             $.mage.__('Please enter a valid credit card number.')
         ],
         'validate-card-date': [
+
             /**
-             * Validate credit card number based on mod 10
-             * @param date - month
-             * @return {boolean}
+             * Validate credit card expiration month
+             *
+             * @param {String} date - month
+             * @return {Boolean}
              */
-                function (date) {
+            function (date) {
                 return monthValidator(date).isValid;
             },
             $.mage.__('Incorrect credit card expiration month.')
         ],
         'validate-card-cvv': [
+
             /**
-             * Validate credit card number based on mod 10
-             * @param cvv - month
-             * @return {boolean}
+             * Validate cvv
+             *
+             * @param {String} cvv - card verification value
+             * @return {Boolean}
              */
-                function (cvv) {
+            function (cvv) {
                 var maxLength = creditCardData.creditCard ? creditCardData.creditCard.code.size : 3;
+
                 return cvvValidator(cvv, maxLength).isValid;
             },
             $.mage.__('Please enter a valid credit card verification number.')
         ],
         'validate-card-year': [
+
             /**
-             * Validate credit card number based on mod 10
-             * @param date - month
-             * @return {boolean}
+             * Validate credit card expiration year
+             *
+             * @param {String} date - year
+             * @return {Boolean}
              */
-                function (date) {
-                return monthValidator(date).isValid;
+            function (date) {
+                return yearValidator(date).isValid;
             },
             $.mage.__('Incorrect credit card expiration year.')
         ]

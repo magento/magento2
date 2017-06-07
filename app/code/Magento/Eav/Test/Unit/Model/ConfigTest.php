@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model;
 
-use Magento\Framework\DataObject;
-use Magento\Eav\Model\Config;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\Cache\Type as Cache;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -87,39 +87,32 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param boolean $cacheEnabled
-     * @param int $loadCalls
-     * @param int $cachedValue
-     * @param int $unserializeCalls
-     * @dataProvider getAttributeCacheDataProvider
-     * @return void
-     */
-    public function testGetAttributeCache($cacheEnabled, $loadCalls, $unserializeCalls, $cachedValue)
+    public function testGetAttributeCache()
     {
         $attributeData = [
-            [
-                'attribute_code' => 'attribute_code_1',
-                'attribute_id' => 1
-            ]
+            'attribute_code' => 'attribute_code_1',
+            'attribute_id' => 1
         ];
         $attributeCollectionMock = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
             ->setMethods(['getData', 'setEntityTypeFilter'])
             ->getMock();
-        $attributeCollectionMock
-            ->expects($this->any())
+        $attributeCollectionMock->expects($this->any())
             ->method('setEntityTypeFilter')
             ->will($this->returnSelf());
-        $attributeCollectionMock
-            ->expects($this->any())
+        $attributeCollectionMock->expects($this->any())
             ->method('getData')
-            ->willReturn([]);
+            ->willReturn([$attributeData]);
         $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['setData'])
+            ->setMethods(['setData', 'loadByCode', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
+        $entityAttributeMock->expects($this->atLeastOnce())->method('setData')
+            ->willReturnSelf();
+        $entityAttributeMock->expects($this->atLeastOnce())->method('loadByCode')
+            ->willReturnSelf();
+
         $factoryCalls = [
             [
                 Collection::class,
@@ -133,44 +126,36 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->cacheStateMock
-            ->expects($this->atLeastOnce())
-            ->method('isEnabled')
-            ->with(Cache::TYPE_IDENTIFIER)
-            ->willReturn($cacheEnabled);
-        $this->cacheMock
-            ->expects($this->exactly($loadCalls))
-            ->method('load')
-            ->with(Config::ATTRIBUTES_CACHE_ID)
-            ->willReturn($cachedValue);
-        $this->serializerMock
-            ->expects($this->exactly($unserializeCalls))
-            ->method('unserialize')
-            ->with($cachedValue)
-            ->willReturn($attributeData);
-
-        $collectionStub = new DataObject([$attributeData]);
+        $entityTypeData = [
+            'entity_type_id' => 'entity_type_id',
+            'entity_type_code' => 'entity_type_code'
+        ];
+        $collectionStub = new DataObject([$entityTypeData]);
         $this->collectionFactoryMock
             ->expects($this->any())
             ->method('create')
             ->willReturn($collectionStub);
 
+        $entityType = $this->getMockBuilder(Type::class)
+            ->setMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityType->method('getEntityTypeCode')
+            ->willReturn('entity_type_code');
+        $entityType->method('getId')
+            ->willReturn(101);
+
         $this->typeFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn(new DataObject(['id' => 101]));
+            ->willReturn($entityType);
 
         $this->universalFactoryMock
             ->expects($this->atLeastOnce())
             ->method('create')
             ->will($this->returnValueMap($factoryCalls));
 
-        $entityType = $this->getMockBuilder(Type::class)
-            ->setMethods(['getEntity', 'setData', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->config->getAttribute($entityType, 'attribute_code_1');
+        $this->assertInstanceOf(Attribute::class, $this->config->getAttribute($entityType, 'attribute_code_1'));
     }
 
     /**
@@ -198,6 +183,94 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'attribute serialzied data',
             ],
         ];
+    }
+
+    /**
+     * @param boolean $cacheEnabled
+     * @param int $loadCalls
+     * @param int $cachedValue
+     * @param int $unserializeCalls
+     * @dataProvider getAttributeCacheDataProvider
+     * @return void
+     */
+    public function testGetAttributes($cacheEnabled)
+    {
+        $attributeData = [
+            'attribute_code' => 'attribute_code_1',
+            'attribute_id' => 1
+        ];
+        $attributeCollectionMock = $this->getMockBuilder(
+            Collection::class
+        )->disableOriginalConstructor()
+            ->setMethods(['getData', 'setEntityTypeFilter'])
+            ->getMock();
+        $attributeCollectionMock
+            ->expects($this->any())
+            ->method('setEntityTypeFilter')
+            ->will($this->returnSelf());
+        $attributeCollectionMock
+            ->expects($this->any())
+            ->method('getData')
+            ->willReturn([$attributeData]);
+        $entityAttributeMock = $this->getMockBuilder(Attribute::class)
+            ->setMethods(['setData', 'load', 'toArray'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityAttributeMock->method('setData')
+            ->willReturnSelf();
+        $entityAttributeMock->method('load')
+            ->willReturnSelf();
+        $entityAttributeMock->method('toArray')
+            ->willReturn($attributeData);
+        $factoryCalls = [
+            [
+                Collection::class,
+                [],
+                $attributeCollectionMock
+            ],
+            [
+                Attribute::class,
+                [],
+                $entityAttributeMock
+            ],
+        ];
+
+        $this->cacheStateMock
+            ->expects($this->atLeastOnce())
+            ->method('isEnabled')
+            ->with(Cache::TYPE_IDENTIFIER)
+            ->willReturn($cacheEnabled);
+
+        $entityTypeData = [
+            'entity_type_id' => 'entity_type_id',
+            'entity_type_code' => 'entity_type_code'
+        ];
+        $collectionStub = new DataObject([$entityTypeData]);
+        $this->collectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($collectionStub);
+
+        $entityType = $this->getMockBuilder(Type::class)
+            ->setMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityType->method('getEntityTypeCode')
+            ->willReturn('entity_type_code');
+        $entityType->method('getId')
+            ->willReturn(101);
+
+        $this->typeFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($entityType);
+
+        $this->universalFactoryMock
+            ->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValueMap($factoryCalls));
+
+        $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
     }
 
     public function testClear()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml;
 /**
  * Adminhtml sales transactions block
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Transactions extends \Magento\Backend\Block\Widget\Grid\Container

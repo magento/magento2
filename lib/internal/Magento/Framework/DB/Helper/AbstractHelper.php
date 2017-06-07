@@ -2,7 +2,7 @@
 /**
  * Abstract DB helper class
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Helper;
@@ -42,7 +42,6 @@ abstract class AbstractHelper
     {
         return $this->_resource->getConnection($this->_modulePrefix);
     }
-
 
     /**
      * Escapes value, that participates in LIKE, with '\' symbol.

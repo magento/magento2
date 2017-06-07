@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui;
@@ -11,6 +11,11 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentMethodListInterface;
 
+/**
+ * Provides information about vault payemnt methods availability on storefront
+ *
+ * @api
+ */
 class VaultConfigProvider implements ConfigProviderInterface
 {
     const IS_ACTIVE_CODE = 'is_active_payment_token_enabler';
