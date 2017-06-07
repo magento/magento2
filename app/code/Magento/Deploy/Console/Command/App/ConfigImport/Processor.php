@@ -113,9 +113,9 @@ class Processor
             if (!$importers || !$this->changeDetector->hasChanges()) {
                 $output->writeln('<info>Nothing to import.</info>');
                 return;
-            } else {
-                $output->writeln('<info>Processing configurations data from configuration file...</info>');
             }
+
+            $output->writeln('<info>Processing configurations data from configuration file...</info>');
 
             /**
              * @var string $section
@@ -129,13 +129,12 @@ class Processor
                 $data = (array)$this->deploymentConfig->getConfigData($section);
 
                 $validator = $this->configImporterPool->getValidator($section);
-                if (null !== $validator) {
-                    $messages = $validator->validate($data);
+                if (null !== $validator
+                    && $messages = $validator->validate($data)
+                ) {
                     //Stop process next sections if current section has wrong data
-                    if ($messages) {
-                        $output->writeln($messages);
-                        return;
-                    }
+                    $output->writeln(sprintf('<error>%s</error>', implode(PHP_EOL, $messages)));
+                    return;
                 }
 
                 /** @var ImporterInterface $importer */
