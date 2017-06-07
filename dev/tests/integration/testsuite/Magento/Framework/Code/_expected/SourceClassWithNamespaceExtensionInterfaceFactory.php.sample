@@ -1,6 +1,12 @@
 <?php
 namespace Magento\Framework\Code\GeneratorTest;
 
+/**
+ * Factory class for @see \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespaceExtension
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 class SourceClassWithNamespaceExtensionInterfaceFactory
 {
     /**
