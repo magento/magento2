@@ -44,7 +44,7 @@ define(
                                 function () {
                                     $('body').trigger('processStart');
 
-                                    $.get(
+                                    $.getJSON(
                                         this.path,
                                         {
                                             button: 0

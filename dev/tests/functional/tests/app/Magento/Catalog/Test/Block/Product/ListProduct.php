@@ -48,7 +48,7 @@ class ListProduct extends Block
         $locator = sprintf($this->productItem, $product->getName());
 
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\ProductList\ProductItem',
+            \Magento\Catalog\Test\Block\Product\ProductList\ProductItem::class,
             ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
         );
     }
@@ -77,6 +77,7 @@ class ListProduct extends Block
      */
     public function getSortByValues()
     {
-        return explode("\n", $this->_rootElement->find($this->sorter)->getText());
+        $sortValues = $this->_rootElement->find($this->sorter)->getText();
+        return array_filter(array_map("trim", explode("\n", $sortValues)));
     }
 }

@@ -12,9 +12,6 @@
     <type name="Magento\Catalog\Block\Product\AbstractProduct">
         <plugin name="add_product_object_to_image_data_array" type="Magento\Swatches\Model\Plugin\ProductImage" />
     </type>
-    <type name="Magento\Catalog\Block\Product\ImageBlockBuilder">
-        <plugin name="add_product_object_to_image_data_array_for_builder" type="Magento\Swatches\Model\Plugin\ProductImageBuilder" />
-    </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="exclude_swatch_attribute" type="Magento\Swatches\Model\Plugin\Product" />
     </type>

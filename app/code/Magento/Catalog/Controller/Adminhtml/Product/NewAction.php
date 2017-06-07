@@ -29,23 +29,33 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $resultForwardFactory;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\StockDataFilter $stockFilter
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         Initialization\StockDataFilter $stockFilter,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->stockFilter = $stockFilter;
         parent::__construct($context, $productBuilder);
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->storeManager = $storeManager ?: $this->_objectManager->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
     }
 
     /**
@@ -60,6 +70,10 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         $product = $this->productBuilder->build($this->getRequest());
+
+        $store = $this->storeManager->getStore($product->getStoreId());
+        $this->storeManager->setCurrentStore($store->getCode());
+
         $this->_eventManager->dispatch('catalog_product_new_action', ['product' => $product]);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
