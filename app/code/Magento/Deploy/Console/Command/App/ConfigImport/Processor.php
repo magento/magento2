@@ -131,7 +131,7 @@ class Processor
                 $validator = $this->configImporterPool->getValidator($section);
                 if (null !== $validator) {
                     $messages = $validator->validate($data);
-                    //Stop process next sections if current of section has wrong data
+                    //Stop process next sections if current section has wrong data
                     if ($messages) {
                         $output->writeln($messages);
                         return;
