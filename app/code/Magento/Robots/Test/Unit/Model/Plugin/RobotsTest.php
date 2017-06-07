@@ -95,62 +95,9 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
             ->with($storeId)
             ->willReturn(true);
 
-        $sitemapMockOne = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getSitemapFilename',
-                'getSitemapPath',
-                'getSitemapUrl',
-            ])
-            ->getMock();
-        $sitemapMockOne->expects($this->any())
-            ->method('getSitemapFilename')
-            ->willReturn($sitemapFilenameOne);
-        $sitemapMockOne->expects($this->any())
-            ->method('getSitemapPath')
-            ->willReturn($sitemapPath);
-        $sitemapMockOne->expects($this->any())
-            ->method('getSitemapUrl')
-            ->with($sitemapPath, $sitemapFilenameOne)
-            ->willReturn($sitemapFilenameOne);
-
-        $sitemapMockTwo = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getSitemapFilename',
-                'getSitemapPath',
-                'getSitemapUrl',
-            ])
-            ->getMock();
-        $sitemapMockTwo->expects($this->any())
-            ->method('getSitemapFilename')
-            ->willReturn($sitemapFilenameTwo);
-        $sitemapMockTwo->expects($this->any())
-            ->method('getSitemapPath')
-            ->willReturn($sitemapPath);
-        $sitemapMockTwo->expects($this->any())
-            ->method('getSitemapUrl')
-            ->with($sitemapPath, $sitemapFilenameTwo)
-            ->willReturn($sitemapFilenameTwo);
-
-        $sitemapMockThree = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getSitemapFilename',
-                'getSitemapPath',
-                'getSitemapUrl',
-            ])
-            ->getMock();
-        $sitemapMockThree->expects($this->any())
-            ->method('getSitemapFilename')
-            ->willReturn($sitemapFilenameThree);
-        $sitemapMockThree->expects($this->any())
-            ->method('getSitemapPath')
-            ->willReturn($sitemapPath);
-        $sitemapMockThree->expects($this->any())
-            ->method('getSitemapUrl')
-            ->with($sitemapPath, $sitemapFilenameThree)
-            ->willReturn($sitemapFilenameThree);
+        $sitemapMockOne = $this->getSitemapMock($sitemapPath, $sitemapFilenameOne);
+        $sitemapMockTwo = $this->getSitemapMock($sitemapPath, $sitemapFilenameTwo);
+        $sitemapMockThree = $this->getSitemapMock($sitemapPath, $sitemapFilenameThree);
 
         $sitemapCollectionMock = $this->getMockBuilder(\Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class)
             ->disableOriginalConstructor()
@@ -163,7 +110,6 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $sitemapCollectionMock->expects($this->any())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$sitemapMockOne, $sitemapMockTwo, $sitemapMockThree]));
-
 
         $this->sitemapCollectionFactory->expects($this->once())
             ->method('create')
@@ -180,5 +126,37 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
             . 'Sitemap: ' . $sitemapFilenameTwo;
 
         $this->assertEquals($expected, $this->plugin->afterGetData($robotsDataMock, $result));
+    }
+
+    /**
+     * Create and return mock object of \Magento\Sitemap\Model\Sitemap class
+     *
+     * @param string $sitemapPath
+     * @param string $sitemapFilename
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getSitemapMock($sitemapPath, $sitemapFilename)
+    {
+        $sitemapMock = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getSitemapFilename',
+                'getSitemapPath',
+                'getSitemapUrl',
+            ])
+            ->getMock();
+
+        $sitemapMock->expects($this->any())
+            ->method('getSitemapFilename')
+            ->willReturn($sitemapFilename);
+        $sitemapMock->expects($this->any())
+            ->method('getSitemapPath')
+            ->willReturn($sitemapPath);
+        $sitemapMock->expects($this->any())
+            ->method('getSitemapUrl')
+            ->with($sitemapPath, $sitemapFilename)
+            ->willReturn($sitemapFilename);
+
+        return $sitemapMock;
     }
 }
