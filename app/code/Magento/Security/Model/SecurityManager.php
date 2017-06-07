@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
 
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Security\Model\SecurityChecker\SecurityCheckerInterface;
 
 /**
- * Security Control Manager Model
+ * Manager for password reset actions
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SecurityManager
@@ -35,7 +39,7 @@ class SecurityManager
     protected $passwordResetRequestEventCollectionFactory;
 
     /**
-     * @var array
+     * @var SecurityCheckerInterface[]
      */
     protected $securityCheckers;
 
@@ -84,7 +88,7 @@ class SecurityManager
         $this->remoteAddress = $remoteAddress;
 
         foreach ($this->securityCheckers as $checker) {
-            if (!($checker instanceof \Magento\Security\Model\SecurityChecker\SecurityCheckerInterface)) {
+            if (!($checker instanceof SecurityCheckerInterface)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
                 );

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -89,6 +89,36 @@
     <type name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect">
         <arguments>
             <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOnlineInvoiceCannotBeCreated">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOnlineInvoiceCannotBeCreated">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderBillingAndShippingAddressesAreDifferent">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
 </config>

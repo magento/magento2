@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\Component\Listing\AssociatedProduct\Columns;
@@ -79,7 +79,7 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
         $this->searchResultsMock = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
             ->getMockForAbstractClass();
 
-        $this->contextMock->expects(static::any())
+        $this->contextMock->expects(static::never())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
         $this->searchCriteriaBuilderMock->expects(static::any())

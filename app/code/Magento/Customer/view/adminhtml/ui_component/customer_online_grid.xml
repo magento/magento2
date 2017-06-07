@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,26 +9,27 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid_data_source</item>
-            <item name="deps" xsi:type="string">customer_online_grid.customer_online_grid_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">customer_online_columns</item>
     </argument>
-    <dataSource name="customer_online_grid_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">customer_online_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">visitor_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">visitor_id</item>
-                    </item>
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                </item>
-            </argument>
-        </argument>
+    <settings>
+        <spinner>customer_online_columns</spinner>
+        <deps>
+            <dep>customer_online_grid.customer_online_grid_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="customer_online_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">visitor_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="customer_online_grid_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>visitor_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks"/>
@@ -38,58 +39,46 @@
     </listingToolbar>
     <columns name="customer_online_columns">
         <column name="customer_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="sorting" xsi:type="string">asc</item>
-                    <item name="label" xsi:type="string" translate="true">ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
         </column>
         <column name="firstname">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">First Name</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">First Name</label>
+            </settings>
         </column>
         <column name="lastname">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Last Name</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>
+                    text
+                </filter>
+                <label translate="true">Last Name</label>
+            </settings>
         </column>
         <column name="email">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Email</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+            </settings>
         </column>
-        <column name="last_visit_at" class="Magento\Ui\Component\Listing\Columns\Date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="label" xsi:type="string" translate="true">Last Activity</item>
-                </item>
-            </argument>
+        <column name="last_visit_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Last Activity</label>
+            </settings>
         </column>
-        <column name="visitor_type">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Customer\Ui\Component\Listing\Column\Online\Type\Options</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Type</item>
-                </item>
-            </argument>
+        <column name="visitor_type" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Customer\Ui\Component\Listing\Column\Online\Type\Options"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Type</label>
+            </settings>
         </column>
     </columns>
 </listing>

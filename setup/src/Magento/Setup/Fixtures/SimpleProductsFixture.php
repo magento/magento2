@@ -1,215 +1,134 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\Setup\Model\DataGenerator;
-use Magento\Setup\Model\Generator;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
+use Magento\Setup\Model\FixtureGenerator\ProductGenerator;
+use Magento\Setup\Model\SearchTermDescriptionGeneratorFactory;
 
 /**
- * Class SimpleProductsFixture
+ * Generate simple products based on profile configuration
+ * Support the following format:
+ * <simple_products>{products amount}</simple_products>
+ * Products will be distributed per Default and pre-defined
+ * attribute sets (@see setup/performance-toolkit/config/attributeSets.xml)
+ *
+ * If extra attribute set is specified in profile as: <product_attribute_sets>{sets amount}</product_attribute_sets>
+ * then products also will be distributed per additional attribute sets
+ *
+ * Products will be uniformly distributed per categories and websites
+ * If node "assign_entities_to_all_websites" from profile is set to "1" then products will be assigned to all websites
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SimpleProductsFixture extends Fixture
 {
     /**
+     * Simple product sku pattern
+     */
+    const SKU_PATTERN = 'product_dynamic_%s';
+
+    /**
      * @var int
      */
-    protected $priority = 30;
+    protected $priority = 31;
 
     /**
      * @var array
      */
-    protected $searchConfig;
+    private $descriptionConfig;
 
     /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD)
+     * @var array
      */
-    public function execute()
-    {
-        $simpleProductsCount = $this->fixtureModel->getValue('simple_products', 0);
-        if (!$simpleProductsCount) {
-            return;
-        }
-        $configurableProductsCount = $this->fixtureModel->getValue('configurable_products', 0);
-        $maxAmountOfWordsDescription = $this->getSearchConfigValue('max_amount_of_words_description');
-        $maxAmountOfWordsShortDescription = $this->getSearchConfigValue('max_amount_of_words_short_description');
-        $minAmountOfWordsDescription = $this->getSearchConfigValue('min_amount_of_words_description');
-        $minAmountOfWordsShortDescription = $this->getSearchConfigValue('min_amount_of_words_short_description');
-        $searchTerms = $this->getSearchTerms();
-        $attributes = $this->getAttributes();
-        $this->fixtureModel->resetObjectManager();
-        $result = $this->getCategoriesAndWebsites();
-        $dataGenerator = new DataGenerator(realpath(__DIR__ . '/' . 'dictionary.csv'));
-
-        $productWebsite = function ($index) use ($result) {
-            return $result[$index % count($result)][0];
-        };
-        $productCategory = function ($index) use ($result) {
-            return $result[$index % count($result)][1];
-        };
-        $shortDescription = function ($index) use (
-            $searchTerms,
-            $simpleProductsCount,
-            $configurableProductsCount,
-            $dataGenerator,
-            $maxAmountOfWordsShortDescription,
-            $minAmountOfWordsShortDescription
-        ) {
-            $count = $searchTerms === null
-                ? 0
-                : round(
-                    $searchTerms[$index % count($searchTerms)]['count'] * (
-                        $simpleProductsCount / ($simpleProductsCount + $configurableProductsCount)
-                    )
-                );
-            return $dataGenerator->generate(
-                $minAmountOfWordsShortDescription,
-                $maxAmountOfWordsShortDescription
-            ) . ($index <= ($count * count($searchTerms)) ? ' '
-                . $searchTerms[$index % count($searchTerms)]['term'] : '');
-        };
-        $description = function ($index) use (
-            $searchTerms,
-            $simpleProductsCount,
-            $configurableProductsCount,
-            $dataGenerator,
-            $maxAmountOfWordsDescription,
-            $minAmountOfWordsDescription
-        ) {
-            $count = $searchTerms === null
-                ? 0
-                : round(
-                    $searchTerms[$index % count($searchTerms)]['count'] * (
-                        $simpleProductsCount / ($simpleProductsCount + $configurableProductsCount)
-                    )
-                );
-            return $dataGenerator->generate(
-                $minAmountOfWordsDescription,
-                $maxAmountOfWordsDescription
-            ) . ($index <= ($count * count($searchTerms)) ? ' '
-                . $searchTerms[$index % count($searchTerms)]['term'] : '');
-        };
-        $price = function () {
-            switch (mt_rand(0, 3)) {
-                case 0:
-                    return 9.99;
-                case 1:
-                    return 5;
-                case 2:
-                    return 1;
-                case 3:
-                    return mt_rand(1, 10000)/10;
-            }
-        };
-        $attributeSet = function ($index) use ($attributes, $result) {
-            mt_srand($index);
-            return (count(array_keys($attributes)) > (($index - 1) % count($result))
-                ? array_keys($attributes)[mt_rand(0, count(array_keys($attributes)) - 1)] : 'Default');
-        };
-        $additionalAttributes = function ($index) use ($attributes, $result) {
-            $attributeValues = '';
-            mt_srand($index);
-            $attributeSetCode = (count(array_keys($attributes)) > (($index - 1) % count($result))
-                ? array_keys($attributes)[mt_rand(0, count(array_keys($attributes)) - 1)] : 'Default');
-            if ($attributeSetCode !== 'Default') {
-                foreach ($attributes[$attributeSetCode] as $attribute) {
-                    $attributeValues = $attributeValues . $attribute['name'] . "=" .
-                        $attribute['values'][mt_rand(0, count($attribute['values']) - 1)] . ",";
-                }
-            }
-            return trim($attributeValues, ",");
-        };
-        $generator = $this->fixtureModel->getObjectManager()->create(
-            Generator::class,
-            [
-                'rowPattern' => $this->getPattern(
-                    $productWebsite,
-                    $productCategory,
-                    $shortDescription,
-                    $description,
-                    $price,
-                    $attributeSet,
-                    $additionalAttributes
-                ),
-                'limit' => $simpleProductsCount
-            ]
-        );
-        /** @var \Magento\ImportExport\Model\Import $import */
-        $import = $this->fixtureModel->getObjectManager()->create(
-            \Magento\ImportExport\Model\Import::class,
-            [
-                'data' => [
-                    'entity' => 'catalog_product',
-                    'behavior' => 'append',
-                    'validation_strategy' => 'validation-stop-on-errors'
-                ]
-            ]
-        );
-        // it is not obvious, but the validateSource() will actually save import queue data to DB
-        if (!$import->validateSource($generator)) {
-            throw new \Exception($import->getFormatedLogTrace());
-        }
-        // this converts import queue into actual entities
-        if (!$import->importSource()) {
-            throw new \Exception($import->getFormatedLogTrace());
-        }
-    }
+    private $shortDescriptionConfig;
 
     /**
-     * Get pattern for product import
-     *
-     * @param Closure|int|string $productWebsiteClosure
-     * @param Closure|int|string $productCategoryClosure
-     * @param Closure|int|string $shortDescriptionClosure
-     * @param Closure|int|string $descriptionClosure
-     * @param Closure|int|string $priceClosure
-     * @param Closure|int|string $attributeSetClosure
-     * @param Closure|int|string $additionalAttributesClosure
-     * @return array
+     * @var ProductFactory
      */
-    protected function getPattern(
-        $productWebsiteClosure,
-        $productCategoryClosure,
-        $shortDescriptionClosure,
-        $descriptionClosure,
-        $priceClosure,
-        $attributeSetClosure,
-        $additionalAttributesClosure
+    private $productFactory;
+
+    /**
+     * @var ProductGenerator
+     */
+    private $productGenerator;
+
+    /**
+     * @var int
+     */
+    private $defaultAttributeSetId;
+
+    /**
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     */
+    private $attributeCollectionFactory;
+
+    /**
+     * @var AttributeSetCollectionFactory
+     */
+    private $attributeSetCollectionFactory;
+
+    /**
+     * @var SearchTermDescriptionGeneratorFactory
+     */
+    private $descriptionGeneratorFactory;
+
+    /**
+     * @var ProductsAmountProvider
+     */
+    private $productsAmountProvider;
+
+    /**
+     * @var WebsiteCategoryProvider
+     */
+    private $websiteCategoryProvider;
+
+    /**
+     * @var PriceProvider
+     */
+    private $priceProvider;
+
+    /**
+     * @param FixtureModel $fixtureModel
+     * @param ProductFactory $productFactory
+     * @param ProductGenerator $productGenerator
+     * @param CollectionFactory $attributeCollectionFactory
+     * @param AttributeSetCollectionFactory $attributeSetCollectionFactory
+     * @param SearchTermDescriptionGeneratorFactory $descriptionGeneratorFactory
+     * @param WebsiteCategoryProvider $websiteCategoryProvider
+     * @param ProductsAmountProvider $productsAmountProvider
+     * @param PriceProvider $priceProvider
+     * @internal param FixtureConfig $fixtureConfig
+     */
+    public function __construct(
+        FixtureModel $fixtureModel,
+        ProductFactory $productFactory,
+        ProductGenerator $productGenerator,
+        CollectionFactory $attributeCollectionFactory,
+        AttributeSetCollectionFactory $attributeSetCollectionFactory,
+        SearchTermDescriptionGeneratorFactory $descriptionGeneratorFactory,
+        WebsiteCategoryProvider $websiteCategoryProvider,
+        ProductsAmountProvider $productsAmountProvider,
+        PriceProvider $priceProvider
     ) {
-        return [
-            'attribute_set_code'    => $attributeSetClosure,
-            'additional_attributes' => $additionalAttributesClosure,
-            'product_type'             => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-            'product_websites' => $productWebsiteClosure,
-            'categories'         => $productCategoryClosure,
-            'name'              => 'Simple Product %s',
-            'short_description' => $shortDescriptionClosure,
-            'weight'            => 1,
-            'description'       => $descriptionClosure,
-            'sku'               => 'product_dynamic_%s',
-            'price'             => $priceClosure,
-            'visibility'        => 'Catalog, Search',
-            'product_online'            => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-            'tax_class_name'      => 'Taxable Goods',
-            /**
-             * actually it saves without stock data, but by default system won't show on the
-             * frontend products out of stock
-             */
-            'is_in_stock'                   => 1,
-            'qty'                           => 100500,
-            'out_of_stock_qty'            => 'Use Config',
-            'allow_backorders'         => 'Use Config',
-            'min_cart_qty'       => 'Use Config',
-            'max_cart_qty'       => 'Use Config',
-            'notify_on_stock_below'   => 'Use Config',
-            'manage_stock'       => 'Use Config',
-            'qty_increments'     => 'Use Config',
-            'enable_qty_incremements'     => 'Use Config',
-        ];
+        parent::__construct($fixtureModel);
+        $this->productFactory = $productFactory;
+        $this->productGenerator = $productGenerator;
+        $this->attributeCollectionFactory = $attributeCollectionFactory;
+        $this->attributeSetCollectionFactory = $attributeSetCollectionFactory;
+        $this->descriptionGeneratorFactory = $descriptionGeneratorFactory;
+        $this->productsAmountProvider = $productsAmountProvider;
+        $this->websiteCategoryProvider = $websiteCategoryProvider;
+        $this->priceProvider = $priceProvider;
     }
 
     /**
@@ -231,9 +150,136 @@ class SimpleProductsFixture extends Fixture
     }
 
     /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD)
+     */
+    public function execute()
+    {
+        $simpleProductsCount = $this->productsAmountProvider->getAmount(
+            $this->fixtureModel->getValue('simple_products', 0),
+            $this->getSkuPattern()
+        );
+
+        if (!$simpleProductsCount) {
+            return;
+        }
+
+        $defaultAttributeSets = $this->getDefaultAttributeSets();
+        $searchTermsConfig = $this->getSearchTerms();
+
+        /** @var \Magento\Setup\Model\SearchTermDescriptionGenerator $descriptionGenerator */
+        $descriptionGenerator = $this->descriptionGeneratorFactory->create(
+            $this->getDescriptionConfig(),
+            $searchTermsConfig,
+            $simpleProductsCount,
+            'Full simple product Description %s'
+        );
+
+        /** @var \Magento\Setup\Model\SearchTermDescriptionGenerator $shortDescriptionGenerator */
+        $shortDescriptionGenerator = $this->descriptionGeneratorFactory->create(
+            $this->getShortDescriptionConfig(),
+            $searchTermsConfig,
+            $simpleProductsCount,
+            'Short simple product Description %s'
+        );
+
+        $additionalAttributeSets = $this->getAdditionalAttributeSets();
+        $attributeSet = function ($index) use ($defaultAttributeSets, $additionalAttributeSets) {
+            mt_srand($index);
+            $attributeSetCount = count(array_keys($defaultAttributeSets));
+            if ($attributeSetCount > (($index - 1) % (int)$this->fixtureModel->getValue('categories', 30))) {
+                return array_keys($defaultAttributeSets)[mt_rand(0, count(array_keys($defaultAttributeSets)) - 1)];
+            } else {
+                $customSetsAmount = count($additionalAttributeSets);
+                return $customSetsAmount
+                    ? $additionalAttributeSets[$index % count($additionalAttributeSets)]['attribute_set_id']
+                    : $this->getDefaultAttributeSetId();
+            }
+        };
+
+        $additionalAttributes = function (
+            $attributeSetId,
+            $index
+        ) use (
+            $defaultAttributeSets,
+            $additionalAttributeSets
+        ) {
+            $attributeValues = [];
+            mt_srand($index);
+            if (isset($defaultAttributeSets[$attributeSetId])) {
+                foreach ($defaultAttributeSets[$attributeSetId] as $attributeCode => $values) {
+                    $attributeValues[$attributeCode] = $values[mt_rand(0, count($values) - 1)];
+                }
+            }
+
+            return $attributeValues;
+        };
+
+        $fixtureMap = [
+            'name' => function ($productId) {
+                return sprintf('Simple Product %s', $productId);
+            },
+            'sku' => function ($productId) {
+                return sprintf($this->getSkuPattern(), $productId);
+            },
+            'price' => function ($index, $entityNumber) {
+                return $this->priceProvider->getPrice($entityNumber);
+            },
+            'url_key' => function ($productId) {
+                return sprintf('simple-product-%s', $productId);
+            },
+            'description' => function ($index) use ($descriptionGenerator) {
+                return $descriptionGenerator->generate($index);
+            },
+            'short_description' => function ($index) use ($shortDescriptionGenerator) {
+                return $shortDescriptionGenerator->generate($index);
+            },
+            'website_ids' => function ($index, $entityNumber) {
+                return $this->websiteCategoryProvider->getWebsiteIds($index);
+            },
+            'category_ids' => function ($index, $entityNumber) {
+                return $this->websiteCategoryProvider->getCategoryId($index);
+            },
+            'attribute_set_id' => $attributeSet,
+            'additional_attributes' => $additionalAttributes,
+            'status' => function () {
+                return Status::STATUS_ENABLED;
+            }
+        ];
+        $this->productGenerator->generate($simpleProductsCount, $fixtureMap);
+    }
+
+    /**
+     * Get simple product sku pattern
+     *
+     * @return string
+     */
+    private function getSkuPattern()
+    {
+        return self::SKU_PATTERN;
+    }
+
+    /**
+     * Get default attribute set id
+     *
+     * @return int
+     */
+    private function getDefaultAttributeSetId()
+    {
+        if (null === $this->defaultAttributeSetId) {
+            $this->defaultAttributeSetId = (int)$this->productFactory->create()->getDefaultAttributeSetId();
+        }
+
+        return $this->defaultAttributeSetId;
+    }
+
+    /**
+     * Get default attribute sets with attributes
+     *
+     * @see config/attributeSets.xml
      * @return array
      */
-    protected function getAttributes()
+    private function getDefaultAttributeSets()
     {
         $attributeSets = $this->fixtureModel->getValue('attribute_sets', null);
         $attributes = [];
@@ -242,99 +288,104 @@ class SimpleProductsFixture extends Fixture
             foreach ($attributeSets['attribute_set'] as $attributeSet) {
                 $attributesData = array_key_exists(0, $attributeSet['attributes']['attribute'])
                     ? $attributeSet['attributes']['attribute'] : [$attributeSet['attributes']['attribute']];
-                foreach ($attributesData as $attributeData) {
+
+                $attributeCollection = $this->attributeCollectionFactory->create();
+
+                $attributeCollection->setAttributeSetFilterBySetName($attributeSet['name'], Product::ENTITY);
+                $attributeCollection->addFieldToFilter(
+                    'attribute_code',
+                    array_column($attributesData, 'attribute_code')
+                );
+                /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
+                foreach ($attributeCollection as $attribute) {
                     $values = [];
-                    $optionsData = array_key_exists(0, $attributeData['options']['option'])
-                        ? $attributeData['options']['option'] : [$attributeData['options']['option']];
-                    foreach ($optionsData as $optionData) {
-                        $values[] = $optionData['label'];
+                    $options = $attribute->getOptions();
+                    foreach (($options ?: []) as $option) {
+                        if ($option->getValue()) {
+                            $values[] = $option->getValue();
+                        }
                     }
-                    $attributes[$attributeSet['name']][] =
-                        ['name' => $attributeData['attribute_code'], 'values' => $values];
+                    $attributes[$attribute->getAttributeSetId()][$attribute->getAttributeCode()] = $values;
                 }
             }
         }
+        $attributes[$this->getDefaultAttributeSetId()] = [];
+
         return $attributes;
     }
 
     /**
+     * Get search terms config which used for product description generation
+     *
      * @return array
      */
-    protected function getCategoriesAndWebsites()
+    private function getSearchTerms()
     {
-        /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
-        /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->get(\Magento\Catalog\Model\Category::class);
-
-        $result = [];
-        //Get all websites
-        $websites = $storeManager->getWebsites();
-        foreach ($websites as $website) {
-            $websiteCode = $website->getCode();
-            //Get all groups
-            $websiteGroups = $website->getGroups();
-            foreach ($websiteGroups as $websiteGroup) {
-                $websiteGroupRootCategory = $websiteGroup->getRootCategoryId();
-                $category->load($websiteGroupRootCategory);
-                $categoryResource = $category->getResource();
-                //Get all categories
-                $resultsCategories = $categoryResource->getAllChildren($category);
-                foreach ($resultsCategories as $resultsCategory) {
-                    $category->load($resultsCategory);
-                    $structure = explode('/', $category->getPath());
-                    $pathSize  = count($structure);
-                    if ($pathSize > 1) {
-                        $path = [];
-                        for ($i = 0; $i < $pathSize; $i++) {
-                            $path[] = $category->load($structure[$i])->getName();
-                        }
-                        array_shift($path);
-                        $resultsCategoryName = implode('/', $path);
-                    } else {
-                        $resultsCategoryName = $category->getName();
-                    }
-                    //Deleted root categories
-                    if (trim($resultsCategoryName) != '') {
-                        $result[$resultsCategory] = [$websiteCode, $resultsCategoryName];
-                    }
-                }
-            }
-        }
-        return array_values($result);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSearchConfig()
-    {
-        if (!$this->searchConfig) {
-            $this->searchConfig = $this->fixtureModel->getValue('search_config', null);
-        }
-        return $this->searchConfig;
-    }
-
-    /**
-     * @param string $name
-     * @return int|mixed
-     */
-    protected function getSearchConfigValue($name)
-    {
-        return $this->getSearchConfig() === null
-            ? 0 : ($this->getSearchConfig()[$name] === null ? 0: $this->getSearchConfig()[$name]);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSearchTerms()
-    {
-        $searchTerms = $this->fixtureModel->getValue('search_terms', null);
-        if ($searchTerms !== null) {
+        $searchTerms = $this->fixtureModel->getValue('search_terms', []);
+        if (!empty($searchTerms)) {
             $searchTerms = array_key_exists(0, $searchTerms['search_term'])
                 ? $searchTerms['search_term'] : [$searchTerms['search_term']];
         }
+
         return $searchTerms;
+    }
+
+    /**
+     * Get description config
+     *
+     * @return array
+     */
+    private function getDescriptionConfig()
+    {
+        if (null === $this->descriptionConfig) {
+            $this->descriptionConfig = $this->readDescriptionConfig('description');
+        }
+
+        return $this->descriptionConfig;
+    }
+
+    /**
+     * Get short description config
+     *
+     * @return array
+     */
+    private function getShortDescriptionConfig()
+    {
+        if (null === $this->shortDescriptionConfig) {
+            $this->shortDescriptionConfig = $this->readDescriptionConfig('short-description');
+        }
+
+        return $this->shortDescriptionConfig;
+    }
+
+    /**
+     * Get description config from fixture
+     *
+     * @param string $configSrc
+     * @return array
+     */
+    private function readDescriptionConfig($configSrc)
+    {
+        $configData = $this->fixtureModel->getValue($configSrc, []);
+
+        if (isset($configData['mixin']['tags'])) {
+            $configData['mixin']['tags'] = explode('|', $configData['mixin']['tags']);
+        }
+
+        return $configData;
+    }
+
+    /**
+     * Get additional attribute sets
+     *
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection[]
+     */
+    private function getAdditionalAttributeSets()
+    {
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $sets */
+        $sets = $this->attributeSetCollectionFactory->create();
+        $sets->addFieldToFilter('attribute_set_name', ['like' => AttributeSetsFixture::PRODUCT_SET_NAME . '%']);
+
+        return $sets->getData();
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,11 +12,21 @@
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider" />
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
     <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
+    <preference for="Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
+    <preference for="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface" type="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexerHandler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy">
+        <arguments>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="mysql" xsi:type="string">\Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher</item>
             </argument>
         </arguments>
     </type>
@@ -43,6 +53,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver">
+        <arguments>
+            <argument name="attributeCollection" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
     </type>
@@ -60,6 +75,7 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
+        <plugin name="catalogsearchAttributeSearchWeightCache" type="Magento\CatalogSearch\Model\Attribute\SearchWeight"/>
     </type>
     <type name="Magento\Framework\Search\EntityMetadata" />
     <virtualType name="Magento\Framework\Search\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
@@ -195,6 +211,8 @@
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
         <arguments>
             <argument name="range" xsi:type="object">Magento\Catalog\Model\Layer\Filter\Price\Range\Proxy</argument>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
     </type>
@@ -244,6 +262,74 @@
             <argument name="generators" xsi:type="array">
                 <item name="decimal" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandler">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructure">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy">
+        <arguments>
+            <argument name="states" xsi:type="array">
+                <item name="use_temporary_table" xsi:type="string">\Magento\CatalogSearch\Model\Indexer\Scope\TemporaryResolver</item>
+                <item name="use_main_table" xsi:type="string">\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider">
+        <arguments>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy">
+        <arguments>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
+            <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider">
+        <arguments>
+            <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy">
+        <arguments>
+            <argument name="frontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\IndexBuilder">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite">
+        <arguments>
+            <argument name="queryCheckers" xsi:type="array">
+                <item name="advanced_search_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch</item>
+                <item name="catalog_view_container" xsi:type="object">\Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\AdvancedSearch">
+        <arguments>
+            <argument name="name" xsi:type="string">advanced_search_container</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView">
+        <arguments>
+            <argument name="name" xsi:type="string">catalog_view_container</argument>
         </arguments>
     </type>
 </config>

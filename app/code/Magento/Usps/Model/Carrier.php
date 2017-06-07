@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,11 +9,11 @@
 namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Framework\Xml\Security;
 use Magento\Usps\Helper\Data as DataHelper;
 
 /**
@@ -413,7 +413,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($this->_isUSCountry($r->getDestCountryId())) {
             $xml = $this->_xmlElFactory->create(
-                
+
                 ['data' => '<?xml version="1.0" encoding="UTF-8"?><RateV4Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -461,7 +461,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $api = 'RateV4';
         } else {
             $xml = $this->_xmlElFactory->create(
-                
+
                 ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><IntlRateV2Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -490,6 +490,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $package->addChild('Length', $length);
             $package->addChild('Height', $height);
             $package->addChild('Girth', $girth);
+
+            $package->addChild('OriginZip', $r->getOrigPostal());
+            $package->addChild('AcceptanceDateTime', date('c'));
+            $package->addChild('DestinationPostalCode', $r->getDestPostal());
 
             $api = 'IntlRateV2';
         }
@@ -1901,27 +1905,30 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $response = $client->request()->getBody();
 
         $response = $this->parseXml($response);
-        if ($response === false || $response->getName() == 'Error') {
-            $debugData['result'] = [
-                'error' => $response->Description,
-                'code' => $response->Number,
-                'xml' => $response->asXML(),
-            ];
-            $this->_debug($debugData);
-            $result->setErrors($debugData['result']['error']);
-        } else {
-            if ($recipientUSCountry && $service == 'Priority Express') {
-                $labelContent = base64_decode((string)$response->EMLabel);
-                $trackingNumber = (string)$response->EMConfirmationNumber;
-            } elseif ($recipientUSCountry) {
-                $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
-                $trackingNumber = (string)$response->SignatureConfirmationNumber;
+
+        if ($response !== false) {
+            if ($response->getName() == 'Error') {
+                $debugData['result'] = [
+                    'error' => $response->Description,
+                    'code' => $response->Number,
+                    'xml' => $response->asXML(),
+                ];
+                $this->_debug($debugData);
+                $result->setErrors($debugData['result']['error']);
             } else {
-                $labelContent = base64_decode((string)$response->LabelImage);
-                $trackingNumber = (string)$response->BarcodeNumber;
+                if ($recipientUSCountry && $service == 'Priority Express') {
+                    $labelContent = base64_decode((string)$response->EMLabel);
+                    $trackingNumber = (string)$response->EMConfirmationNumber;
+                } elseif ($recipientUSCountry) {
+                    $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
+                    $trackingNumber = (string)$response->SignatureConfirmationNumber;
+                } else {
+                    $labelContent = base64_decode((string)$response->LabelImage);
+                    $trackingNumber = (string)$response->BarcodeNumber;
+                }
+                $result->setShippingLabelContent($labelContent);
+                $result->setTrackingNumber($trackingNumber);
             }
-            $result->setShippingLabelContent($labelContent);
-            $result->setTrackingNumber($trackingNumber);
         }
 
         $result->setGatewayResponse($response);
@@ -2096,7 +2103,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
             $data = $xml->asXML();
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return $data;
     }

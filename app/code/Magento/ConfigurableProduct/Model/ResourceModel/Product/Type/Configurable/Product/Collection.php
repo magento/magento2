@@ -2,7 +2,7 @@
 /**
  * Catalog super product link collection
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product;
@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configura
 /**
  * Class Collection
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection

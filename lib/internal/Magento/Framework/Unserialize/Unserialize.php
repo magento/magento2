@@ -1,16 +1,34 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Unserialize;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * @deprecated
  */
 class Unserialize
 {
+    /**
+     * Serializer for safe string unserialization.
+     *
+     * @var Serialize
+     */
+    private $serializer;
+
+    /**
+     * @param Serialize|null $serializer Optional parameter for backward compatibility.
+     */
+    public function __construct(Serialize $serializer = null)
+    {
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serialize::class);
+    }
+
     /**
      * @param string $string
      * @return bool|mixed
@@ -21,6 +39,6 @@ class Unserialize
             trigger_error('String contains serialized object');
             return false;
         }
-        return unserialize($string);
+        return $this->serializer->unserialize($string);
     }
 }

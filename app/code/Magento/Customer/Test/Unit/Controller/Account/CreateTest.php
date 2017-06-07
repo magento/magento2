@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->resultPageMock = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false );
+        $this->resultPageMock = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
         $this->pageFactoryMock = $this->getMock(\Magento\Framework\View\Result\PageFactory::class, [], [], '', false);
 
         $this->object = $objectManager->getObject(

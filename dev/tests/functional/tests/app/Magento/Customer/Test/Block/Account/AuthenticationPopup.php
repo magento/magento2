@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Block\Account;
@@ -32,7 +32,24 @@ class AuthenticationPopup extends Form
      *
      * @var string
      */
-    protected $createAccountButton = '.action.action-register.primary';
+    private $createAccountButton = '.action.action-register.primary';
+
+    /**
+     * Selector for password field with autocomplete off.
+     *
+     * @var string
+     */
+    private $passwordFieldWithAutocompleteOff = 'input[name="password"][autocomplete="off"]';
+
+    /**
+     * Checks if password field autocomplete is off.
+     *
+     * @return bool
+     */
+    public function isPasswordAutocompleteOff()
+    {
+        return $this->_rootElement->find($this->passwordFieldWithAutocompleteOff)->isVisible();
+    }
 
     /**
      * Click 'Create an Account' button.

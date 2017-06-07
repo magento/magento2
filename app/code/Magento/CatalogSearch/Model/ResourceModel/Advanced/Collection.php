@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
@@ -84,8 +84,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -113,7 +116,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -144,7 +149,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection,
             $productLimitationFactory,
-            $metadataPool
+            $metadataPool,
+            $indexerFrontendResource,
+            $categoryProductIndexerFrontend
         );
     }
 

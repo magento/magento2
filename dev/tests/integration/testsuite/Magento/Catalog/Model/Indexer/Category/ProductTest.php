@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category;
@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Category;
 
 /**
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+ * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_products.php
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
@@ -42,8 +43,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
-     * @magentoDbIsolation enabled
      */
     public function testReindexAll()
     {
@@ -82,9 +81,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testCategoryMove()
     {
@@ -113,7 +109,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexer->reindexAll();
 
         /**
-         * Move category from $categoryThird to $categorySecond
+         * Move $categoryFourth from $categoryThird to $categorySecond
          */
         $categoryFourth->move($categorySecond->getId(), null);
 
@@ -169,8 +165,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $categorySecond->setIsAnchor(0);
         $categorySecond->save();
 
-        /** @var Category $categoryFifth */
-        $categoryFifth = end($categories);
+        /** @var Category $categoryFourth */
+        $categoryFourth = end($categories);
 
         /** @var Category $categorySixth */
         $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -179,7 +175,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $categorySixth->setName(
             'Category 6'
         )->setPath(
-            $categoryFifth->getPath()
+            $categoryFourth->getPath()
         )->setAvailableSortBy(
             'name'
         )->setDefaultSortBy(
@@ -193,7 +189,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productThird->setCategoryIds([$categorySixth->getId()]);
         $productThird->save();
 
-        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFifth->getId()];
+        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
             $this->assertTrue((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }

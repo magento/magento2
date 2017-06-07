@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\CloseOrderTest" summary="Close order">
+        <variation name="CloseOrderTestWithPayPalPaymentsPro" summary="Close order with PayPal Payments Pro" ticketId="MAGETWO-13015">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">payflowpro</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">15.00</item>
+            </data>
+            <data name="order/data/price/dataset" xsi:type="string">captured_price_15.00</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="status" xsi:type="string">Complete</data>
+            <data name="configData" xsi:type="string">paypal_direct</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+        </variation>
+        <variation name="CloseOrderTestWithPayPalPayflowPro" summary="Close order with PayPal Payflow Pro" ticketId="MAGETWO-13020">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">payflowpro</data>
+            <data name="order/data/price/dataset" xsi:type="string">full_invoice_with_product_10_dollar</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">15.00</item>
+            </data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="status" xsi:type="string">Complete</data>
+            <data name="configData" xsi:type="string">payflowpro, payflowpro_use_vault</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesTab" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+        </variation>
+    </testCase>
+</config>

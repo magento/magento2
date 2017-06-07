@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -11,7 +11,8 @@ define(
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Ui/js/lib/view/utils/dom-observer',
         'paypalInContextExpressCheckout',
-        'Magento_Customer/js/customer-data'
+        'Magento_Customer/js/customer-data',
+        'Magento_Ui/js/model/messageList'
     ],
     function (
         _,
@@ -21,7 +22,8 @@ define(
         additionalValidators,
         domObserver,
         paypalExpressCheckout,
-        customerData
+        customerData,
+        messageList
     ) {
         'use strict';
 
@@ -33,7 +35,6 @@ define(
             defaults: {
                 template: 'Magento_Paypal/payment/paypal-express-in-context',
                 clientConfig: {
-
                     /**
                      * @param {Object} event
                      */
@@ -42,41 +43,42 @@ define(
 
                         if (additionalValidators.validate()) {
                             paypalExpressCheckout.checkout.initXO();
+
                             this.selectPaymentMethod();
-                            setPaymentMethodAction(this.messageContainer).done(
-                                function () {
-                                    $('body').trigger('processStart');
+                            setPaymentMethodAction(this.messageContainer).done(function () {
+                                $('body').trigger('processStart');
 
-                                    $.get(
-                                        this.path,
-                                        {
-                                            button: 0
-                                        }
-                                    ).done(
-                                        function (response) {
-                                            if (response && response.url) {
-                                                paypalExpressCheckout.checkout.startFlow(response.url);
+                                $.get(this.path, {
+                                    button: 0
+                                }).done(function (response) {
+                                    var message = response && response.message;
 
-                                                return;
-                                            }
+                                    if (message) {
+                                        if (message.type === 'error') {
+                                            messageList.addErrorMessage({
+                                                message: message.text
+                                            });
+                                        } else {
+                                            messageList.addSuccessMessage({
+                                                message: message.text
+                                            });
+                                        }
+                                    }
 
-                                            paypalExpressCheckout.checkout.closeFlow();
-                                            window.location.reload();
-                                        }
-                                    ).fail(
-                                        function () {
-                                            paypalExpressCheckout.checkout.closeFlow();
-                                            window.location.reload();
-                                        }
-                                    ).always(
-                                        function () {
-                                            $('body').trigger('processStop');
-                                            customerData.invalidate(['cart']);
-                                        }
-                                    );
+                                    if (response && response.url) {
+                                        paypalExpressCheckout.checkout.startFlow(response.url);
 
-                                }.bind(this)
-                            );
+                                        return;
+                                    }
+
+                                    paypalExpressCheckout.checkout.closeFlow();
+                                }).fail(function () {
+                                    paypalExpressCheckout.checkout.closeFlow();
+                                }).always(function () {
+                                    $('body').trigger('processStop');
+                                    customerData.invalidate(['cart']);
+                                });
+                            }.bind(this));
                         }
                     }
                 }

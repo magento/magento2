@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -55,7 +55,7 @@
         <plugin name="customer_account" type="Magento\Customer\Controller\Plugin\Account" />
     </type>
     <type name="Magento\Checkout\Block\Cart\Sidebar">
-        <plugin name="customer_cart" type="\Magento\Customer\Model\Cart\ConfigPlugin" />
+        <plugin name="customer_cart" type="Magento\Customer\Model\Cart\ConfigPlugin" />
     </type>
     <type name="Magento\Framework\Session\SessionManager">
         <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />

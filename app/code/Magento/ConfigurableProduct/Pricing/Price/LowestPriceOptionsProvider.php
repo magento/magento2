@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -31,6 +31,13 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
     private $collectionFactory;
 
     /**
+     * Key is product id. Value is array of prepared linked products
+     *
+     * @var array
+     */
+    private $linkedProductMap;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
      * @param CollectionFactory $collectionFactory
@@ -50,14 +57,16 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
      */
     public function getProducts(ProductInterface $product)
     {
-        $productIds = $this->resource->getConnection()->fetchCol(
-            '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($product->getId())) . ')'
-        );
+        if (!isset($this->linkedProductMap[$product->getId()])) {
+            $productIds = $this->resource->getConnection()->fetchCol(
+                '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($product->getId())) . ')'
+            );
 
-        $lowestPriceChildProducts = $this->collectionFactory->create()
-            ->addAttributeToSelect(['price', 'special_price'])
-            ->addIdFilter($productIds)
-            ->getItems();
-        return $lowestPriceChildProducts;
+            $this->linkedProductMap[$product->getId()] = $this->collectionFactory->create()
+                ->addAttributeToSelect(['price', 'special_price'])
+                ->addIdFilter($productIds)
+                ->getItems();
+        }
+        return $this->linkedProductMap[$product->getId()];
     }
 }

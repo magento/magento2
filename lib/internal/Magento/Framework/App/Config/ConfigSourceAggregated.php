@@ -2,7 +2,7 @@
 /**
  * Application configuration object. Used to access configuration when application is initialized and installed.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -28,7 +28,7 @@ class ConfigSourceAggregated implements ConfigSourceInterface
      * Retrieve aggregated configuration from all available sources.
      *
      * @param string $path
-     * @return array
+     * @return string|array
      */
     public function get($path = '')
     {
@@ -37,7 +37,12 @@ class ConfigSourceAggregated implements ConfigSourceInterface
         foreach ($this->sources as $sourceConfig) {
             /** @var ConfigSourceInterface $source */
             $source = $sourceConfig['source'];
-            $data = array_replace_recursive($data, $source->get($path));
+            $configData = $source->get($path);
+            if (!is_array($configData)) {
+                $data = $configData;
+            } elseif (!empty($configData)) {
+                $data = array_replace_recursive(is_array($data) ? $data : [], $configData);
+            }
         }
         return $data;
     }

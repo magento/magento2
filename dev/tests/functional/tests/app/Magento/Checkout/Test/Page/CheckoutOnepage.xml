@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -15,6 +15,9 @@
         <block name="shippingAddressPopupBlock" class="Magento\Checkout\Test\Block\Onepage\ShippingPopup" locator="#opc-new-shipping-address" strategy="css selector" />
         <block name="shippingMethodBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping\Method" locator="#checkout-step-shipping_method" strategy="css selector" />
         <block name="paymentBlock" class="Magento\Checkout\Test\Block\Onepage\Payment" locator="#checkout-step-payment" strategy="css selector" />
+        <block name="paymentBlock">
+            <render name="default" class="Magento\Payment\Test\Block\Form\PaymentCc" />
+        </block>
         <block name="discountCodesBlock" class="Magento\Checkout\Test\Block\Onepage\Payment\DiscountCodes" locator=".discount-code" strategy="css selector" />
         <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator=".opc-block-summary" strategy="css selector" />
         <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="//*[@id='checkout']//div[@data-role='checkout-messages' and .//div]" strategy="xpath" />

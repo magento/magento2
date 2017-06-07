@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model\ResourceModel;
@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product\Condition\ConditionInterface;
 
 /**
  * Wee tax resource model
+ *
+ * @api
  */
 class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

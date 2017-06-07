@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Client;
@@ -13,8 +13,6 @@ namespace Magento\Framework\HTTP\Client;
  */
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
-    const SSL_VERSION = 6;
-
     /**
      * Max supported protocol by curl CURL_SSLVERSION_TLSv1_2
      * @var int
@@ -122,7 +120,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * @param int|null $sslVersion
      */
-    public function __construct($sslVersion = self::SSL_VERSION)
+    public function __construct($sslVersion = null)
     {
         $this->sslVersion = $sslVersion;
     }
@@ -232,8 +230,11 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Make POST request
      *
+     * String type was added to parameter $param in order to support sending JSON or XML requests.
+     * This feature was added base on Community Pull Request https://github.com/magento/magento2/pull/8373
+     *
      * @param string $uri
-     * @param array $params
+     * @param array|string $params
      * @return void
      *
      * @see \Magento\Framework\HTTP\Client#post($uri, $params)
@@ -337,9 +338,13 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Make request
+     *
+     * String type was added to parameter $param in order to support sending JSON or XML requests.
+     * This feature was added base on Community Pull Request https://github.com/magento/magento2/pull/8373
+     *
      * @param string $method
      * @param string $uri
-     * @param array $params
+     * @param array|string $params - use $params as a string in case of JSON or XML POST request.
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -350,7 +355,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
-            $this->curlOption(CURLOPT_POSTFIELDS, http_build_query($params));
+            $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
         } elseif ($method == "GET") {
             $this->curlOption(CURLOPT_HTTPGET, 1);
         } else {
@@ -383,7 +388,9 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
         $this->curlOption(CURLOPT_RETURNTRANSFER, 1);
         $this->curlOption(CURLOPT_HEADERFUNCTION, [$this, 'parseHeaders']);
-        $this->curlOption(CURLOPT_SSLVERSION, $this->sslVersion);
+        if ($this->sslVersion !== null) {
+            $this->curlOption(CURLOPT_SSLVERSION, $this->sslVersion);
+        }
 
         if (count($this->_curlUserOptions)) {
             foreach ($this->_curlUserOptions as $k => $v) {

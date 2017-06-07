@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
@@ -12,7 +12,8 @@ use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 /**
  * Export entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -762,8 +763,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function getItemsPerPage()
     {
         if ($this->_itemsPerPage === null) {
-            $memoryLimit = trim(ini_get('memory_limit'));
-            $lastMemoryLimitLetter = strtolower($memoryLimit[strlen($memoryLimit) - 1]);
+            $memoryLimitConfigValue = trim(ini_get('memory_limit'));
+            $lastMemoryLimitLetter = strtolower($memoryLimitConfigValue[strlen($memoryLimitConfigValue) - 1]);
+            $memoryLimit = (int) $memoryLimitConfigValue;
             switch ($lastMemoryLimitLetter) {
                 case 'g':
                     $memoryLimit *= 1024;
@@ -961,7 +963,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
+                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == htmlspecialchars_decode($attrValue)
                     ) {
                         continue;
                     }
@@ -1000,7 +1002,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                     $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
                 }
-                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
+                $data[$itemId][$storeId][self::COL_SKU] = htmlspecialchars_decode($item->getSku());
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;

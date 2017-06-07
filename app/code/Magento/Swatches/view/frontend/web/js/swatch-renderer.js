@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -259,6 +259,9 @@ define([
             // whether swatches are rendered in product list or on product page
             inProductList: false,
 
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price',
+
             // tier prise selectors start
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
@@ -269,21 +272,28 @@ define([
         /**
          * Get chosen product
          *
-         * @returns array
+         * @returns int|null
          */
         getProduct: function () {
-            return this._CalcProducts().shift();
+            var products = this._CalcProducts();
+
+            return _.isArray(products) ? products[0] : null;
         },
 
         /**
          * @private
          */
         _init: function () {
+            // creates debounced variant of _LoadProductMedia()
+            // to use it in events handlers instead of _LoadProductMedia()
+            this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
+
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
                 this.options.jsonConfig.mappedAttributes = _.clone(this.options.jsonConfig.attributes);
                 this._sortAttributes();
                 this._RenderControls();
+                this._setPreSelectedGallery();
                 $(this.element).trigger('swatch.initialized');
             } else {
                 console.log('SwatchRenderer: No input data received');
@@ -306,12 +316,12 @@ define([
         _create: function () {
             var options = this.options,
                 gallery = $('[data-gallery-role=gallery-placeholder]', '.column.main'),
-                isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ?
+                productData = this._determineProductData(),
+                $main = productData.isInProductView ?
                     this.element.parents('.column.main') :
                     this.element.parents('.product-item-info');
 
-            if (isProductViewExist) {
+            if (productData.isInProductView) {
                 gallery.data('gallery') ?
                     this._onGalleryLoaded(gallery) :
                     gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
@@ -323,6 +333,32 @@ define([
 
             this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
             this.inProductList = this.productForm.length > 0;
+        },
+
+        /**
+         * Determine product id and related data
+         *
+         * @returns {{productId: *, isInProductView: bool}}
+         * @private
+         */
+        _determineProductData: function () {
+            // Check if product is in a list of products.
+            var productId,
+                isInProductView = false;
+
+            productId = this.element.parents('.product-item-details')
+                    .find('.price-box.price-final_price').attr('data-product-id');
+
+            if (!productId) {
+                // Check individual product.
+                productId = $('[name=product]').val();
+                isInProductView = productId > 0;
+            }
+
+            return {
+                productId: productId,
+                isInProductView: isInProductView
+            };
         },
 
         /**
@@ -647,7 +683,7 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
         },
 
@@ -705,7 +741,7 @@ define([
 
             $widget._Rebuild();
             $widget._UpdatePrice();
-            $widget._LoadProductMedia();
+            this._debouncedLoadProductMedia();
             $input.trigger('change');
         },
 
@@ -837,7 +873,13 @@ define([
                 }
             );
 
-            if (result.tierPrices.length) {
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
+
+            if (typeof result != 'undefined' && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
                     tierPriceHtml = mageTemplate(
                         this.options.tierPriceTemplate,
@@ -887,8 +929,7 @@ define([
         _LoadProductMedia: function () {
             var $widget = this,
                 $this = $widget.element,
-                attributes = {},
-                productId = 0,
+                productData = this._determineProductData(),
                 mediaCallData,
                 mediaCacheKey,
 
@@ -902,43 +943,30 @@ define([
                     if (!(mediaCacheKey in $widget.options.mediaCache)) {
                         $widget.options.mediaCache[mediaCacheKey] = data;
                     }
-                    $widget._ProductMediaCallback($this, data);
-                    $widget._DisableProductMediaLoader($this);
+                    $widget._ProductMediaCallback($this, data, productData.isInProductView);
+                    setTimeout(function () {
+                        $widget._DisableProductMediaLoader($this);
+                    }, 300);
                 };
 
             if (!$widget.options.mediaCallback) {
                 return;
             }
 
-            $this.find('[option-selected]').each(function () {
-                var $selected = $(this);
-
-                attributes[$selected.attr('attribute-code')] = $selected.attr('option-selected');
-            });
-
-            if ($('body.catalog-product-view').size() > 0) {
-                //Product Page
-                productId = document.getElementsByName('product')[0].value;
-            } else {
-                //Category View
-                productId = $this.parents('.product.details.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
-            }
-
             mediaCallData = {
-                'product_id': productId,
-                'attributes': attributes,
-                'additional': $.parseQuery()
+                'product_id': this.getProduct()
             };
             mediaCacheKey = JSON.stringify(mediaCallData);
 
             if (mediaCacheKey in $widget.options.mediaCache) {
+                $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
                 mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
             } else {
                 mediaCallData.isAjax = true;
                 $widget._XhrKiller();
                 $widget._EnableProductMediaLoader($this);
-                $widget.xhr = $.post(
+                $widget.xhr = $.get(
                     $widget.options.mediaCallback,
                     mediaCallData,
                     mediaSuccessCallback,
@@ -992,11 +1020,11 @@ define([
          *
          * @param {Object} $this
          * @param {String} response
+         * @param {Boolean} isInProductView
          * @private
          */
-        _ProductMediaCallback: function ($this, response) {
-            var isProductViewExist = $('body.catalog-product-view').size() > 0,
-                $main = isProductViewExist ? $this.parents('.column.main') : $this.parents('.product-item-info'),
+        _ProductMediaCallback: function ($this, response, isInProductView) {
+            var $main = isInProductView ? $this.parents('.column.main') : $this.parents('.product-item-info'),
                 $widget = this,
                 images = [],
 
@@ -1011,7 +1039,7 @@ define([
                 };
 
             if (_.size($widget) < 1 || !support(response)) {
-                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
+                this.updateBaseImage(this.options.mediaGalleryInitial, $main, isInProductView);
 
                 return;
             }
@@ -1036,7 +1064,7 @@ define([
                 });
             }
 
-            this.updateBaseImage(images, $main, isProductViewExist);
+            this.updateBaseImage(images, $main, isInProductView);
         },
 
         /**
@@ -1061,16 +1089,16 @@ define([
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
-         * @param {Boolean} isProductViewExist
+         * @param {Boolean} isInProductView
          */
-        updateBaseImage: function (images, context, isProductViewExist) {
+        updateBaseImage: function (images, context, isInProductView) {
             var justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 imagesToUpdate,
                 isInitial;
 
-            if (isProductViewExist) {
+            if (isInProductView) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
                 isInitial = _.isEqual(imagesToUpdate, initialImages);
 
@@ -1172,6 +1200,23 @@ define([
             var galleryObject = element.data('gallery');
 
             this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        },
+
+        /**
+         * Sets mediaCache for cases when jsonConfig contains preSelectedGallery on layered navigation result pages
+         *
+         * @private
+         */
+        _setPreSelectedGallery: function () {
+            var mediaCallData;
+
+            if (this.options.jsonConfig.preSelectedGallery) {
+                mediaCallData = {
+                    'product_id': this.getProduct()
+                };
+
+                this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
+            }
         }
     });
 

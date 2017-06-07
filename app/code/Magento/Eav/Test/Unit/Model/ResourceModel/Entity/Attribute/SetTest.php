@@ -1,13 +1,13 @@
 <?php
-/** 
- * Copyright © 2016 Magento. All rights reserved.
+/**
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity\Attribute;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,7 +50,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     protected $relationProcessor;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
@@ -88,7 +88,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMock(Json::class);
 
         $attributeGroupFactoryMock = $this->getMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\GroupFactory::class,

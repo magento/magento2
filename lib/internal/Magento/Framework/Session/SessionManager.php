@@ -2,7 +2,7 @@
 /**
  * Magento session manager
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -188,6 +188,7 @@ class SessionManager implements SessionManagerInterface
             $this->setSessionId($this->sidResolver->getSid($this));
             session_start();
             $this->validator->validate($this);
+            $this->renewCookie();
 
             register_shutdown_function([$this, 'writeClose']);
 
@@ -195,6 +196,35 @@ class SessionManager implements SessionManagerInterface
             \Magento\Framework\Profiler::stop('session_start');
         }
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
+        return $this;
+    }
+
+    /**
+     * Renew session cookie to prolong session
+     *
+     * @return $this
+     */
+    private function renewCookie()
+    {
+        if (!$this->getCookieLifetime()) {
+            return $this;
+        }
+        $cookieValue = $this->cookieManager->getCookie($this->getName());
+        if ($cookieValue) {
+            $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
+            $metadata->setPath($this->sessionConfig->getCookiePath());
+            $metadata->setDomain($this->sessionConfig->getCookieDomain());
+            $metadata->setDuration($this->sessionConfig->getCookieLifetime());
+            $metadata->setSecure($this->sessionConfig->getCookieSecure());
+            $metadata->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+
+            $this->cookieManager->setPublicCookie(
+                $this->getName(),
+                $cookieValue,
+                $metadata
+            );
+        }
+
         return $this;
     }
 

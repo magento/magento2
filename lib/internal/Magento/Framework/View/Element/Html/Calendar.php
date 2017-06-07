@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Html;
@@ -11,6 +11,8 @@ use Magento\Framework\Locale\Bundle\DataBundle;
  * Calendar block for page header
  *
  * Prepares localization data for calendar
+ *
+ * @api
  */
 class Calendar extends \Magento\Framework\View\Element\Template
 {

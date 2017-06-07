@@ -85,7 +85,7 @@ Exception,Exception
 Edit,Edit
 Delete,Delete
 "Delete %1","Delete %1"
-"Are you sure you wan\'t to delete a %1 record?","Are you sure you wan\'t to delete a %1 record?"
+"Are you sure you want to delete a %1 record?","Are you sure you want to delete a %1 record?"
 View,View
 px.,px.
 "No files found","No files found"
@@ -124,7 +124,7 @@ Block,Block
 "Enable Block","Enable Block"
 "Block Title","Block Title"
 "Delete items","Delete items"
-"Are you sure you wan't to delete selected items?","Are you sure you wan't to delete selected items?"
+"Are you sure you want to delete selected items?","Are you sure you want to delete selected items?"
 "Page Information","Page Information"
 "Enable Page","Enable Page"
 Content,Content

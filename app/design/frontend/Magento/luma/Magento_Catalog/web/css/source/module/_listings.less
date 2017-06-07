@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -20,6 +20,8 @@
 @product-item__hover__background-color: @color-white;
 @product-item__hover__box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
 
+@product-price__muted__color: @color-gray40;
+
 //
 //  Common
 //  _____________________________________________
@@ -34,15 +36,15 @@
         &-items {
             &:extend(.abs-reset-list all);
         }
-        
+
         &-item {
             vertical-align: top;
-            
+
             .products-grid & {
                 display: inline-block;
                 width: 100%/2;
             }
-            
+
             &:extend(.abs-add-box-sizing all);
 
             &-name {
@@ -59,7 +61,7 @@
             &-info {
                 max-width: 100%;
                 width: 152px;
-                
+
                 .page-products & {
                     width: 240px;
                 }
@@ -67,30 +69,30 @@
 
             &-actions {
                 display: none;
-                
+
                 .actions-secondary {
                     > .action {
                         &:extend(.abs-actions-addto all);
                         &:before {
                             margin: 0;
                         }
-                        
+
                         span {
                             &:extend(.abs-visually-hidden all);
                         }
                     }
                 }
             }
-            
+
             &-description {
                 margin: @indent__m 0;
             }
-            
+
             .product-reviews-summary {
                 .rating-summary {
                     margin: 0 4px 0 0;
                 }
-                
+
                 .reviews-actions {
                     font-size: @font-size__s;
                     margin-top: 5px;
@@ -100,21 +102,21 @@
 
             .price-box {
                 margin: @indent__s 0 @indent__m;
-                
+
                 .price {
                     font-weight: @font-weight__bold;
                     white-space: nowrap;
                 }
-                
+
                 .price-label {
-                    .lib-css(color, @text__color__muted);
+                    .lib-css(color, @product-price__muted__color);
                     font-size: @font-size__s;
                 }
             }
 
             .old-price {
                 margin: @indent__xs 0;
-                
+
                 .price {
                     font-weight: normal;
                 }
@@ -140,7 +142,7 @@
                 @icon-compare-full
                 );
             }
-            
+
             .tocart {
                 .lib-font-size(13px);
                 border-radius: 0;
@@ -157,7 +159,7 @@
             &-items {
                 margin-left: -@indent__base;
             }
-            
+
             &-item {
                 padding-left: @indent__base;
             }
@@ -187,11 +189,11 @@
             &:before {
                 content: '(' attr(data-label) ': ';
             }
-            
+
             &:after {
                 content: ')';
             }
-            
+
             + .price-excluding-tax {
                 &:before {
                     content: attr(data-label) ': ';
@@ -293,7 +295,7 @@
             display: table-cell;
             padding-left: 10px;
             width: 50%;
-            
+
             > .action {
                 margin-right: 10px;
 
@@ -421,7 +423,7 @@
             .product-items {
                 margin: 0;
             }
-            
+
             .product-item {
                 margin-left: calc(~'(100% - 4 * 24.439%) / 3');
                 padding: 0;

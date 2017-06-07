@@ -5,8 +5,12 @@
 /.settings
 atlassian*
 /nbproject
+/robots.txt
+/pub/robots.txt
 /sitemap
 /sitemap.xml
+/pub/sitemap
+/pub/sitemap.xml
 /.idea
 /.gitattributes
 /app/config_sandbox
@@ -25,17 +29,26 @@ atlassian*
 /.grunt
 /Gruntfile.js
 /package.json
+/.php_cs
+/.php_cs.cache
+/grunt-config.json
+/dev/tools/grunt/configs/local-themes.js
 
 /pub/media/*.*
 !/pub/media/.htaccess
+/pub/media/attribute/*
+!/pub/media/attribute/.htaccess
+/pub/media/analytics/*
 /pub/media/catalog/*
 !/pub/media/catalog/.htaccess
 /pub/media/customer/*
 !/pub/media/customer/.htaccess
 /pub/media/downloadable/*
 !/pub/media/downloadable/.htaccess
+/pub/media/favicon/*
 /pub/media/import/*
 !/pub/media/import/.htaccess
+/pub/media/logo/*
 /pub/media/theme/*
 /pub/media/theme_customization/*
 !/pub/media/theme_customization/.htaccess
@@ -51,3 +64,5 @@ atlassian*
 !/var/.htaccess
 /vendor/*
 !/vendor/.htaccess
+/generated/*
+!/generated/.htaccess

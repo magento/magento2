@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Test\Unit\App\Config\Type;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 
 /**
@@ -30,6 +31,11 @@ class SystemTest extends \PHPUnit_Framework_TestCase
     private $postProcessor;
 
     /**
+     * @var PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $preProcessor;
+
+    /**
      * @var Fallback|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fallback;
@@ -45,7 +51,7 @@ class SystemTest extends \PHPUnit_Framework_TestCase
     private $configType;
 
     /**
-     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
 
@@ -60,23 +66,42 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)
             ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(Serialize::class)
-            ->disableOriginalConstructor()
+        $this->preProcessor = $this->getMockBuilder(PreProcessorInterface::class)
+            ->getMockForAbstractClass();
+        $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->getMock();
+
         $this->configType = new System(
             $this->source,
             $this->postProcessor,
             $this->fallback,
             $this->cache,
-            $this->serializer
+            $this->serializer,
+            $this->preProcessor
         );
     }
 
-    /**
-     * @param bool $isCached
-     * @dataProvider getDataProvider
-     */
-    public function testGet($isCached)
+    public function testGetCached()
+    {
+        $path = 'default/dev/unsecure/url';
+        $url = 'http://magento.test/';
+        $data = [
+            'unsecure' => [
+                'url' => $url
+            ]
+        ];
+
+        $this->cache->expects($this->any())
+            ->method('load')
+            ->withConsecutive(['system_CACHE_EXISTS'], ['system_defaultdev'])
+            ->willReturnOnConsecutiveCalls('1', serialize($data));
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->willReturn($data);
+        $this->assertEquals($url, $this->configType->get($path));
+    }
+
+    public function testGetNotCached()
     {
         $path = 'default/dev/unsecure/url';
         $url = 'http://magento.test/';
@@ -90,52 +115,49 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->cache->expects($this->once())
+        $dataToCache = [
+            'unsecure' => [
+                'url' => $url
+            ]
+        ];
+        $this->cache->expects($this->any())
             ->method('load')
-            ->with(System::CONFIG_TYPE)
-            ->willReturn($isCached ? $data : null);
+            ->withConsecutive(['system_CACHE_EXISTS'], ['system_defaultdev'])
+            ->willReturnOnConsecutiveCalls(false, false);
 
-        if ($isCached) {
-            $this->serializer->expects($this->once())
-                ->method('unserialize')
-                ->willReturn($data);
-        }
-
-        if (!$isCached) {
-            $this->serializer->expects($this->once())
-                ->method('serialize')
-                ->willReturn(serialize($data));
-            $this->source->expects($this->once())
-                ->method('get')
-                ->willReturn($data);
-            $this->fallback->expects($this->once())
-                ->method('process')
-                ->with($data)
-                ->willReturnArgument(0);
-            $this->postProcessor->expects($this->once())
-                ->method('process')
-                ->with($data)
-                ->willReturnArgument(0);
-            $this->cache->expects($this->once())
-                ->method('save')
-                ->with(
-                    serialize($data),
-                    System::CONFIG_TYPE,
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->willReturn(serialize($dataToCache));
+        $this->source->expects($this->once())
+            ->method('get')
+            ->willReturn($data);
+        $this->fallback->expects($this->once())
+            ->method('process')
+            ->with($data)
+            ->willReturnArgument(0);
+        $this->preProcessor->expects($this->once())
+            ->method('process')
+            ->with($data)
+            ->willReturnArgument(0);
+        $this->postProcessor->expects($this->once())
+            ->method('process')
+            ->with($data)
+            ->willReturnArgument(0);
+        $this->cache->expects($this->any())
+            ->method('save')
+            ->withConsecutive(
+                [
+                    serialize($dataToCache),
+                    'system_defaultdev',
                     [System::CACHE_TAG]
-                );
-        }
+                ],
+                [
+                    'system_CACHE_EXISTS',
+                    'system_CACHE_EXISTS',
+                    [System::CACHE_TAG]
+                ]
+            );
 
         $this->assertEquals($url, $this->configType->get($path));
-    }
-
-    /**
-     * @return array
-     */
-    public function getDataProvider()
-    {
-        return [
-            [true],
-            [false]
-        ];
     }
 }

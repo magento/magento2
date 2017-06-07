@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,6 +52,13 @@ class Shipping extends Form
     protected $estimationFields = ['country_id', 'region_id', 'region', 'postcode'];
 
     /**
+     * Selector for top destinations in country field.
+     *
+     * @var string
+     */
+    private $topOptions = './option[@value="delimiter"]/preceding-sibling::option[string(@value)]';
+
+    /**
      * Block wait element.
      *
      * @var string
@@ -59,11 +66,11 @@ class Shipping extends Form
     protected $blockWaitElement = '._block-content-loading';
 
     /**
-     * Get shipping price selector for exclude and include price
+     * Get shipping price selector for exclude and include price.
      *
      * @var string
      */
-    protected $commonShippingPriceSelector = '.shipping .price';
+    protected $commonShippingPriceSelector = '.totals.shipping .price';
 
     /**
      * Open estimate shipping and tax form.
@@ -75,6 +82,29 @@ class Shipping extends Form
         if (!$this->_rootElement->find($this->formWrapper)->isVisible()) {
             $this->_rootElement->find($this->openForm)->click();
         }
+    }
+
+    /**
+     * Get countries displayed at the top of country element.
+     *
+     * @return array
+     */
+    public function getTopCountries()
+    {
+        $this->openEstimateShippingAndTax();
+        $mapping = $this->dataMapping(array_flip(['country_id']));
+        $countryField = $this->getElement($this->_rootElement, $mapping['country_id']);
+        $this->_rootElement->waitUntil(
+            function () use ($countryField) {
+                return $countryField->isVisible() ? true : null;
+            }
+        );
+        return array_map(
+            function ($option) {
+                return $option->getAttribute('value');
+            },
+            $countryField->getElements($this->topOptions, Locator::SELECTOR_XPATH)
+        );
     }
 
     /**
@@ -92,11 +122,55 @@ class Shipping extends Form
                 $this->openEstimateShippingAndTax();
             }
             $element = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+
+            if (!empty($element->getAttribute('checked'))) {
+                return;
+            }
+
             if (!$element->isDisabled()) {
                 $element->click();
             } else {
                 throw new \Exception("Unable to set value to field '$selector' as it's disabled.");
             }
+        }
+    }
+
+    /**
+     * Reset the address fields in the shipping and tax form.
+     *
+     * @return void
+     */
+    public function resetAddress()
+    {
+        $this->openEstimateShippingAndTax();
+        $fields = [
+           'country_id' => [
+               'selector' => '[name=country_id]',
+               'strategy' => 'css selector',
+               'input' => 'select',
+               'class' => null,
+               'value' => 'United States'
+           ],
+            'region_id' => [
+                'selector' => '[name=region_id]',
+                'strategy' => 'css selector',
+                'input' => 'select',
+                'class' => null,
+                'value' => 'Please select a region, state or province.'
+            ],
+            'postcode' => [
+                'selector' => '[name=postcode]',
+                'strategy' => 'css selector',
+                'input' => null,
+                'class' => null,
+                'value' => ''
+            ]
+        ];
+        // Test environment may become unstable when form fields are filled in a default manner.
+        // Imitating behavior closer to the real user.
+        foreach ($fields as $field) {
+            $this->_fill([$field], $this->_rootElement);
+            $this->waitForUpdatedShippingMethods();
         }
     }
 
@@ -168,7 +242,7 @@ class Shipping extends Form
     }
 
     /**
-     * Wait for common shipping price block to appear
+     * Wait for common shipping price block to appear.
      *
      * @return void
      */

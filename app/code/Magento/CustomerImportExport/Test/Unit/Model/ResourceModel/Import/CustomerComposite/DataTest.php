@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -105,7 +105,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $jsonDecoderMock->expects($this->once())
             ->method('decode')
-            ->willReturn(\Zend_Json::decode($bunchData));
+            ->willReturn(json_decode($bunchData, true));
         $jsonHelper = $helper->getObject(
             \Magento\Framework\Json\Helper\Data::class,
             [
@@ -140,7 +140,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         return [
             'address entity' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_ADDRESS,
-                '$bunchData' => \Zend_Json::encode(
+                '$bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -170,7 +170,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'customer entity default scope' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => \Zend_Json::encode(
+                '$bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -202,7 +202,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'customer entity address scope' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => \Zend_Json::encode(
+                '$bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_ADDRESS,

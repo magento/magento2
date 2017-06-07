@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -38,7 +38,7 @@
                 <item name="4" xsi:type="boolean">true</item>
                 <item name="5" xsi:type="boolean">true</item>
             </data>
-            <data name="configData" xsi:type="string">dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
+            <data name="configData" xsi:type="string">dhl_eu, shipping_origin_GB, config_base_currency_gb</data>
         </variation>
     </testCase>
 </config>

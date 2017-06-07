@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -25,13 +25,13 @@
 @message-global-caution__border-color: none;
 
 @header__background-color: false;
-@header-panel__background-color: @color-gray-middle3;
+@header-panel__background-color: @color-gray-middle4;
 @header-panel__text-color: @color-white;
-@header-icons-color: @color-gray56;
+@header-icons-color: @color-gray46;
 @header-icons-color-hover: @color-gray20;
 @customer-welcome__z-index: @dropdown-list__z-index + 1;
 
-@addto-color: @color-gray60;
+@addto-color: @color-gray40;
 @addto-hover-color: @primary__color;
 @minicart-icons-color: @header-icons-color;
 @minicart-icons-color-hover: @header-icons-color-hover;
@@ -56,7 +56,7 @@
 @filter-title-background-color: @color-gray94;
 @filter-link: @color-gray-darken4;
 @filter-link-hover: darken(@filter-link, 30%);
-@filter-quantity: @color-gray52;
+@filter-quantity: @color-gray46;
 
 //
 //  Common
@@ -576,6 +576,12 @@
                         content: attr(data-label);
                         display: inline-block;
                         margin: 0 -@indent__xs 0 @indent__xs;
+                    }
+
+                    &:last-child {
+                        &:after {
+                            display: none;
+                        }
                     }
                 }
 

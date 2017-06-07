@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\Config\Type;
@@ -11,8 +11,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Merge and hold scopes data from different sources
- *
- * @package Magento\Store\App\Config\Type
  */
 class Scopes implements ConfigTypeInterface
 {

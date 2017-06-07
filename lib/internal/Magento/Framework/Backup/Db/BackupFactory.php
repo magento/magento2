@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Backup\Db;
 
@@ -32,8 +30,11 @@ class BackupFactory
      * @param string $backupInstanceName
      * @param string $backupDbInstanceName
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $backupInstanceName, $backupDbInstanceName)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $backupInstanceName,
+        $backupDbInstanceName
+    ) {
         $this->_objectManager = $objectManager;
         $this->_backupInstanceName = $backupInstanceName;
         $this->_backupDbInstanceName = $backupDbInstanceName;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -487,7 +487,7 @@ window.WidgetInstance = WidgetInstance;
 
 jQuery(function(){
     <?php foreach ($block->getPageGroups() as $pageGroup): ?>
-        WidgetInstance.addPageGroup(<?php /* @noEscape */ echo Zend_Json::encode($pageGroup) ?>);
+        WidgetInstance.addPageGroup(<?php /* @noEscape */ echo $pageGroup ?>);
     <?php endforeach; ?>
     Event.observe(document, 'product:changed', function(event){
         WidgetInstance.checkProduct(event);

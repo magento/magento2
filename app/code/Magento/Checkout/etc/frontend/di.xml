@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -47,6 +47,7 @@
         <arguments>
             <argument name="configProviders" xsi:type="array">
                 <item name="checkout_default_config_provider" xsi:type="object">Magento\Checkout\Model\DefaultConfigProvider</item>
+                <item name="checkout_summary_config_provider" xsi:type="object">Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider</item>
             </argument>
         </arguments>
     </type>

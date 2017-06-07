@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
                 <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
                     <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before" htmlTag="div" htmlClass="rewards"/>
                 </block>
-                <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml"/>
+                <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="Magento_Review::product/view/list.phtml"/>
                 <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar"/>
             </container>
         </referenceContainer>

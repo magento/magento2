@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
 
-use Magento\Ui\Component\Form\Element\DataType\Date;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Form\Element\DataType\Date;
 
 class DateTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +39,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->localeResolverMock = $this->getMock(ResolverInterface::class, [], [], '', false);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->processorMock = $this->getMock(Processor::class, [], [], '', false);
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($this->processorMock);
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processorMock);
     }
 
     public function testPrepareWithTimeOffset()
@@ -70,9 +70,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
         $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
-
-        $this->assertArrayHasKey('outputDateFormat', $config);
-        $this->assertEquals($localeDateFormat, $config['outputDateFormat']);
     }
 
     public function testPrepareWithoutTimeOffset()
@@ -111,9 +108,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
         $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
-
-        $this->assertArrayHasKey('outputDateFormat', $config);
-        $this->assertEquals($localeDateFormat, $config['outputDateFormat']);
     }
 
     /**
@@ -121,6 +115,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare()
     {
+        $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn('de-DE');
         $this->date = $this->objectManagerHelper->getObject(
             Date::class,
             [
@@ -133,5 +128,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->date->prepare();
         $configArray = $this->date->getData('config');
         $this->assertEquals('America/Chicago', $configArray['storeTimeZone']);
+        $this->assertEquals('de-DE', $configArray['options']['storeLocale']);
     }
 }

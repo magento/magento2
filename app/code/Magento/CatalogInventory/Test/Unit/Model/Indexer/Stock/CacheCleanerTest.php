@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Product;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 class CacheCleanerTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,6 +50,11 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
     private $stockConfigurationMock;
 
     /**
+     * @var FrontendResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerStockFrontendResourceMock;
+
+    /**
      * @var Select|\PHPUnit_Framework_MockObject_MockObject
      */
     private $selectMock;
@@ -62,6 +68,9 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
         $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)->disableOriginalConstructor()->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $this->indexerStockFrontendResourceMock = $this->getMockBuilder(FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
@@ -74,6 +83,7 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
                 'stockConfiguration' => $this->stockConfigurationMock,
                 'cacheContext' => $this->cacheContextMock,
                 'eventManager' => $this->eventManagerMock,
+                'indexerStockFrontendResource' => $this->indexerStockFrontendResourceMock
             ]
         );
     }
@@ -105,6 +115,9 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
             ->with(Product::CACHE_TAG, [$productId]);
         $this->eventManagerMock->expects($this->once())->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $this->cacheContextMock]);
+        $this->indexerStockFrontendResourceMock->expects($this->any())
+            ->method('getMainTable')
+            ->willReturn('table_name');
 
         $callback = function () {
         };
@@ -149,6 +162,9 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stockThresholdQty);
         $this->cacheContextMock->expects($this->never())->method('registerEntities');
         $this->eventManagerMock->expects($this->never())->method('dispatch');
+        $this->indexerStockFrontendResourceMock->expects($this->any())
+            ->method('getMainTable')
+            ->willReturn('table_name');
 
         $callback = function () {
         };

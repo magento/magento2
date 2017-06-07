@@ -1,18 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use \Magento\Framework\App\Request\Http;
-use Magento\Framework\App\ScopeInterface;
-use Zend\Stdlib\Parameters;
+use Magento\Framework\App\Request\Http;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +49,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
         $this->_routerListMock = $this->getMock(
             \Magento\Framework\App\Route\ConfigInterface\Proxy::class,
             ['getRouteFrontName', 'getRouteByFrontName', '__wakeup'],
@@ -86,7 +81,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     private function getModel($uri = null, $appConfigMock = true)
     {
-
         $model = $this->objectManager->getObject(
             \Magento\Framework\App\Request\Http::class,
             [
@@ -99,7 +93,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
 
         if ($appConfigMock) {
-            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
             $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 
@@ -151,7 +145,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFrontName()
     {
-
         $uri = 'http://test.com/one/two';
         $this->_model = $this->getModel($uri);
         $this->assertEquals('one', $this->_model->getFrontName());
@@ -283,7 +276,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function serverVariablesProvider()
     {
         $returnValue = [];
@@ -351,8 +343,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
-            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
-            ->willReturn($configOffloadHeader);
+            ->with(
+                \Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            )->willReturn($configOffloadHeader);
 
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'sslOffloadHeader', null);

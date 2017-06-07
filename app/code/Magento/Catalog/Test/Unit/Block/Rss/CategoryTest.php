@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Rss;
@@ -95,7 +95,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(0))->method('getParam')->with('cid')->will($this->returnValue(1));
         $this->request->expects($this->at(1))->method('getParam')->with('store_id')->will($this->returnValue(null));
 
-        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class);
+        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
         $this->catalogHelper = $this->getMock(\Magento\Catalog\Helper\Data::class, [], [], '', false);
         $this->categoryFactory = $this->getMockBuilder(\Magento\Catalog\Model\CategoryFactory::class)
             ->setMethods(['create'])
