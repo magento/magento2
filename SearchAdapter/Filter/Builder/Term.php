@@ -9,9 +9,6 @@ use Magento\Framework\Search\Request\Filter\Term as TermFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
-/**
- * @api
- */
 class Term implements FilterInterface
 {
     /**

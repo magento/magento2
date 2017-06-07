@@ -8,9 +8,6 @@ namespace Magento\Elasticsearch\Model\Adapter\Index\Config;
 use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Module\Dir;
 
-/**
- * @api
- */
 class SchemaLocator implements SchemaLocatorInterface
 {
     /**

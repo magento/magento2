@@ -152,7 +152,6 @@
             <argument name="cacheId" xsi:type="string">elasticsearch_index_config</argument>
         </arguments>
     </type>
-    <!-- @api -->
     <virtualType name="Magento\Elasticsearch\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
         <arguments>
             <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Model\Client\Elasticsearch</argument>

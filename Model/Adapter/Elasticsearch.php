@@ -9,7 +9,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Elasticsearch adapter
- * @api
  */
 class Elasticsearch
 {

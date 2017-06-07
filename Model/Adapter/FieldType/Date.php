@@ -10,9 +10,6 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * @api
- */
 class Date
 {
     /**
