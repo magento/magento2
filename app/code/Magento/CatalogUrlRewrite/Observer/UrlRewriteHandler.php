@@ -139,7 +139,7 @@ class UrlRewriteHandler
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
-        $productCollection = $this->productCollectionFactory->create();//$category->getProductCollection()
+        $productCollection = $this->productCollectionFactory->create();
 
         $productCollection->addCategoriesFilter(['eq' => [$category->getEntityId()]])
             ->setStoreId($storeId)
