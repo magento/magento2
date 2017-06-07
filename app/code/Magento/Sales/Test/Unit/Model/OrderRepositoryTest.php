@@ -11,8 +11,6 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
- * Class OrderRepositoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -20,22 +18,22 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Model\OrderRepository
      */
-    protected $model;
+    private $orderRepository;
 
     /**
      * @var Metadata|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadata;
+    private $metadata;
 
     /**
      * @var SearchResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultFactory;
+    private $searchResultFactory;
 
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -61,20 +59,20 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = $this->objectManager->getObject(
+        $orderExtensionFactoryMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderRepository = $this->objectManager->getObject(
             \Magento\Sales\Model\OrderRepository::class,
             [
                 'metadata' => $this->metadata,
                 'searchResultFactory' => $this->searchResultFactory,
-                'collectionProcessor' => $this->collectionProcessor
+                'collectionProcessor' => $this->collectionProcessor,
+                'orderExtensionFactory' => $orderExtensionFactoryMock
             ]
         );
     }
 
-    /**
-     * TODO: Cover with unit tests the other methods in the repository
-     * test GetList
-     */
     public function testGetList()
     {
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
@@ -106,7 +104,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
 
-        $this->assertEquals($collectionMock, $this->model->getList($searchCriteriaMock));
+        $this->assertEquals($collectionMock, $this->orderRepository->getList($searchCriteriaMock));
     }
 
     public function testSave()
@@ -142,6 +140,6 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->metadata->expects($this->once())->method('getMapper')->willReturn($mapperMock);
         $mapperMock->expects($this->once())->method('save');
         $orderEntity->expects($this->any())->method('getEntityId')->willReturn(1);
-        $this->model->save($orderEntity);
+        $this->orderRepository->save($orderEntity);
     }
 }
