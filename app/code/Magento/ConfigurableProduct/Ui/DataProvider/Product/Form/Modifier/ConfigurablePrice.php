@@ -84,6 +84,8 @@ class ConfigurablePrice extends AbstractModifier
                                 . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                         ]
                     ];
+                $config = $visibilityConfig;
+                $config['componentType'] = 'container';
                 $meta[$groupCode]['children'][self::CODE_GROUP_PRICE] = array_replace_recursive(
                     $meta[$groupCode]['children'][self::CODE_GROUP_PRICE],
                     [
@@ -91,10 +93,7 @@ class ConfigurablePrice extends AbstractModifier
                             self::$advancedPricingButton => [
                                 'arguments' => [
                                     'data' => [
-                                        'config' => [
-                                            'componentType' => 'container',
-                                            $visibilityConfig
-                                        ],
+                                        'config' => $config,
                                     ],
                                 ],
                             ],
