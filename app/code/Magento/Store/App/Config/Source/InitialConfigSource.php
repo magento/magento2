@@ -3,36 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\App\Config;
+namespace Magento\Store\App\Config\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\DataObject;
 
+/**
+ * Config source to retrieve configuration from files.
+ */
 class InitialConfigSource implements ConfigSourceInterface
 {
     /**
+     * The file reader
+     *
      * @var Reader
      */
     private $reader;
 
     /**
+     * The deployment config reader
+     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
+     * The config type
+     *
      * @var string
      */
     private $configType;
 
     /**
-     * DataProvider constructor.
-     *
-     * @param Reader $reader
-     * @param DeploymentConfig $deploymentConfig
-     * @param string $configType
+     * @param Reader $reader The file reader
+     * @param DeploymentConfig $deploymentConfig The deployment config reader
+     * @param string $configType The config type
      */
     public function __construct(Reader $reader, DeploymentConfig $deploymentConfig, $configType)
     {
@@ -57,7 +64,9 @@ class InitialConfigSource implements ConfigSourceInterface
         }
 
         $data = new DataObject($this->reader->load());
+
         if ($path !== '' && $path !== null) {
+            $path = ltrim($path, '/');
             $path = '/' . $path;
         }
 

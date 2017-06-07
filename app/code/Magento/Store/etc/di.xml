@@ -346,7 +346,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="scopesConfigInitialDataProvider" type="Magento\Store\App\Config\InitialConfigSource">
+    <virtualType name="scopesConfigInitialDataProvider" type="Magento\Store\App\Config\Source\InitialConfigSource">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
             <argument name="configType" xsi:type="const">Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE</argument>

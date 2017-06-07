@@ -110,7 +110,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             'name' => 'Main Website',
             'sort_order' => '0',
             'is_default' => '1',
-            'default_group_id' => '1',
         ];
         $data = [
             'websites' => $websites,
