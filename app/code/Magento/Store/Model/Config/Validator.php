@@ -9,7 +9,7 @@ use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Imports stores, websites and groups from transmitted data.
+ * Validates that scopes data contain correct values
  */
 class Validator implements ValidatorInterface
 {

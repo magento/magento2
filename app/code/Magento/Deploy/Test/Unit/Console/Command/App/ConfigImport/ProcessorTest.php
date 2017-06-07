@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
 use Magento\Framework\Console\QuestionPerformer\YesNo;
+use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -230,6 +231,45 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock->expects($this->once())
             ->method('error')
             ->with($exception);
+
+        $this->processor->execute($this->inputMock, $this->outputMock);
+    }
+
+    public function testImportWithValidation()
+    {
+        $configData = ['config data'];
+        $importerClassName = 'someImporterClassName';
+        $importers = ['someSection' => $importerClassName];
+        $errorMessages = ['error message'];
+
+        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
+            ->getMockForAbstractClass();
+        $validatorMock->expects($this->once())
+            ->method('validate')
+            ->with($configData)
+            ->willReturn($errorMessages);
+        $this->configImporterPoolMock->expects($this->once())
+            ->method('getImporters')
+            ->willReturn($importers);
+        $this->changeDetectorMock->expects($this->exactly(2))
+            ->method('hasChanges')
+            ->withConsecutive(
+                [],
+                ['someSection']
+            )
+            ->willReturnOnConsecutiveCalls(true, true);
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with('someSection')
+            ->willReturn($configData);
+        $this->configImporterPoolMock->expects($this->once())
+            ->method('getValidator')
+            ->willReturn($validatorMock);
+        $this->outputMock->expects($this->at(1))
+            ->method('writeln')
+            ->with($errorMessages);
+        $this->importerFactoryMock->expects($this->never())
+            ->method('create');
 
         $this->processor->execute($this->inputMock, $this->outputMock);
     }
