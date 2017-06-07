@@ -103,7 +103,11 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function getExtensionAttributes()
     {
-        return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (!$extensionAttributes) {
+            return $this->extensionAttributesFactory->create(WeeeAdjustmentAttributeInterface::class);
+        }
+        return $extensionAttributes;
     }
 
     /**
