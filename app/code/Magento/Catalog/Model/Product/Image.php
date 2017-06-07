@@ -3,13 +3,17 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * Catalog product link model
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
-use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Catalog\Model\Product\Image\SizeCache;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -167,31 +171,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\View\Asset\ImageFactory
-     */
-    private $viewAssetImageFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
-     */
-    private $viewAssetPlaceholderFactory;
-
-    /**
-     * @var \Magento\Framework\View\Asset\LocalInterface
-     */
-    private $imageAsset;
-
-    /**
-     * @var ParamsBuilder
-     */
-    private $paramsBuilder;
-
-    /**
-     * @var SizeCache
-     */
-    private $sizeCache;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -205,10 +184,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Catalog\Model\View\Asset\ImageFactory $assetImageFactory
-     * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $assetPlaceholderFactory
-     * @param ParamsBuilder $paramsBuilder
-     * @param SizeCache $sizeCache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -225,35 +200,18 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [],
-        \Magento\Catalog\Model\View\Asset\ImageFactory $assetImageFactory = null,
-        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $assetPlaceholderFactory = null,
-        ParamsBuilder $paramsBuilder = null,
-        SizeCache $sizeCache = null
+        array $data = []
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $result = $this->_mediaDirectory->create($this->_catalogProductMediaConfig->getBaseMediaPath());
         $this->_imageFactory = $imageFactory;
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_scopeConfig = $scopeConfig;
-        $this->viewAssetImageFactory = $assetImageFactory;
-        if ($this->viewAssetImageFactory == null) {
-            $this->viewAssetImageFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\View\Asset\ImageFactory::class
-            );
-        }
-        $this->viewAssetPlaceholderFactory = $assetPlaceholderFactory;
-        if ($this->viewAssetPlaceholderFactory == null) {
-            $this->viewAssetPlaceholderFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\View\Asset\PlaceholderFactory::class
-            );
-        }
-        $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
-        $this->sizeCache = $sizeCache ?: ObjectManager::getInstance()->get(SizeCache::class);
     }
 
     /**
@@ -475,7 +433,15 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     protected function _rgbToString($rgbArray)
     {
-        return $this->paramsBuilder->rgbToString($rgbArray);
+        $result = [];
+        foreach ($rgbArray as $value) {
+            if (null === $value) {
+                $result[] = 'null';
+            } else {
+                $result[] = sprintf('%02s', dechex($value));
+            }
+        }
+        return implode($result);
     }
 
     /**
@@ -484,29 +450,85 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param string $file
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setBaseFile($file)
     {
         $this->_isBaseFilePlaceholder = false;
 
-        $this->imageAsset = $this->viewAssetImageFactory->create(
-            [
-                'miscParams' => $this->getMiscParams(),
-                'filePath' => $file,
-            ]
-        );
-        if ($file == 'no_selection' || !$this->_fileExists($this->imageAsset->getSourceFile())
-            || !$this->_checkMemory($this->imageAsset->getSourceFile())
-        ) {
+        if ($file && 0 !== strpos($file, '/', 0)) {
+            $file = '/' . $file;
+        }
+        $baseDir = $this->_catalogProductMediaConfig->getBaseMediaPath();
+
+        if ('/no_selection' == $file) {
+            $file = null;
+        }
+        if ($file) {
+            if (!$this->_fileExists($baseDir . $file) || !$this->_checkMemory($baseDir . $file)) {
+                $file = null;
+            }
+        }
+        if (!$file) {
             $this->_isBaseFilePlaceholder = true;
-            $this->imageAsset = $this->viewAssetPlaceholderFactory->create(
-                [
-                    'type' => $this->getDestinationSubdir(),
-                ]
+            // check if placeholder defined in config
+            $isConfigPlaceholder = $this->_scopeConfig->getValue(
+                "catalog/placeholder/{$this->getDestinationSubdir()}_placeholder",
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
+            $configPlaceholder = '/placeholder/' . $isConfigPlaceholder;
+            if (!empty($isConfigPlaceholder) && $this->_fileExists($baseDir . $configPlaceholder)) {
+                $file = $configPlaceholder;
+            } else {
+                $this->_newFile = true;
+                return $this;
+            }
         }
 
-        $this->_baseFile = $this->imageAsset->getSourceFile();
+        $baseFile = $baseDir . $file;
+
+        if (!$file || !$this->_mediaDirectory->isFile($baseFile)) {
+            throw new \Exception(__('We can\'t find the image file.'));
+        }
+
+        $this->_baseFile = $baseFile;
+
+        // build new filename (most important params)
+        $path = [
+            $this->_catalogProductMediaConfig->getBaseMediaPath(),
+            'cache',
+            $this->getDestinationSubdir(),
+        ];
+        if (!empty($this->_width) || !empty($this->_height)) {
+            $path[] = "{$this->_width}x{$this->_height}";
+        }
+
+        // add misk params as a hash
+        $miscParams = [
+            ($this->_keepAspectRatio ? '' : 'non') . 'proportional',
+            ($this->_keepFrame ? '' : 'no') . 'frame',
+            ($this->_keepTransparency ? '' : 'no') . 'transparency',
+            ($this->_constrainOnly ? 'do' : 'not') . 'constrainonly',
+            $this->_rgbToString($this->_backgroundColor),
+            'angle' . $this->_angle,
+            'quality' . $this->_quality,
+        ];
+
+        // if has watermark add watermark params to hash
+        if ($this->getWatermarkFile()) {
+            $miscParams[] = $this->getWatermarkFile();
+            $miscParams[] = $this->getWatermarkImageOpacity();
+            $miscParams[] = $this->getWatermarkPosition();
+            $miscParams[] = $this->getWatermarkWidth();
+            $miscParams[] = $this->getWatermarkHeight();
+        }
+
+        $path[] = md5(implode('_', $miscParams));
+
+        // append prepared filename
+        $this->_newFile = implode('/', $path) . $file;
+        // the $file contains heading slash
 
         return $this;
     }
@@ -520,7 +542,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @deprecated
      * @return bool|string
      */
     public function getNewFile()
@@ -665,23 +686,16 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Save image file
      * @return $this
      */
     public function saveFile()
     {
-        if ($this->_isBaseFilePlaceholder) {
+        if ($this->_isBaseFilePlaceholder && $this->_newFile === true) {
             return $this;
         }
-        $filename = $this->getBaseFile() ? $this->imageAsset->getPath() : null;
+        $filename = $this->_mediaDirectory->getAbsolutePath($this->getNewFile());
         $this->getImageProcessor()->save($filename);
         $this->_coreFileStorageDatabase->saveFile($filename);
-        $this->sizeCache->save(
-            $this->getWidth(),
-            $this->getHeight(),
-            $this->imageAsset->getPath()
-        );
-
         return $this;
     }
 
@@ -690,7 +704,17 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getUrl()
     {
-        return $this->imageAsset->getUrl();
+        if ($this->_newFile === true) {
+            $url = $this->_assetRepo->getUrl(
+                "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
+            );
+        } else {
+            $url = $this->_storeManager->getStore()->getBaseUrl(
+                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+            ) . $this->_newFile;
+        }
+
+        return $url;
     }
 
     /**
@@ -716,7 +740,9 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function isCached()
     {
-        return file_exists($this->imageAsset->getPath());
+        if (is_string($this->_newFile)) {
+            return $this->_fileExists($this->_newFile);
+        }
     }
 
     /**
@@ -913,36 +939,18 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getResizedImageInfo()
     {
-        if ($this->isBaseFilePlaceholder() == true) {
-            $image = $this->imageAsset->getSourceFile();
+        $fileInfo = null;
+        if ($this->_newFile === true) {
+            $asset = $this->_assetRepo->createAsset(
+                "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
+            );
+            $img = $asset->getSourceFile();
+            $fileInfo = getimagesize($img);
         } else {
-            $image = $this->imageAsset->getPath();
+            if ($this->_mediaDirectory->isFile($this->_mediaDirectory->getAbsolutePath($this->_newFile))) {
+                $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
+            }
         }
-
-        return getimagesize($image);
-    }
-
-    /**
-     * Retrieve misc params based on all image attributes
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    private function getMiscParams()
-    {
-        return $this->paramsBuilder->build(
-            [
-                'type' => $this->getDestinationSubdir(),
-                'width' => $this->getWidth(),
-                'height' => $this->getHeight(),
-                'frame' => $this->_keepFrame,
-                'constrain' => $this->_constrainOnly,
-                'aspect_ratio' => $this->_keepAspectRatio,
-                'transparency' => $this->_keepTransparency,
-                'background' => $this->_backgroundColor,
-                'angle' => $this->_angle,
-                'quality' => $this->_quality
-            ]
-        );
+        return $fileInfo;
     }
 }

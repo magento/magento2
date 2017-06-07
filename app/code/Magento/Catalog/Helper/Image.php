@@ -195,12 +195,15 @@ class Image extends AbstractHelper
     protected function setImageProperties()
     {
         $this->_getModel()->setDestinationSubdir($this->getType());
+
         $this->_getModel()->setWidth($this->getWidth());
         $this->_getModel()->setHeight($this->getHeight());
 
         // Set 'keep frame' flag
         $frame = $this->getFrame();
-        $this->_getModel()->setKeepFrame($frame);
+        if (!empty($frame)) {
+            $this->_getModel()->setKeepFrame($frame);
+        }
 
         // Set 'constrain only' flag
         $constrain = $this->getAttribute('constrain');
@@ -238,25 +241,25 @@ class Image extends AbstractHelper
     {
         $this->setWatermark(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->getType()}_image",
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_image",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkImageOpacity(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->getType()}_imageOpacity",
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkPosition(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->getType()}_position",
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
         $this->setWatermarkSize(
             $this->scopeConfig->getValue(
-                "design/watermark/{$this->getType()}_size",
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_size",
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         );
@@ -494,7 +497,10 @@ class Image extends AbstractHelper
     protected function isScheduledActionsAllowed()
     {
         $model = $this->_getModel();
-        if ($model->isBaseFilePlaceholder() || $model->isCached()) {
+        if ($model->isBaseFilePlaceholder()
+            && $model->getNewFile() === true
+            || $model->isCached()
+        ) {
             return false;
         }
         return true;
@@ -823,10 +829,10 @@ class Image extends AbstractHelper
     public function getFrame()
     {
         $frame = $this->getAttribute('frame');
-        if ($frame === null) {
+        if (empty($frame)) {
             $frame = $this->getConfigView()->getVarValue('Magento_Catalog', 'product_image_white_borders');
         }
-        return (bool)$frame;
+        return $frame;
     }
 
     /**

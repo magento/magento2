@@ -95,7 +95,6 @@
                         <item name="dataScope" xsi:type="string">quantity_and_stock_status.qty</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
-                            <item name="validate-digits" xsi:type="boolean">true</item>
                             <item name="less-than-equals-to" xsi:type="number">99999999</item>
                         </item>
                         <item name="sortOrder" xsi:type="number">200</item>

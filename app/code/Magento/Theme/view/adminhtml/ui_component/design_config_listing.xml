@@ -12,6 +12,7 @@
             <item name="deps" xsi:type="string">design_config_listing.design_config_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">design_config_columns</item>
+        <item name="acl" xsi:type="string">Magento_Config::config_design</item>
     </argument>
     <dataSource name="design_config_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
