@@ -237,8 +237,7 @@
         },
         "psr-0": {
             "": [
-                "app/code/",
-                "generated/code"
+                "app/code/"
             ]
         },
         "files": [

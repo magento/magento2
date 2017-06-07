@@ -89,7 +89,7 @@ class DataProvider implements DataProviderInterface
         $this->scopeResolver = $scopeResolver;
         $this->customerSession = $customerSession;
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
-            Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
         );
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
