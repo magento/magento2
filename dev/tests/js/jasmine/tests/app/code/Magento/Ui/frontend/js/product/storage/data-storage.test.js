@@ -12,6 +12,9 @@ define([
     'use strict';
 
     var injector = new Squire(),
+        /**
+         * Mock for customerData get method
+         */
         customerDataGet = function () {
             return {
                 customerDataGet: 'customerDataGetValue'
@@ -27,6 +30,9 @@ define([
         },
         obj;
 
+    /**
+     * Mock for customerData subscribe method
+     */
     customerDataGet.subscribe = jasmine.createSpy();
 
 
@@ -72,7 +78,7 @@ define([
                 obj.localStorage = {
                     removeAll: jasmine.createSpy(),
                     set: jasmine.createSpy()
-                }
+                };
             });
 
             it('check calls "dataHandler" method with data', function () {
@@ -97,6 +103,9 @@ define([
                     set: jasmine.createSpy()
                 };
 
+                /**
+                 * Mock for observable data property
+                 */
                 obj.data = function (data) {
                     if (!data) {
                         return {
@@ -279,8 +288,8 @@ define([
             it('check data in "updateRequestConfig" property', function () {
                 obj.loadDataFromServer(currency, store, ids);
 
-                expect(obj.updateRequestConfig.data.store_id).toBe(store);
-                expect(obj.updateRequestConfig.data.currency_code).toBe(currency);
+                expect(obj.updateRequestConfig.data['store_id']).toBe(store);
+                expect(obj.updateRequestConfig.data['currency_code']).toBe(currency);
             });
         });
         describe('"hasIdsInSentRequest" method', function () {

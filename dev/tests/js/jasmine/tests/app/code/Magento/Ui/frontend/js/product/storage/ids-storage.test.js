@@ -6,9 +6,8 @@
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
-    'squire',
-    'underscore',
-], function ($, Squire, _) {
+    'squire'
+], function ($, Squire) {
     'use strict';
 
     var injector = new Squire(),
@@ -97,6 +96,9 @@ define([
                     secondProperty: 'secondValue'
                 });
 
+                /**
+                 * Mock for set method
+                 */
                 obj.set = function (param) {
                     this.result = param;
                 };

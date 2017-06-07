@@ -13,7 +13,6 @@ define([
 ], function ($, Squire, _) {
     'use strict';
 
-
     var injector = new Squire(),
         mocks = {
             'Magento_Catalog/js/product/storage/storage-service': {
@@ -127,7 +126,7 @@ define([
         });
         describe('"getUtcTime" method', function () {
             it('check type of returned value', function () {
-                expect(typeof  obj.getUtcTime()).toBe('number');
+                expect(typeof obj.getUtcTime()).toBe('number');
             });
         });
         describe('"initUpdateStorageDataListener" method', function () {
@@ -144,7 +143,7 @@ define([
                     }
                 };
 
-                expect(typeof  obj.getUtcTime()).toBe('number');
+                expect(typeof obj.getUtcTime()).toBe('number');
             });
         });
         describe('"updateDataHandler" method', function () {
@@ -169,8 +168,8 @@ define([
                 obj[name] = {};
                 obj.updateDataHandler(name, {});
 
-               expect(obj.getLastUpdate).toHaveBeenCalledWith('first');
-               expect(obj.getUtcTime).toHaveBeenCalled();
+                expect(obj.getLastUpdate).toHaveBeenCalledWith('first');
+                expect(obj.getUtcTime).toHaveBeenCalled();
             });
             it('check calls with data and without previous data', function () {
                 obj[name] = {
@@ -227,7 +226,7 @@ define([
         });
         describe('"getLastUpdate" method', function () {
             beforeEach(function () {
-                window.localStorage.getItem = jasmine.createSpy().and.returnValue('value')
+                window.localStorage.getItem = jasmine.createSpy().and.returnValue('value');
             });
 
             it('check calling "getItem" method of localStorage', function () {
@@ -262,12 +261,12 @@ define([
         describe('"dataFilter" method', function () {
             var data = [
                     {
-                        added_at: 1400000000,
-                        product_id: 0
+                        'added_at': 1400000000,
+                        'product_id': 0
                     },
                     {
-                        added_at: 1200000000,
-                        product_id: 1
+                        'added_at': 1200000000,
+                        'product_id': 1
                     }
                 ],
                 currentTime = 1500000000,
