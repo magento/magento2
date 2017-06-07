@@ -9,7 +9,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 
 /**
- * @api
+ * @deprecated
+ * This class is used only in deprecated \Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper
+ * and must not be used for new code
  */
 class Attribute
 {
