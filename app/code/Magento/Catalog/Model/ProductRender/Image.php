@@ -9,8 +9,7 @@ namespace Magento\Catalog\Model\ProductRender;
 use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
 
 /**
- * Button interface.
- * @api
+ * @inheritdoc
  */
 class Image extends \Magento\Framework\Model\AbstractExtensibleModel implements
     ImageInterface

@@ -7,7 +7,7 @@ define([
     'ko',
     'mageUtils',
     'Magento_Customer/js/customer-data',
-    './ids-storage'
+    'Magento_Catalog/js/product/storage/ids-storage'
 ], function (_, ko, utils, customerData, idsStorage) {
     'use strict';
 

@@ -32,8 +32,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * @param float $amount
-     * @return void
+     * @inheritdoc
      */
     public function setAmount($amount)
     {
@@ -41,7 +40,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * @return float
+     * @inheritdoc
      */
     public function getAmount()
     {
@@ -49,7 +48,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * @return float
+     * @inheritdoc
      */
     public function getTaxAmount()
     {
@@ -57,8 +56,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * @param float $taxAmount
-     * @return void
+     * @inheritdoc
      */
     public function setTaxAmount($taxAmount)
     {
@@ -66,8 +64,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * @param float $amountExclTax
-     * @return void
+     * @inheritdoc
      */
     public function setAmountExclTax($amountExclTax)
     {
@@ -75,7 +72,7 @@ class WeeeAdjustmentAttribute extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
-     * @return float
+     * @inheritdoc
      */
     public function getAmountExclTax()
     {

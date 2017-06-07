@@ -6,7 +6,8 @@ define([
     'jquery',
     'underscore',
     'ko',
-    'mageUtils'
+    'mageUtils',
+    'jquery/jquery-storageapi'
 ], function ($, _, ko, utils) {
     'use strict';
 

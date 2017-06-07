@@ -8,7 +8,8 @@ define([
     'ko',
     'mageUtils',
     'Magento_Catalog/js/product/query-builder',
-    'Magento_Customer/js/customer-data'
+    'Magento_Customer/js/customer-data',
+    'jquery/jquery-storageapi'
 ], function ($, _, ko, utils, queryBuilder, customerData) {
     'use strict';
 
@@ -298,4 +299,3 @@ define([
         }
     };
 });
-
