@@ -13,7 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
-use Magento\Inventory\Model\ResourceModel\Source\Collection as SourceCollection;
 use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
@@ -129,7 +128,6 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
-        /** @var SourceCollection $collection */
         $collection = $this->sourceCollectionFactory->create();
 
         if (null === $searchCriteria) {
