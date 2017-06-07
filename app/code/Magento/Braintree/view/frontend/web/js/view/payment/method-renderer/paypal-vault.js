@@ -49,7 +49,7 @@ define([
             var self = this;
 
             fullScreenLoader.startLoader();
-            $.get(self.nonceUrl, {
+            $.getJSON(self.nonceUrl, {
                 'public_hash': self.publicHash
             })
                 .done(function (response) {
