@@ -64,6 +64,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
                                                 'config' => [
                                                     'visible' => 0,
                                                     'disabled' => 1,
+                                                    'componentType' => 'container'
                                                 ],
                                             ],
                                         ],
