@@ -20,6 +20,7 @@
                 <item name="url" xsi:type="string">*/*/new</item>
             </item>
         </item>
+        <item name="acl" xsi:type="string">Magento_Search::synonyms</item>
     </argument>
     <dataSource name="search_synonyms_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">

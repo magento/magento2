@@ -35,7 +35,7 @@ define(
 
                         paypalExpressCheckout.checkout.initXO();
 
-                        $.get(
+                        $.getJSON(
                             this.path,
                             {
                                 button: 1

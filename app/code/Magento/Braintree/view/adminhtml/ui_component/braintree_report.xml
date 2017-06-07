@@ -12,6 +12,7 @@
             <item name="deps" xsi:type="string">braintree_report.braintree_report_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">braintree_report_columns</item>
+        <item name="acl" xsi:type="string">Magento_Braintree::settlement_report</item>
     </argument>
     <dataSource name="braintree_report_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
