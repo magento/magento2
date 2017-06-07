@@ -8,6 +8,7 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as ResourceSourceCarrierLink;
@@ -74,19 +75,52 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
      */
     public function saveCarrierLinksBySource(SourceInterface $source)
     {
-        if ($source->getCarrierLinks() !== null) {
-            $connection = $this->connection->getConnection();
-            $connection->delete(
-                $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_CARRIER_LINK),
-                $connection->quoteInto('source_id = ?', $source->getSourceId())
-            );
-
-            /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
-            foreach ($source->getCarrierLinks() as $carrierLink) {
-                $carrierLink->setData(SourceInterface::SOURCE_ID, $source->getSourceId());
-                $this->resourceSourceCarrierLink->save($carrierLink);
+        if (is_array($source->getCarrierLinks())) {
+            try {
+                $this->deleteCurrentCarrierLinks($source);
+                if (!empty($source->getCarrierLinks())) {
+                    $this->saveNewCarrierLinks($source);
+                }
+            } catch (\Exception $e) {
+                throw new StateException(__('Could not update Carrier Links'), $e);
             }
         }
+    }
+
+    /**
+     * @param SourceInterface $source
+     * @return void
+     */
+    private function deleteCurrentCarrierLinks(SourceInterface $source)
+    {
+        $connection = $this->connection->getConnection();
+        $connection->delete(
+            $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_CARRIER_LINK),
+            $connection->quoteInto('source_id = ?', $source->getSourceId())
+        );
+    }
+
+    /**
+     * @param SourceInterface $source
+     * @return void
+     */
+    private function saveNewCarrierLinks(SourceInterface $source)
+    {
+        $carrierLinkData = [];
+        /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
+        foreach ($source->getCarrierLinks() as $carrierLink) {
+            $carrierLinkData[] = [
+                'source_id' => $source->getSourceId(),
+                SourceCarrierLinkInterface::CARRIER_CODE => $carrierLink->getCarrierCode(),
+                SourceCarrierLinkInterface::POSITION => $carrierLink->getPosition(),
+            ];
+        }
+
+        $connection = $this->connection->getConnection();
+        $connection->insertMultiple(
+            $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_CARRIER_LINK),
+            $carrierLinkData
+        );
     }
 
     /**
