@@ -5,11 +5,16 @@
  */
 namespace Magento\Inventory\Model\ResourceModel\Source;
 
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Inventory\Model\Source as SourceModel;
 use Magento\Inventory\Model\SourceCarrierLinkManagementInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Psr\Log\LoggerInterface;
 
 class Collection extends AbstractCollection
 {
@@ -21,16 +26,22 @@ class Collection extends AbstractCollection
     /**
      * Collection constructor
      *
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
      * @param SourceCarrierLinkManagementInterface $sourceCarrierLinkManagement
+     * @param AdapterInterface $connection
+     * @param AbstractDb $resource
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        ManagerInterface $eventManager,
         SourceCarrierLinkManagementInterface $sourceCarrierLinkManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
         parent::__construct(
             $entityFactory,

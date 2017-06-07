@@ -54,7 +54,12 @@ class InstallSchema implements InstallSchemaInterface
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        $setup->getConnection()->createTable($this->createSourceTable($setup));
+
+        $sourceTable = $this->createSourceTable($setup);
+        $sourceTable = $this->addAddressFields($sourceTable);
+        $sourceTable = $this->addContactInfoFields($sourceTable);
+        $setup->getConnection()->createTable($sourceTable);
+
         $setup->getConnection()->createTable($this->createSourceCarrierLinkTable($setup));
         $setup->endSetup();
     }
@@ -90,22 +95,6 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => false,
             ],
             'Source Name'
-        )->addColumn(
-            SourceInterface::CONTACT_NAME,
-            Table::TYPE_TEXT,
-            255,
-            [
-                InstallSchema::OPTION_NULLABLE => true,
-            ],
-            'Contact Name'
-        )->addColumn(
-            SourceInterface::EMAIL,
-            Table::TYPE_TEXT,
-            255,
-            [
-                InstallSchema::OPTION_NULLABLE => true,
-            ],
-            'Email'
         )->addColumn(
             SourceInterface::ENABLED,
             Table::TYPE_SMALLINT,
@@ -147,6 +136,24 @@ class InstallSchema implements InstallSchemaInterface
             ],
             'Longitude'
         )->addColumn(
+            SourceInterface::PRIORITY,
+            Table::TYPE_SMALLINT,
+            null,
+            [
+                InstallSchema::OPTION_NULLABLE => true,
+                InstallSchema::OPTION_UNSIGNED => true,
+            ],
+            'Priority'
+        );
+    }
+
+    /**
+     * @param Table $sourceTable
+     * @return Table
+     */
+    private function addAddressFields(Table $sourceTable)
+    {
+        $sourceTable->addColumn(
             SourceInterface::COUNTRY_ID,
             Table::TYPE_TEXT,
             2,
@@ -195,6 +202,32 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => false,
             ],
             'Postcode'
+        );
+        return $sourceTable;
+    }
+
+    /**
+     * @param Table $sourceTable
+     * @return Table
+     */
+    private function addContactInfoFields(Table $sourceTable)
+    {
+        $sourceTable->addColumn(
+            SourceInterface::CONTACT_NAME,
+            Table::TYPE_TEXT,
+            255,
+            [
+                InstallSchema::OPTION_NULLABLE => true,
+            ],
+            'Contact Name'
+        )->addColumn(
+            SourceInterface::EMAIL,
+            Table::TYPE_TEXT,
+            255,
+            [
+                InstallSchema::OPTION_NULLABLE => true,
+            ],
+            'Email'
         )->addColumn(
             SourceInterface::PHONE,
             Table::TYPE_TEXT,
@@ -211,16 +244,8 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => true,
             ],
             'Fax'
-        )->addColumn(
-            SourceInterface::PRIORITY,
-            Table::TYPE_SMALLINT,
-            null,
-            [
-                InstallSchema::OPTION_NULLABLE => true,
-                InstallSchema::OPTION_UNSIGNED => true,
-            ],
-            'Priority'
         );
+        return $sourceTable;
     }
 
     /**
