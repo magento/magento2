@@ -19,9 +19,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     private $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Robots\Model\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $scopeConfigMock;
+    private $robotsData;
 
     /**
      * @var \Magento\Robots\Controller\Index\Index
@@ -39,13 +39,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->robotsData = $this->getMockBuilder(\Magento\Robots\Model\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->controller = new \Magento\Robots\Controller\Index\Index(
             $this->contextMock,
             $this->resultRawFactoryMock,
-            $this->scopeConfigMock
+            $this->robotsData
         );
     }
 
@@ -56,12 +57,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     {
         $content = 'test';
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with(
-                'design/search_engine_robots/custom_instructions',
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
-            )
+        $this->robotsData->expects($this->once())
+            ->method('getData')
             ->willReturn($content);
 
         $resultRawMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)

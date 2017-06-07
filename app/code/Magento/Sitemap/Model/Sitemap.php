@@ -147,6 +147,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     protected $dateTime;
 
     /**
+     * @var \Magento\Theme\Model\DesignConfigRepository
+     */
+    private $designConfigRepository;
+
+    /**
+     * @var \Magento\Theme\Model\Data\Design\ConfigFactory
+     */
+    private $configFactory;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -183,7 +193,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null
+        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
+        \Magento\Theme\Model\DesignConfigRepository $designConfigRepository = null,
+        \Magento\Theme\Model\Data\Design\ConfigFactory $configFactory = null
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
@@ -196,7 +208,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
+        $this->designConfigRepository = $designConfigRepository ?: ObjectManager::getInstance()
+            ->get(\Magento\Theme\Model\DesignConfigRepository::class);
+        $this->configFactory = $configFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Theme\Model\Data\Design\ConfigFactory::class);
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+
     }
 
     /**
@@ -381,11 +399,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         } else {
             // Otherwise create index file with list of generated sitemaps
             $this->_createSitemapIndex();
-        }
-
-        // Push sitemap to robots.txt
-        if ($this->_isEnabledSubmissionRobots()) {
-            $this->_addSitemapToRobotsTxt($this->getSitemapFilename());
         }
 
         $this->setSitemapTime($this->_dateModel->gmtDate('Y-m-d H:i:s'));
@@ -682,6 +695,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * Check is enabled submission to robots.txt
      *
      * @return bool
+     * @deprecated Because the robots.txt file is not generated anymore,
+     *             this method is not needed and will be removed in major release.
      */
     protected function _isEnabledSubmissionRobots()
     {
@@ -696,6 +711,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $sitemapFileName
      * @return void
+     * @deprecated Because the robots.txt file is not generated anymore,
+     *             this method is not needed and will be removed in major release.
      */
     protected function _addSitemapToRobotsTxt($sitemapFileName)
     {

@@ -6,9 +6,8 @@
 namespace Magento\Robots\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Robots\Model\Data;
 
 /**
  * Processes request to robots.txt file and returns robots.txt data as result
@@ -21,22 +20,22 @@ class Index extends \Magento\Framework\App\Action\Action
     private $resultRawFactory;
 
     /**
-     * @var ScopeConfigInterface
+     * @var Data
      */
-    private $scopeConfig;
+    private $robotsData;
 
     /**
      * @param Context $context
      * @param RawFactory $resultRawFactory
-     * @param ScopeConfigInterface $scopeConfig
+     * @param Data $robotsData
      */
     public function __construct(
         Context $context,
         RawFactory $resultRawFactory,
-        ScopeConfigInterface $scopeConfig
+        Data $robotsData
     ) {
         $this->resultRawFactory = $resultRawFactory;
-        $this->scopeConfig = $scopeConfig;
+        $this->robotsData = $robotsData;
 
         parent::__construct($context);
     }
@@ -48,14 +47,9 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $content = $this->scopeConfig->getValue(
-            'design/search_engine_robots/custom_instructions',
-            ScopeInterface::SCOPE_WEBSITE
-        );
-
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($content);
+        $resultRaw->setContents($this->robotsData->getData());
         return $resultRaw;
     }
 }
