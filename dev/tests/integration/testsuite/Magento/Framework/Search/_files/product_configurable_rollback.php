@@ -25,6 +25,7 @@ foreach (['simple_10010', 'simple_10020', 'configurable_searchable'] as $sku) {
         //Product already removed
     }
 }
+
 require __DIR__ . '/configurable_attribute_rollback.php';
 
 $registry->unregister('isSecureArea');

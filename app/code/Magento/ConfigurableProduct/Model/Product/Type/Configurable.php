@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
@@ -203,10 +204,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param ProductTypeConfigurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Framework\Cache\FrontendInterface $cache,
-     * @param \Magento\Customer\Model\Session $customerSession,
-     * @param StockRegistryInterface $stockRegistry,
-     * @param ProductInterfaceFactory $productFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Customer\Model\Session $customerSession
      * @param StockRegistryInterface $stockRegistry
@@ -610,7 +607,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 )
             );
             $data = unserialize($this->getCache()->load($key));
-            if (!empty($data)) {
+            if (is_array($data)) {
                 $usedProducts = [];
                 foreach ($data as $item) {
                     $productItem = $this->productFactory->create();
@@ -941,9 +938,15 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $value = $value->getSource()->getOptionText($attributeValue);
                     } else {
                         $value = '';
+                        $attributeValue = '';
                     }
 
-                    $attributes[] = ['label' => $label, 'value' => $value];
+                    $attributes[] = [
+                        'label' => $label,
+                        'value' => $value,
+                        'option_id' => $attributeId,
+                        'option_value' => $attributeValue
+                    ];
                 }
             }
         }

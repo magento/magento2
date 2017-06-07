@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ProductVideo\Test\TestCase\DeleteProductVideoTest" summary="Delete Video from PCF - Delete video" ticketId="MAGETWO-43660">
         <variation name="DeleteVideoEntityTestVariation1" summary="Delete video youtube" ticketId="MAGETWO-43660">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66296: Magento\ProductVideo\Test\TestCase\DeleteProductVideoTest.test with data set "DeleteVideoEntityTestVariation1" failed on Jenkins</data>
             <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
@@ -15,6 +17,8 @@
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
         </variation>
         <variation name="DeleteVideoEntityTestVariation2" summary="Delete video vimeo" ticketId="MAGETWO-43660">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-66298: Magento\ProductVideo\Test\TestCase\DeleteProductVideoTest.test with data set "DeleteVideoEntityTestVariation2" failed on Jenkins</data>
             <data name="product/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="configData" xsi:type="string">play_if_base</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
