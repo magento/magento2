@@ -8,6 +8,9 @@ namespace Magento\Weee\Plugin\Ui\DataProvider;
 
 use Magento\Framework\App\Config;
 
+/**
+ * Provide param on front, which says the current set of weee settings
+ */
 class WeeeSettings
 {
     /**

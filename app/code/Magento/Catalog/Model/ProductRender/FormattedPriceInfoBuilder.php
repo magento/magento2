@@ -11,8 +11,7 @@ use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
- * Price interface.
- * @api
+ * Builder which format all types of float prices into html representation
  */
 class FormattedPriceInfoBuilder
 {
