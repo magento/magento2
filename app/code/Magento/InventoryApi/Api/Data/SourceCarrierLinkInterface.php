@@ -53,7 +53,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface
+     * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface|null
      */
     public function getExtensionAttributes();
 
