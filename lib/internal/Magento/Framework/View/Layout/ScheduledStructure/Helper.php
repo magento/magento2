@@ -201,7 +201,7 @@ class Helper
                 $scheduledStructure->setElementToBrokenParentList($key);
 
                 if ($this->state->getMode() === State::MODE_DEVELOPER) {
-                    $this->logger->critical(
+                    $this->logger->info(
                         "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
                         'because the latter doesn\'t exist'
                     );
