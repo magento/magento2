@@ -11,9 +11,6 @@ namespace Magento\Framework\Authorization\Policy;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Authorization\PolicyInterface;
 
-/**
- * @api
- */
 class Acl implements PolicyInterface
 {
     /**

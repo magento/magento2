@@ -5,9 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-/**
- * @api
- */
 class Autocomplete implements AutocompleteInterface
 {
     /**

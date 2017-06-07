@@ -11,7 +11,6 @@ use Magento\Eav\Model\Config as EavConfig;
 
 /**
  * This strategy handles static attributes
- * @api
  */
 class StaticAttributeStrategy implements FilterStrategyInterface
 {

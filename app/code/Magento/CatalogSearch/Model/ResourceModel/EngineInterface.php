@@ -14,6 +14,13 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
  */
 interface EngineInterface
 {
+    const ATTRIBUTE_PREFIX = 'attr_';
+
+    /**
+     * Scope identifier
+     */
+    const SCOPE_FIELD_NAME = 'scope';
+
     /**
      * Configuration path by which current indexer handler stored
      */

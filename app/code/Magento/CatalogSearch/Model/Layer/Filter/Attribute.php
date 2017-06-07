@@ -9,7 +9,6 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Layer attribute filter
- * @api
  */
 class Attribute extends AbstractFilter
 {

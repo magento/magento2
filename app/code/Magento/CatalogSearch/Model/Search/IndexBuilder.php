@@ -25,7 +25,6 @@ use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
 /**
  * Build base Query for Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @api
  */
 class IndexBuilder implements IndexBuilderInterface
 {

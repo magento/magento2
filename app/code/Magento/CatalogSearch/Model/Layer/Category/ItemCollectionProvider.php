@@ -9,9 +9,6 @@ namespace Magento\CatalogSearch\Model\Layer\Category;
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
-/**
- * @api
- */
 class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
     /**

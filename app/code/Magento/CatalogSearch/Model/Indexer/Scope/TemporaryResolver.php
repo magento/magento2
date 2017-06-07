@@ -11,7 +11,6 @@ use Magento\Framework\Search\Request\Dimension;
 
 /**
  * Resolves name of a temporary table for indexation
- * @api
  */
 class TemporaryResolver implements \Magento\Framework\Search\Request\IndexScopeResolverInterface
 {

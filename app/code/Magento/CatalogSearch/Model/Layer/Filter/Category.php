@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Layer\Filter\DataProvider\Category as CategoryDataProv
 
 /**
  * Layer category filter
- * @api
  */
 class Category extends AbstractFilter
 {

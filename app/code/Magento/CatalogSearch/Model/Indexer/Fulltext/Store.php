@@ -11,9 +11,6 @@ use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * @api
- */
 class Store implements ObserverInterface
 {
     /**

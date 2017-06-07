@@ -7,9 +7,6 @@ namespace Magento\CatalogSearch\Model\Price;
 
 use Magento\Framework\Search\Dynamic\IntervalInterface;
 
-/**
- * @api
- */
 class Interval implements IntervalInterface
 {
     /**

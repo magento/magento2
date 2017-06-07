@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  * Layer price filter based on Search API
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @api
  */
 class Price extends AbstractFilter
 {

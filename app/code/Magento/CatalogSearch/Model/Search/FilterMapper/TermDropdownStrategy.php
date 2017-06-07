@@ -19,7 +19,6 @@ use Magento\Framework\App\ObjectManager;
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @api
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {

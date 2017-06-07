@@ -14,7 +14,6 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  * FilterContext represents a Context of the Strategy pattern
  * Its responsibility is to choose appropriate strategy to apply passed filter to the Select
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @api
  */
 class FilterContext implements FilterStrategyInterface
 {

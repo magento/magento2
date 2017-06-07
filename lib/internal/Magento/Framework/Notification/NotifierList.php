@@ -65,7 +65,7 @@ class NotifierList
             }
             $this->isNotifiersVerified = true;
             if ($hasErrors) {
-                throw new \InvalidArgumentException('All notifiers should implements NotifierInterface');
+                throw new \InvalidArgumentException('All notifiers should implement NotifierInterface');
             }
         }
         return $this->notifiers;

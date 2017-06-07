@@ -12,7 +12,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Proxy for adapter-specific index switcher
- * @api
  */
 class IndexSwitcherProxy implements IndexSwitcherInterface
 {

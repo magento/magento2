@@ -10,9 +10,6 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
-/**
- * @api
- */
 class General implements GeneratorInterface
 {
     /**
