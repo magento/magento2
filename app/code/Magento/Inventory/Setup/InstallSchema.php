@@ -283,7 +283,8 @@ class InstallSchema implements InstallSchemaInterface
             'Source ID'
         )->addColumn(
             SourceCarrierLinkInterface::CARRIER_CODE,
-            Table::TYPE_TEXT, 255,
+            Table::TYPE_TEXT,
+            255,
             [
                 InstallSchema::OPTION_NULLABLE => false,
             ],

@@ -18,7 +18,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
- * Class SourceRepositoryTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -159,13 +159,10 @@ class SourceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->source);
-        $this->resourceSource->expects($this->once())
+        $this->resourceSource
+            ->expects($this->once())
             ->method('load')
-            ->with(
-                $this->source,
-                $sourceId,
-                SourceInterface::SOURCE_ID
-            );
+            ->with($this->source, $sourceId, SourceInterface::SOURCE_ID);
 
         self::assertSame($this->source, $this->model->get($sourceId));
     }

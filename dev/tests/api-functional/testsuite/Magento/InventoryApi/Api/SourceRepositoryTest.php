@@ -151,7 +151,7 @@ class SourceRepositoryTest extends WebapiAbstract
     {
         $country = $this->countryInformationAcquirer->getCountryInfo('US');
         $regions = $country->getAvailableRegions();
-        $region = $regions[mt_rand(0, count($regions)-1)];
+        $region = $regions[mt_rand(0, count($regions) - 1)];
 
         $name = uniqid(self::TEST_PREFIX, false);
         $description = 'This is an inventory source created by api-functional tests';
@@ -163,7 +163,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $phone = '01660002020044';
         $latitude = 51.343479;
         $longitude = 12.387772;
-        $priority = mt_rand(1,999);
+        $priority = mt_rand(1, 999);
 
         $carriers = [];
         for ($index = 1; $index <= $countCarrier; $index++) {
@@ -293,8 +293,6 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testGetSourcesList()
     {
-        //$this->markTestSkipped('WIP: Search seems to ignore filter criterias!');
-
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
             ->create(SearchCriteriaBuilder::class);
@@ -337,7 +335,8 @@ class SourceRepositoryTest extends WebapiAbstract
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertEquals(3, count($searchResult['items']));
-        $this->assertEquals($searchResult['items'][0][SourceInterface::SOURCE_ID],
+        $this->assertEquals(
+            $searchResult['items'][0][SourceInterface::SOURCE_ID],
             $source1->getSourceId()
         );
         $this->assertEquals(
