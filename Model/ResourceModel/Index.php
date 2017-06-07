@@ -12,7 +12,6 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Elasticsearch index resource model
@@ -43,8 +42,6 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Config $eavConfig
      * @param null $connectionName
-     * @param FrontendResource $indexerFrontendResource
-     * @param FrontendResource $categoryProductIndexerFrontend
      * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
@@ -54,9 +51,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
-        $connectionName = null,
-        FrontendResource $indexerFrontendResource = null,
-        FrontendResource $categoryProductIndexerFrontend = null
+        $connectionName = null
     ) {
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
@@ -65,9 +60,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
             $context,
             $storeManager,
             $metadataPool,
-            $connectionName,
-            $indexerFrontendResource,
-            $categoryProductIndexerFrontend
+            $connectionName
         );
     }
 
