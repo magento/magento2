@@ -27,11 +27,11 @@ class ConditionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->conditionFactory = $this->objectManagerHelper->getObject(
-            'Magento\Rule\Model\ConditionFactory',
+            \Magento\Rule\Model\ConditionFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
@@ -40,27 +40,59 @@ class ConditionFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptingToCallMethodCreateInObjectManager()
     {
-        $type = 'type';
+        $type = \Magento\Rule\Model\Condition\Combine::class;
+        $origin = $this->getMockBuilder($type)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerMock
             ->expects($this->once())
             ->method('create')
             ->with($type)
-            ->willReturn(new \stdClass());
+            ->willReturn($origin);
 
         $this->conditionFactory->create($type);
     }
 
     public function testExceptingClonedObject()
     {
-        $origin = new \stdClass();
+        $type = \Magento\Rule\Model\Condition\Combine::class;
+        $origin = $this->getMockBuilder($type)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('clone')
+            ->with($type)
             ->willReturn($origin);
 
-        $cloned = $this->conditionFactory->create('clone');
+        $cloned = $this->conditionFactory->create($type);
 
         $this->assertNotSame($cloned, $origin);
+    }
+    
+    public function testCreateExceptionClass()
+    {
+        $type = 'type';
+        $this->objectManagerMock
+            ->expects($this->never())
+            ->method('create');
+
+        $this->setExpectedException(\InvalidArgumentException::class, 'Class does not exist');
+
+        $this->conditionFactory->create($type);
+    }
+
+    public function testCreateExceptionType()
+    {
+        $type = \Magento\Rule\Model\ConditionFactory::class;
+
+        $this->objectManagerMock
+            ->expects($this->never())
+            ->method('create')
+            ->with($type)
+            ->willReturn(new \stdClass());
+        $this->setExpectedException(\InvalidArgumentException::class, 'Class does not implement condition interface');
+        $this->conditionFactory->create($type);
     }
 }

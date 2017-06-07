@@ -53,6 +53,16 @@ class RetrieveImage extends \Magento\Backend\App\Action
     private $validator;
 
     /**
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
+     */
+    private $extensionValidator;
+
+    /**
+     * @var \Magento\Framework\Filesystem\DriverInterface
+     */
+    private $fileDriver;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -60,6 +70,8 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Image\AdapterFactory $imageAdapterFactory
      * @param \Magento\Framework\HTTP\Adapter\Curl $curl
      * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator
+     * @param \Magento\Framework\Filesystem\DriverInterface $fileDriver
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -68,7 +80,9 @@ class RetrieveImage extends \Magento\Backend\App\Action
         \Magento\Framework\Filesystem $fileSystem,
         \Magento\Framework\Image\AdapterFactory $imageAdapterFactory,
         \Magento\Framework\HTTP\Adapter\Curl $curl,
-        \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
+        \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility,
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator = null,
+        \Magento\Framework\Filesystem\DriverInterface $fileDriver = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -77,6 +91,10 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $this->imageAdapter = $imageAdapterFactory->create();
         $this->curl = $curl;
         $this->fileUtility = $fileUtility;
+        $this->extensionValidator = $extensionValidator
+            ?: $this->_objectManager->get(\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class);
+        $this->fileDriver = $fileDriver
+            ?: $this->_objectManager->get(\Magento\Framework\Filesystem\DriverInterface::class);
     }
 
     /**
@@ -93,12 +111,16 @@ class RetrieveImage extends \Magento\Backend\App\Action
             $localTmpFileName = Uploader::getDispretionPath($localFileName) . DIRECTORY_SEPARATOR . $localFileName;
             $localFileMediaPath = $baseTmpMediaPath . ($localTmpFileName);
             $localUniqueFileMediaPath = $this->appendNewFileName($localFileMediaPath);
+            $this->validateRemoteFileExtensions($localUniqueFileMediaPath);
             $this->retrieveRemoteImage($remoteFileUrl, $localUniqueFileMediaPath);
             $localFileFullPath = $this->appendAbsoluteFileSystemPath($localUniqueFileMediaPath);
             $this->imageAdapter->validateUploadFile($localFileFullPath);
             $result = $this->appendResultSaveRemoteImage($localUniqueFileMediaPath);
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
+            if (isset($localFileFullPath) && $this->fileDriver->isExists($localFileFullPath)) {
+                $this->fileDriver->deleteFile($localFileFullPath);
+            }
         }
 
         /** @var \Magento\Framework\Controller\Result\Raw $response */
@@ -141,6 +163,21 @@ class RetrieveImage extends \Magento\Backend\App\Action
         }
 
         return $this;
+    }
+
+    /**
+     * Invalidates files that have script extensions.
+     *
+     * @param string $filePath
+     * @throws \Magento\Framework\Exception\ValidatorException
+     * @return void
+     */
+    private function validateRemoteFileExtensions($filePath)
+    {
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        if (!$this->extensionValidator->isValid($extension)) {
+            throw new \Magento\Framework\Exception\ValidatorException(__('Disallowed file type.'));
+        }
     }
 
     /**
