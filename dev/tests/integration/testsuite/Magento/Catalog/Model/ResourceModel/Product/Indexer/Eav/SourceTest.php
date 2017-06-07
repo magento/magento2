@@ -67,9 +67,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $this->_eavIndexerProcessor->reindexAll();
 
-        $suffix = $objectManager->get(\Magento\Indexer\Model\Indexer\StateFactory::class)->create()->loadByIndexer(
-            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
-        )->getTableSuffix();
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $options **/
         $options = $objectManager->create(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
@@ -79,7 +76,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $connection = $this->productResource->getConnection();
 
-        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav') . $suffix)
+        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
             ->where('entity_id = ?', 1)
             ->where('attribute_id = ?', $attr->getId())
             ->where('value IN (?)', $optionIds);
@@ -136,11 +133,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $productRepository->save($product2);
 
         $this->_eavIndexerProcessor->reindexAll();
-        $suffix = $objectManager->get(\Magento\Indexer\Model\Indexer\StateFactory::class)->create()->loadByIndexer(
-            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
-        )->getTableSuffix();
         $connection = $this->productResource->getConnection();
-        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav') . $suffix)
+        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
             ->where('entity_id in (?)', [$product1Id, $product2Id])
             ->where('attribute_id = ?', $attr->getId());
 
