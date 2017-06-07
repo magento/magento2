@@ -223,3 +223,21 @@ class ClassWithSuppressWarnings
         $this->argumentTwo = $secondClass;
     }
 }
+
+interface InterfaceTypeWithConstructorMethodAndParams
+{
+    /**
+     * We do not expect that this is valid case. There is no need to declare interface with method __construct
+     *
+     * @param $paramOne
+     * @param $paramTwo
+     */
+    public function __construct($paramOne, $paramTwo);
+}
+interface InterfaceTypeWithConstructorMethodWithoutParams
+{
+    /**
+     * We do not expect that this is valid case. There is no need to declare interface with method __construct
+     */
+    public function __construct();
+}
