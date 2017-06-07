@@ -16,6 +16,9 @@ use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 
 /**
  * Collect information about bundle price
+ *
+ * This information can be used on front in order to render product list or product view
+ * Price is collected always with VAT and fixed taxes
  */
 class BundlePrice implements ProductRenderCollectorInterface
 {

@@ -9,14 +9,13 @@ namespace Magento\Catalog\Model\ProductRender;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface;
 
 /**
- * Price interface.
- * @api
+ * @inheritdoc
  */
 class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel implements
     FormattedPriceInfoInterface
 {
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getFinalPrice()
     {
@@ -24,8 +23,7 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
     }
 
     /**
-     * @param float $finalPrice
-     * @return void
+     * @inheritdoc
      */
     public function setFinalPrice($finalPrice)
     {
@@ -33,7 +31,7 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getMaxPrice()
     {
@@ -41,8 +39,7 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
     }
 
     /**
-     * @param string $maxPrice
-     * @return void
+     * @inheritdoc
      */
     public function setMaxPrice($maxPrice)
     {
@@ -50,7 +47,7 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getMinimalPrice()
     {
@@ -120,8 +117,7 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
     }
 
     /**
-     * @param string $minimalPrice
-     * @return void
+     * @inheritdoc
      */
     public function setMinimalPrice($minimalPrice)
     {
@@ -129,7 +125,7 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getRegularPrice()
     {
@@ -137,8 +133,7 @@ class FormattedPriceInfo extends \Magento\Framework\Model\AbstractExtensibleMode
     }
 
     /**
-     * @param string $regularPrice
-     * @return void
+     * @inheritdoc
      */
     public function setRegularPrice($regularPrice)
     {

@@ -11,14 +11,12 @@ use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
 use Magento\Catalog\Api\Data\ProductRender\ButtonExtensionInterface;
 
 /**
- * Price interface.
- * @api
+ * @inheritdoc
  */
 class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements ButtonInterface
 {
     /**
-     * @param string $postData
-     * @return void
+     * @inheritdoc
      */
     public function setPostData($postData)
     {
@@ -26,9 +24,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Retrieve post data array
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getPostData()
     {
@@ -36,8 +32,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * @param string $url
-     * @return @return void
+     * @inheritdoc
      */
     public function setUrl($url)
     {
@@ -45,9 +40,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * Retrieve url, needed to add product to cart
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -55,8 +48,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * @param string $requiredOptions
-     * @return void
+     * @inheritdoc
      */
     public function setRequiredOptions($requiredOptions)
     {
@@ -64,7 +56,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getRequiredOptions()
     {
