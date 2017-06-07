@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Block\Product;
 
-use Magento\Framework\App\ObjectManager;
-
 /**
  * Class AbstractProduct
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -99,13 +97,9 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     /**
      * @param Context $context
      * @param array $data
-     * @param ImageBlockBuilder|null $imageBlockBuilder
      */
-    public function __construct(
-        Context $context,
-        array $data = [],
-        ImageBlockBuilder $imageBlockBuilder = null
-    ) {
+    public function __construct(\Magento\Catalog\Block\Product\Context $context, array $data = [])
+    {
         $this->_imageHelper = $context->getImageHelper();
         $this->imageBuilder = $context->getImageBuilder();
         $this->_compareProduct = $context->getCompareProduct();
@@ -117,10 +111,6 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
         $this->_mathRandom = $context->getMathRandom();
         $this->reviewRenderer = $context->getReviewRenderer();
         $this->stockRegistry = $context->getStockRegistry();
-        $this->assign(
-            'imageBlockBuilder',
-            $imageBlockBuilder ?: ObjectManager::getInstance()->get(ImageBlockBuilder::class)
-        );
         parent::__construct($context, $data);
     }
 
