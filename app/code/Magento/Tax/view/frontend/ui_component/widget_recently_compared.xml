@@ -14,13 +14,6 @@
                         <item name="prices" xsi:type="array">
                             <item name="default" xsi:type="array">
                                 <item name="children" xsi:type="array">
-                                    <item name="regular_price" xsi:type="array">
-                                        <item name="children" xsi:type="array">
-                                            <item name="tax" xsi:type="array">
-                                                <item name="component" xsi:type="string">Magento_Tax/js/price/adjustment</item>
-                                            </item>
-                                        </item>
-                                    </item>
                                     <item name="special_price" xsi:type="array">
                                         <item name="children" xsi:type="array">
                                             <item name="tax" xsi:type="array">
