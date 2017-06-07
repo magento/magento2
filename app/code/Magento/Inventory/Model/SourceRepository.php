@@ -11,6 +11,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
 use Magento\Inventory\Model\ResourceModel\Source\Collection as SourceCollection;
 use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
@@ -96,7 +97,7 @@ class SourceRepository implements SourceRepositoryInterface
     public function save(SourceInterface $source)
     {
         try {
-            /** @var SourceInterface $source */
+            /** @var SourceInterface|AbstractModel $source */
             $this->resourceSource->save($source);
             return $source->getSourceId();
         } catch (StateException $e) {
@@ -113,7 +114,7 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function get($sourceId)
     {
-        /** @var SourceInterface $source */
+        /** @var SourceInterface|AbstractModel $source */
         $source = $this->sourceFactory->create();
         $this->resourceSource->load($source, $sourceId, SourceInterface::SOURCE_ID);
 
