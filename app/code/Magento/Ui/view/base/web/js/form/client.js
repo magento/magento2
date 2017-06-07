@@ -104,6 +104,7 @@ define([
         _save: function (data, options) {
             var url = this.urls.save;
 
+            $('body').trigger('processStart');
             options = options || {};
 
             if (!options.redirect) {
@@ -115,6 +116,8 @@ define([
                     url: url,
                     data: data
                 }, options);
+
+                $('body').trigger('processStop');
 
                 return this;
             }

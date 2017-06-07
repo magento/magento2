@@ -201,5 +201,16 @@
             <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique" />
         </variation>
+        <variation name="CreateProductAttributeEntityTestVariation10"  summary="Attribute values is from correct store when creating new product" ticketId="MAGETWO-67359">
+            <data name="productAttribute/dataset" xsi:type="string">size</data>
+            <data name="ifAssertOnNewProduct" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
+        </variation>
+        <variation name="CreateProductAttributeEntityTestVariation11" summary="Attribute values is from correct store when creating new product and changing attribute set" ticketId="MAGETWO-67484">
+            <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
+            <data name="productAttribute/dataset" xsi:type="string">size</data>
+            <data name="ifAssertOnNewProduct" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
+        </variation>
     </testCase>
 </config>
