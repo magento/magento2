@@ -10,9 +10,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 
-/**
- * @api
- */
 class DataProvider implements SuggestedQueriesInterface
 {
     const CONFIG_IS_ENABLED = 'catalog/search/search_recommendations_enabled';
