@@ -87,19 +87,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
         );
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
-            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
-
-        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
-
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject(
             \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,

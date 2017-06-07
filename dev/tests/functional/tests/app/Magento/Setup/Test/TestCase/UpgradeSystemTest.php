@@ -31,18 +31,31 @@ class UpgradeSystemTest extends Injectable
     protected $adminDashboard;
 
     /**
-     * Injection data.
-     *
+     * @var \Magento\Analytics\Mtf\App\State\NotificationTimeHandler
+     */
+    private $analyticsNotificationHandler;
+
+    /**
+     * @var \Magento\Mtf\Util\Iterator\ApplicationState
+     */
+    private $applicationStateIterator;
+
+    /**
      * @param Dashboard $adminDashboard
      * @param SetupWizard $setupWizard
-     * @return void
+     * @param \Magento\Analytics\Mtf\App\State\NotificationTimeHandler $analyticsNotificationHandler
+     * @param \Magento\Mtf\Util\Iterator\ApplicationState $applicationStateIterator
      */
     public function __inject(
         Dashboard $adminDashboard,
-        SetupWizard $setupWizard
+        SetupWizard $setupWizard,
+        \Magento\Analytics\Mtf\App\State\NotificationTimeHandler $analyticsNotificationHandler,
+        \Magento\Mtf\Util\Iterator\ApplicationState $applicationStateIterator
     ) {
         $this->adminDashboard = $adminDashboard;
         $this->setupWizard = $setupWizard;
+        $this->analyticsNotificationHandler = $analyticsNotificationHandler;
+        $this->applicationStateIterator = $applicationStateIterator;
     }
 
     /**
@@ -127,6 +140,11 @@ class UpgradeSystemTest extends Injectable
         $this->setupWizard->getSystemUpgrade()->clickSystemUpgrade();
 
         $assertSuccessMessage->processAssert($this->setupWizard, $upgrade['package']);
+
+        // Disable promotion popup for Analytics module
+        $appStateMetadata = $this->applicationStateIterator->current();
+        $appState = \Magento\Mtf\ObjectManager::getInstance()->get($appStateMetadata['class']);
+        $this->analyticsNotificationHandler->execute($appState);
 
         // Check application version
         $this->adminDashboard->open();

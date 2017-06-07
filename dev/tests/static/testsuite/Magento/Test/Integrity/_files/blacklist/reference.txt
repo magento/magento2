@@ -59,6 +59,7 @@ Model3
 \Magento\TestModule2\Service\V1\Entity\ItemBuilder
 \Magento\TestModule4\Service\V1\Entity\DataObjectResponse
 \Magento\TestModule4\Service\V1\Entity\DataObjectRequest
+\Magento\Mtf\ObjectManager
 \Magento\Mtf\ObjectManager\Config\Mapper\Dom
 \Magento\Mtf\Data\Argument\Interpreter\Constant
 \Magento\Mtf\Data\Argument\Interpreter\Boolean
@@ -118,3 +119,6 @@ DoubleColon
 \Magento\TestModuleMessageQueueConfiguration\SyncHandler
 \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
 \Magento\Mtf\Client\ElementInterface
+BarFactory
+PartialNamespace\BarFactory
+Product\OptionFactory
