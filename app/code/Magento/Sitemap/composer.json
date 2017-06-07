@@ -13,7 +13,6 @@
         "magento/framework": "100.2.*",
         "magento/module-config": "100.2.*",
         "magento/module-robots": "100.2.*"
-        "magento/module-theme": "100.2.*"
     },
     "suggest": {
         "magento/module-config": "100.2.*"

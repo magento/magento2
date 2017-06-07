@@ -147,16 +147,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     protected $dateTime;
 
     /**
-     * @var \Magento\Theme\Model\DesignConfigRepository
-     */
-    private $designConfigRepository;
-
-    /**
-     * @var \Magento\Theme\Model\Data\Design\ConfigFactory
-     */
-    private $configFactory;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -193,9 +183,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null,
-        \Magento\Theme\Model\DesignConfigRepository $designConfigRepository = null,
-        \Magento\Theme\Model\Data\Design\ConfigFactory $configFactory = null
+        \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot $documentRoot = null
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
@@ -208,13 +196,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
-        $this->designConfigRepository = $designConfigRepository ?: ObjectManager::getInstance()
-            ->get(\Magento\Theme\Model\DesignConfigRepository::class);
-        $this->configFactory = $configFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Theme\Model\Data\Design\ConfigFactory::class);
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-
     }
 
     /**
