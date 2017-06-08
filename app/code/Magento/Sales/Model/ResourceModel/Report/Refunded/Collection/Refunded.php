@@ -28,7 +28,7 @@ class Refunded extends Order
         \Magento\Sales\Model\ResourceModel\Report $resource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
-        $resource->init('sales_refunded_aggregated');
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
+        $resource->init('sales_refunded_aggregated');
     }
 }

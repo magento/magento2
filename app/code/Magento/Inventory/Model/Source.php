@@ -24,7 +24,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\Resource\Source::class);
+        $this->_init(\Magento\Inventory\Model\ResourceModel\Source::class);
     }
 
     /**
@@ -41,7 +41,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setSourceId($sourceId)
     {
         $this->setData(SourceInterface::SOURCE_ID, $sourceId);
-        return $this;
     }
 
     /**
@@ -58,7 +57,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setName($name)
     {
         $this->setData(SourceInterface::NAME, $name);
-        return $this;
     }
 
     /**
@@ -75,7 +73,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setEmail($email)
     {
         $this->setData(SourceInterface::EMAIL, $email);
-        return $this;
     }
 
     /**
@@ -92,24 +89,22 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setContactName($contactName)
     {
         $this->setData(SourceInterface::CONTACT_NAME, $contactName);
-        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function getIsActive()
+    public function isEnabled()
     {
-        return $this->getData(SourceInterface::IS_ACTIVE);
+        return $this->getData(SourceInterface::ENABLED);
     }
 
     /**
      * @inheritdoc
      */
-    public function setIsActive($active)
+    public function setEnabled($enabled)
     {
-        $this->setData(SourceInterface::IS_ACTIVE, $active);
-        return $this;
+        $this->setData(SourceInterface::ENABLED, $enabled);
     }
 
     /**
@@ -126,7 +121,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setDescription($description)
     {
         $this->setData(SourceInterface::DESCRIPTION, $description);
-        return $this;
     }
 
     /**
@@ -143,7 +137,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setLatitude($latitude)
     {
         $this->setData(SourceInterface::LATITUDE, $latitude);
-        return $this;
     }
 
     /**
@@ -160,7 +153,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setLongitude($longitude)
     {
         $this->setData(SourceInterface::LONGITUDE, $longitude);
-        return $this;
     }
 
     /**
@@ -177,7 +169,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setCountryId($countryId)
     {
         $this->setData(SourceInterface::COUNTRY_ID, $countryId);
-        return $this;
     }
 
     /**
@@ -194,7 +185,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setRegionId($regionId)
     {
         $this->setData(SourceInterface::REGION_ID, $regionId);
-        return $this;
     }
 
     /**
@@ -211,7 +201,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setRegion($region)
     {
         $this->setData(SourceInterface::REGION, $region);
-        return $this;
     }
 
     /**
@@ -228,7 +217,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setCity($city)
     {
         $this->setData(SourceInterface::CITY, $city);
-        return $this;
     }
 
     /**
@@ -245,7 +233,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setStreet($street)
     {
         $this->setData(SourceInterface::STREET, $street);
-        return $this;
     }
 
     /**
@@ -262,7 +249,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setPostcode($postcode)
     {
         $this->setData(SourceInterface::POSTCODE, $postcode);
-        return $this;
     }
 
     /**
@@ -279,7 +265,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setPhone($phone)
     {
         $this->setData(SourceInterface::PHONE, $phone);
-        return $this;
     }
 
     /**
@@ -296,7 +281,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setFax($fax)
     {
         $this->setData(SourceInterface::FAX, $fax);
-        return $this;
     }
 
     /**
@@ -313,7 +297,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setPriority($priority)
     {
         $this->setData(SourceInterface::PRIORITY, $priority);
-        return $this;
     }
 
     /**
@@ -330,7 +313,6 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     public function setCarrierLinks($carrierLinks)
     {
         $this->setData(SourceInterface::CARRIER_LINKS, $carrierLinks);
-        return $this;
     }
 
     /**
@@ -338,7 +320,12 @@ class Source extends AbstractExtensibleModel implements SourceInterface
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(SourceInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
     }
 
     /**

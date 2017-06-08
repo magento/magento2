@@ -8,20 +8,20 @@ namespace Magento\InventoryApi\Api;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class SourceRepositoryTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'inventoryApiSourceRepositoryV1';
     const RESOURCE_PATH = '/V1/inventory/source/';
+    const TEST_PREFIX = 'SOURCE_APITEST_';
 
     /**
      * @var SourceInterfaceFactory
@@ -124,7 +124,7 @@ class SourceRepositoryTest extends WebapiAbstract
             SourceInterface::REGION_ID => $source->getRegionId(),
             SourceInterface::LATITUDE => $source->getLatitude(),
             SourceInterface::LONGITUDE => $source->getLongitude(),
-            SourceInterface::IS_ACTIVE => $source->getIsActive(),
+            SourceInterface::ENABLED => $source->isEnabled(),
             SourceInterface::PRIORITY => $source->getPriority(),
             SourceInterface::CARRIER_LINKS => []
         ];
@@ -147,13 +147,13 @@ class SourceRepositoryTest extends WebapiAbstract
      * @param string $postcode
      * @return SourceInterface
      */
-    private function createRandomSource($countCarrier = 2, $postcode = '54321', $isActive = true)
+    private function createRandomSource($countCarrier = 2, $postcode = '54321', $enabled = true)
     {
         $country = $this->countryInformationAcquirer->getCountryInfo('US');
         $regions = $country->getAvailableRegions();
-        $region = $regions[rand(0, count($regions)-1)];
+        $region = $regions[mt_rand(0, count($regions) - 1)];
 
-        $name = 'Api Test ' . uniqid();
+        $name = uniqid(self::TEST_PREFIX, false);
         $description = 'This is an inventory source created by api-functional tests';
         $city = 'Exampletown';
         $street = 'Some Street 455';
@@ -163,38 +163,67 @@ class SourceRepositoryTest extends WebapiAbstract
         $phone = '01660002020044';
         $latitude = 51.343479;
         $longitude = 12.387772;
-        $priority = rand(1,999);
+        $priority = mt_rand(1, 999);
 
         $carriers = [];
         for ($index = 1; $index <= $countCarrier; $index++) {
             $carrierCode = 'CAR-' . $index;
             $carrier = $this->sourceCarrierLinkFactory->create();
-            $carrier->setPosition($index)
-                ->setCarrierCode($carrierCode);
+            $carrier->setPosition($index);
+            $carrier->setCarrierCode($carrierCode);
             $carriers[] = $carrier;
         }
 
         /** @var  \Magento\InventoryApi\Api\Data\SourceInterface $source */
         $source = $this->sourceFactory->create();
-        $source->setName($name)
-            ->setCity($city)
-            ->setPostcode($postcode)
-            ->setContactName($contactName)
-            ->setCountryId($country->getId())
-            ->setDescription($description)
-            ->setEmail($email)
-            ->setStreet($street)
-            ->setFax($fax)
-            ->setPhone($phone)
-            ->setRegion($region->getName())
-            ->setRegionId($region->getId())
-            ->setLatitude($latitude)
-            ->setLongitude($longitude)
-            ->setIsActive($isActive)
-            ->setPriority($priority)
-            ->setCarrierLinks($carriers);
+        $source->setName($name);
+        $source->setCity($city);
+        $source->setPostcode($postcode);
+        $source->setContactName($contactName);
+        $source->setCountryId($country->getId());
+        $source->setDescription($description);
+        $source->setEmail($email);
+        $source->setStreet($street);
+        $source->setFax($fax);
+        $source->setPhone($phone);
+        $source->setRegion($region->getName());
+        $source->setRegionId($region->getId());
+        $source->setLatitude($latitude);
+        $source->setLongitude($longitude);
+        $source->setEnabled($enabled);
+        $source->setPriority($priority);
+        $source->setCarrierLinks($carriers);
 
         return $source;
+    }
+
+    /**
+     * Update the given source in magento
+     *
+     * @param SourceInterface $expectedSource
+     *
+     * @return int
+     */
+    private function updateSource($expectedSource)
+    {
+        $requestData = [
+            'source' => $this->getSourceDataArray($expectedSource)
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $expectedSource->getSourceId(),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        // call the webservice to update the source
+        return $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**
@@ -264,17 +293,15 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testGetSourcesList()
     {
-        $this->markTestSkipped('WIP: Search seems to ignore filter criterias!');
-
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
             ->create(SearchCriteriaBuilder::class);
 
-        $postcode1 = uniqid('APITEST');
-        $postcode2 = uniqid('APITEST');
+        $postcode1 = uniqid(self::TEST_PREFIX, false);
+        $postcode2 = uniqid(self::TEST_PREFIX, false);
 
         $source1 = $this->createRandomSource(2, $postcode1, true);
-        $source1->setSourceId($this->sourceRepository->save($source1));
+        $this->sourceRepository->save($source1);
 
         $source2 = $this->createRandomSource(3, $postcode1, false);
         $this->sourceRepository->save($source2);
@@ -285,29 +312,10 @@ class SourceRepositoryTest extends WebapiAbstract
         $source4 = $this->createRandomSource(3, $postcode2, true);
         $this->sourceRepository->save($source4);
 
-        $filter1 = $this->filterBuilder->setField(SourceInterface::POSTCODE)
-            ->setValue($postcode1);
-
-        $filter2 = $this->filterBuilder->setField(SourceInterface::POSTCODE)
-            ->setValue($postcode2);
-
-        $filter3 = $this->filterBuilder->setField(SourceInterface::IS_ACTIVE)
-            ->setValue(true);
-
-        // where postcode = $postcode1
-        // or postcode = $postcode2
-        // and is_active = true
-        $searchCriteriaBuilder->addFilters([$filter1, $filter3]);
-        $searchCriteriaBuilder->addFilters([$filter2, $filter3]);
-
-        $searchCriteriaBuilder->setPageSize(2);
-
-        /** @var SortOrder $sortOrder */
-        $sortOrder = $this->sortOrderBuilder->setField(SourceInterface::SOURCE_ID)
-            ->setDirection(SortOrder::SORT_ASC)
-            ->create();
-
-        $searchCriteriaBuilder->setSortOrders([$sortOrder]);
+        //  add filters to find all active items with created postcode
+        $postcodeFilter = implode(',', [$postcode1, $postcode2]);
+        $searchCriteriaBuilder->addFilter('postcode', $postcodeFilter, 'in');
+        $searchCriteriaBuilder->addFilter('enabled', 1, 'eq');
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -324,21 +332,27 @@ class SourceRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        var_dump($serviceInfo);
-
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
-        var_dump($searchResult);
 
-        $this->assertEquals(3, $searchResult['page_size']);
-        $this->assertEquals(2, count($searchResult['items']));
+        $this->assertEquals(3, count($searchResult['items']));
         $this->assertEquals(
             $searchResult['items'][0][SourceInterface::SOURCE_ID],
             $source1->getSourceId()
         );
         $this->assertEquals(
             $searchResult['items'][1][SourceInterface::SOURCE_ID],
-            $source2->getSourceId()
+            $source3->getSourceId()
         );
+
+        /** @var SourceCarrierLinkInterface[] $carrierLinks */
+        $resultCarrierLink = $searchResult['items'][0][SourceInterface::CARRIER_LINKS];
+
+        $counter = 0;
+        foreach ($source1->getCarrierLinks() as $carrierLink) {
+            $carrierCode = $resultCarrierLink[$counter][SourceCarrierLinkInterface::CARRIER_CODE];
+            $this->assertEquals($carrierLink->getCarrierCode(), $carrierCode);
+            $counter++;
+        }
     }
 
     /**
@@ -346,8 +360,33 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testUpdateSource()
     {
-        //TODO: Implement testUpdateSource
-        $this->fail(__METHOD__ . " is not implemented yet.");
+        // create a new source
+        $expectedSource = $this->createRandomSource(2);
+        $this->sourceRepository->save($expectedSource);
+
+        // set name and city property's in the source to update them
+        $expectedName = uniqid('UpdatedName_', false);
+        $expectedCity = uniqid('UpdatedCity_', false);
+        $expectedSource->setName($expectedName);
+        $expectedSource->setCity($expectedCity);
+        $updateSourceId = $this->updateSource($expectedSource);
+
+        // verify it's integrity
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $updateSourceId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, [SourceInterface::SOURCE_ID => $updateSourceId]);
+        $this->assertEquals($expectedName, $result[SourceInterface::NAME]);
+        $this->assertEquals($expectedCity, $result[SourceInterface::CITY]);
     }
 
     /**
@@ -355,7 +394,27 @@ class SourceRepositoryTest extends WebapiAbstract
      */
     public function testUpdateSourceWithoutCarriers()
     {
-        //TODO: Implement testUpdateSourceWithoutCarriers
-        $this->fail(__METHOD__ . " is not implemented yet.");
+        $expectedSource = $this->createRandomSource(2);
+        $this->sourceRepository->save($expectedSource);
+
+        $carriers = [];
+        $expectedSource->setCarrierLinks($carriers);
+        $updateSourceId = $this->updateSource($expectedSource);
+
+        // verify it's integrity
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $updateSourceId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, [SourceInterface::SOURCE_ID => $updateSourceId]);
+        $this->assertEquals($carriers, $result[SourceInterface::CARRIER_LINKS]);
     }
 }
