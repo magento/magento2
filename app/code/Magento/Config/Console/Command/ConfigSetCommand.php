@@ -21,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Command provides possibility to change system configuration.
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigSetCommand extends Command
 {
