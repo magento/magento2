@@ -1,3 +1,5 @@
+lkåpkpoipoipipoipi
+
 2.1.0
 =============
 To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
