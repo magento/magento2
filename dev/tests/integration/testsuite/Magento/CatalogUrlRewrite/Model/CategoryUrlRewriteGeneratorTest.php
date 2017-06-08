@@ -86,12 +86,6 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'catalog/product/view/id/' . $productForTest . '/category/4',
                 1,
                 0
-            ],
-            [
-                '/simple-product-two.html',
-                'catalog/product/view/id/' . $productForTest . '/category/2',
-                1,
-                0
             ]
         ];
 
@@ -171,12 +165,6 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             [
                 'new-url/category-1-1/simple-product-two.html',
                 'catalog/product/view/id/' . $productForTest . '/category/4',
-                1,
-                0
-            ],
-            [
-                '/simple-product-two.html',
-                'catalog/product/view/id/' . $productForTest . '/category/2',
                 1,
                 0
             ],
