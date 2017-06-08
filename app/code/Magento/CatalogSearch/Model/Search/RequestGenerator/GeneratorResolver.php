@@ -12,11 +12,15 @@ namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 class GeneratorResolver
 {
     /**
+     * Search request generators.
+     *
      * @var GeneratorInterface[]
      */
     private $generators;
 
     /**
+     * Default search request generator.
+     *
      * @var GeneratorInterface
      */
     private $defaultGenerator;

@@ -9,6 +9,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
+/**
+ * Test for Magento\CatalogSearch\Model\Search\RequestGenerator.
+ */
 class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
@@ -20,6 +23,9 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var  CollectionFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $productAttributeCollectionFactory;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->productAttributeCollectionFactory =
@@ -119,8 +125,11 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests generate dynamic fields requests.
+     *
      * @param array $countResult
      * @param $attributeOptions
+     * @return void
      * @dataProvider attributesProvider
      */
     public function testGenerate($countResult, $attributeOptions)
@@ -173,7 +182,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create attribute mock
+     * Create attribute mock.
      *
      * @param $attributeOptions
      * @return \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
@@ -229,6 +238,12 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
         return $attribute;
     }
 
+    /**
+     * Return count.
+     *
+     * @param array|\Countable $value
+     * @return int
+     */
     private function countVal(&$value)
     {
         return !empty($value) ? count($value) : 0;

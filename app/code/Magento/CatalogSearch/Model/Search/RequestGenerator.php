@@ -25,11 +25,15 @@ class RequestGenerator
     const BUCKET_SUFFIX = '_bucket';
 
     /**
+     * Product attribute collection factory.
+     *
      * @var CollectionFactory
      */
     private $productAttributeCollectionFactory;
 
     /**
+     * Search generator resolver.
+     *
      * @var GeneratorResolver
      */
     private $generatorResolver;
@@ -48,7 +52,7 @@ class RequestGenerator
     }
 
     /**
-     * Generate dynamic fields requests
+     * Generate dynamic fields requests.
      *
      * @return array
      */
@@ -65,7 +69,7 @@ class RequestGenerator
     }
 
     /**
-     * Generate search request
+     * Generate search request.
      *
      * @param string $attributeType
      * @param string $container
@@ -115,7 +119,7 @@ class RequestGenerator
     }
 
     /**
-     * Retrieve searchable attributes
+     * Retrieve searchable attributes.
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
@@ -132,7 +136,7 @@ class RequestGenerator
     }
 
     /**
-     * Generate advanced search request
+     * Generate advanced search request.
      *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

@@ -11,6 +11,9 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
+/**
+ * Test for Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal.
+ */
 class DecimalTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  Decimal */
@@ -19,6 +22,9 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
     /** @var  Attribute|\PHPUnit_Framework_MockObject_MockObject */
     private $attribute;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->attribute = $this->getMockBuilder(Attribute::class)
@@ -29,6 +35,11 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $this->decimal = $objectManager->getObject(Decimal::class);
     }
 
+    /**
+     * Tests retrieving filter data by search request generator.
+     *
+     * @return void
+     */
     public function testGetFilterData()
     {
         $filterName = 'test_filter_name';
@@ -47,6 +58,11 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * Test retrieving aggregation data by search request generator.
+     *
+     * @return void
+     */
     public function testGetAggregationData()
     {
         $bucketName = 'test_bucket_name';
