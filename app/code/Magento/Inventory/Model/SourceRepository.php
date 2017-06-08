@@ -11,13 +11,10 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
-use Magento\Inventory\Model\ResourceModel\Source\Collection as SourceCollection;
 use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
-use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -97,7 +94,6 @@ class SourceRepository implements SourceRepositoryInterface
     public function save(SourceInterface $source)
     {
         try {
-            /** @var SourceInterface|AbstractModel $source */
             $this->resourceSource->save($source);
             return $source->getSourceId();
         } catch (StateException $e) {
@@ -114,7 +110,6 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function get($sourceId)
     {
-        /** @var SourceInterface|AbstractModel $source */
         $source = $this->sourceFactory->create();
         $this->resourceSource->load($source, $sourceId, SourceInterface::SOURCE_ID);
 
@@ -129,7 +124,6 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
-        /** @var SourceCollection $collection */
         $collection = $this->sourceCollectionFactory->create();
 
         if (null === $searchCriteria) {
@@ -138,7 +132,6 @@ class SourceRepository implements SourceRepositoryInterface
             $this->collectionProcessor->process($searchCriteria, $collection);
         }
 
-        /** @var SourceSearchResultsInterface $searchResult */
         $searchResult = $this->sourceSearchResultsFactory->create();
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
