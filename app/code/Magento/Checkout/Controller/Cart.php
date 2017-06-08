@@ -7,6 +7,7 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\Escaper;
 
 /**
  * Shopping cart controller
@@ -39,6 +40,11 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     protected $cart;
 
     /**
+    * @var \Magento\Framework\Escaper
+    */
+    protected $escaper;
+    
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -53,13 +59,15 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        CustomerCart $cart
+        CustomerCart $cart,
+        Escaper $escaper
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_scopeConfig = $scopeConfig;
         $this->_checkoutSession = $checkoutSession;
         $this->_storeManager = $storeManager;
-        $this->cart = $cart;
+        $this->cart = $cart;        
+        $this->escaper = $escaper;
         parent::__construct($context);
     }
 
