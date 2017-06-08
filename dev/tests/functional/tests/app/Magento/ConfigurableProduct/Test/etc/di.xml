@@ -26,6 +26,11 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar\RecentlyComparedProducts">
         <arguments>
             <argument name="config" xsi:type="array">
