@@ -151,7 +151,7 @@ class ProductForm extends FormSections
     public function getAttributesSearchGrid()
     {
         return $this->blockFactory->create(
-            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes\Grid',
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes\Grid::class,
             ['element' => $this->browser->find($this->attributeSearch)]
         );
     }
@@ -190,7 +190,7 @@ class ProductForm extends FormSections
     public function getAttributeForm()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm::class,
             ['element' => $this->browser->find($this->newAttributeModal)]
         );
     }
@@ -206,7 +206,7 @@ class ProductForm extends FormSections
         return $this->_rootElement->find(
             sprintf($this->attributeBlock, $attribute->getAttributeCode()),
             Locator::SELECTOR_CSS,
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute'
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute::class
         );
     }
 }
