@@ -10,11 +10,17 @@ define([], function() {
      * Returns new address object
      */
     return function (addressData) {
+        var regionId;
+
+        if (addressData.region['region_id'] && addressData.region['region_id'] !== '0') {
+            regionId = addressData.region['region_id'] + '';
+        }
+
         return {
             customerAddressId: addressData.id,
             email: addressData.email,
             countryId: addressData.country_id,
-            regionId: addressData.region_id,
+            regionId: regionId,
             regionCode: addressData.region.region_code,
             region: addressData.region.region,
             customerId: addressData.customer_id,

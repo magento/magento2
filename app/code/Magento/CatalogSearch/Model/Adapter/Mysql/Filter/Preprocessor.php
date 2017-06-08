@@ -18,6 +18,10 @@ use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Store\Model\Store;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -60,9 +64,25 @@ class Preprocessor implements PreprocessorInterface
     private $metadataPool;
 
     /**
+     * @deprecated
+     *
      * @var TableMapper
      */
     private $tableMapper;
+
+    /**
+     * Scope config.
+     *
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * Resolving table alias for Search Request filter.
+     *
+     * @var AliasResolver
+     */
+    private $aliasResolver;
 
     /**
      * @param ConditionManager $conditionManager
@@ -71,6 +91,8 @@ class Preprocessor implements PreprocessorInterface
      * @param ResourceConnection $resource
      * @param TableMapper $tableMapper
      * @param string $attributePrefix
+     * @param ScopeConfigInterface $scopeConfig
+     * @param AliasResolver $aliasResolver
      */
     public function __construct(
         ConditionManager $conditionManager,
@@ -78,7 +100,9 @@ class Preprocessor implements PreprocessorInterface
         Config $config,
         ResourceConnection $resource,
         TableMapper $tableMapper,
-        $attributePrefix
+        $attributePrefix,
+        ScopeConfigInterface $scopeConfig = null,
+        AliasResolver $aliasResolver = null
     ) {
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
@@ -87,6 +111,8 @@ class Preprocessor implements PreprocessorInterface
         $this->connection = $resource->getConnection();
         $this->attributePrefix = $attributePrefix;
         $this->tableMapper = $tableMapper;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->aliasResolver = $aliasResolver ?: ObjectManager::getInstance()->get(AliasResolver::class);
     }
 
     /**
@@ -117,7 +143,7 @@ class Preprocessor implements PreprocessorInterface
         } elseif ($filter->getField() === 'category_ids') {
             return 'category_ids_index.category_id = ' . (int) $filter->getValue();
         } elseif ($attribute->isStatic()) {
-            $alias = $this->tableMapper->getMappingAlias($filter);
+            $alias = $this->aliasResolver->getAlias($filter);
             $resultQuery = str_replace(
                 $this->connection->quoteIdentifier($attribute->getAttributeCode()),
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
@@ -208,7 +234,7 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processTermSelect(FilterInterface $filter, $isNegation)
     {
-        $alias = $this->tableMapper->getMappingAlias($filter);
+        $alias = $this->aliasResolver->getAlias($filter);
         if (is_array($filter->getValue())) {
             $value = sprintf(
                 '%s IN (%s)',
@@ -224,7 +250,32 @@ class Preprocessor implements PreprocessorInterface
             $value
         );
 
+        if ($this->isAddStockFilter()) {
+            $resultQuery = sprintf(
+                '%1$s AND %2$s%3$s.stock_status = %4$s',
+                $resultQuery,
+                $alias,
+                AliasResolver::STOCK_FILTER_SUFFIX,
+                Stock::STOCK_IN_STOCK
+            );
+        }
+
         return $resultQuery;
+    }
+
+    /**
+     * Checks if it is necessary to show out of stock products.
+     *
+     * @return bool
+     */
+    private function isAddStockFilter()
+    {
+        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
+            'cataloginventory/options/show_out_of_stock',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return false === $isShowOutOfStock;
     }
 
     /**
