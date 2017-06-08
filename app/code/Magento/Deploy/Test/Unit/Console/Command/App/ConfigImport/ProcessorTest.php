@@ -235,6 +235,10 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->execute($this->inputMock, $this->outputMock);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Import failed: error message
+     */
     public function testImportWithValidation()
     {
         $configData = ['config data'];
@@ -265,11 +269,10 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->configImporterPoolMock->expects($this->once())
             ->method('getValidator')
             ->willReturn($validatorMock);
-        $this->outputMock->expects($this->at(1))
-            ->method('writeln')
-            ->with($errorMessages);
         $this->importerFactoryMock->expects($this->never())
             ->method('create');
+        $this->loggerMock->expects($this->once())
+            ->method('error');
 
         $this->processor->execute($this->inputMock, $this->outputMock);
     }

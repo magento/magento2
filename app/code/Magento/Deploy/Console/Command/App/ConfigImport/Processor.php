@@ -11,6 +11,7 @@ use Magento\Framework\Exception\RuntimeException;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Framework\Exception\ValidatorException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
@@ -127,15 +128,7 @@ class Processor
                 }
 
                 $data = (array)$this->deploymentConfig->getConfigData($section);
-
-                $validator = $this->configImporterPool->getValidator($section);
-                if (null !== $validator
-                    && $messages = $validator->validate($data)
-                ) {
-                    //Stop process next sections if current section has wrong data
-                    $output->writeln(sprintf('<error>%s</error>', implode(PHP_EOL, $messages)));
-                    return;
-                }
+                $this->validateSectionData($section, $data);
 
                 /** @var ImporterInterface $importer */
                 $importer = $this->importerFactory->create($importerClassName);
@@ -157,6 +150,24 @@ class Processor
         } catch (\Exception $exception) {
             $this->logger->error($exception);
             throw new RuntimeException(__('Import failed: %1', $exception->getMessage()), $exception);
+        }
+    }
+
+    /**
+     * Validates that current section has valid import data
+     *
+     * @param string $section Name of configuration section
+     * @param array $data Configuration data for given section
+     * @return void
+     * @throws ValidatorException If current section has wrong data
+     */
+    private function validateSectionData($section, array $data)
+    {
+        $validator = $this->configImporterPool->getValidator($section);
+        if (null !== $validator
+            && $messages = $validator->validate($data)
+        ) {
+            throw new ValidatorException(__(implode(PHP_EOL, $messages)));
         }
     }
 }

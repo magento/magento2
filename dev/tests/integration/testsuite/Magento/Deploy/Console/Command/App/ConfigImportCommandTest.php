@@ -250,6 +250,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             'Scopes data should have at least one not admin website, group and store.',
             $importCommandTester->getDisplay()
         );
+        $this->assertSame(Cli::RETURN_FAILURE, $importCommandTester->getStatusCode());
     }
 
     /**
