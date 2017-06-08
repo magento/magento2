@@ -5,6 +5,9 @@
  */
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestValidationTest extends \PHPUnit_Framework_TestCase
 {
     /**
