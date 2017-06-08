@@ -283,7 +283,7 @@ class ObjectManagerFactory
     }
 
     /**
-     * Crete plugin list object
+     * Create plugin list object
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
