@@ -73,9 +73,10 @@ class InitialConfigSourceTest extends \PHPUnit_Framework_TestCase
      * @param string $path
      * @param array $data
      * @param string|array $expected
+     * @param string $expectedPath
      * @dataProvider getDataProvider
      */
-    public function testGet($path, $data, $expected)
+    public function testGet($path, $data, $expected, $expectedPath)
     {
         $this->readerMock->expects($this->once())
             ->method('load')
@@ -89,6 +90,7 @@ class InitialConfigSourceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->dataObjectMock);
         $this->dataObjectMock->expects($this->once())
             ->method('getData')
+            ->with($expectedPath)
             ->willReturn($expected);
 
         $this->assertEquals($expected, $this->source->get($path));
@@ -100,8 +102,10 @@ class InitialConfigSourceTest extends \PHPUnit_Framework_TestCase
     public function getDataProvider()
     {
         return [
-            'simple path' => ['path', ['configType' => 'value'], 'value'],
-            'empty path' => ['', [], []]
+            'simple path' => ['path', ['configType' => 'value'], 'value', 'configType/path'],
+            'empty path' => ['', [], [], 'configType'],
+            'null path' => [null, [], [], 'configType'],
+            'leading path' => ['/path', [], [], 'configType/path']
         ];
     }
 
