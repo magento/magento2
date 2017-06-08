@@ -30,7 +30,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            ґMagento\Indexer\Model\Indexer::class
+            \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalog_category_product');
 
