@@ -36,7 +36,6 @@ define([
      */
     customerDataGet.subscribe = jasmine.createSpy();
 
-
     beforeEach(function (done) {
         injector.mock(mocks);
         injector.require(['Magento_Catalog/js/product/storage/data-storage'], function (insance) {
