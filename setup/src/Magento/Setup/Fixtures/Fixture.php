@@ -60,7 +60,7 @@ abstract class Fixture
                 : $configValue;
 
             if (!empty($generationCount)) {
-                $output->writeln('<info> |- ' . $label . ': ' . $generationCount .'</info>');
+                $output->writeln('<info> |- ' . $label . ': ' . $generationCount . '</info>');
             }
         }
     }

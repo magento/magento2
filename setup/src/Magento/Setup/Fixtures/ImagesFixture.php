@@ -179,7 +179,7 @@ class ImagesFixture extends Fixture
     {
         $config = $this->fixtureModel->getValue('product-images', []);
         if (!$config) {
-            return ;
+            return;
         }
 
         if (!isset($config['images-count'])) {

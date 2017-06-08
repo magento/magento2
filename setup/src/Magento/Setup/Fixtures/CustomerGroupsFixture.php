@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Fixtures;
 
-use \Magento\Customer\Api\Data\GroupInterfaceFactory;
-use \Magento\Customer\Api\GroupRepositoryInterface;
-use \Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Customer\Api\Data\GroupInterfaceFactory;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Fixture for creating a Customer Groups
