@@ -119,7 +119,7 @@ class DeployStaticOptions
     /**
      * Default jobs amount
      */
-    const DEFAULT_JOBS_AMOUNT = 0;
+    const DEFAULT_JOBS_AMOUNT = 1;
 
     /**
      * Key for languages parameter
