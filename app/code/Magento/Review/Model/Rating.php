@@ -116,7 +116,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * retrieve rating options
      *
-     * @return array
+     * @return []
      */
     public function getOptions()
     {
@@ -147,7 +147,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * @param int $reviewId
      * @param bool $onlyForCurrentStore
-     * @return array
+     * @return []
      */
     public function getReviewSummary($reviewId, $onlyForCurrentStore = true)
     {
@@ -169,7 +169,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * Return unique ID(s) for each object in system
      *
-     * @return array
+     * @return []
      */
     public function getIdentities()
     {
