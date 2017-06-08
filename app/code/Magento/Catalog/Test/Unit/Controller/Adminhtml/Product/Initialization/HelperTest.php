@@ -314,7 +314,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getProductLinks')
             ->willReturn([]);
 
-
         $this->linkTypeProviderMock->expects($this->once())
             ->method('getItems')
             ->willReturn($this->assembleLinkTypes(['related', 'upsell', 'crosssell']));
