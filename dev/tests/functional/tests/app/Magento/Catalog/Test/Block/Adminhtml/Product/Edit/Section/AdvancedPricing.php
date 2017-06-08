@@ -46,13 +46,6 @@ class AdvancedPricing extends Section
     private $fieldByName = '//*[contains(text(),"%s")]/preceding::div[2]/ancestor::div[1]';
 
     /**
-     * Selector for previous field.
-     *
-     * @var string
-     */
-    private $previousField = '//*[contains(text(),"%s")]/preceding::div[2]//label';
-
-    /**
      * Fill 'Advanced price' product form on tab.
      *
      * @param array $fields
