@@ -5,8 +5,7 @@
  */
 namespace Magento\Shipping\Test\Unit\Model\Shipping;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Store\Model\ScopeInterface;
 
@@ -69,8 +68,8 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getValue'])
             ->getMock();
 
-        $objectManagerHelper = new ObjectManager($this);
-        $this->labels = $objectManagerHelper->getObject(
+        $bjectManagerHelper = new ObjectManagerHelper($this);
+        $this->labels = $bjectManagerHelper->getObject(
             \Magento\Shipping\Model\Shipping\Labels::class,
             [
                 'shipmentRequestFactory' => $requestFactory,
