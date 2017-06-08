@@ -104,8 +104,8 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->user->expects($this->exactly(2))->method('getFirstname')->willReturn('John');
-        $this->user->expects($this->exactly(2))->method('getLastname')->willReturn('Doe');
+        $this->user->expects($this->atLeastOnce())->method('getFirstname')->willReturn('John');
+        $this->user->expects($this->atLeastOnce())->method('getLastname')->willReturn('Doe');
         $this->user->expects($this->once())->method('getName')->willReturn('John Doe');
         $this->user->expects($this->once())->method('getEmail')->willReturn('admin@admin.test.com');
         $shippingMethod = $this->getMockBuilder(\Magento\Framework\DataObject::class)
@@ -170,7 +170,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCarrierCode'])
             ->getMock();
-        $order->expects($this->exactly(2))
+        $order->expects($this->atLeastOnce())
             ->method('getShippingMethod')
             ->with(true)
             ->willReturn($shippingMethod);
