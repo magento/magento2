@@ -18,7 +18,7 @@ Options -MultiViews
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-l
 
-    RewriteRule .* ../static.php?resource=$0 [L]
+    RewriteRule .* ../static.php?resource=$0 [L,QSA]
 </IfModule>
 
 ############################################
