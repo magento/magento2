@@ -370,7 +370,6 @@ interface AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @param string $onDelete
-     * @param string $onUpdate
      * @param boolean $purge trying remove invalid data
      * @param string $schemaName
      * @param string $refSchemaName
