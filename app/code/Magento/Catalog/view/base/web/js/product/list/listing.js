@@ -13,11 +13,12 @@ define([
     return Listing.extend({
         defaults: {
             additionalClasses: '',
-            filteredRows: [],
+            filteredRows: ko.observable(),
             limit: 5,
             shouldMergeFromSource: ['displayMode', 'additionalClasses'],
             listens: {
-                elems: 'filterRows'
+                elems: 'filterRowsFromCache',
+                '${ $.provider }:data.items': 'filterRowsFromServer'
             }
         },
 
@@ -75,12 +76,31 @@ define([
         },
 
         /**
-         * Sort rows by their action time and filter by allowed limit
+         * Sort and filter rows, that are already in magento storage cache
          *
          * @return void
          */
-        filterRows: function () {
-            this.filteredRows = _.sortBy(this.rows, 'added_at').reverse().slice(0, this.limit);
+        filterRowsFromCache: function () {
+            this._filterRows(this.rows);
+        },
+
+        /**
+         * Sort and filter rows, that are come from backend
+         *
+         * @param rows
+         */
+        filterRowsFromServer: function (rows) {
+            this._filterRows(rows);
+        },
+
+        /**
+         * Filter rows by limit and sort them
+         *
+         * @param {Array} rows
+         * @private
+         */
+        _filterRows: function (rows) {
+            this.filteredRows(_.sortBy(rows, 'added_at').reverse().slice(0, this.limit));
         },
 
         /**
