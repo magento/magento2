@@ -7,6 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Review\Block\Product\ReviewRenderer" />
+    <preference for="Magento\Review\Api\Data\ReviewInterface" type="Magento\Review\Model\Review" />
+    <preference for="Magento\Review\Api\ReviewRepositoryInterface" type="Magento\Review\Model\ResourceModel\ReviewRepository" />
+    <preference for="Magento\Review\Api\Data\ReviewSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+
     <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
         <arguments>
             <argument name="protectedModels" xsi:type="array">
