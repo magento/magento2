@@ -7,6 +7,8 @@ namespace Magento\Store\Test\Unit\App\Config\Source;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 use Magento\Store\App\Config\Source\InitialConfigSource;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
@@ -26,6 +28,16 @@ class InitialConfigSourceTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfigMock;
 
     /**
+     * @var DataObjectFactory|Mock
+     */
+    private $dataObjectFactory;
+
+    /**
+     * @var DataObject|Mock
+     */
+    private $dataObjectMock;
+
+    /**
      * @var InitialConfigSource
      */
     private $source;
@@ -41,26 +53,56 @@ class InitialConfigSourceTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->dataObjectFactory = $this->getMockBuilder(DataObjectFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectMock = $this->getMockBuilder(DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->source = new InitialConfigSource(
             $this->readerMock,
             $this->deploymentConfigMock,
+            $this->dataObjectFactory,
             'configType'
         );
     }
 
-    public function testGet()
+    /**
+     * @param string $path
+     * @param array $data
+     * @param string|array $expected
+     * @dataProvider getDataProvider
+     */
+    public function testGet($path, $data, $expected)
     {
-        $path = 'path';
-
         $this->readerMock->expects($this->once())
             ->method('load')
-            ->willReturn(['configType' => [$path => 'value']]);
+            ->willReturn($data);
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
+        $this->dataObjectFactory->expects($this->once())
+            ->method('create')
+            ->with(['data' => $data])
+            ->willReturn($this->dataObjectMock);
+        $this->dataObjectMock->expects($this->once())
+            ->method('getData')
+            ->willReturn($expected);
 
-        $this->assertEquals('value', $this->source->get($path));
+        $this->assertEquals($expected, $this->source->get($path));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataProvider()
+    {
+        return [
+            'simple path' => ['path', ['configType' => 'value'], 'value'],
+            'empty path' => ['', [], []]
+        ];
     }
 
     public function testGetNotInstalled()

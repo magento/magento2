@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 
 /**
  * Config source to retrieve configuration from files.
@@ -37,14 +38,27 @@ class InitialConfigSource implements ConfigSourceInterface
     private $configType;
 
     /**
+     * The DataObject factory.
+     *
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
      * @param Reader $reader The file reader
      * @param DeploymentConfig $deploymentConfig The deployment config reader
+     * @param DataObjectFactory $dataObjectFactory The DataObject factory
      * @param string $configType The config type
      */
-    public function __construct(Reader $reader, DeploymentConfig $deploymentConfig, $configType)
-    {
+    public function __construct(
+        Reader $reader,
+        DeploymentConfig $deploymentConfig,
+        DataObjectFactory $dataObjectFactory,
+        $configType
+    ) {
         $this->reader = $reader;
         $this->deploymentConfig = $deploymentConfig;
+        $this->dataObjectFactory = $dataObjectFactory;
         $this->configType = $configType;
     }
 
@@ -59,11 +73,13 @@ class InitialConfigSource implements ConfigSourceInterface
          *
          * @see \Magento\Store\Model\Config\Importer To import store configs
          */
-        if ($this->deploymentConfig->isAvailable()) {
+        if (!$this->deploymentConfig->isAvailable()) {
             return [];
         }
 
-        $data = new DataObject($this->reader->load());
+        $data = $this->dataObjectFactory->create([
+            'data' => $this->reader->load()
+        ]);
 
         if ($path !== '' && $path !== null) {
             $path = '/' . ltrim($path, '/');
