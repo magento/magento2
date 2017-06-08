@@ -100,8 +100,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var Category $categorySecond */
         $categorySecond = $categories[1];
-        $categorySecond->setIsAnchor(true);
-        $categorySecond->save();
 
         /** @var Category $categoryThird */
         $categoryThird = $categories[2];
