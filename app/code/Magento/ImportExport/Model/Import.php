@@ -163,11 +163,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Exception\RendererInterface
-     */
-    private $exceptionRenderer;
-
-    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -183,7 +178,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param History $importHistoryModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime
      * @param array $data
-     * @param \Magento\Framework\Exception\RendererInterface|null $exceptionRenderer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -201,8 +195,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\ImportExport\Model\History $importHistoryModel,
         \Magento\Framework\Stdlib\DateTime\DateTime $localeDate,
-        array $data = [],
-        \Magento\Framework\Exception\RendererInterface $exceptionRenderer = null
+        array $data = []
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -217,9 +210,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->_filesystem = $filesystem;
         $this->importHistoryModel = $importHistoryModel;
         $this->localeDate = $localeDate;
-        $this->exceptionRenderer = isset($exceptionRenderer) ? $exceptionRenderer :
-            \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Exception\RendererInterface::class);
         parent::__construct($logger, $filesystem, $data);
     }
 
@@ -447,6 +437,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
     /**
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function processImport()
     {
@@ -464,8 +455,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 null,
                 null,
                 null,
-                $this->exceptionRenderer->render($e)
+                $e->getMessage()
             );
+            throw $e;
         }
 
         return !$errorAggregator->hasToBeTerminated();

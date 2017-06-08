@@ -117,7 +117,7 @@ class DbStorage extends AbstractStorage
                         UrlRewriteData::STORE_ID => $url->getStoreId()
                     ]
                 );
-                $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url;
+                $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url->toArray();
             }
             if (!empty($urlConflicted)) {
                 if ($e instanceof \Magento\Framework\Exception\AlreadyExistsException) {

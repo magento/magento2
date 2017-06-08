@@ -44,6 +44,7 @@ class Start extends ImportResultController
         if ($data) {
             /** @var \Magento\Framework\View\Result\Layout $resultLayout */
             $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
+
             /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
             $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
             $resultBlock
@@ -52,7 +53,11 @@ class Start extends ImportResultController
                 ->addAction('hide', ['edit_form', 'upload_button', 'messages']);
 
             $this->importModel->setData($data);
-            $this->importModel->importSource();
+            try {
+                $this->importModel->importSource();
+            } catch (\Exception $e) {
+                $this->messageManager->addExceptionMessage($e, $e->getMessage());
+            }
             $errorAggregator = $this->importModel->getErrorAggregator();
             if ($this->importModel->getErrorAggregator()->hasToBeTerminated()) {
                 $resultBlock->addError(__('Maximum error count has been reached or system error is occurred!'));
@@ -62,6 +67,7 @@ class Start extends ImportResultController
                 $this->addErrorMessages($resultBlock, $errorAggregator);
                 $resultBlock->addSuccess(__('Import successfully done'));
             }
+
 
             return $resultLayout;
         }

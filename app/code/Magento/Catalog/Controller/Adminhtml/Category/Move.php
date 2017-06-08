@@ -24,30 +24,21 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
     protected $logger;
 
     /**
-     * @var \Magento\Framework\Exception\RendererInterface
-     */
-    private $exceptionRenderer;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory,
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Exception\RendererInterface|null $exceptionRenderer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Exception\RendererInterface $exceptionRenderer = null
+        \Psr\Log\LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->logger = $logger;
-        $this->exceptionRenderer = $exceptionRenderer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Exception\RendererInterface::class);
     }
 
     /**
@@ -78,7 +69,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
             $category->move($parentNodeId, $prevNodeId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
-            $this->messageManager->addError($this->exceptionRenderer->render($e));
+            $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $error = true;
             $this->messageManager->addError(__('There was a category move error.'));

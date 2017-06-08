@@ -41,25 +41,19 @@ class Save extends \Magento\Backend\App\Action
     private $pageRepository;
 
     /**
-     * @var \Magento\Framework\Exception\RendererInterface
-     */
-    private $exceptionRenderer;
-
-    /**
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
      * @param \Magento\Cms\Model\PageFactory $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
-     * @param \Magento\Framework\Exception\RendererInterface|null $exceptionRenderer
+     *
      */
     public function __construct(
         Action\Context $context,
         PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
         \Magento\Cms\Model\PageFactory $pageFactory = null,
-        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null,
-        \Magento\Framework\Exception\RendererInterface $exceptionRenderer = null
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
@@ -68,8 +62,6 @@ class Save extends \Magento\Backend\App\Action
         $this->pageRepository = $pageRepository
             ?: \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
-        $this->exceptionRenderer = $exceptionRenderer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Exception\RendererInterface::class);
         parent::__construct($context);
     }
 
@@ -115,28 +107,19 @@ class Save extends \Magento\Backend\App\Action
             try {
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccess(__('You saved the page.'));
-
-                $this->_eventManager->dispatch(
-                    'controller_action_cms_page_save_entity_after',
-                    ['controller' => $this, 'page' => $model]
-                );
-
                 $this->dataPersistor->clear('cms_page');
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($this->exceptionRenderer->render($e));
+                $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
             }
 
             $this->dataPersistor->set('cms_page', $data);
-            return $resultRedirect->setPath(
-                '*/*/edit',
-                ['page_id' => $this->getRequest()->getParam('page_id')]
-            );
+            return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
     }

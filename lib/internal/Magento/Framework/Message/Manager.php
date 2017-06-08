@@ -7,7 +7,8 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\RendererPool;
+use Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Message manager model
@@ -56,9 +57,9 @@ class Manager implements ManagerInterface
     protected $hasMessages = false;
 
     /**
-     * @var RendererPool
+     * @var \Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool
      */
-    private $rendererPool;
+    private $messageConfigurationsPool;
 
     /**
      * @param Session $session
@@ -67,7 +68,7 @@ class Manager implements ManagerInterface
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
-     * @param RendererPool|null $rendererPool
+     * @param MessageConfigurationsPool|null $messageConfigurationsPool
      */
     public function __construct(
         Session $session,
@@ -76,7 +77,7 @@ class Manager implements ManagerInterface
         Event\ManagerInterface $eventManager,
         LoggerInterface $logger,
         $defaultGroup = self::DEFAULT_GROUP,
-        RendererPool $rendererPool = null
+        $messageConfigurationsPool = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;
@@ -84,8 +85,9 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
-        $this->rendererPool = $rendererPool ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(RendererPool::class);
+        $this->messageConfigurationsPool = $messageConfigurationsPool;
+        $this->messageConfigurationsPool = $messageConfigurationsPool ?: ObjectManager::getInstance()
+            ->get(MessageConfigurationsPool::class);
     }
 
     /**
@@ -242,7 +244,7 @@ class Manager implements ManagerInterface
      * @param string $group
      * @return $this
      */
-    public function addException(\Exception $exception, $alternativeText, $group = null)
+    public function addException(\Exception $exception, $alternativeText = null, $group = null)
     {
         $message = sprintf(
             'Exception message: %s%sTrace: %s',
@@ -253,17 +255,14 @@ class Manager implements ManagerInterface
 
         $this->logger->critical($message);
 
-        if ($this->rendererPool->getRenderer($exception)) {
-            $data = $this->rendererPool->getRenderer($exception)->render($exception);
-            $identifier = $this->rendererPool->getRenderer($exception)->getIdentifier();
-            $this->assertNotEmptyIdentifier($identifier);
-            $this->addMessage(
-                $this->createMessage(MessageInterface::TYPE_ERROR, $identifier)
-                    ->setData($data),
-                $group
-            );
+        if ($messageConfiguration = $this->messageConfigurationsPool->getMessageConfiguration($exception)) {
+            $this->addMessage($messageConfiguration->createMessage($exception));
         } else {
-            $this->addErrorMessage($alternativeText, $group);
+            if ($alternativeText) {
+                $this->addErrorMessage($alternativeText, $group);
+            } else {
+                $this->addErrorMessage($exception->getMessage(), $group);
+            }
         }
         return $this;
     }
@@ -286,7 +285,7 @@ class Manager implements ManagerInterface
      * @param string $group
      * @return $this
      */
-    public function addExceptionMessage(\Exception $exception, $alternativeText, $group = null)
+    public function addExceptionMessage(\Exception $exception, $alternativeText = null, $group = null)
     {
         $message = sprintf(
             'Exception message: %s%sTrace: %s',
@@ -297,17 +296,14 @@ class Manager implements ManagerInterface
 
         $this->logger->critical($message);
 
-        if ($this->rendererPool->getRenderer($exception)) {
-            $data = $this->rendererPool->getRenderer($exception)->render($exception);
-            $identifier = $this->rendererPool->getRenderer($exception)->getIdentifier();
-            $this->assertNotEmptyIdentifier($identifier);
-            $this->addMessage(
-                $this->createMessage(MessageInterface::TYPE_ERROR, $identifier)
-                    ->setData($data),
-                $group
-            );
+        if ($messageConfiguration = $this->messageConfigurationsPool->getMessageConfiguration($exception)) {
+            $this->addMessage($messageConfiguration->createMessage($exception));
         } else {
-            $this->addErrorMessage($alternativeText, $group);
+            if ($alternativeText) {
+                $this->addErrorMessage($alternativeText, $group);
+            } else {
+                $this->addErrorMessage($exception->getMessage(), $group);
+            }
         }
         return $this;
     }

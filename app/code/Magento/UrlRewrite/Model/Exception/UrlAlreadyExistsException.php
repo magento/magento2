@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Model\Exception;
@@ -20,7 +20,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedEx
     /**
      * @param Phrase $phrase
      * @param \Exception $cause
-     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @param array
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, array $urls = [])
     {
@@ -32,7 +32,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedEx
     }
 
     /**
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @return array
      */
     public function getUrls()
     {

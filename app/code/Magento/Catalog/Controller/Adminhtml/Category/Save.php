@@ -55,11 +55,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     private $eavConfig;
 
     /**
-     * @var \Magento\Framework\Exception\RendererInterface
-     */
-    private $exceptionRenderer;
-
-    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -68,7 +63,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Exception\RendererInterface|null $exceptionRenderer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -76,8 +70,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Config $eavConfig = null,
-        \Magento\Framework\Exception\RendererInterface $exceptionRenderer = null
+        \Magento\Eav\Model\Config $eavConfig = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -86,8 +79,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $this->storeManager = $storeManager;
         $this->eavConfig = $eavConfig
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
-        $this->exceptionRenderer = $exceptionRenderer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Exception\RendererInterface::class);
     }
 
     /**
@@ -222,7 +213,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($this->exceptionRenderer->render($e));
+                $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Exception $e) {

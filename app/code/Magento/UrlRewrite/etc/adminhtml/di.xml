@@ -6,23 +6,25 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Exception\RendererPool">
+    <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
         <arguments>
-            <argument name="rendererInstances" xsi:type="array">
-                <item name="Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException" xsi:type="object">Magento\UrlRewrite\Model\Exception\Renderer</item>
+            <argument name="renderers" xsi:type="array">
+                <item name="url_duplicate_block_renderer" xsi:type="object">Magento\UrlRewrite\Block\View\Element\Message\Renderer\BlockRenderer</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\UrlRewrite\Model\Exception\Renderer">
+    <type name="Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool">
         <arguments>
-            <argument name="identifier" xsi:type="string">addUrlDuplicateMessage</argument>
+            <argument name="messageConfigurationsMap" xsi:type="array">
+                <item name="Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException" xsi:type="object">\Magento\UrlRewrite\Block\View\Element\Message\Renderer\UrlRewriteMessageConfiguration</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
         <arguments>
             <argument name="configurationsMap" xsi:type="array">
                 <item name="addUrlDuplicateMessage" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="renderer" xsi:type="const">\Magento\UrlRewrite\Block\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">
                         <item name="template" xsi:type="string">Magento_UrlRewrite::messages/url_duplicate_message.phtml</item>
                     </item>
