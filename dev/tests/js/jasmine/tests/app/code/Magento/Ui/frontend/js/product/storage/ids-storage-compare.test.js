@@ -53,8 +53,8 @@ define([
                 result = obj.prepareData(data);
 
                 expect(typeof result[data['1'].id]).toBe('object');
-                expect(typeof result[data['1'].id].added_at).toBe('number');
-                expect(result[data['1'].id].product_id).toBe(data['1'].id);
+                expect(typeof result[data['1'].id]['added_at']).toBe('number');
+                expect(result[data['1'].id]['product_id']).toBe(data['1'].id);
             });
         });
     });

@@ -6,11 +6,9 @@
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
-    'squire',
-    'underscore'
-], function ($, Squire, _) {
+    'squire'
+], function ($, Squire) {
     'use strict';
-
 
     var injector = new Squire(),
         mocks = {
