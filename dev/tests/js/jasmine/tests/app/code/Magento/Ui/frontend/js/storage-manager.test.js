@@ -242,7 +242,7 @@ define([
         });
         describe('"setLastUpdate" method', function () {
             beforeEach(function () {
-                window.localStorage.setItem = jasmine.createSpy().and.returnValue('value')
+                window.localStorage.setItem = jasmine.createSpy().and.returnValue('value');
             });
 
             it('check calling "setItem" method of localStorage', function () {
@@ -277,7 +277,7 @@ define([
                     first: {
                         lifetime: 200000000
                     }
-                }
+                };
             });
 
             it('check result of "dataFilter" method', function () {

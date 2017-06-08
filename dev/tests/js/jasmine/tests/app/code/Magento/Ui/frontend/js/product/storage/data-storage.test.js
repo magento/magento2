@@ -12,6 +12,7 @@ define([
     'use strict';
 
     var injector = new Squire(),
+
         /**
          * Mock for customerData get method
          */
@@ -112,8 +113,9 @@ define([
                             dataProperty: 'dataValue'
                         };
                     }
+
                     this.result = data;
-                }
+                };
             });
 
             it('check calls "providerHandler" method with data', function () {
