@@ -52,12 +52,11 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertResults($categoryExpectedResult, $actualResults);
 
-        $productIds = [];
-        foreach ($category->getProductCollection() as $product) {
-            $productIds = $product->getId();
-        }
-        $this->assertTrue(isset($productIds[0]), 'Product for testing does not exist');
-        $productForTest = $productIds[0];
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productForTest = $product->getId();
+
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
             UrlRewrite::ENTITY_ID => [$productForTest]
@@ -134,12 +133,11 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertResults($categoryExpectedResult, $actualResults);
 
-        $productIds = [];
-        foreach ($category->getProductCollection() as $product) {
-            $productIds = $product->getId();
-        }
-        $this->assertTrue(isset($productIds[0]), 'Product for testing does not exist');
-        $productForTest = $productIds[0];
+        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productForTest = $product->getId();
+
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
             UrlRewrite::ENTITY_ID => [$productForTest]
