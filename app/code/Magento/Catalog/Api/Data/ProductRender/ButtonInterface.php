@@ -55,7 +55,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      * Required options is flag for options (attributes), without which we cant do actions with a product
      * E.g.: without product size we cant add this product to cart
      *
-     * @param string $requiredOptions
+     * @param bool $requiredOptions
      * @return void
      */
     public function setRequiredOptions($requiredOptions);
@@ -63,7 +63,7 @@ interface ButtonInterface extends ExtensibleDataInterface
     /**
      * Retrieve flag whether a product has options or not
      *
-     * @return string
+     * @return bool
      */
     public function getRequiredOptions();
 

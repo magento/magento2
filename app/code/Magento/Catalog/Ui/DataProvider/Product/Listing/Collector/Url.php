@@ -97,7 +97,7 @@ class Url implements ProductRenderCollectorInterface
                 ]
             )
         );
-        $addToCart->setRequiredOptions($product->hasOptions());
+        $addToCart->setRequiredOptions((bool) $product->getData('has_options'));
         $addToCart->setUrl(
             $this->abstractProduct
                 ->getAddToCartUrl($product, ['useUencPlaceholder' => true])
