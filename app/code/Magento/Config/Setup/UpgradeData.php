@@ -17,9 +17,7 @@ class UpgradeData implements UpgradeDataInterface
 {
 
     /**
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -29,10 +27,13 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
+     * ACL roles were moved to Magento_Backend
+     * for backward compatibility, roles that are already defined as Magento_Config should be updated to Magento_Backend
+     *
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    protected function upgradeAcl(ModuleDataSetupInterface $setup)
+    private function upgradeAcl(ModuleDataSetupInterface $setup)
     {
 
         $aclUpdates = [
