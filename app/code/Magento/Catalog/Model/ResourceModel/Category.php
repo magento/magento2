@@ -764,7 +764,6 @@ class Category extends AbstractResource
      */
     public function getChildren($category, $recursive = true)
     {
-        $linkField = $this->getLinkField();
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
