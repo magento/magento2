@@ -122,7 +122,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         'datetime',
         'varchar',
         'text',
-        'static'
+        'static',
     ];
 
     /**
@@ -188,7 +188,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class);
     }
 
     /**
@@ -1091,7 +1091,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             foreach ($options as $option) {
                 $optionData = $this->dataObjectProcessor->buildOutputDataArray(
                     $option,
-                    '\Magento\Eav\Api\Data\AttributeOptionInterface'
+                    \Magento\Eav\Api\Data\AttributeOptionInterface::class
                 );
                 $optionDataArray[] = $optionData;
             }
@@ -1117,7 +1117,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             $this->dataObjectHelper->populateWithArray(
                 $optionDataObject,
                 $option,
-                '\Magento\Eav\Api\Data\AttributeOptionInterface'
+                \Magento\Eav\Api\Data\AttributeOptionInterface::class
             );
             $dataObjects[] = $optionDataObject;
         }
