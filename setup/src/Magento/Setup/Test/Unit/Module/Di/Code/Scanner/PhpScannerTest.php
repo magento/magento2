@@ -66,4 +66,19 @@ class PhpScannerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([], $this->_model->collectEntities($this->_testFiles));
     }
+
+    public function testMethodNamedClassDoesNotGetRecognisedAsAClass()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped('Test only runs on PHP > 7');
+        }
+
+        try {
+            $this->_model->collectEntities([
+                $this->_testDir . '/app/code/Magento/SomeModule/Model/MethodNamedClass.php'
+            ]);
+        } catch (\ReflectionException $e) {
+            $this->fail('Method should not be parsed as a class');
+        }
+    }
 }
