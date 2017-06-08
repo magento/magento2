@@ -12,13 +12,11 @@ use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
  */
 interface BuilderInterface
 {
-    /**#@+
-     * Text flags for Elasticsearch filter query condition types
-     */
-    const QUERY_CONDITION_MUST = 'must';
-    const QUERY_CONDITION_SHOULD = 'should';
-    const QUERY_CONDITION_MUST_NOT = 'must_not';
-    /**#@-*/
+    const FILTER_QUERY_CONDITION_MUST = 'must';
+
+    const FILTER_QUERY_CONDITION_SHOULD = 'should';
+
+    const FILTER_QUERY_CONDITION_MUST_NOT = 'must_not';
 
     /**
      * @param RequestFilterInterface $filter
