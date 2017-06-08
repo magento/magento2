@@ -6,24 +6,13 @@
 -->
 <if args="isAllowed()">
     <if args="isSalable($row())">
-        <if args="hasRequiredOptions($row())">
-            <button class="action tocart primary"
-                    attr="'data-mage-init': getDataMageInit($row()),
-                           title: getLabel()"
-                    type="button">
-                <span text="getLabel()"/>
-            </button>
-        </if>
-
-        <ifnot args="hasRequiredOptions($row())">
-            <button class="action tocart primary"
-                    attr="'data-mage-init': getDataMageInit($row()),
-                          'data-post': getDataPost($row()),
-                           title: getLabel()"
-                    type="button">
-                <span text="getLabel()"/>
-            </button>
-        </ifnot>
+        <button class="action tocart primary"
+                attr="'data-mage-init': getDataMageInit($row()),
+                      'data-post': getDataPost($row()),
+                       title: getLabel()"
+                type="button">
+            <span text="getLabel()"/>
+        </button>
     </if>
 
     <ifnot args="isSalable($row())">
