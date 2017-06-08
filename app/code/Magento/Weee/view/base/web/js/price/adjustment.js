@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_UI/js/grid/columns/column'
+    'Magento_Ui/js/grid/columns/column'
 ], function (Element) {
     'use strict';
 
