@@ -9,7 +9,11 @@ use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Validation
+ * Class GuestValidation
+ *
+ * Plugin that checks if checkout agreement enabled and validates all agreements.
+ * Current plugin is duplicate from Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation due to different
+ * interfaces of payment information and makes check before processing of payment information.
  */
 class GuestValidation
 {
