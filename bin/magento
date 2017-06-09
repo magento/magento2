@@ -20,7 +20,7 @@ try {
     $handler = new \Magento\Framework\App\ErrorHandler();
     set_error_handler([$handler, 'handler']);
     $application = new Magento\Framework\Console\Cli('Magento CLI');
-    $application->run();
+    $application->run(new Magento\Framework\Console\Input);
 } catch (\Exception $e) {
     while ($e) {
         echo $e->getMessage();
