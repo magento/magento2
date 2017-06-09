@@ -39,6 +39,17 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
      */
     public function create($type = null)
     {
+        /**
+         * This code added for Backward Compatibility reasons only, as previous implementation of Code Generated factory
+         * accepted an array as any other code generated factory
+         */
+        if(is_array($type)) {
+            return $this->objectManager->create(
+                PaymentTokenInterface::class,
+                ['data' => $type]
+            );
+        }
+
         if ($type !== null && !in_array($type, $this->tokenTypes, true)) {
             throw new \LogicException('There is no such payment token type: ' . $type);
         }
