@@ -3,29 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Test class for \Magento\Paypal\Model\Payflowpro
- */
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\Payflow\Service\Gateway;
+use Magento\Paypal\Model\PayflowConfig;
 use Magento\Paypal\Model\Payflowpro;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class PayflowproTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PayflowproTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var Payflowpro
      */
@@ -37,91 +39,60 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Paypal\Model\Payflow\Service\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @var Gateway|MockObject
      */
     protected $gatewayMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManager;
 
     protected function setUp()
     {
-        $configFactoryMock = $this->getMock(
-            \Magento\Payment\Model\Method\ConfigInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->configMock = $this->getMock(
-            \Magento\Paypal\Model\PayflowConfig::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $client = $this->getMock(
-            \Magento\Framework\HTTP\ZendClient::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getStore']
-        );
-        $this->gatewayMock = $this->getMock(
-            \Magento\Paypal\Model\Payflow\Service\Gateway::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
+        $this->configMock = $this->getMockBuilder(PayflowConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->gatewayMock = $this->getMockBuilder(Gateway::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $configFactoryMock->expects($this->any())
-            ->method('create')
+        $configFactoryMock = $this->getMockBuilder(ConfigInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configFactoryMock->method('create')
             ->willReturn($this->configMock);
 
-        $client->expects($this->any())->method('create')->will($this->returnSelf());
-        $client->expects($this->any())->method('setUri')->will($this->returnSelf());
-        $client->expects($this->any())->method('setConfig')->will($this->returnSelf());
-        $client->expects($this->any())->method('setMethod')->will($this->returnSelf());
-        $client->expects($this->any())->method('setParameterPost')->will($this->returnSelf());
-        $client->expects($this->any())->method('setHeaders')->will($this->returnSelf());
-        $client->expects($this->any())->method('setUrlEncodeBody')->will($this->returnSelf());
-        $client->expects($this->any())->method('request')->will($this->returnSelf());
-        $client->expects($this->any())->method('getBody')->will($this->returnValue('RESULT name=value&name2=value2'));
+        $client = $this->getMockBuilder(ZendClient::class)
+            ->getMock();
 
-        $clientFactory = $this->getMock(\Magento\Framework\HTTP\ZendClientFactory::class, ['create'], [], '', false);
-        $clientFactory->expects($this->any())->method('create')->will($this->returnValue($client));
+        $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $clientFactory->method('create')->will($this->returnValue($client));
 
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
+            ->getMockForAbstractClass();
 
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->payflowpro = $this->helper->getObject(
@@ -138,17 +109,23 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed $amountPaid
-     * @param string $paymentType
+     * @covers \Magento\Paypal\Model\Payflowpro::canVoid
+     *
+     * @param string $message
+     * @param int|null $amountPaid
      * @param bool $expected
      * @dataProvider canVoidDataProvider
      */
-    public function testCanVoid($amountPaid, $paymentType, $expected)
+    public function testCanVoid($message, $amountPaid, $expected)
     {
-        $payment = $this->helper->getObject($paymentType);
-        $payment->setAmountPaid($amountPaid);
+        /** @var Payment|MockObject $payment */
+        $payment = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $payment->method('getAmountPaid')->willReturn($amountPaid);
         $this->payflowpro->setInfoInstance($payment);
-        $this->assertEquals($expected, $this->payflowpro->canVoid());
+
+        $this->assertEquals($expected, $this->payflowpro->canVoid(), $message);
     }
 
     /**
@@ -157,8 +134,9 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     public function canVoidDataProvider()
     {
         return [
-            [0, \Magento\Sales\Model\Order\Payment::class, true],
-            [null, \Magento\Sales\Model\Order\Payment::class, true]
+            ["Can void transaction if order's paid amount not set", null, true],
+            ["Can void transaction if order's paid amount equals zero", 0, true],
+            ["Can't void transaction if order's paid amount greater than zero", 10, false],
         ];
     }
 
@@ -342,7 +320,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     public function testRefund()
     {
-        /** @var \Magento\Sales\Model\Order\Payment $paymentMock */
+        /** @var Payment $paymentMock */
         $paymentMock = $this->getPaymentMock();
 
         $response = $this->execGatewayRequest();
@@ -403,7 +381,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ->method('postRequest')
             ->with(
                 $this->isInstanceOf(\Magento\Framework\DataObject::class),
-                $this->isInstanceOf(\Magento\Paypal\Model\PayflowConfig::class)
+                $this->isInstanceOf(PayflowConfig::class)
             )
             ->willReturn($response);
         return $response;
@@ -411,7 +389,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Create mock object for payment model
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getPaymentMock()
     {
@@ -446,7 +424,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Create mock object for order model
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getOrderMock()
     {
@@ -529,5 +507,98 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         $this->payflowpro->assignData($dataObject);
+    }
+
+    /**
+     * Asserts that PayPal gateway response mapping correctly.
+     *
+     * @param array $postData
+     * @param DataObject $expectedResponse
+     * @dataProvider dataProviderMapGatewayResponse
+     */
+    public function testMapGatewayResponse($postData, $expectedResponse)
+    {
+        self::assertEquals(
+            $this->payflowpro->mapGatewayResponse($postData, new DataObject()),
+            $expectedResponse
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderMapGatewayResponse()
+    {
+        return [
+            [
+                [
+                    'BILLTONAME' => 'John Doe',
+                    'BILLTOFIRSTNAME' => 'John',
+                    'BILLTOLASTNAME' => 'Doe',
+                    'BILLTOEMAIL' => 'user@magento.com',
+                    'BILLTOSTREET' => '6161 West Centinela Avenue',
+                    'BILLTOCITY' => 'Culver City',
+                    'BILLTOSTATE' => 'CA',
+                    'BILLTOZIP' => '90230',
+                    'BILLTOCOUNTRY' => 'US',
+                    'SHIPTOSTREET' => '6161 West Centinela Avenue',
+                    'SHIPTOCITY' => 'Culver City',
+                    'SHIPTOSTATE' => 'CA',
+                    'SHIPTOZIP' => '90230',
+                    'SHIPTOCOUNTRY' => 'US',
+                    'NAMETOSHIP' => 'John Doe',
+                    'ADDRESSTOSHIP' => '6161 West Centinela Avenue',
+                    'CITYTOSHIP' => 'Culver City',
+                    'STATETOSHIP' => 'CA',
+                    'ZIPTOSHIP' => '90230',
+                    'COUNTRYTOSHIP' => 'US',
+                    'NAME' => 'John Doe',
+                    'CVV2MATCH' => 'Y',
+                    'CARDTYPE' => '0',
+                    'AVSDATA' => 'NNN',
+                    'AVSZIP' => 'N',
+                    'AVSADDR' => 'N',
+                ],
+                new DataObject([
+                    'billtoname' => 'John Doe',
+                    'billtofirstname' => 'John',
+                    'billtolastname' => 'Doe',
+                    'billtoemail' => 'user@magento.com',
+                    'billtostreet' => '6161 West Centinela Avenue',
+                    'billtocity' => 'Culver City',
+                    'billtostate' => 'CA',
+                    'billtozip' => '90230',
+                    'billtocountry' => 'US',
+                    'shiptostreet' => '6161 West Centinela Avenue',
+                    'shiptocity' => 'Culver City',
+                    'shiptostate' => 'CA',
+                    'shiptozip' => '90230',
+                    'shiptocountry' => 'US',
+                    'nametoship' => 'John Doe',
+                    'addresstoship' => '6161 West Centinela Avenue',
+                    'citytoship' => 'Culver City',
+                    'statetoship' => 'CA',
+                    'ziptoship' => '90230',
+                    'countrytoship' => 'US',
+                    'name' => 'John Doe',
+                    'cvv2match' => 'Y',
+                    'cardtype' => '0',
+                    'avsdata' => 'NN',
+                    'avszip' => 'N',
+                    'avsaddr' => 'N',
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'address' => '6161 West Centinela Avenue',
+                    'city' => 'Culver City',
+                    'state' => 'CA',
+                    'zip' => '90230',
+                    'country' => 'US',
+                    'email' => 'user@magento.com',
+                    'cscmatch' => 'Y',
+                    'ccavsstatus' => 'NNN',
+                    'cc_type' => 'VI',
+                ]),
+            ]
+        ];
     }
 }

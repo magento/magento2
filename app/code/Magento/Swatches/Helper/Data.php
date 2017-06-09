@@ -155,11 +155,14 @@ class Data
      */
     private function populateAdditionalDataEavAttribute(Attribute $attribute)
     {
-        $additionalData = $this->serializer->unserialize($attribute->getData('additional_data'));
-        if (isset($additionalData) && is_array($additionalData)) {
-            foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-                if (isset($additionalData[$key])) {
-                    $attribute->setData($key, $additionalData[$key]);
+        $serializedAdditionalData = $attribute->getData('additional_data');
+        if ($serializedAdditionalData) {
+            $additionalData = $this->serializer->unserialize($serializedAdditionalData);
+            if (isset($additionalData) && is_array($additionalData)) {
+                foreach ($this->eavAttributeAdditionalDataKeys as $key) {
+                    if (isset($additionalData[$key])) {
+                        $attribute->setData($key, $additionalData[$key]);
+                    }
                 }
             }
         }
@@ -234,7 +237,9 @@ class Data
         $configurableAttributes = $this->getAttributesFromConfigurable($parentProduct);
         $allAttributesArray = [];
         foreach ($configurableAttributes as $attribute) {
-            $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            if (!empty($attribute['default_value'])) {
+                $allAttributesArray[$attribute['attribute_code']] = $attribute['default_value'];
+            }
         }
 
         $resultAttributesToFilter = array_merge(
@@ -417,6 +422,11 @@ class Data
     }
 
     /**
+     * @var array
+     */
+    private $swatchesCache = [];
+
+    /**
      * Get swatch options by option id's according to fallback logic
      *
      * @param array $optionIds
@@ -424,27 +434,58 @@ class Data
      */
     public function getSwatchesByOptionsId(array $optionIds)
     {
-        /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
-        $swatchCollection = $this->swatchCollectionFactory->create();
-        $swatchCollection->addFilterByOptionsIds($optionIds);
+        $swatches = $this->getCachedSwatches($optionIds);
 
-        $swatches = [];
-        $currentStoreId = $this->storeManager->getStore()->getId();
-        foreach ($swatchCollection as $item) {
-            if ($item['type'] != Swatch::SWATCH_TYPE_TEXTUAL) {
-                $swatches[$item['option_id']] = $item->getData();
-            } elseif ($item['store_id'] == $currentStoreId && $item['value'] != '') {
-                $fallbackValues[$item['option_id']][$currentStoreId] = $item->getData();
-            } elseif ($item['store_id'] == self::DEFAULT_STORE_ID) {
-                $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item->getData();
+        if (count($swatches) !== count($optionIds)) {
+            $swatchOptionIds = array_diff($optionIds, array_keys($swatches));
+            /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
+            $swatchCollection = $this->swatchCollectionFactory->create();
+            $swatchCollection->addFilterByOptionsIds($swatchOptionIds);
+
+            $swatches = [];
+            $currentStoreId = $this->storeManager->getStore()->getId();
+            foreach ($swatchCollection as $item) {
+                if ($item['type'] != Swatch::SWATCH_TYPE_TEXTUAL) {
+                    $swatches[$item['option_id']] = $item->getData();
+                } elseif ($item['store_id'] == $currentStoreId && $item['value'] != '') {
+                    $fallbackValues[$item['option_id']][$currentStoreId] = $item->getData();
+                } elseif ($item['store_id'] == self::DEFAULT_STORE_ID) {
+                    $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item->getData();
+                }
             }
+
+            if (!empty($fallbackValues)) {
+                $swatches = $this->addFallbackOptions($fallbackValues, $swatches);
+            }
+            $this->setCachedSwatches($swatchOptionIds, $swatches);
         }
 
-        if (!empty($fallbackValues)) {
-            $swatches = $this->addFallbackOptions($fallbackValues, $swatches);
-        }
+        return array_filter($this->getCachedSwatches($optionIds));
+    }
 
-        return $swatches;
+    /**
+     * Get cached swatches
+     *
+     * @param array $optionIds
+     * @return array
+     */
+    private function getCachedSwatches(array $optionIds)
+    {
+        return array_intersect_key($this->swatchesCache, array_combine($optionIds, $optionIds));
+    }
+
+    /**
+     * Cache swatch. If no swathes found for specific option id - set null for prevent double call
+     *
+     * @param array $optionIds
+     * @param array $swatches
+     * @return void
+     */
+    private function setCachedSwatches(array $optionIds, array $swatches)
+    {
+        foreach ($optionIds as $optionId) {
+            $this->swatchesCache[$optionId] = isset($swatches[$optionId]) ? $swatches[$optionId] : null;
+        }
     }
 
     /**

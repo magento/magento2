@@ -165,7 +165,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $attributeCode = 'attr_code';
         $attribute = $this->getMock(
             \Magento\Eav\Model\Entity\Attribute::class,
-            ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntityType', '__wakeup'],
+            ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntity', '__wakeup'],
             [],
             '',
             false
@@ -178,7 +178,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())->method('getIsRequired')->will($this->returnValue(true));
         $attribute->expects($this->any())->method('isValueEmpty')->will($this->returnValue($value));
         $attribute->expects($this->any())->method('getIsUnique')->will($this->returnValue(true));
-        $attribute->expects($this->any())->method('getEntityType')->will($this->returnValue($attributeEntity));
+        $attribute->expects($this->any())->method('getEntity')->will($this->returnValue($attributeEntity));
         $attributeEntity->expects($this->any())->method('checkAttributeUniqueValue')->will($this->returnValue(true));
 
         $this->attributeRepository->expects($this->once())

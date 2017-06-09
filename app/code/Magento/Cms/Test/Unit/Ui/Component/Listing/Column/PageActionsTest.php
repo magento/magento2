@@ -68,7 +68,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete %1', $title),
-                            'message' => __('Are you sure you wan\'t to delete a %1 record?', $title)
+                            'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ],
                     ]
                 ],
