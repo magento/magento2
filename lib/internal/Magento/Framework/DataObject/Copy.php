@@ -61,27 +61,239 @@ class Copy
      */
     public function copyFieldsetToTarget($fieldset, $aspect, $source, $target, $root = 'global')
     {
-        if (!$this->_isFieldsetInputValid($source, $target)) {
+        $sourceIsArray = is_array($source);
+        $sourceIsDataObject = $source instanceof \Magento\Framework\DataObject;
+        $sourceIsExtensible = $source instanceof \Magento\Framework\Api\ExtensibleDataInterface;
+        $sourceIsAbstract = $source instanceof \Magento\Framework\Api\AbstractSimpleObject;
+        $targetIsArray = is_array($target);
+        $targetIsDataObject = $target instanceof \Magento\Framework\DataObject;
+        $targetIsExtensible = $target instanceof \Magento\Framework\Api\ExtensibleDataInterface;
+        $targetIsAbstract = $target instanceof \Magento\Framework\Api\AbstractSimpleObject;
+        if (!(($sourceIsArray || $sourceIsDataObject ||
+            $sourceIsExtensible ||
+            $sourceIsAbstract) && (
+            $targetIsArray || $targetIsDataObject ||
+            $targetIsExtensible ||
+            $targetIsAbstract))) {
             return null;
         }
         $fields = $this->fieldsetConfig->getFieldset($fieldset, $root);
         if ($fields === null) {
             return $target;
         }
-        $targetIsArray = is_array($target);
+       
 
-        foreach ($fields as $code => $node) {
-            if (empty($node[$aspect])) {
-                continue;
+        if ($sourceIsArray) {
+            if ($targetIsArray) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = isset($source[$code]) ? $source[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target[$targetCode] = $value;
+                }
+            } else if ($targetIsDataObject) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = isset($source[$code]) ? $source[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target->setDataUsingMethod($targetCode, $value);
+                }
+            } else if ($targetIsExtensible) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = isset($source[$code]) ? $source[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $this->setAttributeValueFromExtensibleDataObject($target, $targetCode, $value);
+                }
+            } else if ($targetIsAbstract) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = isset($source[$code]) ? $source[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target->setData($targetCode, $value);
+                }
+            } else {
+                throw new \InvalidArgumentException(
+                'Target should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+                );
             }
+        } else if ($sourceIsDataObject) {
+            if ($targetIsArray) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $source->getDataUsingMethod($code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
 
-            $value = $this->_getFieldsetFieldValue($source, $code);
+                    $target[$targetCode] = $value;
+                }
+            } else if ($targetIsDataObject) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $source->getDataUsingMethod($code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
 
-            $targetCode = (string)$node[$aspect];
-            $targetCode = $targetCode == '*' ? $code : $targetCode;
+                    $target->setDataUsingMethod($targetCode, $value);
+                }
+            } else if ($targetIsExtensible) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $source->getDataUsingMethod($code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
 
-            $target = $this->_setFieldsetFieldValue($target, $targetCode, $value);
+                    $this->setAttributeValueFromExtensibleDataObject($target, $targetCode, $value);
+                }
+            } else if ($targetIsAbstract) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $source->getDataUsingMethod($code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target->setData($targetCode, $value);
+                }
+            } else {
+                throw new \InvalidArgumentException(
+                'Target should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+                );
+            }
+        } else if ($sourceIsExtensible) {
+            if ($targetIsArray) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $this->getAttributeValueFromExtensibleDataObject($source, $code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target[$targetCode] = $value;
+                }
+            } else if ($targetIsDataObject) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $this->getAttributeValueFromExtensibleDataObject($source, $code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target->setDataUsingMethod($targetCode, $value);
+                }
+            } else if ($targetIsExtensible) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $this->getAttributeValueFromExtensibleDataObject($source, $code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $this->setAttributeValueFromExtensibleDataObject($target, $targetCode, $value);
+                }
+            } else if ($targetIsAbstract) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $value = $this->getAttributeValueFromExtensibleDataObject($source, $code);
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target->setData($targetCode, $value);
+                }
+            } else {
+                throw new \InvalidArgumentException(
+                'Target should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+                );
+            }
+        } else if ($sourceIsAbstract) {
+            if ($targetIsArray) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $sourceArray = $source->__toArray();
+                    $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target[$targetCode] = $value;
+                }
+            } else if ($targetIsDataObject) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $sourceArray = $source->__toArray();
+                    $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target->setDataUsingMethod($targetCode, $value);
+                }
+            } else if ($targetIsExtensible) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $sourceArray = $source->__toArray();
+                    $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $this->setAttributeValueFromExtensibleDataObject($target, $targetCode, $value);
+                }
+            } else if ($targetIsAbstract) {
+                foreach ($fields as $code => $node) {
+                    if (empty($node[$aspect])) {
+                        continue;
+                    }
+                    $sourceArray = $source->__toArray();
+                    $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+                    $targetCode = (string) $node[$aspect];
+                    $targetCode = $targetCode == '*' ? $code : $targetCode;
+
+                    $target->setData($targetCode, $value);
+                }
+            } else {
+                throw new \InvalidArgumentException(
+                'Target should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+                );
+            }
+        } else {
+
+            throw new \InvalidArgumentException(
+            'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+            );
         }
+
 
         $target = $this->dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray);
 
@@ -129,7 +341,11 @@ class Copy
      */
     public function getDataFromFieldset($fieldset, $aspect, $source, $root = 'global')
     {
-        if (!(is_array($source) || $source instanceof \Magento\Framework\DataObject)) {
+        $sourceIsArray = is_array($source);
+        $sourceIsDataObject = $source instanceof \Magento\Framework\DataObject;
+        $sourceIsExtensible = $source instanceof \Magento\Framework\Api\ExtensibleDataInterface;
+        $sourceIsAbstract = $source instanceof \Magento\Framework\Api\AbstractSimpleObject;
+        if (!($sourceIsArray || $sourceIsDataObject)) {
             return null;
         }
         $fields = $this->fieldsetConfig->getFieldset($fieldset, $root);
@@ -143,7 +359,11 @@ class Copy
                 continue;
             }
 
-            $value = $this->_getFieldsetFieldValue($source, $code);
+            if ($sourceIsArray) {
+                $value = isset($source[$code]) ? $source[$code] : null;
+            } elseif ($sourceIsDataObject) {
+                $value = $source->getDataUsingMethod($code);
+            }
 
             $targetCode = (string)$node[$aspect];
             $targetCode = $targetCode == '*' ? $code : $targetCode;
@@ -151,83 +371,7 @@ class Copy
         }
 
         return $data;
-    }
-
-    /**
-     * Check if source and target are valid input for converting using fieldset
-     *
-     * @param array|\Magento\Framework\DataObject $source
-     * @param array|\Magento\Framework\DataObject $target
-     * @return bool
-     */
-    protected function _isFieldsetInputValid($source, $target)
-    {
-        return (is_array($source) || $source instanceof \Magento\Framework\DataObject ||
-            $source instanceof \Magento\Framework\Api\ExtensibleDataInterface ||
-            $source instanceof \Magento\Framework\Api\AbstractSimpleObject) && (
-            is_array($target) || $target instanceof \Magento\Framework\DataObject ||
-            $target instanceof \Magento\Framework\Api\ExtensibleDataInterface ||
-            $target instanceof \Magento\Framework\Api\AbstractSimpleObject);
-    }
-
-    /**
-     * Get value of source by code
-     *
-     * @param mixed $source
-     * @param string $code
-     *
-     * @return mixed
-     * @throws \InvalidArgumentException
-     */
-    protected function _getFieldsetFieldValue($source, $code)
-    {
-        if (is_array($source)) {
-            $value = isset($source[$code]) ? $source[$code] : null;
-        } elseif ($source instanceof \Magento\Framework\DataObject) {
-            $value = $source->getDataUsingMethod($code);
-        } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-            $value = $this->getAttributeValueFromExtensibleDataObject($source, $code);
-        } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
-            $sourceArray = $source->__toArray();
-            $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
-        } else {
-            throw new \InvalidArgumentException(
-                'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
-            );
-        }
-        return $value;
-    }
-
-    /**
-     * Set value of target by code
-     *
-     * @param mixed $target
-     * @param string $targetCode
-     * @param mixed $value
-     *
-     * @return mixed
-     * @throws \InvalidArgumentException
-     */
-    protected function _setFieldsetFieldValue($target, $targetCode, $value)
-    {
-        $targetIsArray = is_array($target);
-
-        if ($targetIsArray) {
-            $target[$targetCode] = $value;
-        } elseif ($target instanceof \Magento\Framework\DataObject) {
-            $target->setDataUsingMethod($targetCode, $value);
-        } elseif ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-            $this->setAttributeValueFromExtensibleDataObject($target, $targetCode, $value);
-        } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
-            $target->setData($targetCode, $value);
-        } else {
-            throw new \InvalidArgumentException(
-                'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
-            );
-        }
-
-        return $target;
-    }
+    }   
 
     /**
      * Access the extension get method
