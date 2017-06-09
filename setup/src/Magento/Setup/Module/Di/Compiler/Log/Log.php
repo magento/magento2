@@ -80,11 +80,15 @@ class Log
      * Write entries
      *
      * @return void
+     * @throws \Magento\Framework\Validator\Exception
      */
     public function report()
     {
         $this->_successWriter->write($this->_successEntries);
         $this->_errorWriter->write($this->_errorEntries);
+        if (count($this->_errorEntries) > 0) {
+            throw new \Magento\Framework\Validator\Exception(__('Error during compilation'));
+        }
     }
 
     /**
