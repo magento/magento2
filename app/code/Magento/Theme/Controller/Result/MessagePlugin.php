@@ -105,7 +105,6 @@ class MessagePlugin
      *   ],
      * ]
      *
-     *
      * @param array $messages List of Magento messages that must be set as 'mage-messages' cookie.
      * @return void
      */
