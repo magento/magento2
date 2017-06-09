@@ -97,6 +97,10 @@ define([
             optionsVideoData: '',
             vimeoJSFrameworkLoaded: false
         },
+
+        /**
+         * @private
+         */
         onVimeoJSFramework: function () {},
         PV: 'product-video', // [CONST]
         VU: 'video-unplayed',
@@ -654,7 +658,8 @@ define([
          * @param {Event} event
          * @private
          */
-        _clickHandler: function (event) {if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
+        _clickHandler: function (event) {
+            if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
                 $(event.target).removeClass(this.VU);
 
                 if (this.vimeoJSFrameworkLoaded) {
