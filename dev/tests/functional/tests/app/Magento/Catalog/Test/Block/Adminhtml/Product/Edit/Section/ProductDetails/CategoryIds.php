@@ -47,13 +47,6 @@ class CategoryIds extends MultisuggestElement
     protected $advancedInventoryButton = '[data-index="advanced_inventory_button"]';
 
     /**
-     * Locator for MultiSelect element.
-     *
-     * @var string
-     */
-    private $multiSelectElement = '.admin__action-multiselect-menu-inner-item';
-
-    /**
      * @constructor
      * @param BrowserInterface $browser
      * @param DriverInterface $driver
