@@ -7,6 +7,7 @@
  * @api
  */
 define([
+    'jquery',
     'Magento_Ui/js/lib/view/utils/async',
     'jquery/ui',
     'mage/translate',
@@ -838,4 +839,6 @@ define([
     };
 
     productConfigure = new ProductConfigure();
+    jQuery(document).trigger('productConfigure:inited');
+    jQuery(document).data('productConfigureInited', true);
 });
