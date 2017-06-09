@@ -14,9 +14,9 @@
     <settings>
         <buttons>
             <button name="add">
-                <label translate="true">Add New Source</label>
+                <url path="*/*/new"/>
                 <class>primary</class>
-                <url path="*/*/edit"/>
+                <label translate="true">Add New Source</label>
             </button>
         </buttons>
         <spinner>inventory_source_listing_columns</spinner>
@@ -24,26 +24,20 @@
             <dep>inventory_source_listing.inventory_source_listing_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="inventory_source_listing_data_source">
-        <dataProvider>
-            <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                </item>
-            </argument>
+    <dataSource name="inventory_source_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">source_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Inventory\Ui\DataProvider\SourceDataProvider" name="inventory_source_listing_data_source">
             <settings>
-                <class>Magento\Inventory\Ui\Component\Listing\DataProviders\Magento\Inventory\Source</class>
-                <name>inventory_source_listing_data_source</name>
-                <primaryFieldName>source_id</primaryFieldName>
                 <requestFieldName>id</requestFieldName>
-                <update_url path="mui/index/render"/>
-                <storage_config>
-                    <indexField>source_id</indexField>
-                </storage_config>
+                <primaryFieldName>source_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
-
     <listingToolbar name="listing_top">
         <settings>
             <sticky>true</sticky>
@@ -51,7 +45,18 @@
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
         <filterSearch name="name"/>
-        <filters name="listing_filters"/>
+        <filters name="listing_filters">
+            <settings>
+                <templates>
+                    <filters>
+                        <select>
+                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
+                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
+                        </select>
+                    </filters>
+                </templates>
+            </settings>
+        </filters>
         <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
             <action name="delete">
                 <settings>
@@ -84,26 +89,20 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">Name</label>
-            </settings>
-        </column>
-        <column name="is_active" component="Magento_Ui/js/grid/columns/select" sortOrder="35">
-            <settings>
-                <label translate="true">Is Active</label>
-                <item name="filter" xsi:type="string">select</item>
-                <item name="dataType" xsi:type="string">select</item>
-                <options>
-                    <option name="active" value="1">
-                        <label translate="true">Active</label>
-                    </option>
-                    <option name="inactive" value="0">
-                        <label translate="true">Inactive</label>
-                    </option>
-                </options>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
             </settings>
         </column>
         <column name="contact_name" sortOrder="40">
             <settings>
                 <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
                 <label translate="true">Contact Name</label>
                 <visible>false</visible>
             </settings>
@@ -111,23 +110,57 @@
         <column name="email" sortOrder="50">
             <settings>
                 <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="validate-email" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
                 <label translate="true">Email</label>
                 <visible>false</visible>
             </settings>
         </column>
-        <column name="region" sortOrder="50">
+        <column name="enabled" component="Magento_Ui/js/grid/columns/select" sortOrder="50">
+            <settings>
+                <label translate="true">Is Enabled</label>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <options>
+                    <option name="0" xsi:type="array">
+                        <item name="value" xsi:type="number">1</item>
+                        <item name="label" xsi:type="string" translate="true">Enabled</item>
+                    </option>
+                    <option name="1" xsi:type="array">
+                        <item name="value" xsi:type="number">0</item>
+                        <item name="label" xsi:type="string" translate="true">Disabled</item>
+                    </option>
+                </options>
+            </settings>
+        </column>
+        <column name="latitude" sortOrder="60">
             <settings>
                 <filter>text</filter>
-                <label translate="true">Region</label>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="validate-number" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+                <label translate="true">Latitude</label>
                 <visible>false</visible>
             </settings>
         </column>
-        <column name="region_id" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
+        <column name="longitude" sortOrder="70">
             <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="validate-number" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+                <label translate="true">Longitude</label>
                 <visible>false</visible>
-                <filter>select</filter>
-                <dataType>select</dataType>
-                <label translate="true">Region Id</label>
             </settings>
         </column>
         <column name="country_id" component="Magento_Ui/js/grid/columns/select" sortOrder="80">
@@ -138,10 +171,100 @@
                 <label translate="true">Country</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Inventory\Ui\Component\Listing\Columns\SourceActions" sortOrder="150">
+        <column name="region_id" component="Magento_Ui/js/grid/columns/select" sortOrder="90">
             <settings>
-                <indexField>source_id</indexField>
+                <visible>false</visible>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">State/Province</label>
             </settings>
+        </column>
+        <column name="region" sortOrder="100">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">State/Province</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="city" sortOrder="110">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">City</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="street" sortOrder="120">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Street</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="postcode" sortOrder="130">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+                <label translate="true">Postcode</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="phone" sortOrder="140">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="validate-phoneStrict" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+                <label translate="true">Phone</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="fax" sortOrder="150">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="validate-fax" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+                <label translate="true">Fax</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="priority" sortOrder="160">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="validate-integer" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
+                <label translate="true">Priority</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction">
+            <!-- TODO: adapt to new syntaxis -->
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">source_id</item>
+                    <item name="editUrlPath" xsi:type="string">inventory/source/edit</item>
+                </item>
+            </argument>
         </actionsColumn>
     </columns>
 </listing>

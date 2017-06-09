@@ -3,17 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
 use \Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class Source,
- * provides implementation of the SourceInterface which adds the possibility
- * for a Merchant to map existing physical sources to some particular sales channels
- * this model holds the information like name and description of this physical sources.
+ * Class Source
  *
  * @codeCoverageIgnore
  */

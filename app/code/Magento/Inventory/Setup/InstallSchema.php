@@ -108,7 +108,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             SourceInterface::DESCRIPTION,
             Table::TYPE_TEXT,
-            255,
+            1000,
             [
                 InstallSchema::OPTION_NULLABLE => true,
             ],
