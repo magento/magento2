@@ -19,6 +19,7 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Entity;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -111,6 +112,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $store = $storeRepository->get('fixture_second_store');
 
         self::assertNotEquals($store->getId(), $bundle->getStoreId());
+
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore($store->getId());
 
         $bundle->setStoreId($store->getId())
             ->setCopyFromView(true);
