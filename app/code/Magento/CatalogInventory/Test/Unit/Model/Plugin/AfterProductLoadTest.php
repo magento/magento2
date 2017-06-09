@@ -27,7 +27,7 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
     protected $productExtensionFactoryMock;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductExtension|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productExtensionMock;
 
@@ -53,7 +53,7 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->with($productId)
             ->willReturn($stockItemMock);
 
-        $this->productExtensionMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtension::class)
+        $this->productExtensionMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->setMethods(['setStockItem'])
             ->getMock();
         $this->productExtensionMock->expects($this->once())
@@ -75,23 +75,6 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterLoad()
     {
-        // test when extension attributes are not (yet) present in the product
-        $this->productMock->expects($this->once())
-            ->method('getExtensionAttributes')
-            ->willReturn(null);
-        $this->productExtensionFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->productExtensionMock);
-
-        $this->assertEquals(
-            $this->productMock,
-            $this->plugin->afterLoad($this->productMock)
-        );
-    }
-
-    public function testAfterLoadWithExistingExtensionAttributes()
-    {
-        // test when extension attributes already exist
         $this->productMock->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->productExtensionMock);
