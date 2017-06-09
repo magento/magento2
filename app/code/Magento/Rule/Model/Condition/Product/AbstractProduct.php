@@ -518,7 +518,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attrCode = $this->getAttribute();
 
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($model->getAvailableInCategories($model));
+            return $this->validateAttribute($model->getAvailableInCategories());
         } elseif (!isset($this->_entityAttributeValues[$model->getId()])) {
             if (!$model->getResource()) {
                 return false;
@@ -633,7 +633,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     }
 
     /**
-     * Retrieve category ids where productId is available
+     * Retrieve category ids where product is available
      *
      * @param int $productId
      * @return array
