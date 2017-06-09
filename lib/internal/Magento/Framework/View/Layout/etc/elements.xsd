@@ -312,6 +312,7 @@
             <xs:element ref="uiComponent" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="template" use="optional"/>
         <xs:attribute type="xs:boolean" name="display" default="true" use="optional"/>
         <xs:attribute type="xs:boolean" name="remove" use="optional"/>
     </xs:complexType>

@@ -200,7 +200,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $expectedArray = $this->getExpectedArray($productId, $amount, $priceQty, $percentage);
-        $expectedJson = \Zend_Json::encode($expectedArray);
+        $expectedJson = json_encode($expectedArray);
 
         $this->jsonEncoder->expects($this->once())
             ->method('encode')
