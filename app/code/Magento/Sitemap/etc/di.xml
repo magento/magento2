@@ -18,7 +18,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Robots\Model\Data">
-        <plugin name="updateRobotsDataWithSitemapLink" type="Magento\Sitemap\Model\Plugin\Robots"/>
-    </type>
 </config>

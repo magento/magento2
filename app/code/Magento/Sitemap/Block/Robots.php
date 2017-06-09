@@ -3,17 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sitemap\Model\Plugin;
+namespace Magento\Sitemap\Block;
 
+use Magento\Framework\View\Element\Context;
 use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Store\Model\StoreResolver;
 
 /**
- * Plug-in for getData() method of \Magento\Robots\Model\Data class.
- * Adds link for current sitemap file to robots.txt data.
+ * Prepares sitemap links to add to the robots.txt file
  */
-class Robots
+class Robots extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * @var StoreResolver
@@ -31,34 +31,39 @@ class Robots
     private $sitemapHelper;
 
     /**
+     * @param Context $context
      * @param StoreResolver $storeResolver
      * @param CollectionFactory $sitemapCollectionFactory
      * @param SitemapHelper $sitemapHelper
+     * @param array $data
      */
     public function __construct(
+        Context $context,
         StoreResolver $storeResolver,
         CollectionFactory $sitemapCollectionFactory,
-        SitemapHelper $sitemapHelper
+        SitemapHelper $sitemapHelper,
+        array $data = []
     ) {
         $this->storeResolver = $storeResolver;
         $this->sitemapCollectionFactory = $sitemapCollectionFactory;
         $this->sitemapHelper = $sitemapHelper;
+
+        parent::__construct($context, $data);
     }
 
     /**
-     * Add link for sitemap file into robots.txt data
+     * Prepare sitemap links to add to the robots.txt file
      *
-     * Detects if sitemap file information is required to be added to robots.txt data,
-     * then gets the name of sitemap file that linked with current store,
-     * and adds record for this sitemap file into result data.
+     * Detects if sitemap file information is required to be added to robots.txt,
+     * then gets the name of sitemap files that linked with current store,
+     * and adds record for this sitemap files into result data.
      *
-     * @param \Magento\Robots\Model\Data $subject
-     * @param string $result
      * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetData(\Magento\Robots\Model\Data $subject, $result)
+    protected function _toHtml()
     {
+        $result = '';
+
         $storeId = $this->storeResolver->getCurrentStoreId();
 
         if ((bool)$this->sitemapHelper->getEnableSubmissionRobots($storeId)) {
@@ -72,32 +77,12 @@ class Robots
                 $sitemapPath = $sitemap->getSitemapPath();
 
                 $robotsSitemapLine = 'Sitemap: ' . $sitemap->getSitemapUrl($sitemapPath, $sitemapFilename);
-
                 if (strpos($result, $robotsSitemapLine) === false) {
-                    if (!empty($result)) {
-                        $result .= $this->getEndOfLine($result);
-                    }
-                    $result .= $robotsSitemapLine;
+                    $result .= PHP_EOL . $robotsSitemapLine;
                 }
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Detects and returns 'end of line' symbol that currently used in text argument
-     *
-     * @param string $text
-     * @return string
-     */
-    private function getEndOfLine($text)
-    {
-        foreach (["\r\n", "\r", "\n"] as $eol) {
-            if (strpos($text, $eol) !== false) {
-                return $eol;
-            }
-        }
-        return PHP_EOL;
     }
 }

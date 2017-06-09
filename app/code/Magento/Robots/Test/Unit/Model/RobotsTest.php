@@ -6,10 +6,10 @@
 namespace Magento\Robots\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Robots\Model\Data;
+use Magento\Robots\Model\Robots;
 use Magento\Store\Model\ScopeInterface;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class RobotsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -17,7 +17,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     private $scopeConfigMock;
 
     /**
-     * @var Data
+     * @var Robots
      */
     private $model;
 
@@ -26,7 +26,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new Data(
+        $this->model = new Robots(
             $this->scopeConfigMock
         );
     }

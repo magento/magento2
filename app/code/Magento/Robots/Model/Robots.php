@@ -11,7 +11,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Returns data for robots.txt file
  */
-class Data
+class Robots
 {
     /**
      * @var ScopeConfigInterface

@@ -16,12 +16,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $resultRawFactoryMock;
-
-    /**
-     * @var \Magento\Robots\Model\Data|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $robotsData;
+    private $resultPageFactory;
 
     /**
      * @var \Magento\Robots\Controller\Index\Index
@@ -34,19 +29,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRawFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RawFactory::class)
+        $this->resultPageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->robotsData = $this->getMockBuilder(\Magento\Robots\Model\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->controller = new \Magento\Robots\Controller\Index\Index(
             $this->contextMock,
-            $this->resultRawFactoryMock,
-            $this->robotsData
+            $this->resultPageFactory
         );
     }
 
@@ -55,25 +45,20 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $content = 'test';
-
-        $this->robotsData->expects($this->once())
-            ->method('getData')
-            ->willReturn($content);
-
-        $resultRawMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
+        $resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRawMock->expects($this->once())
-            ->method('setContents')
-            ->with($content);
+        $resultPageMock->expects($this->once())
+            ->method('addHandle')
+            ->with('robots_index_index');
 
-        $this->resultRawFactoryMock->expects($this->any())
+        $this->resultPageFactory->expects($this->any())
             ->method('create')
-            ->willReturn($resultRawMock);
+            ->with(true)
+            ->willReturn($resultPageMock);
 
         $this->assertInstanceOf(
-            \Magento\Framework\Controller\Result\Raw::class,
+            \Magento\Framework\View\Result\Page::class,
             $this->controller->execute()
         );
     }

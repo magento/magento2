@@ -5,37 +5,30 @@
  */
 namespace Magento\Robots\Controller\Index;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Robots\Model\Data;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Processes request to robots.txt file and returns robots.txt data as result
  */
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends Action
 {
     /**
-     * @var RawFactory
+     * @var PageFactory
      */
-    private $resultRawFactory;
-
-    /**
-     * @var Data
-     */
-    private $robotsData;
+    private $resultPageFactory;
 
     /**
      * @param Context $context
-     * @param RawFactory $resultRawFactory
-     * @param Data $robotsData
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
-        RawFactory $resultRawFactory,
-        Data $robotsData
+        PageFactory $resultPageFactory
     ) {
-        $this->resultRawFactory = $resultRawFactory;
-        $this->robotsData = $robotsData;
+        $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context);
     }
@@ -43,13 +36,13 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * Generates robots.txt data and returns it as result
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return Page
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($this->robotsData->getData());
-        return $resultRaw;
+        /** @var Page $resultPage */
+        $resultPage = $this->resultPageFactory->create(true);
+        $resultPage->addHandle('robots_index_index');
+        return $resultPage;
     }
 }

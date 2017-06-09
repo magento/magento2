@@ -98,25 +98,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $actionClassName = \Magento\Robots\Controller\Index\Index::class;
 
         $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->setMethods([
-                'getPathInfo',
-                'setModuleName',
-                'setControllerName',
-                'setActionName',
-            ])
+            ->setMethods(['getPathInfo'])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())
             ->method('getPathInfo')
             ->willReturn($identifier);
-        $requestMock->expects($this->once())
-            ->method('setModuleName')
-            ->willReturn('robots');
-        $requestMock->expects($this->once())
-            ->method('setControllerName')
-            ->willReturn('index');
-        $requestMock->expects($this->once())
-            ->method('setActionName')
-            ->willReturn('index');
 
         $this->routeConfigMock->expects($this->once())
             ->method('getModulesByFrontName')
