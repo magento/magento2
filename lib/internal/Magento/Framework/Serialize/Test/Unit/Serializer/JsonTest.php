@@ -75,4 +75,33 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             ['{}', []],
         ];
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to serialize value.
+     */
+    public function testSerializeException()
+    {
+        $this->json->serialize(STDOUT);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to unserialize value.
+     * @dataProvider unserializeExceptionDataProvider
+     */
+    public function testUnserializeException($value)
+    {
+        $this->json->unserialize($value);
+    }
+
+    public function unserializeExceptionDataProvider()
+    {
+        return [
+            [''],
+            [false],
+            [null],
+            ['{']
+        ];
+    }
 }
