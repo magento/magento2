@@ -53,14 +53,21 @@
             <label translate="true">General</label>
             <collapsible>true</collapsible>
             <opened>true</opened>
+            <dataScope>general</dataScope>
         </settings>
         <field name="name" formElement="input" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Name</label>
+                <dataScope>name</dataScope>
             </settings>
         </field>
         <field name="enabled" formElement="checkbox" sortOrder="30">
@@ -73,6 +80,7 @@
             <settings>
                 <dataType>boolean</dataType>
                 <label translate="true">Is Enabled</label>
+                <dataScope>enabled</dataScope>
             </settings>
             <formElements>
                 <checkbox>
@@ -87,39 +95,63 @@
             </formElements>
         </field>
         <field name="description" formElement="textarea" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="max_text_length" xsi:type="number">1000</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Description</label>
+                <dataScope>description</dataScope>
             </settings>
         </field>
         <field name="latitude" formElement="input" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="validate-number" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>number</dataType>
                 <label translate="true">Latitude</label>
+                <dataScope>latitude</dataScope>
             </settings>
         </field>
         <field name="longitude" formElement="input" sortOrder="60">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="validate-number" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>number</dataType>
                 <label translate="true">Longitude</label>
+                <dataScope>longitude</dataScope>
             </settings>
         </field>
         <field name="priority" formElement="input" sortOrder="70">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="validate-integer" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>number</dataType>
                 <label translate="true">Priority</label>
+                <dataScope>priority</dataScope>
             </settings>
         </field>
     </fieldset>
@@ -128,38 +160,63 @@
             <label translate="true">Contact Info</label>
             <collapsible>true</collapsible>
             <opened>false</opened>
+            <dataScope>general</dataScope>
         </settings>
         <field name="contact_name" formElement="input" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Contact Name</label>
+                <dataScope>contact_name</dataScope>
             </settings>
         </field>
         <field name="email" formElement="input" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="validate-email" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Email</label>
+                <dataScope>email</dataScope>
             </settings>
         </field>
         <field name="phone" formElement="input" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="validate-phoneStrict" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Phone</label>
+                <dataScope>phone</dataScope>
             </settings>
         </field>
         <field name="fax" formElement="input" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <validation>
                     <rule name="validate-fax" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Fax</label>
+                <dataScope>fax</dataScope>
             </settings>
         </field>
     </fieldset>
@@ -168,11 +225,18 @@
             <label translate="true">Address Data</label>
             <collapsible>true</collapsible>
             <opened>false</opened>
+            <dataScope>general</dataScope>
         </settings>
         <field name="country_id" formElement="select" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Country</label>
+                <dataScope>country_id</dataScope>
             </settings>
             <formElements>
                 <select>
@@ -183,9 +247,15 @@
             </formElements>
         </field>
         <field name="region_id" formElement="select" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">State/Province</label>
+                <dataScope>region_id</dataScope>
             </settings>
             <formElements>
                 <select>
@@ -196,27 +266,52 @@
             </formElements>
         </field>
         <field name="region" formElement="input" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">State/Province</label>
+                <dataScope>region</dataScope>
             </settings>
         </field>
         <field name="city" formElement="input" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">City</label>
+                <dataScope>city</dataScope>
             </settings>
         </field>
         <field name="street" formElement="input" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                </item>
+            </argument>
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Street</label>
+                <dataScope>street</dataScope>
             </settings>
         </field>
         <field name="postcode" formElement="input" sortOrder="60">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">source</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
+                </item>
+            </argument>
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Postcode</label>
+                <dataScope>postcode</dataScope>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
