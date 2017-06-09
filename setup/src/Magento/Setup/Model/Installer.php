@@ -1011,7 +1011,7 @@ class Installer
     {
         $this->assertDbConfigExists();
         $setup = $this->setupFactory->create($this->context->getResources());
-        $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
+        $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
         $adminAccount->save();
     }
 

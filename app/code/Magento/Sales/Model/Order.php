@@ -618,7 +618,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
-        if (abs($this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded()) < .0001) {
+        $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
+        if (abs($totalRefunded) < .0001) {
+            return false;
+        }
+        // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
+        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
             return false;
         }
 
