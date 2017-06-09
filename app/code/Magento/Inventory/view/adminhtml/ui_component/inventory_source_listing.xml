@@ -270,10 +270,12 @@
             <!-- TODO: adapt to new syntaxis -->
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">source_id</item>
                     <item name="editUrlPath" xsi:type="string">inventory/source/edit</item>
                 </item>
             </argument>
+            <settings>
+                <indexField>source_id</indexField>
+            </settings>
         </actionsColumn>
     </columns>
 </listing>

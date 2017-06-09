@@ -21,6 +21,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class SourceRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * TODO: resolve CouplingBetweenObjects
  */
 class SourceRepository implements SourceRepositoryInterface
 {
