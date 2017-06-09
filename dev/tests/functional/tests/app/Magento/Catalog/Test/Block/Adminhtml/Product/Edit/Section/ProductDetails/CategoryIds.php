@@ -93,14 +93,15 @@ class CategoryIds extends MultisuggestElement
                 if ($value == '') {
                     continue;
                 }
+
                 $this->keys([$value]);
-
-                // wait when some element of multiSelect will be visible.
-                $this->waitUntil(function () {
-                    return $this->find($this->multiSelectElement)->isVisible() ? true : null;
-                });
-
                 $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+                $searchedCountElements = $this->find($this->searchedCount);
+                $this->waitUntil(
+                    function () use ($searchedCountElements) {
+                        return $searchedCountElements->isVisible() ? true : null;
+                    }
+                );
                 $searchedItem->click();
 
                 $closeButton = $this->find($this->closeButton);
