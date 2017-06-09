@@ -100,7 +100,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->selectMock
             ->expects($this->any())
             ->method('from')
-            ->with($this->anything(),$this->anything())
+            ->with($this->anything(), $this->anything())
             ->willReturnSelf();
         $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
