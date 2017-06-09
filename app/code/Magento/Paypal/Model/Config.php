@@ -11,7 +11,7 @@ namespace Magento\Paypal\Model;
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
  * Works with PayPal-specific system configuration
- * @SuppressWarnings(PHPMD.ExcesivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Config extends AbstractConfig
@@ -915,6 +915,19 @@ class Config extends AbstractConfig
             'https://www.%spaypal.com/cgi-bin/webscr%s',
             $this->getValue('sandboxFlag') ? 'sandbox.' : '',
             $params ? '?' . http_build_query($params) : ''
+        );
+    }
+
+    /**
+     * PayPal web URL for IPN
+     *
+     * @return string
+     */
+    public function getPayPalIpnUrl()
+    {
+        return sprintf(
+            'https://ipnpb.%spaypal.com/cgi-bin/webscr',
+            $this->getValue('sandboxFlag') ? 'sandbox.' : ''
         );
     }
 
