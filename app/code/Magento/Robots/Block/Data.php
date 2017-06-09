@@ -11,6 +11,8 @@ use Magento\Robots\Model\Robots;
 
 /**
  * Prepares base content for robots.txt file
+ *
+ * @api
  */
 class Data extends AbstractBlock
 {

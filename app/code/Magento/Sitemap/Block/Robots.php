@@ -12,6 +12,8 @@ use Magento\Store\Model\StoreResolver;
 
 /**
  * Prepares sitemap links to add to the robots.txt file
+ *
+ * @api
  */
 class Robots extends \Magento\Framework\View\Element\AbstractBlock
 {
