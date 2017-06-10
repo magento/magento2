@@ -84,7 +84,7 @@ class Curl extends AbstractCurl implements StoreGroupInterface
                 'root_category_id' => $categoryId,
                 'website_id' => $websiteId,
                 'group_id' => $fixture->hasData('group_id') ? $fixture->getGroupId() : '',
-                'code' => $fixture->getData()['code'],
+                'code' => $fixture->hasData('code') ? $fixture->getCode() : '',
             ],
             'store_action' => 'add',
             'store_type' => 'group',

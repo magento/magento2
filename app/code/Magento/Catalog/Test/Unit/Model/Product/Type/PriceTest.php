@@ -64,6 +64,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     private $idxFrontendResourceMock;
 
+    private $tierPriceExtensionFactoryMock;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -119,6 +121,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product\Type\Price::class,
             [
@@ -126,7 +132,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'config' => $this->scopeConfigMock,
                 'storeManager' => $storeMangerMock,
                 'groupManagement' => $this->groupManagementMock,
-                'indexerFrontendResource' => $this->idxFrontendResourceMock
+                'indexerFrontendResource' => $this->idxFrontendResourceMock,
+                'tierPriceExtensionFactory' => $this->tierPriceExtensionFactoryMock
             ]
         );
     }
@@ -229,19 +236,14 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($tps[$i]->getQty(), $tpData['price_qty'], 'Qty does not match');
         }
 
-        $tierPriceExtention = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
+        $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
             ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
             ->getMock();
-        $tierPriceExtention->expects($this->any())->method('getPercentageValue')->willReturn(50);
-        $tierPriceExtention->expects($this->any())->method('setWebsiteId');
-        $factoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
-        $factoryMock->expects($this->any())->method('create')->willReturn($tierPriceExtention);
-
-        $reflection = new \ReflectionClass(get_class($this->model));
-        $reflectionProperty = $reflection->getProperty('tierPriceExtensionFactory');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->model, $factoryMock);
+        $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(50);
+        $tierPriceExtensionMock->expects($this->any())->method('setWebsiteId');
+        $this->tierPriceExtensionFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($tierPriceExtensionMock);
 
         // test with the data retrieved as a REST object
         $tpRests = $this->model->getTierPrices($this->product);
