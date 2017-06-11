@@ -13,7 +13,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\Serializer\Json as Serializer;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Cache\Type as CacheType;
 use Magento\Eav\Model\Entity\Attribute;
@@ -37,9 +37,9 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     private $cache;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var Serializer
@@ -66,22 +66,25 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     /**
      * @param BooleanFactory $attrBooleanFactory
      * @param CacheInterface $cache
-     * @param StoreResolverInterface $storeResolver
+     * @param $storeResolver @deprecated
      * @param array $cacheTags
      * @param Serializer $serializer
+     * @param StoreManagerInterface $storeManager
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         BooleanFactory $attrBooleanFactory,
         CacheInterface $cache = null,
-        StoreResolverInterface $storeResolver = null,
+        $storeResolver = null,
         array $cacheTags = null,
-        Serializer $serializer = null
+        Serializer $serializer = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_attrBooleanFactory = $attrBooleanFactory;
         $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
-        $this->storeResolver = $storeResolver ?: ObjectManager::getInstance()->get(StoreResolverInterface::class);
         $this->cacheTags = $cacheTags ?: self::$defaultCacheTags;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serializer::class);
     }
 
@@ -299,7 +302,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     {
         $cacheKey = 'attribute-navigation-option-' .
             $this->getAttribute()->getAttributeCode() . '-' .
-            $this->storeResolver->getCurrentStoreId();
+            $this->storeManager->getStore()->getId();
         $optionString = $this->cache->load($cacheKey);
         if (false === $optionString) {
             $options = $this->getAttribute()->getSource()->getAllOptions();

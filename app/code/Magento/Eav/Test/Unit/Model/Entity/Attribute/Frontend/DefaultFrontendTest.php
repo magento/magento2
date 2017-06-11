@@ -8,7 +8,8 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Frontend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 use Magento\Framework\Serialize\Serializer\Json as Serializer;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
@@ -31,9 +32,14 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
     private $serializerMock;
 
     /**
-     * @var StoreResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $storeResolverMock;
+    private $storeManagerMock;
+
+    /**
+     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeMock;
 
     /**
      * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -64,7 +70,9 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->serializerMock = $this->getMockBuilder(Serializer::class)
             ->getMock();
-        $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->getMockForAbstractClass();
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
@@ -83,7 +91,7 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
             [
                 '_attrBooleanFactory' => $this->booleanFactory,
                 'cache' => $this->cacheMock,
-                'storeResolver' => $this->storeResolverMock,
+                'storeManager' => $this->storeManagerMock,
                 'serializer' => $this->serializerMock,
                 '_attribute' => $this->attributeMock,
                 'cacheTags' => $this->cacheTags
@@ -188,8 +196,11 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
         $options = ['option1', 'option2'];
         $serializedOptions = "{['option1', 'option2']}";
 
-        $this->storeResolverMock->expects($this->once())
-            ->method('getCurrentStoreId')
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())
+            ->method('getId')
             ->willReturn($storeId);
         $this->attributeMock->expects($this->once())
             ->method('getAttributeCode')
