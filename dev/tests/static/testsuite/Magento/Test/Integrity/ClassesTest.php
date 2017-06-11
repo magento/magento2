@@ -290,7 +290,12 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $relativePath = str_replace(BP, "", $file);
                 // Due to the examples given with the regex patterns, we skip this test file itself
-                if (preg_match('/\/dev\/tests\/static\/testsuite\/Magento\/Test\/Integrity\/ClassesTest.php$/', $relativePath)) {
+                if (
+                    preg_match(
+                        '/\/dev\/tests\/static\/testsuite\/Magento\/Test\/Integrity\/ClassesTest.php$/',
+                        $relativePath
+                    )
+                ) {
                     return;
                 }
                 $contents = file_get_contents($file);
