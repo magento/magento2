@@ -75,6 +75,16 @@ class DeployStaticContent
      */
     public function deploy(array $options)
     {
+        $version = !empty($options[Options::CONTENT_VERSION]) && is_string($options[Options::CONTENT_VERSION])
+            ? $options[Options::CONTENT_VERSION]
+            : (new \DateTime())->getTimestamp();
+        $this->versionStorage->save($version);
+
+        if ($options[Options::REFRESH_CONTENT_VERSION_ONLY]) {
+            $this->logger->warning(PHP_EOL . "New content version: " . $version);
+            return;
+        }
+
         $queue = $this->queueFactory->create(
             [
                 'logger' => $this->logger,
@@ -95,11 +105,6 @@ class DeployStaticContent
                 'queue' => $queue
             ]
         );
-
-        $version = !empty($options[Options::CONTENT_VERSION]) && is_string($options[Options::CONTENT_VERSION])
-            ? $options[Options::CONTENT_VERSION]
-            : (new \DateTime())->getTimestamp();
-        $this->versionStorage->save($version);
 
         $packages = $deployStrategy->deploy($options);
 
