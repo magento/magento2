@@ -7,7 +7,6 @@ namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -111,7 +110,7 @@ class Save extends Action
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $resultRedirect->setPath('*/*/');
-            } catch (StateException|CouldNotSaveException $e) {
+            } catch (CouldNotSaveException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 if (empty($sourceId)) {
                     $resultRedirect->setPath('*/*/');

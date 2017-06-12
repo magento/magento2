@@ -10,7 +10,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\StateException;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
 use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -21,8 +20,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class SourceRepository
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * TODO: resolve CouplingBetweenObjects
  */
 class SourceRepository implements SourceRepositoryInterface
 {
@@ -98,10 +95,7 @@ class SourceRepository implements SourceRepositoryInterface
         try {
             $this->resourceSource->save($source);
             return $source->getSourceId();
-        } catch (StateException $e) {
-            $this->logger->error($e->getPrevious()->getMessage());
-            throw $e;
-        } catch (\Exception $e) {
+        }  catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save source'), $e);
         }

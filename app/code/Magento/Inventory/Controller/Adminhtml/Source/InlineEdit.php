@@ -12,7 +12,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\StateException;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
@@ -68,7 +67,7 @@ class InlineEdit extends Action
                     );
                     $source = $this->hydrator->hydrate($source, $itemData);
                     $this->sourceRepository->save($source);
-                } catch (StateException|NoSuchEntityException $e) {
+                } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
                         '[ID: %1] The Source does not exist.',
                         $itemData[SourceInterface::SOURCE_ID]

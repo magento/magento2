@@ -38,6 +38,7 @@ class SourceDataProvider extends DataProvider
      * @param SearchResultFactory $searchResultFactory
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList) All parameters are needed for backward compatibility
      */
     public function __construct(
         $name,

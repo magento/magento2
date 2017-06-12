@@ -16,8 +16,6 @@ interface SourceRepositoryInterface
      *
      * @param \Magento\InventoryApi\Api\Data\SourceInterface $source
      * @return int
-     *
-     * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\InventoryApi\Api\Data\SourceInterface $source);
