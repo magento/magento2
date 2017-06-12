@@ -7,7 +7,6 @@ namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -81,23 +80,24 @@ class Save extends Action
         $requestData = $this->getRequest()->getParam('general');
         if ($this->getRequest()->isPost() && $requestData) {
             try {
-                $sourceId = !empty($requestData[SourceInterface::SOURCE_ID])
-                    ? $requestData[SourceInterface::SOURCE_ID] : null;
+                $sourceId = $this->processSave($requestData);
 
-                if ($sourceId) {
-                    $source = $this->sourceRepository->get($sourceId);
-                } else {
-                    /** @var SourceInterface $source */
-                    $source = $this->sourceFactory->create();
-                }
-                $source = $this->hydrator->hydrate($source, $requestData);
-                $sourceId = $this->sourceRepository->save($source);
                 // Keep data for plugins on Save controller. Now we can not call separate services from one form.
                 $this->registry->register(self::REGISTRY_SOURCE_ID_KEY, $sourceId);
 
                 $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
-                $this->setRedirectOnSuccessSave($resultRedirect, $sourceId);
-
+                if ($this->getRequest()->getParam('back')) {
+                    $resultRedirect->setPath('*/*/edit', [
+                        SourceInterface::SOURCE_ID => $sourceId,
+                        '_current' => true,
+                    ]);
+                } elseif ($this->getRequest()->getParam('redirect_to_new')) {
+                    $resultRedirect->setPath('*/*/new', [
+                        '_current' => true,
+                    ]);
+                } else {
+                    $resultRedirect->setPath('*/*/');
+                }
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $resultRedirect->setPath('*/*/');
@@ -120,23 +120,22 @@ class Save extends Action
     }
 
     /**
-     * @param Redirect $resultRedirect
-     * @param int $sourceId
-     * @return void
+     * @param array $requestData
+     * @return int
      */
-    private function setRedirectOnSuccessSave(Redirect $resultRedirect, $sourceId)
+    private function processSave(array $requestData)
     {
-        if ($this->getRequest()->getParam('back')) {
-            $resultRedirect->setPath('*/*/edit', [
-                SourceInterface::SOURCE_ID => $sourceId,
-                '_current' => true,
-            ]);
-        } elseif ($this->getRequest()->getParam('redirect_to_new')) {
-            $resultRedirect->setPath('*/*/new', [
-                '_current' => true,
-            ]);
+        $sourceId = !empty($requestData[SourceInterface::SOURCE_ID])
+            ? $requestData[SourceInterface::SOURCE_ID] : null;
+
+        if ($sourceId) {
+            $source = $this->sourceRepository->get($sourceId);
         } else {
-            $resultRedirect->setPath('*/*/');
+            /** @var SourceInterface $source */
+            $source = $this->sourceFactory->create();
         }
+        $source = $this->hydrator->hydrate($source, $requestData);
+        $sourceId = $this->sourceRepository->save($source);
+        return $sourceId;
     }
 }
