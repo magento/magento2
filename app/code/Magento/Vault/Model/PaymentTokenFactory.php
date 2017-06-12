@@ -43,7 +43,7 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
          * This code added for Backward Compatibility reasons only, as previous implementation of Code Generated factory
          * accepted an array as any other code generated factory
          */
-        if(is_array($type)) {
+        if (is_array($type)) {
             return $this->objectManager->create(
                 PaymentTokenInterface::class,
                 $type
