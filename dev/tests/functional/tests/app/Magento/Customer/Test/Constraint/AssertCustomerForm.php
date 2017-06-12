@@ -72,7 +72,7 @@ class AssertCustomerForm extends AbstractConstraint
             'Customer data on edit page(backend) not equals to passed from fixture.'
             . "\nFailed values: " . implode(', ', $dataDiff)
         );
-        $this->isCustomerGroupCorrect($customer, $dataForm);
+        $this->assertCustomerGroupName($customer, $dataForm);
     }
 
     /**
@@ -119,7 +119,7 @@ class AssertCustomerForm extends AbstractConstraint
      * @param array $formData
      * @return void
      */
-    private function isCustomerGroupCorrect(Customer $customer, array $formData)
+    private function assertCustomerGroupName(Customer $customer, array $formData)
     {
         $isCustomerGroupCorrect = false;
         $customerGroupName = $customer->getGroupId();
