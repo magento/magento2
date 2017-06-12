@@ -46,7 +46,7 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
         if(is_array($type)) {
             return $this->objectManager->create(
                 PaymentTokenInterface::class,
-                ['data' => $type]
+                $type
             );
         }
 
