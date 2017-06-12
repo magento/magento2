@@ -55,7 +55,7 @@ class Cache
      *
      * @return array
      */
-    protected function getData()
+    public function getData()
     {
         if (!$this->data) {
             /** @var \Magento\Theme\Model\Theme $theme */
