@@ -83,10 +83,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 
         $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         /** Escape RTL characters which are present in some locales and corrupt formatting */
-        $patterns = [];
-        $patterns[0] = '/[^[:print:]]/';
-        $patterns[1] = '/[^MmDdYy\/\.\-]/';
-        $escapedDateFormat = preg_replace($patterns, '', $dateFormat);
+        $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
         $calendar = $this->getLayout()->createBlock(
             \Magento\Framework\View\Element\Html\Date::class
         )->setId(
