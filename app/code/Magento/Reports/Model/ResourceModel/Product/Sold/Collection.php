@@ -46,6 +46,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
      */
     public function addOrderedQty($from = '', $to = '')
     {
+        //return $this;
         $connection = $this->getConnection();
         $orderTableAliasName = $connection->quoteIdentifier('order');
 
@@ -61,17 +62,15 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 
         $this->getSelect()->reset()->from(
             ['order_items' => $this->getTable('sales_order_item')],
-            ['ordered_qty' => 'SUM(order_items.qty_ordered)', 'order_items_name' => 'order_items.name']
+            ['ordered_qty' => 'order_items.qty_ordered', 'order_items_name' => 'order_items.name', 'order_items_sku' => 'order_items.sku']
         )->joinInner(
             ['order' => $this->getTable('sales_order')],
             implode(' AND ', $orderJoinCondition),
             []
         )->where(
             'parent_item_id IS NULL'
-        )->group(
-            'order_items.product_id'
         )->having(
-            'SUM(order_items.qty_ordered) > ?',
+            'order_items.qty_ordered > ?',
             0
         );
         return $this;
