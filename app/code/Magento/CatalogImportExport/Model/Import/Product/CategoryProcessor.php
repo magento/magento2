@@ -67,8 +67,8 @@ class CategoryProcessor
     {
         if (empty($this->categories)) {
             $collection = $this->categoryColFactory->create();
+            $collection->setStoreId(Store::DEFAULT_STORE_ID);
             $collection
-                ->setStoreId(Store::DEFAULT_STORE_ID)
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
