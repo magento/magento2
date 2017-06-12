@@ -7,8 +7,10 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Sitemap\Model;
+
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
+use Magento\Robots\Model\Config\Value;
 
 /**
  * Sitemap model
@@ -28,7 +30,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Sitemap extends \Magento\Framework\Model\AbstractModel
+class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     const OPEN_TAG_KEY = 'start';
 
@@ -145,6 +147,13 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
+
+    /**
+     * Model cache tag for clear cache in after save and after delete
+     *
+     * @var string
+     */
+    protected $_cacheTag = true;
 
     /**
      * Initialize dependencies.
@@ -732,5 +741,17 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         }
 
         return PHP_EOL;
+    }
+
+    /**
+     * Get unique page cache identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [
+            Value::CACHE_TAG . '_' . $this->getStoreId(),
+        ];
     }
 }

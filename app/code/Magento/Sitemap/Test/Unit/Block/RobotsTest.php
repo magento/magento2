@@ -148,6 +148,23 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Check that getIdentities() method returns specified cache tag
+     */
+    public function testGetIdentities()
+    {
+        $storeId = 1;
+
+        $this->storeResolver->expects($this->once())
+            ->method('getCurrentStoreId')
+            ->willReturn($storeId);
+
+        $expected = [
+            \Magento\Robots\Model\Config\Value::CACHE_TAG . '_' . $storeId,
+        ];
+        $this->assertEquals($expected, $this->block->getIdentities());
+    }
+
+    /**
      * Initialize mock object of Event Manager
      *
      * @param string $data

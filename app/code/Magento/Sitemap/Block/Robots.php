@@ -5,7 +5,10 @@
  */
 namespace Magento\Sitemap\Block;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
+use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Store\Model\StoreResolver;
@@ -15,7 +18,7 @@ use Magento\Store\Model\StoreResolver;
  *
  * @api
  */
-class Robots extends \Magento\Framework\View\Element\AbstractBlock
+class Robots extends AbstractBlock implements IdentityInterface
 {
     /**
      * @var StoreResolver
@@ -86,5 +89,17 @@ class Robots extends \Magento\Framework\View\Element\AbstractBlock
         }
 
         return $result;
+    }
+
+    /**
+     * Get unique page cache identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return [
+            Value::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+        ];
     }
 }
