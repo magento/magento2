@@ -19,13 +19,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Ensure that SalesRules filtering on category ignore product visibility
+     *
      * @magentoAppIsolation enabled
      * @param int $categoryId
      * @param int $visibility
      * @param bool $expectedResult
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product.php
      * @magentoDataFixture Magento/SalesRule/_files/rules_category.php
-     * @magentoDataFixture Magento/SalesRule/_files/category.php
      * @dataProvider validateProductConditionDataProvider
      */
     public function testValidateCategorySalesRuleIgnoresVisibility($categoryId, $visibility, $expectedResult)
@@ -33,6 +34,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->objectManager->create(\Magento\Checkout\Model\Session::class);
 
+        // Prepare product with given visibility and category settings
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
@@ -41,6 +43,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $product->setCategoryIds([$categoryId]);
         $product->save();
 
+        // Load the SalesRule looking for products in a category and assert that the validation is as expected
         /** @var $rule \Magento\SalesRule\Model\Rule */
         $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
             ->registry('_fixture/Magento_SalesRule_Category');
