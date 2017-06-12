@@ -17,7 +17,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * @author  naydav <valeriy.nayda@gmail.com>
+ * Class InlineEdit
  */
 class InlineEdit extends Action
 {

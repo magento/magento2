@@ -6,10 +6,14 @@
  */
 namespace Magento\Inventory\Controller\Adminhtml\Source;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 
-class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
+/**
+ * Class NewAction
+ */
+class NewAction extends Action
 {
     /**
      * @see _isAllowed()
