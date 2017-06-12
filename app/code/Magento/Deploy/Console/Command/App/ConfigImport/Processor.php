@@ -164,10 +164,11 @@ class Processor
     private function validateSectionData($section, array $data)
     {
         $validator = $this->configImporterPool->getValidator($section);
-        if (null !== $validator
-            && $messages = $validator->validate($data)
-        ) {
-            throw new ValidatorException(__(implode(PHP_EOL, $messages)));
+        if (null !== $validator) {
+            $messages = $validator->validate($data);
+            if (!empty($messages)) {
+                throw new ValidatorException(__(implode(PHP_EOL, $messages)));
+            }
         }
     }
 }
