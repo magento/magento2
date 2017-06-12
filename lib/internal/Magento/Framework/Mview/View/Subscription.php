@@ -186,10 +186,12 @@ class Subscription implements SubscriptionInterface
         $skipColumns = ['updated_at'];
         $describe = $this->connection->describeTable($this->getTableName());
         $columns = [];
-        foreach ($describe as $column) {
-            if (!in_array($column['COLUMN_NAME'], $skipColumns)) {
-                $columns[] = sprintf('NEW.%1$s <> OLD.%1$s',
-                    $this->connection->quoteIdentifier($column['COLUMN_NAME']));
+        if (is_array($describe)) {
+            foreach ($describe as $column) {
+                if (!in_array($column['COLUMN_NAME'], $skipColumns)) {
+                    $columns[] = sprintf('NEW.%1$s != OLD.%1$s',
+                        $this->connection->quoteIdentifier($column['COLUMN_NAME']));
+                }
             }
         }
 
@@ -202,9 +204,17 @@ class Subscription implements SubscriptionInterface
                     $this->connection->quoteIdentifier($this->getColumnName())
                 );
             case Trigger::EVENT_UPDATE:
+                if ($columns) {
+                    return sprintf(
+                        "IF (%s) THEN INSERT IGNORE INTO %s (%s) VALUES (NEW.%s); END IF;",
+                        implode(' OR ', $columns),
+                        $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+                        $this->connection->quoteIdentifier($changelog->getColumnName()),
+                        $this->connection->quoteIdentifier($this->getColumnName())
+                    );
+                }
                 return sprintf(
-                    "IF (%s) THEN INSERT IGNORE INTO %s (%s) VALUES (NEW.%s); END IF;",
-                    implode(' OR ', $columns),
+                    "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);",
                     $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
                     $this->connection->quoteIdentifier($changelog->getColumnName()),
                     $this->connection->quoteIdentifier($this->getColumnName())
