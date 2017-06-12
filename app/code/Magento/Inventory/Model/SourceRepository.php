@@ -95,7 +95,7 @@ class SourceRepository implements SourceRepositoryInterface
         try {
             $this->resourceSource->save($source);
             return $source->getSourceId();
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save source'), $e);
         }

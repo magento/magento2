@@ -7,6 +7,7 @@ namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -95,18 +96,8 @@ class Save extends Action
                 $this->registry->register(self::REGISTRY_SOURCE_ID_KEY, $sourceId);
 
                 $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
-                if ($this->getRequest()->getParam('back')) {
-                    $resultRedirect->setPath('*/*/edit', [
-                        SourceInterface::SOURCE_ID => $sourceId,
-                        '_current' => true,
-                    ]);
-                } elseif ($this->getRequest()->getParam('redirect_to_new')) {
-                    $resultRedirect->setPath('*/*/new', [
-                        '_current' => true,
-                    ]);
-                } else {
-                    $resultRedirect->setPath('*/*/');
-                }
+                $this->setRedirectOnSuccessSave($resultRedirect, $sourceId);
+
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $resultRedirect->setPath('*/*/');
@@ -126,5 +117,26 @@ class Save extends Action
             $resultRedirect->setPath('*/*');
         }
         return $resultRedirect;
+    }
+
+    /**
+     * @param Redirect $resultRedirect
+     * @param int $sourceId
+     * @return void
+     */
+    private function setRedirectOnSuccessSave(Redirect $resultRedirect, $sourceId)
+    {
+        if ($this->getRequest()->getParam('back')) {
+            $resultRedirect->setPath('*/*/edit', [
+                SourceInterface::SOURCE_ID => $sourceId,
+                '_current' => true,
+            ]);
+        } elseif ($this->getRequest()->getParam('redirect_to_new')) {
+            $resultRedirect->setPath('*/*/new', [
+                '_current' => true,
+            ]);
+        } else {
+            $resultRedirect->setPath('*/*/');
+        }
     }
 }
