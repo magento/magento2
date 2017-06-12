@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+use \Magento\Store\Model\Store;
+
 class CategoryProcessor
 {
     /**
@@ -65,7 +67,9 @@ class CategoryProcessor
     {
         if (empty($this->categories)) {
             $collection = $this->categoryColFactory->create();
-            $collection->addAttributeToSelect('name')
+            $collection
+                ->setStoreId(Store::DEFAULT_STORE_ID)
+                ->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
             /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
