@@ -115,7 +115,7 @@ class DeployStaticContent
             ]);
             foreach ($packages as $package) {
                 if (!$package->isVirtual()) {
-                    $deployRjsConfig->deploy($package->getArea(), $package->getTheme());
+                    $deployRjsConfig->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                     $deployI18n->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                     $deployBundle->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                 }
