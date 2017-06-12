@@ -246,14 +246,18 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             // handle range
             $e = explode('-', $expr);
             if (sizeof($e) !== 2) {
-                throw new CronException(__('Invalid cron expression, expecting \'from-to\' structure: %1', $expr));
+                throw new CronException(
+                    __('Invalid cron expression, expecting \'from-to\' structure: %1', $expr)
+                );
             }
 
             $from = $this->getNumeric($e[0]);
             $to = $this->getNumeric($e[1]);
 
             if ($from > $to) {
-                throw new CronException(__('Invalid cron expression, expecting from <= to in \'from-to\' structure: %1', $expr));
+                throw new CronException(
+                    __('Invalid cron expression, expecting from <= to in \'from-to\' structure: %1', $expr)
+                );
             }
         } else {
             // handle regular token
