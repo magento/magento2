@@ -26,13 +26,14 @@ class AssertCustomerForm extends AbstractConstraint
      *
      * @var array
      */
-    protected $customerSkippedFields = [
+    private $customerSkippedFields = [
         'id',
         'password',
         'password_confirmation',
         'current_password',
         'is_subscribed',
-        'address'
+        'address',
+        'group_id'
     ];
 
     /**
@@ -71,6 +72,7 @@ class AssertCustomerForm extends AbstractConstraint
             'Customer data on edit page(backend) not equals to passed from fixture.'
             . "\nFailed values: " . implode(', ', $dataDiff)
         );
+        $this->isCustomerGroupCorrect($customer, $dataForm);
     }
 
     /**
@@ -80,7 +82,7 @@ class AssertCustomerForm extends AbstractConstraint
      * @param array $dataForm
      * @return array
      */
-    protected function verify(array $dataFixture, array $dataForm)
+    private function verify(array $dataFixture, array $dataForm)
     {
         $result = [];
 
@@ -108,6 +110,31 @@ class AssertCustomerForm extends AbstractConstraint
         }
 
         return $result;
+    }
+
+    /**
+     * Check is Customer Group name correct.
+     *
+     * @param Customer $customer
+     * @param array $formData
+     * @return void
+     */
+    private function isCustomerGroupCorrect(Customer $customer, array $formData)
+    {
+        $isCustomerGroupCorrect = false;
+        $customerGroupName = $customer->getGroupId();
+
+        if (
+            $customerGroupName && !empty($formData['customer']['group_id'])
+            && strpos($formData['customer']['group_id'], $customerGroupName) !== false
+        ) {
+            $isCustomerGroupCorrect = true;
+        }
+
+        \PHPUnit_Framework_Assert::assertTrue(
+            $isCustomerGroupCorrect,
+            'Customer Group name is incorrect.'
+        );
     }
 
     /**
