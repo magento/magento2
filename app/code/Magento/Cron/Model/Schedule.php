@@ -82,7 +82,90 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         $this->setCronExprArr($e);
+        $this->checkCronExpr();
+
         return $this;
+    }
+
+    /**
+     * Checks the observer's cron expression validity
+     *
+     * @return bool
+     */
+    public function checkCronExpr()
+    {
+        $e = $this->getCronExprArr();
+
+        if (!$e) {
+            return false;
+        }
+
+        $match = $this->checkCronExpression($e[0])
+            && $this->checkCronExpression($e[1])
+            && $this->checkCronExpression($e[2])
+            && $this->checkCronExpression($e[3])
+            && $this->checkCronExpression($e[4]);
+
+        return $match;
+    }
+
+    /**
+     * @param string $expr
+     * @return bool
+     * @throws \Magento\Framework\Exception\CronException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function checkCronExpression($expr)
+    {
+        // handle ALL match
+        if ($expr === '*') {
+            return true;
+        }
+
+        // handle multiple options
+        if (strpos($expr, ',') !== false) {
+            foreach (explode(',', $expr) as $e) {
+                if ($this->checkCronExpression($e)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // handle modulus
+        if (strpos($expr, '/') !== false) {
+            $e = explode('/', $expr);
+            if (sizeof($e) !== 2) {
+                throw new CronException(__('Invalid cron expression, expecting \'match/modulus\': %1', $expr));
+            }
+            if (!is_numeric($e[1])) {
+                throw new CronException(__('Invalid cron expression, expecting numeric modulus: %1', $expr));
+            }
+            $expr = $e[0];
+        }
+
+        // handle all match by modulus
+        if (strpos($expr, '-') !== false) {
+            // handle range
+            $e = explode('-', $expr);
+            if (sizeof($e) !== 2) {
+                throw new CronException(__('Invalid cron expression, expecting \'from-to\' structure: %1', $expr));
+            }
+
+            $from = $this->getNumeric($e[0]);
+            $to = $this->getNumeric($e[1]);
+        } else {
+            // handle regular token
+            $from = $this->getNumeric($expr);
+            $to = $from;
+        }
+
+        if ($from === false || $to === false) {
+            throw new CronException(__('Invalid cron expression: %1', $expr));
+        }
+
+        return $from <= $to;
     }
 
     /**
