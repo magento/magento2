@@ -73,21 +73,25 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ['* 0 * * *', ['*', '0', '*', '*', '*']],
             ['* 59 * * *', ['*', '59', '*', '*', '*']],
             ['* 1-2 * * *', ['*', '1-2', '*', '*', '*']],
+            ['* 2-2 * * *', ['*', '2-2', '*', '*', '*']],
             ['* 0/5 * * *', ['*', '0/5', '*', '*', '*']],
 
             ['* * 0 * *', ['*', '*', '0', '*', '*']],
             ['* * 23 * *', ['*', '*', '23', '*', '*']],
             ['* * 1-2 * *', ['*', '*', '1-2', '*', '*']],
+            ['* * 2-2 * *', ['*', '*', '2-2', '*', '*']],
             ['* * 0/5 * *', ['*', '*', '0/5', '*', '*']],
 
             ['* * * 1 *', ['*', '*', '*', '1', '*']],
             ['* * * 31 *', ['*', '*', '*', '31', '*']],
             ['* * * 1-2 *', ['*', '*', '*', '1-2', '*']],
+            ['* * * 2-2 *', ['*', '*', '*', '2-2', '*']],
             ['* * * 0/5 *', ['*', '*', '*', '0/5', '*']],
 
             ['* * * * 0', ['*', '*', '*', '*', '0']],
             ['* * * * 11', ['*', '*', '*', '*', '11']],
             ['* * * * 1-2', ['*', '*', '*', '*', '1-2']],
+            ['* * * * 2-2', ['*', '*', '*', '*', '2-2']],
             ['* * * * 0/5', ['*', '*', '*', '*', '0/5']],
             ['* * * * JAN', ['*', '*', '*', '*', 'JAN']],
             ['* * * * DEC', ['*', '*', '*', '*', 'DEC']],
@@ -97,6 +101,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ['* * * * * 7', ['*', '*', '*', '*', '*', '7']],
             ['* * * * * ,', ['*', '*', '*', '*', '*', ',']],
             ['* * * * * 1-2', ['*', '*', '*', '*', '*', '1-2']],
+            ['* * * * * 2-2', ['*', '*', '*', '*', '*', '2-2']],
             ['* * * * * 0/5', ['*', '*', '*', '*', '*', '0/5']],
             ['* * * * * ?', ['*', '*', '*', '*', '*', '?']],
             ['* * * * * L', ['*', '*', '*', '*', '*', 'L']],
@@ -105,6 +110,45 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ['* * * * * SAT', ['*', '*', '*', '*', '*', 'SAT']],
             ['* * * * * SUN-SAT', ['*', '*', '*', '*', '*', 'SUN-SAT']],
         ];
+    }
+
+    /**
+     * @param array $cronExpressionArray
+     * @param array $expected
+     * @dataProvider checkCronExprDataProvider
+     */
+    public function testCheckCronExpr($cronExpressionArray, $expected)
+    {
+        // 1. Create mocks
+        /** @var \Magento\Cron\Model\Schedule $model */
+        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
+        $model->setCronExprArr($cronExpressionArray);
+
+        // 2. Run tested method
+        $result = $model->checkCronExpr();
+
+        // 3. Compare actual result with expected result
+        $this->assertEquals($result, $expected);
+    }
+
+    /**
+     * Data provider
+     *
+     * Here is a list of allowed and invalid characters and values for Cron expression check*
+     * @return array
+     */
+    public function checkCronExprDataProvider()
+    {
+        $data = [];
+        foreach ($this->setCronExprDataProvider() as $validCronExprArray) {
+            $data[] = [end($validCronExprArray), true];
+        }
+        foreach ($this->setCronExprExceptionDataProvider() as $invalidCronExpr) {
+            $invalidCronExprArray = preg_split('#\s+#', reset($invalidCronExpr), null, PREG_SPLIT_NO_EMPTY);
+            $data[] = [$invalidCronExprArray, false];
+        }
+
+        return $data;
     }
 
     /**
@@ -140,10 +184,15 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ['1 2 3 4 5 6 7'],
             ['a b c d e'],
             [', * * * *'],
+            ['2-1 * * * *'],
             ['* , * * *'],
+            ['* 2-1 * * *'],
             ['* * , * *'],
+            ['* * 2-1 * *'],
             ['* * * , *'],
+            ['* * * 2-1 *'],
             ['* * * * ,'],
+            ['* * * * 2-1'],
             ['* * * ? *'],
             ['* * * L *'],
             ['* * * W *'],
@@ -186,15 +235,18 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             [$date, [], false],
             [$date, null, false],
             [$date, false, false],
-            [$date, [], false],
-            [$date, null, false],
-            [$date, false, false],
             [$date, ['*', '*', '*', '*', '*'], true],
             [strtotime($date), ['*', '*', '*', '*', '*'], true],
             [strtotime($date), ['15', '*', '*', '*', '*'], true],
             [strtotime($date), ['*', '14', '*', '*', '*'], true],
             [strtotime($date), ['*', '*', '13', '*', '*'], true],
             [strtotime($date), ['*', '*', '*', '12', '*'], true],
+            [strtotime($date), ['*/15', '*', '*', '*', '*'], true],
+            [strtotime($date), ['15/15', '*', '*', '*', '*'], true],
+            [strtotime($date), ['30/15', '*', '*', '*', '*'], false],
+            [strtotime($date), ['*', '30,*/7', '*', '*', '*'], true],
+            [strtotime($date), ['*', '*', '15,*/13', '*', '*'], true],
+            [strtotime($date), ['*', '*', '*', '*/6', '*'], true],
             [strtotime('Monday'), ['*', '*', '*', '*', '1'], true],
         ];
     }
@@ -253,6 +305,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
             ['1/5', 5, false],
             ['5/5', 5, true],
+            ['10/5', 5, false],
             ['10/5', 10, true],
         ];
     }
@@ -284,6 +337,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             ['1/'],       //Invalid cron expression, expecting numeric modulus: 1/
             ['-'],        //Invalid cron expression
             ['1-2-3'],    //Invalid cron expression, expecting 'from-to' structure: 1-2-3
+            ['2-1'],      //Invalid cron expression, expecting from <= to in 'from-to' structure: 2-1
         ];
     }
 

@@ -77,12 +77,11 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     public function setCronExpr($expr)
     {
         $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
-        if (sizeof($e) < 5 || sizeof($e) > 6) {
+        $this->setCronExprArr($e);
+
+        if (!$this->checkCronExpr()) {
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
-
-        $this->setCronExprArr($e);
-        $this->checkCronExpr();
 
         return $this;
     }
@@ -100,19 +99,23 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
 
-        $match = $this->checkCronExpression($e[0])
+        if (sizeof($e) < 5 || sizeof($e) > 6) {
+            return false;
+        }
+
+        $check = $this->checkCronExpression($e[0])
             && $this->checkCronExpression($e[1])
             && $this->checkCronExpression($e[2])
             && $this->checkCronExpression($e[3])
             && $this->checkCronExpression($e[4]);
 
-        return $match;
+        return $check;
     }
 
     /**
      * @param string $expr
      * @return bool
-     * @throws \Magento\Framework\Exception\CronException
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -136,36 +139,36 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         // handle modulus
         if (strpos($expr, '/') !== false) {
             $e = explode('/', $expr);
-            if (sizeof($e) !== 2) {
-                throw new CronException(__('Invalid cron expression, expecting \'match/modulus\': %1', $expr));
+            if (sizeof($e) !== 2 || !is_numeric($e[1])) {
+                return false;
             }
-            if (!is_numeric($e[1])) {
-                throw new CronException(__('Invalid cron expression, expecting numeric modulus: %1', $expr));
+
+            if (!is_numeric($e[0]) && $e[0] != '*') {
+                return false;
             }
             $expr = $e[0];
         }
 
         // handle all match by modulus
-        if (strpos($expr, '-') !== false) {
+        if ($expr === '*') {
+            $fromValue = 0;
+            $toValue = 60;
+        } elseif (strpos($expr, '-') !== false) {
             // handle range
             $e = explode('-', $expr);
             if (sizeof($e) !== 2) {
-                throw new CronException(__('Invalid cron expression, expecting \'from-to\' structure: %1', $expr));
+                return false;
             }
 
-            $from = $this->getNumeric($e[0]);
-            $to = $this->getNumeric($e[1]);
+            $fromValue = $this->getNumeric($e[0]);
+            $toValue = $this->getNumeric($e[1]);
         } else {
             // handle regular token
-            $from = $this->getNumeric($expr);
-            $to = $from;
+            $fromValue = $this->getNumeric($expr);
+            $toValue = $fromValue;
         }
 
-        if ($from === false || $to === false) {
-            throw new CronException(__('Invalid cron expression: %1', $expr));
-        }
-
-        return $from <= $to;
+        return $fromValue !== false && $toValue !== false && $fromValue <= $toValue;
     }
 
     /**
@@ -248,6 +251,10 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
 
             $from = $this->getNumeric($e[0]);
             $to = $this->getNumeric($e[1]);
+
+            if ($from > $to) {
+                throw new CronException(__('Invalid cron expression, expecting from <= to in \'from-to\' structure: %1', $expr));
+            }
         } else {
             // handle regular token
             $from = $this->getNumeric($expr);
