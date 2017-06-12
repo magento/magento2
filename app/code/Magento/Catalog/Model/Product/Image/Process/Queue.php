@@ -228,6 +228,7 @@ class Queue
             exit();
         } else {
             $this->imageCache->generate($product);
+            $this->output->write('.');
             return true;
         }
     }
