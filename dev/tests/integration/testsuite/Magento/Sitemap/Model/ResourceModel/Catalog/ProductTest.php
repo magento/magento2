@@ -9,7 +9,7 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
  * Test class for \Magento\Sitemap\Model\ResourceModel\Catalog\Product.
  * - test products collection generation for sitemap
  *
- * @magentoDataFixtureBeforeTransaction Magento/CatalogSearch/_files/full_reindex.php
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixture Magento/Sitemap/_files/sitemap_products.php
  */
 class ProductTest extends \PHPUnit_Framework_TestCase

@@ -38,7 +38,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
         </variation>
         <variation name="OnePageCheckoutTestVariation1" summary="Checkout as UK guest with virtual product and downloadable product using coupon for not logged in customers">
-            <data name="issue" xsi:type="string">MAGETWO-64874: Eternal loader in shipping and tax block</data>
             <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
@@ -156,7 +155,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
         </variation>
         <variation name="OnePageCheckoutTestVariation6" summary="Checkout as UK guest with virtual product using coupon for not logged in customers with Zero Subtotal Checkout payment method">
-            <data name="issue" xsi:type="string">MAGETWO-64874: Eternal loader in shipping and tax block</data>
             <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
