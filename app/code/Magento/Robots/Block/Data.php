@@ -24,6 +24,7 @@ class Data extends AbstractBlock implements IdentityInterface
      * @var Robots
      */
     private $robots;
+
     /**
      * @var StoreResolver
      */
