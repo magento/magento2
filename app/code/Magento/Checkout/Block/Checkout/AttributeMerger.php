@@ -317,29 +317,18 @@ class AttributeMerger
     {
         switch ($attributeCode) {
             case 'prefix':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getPrefix();
-                }
-                break;
+                return $this->getCustomer() ? $this->getCustomer()->getPrefix() : null;
             case 'firstname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getFirstname();
-                }
-                break;
+                return $this->getCustomer() ? $this->getCustomer()->getFirstname() : null;
             case 'lastname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getLastname();
-                }
-                break;
+                return $this->getCustomer() ? $this->getCustomer()->getLastname() : null;
             case 'suffix':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getSuffix();
-                }
-                break;
+                return $this->getCustomer() ? $this->getCustomer()->getSuffix() : null;
             case 'country_id':
                 return $this->directoryHelper->getDefaultCountry();
+            default:
+                return null;
         }
-        return null;
     }
 
     /**
