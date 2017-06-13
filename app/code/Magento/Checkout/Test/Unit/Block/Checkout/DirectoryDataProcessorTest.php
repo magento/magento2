@@ -35,6 +35,11 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $storeResolverMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $storeManagerMock;
 
     /**
@@ -72,6 +77,9 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->storeResolverMock = $this->getMock(
+            \Magento\Store\Api\StoreResolverInterface::class
+        );
         $this->storeManagerMock = $this->getMock(
             \Magento\Store\Model\StoreManagerInterface::class
         );
@@ -86,8 +94,9 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Checkout\Block\Checkout\DirectoryDataProcessor(
             $this->countryCollectionFactoryMock,
             $this->regionCollectionFactoryMock,
-            $this->storeManagerMock,
-            $this->directoryDataHelperMock
+            $this->storeResolverMock,
+            $this->directoryDataHelperMock,
+            $this->storeManagerMock
         );
     }
 

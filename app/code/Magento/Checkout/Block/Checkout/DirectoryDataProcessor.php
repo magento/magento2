@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -49,19 +50,21 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection
-     * @param StoreManagerInterface $storeManager
+     * @param StoreResolverInterface $storeResolver
      * @param DirectoryHelper $directoryHelper
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection,
-        StoreManagerInterface $storeManager,
-        DirectoryHelper $directoryHelper
+        StoreResolverInterface $storeResolver,
+        DirectoryHelper $directoryHelper,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->countryCollectionFactory = $countryCollection;
         $this->regionCollectionFactory = $regionCollection;
-        $this->storeManager = $storeManager;
         $this->directoryHelper = $directoryHelper;
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
