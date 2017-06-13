@@ -81,7 +81,7 @@ class DeployStaticContent
         $this->versionStorage->save($version);
 
         if ($this->getRefreshContentVersionOnly($options)) {
-            $this->logger->warning(PHP_EOL . "New content version: " . $version);
+            $this->logger->warning("New content version: " . $version);
             return;
         }
 
@@ -148,7 +148,6 @@ class DeployStaticContent
     private function getRefreshContentVersionOnly(array $options)
     {
         return isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
-            ? (bool)$options[Options::REFRESH_CONTENT_VERSION_ONLY]
-            : false;
+            && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
     }
 }
