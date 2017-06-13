@@ -316,6 +316,11 @@ class AttributeMerger
     protected function getDefaultValue($attributeCode)
     {
         switch ($attributeCode) {
+            case 'prefix':
+                if ($this->getCustomer()) {
+                    return $this->getCustomer()->getPrefix();
+                }
+                break;
             case 'firstname':
                 if ($this->getCustomer()) {
                     return $this->getCustomer()->getFirstname();
@@ -324,6 +329,11 @@ class AttributeMerger
             case 'lastname':
                 if ($this->getCustomer()) {
                     return $this->getCustomer()->getLastname();
+                }
+                break;
+            case 'suffix':
+                if ($this->getCustomer()) {
+                    return $this->getCustomer()->getSuffix();
                 }
                 break;
             case 'country_id':
