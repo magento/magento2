@@ -5,19 +5,17 @@
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Framework\Simplexml\Element;
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\Simplexml\Element;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Zend_Http_Response;
 
 /**
  * Class contains tests for Direct Post integration
@@ -74,7 +72,7 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($httpClient);
 
-        $response = $this->getMockBuilder(Zend_Http_Response::class)
+        $response = $this->getMockBuilder('Zend_Http_Response')
             ->disableOriginalConstructor()
             ->setMethods(['getBody'])
             ->getMock();
@@ -100,7 +98,6 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
         static::assertEquals('US', $payment->getOrder()->getBillingAddress()->getCountryId());
         static::assertEquals('UK', $payment->getOrder()->getShippingAddress()->getCountryId());
     }
-
 
     /**
      * Verifies that order is placed in correct state according the action taken for a transaction that
@@ -136,8 +133,16 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
     public function fdsFilterActionDataProvider()
     {
         return [
-            ['filter_action' => 'authAndHold', 'order_id' => '100000003', 'expected_order_state' => Order::STATE_PAYMENT_REVIEW],
-            ['filter_action' => 'report', 'order_id' => '100000004', 'expected_order_state' => Order::STATE_PROCESSING],
+            [
+                'filter_action' => 'authAndHold',
+                'order_id' => '100000003',
+                'expected_order_state' => Order::STATE_PAYMENT_REVIEW
+            ],
+            [
+                'filter_action' => 'report',
+                'order_id' => '100000004',
+                'expected_order_state' => Order::STATE_PROCESSING
+            ],
         ];
     }
 
@@ -204,17 +209,9 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
      */
     private function getPayment($orderId)
     {
-        /** @var FilterBuilder $filterBuilder */
-        $filterBuilder = $this->objectManager->get(FilterBuilder::class);
-        $filters = [
-            $filterBuilder->setField(OrderInterface::INCREMENT_ID)
-                ->setValue($orderId)
-                ->create()
-        ];
-
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilters($filters)
+        $searchCriteria = $searchCriteriaBuilder->addFilter(OrderInterface::INCREMENT_ID, $orderId)
             ->create();
 
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
