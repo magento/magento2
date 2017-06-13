@@ -582,8 +582,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $sql = sprintf(
             'CREATE TABLE IF NOT EXISTS %s LIKE %s',
-            $setup->getTable($replicaTable),
-            $setup->getTable($existingTable)
+            $setup->getConnection()->quoteIdentifier($setup->getTable($replicaTable)),
+            $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
         );
         $setup->getConnection()->query($sql);
     }

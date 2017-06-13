@@ -144,7 +144,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $select = $this->connection->select()->from($this->getMainTmpTable());
         $columns = array_keys($this->connection->describeTable($this->getMainTable()));
-        $tableName = $this->getMainTable() . ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX;
+        $tableName = $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable());
 
         $this->connection->query(
             $this->connection->insertFromSelect(

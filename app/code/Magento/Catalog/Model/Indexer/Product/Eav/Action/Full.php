@@ -46,7 +46,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator $batchSizeCalculator = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+        ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         parent::__construct($eavDecimalFactory, $eavSourceFactory);
         $this->metadataPool = $metadataPool ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
@@ -59,7 +59,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\BatchSizeCalculator::class
         );
         $this->activeTableSwitcher = $activeTableSwitcher ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+            ActiveTableSwitcher::class
         );
     }
 
@@ -76,7 +76,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
         try {
             foreach ($this->getIndexers() as $indexerName => $indexer) {
                 $connection = $indexer->getConnection();
-                $mainTable = $indexer->getMainTable() . ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX;
+                $mainTable = $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
                 $connection->truncateTable($mainTable);
                 $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
                 $batches = $this->batchProvider->getBatches(

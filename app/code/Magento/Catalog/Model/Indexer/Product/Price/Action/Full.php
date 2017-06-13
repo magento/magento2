@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 
-use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -30,7 +29,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $batchProvider;
 
     /**
-     * @var ActiveTableSwitcher
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
      */
     private $activeTableSwitcher;
 
@@ -46,7 +45,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator|null $batchSizeCalculator
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
-     * @param ActiveTableSwitcher|null $activeTableSwitcher
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -103,8 +102,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $this->_prepareWebsiteDateTable();
 
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-            $replicaTable = $this->_defaultIndexerResource->getMainTable()
-                . ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX;
+            $replicaTable = $this->activeTableSwitcher->getAdditionalTableName(
+                $this->_defaultIndexerResource->getMainTable()
+            );
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
             foreach ($this->getTypeIndexers() as $indexer) {
@@ -162,6 +162,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     protected function getIndexTargetTable()
     {
-        return $this->_defaultIndexerResource->getMainTable() . ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX;
+        return $this->activeTableSwitcher->getAdditionalTableName($this->_defaultIndexerResource->getMainTable());
     }
 }

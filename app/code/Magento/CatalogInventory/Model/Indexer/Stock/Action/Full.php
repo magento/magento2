@@ -125,7 +125,7 @@ class Full extends AbstractAction
             foreach ($this->_getTypeIndexers() as $indexer) {
                 $indexer->setActionType(self::ACTION_TYPE);
                 $connection = $indexer->getConnection();
-                $tableName = $indexer->getMainTable() . ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX;
+                $tableName = $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
 
                 $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
                     ? $this->batchRowsCount[$indexer->getTypeId()]

@@ -6,8 +6,8 @@
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Stock Status Indexer Resource Model
@@ -16,6 +16,35 @@ use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
  */
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     */
+    private $activeTableSwitcher;
+
+    /**
+     * Stock constructor.
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param null $connectionName
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $connectionName = null,
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+    ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        );
+    }
+
+
     /**
      * Retrieve table name for temporary bundle option stock index
      *
@@ -38,7 +67,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         $this->_cleanBundleOptionStockData();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $table = $this->getActionType() === Full::ACTION_TYPE
-            ? $this->getMainTable() . ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX
+            ? $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable())
             : $this->getMainTable();
         $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $connection = $this->getConnection();

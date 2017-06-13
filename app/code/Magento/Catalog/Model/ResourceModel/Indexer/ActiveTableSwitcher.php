@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Indexer;
 
 /**
- * Logic for switching active and replica index tables by mysql rename operation.
+ * Logic for switching active and replica index tables.
  */
 class ActiveTableSwitcher
 {
@@ -44,5 +44,14 @@ class ActiveTableSwitcher
                 ]
             ]
         );
+    }
+
+    /**
+     * @param string $tableName
+     * @return string
+     */
+    public function getAdditionalTableName($tableName)
+    {
+        return $tableName . self::ADDITIONAL_TABLE_SUFFIX;
     }
 }

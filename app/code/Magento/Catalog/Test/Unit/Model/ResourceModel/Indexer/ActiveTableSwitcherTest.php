@@ -44,4 +44,13 @@ class ActiveTableSwitcherTest extends \PHPUnit_Framework_TestCase
 
         $this->model->switchTable($connectionMock, $tableName);
     }
+
+    public function testGetAdditionalTableName()
+    {
+        $tableName = 'table_name';
+        $this->assertEquals(
+            $tableName . \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX,
+            $this->model->getAdditionalTableName($tableName)
+        );
+    }
 }
