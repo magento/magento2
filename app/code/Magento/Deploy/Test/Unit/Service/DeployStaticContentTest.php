@@ -125,9 +125,7 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
             $package->expects($this->exactly(3))->method('getTheme')->willReturn('theme');
             $package->expects($this->exactly(2))->method('getLocale')->willReturn('locale');
         }
-        $packages = [
-            'package' => $package
-        ];
+        $packages = ['package' => $package];
 
         if ($expectedContentVersion) {
             $this->versionStorage->expects($this->once())->method('save')->with($expectedContentVersion);
@@ -150,7 +148,6 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         if ($options['refresh-content-version-only']) {
             $strategy->expects($this->never())->method('deploy');
-            $this->deployStrategyFactory->expects($this->never())->method('create');
         } else {
             $strategy->expects($this->once())->method('deploy')
                 ->with($options)
@@ -201,18 +198,11 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
 
             $this->objectManager->expects($this->exactly(1))
                 ->method('get')
-                ->withConsecutive(
-                    [MinifyTemplates::class]
-                )
-                ->willReturnOnConsecutiveCalls(
-                    $minifyTemplates
-                );
+                ->withConsecutive([MinifyTemplates::class])
+                ->willReturnOnConsecutiveCalls($minifyTemplates);
         }
 
-        $this->assertEquals(
-            null,
-            $this->service->deploy($options)
-        );
+        $this->assertEquals(null, $this->service->deploy($options));
     }
 
     public function deployDataProvider()
