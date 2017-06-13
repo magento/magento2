@@ -75,7 +75,7 @@ class Version
      */
     public function process()
     {
-        if ($this->request->isPost()) {
+        if ($this->request->isPost() || is_null($this->cookieManager->getCookie(self::COOKIE_NAME))) {
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                 ->setDuration(self::COOKIE_PERIOD)
                 ->setPath('/')
