@@ -5,9 +5,11 @@
  */
 namespace Magento\Catalog\Model\Product\Image\Process;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\CacheFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -38,7 +40,7 @@ class Queue
     protected $processIds = [];
 
     /**
-     * @var \Magento\Catalog\Model\Product[]
+     * @var int[]
      */
     protected $inProgress = [];
 
@@ -46,6 +48,11 @@ class Queue
      * @var int
      */
     protected $maxProcesses;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
 
     /**
      * @var ResourceConnection
@@ -88,6 +95,7 @@ class Queue
     protected $imageCache;
 
     /**
+     * @param ProductRepositoryInterface $productRepository
      * @param ResourceConnection $resourceConnection
      * @param CacheFactory $imageCacheFactory
      * @param OutputInterface $output
@@ -95,12 +103,14 @@ class Queue
      * @param int $maxProcesses
      */
     public function __construct(
+        ProductRepositoryInterface $productRepository,
         ResourceConnection $resourceConnection,
         CacheFactory $imageCacheFactory,
         OutputInterface $output,
         array $options = [],
         $maxProcesses = self::DEFAULT_MAX_PROCESSES_AMOUNT
     ) {
+        $this->productRepository = $productRepository;
         $this->resourceConnection = $resourceConnection;
         $this->output = $output;
         $this->imageCacheFactory = $imageCacheFactory;
@@ -110,13 +120,11 @@ class Queue
     }
 
     /**
-     * @param Product $product
-     * @return bool true on success
+     * @param array $productIds
      */
-    public function add(Product $product)
+    public function setProducts(array $productIds)
     {
-        $this->products[$product->getId()] = $product;
-        return true;
+        $this->products = array_combine($productIds, $productIds);
     }
 
     /**
@@ -139,12 +147,12 @@ class Queue
         $this->start = $this->lastJobStarted = time();
         $products = $this->products;
         while (count($products)) {
-            foreach ($products as $productId => $product) {
-                $this->assertAndExecute($productId, $products, $product);
+            foreach ($products as $productId) {
+                $this->assertAndExecute($productId, $products);
             }
             usleep(20000);
-            foreach ($this->inProgress as $productId => $product) {
-                if ($this->isResized($product)) {
+            foreach ($this->inProgress as $productId) {
+                if ($this->isResized($productId)) {
                     unset($this->inProgress[$productId]);
                 }
             }
@@ -160,14 +168,13 @@ class Queue
      *
      * @param int $productId
      * @param array $products
-     * @param Product $product
      * @return void
      */
-    protected function assertAndExecute($productId, array & $products, Product $product)
+    public function assertAndExecute($productId, array & $products)
     {
         if ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses)) {
             unset($products[$productId]);
-            $this->execute($product);
+            $this->execute($productId);
         }
     }
 
@@ -176,7 +183,7 @@ class Queue
      *
      * @return void
      */
-    protected function awaitForAllProcesses()
+    public function awaitForAllProcesses()
     {
         while ($this->inProgress) {
             foreach ($this->inProgress as $productId => $product) {
@@ -195,17 +202,17 @@ class Queue
     /**
      * @return bool
      */
-    protected function isCanBeParalleled()
+    public function isCanBeParalleled()
     {
         return function_exists('pcntl_fork') && $this->maxProcesses > 1;
     }
 
     /**
-     * @param Product $product
+     * @param int $productId
      * @return bool true on success for main process and exit for child process
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    protected function execute(Product $product)
+    public function execute(int $productId)
     {
         $this->lastJobStarted = time();
 
@@ -216,9 +223,17 @@ class Queue
             }
 
             if ($pid) {
-                $this->inProgress[$product->getId()] = $product;
-                $this->processIds[$product->getId()] = $pid;
+                $this->inProgress[$productId] = $productId;
+                $this->processIds[$productId] = $pid;
                 return true;
+            }
+
+            try {
+                /** @var \Magento\Catalog\Model\Product $product */
+                $product = $this->productRepository->getById($productId);
+                $product->getMediaGalleryImages();
+            } catch (NoSuchEntityException $e) {
+                exit();
             }
 
             // process child process
@@ -228,60 +243,68 @@ class Queue
             exit();
         }
 
+        try {
+            /** @var \Magento\Catalog\Model\Product $product */
+            $product = $this->productRepository->getById($productId);
+            $product->getMediaGalleryImages();
+        } catch (NoSuchEntityException $e) {
+            return true;
+        }
+
         $this->imageCache->generate($product);
         $this->output->write('.');
         return true;
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
+     * @param int $productId
      * @return bool
      */
-    protected function isResized($product)
+    public function isResized($productId)
     {
         if ($this->isCanBeParalleled()) {
-            if ($this->getState($product) === null) {
-                $pid = pcntl_waitpid($this->getPid($product), $status, WNOHANG);
-                if ($pid === $this->getPid($product)) {
-                    $this->setState($product, self::STATE_RESIZED);
+            if ($this->getState($productId) === null) {
+                $pid = pcntl_waitpid($this->getPid($productId), $status, WNOHANG);
+                if ($pid === $this->getPid($productId)) {
+                    $this->setState($productId, self::STATE_RESIZED);
 
-                    unset($this->inProgress[$product->getId()]);
+                    unset($this->inProgress[$productId]);
                     return pcntl_wexitstatus($status) === 0;
                 }
                 return false;
             }
 
         }
-        return $this->getState($product);
+        return $this->getState($productId);
     }
 
     /**
-     * @param Product $product
+     * @param int $productId
      * @return null|int
      */
-    protected function getState(Product $product)
+    public function getState($productId)
     {
-        return isset($this->state[$product->getId()]) ?: null;
+        return isset($this->state[$productId]) ?: null;
     }
 
     /**
-     * @param Product $product
+     * @param int $productId
      * @param int $state
      * @return null|int
      */
-    protected function setState(Product $product, $state)
+    public function setState($productId, $state)
     {
-        return $this->state[$product->getId()] = $state;
+        return $this->state[$productId] = $state;
     }
 
     /**
-     * @param Product $product
+     * @param int $productId
      * @return int|null
      */
-    protected function getPid(Product $product)
+    public function getPid($productId)
     {
-        return isset($this->processIds[$product->getId()])
-            ? $this->processIds[$product->getId()]
+        return isset($this->processIds[$productId])
+            ? $this->processIds[$productId]
             : null;
     }
 
@@ -294,10 +317,10 @@ class Queue
      */
     public function __destruct()
     {
-        foreach ($this->inProgress as $product) {
-            if (pcntl_waitpid($this->getPid($product), $status) === -1) {
+        foreach ($this->inProgress as $productId) {
+            if (pcntl_waitpid($this->getPid($productId), $status) === -1) {
                 throw new \RuntimeException(
-                    'Error while waiting for image resize for product: ' . $this->getPid($product)
+                    'Error while waiting for image resize for product ID: ' . $this->getPid($productId)
                     . '; Status: ' . $status
                 );
             }

@@ -121,20 +121,8 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         );
 
         try {
-            $output->writeln("<info>Reading product image information</info>");
-            foreach ($productIds as $productId) {
-                try {
-                    /** @var \Magento\Catalog\Model\Product $product */
-                    $product = $this->productRepository->getById($productId);
-                    $product->getMediaGalleryImages();
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    continue;
-                }
-
-                $queue->add($product);
-                $output->write('.');
-            }
-            $output->writeln("\n<info>Resizing product images</info>");
+            $queue->setProducts($productIds);
+            $output->writeln("<info>Resizing product images</info>");
             $queue->process();
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
