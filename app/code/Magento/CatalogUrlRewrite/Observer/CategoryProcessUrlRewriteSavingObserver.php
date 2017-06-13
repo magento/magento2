@@ -45,10 +45,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         UrlRewriteHandler $urlRewriteHandler,
         UrlRewriteBunchReplacer $urlRewriteBunchReplacer,
         DatabaseMapPool $databaseMapPool,
-        $dataUrlRewriteClassNames = [
-        DataCategoryUrlRewriteDatabaseMap::class,
-        DataProductUrlRewriteDatabaseMap::class
-        ]
+        $dataUrlRewriteClassNames = [DataCategoryUrlRewriteDatabaseMap::class, DataProductUrlRewriteDatabaseMap::class]
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->urlRewriteHandler = $urlRewriteHandler;

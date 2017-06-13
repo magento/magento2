@@ -33,7 +33,7 @@ class DefaultMessageConfiguration implements MessageConfigurationInterface
                 ->setText($exception->getMessage());
         } else {
             throw new NotFoundException(
-                __('Exception instance doesn\'t match %1 type', \Exception::class)
+                new \Magento\Framework\Phrase("Exception instance doesn't match %1 type", [\Exception::class])
             );
         }
     }

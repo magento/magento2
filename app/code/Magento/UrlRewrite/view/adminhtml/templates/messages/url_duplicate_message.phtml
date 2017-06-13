@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,25 +8,25 @@
 $urls = $block->getData('urls');
 ?>
 <h4>
-    <?php
-    echo $block->escapeHtml(__('The value specified in the URL Key field would generate a URL that already exists.'));
-    ?>
+<?php
+echo $block->escapeHtml(__('The value specified in the URL Key field would generate a URL that already exists.'));
+?>
 </h4>
 <p>
-    <?php
-    echo $block->escapeHtml(
-        __(
-            'To resolve this conflict, you can either change the value of the URL Key field '
-            . '(located in the Search Engine Optimization section) to a unique value, or change the Request Path fields'
-            .' in all locations listed below:'
-        )
-    );
+<?php
+echo $block->escapeHtml(
+    __(
+        'To resolve this conflict, you can either change the value of the URL Key field '
+        . '(located in the Search Engine Optimization section) to a unique value, or change the Request Path fields'
+        . ' in all locations listed below:'
+    )
+);
 
-    if (!empty($urls)) {
-        foreach ($urls as $key => $url) {
-            // key is the url that has been setup by the controller with the information from the exception
-            echo '<p> - <a href="' . $block->escapeHtml($key) . '">' . $block->escapeHtml($url) . "</a></p>";
-        }
+if (!empty($urls)) {
+    foreach ($urls as $key => $url) {
+        // key is the url that has been setup by the controller with the information from the exception
+        echo '<p> - <a href="' . $block->escapeHtml($key) . '">' . $block->escapeHtml($url) . '</a></p>';
     }
-    ?>
+}
+?>
 </p>

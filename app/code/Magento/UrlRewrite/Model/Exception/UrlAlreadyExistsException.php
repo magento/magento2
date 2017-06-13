@@ -13,13 +13,14 @@ use Magento\Framework\Phrase;
 class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedException
 {
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @var array
      */
     private $urls = [];
 
     /**
      * @param Phrase $phrase
      * @param \Exception $cause
+     * @param array $urls
      * @param array
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null, array $urls = [])

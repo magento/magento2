@@ -20,6 +20,7 @@ class UrlRewriteMessageConfiguration implements MessageConfigurationInterface
 
     /** @var Factory */
     private $messageFactory;
+
     /**
      * @var \Magento\Framework\UrlInterface
      */

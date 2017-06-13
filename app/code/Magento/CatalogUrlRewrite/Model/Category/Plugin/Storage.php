@@ -38,7 +38,7 @@ class Storage
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterReplace(StorageInterface $object, $result, array $urls)
+    public function afterReplace(StorageInterface $object, array $result, array $urls)
     {
         $toSave = [];
         foreach ($this->filterUrls($result) as $record) {
