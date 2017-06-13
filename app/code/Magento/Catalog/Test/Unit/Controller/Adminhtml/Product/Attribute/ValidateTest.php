@@ -15,6 +15,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\DataObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,11 +62,17 @@ class ValidateTest extends AttributeTest
      */
     protected $layoutMock;
 
+    /**
+     * @var DataObject
+     */
+    protected $responseDataObject;
+
     protected function setUp()
     {
         parent::setUp();
         $this->resultJsonFactoryMock = $this->getMockBuilder(ResultJsonFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->resultJson = $this->getMockBuilder(ResultJson::class)
             ->disableOriginalConstructor()
@@ -73,8 +80,6 @@ class ValidateTest extends AttributeTest
         $this->layoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
         $this->attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -86,10 +91,9 @@ class ValidateTest extends AttributeTest
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
-
-        $this->contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->willReturn($this->objectManagerMock);
+        $this->responseDataObject = $this->getMockBuilder(DataObject::class)
+            ->setMethods(null)
+            ->getMock();
     }
 
     /**
@@ -100,13 +104,17 @@ class ValidateTest extends AttributeTest
         return $this->objectManager->getObject(
             Validate::class,
             [
-            'context' => $this->contextMock,
-            'attributeLabelCache' => $this->attributeLabelCacheMock,
-            'coreRegistry' => $this->coreRegistryMock,
-            'resultPageFactory' => $this->resultPageFactoryMock,
-            'resultJsonFactory' => $this->resultJsonFactoryMock,
-            'layoutFactory' => $this->layoutFactoryMock,
-            'multipleAttributeList' => ['select' => 'option']
+                'context' => $this->contextMock,
+                'attributeLabelCache' => $this->attributeLabelCacheMock,
+                'coreRegistry' => $this->coreRegistryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'layoutFactory' => $this->layoutFactoryMock,
+                'multipleAttributeList' => ['select' => 'option', 'multipleselect' => 'option'],
+                'attributeResource' => $this->attributeMock,
+                'attributeSetResource' => $this->attributeSetMock,
+                'escaper' => $this->escaperMock,
+                'responseObject' => $this->responseDataObject,
             ]
         );
     }
@@ -120,21 +128,8 @@ class ValidateTest extends AttributeTest
                 ['attribute_code', null, 'test_attribute_code'],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
             ]);
-        $this->objectManagerMock->expects($this->exactly(2))
-            ->method('create')
-            ->willReturnMap([
-                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
-                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
-            ]);
         $this->attributeMock->expects($this->once())
             ->method('loadByCode')
-            ->willReturnSelf();
-        $this->requestMock->expects($this->once())
-            ->method('has')
-            ->with('new_attribute_set_name')
-            ->willReturn(true);
-        $this->attributeSetMock->expects($this->once())
-            ->method('setEntityTypeId')
             ->willReturnSelf();
         $this->attributeSetMock->expects($this->once())
             ->method('load')
@@ -155,13 +150,11 @@ class ValidateTest extends AttributeTest
     /**
      * @dataProvider provideUniqueData
      * @param array $options
-     * @param boolean $isError
      * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function testUniqueValidation(array $options, $isError)
+    public function testUniqueValidation(array $options)
     {
-        $countFunctionCalls = ($isError) ? 6 : 5;
-        $this->requestMock->expects($this->exactly($countFunctionCalls))
+        $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap([
                 ['frontend_label', null, null],
@@ -171,18 +164,9 @@ class ValidateTest extends AttributeTest
                 ['message_key', null, Validate::DEFAULT_MESSAGE_KEY]
             ]);
 
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->attributeMock);
-
         $this->attributeMock->expects($this->once())
             ->method('loadByCode')
             ->willReturnSelf();
-
-        $this->requestMock->expects($this->once())
-            ->method('has')
-            ->with('new_attribute_set_name')
-            ->willReturn(false);
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
@@ -205,7 +189,7 @@ class ValidateTest extends AttributeTest
                         "option_1" => "",
                         "option_2" => "",
                     ]
-                ], false
+                ]
             ],
             'valid options' => [
                 [
@@ -219,7 +203,7 @@ class ValidateTest extends AttributeTest
                         "option_1" => "",
                         "option_2" => "",
                     ]
-                ], false
+                ]
             ],
             'duplicate options' => [
                 [
@@ -233,7 +217,7 @@ class ValidateTest extends AttributeTest
                         "option_1" => "",
                         "option_2" => "",
                     ]
-                ], true
+                ]
             ],
             'duplicate and deleted' => [
                 [
@@ -247,8 +231,79 @@ class ValidateTest extends AttributeTest
                         "option_1" => "1",
                         "option_2" => "",
                     ]
-                ], false
+                ]
             ],
+        ];
+    }
+
+    /**
+     * Check that empty admin scope labels will trigger error.
+     *
+     * @dataProvider provideEmptyOption
+     * @param array $options
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testEmptyOption(array $options, $result)
+    {
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['frontend_label', null, null],
+                ['frontend_input', 'select', 'multipleselect'],
+                ['attribute_code', null, "test_attribute_code"],
+                ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                ['option', null, $options],
+                [Validate::ARRAY_MESSAGE_KEY, Validate::DEFAULT_MESSAGE_KEY, Validate::DEFAULT_MESSAGE_KEY]
+            ]);
+
+        $this->attributeMock->expects($this->once())
+            ->method('loadByCode')
+            ->willReturnSelf();
+
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->willReturnArgument(0);
+
+        $response = $this->getModel()->execute();
+        $responseObject = json_decode($response);
+        $this->assertEquals($responseObject, $result);
+    }
+
+    /**
+     * Dataprovider for testEmptyOption.
+     *
+     * @return array
+     */
+    public function provideEmptyOption()
+    {
+        return [
+            'empty admin scope options' => [
+                [
+                    'value' => [
+                        "option_0" => [''],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => [
+                        'The value of Admin scope can\'t be empty.'
+                    ]
+                ]
+            ],
+            'not empty admin scope options' => [
+                [
+                    'value' => [
+                        "option_0" => ['asdads'],
+                    ],
+                ],
+                (object) [
+                    'error' => false,
+                ]
+            ]
         ];
     }
 }
