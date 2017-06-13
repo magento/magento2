@@ -10,7 +10,6 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
- * @api
  */
 class Elasticsearch implements ClientInterface
 {

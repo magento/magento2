@@ -8,7 +8,6 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldType;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Store\Model\ScopeInterface;
 
 class Date
 {

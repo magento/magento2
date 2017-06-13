@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Model\Adapter;
 /**
  * Map index data to search engine metadata
  * Convert array [[attribute_id => [entity_id => value], ... ]] to applicable for search engine [[attribute => value],]
+ * @api
  */
 interface BatchDataMapperInterface
 {

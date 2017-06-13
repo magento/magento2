@@ -6,7 +6,6 @@
 namespace Magento\Elasticsearch\Model\Adapter;
 
 /**
- * @api
  * @deprecated
  * @see \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface
  */
