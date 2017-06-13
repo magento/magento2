@@ -6,7 +6,9 @@
 namespace Magento\Security\Model\SecurityChecker;
 
 /**
- * Interface SecurityCheckerInterface
+ * Interface for validation of reset password action
+ *
+ * @api
  */
 interface SecurityCheckerInterface
 {

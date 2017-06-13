@@ -126,6 +126,7 @@
             <argument name="validators" xsi:type="array">
                 <item name="cvv2_code" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match</item>
                 <item name="avs_response" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse</item>
+                <item name="iavs_response" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\IAVSResponse</item>
             </argument>
         </arguments>
     </type>
@@ -135,6 +136,7 @@
                 <item name="secure_token" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\SecureToken</item>
                 <item name="cvv2_code" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match</item>
                 <item name="avs_response" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse</item>
+                <item name="iavs_response" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\IAVSResponse</item>
             </argument>
         </arguments>
     </virtualType>

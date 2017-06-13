@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
 /**
  * Sales Adminhtml report filter form
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */

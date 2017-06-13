@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFact
 /**
  * Review Product Collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection

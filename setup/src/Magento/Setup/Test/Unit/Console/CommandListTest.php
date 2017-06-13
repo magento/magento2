@@ -29,7 +29,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
     public function testGetCommands()
     {
         $this->serviceManager->expects($this->atLeastOnce())
-            ->method('create');
+            ->method('get');
 
         $this->commandList->getCommands();
     }

@@ -7,17 +7,13 @@
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="design_config_columns">
-        <column name="theme_theme_id">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Framework\View\Design\Theme\Label</item>
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="label" xsi:type="string" translate="true">Theme Name</item>
-                    <item name="sortOrder" xsi:type="number">40</item>
-                </item>
-            </argument>
+        <column name="theme_theme_id" component="Magento_Ui/js/grid/columns/select" sortOrder="40">
+            <settings>
+                <options class="Magento\Framework\View\Design\Theme\Label"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Theme Name</label>
+            </settings>
         </column>
     </columns>
 </listing>

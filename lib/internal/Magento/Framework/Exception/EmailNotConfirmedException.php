@@ -6,7 +6,7 @@
 namespace Magento\Framework\Exception;
 
 /**
- * Class EmailNotConfirmedException
+ * @api
  */
 class EmailNotConfirmedException extends AuthenticationException
 {

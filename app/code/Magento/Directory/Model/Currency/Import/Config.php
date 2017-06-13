@@ -5,6 +5,11 @@
  */
 namespace Magento\Directory\Model\Currency\Import;
 
+/**
+ * Configured currency import services
+ *
+ * @api
+ */
 class Config
 {
     /**

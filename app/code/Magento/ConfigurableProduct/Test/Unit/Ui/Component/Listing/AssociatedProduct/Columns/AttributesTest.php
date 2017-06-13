@@ -79,7 +79,7 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
         $this->searchResultsMock = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
             ->getMockForAbstractClass();
 
-        $this->contextMock->expects(static::any())
+        $this->contextMock->expects(static::never())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
         $this->searchCriteriaBuilderMock->expects(static::any())

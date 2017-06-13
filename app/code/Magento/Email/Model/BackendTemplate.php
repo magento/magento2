@@ -10,6 +10,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Adminhtml email template model
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackendTemplate extends Template

@@ -7,6 +7,7 @@
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config;
 
 use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute\AttributeSelector;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
@@ -160,12 +161,27 @@ class Attribute extends Form
     private $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
 
     /**
+     * Wizard Images step CSS selector.
+     *
+     * @var string
+     */
+    private $wizardImagesStep = '#variation-steps-wizard_step3';
+
+    /**
+     * Attributes grid spinner selector
+     *
+     * @var string
+     */
+    private $attributesGridSpinner = '.productFormConfigurable [data-role="spinner"]';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
+     * @param ConfigurableAttributesData $attributeSource
      * @return void
      */
-    public function fillAttributes(array $attributes)
+    public function fillAttributes(array $attributes, ConfigurableAttributesData $attributeSource)
     {
         $attributesFilters = [];
         foreach ($attributes as $attribute) {
@@ -177,9 +193,11 @@ class Attribute extends Form
 
         //select attributes
         $this->getAttributesGrid()->resetFilter();
+        $this->getAttributesGrid()->waitForElementNotVisible($this->attributesGridSpinner);
         $this->getTemplateBlock()->waitLoader();
+
         $attributesList = $this->browser->find($this->selectedAttributes)->getText();
-        if ($attributesList != '--') {
+        if (!$attributesList || $attributesList !== '--') {
             $this->getAttributesGrid()->deselectAttributes();
         }
 
@@ -197,6 +215,7 @@ class Attribute extends Form
         }
 
         $this->browser->find($this->nextButton)->click();
+        $this->fillBulkImagesPriceAndQuantity($attributeSource, $attributes);
         $this->getTemplateBlock()->waitLoader();
         $this->browser->find($this->nextButton)->click();
     }
@@ -223,6 +242,14 @@ class Attribute extends Form
         $attributeFixture = ObjectManager::getInstance()->create(
             \Magento\Catalog\Test\Fixture\CatalogProductAttribute::class,
             ['data' => $attribute]
+        );
+
+        $browser = $this->browser;
+        $createSetSelector = $this->createNewVariationSet;
+        $browser->waitUntil(
+            function () use ($browser, $createSetSelector) {
+                return $browser->find($createSetSelector)->isVisible() ? true : null;
+            }
         );
 
         $this->browser->find($this->createNewVariationSet)->click();
@@ -468,5 +495,48 @@ class Attribute extends Form
             \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
+    }
+
+    /**
+     * Fill Step 3: Bulk Images, Price and Quantity.
+     *
+     * @param ConfigurableAttributesData $attributeSource
+     * @param array $attributes
+     * @return void
+     */
+    private function fillBulkImagesPriceAndQuantity(ConfigurableAttributesData $attributeSource, array $attributes)
+    {
+        if (empty($attributeSource->getBulkImagesPriceQuantity())) {
+            return;
+        }
+
+        $wizardStep = $this->browser->find($this->wizardImagesStep);
+        $data = $this->prepareImageStepData($attributeSource->getBulkImagesPriceQuantity(), $attributes);
+        $mapping = $this->dataMapping($data);
+        $this->_fill($mapping, $wizardStep);
+    }
+
+    /**
+     * Prepare data for Step 3: Bulk Images, Price and Quantity.
+     *
+     * @param array $data
+     * @param array $attributes
+     * @return array
+     */
+    private function prepareImageStepData(array $data, array $attributes)
+    {
+        if (isset($data['images'])) {
+            $data['images']['image_attribute'] = $attributes['attribute_key_0']['attribute_code'];
+            $data['images']['black_option_image'] = MTF_TESTS_PATH . array_shift($data['images']['images']);
+            $data['images']['white_option_image'] = MTF_TESTS_PATH . array_shift($data['images']['images']);
+            unset($data['images']['images']);
+        }
+
+        if (isset($data['price'])) {
+            $data['price']['price_option'] = $attributes['attribute_key_1']['attribute_code'];
+            ksort($data['price']);
+        }
+
+        return $data;
     }
 }

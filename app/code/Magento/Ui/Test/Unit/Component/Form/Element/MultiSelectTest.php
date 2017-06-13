@@ -24,11 +24,18 @@ class MultiSelectTest extends AbstractElementTest
 
     public function testGetComponentName()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
+
         $this->assertSame(MultiSelect::NAME, $this->getModel()->getComponentName());
     }
 
     public function testPrepare()
     {
+        $processorMock = $this->getMockBuilder(Processor::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['register', 'notify'])
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         $this->getModel()->prepare();
 
         $this->assertNotEmpty($this->getModel()->getData());

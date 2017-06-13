@@ -24,7 +24,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
 
         /** @var \Magento\Cms\Ui\Component\Listing\Column\PageActions $model */
         $model = $objectManager->getObject(
@@ -68,7 +68,7 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete %1', $title),
-                            'message' => __('Are you sure you wan\'t to delete a %1 record?', $title)
+                            'message' => __('Are you sure you want to delete a %1 record?', $title)
                         ],
                     ]
                 ],

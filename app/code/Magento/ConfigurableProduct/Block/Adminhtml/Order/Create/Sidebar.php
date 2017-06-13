@@ -7,6 +7,9 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Order\Create;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * @api
+ */
 class Sidebar
 {
     /**

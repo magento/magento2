@@ -7,6 +7,8 @@ namespace Magento\Backend\Block\Page;
 
 /**
  * Copyright footer block
+ *
+ * @api
  */
 class Copyright extends \Magento\Backend\Block\Template
 {

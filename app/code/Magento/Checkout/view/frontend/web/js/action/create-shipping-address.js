@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'Magento_Customer/js/model/address-list',
     'Magento_Checkout/js/model/address-converter'

@@ -22,10 +22,10 @@ interface CreditmemoRepositoryInterface
      * included. See http://devdocs.magento.com/codelinks/attributes.html#CreditmemoRepositoryInterface to
      * determine which call to use to get detailed information about all attributes for an object.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoSearchResultInterface Credit memo search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Loads a specified credit memo.

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Directory\Model;
+
 /**
  * Region
  *
@@ -17,10 +19,8 @@
  * @method string getDefaultName()
  * @method \Magento\Directory\Model\Region setDefaultName(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Directory\Model;
-
 class Region extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -34,7 +34,7 @@ class Region extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve region name
      *
-     * If name is no declared, then default_name is used
+     * If name is not declared, then default_name is used
      *
      * @return string
      */

@@ -7,6 +7,9 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @api
+ */
 class Exception extends LocalizedException
 {
 }

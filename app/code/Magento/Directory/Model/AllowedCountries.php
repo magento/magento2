@@ -7,12 +7,13 @@
 namespace Magento\Directory\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class CountryHandler
+ * Provider of allowed countries based on configuration settings
+ *
+ * @api
  */
 class AllowedCountries
 {

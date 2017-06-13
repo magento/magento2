@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Model\Address;
 
+/**
+ * @api
+ */
 interface CustomAttributeListInterface
 {
     /**

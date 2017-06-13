@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'jquery/ui',
@@ -21,7 +24,7 @@ define([
             $(this.options.cookieAllowButtonSelector).on('click', $.proxy(function () {
                 var cookieExpires = new Date(new Date().getTime() + this.options.cookieLifetime * 1000);
 
-                $.mage.cookies.set(this.options.cookieName, this.options.cookieValue, {
+                $.mage.cookies.set(this.options.cookieName, JSON.stringify(this.options.cookieValue), {
                     expires: cookieExpires
                 });
 

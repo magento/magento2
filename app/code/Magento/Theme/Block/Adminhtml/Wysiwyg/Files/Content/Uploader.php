@@ -8,6 +8,7 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 /**
  * Files uploader block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Uploader extends \Magento\Backend\Block\Media\Uploader

@@ -5,6 +5,9 @@
  */
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit;
 
+/**
+ * @api
+ */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
