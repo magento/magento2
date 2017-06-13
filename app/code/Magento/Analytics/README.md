@@ -30,4 +30,4 @@
 *   SalesAnalytics: 
     *   Configure data definitions for data collection to Sales module entities
     
-    ![Analytics Modules](/docs/images/analytics_modules.png)
+    ![Analytics Modules](./docs/images/analytics_modules.png)
