@@ -19,36 +19,40 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Ensure that SalesRules filtering on category ignore product visibility
+     * Ensure that SalesRules filtering on category validates children products of configurables
+     *
+     * 1. Load a quote with a configured product and a sales rule set to filter based on category
+     * 2. Set product's associated category according to test case
+     * 3. Attempt to validate the sales rule against the quote and assert the output is as expected
      *
      * @magentoAppIsolation enabled
      * @param int $categoryId
-     * @param int $visibility
      * @param bool $expectedResult
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/SalesRule/_files/rules_category.php
      * @dataProvider validateProductConditionDataProvider
      */
-    public function testValidateCategorySalesRuleIgnoresVisibility($categoryId, $visibility, $expectedResult)
+    public function testValidateCategorySalesRuleIncludesChildren($categoryId, $expectedResult)
     {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->objectManager->create(\Magento\Checkout\Model\Session::class);
+        // Load the quote that contains a child of a configurable product
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
+            ->load('test_cart_with_configurable', 'reserved_order_id');
 
-        // Prepare product with given visibility and category settings
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = $productRepository->get('simple');
-        $product->setVisibility($visibility);
-        $product->setCategoryIds([$categoryId]);
-        $product->save();
-
-        // Load the SalesRule looking for products in a category and assert that the validation is as expected
+        // Load the SalesRule looking for products in a specific category
         /** @var $rule \Magento\SalesRule\Model\Rule */
         $rule = $this->objectManager->get(\Magento\Framework\Registry::class)
             ->registry('_fixture/Magento_SalesRule_Category');
 
-        $this->assertEquals($expectedResult, $rule->validate($session->getQuote()));
+        // Prepare the parent product with the given category setting
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class)
+            ->get('configurable');
+        $product->setCategoryIds([$categoryId]);
+        $product->save();
+
+        // Assert the validation result matches the expected result given the child product and category rule
+        $this->assertEquals($expectedResult, $rule->validate($quote));
     }
 
     /**
@@ -58,29 +62,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $validCategoryId = 66;
         $invalidCategoryId = 2;
-        $visible = \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH;
-        $invisible = \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE;
         return [
             [
                 'categoryId' => $validCategoryId,
-                'visibility' => $visible,
-                'expectedResult' => true
-            ],
-            [
-                'categoryId' => $validCategoryId,
-                'visibility' => $invisible,
                 'expectedResult' => true
             ],
             [
                 'categoryId' => $invalidCategoryId,
-                'visibility' => $visible,
                 'expectedResult' => false
-            ],
-            [
-                'categoryId' => $invalidCategoryId,
-                'visibility' => $invisible,
-                'expectedResult' => false
-            ],
+            ]
         ];
     }
 }
