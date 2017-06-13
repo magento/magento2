@@ -7,22 +7,14 @@
 namespace Magento\Framework\View\Element\Message\Renderer;
 
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 interface MessageConfigurationInterface
 {
     /**
      * @param \Exception $exception
      * @return MessageInterface
+     * @throws NotFoundException
      */
-    public function createMessage($exception);
-
-    /**
-     * @return string
-     */
-    public function getIdentifier();
-
-    /**
-     * @return string
-     */
-    public function getExceptionClass();
+    public function generateMessage(\Exception $exception);
 }

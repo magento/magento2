@@ -144,7 +144,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addExceptionMessage($e, $e->getMessage());
+                $this->messageManager->addExceptionMessage($e);
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {

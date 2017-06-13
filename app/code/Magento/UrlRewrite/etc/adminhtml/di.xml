@@ -6,13 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
-        <arguments>
-            <argument name="renderers" xsi:type="array">
-                <item name="url_duplicate_block_renderer" xsi:type="object">Magento\UrlRewrite\Block\View\Element\Message\Renderer\BlockRenderer</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool">
         <arguments>
             <argument name="messageConfigurationsMap" xsi:type="array">
@@ -24,7 +17,7 @@
         <arguments>
             <argument name="configurationsMap" xsi:type="array">
                 <item name="addUrlDuplicateMessage" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\UrlRewrite\Block\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">
                         <item name="template" xsi:type="string">Magento_UrlRewrite::messages/url_duplicate_message.phtml</item>
                     </item>

@@ -53,12 +53,25 @@ class Start extends ImportResultController
                 ->addAction('hide', ['edit_form', 'upload_button', 'messages']);
 
             $this->importModel->setData($data);
+            $errorAggregator = $this->importModel->getErrorAggregator();
             try {
                 $this->importModel->importSource();
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, $e->getMessage());
+                /** @var \Magento\Framework\View\Element\Messages $resultMessageBlock */
+                $resultMessageBlock = $resultLayout->getLayout()->getBlock('messages');
+                $this->messageManager->addExceptionMessage($e, null, 'importFile');
+                $message = $this->messageManager->getMessages(true, 'importFile')->getLastAddedMessage();
+                $html = $resultMessageBlock->addMessage($message)->toHtml();
+                $errorAggregator->addError(
+                    \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                    \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::ERROR_LEVEL_CRITICAL,
+                    null,
+                    null,
+                    null,
+                    $html
+                );
             }
-            $errorAggregator = $this->importModel->getErrorAggregator();
+
             if ($this->importModel->getErrorAggregator()->hasToBeTerminated()) {
                 $resultBlock->addError(__('Maximum error count has been reached or system error is occurred!'));
                 $this->addErrorMessages($resultBlock, $errorAggregator);
@@ -67,7 +80,6 @@ class Start extends ImportResultController
                 $this->addErrorMessages($resultBlock, $errorAggregator);
                 $resultBlock->addSuccess(__('Import successfully done'));
             }
-
 
             return $resultLayout;
         }

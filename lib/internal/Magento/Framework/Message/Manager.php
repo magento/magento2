@@ -59,7 +59,7 @@ class Manager implements ManagerInterface
     /**
      * @var \Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool
      */
-    private $messageConfigurationsPool;
+    private $messageGeneratorsPool;
 
     /**
      * @param Session $session
@@ -85,8 +85,8 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
-        $this->messageConfigurationsPool = $messageConfigurationsPool;
-        $this->messageConfigurationsPool = $messageConfigurationsPool ?: ObjectManager::getInstance()
+        $this->messageGeneratorsPool = $messageConfigurationsPool;
+        $this->messageGeneratorsPool = $messageConfigurationsPool ?: ObjectManager::getInstance()
             ->get(MessageConfigurationsPool::class);
     }
 
@@ -255,15 +255,13 @@ class Manager implements ManagerInterface
 
         $this->logger->critical($message);
 
-        if ($messageConfiguration = $this->messageConfigurationsPool->getMessageConfiguration($exception)) {
-            $this->addMessage($messageConfiguration->createMessage($exception));
+        if ($alternativeText) {
+            $this->addErrorMessage($alternativeText, $group);
         } else {
-            if ($alternativeText) {
-                $this->addErrorMessage($alternativeText, $group);
-            } else {
-                $this->addErrorMessage($exception->getMessage(), $group);
-            }
+            $messageGenerator = $this->messageGeneratorsPool->getMessageGenerator($exception);
+            $this->addMessage($messageGenerator->generateMessage($exception), $group);
         }
+
         return $this;
     }
 
@@ -296,15 +294,13 @@ class Manager implements ManagerInterface
 
         $this->logger->critical($message);
 
-        if ($messageConfiguration = $this->messageConfigurationsPool->getMessageConfiguration($exception)) {
-            $this->addMessage($messageConfiguration->createMessage($exception));
+        if ($alternativeText) {
+            $this->addErrorMessage($alternativeText, $group);
         } else {
-            if ($alternativeText) {
-                $this->addErrorMessage($alternativeText, $group);
-            } else {
-                $this->addErrorMessage($exception->getMessage(), $group);
-            }
+            $messageGenerator = $this->messageGeneratorsPool->getMessageGenerator($exception);
+            $this->addMessage($messageGenerator->generateMessage($exception), $group);
         }
+
         return $this;
     }
 

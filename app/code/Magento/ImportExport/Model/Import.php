@@ -446,19 +446,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
             $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
         );
-        try {
-            $this->_getEntityAdapter()->importData();
-        } catch (\Exception $e) {
-            $errorAggregator->addError(
-                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
-                ProcessingError::ERROR_LEVEL_CRITICAL,
-                null,
-                null,
-                null,
-                $e->getMessage()
-            );
-            throw $e;
-        }
+        $this->_getEntityAdapter()->importData();
+
 
         return !$errorAggregator->hasToBeTerminated();
     }

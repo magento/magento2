@@ -213,7 +213,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addExceptionMessage($e);
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Exception $e) {

@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\Message\Renderer\MessageConfigurationInterfac
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Factory;
+use Magento\Framework\Exception\NotFoundException;
 
 class UrlRewriteMessageConfiguration implements MessageConfigurationInterface
 {
@@ -19,43 +20,45 @@ class UrlRewriteMessageConfiguration implements MessageConfigurationInterface
 
     /** @var Factory */
     private $messageFactory;
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $urlBuilder;
 
     /**
-     * UrlRewriteExceptionRendererIdentifier constructor.
      * @param Factory $messageFactory
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      */
-    public function __construct(Factory $messageFactory)
+    public function __construct(Factory $messageFactory, \Magento\Framework\UrlInterface $urlBuilder)
     {
         $this->messageFactory = $messageFactory;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
-     * @param UrlAlreadyExistsException $exception
-     * @return MessageInterface
+     * @inheritdoc
      */
-    public function createMessage($exception)
+    public function generateMessage(\Exception $exception)
     {
-        return $this->messageFactory->create(MessageInterface::TYPE_ERROR)
-            ->setIdentifier(
-                empty(self::ADD_URL_DUPLICATE_MESSAGE)
-                    ? MessageInterface::DEFAULT_IDENTIFIER
-                    : self::ADD_URL_DUPLICATE_MESSAGE
-            )->setData(['urls' => $exception->getUrls()]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentifier()
-    {
-        return self::ADD_URL_DUPLICATE_MESSAGE;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExceptionClass()
-    {
-        return self::EXCEPTION_CLASS;
+        if ($exception instanceof UrlAlreadyExistsException) {
+            $generatedUrls = [];
+            $urls = $exception->getUrls();
+            if ($urls && is_array($urls)) {
+                foreach ($urls as $id => $url) {
+                    $adminEditUrl = $this->urlBuilder->getUrl(
+                        'adminhtml/url_rewrite/edit',
+                        ['id' => $id]
+                    );
+                    $generatedUrls[$adminEditUrl] = $url['request_path'];
+                }
+            }
+            return $this->messageFactory->create(MessageInterface::TYPE_ERROR)
+                ->setIdentifier(self::ADD_URL_DUPLICATE_MESSAGE)
+                ->setText($exception->getMessage())
+                ->setData(['urls' => $generatedUrls]);
+        }
+        throw new NotFoundException(
+            __('Exception instance doesn\'t match %1 type', UrlAlreadyExistsException::class)
+        );
     }
 }

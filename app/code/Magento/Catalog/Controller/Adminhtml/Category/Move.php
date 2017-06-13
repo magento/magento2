@@ -69,7 +69,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
             $category->move($parentNodeId, $prevNodeId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage($e);
         } catch (\Exception $e) {
             $error = true;
             $this->messageManager->addError(__('There was a category move error.'));
