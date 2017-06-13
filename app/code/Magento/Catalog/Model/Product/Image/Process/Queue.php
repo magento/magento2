@@ -139,13 +139,13 @@ class Queue
         $this->start = $this->lastJobStarted = time();
         $products = $this->products;
         while (count($products)) {
-            foreach ($products as $id => $product) {
-                $this->assertAndExecute($id, $products, $product);
+            foreach ($products as $productId => $product) {
+                $this->assertAndExecute($productId, $products, $product);
             }
             usleep(20000);
-            foreach ($this->inProgress as $id => $product) {
+            foreach ($this->inProgress as $productId => $product) {
                 if ($this->isResized($product)) {
-                    unset($this->inProgress[$id]);
+                    unset($this->inProgress[$productId]);
                 }
             }
         }
@@ -158,15 +158,15 @@ class Queue
     /**
      * Check that we are not over max processes and execute
      *
-     * @param int $id
+     * @param int $productId
      * @param array $products
      * @param Product $product
      * @return void
      */
-    protected function assertAndExecute($id, array & $products, Product $product)
+    protected function assertAndExecute($productId, array & $products, Product $product)
     {
         if ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses)) {
-            unset($products[$id]);
+            unset($products[$productId]);
             $this->execute($product);
         }
     }
@@ -179,9 +179,9 @@ class Queue
     protected function awaitForAllProcesses()
     {
         while ($this->inProgress) {
-            foreach ($this->inProgress as $id => $product) {
+            foreach ($this->inProgress as $productId => $product) {
                 if ($this->isResized($product)) {
-                    unset($this->inProgress[$id]);
+                    unset($this->inProgress[$productId]);
                 }
             }
             usleep(100000);
