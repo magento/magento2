@@ -255,7 +255,7 @@ class Manager implements ManagerInterface
         $this->logger->critical($message);
 
         if ($alternativeText) {
-            $this->addErrorMessage($alternativeText, $group);
+            $this->addError($alternativeText, $group);
         } else {
             $messageGenerator = $this->messageGeneratorsPool->getMessageGenerator($exception);
             $this->addMessage($messageGenerator->generateMessage($exception), $group);

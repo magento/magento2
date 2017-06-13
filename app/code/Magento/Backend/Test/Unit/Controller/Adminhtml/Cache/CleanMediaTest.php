@@ -28,11 +28,26 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
             ['setIsUrlNotice'],
             $helper->getConstructArguments(\Magento\Backend\Model\Session::class)
         );
+
+        $messageConfigurationsPool = $this->getMockBuilder(
+            \Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(
+                ['getMessageGenerator']
+            )
+            ->getMock();
+
+        $messageManagerParams = $helper->getConstructArguments(\Magento\Framework\Message\Manager::class);
+
+        $messageManagerParams['messageConfigurationsPool'] = $messageConfigurationsPool;
+
         $messageManager = $this->getMock(
             \Magento\Framework\Message\Manager::class,
             ['addSuccess'],
-            $helper->getConstructArguments(\Magento\Framework\Message\Manager::class)
+            $messageManagerParams
         );
+
         $context = $this->getMock(
             \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'],

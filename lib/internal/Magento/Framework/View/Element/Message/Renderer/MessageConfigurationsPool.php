@@ -23,8 +23,8 @@ class MessageConfigurationsPool
         MessageConfigurationInterface $defaultConfiguration,
         array $messageConfigurationsMap = []
     ) {
-        $this->messageConfigurationsMap = $messageConfigurationsMap;
         $this->defaultConfiguration = $defaultConfiguration;
+        $this->messageConfigurationsMap = $messageConfigurationsMap;
     }
 
     /**

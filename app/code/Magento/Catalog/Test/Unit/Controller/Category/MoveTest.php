@@ -211,8 +211,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
         $this->messageManager->expects($this->once())
-            ->method('addError')
-            ->with($exceptionMessage);
+            ->method('addExceptionMessage');
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true)

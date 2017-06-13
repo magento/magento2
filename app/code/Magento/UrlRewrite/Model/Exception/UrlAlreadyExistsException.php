@@ -18,18 +18,18 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedEx
     private $urls = [];
 
     /**
-     * @param Phrase $phrase
+     * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
+     * @param int $code
      * @param array $urls
-     * @param array
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, array $urls = [])
+    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0, array $urls = [])
     {
         $this->urls = $urls;
         if ($phrase === null) {
-            $phrase = new Phrase('URL key for specified store already exists');
+            $phrase = __('URL key for specified store already exists');
         }
-        parent::__construct($phrase, $cause);
+        parent::__construct($phrase, $cause, $code);
     }
 
     /**

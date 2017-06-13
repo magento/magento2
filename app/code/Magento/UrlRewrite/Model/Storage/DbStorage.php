@@ -123,7 +123,8 @@ class DbStorage extends AbstractStorage
             }
             throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
                 __('URL key for specified store already exists.'),
-                null,
+                $e,
+                $e->getCode(),
                 $urlConflicted
             );
         }

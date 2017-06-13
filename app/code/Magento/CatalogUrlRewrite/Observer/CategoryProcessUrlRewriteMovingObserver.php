@@ -14,6 +14,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 
 /**
  * Generates Category Url Rewrites after move/save and Products Url Rewrites assigned to the category that's being saved
@@ -61,7 +63,10 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         UrlRewriteHandler $urlRewriteHandler,
         UrlRewriteBunchReplacer $urlRewriteBunchReplacer,
         DatabaseMapPool $databaseMapPool,
-        $dataUrlRewriteClassNames = [DataCategoryUrlRewriteDatabaseMap::class, DataProductUrlRewriteDatabaseMap::class]
+        $dataUrlRewriteClassNames = [
+        DataCategoryUrlRewriteDatabaseMap::class,
+        DataProductUrlRewriteDatabaseMap::class
+        ]
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
