@@ -80,7 +80,7 @@ class DeployStaticContent
             : (new \DateTime())->getTimestamp();
         $this->versionStorage->save($version);
 
-        if ($this->getRefreshContentVersionOnly($options)) {
+        if ($this->isRefreshContentVersionOnly($options)) {
             $this->logger->warning("New content version: " . $version);
             return;
         }
@@ -145,7 +145,7 @@ class DeployStaticContent
      * @param array $options
      * @return bool
      */
-    private function getRefreshContentVersionOnly(array $options)
+    private function isRefreshContentVersionOnly(array $options)
     {
         return isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
             && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
