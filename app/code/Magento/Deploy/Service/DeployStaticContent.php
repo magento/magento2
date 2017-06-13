@@ -80,7 +80,7 @@ class DeployStaticContent
             : (new \DateTime())->getTimestamp();
         $this->versionStorage->save($version);
 
-        if ($options[Options::REFRESH_CONTENT_VERSION_ONLY]) {
+        if ($this->getRefreshContentVersionOnly($options)) {
             $this->logger->warning(PHP_EOL . "New content version: " . $version);
             return;
         }
@@ -139,5 +139,16 @@ class DeployStaticContent
     private function getProcessesAmount(array $options)
     {
         return isset($options[Options::JOBS_AMOUNT]) ? (int)$options[Options::JOBS_AMOUNT] : 0;
+    }
+
+    /**
+     * @param array $options
+     * @return bool
+     */
+    private function getRefreshContentVersionOnly(array $options)
+    {
+        return isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
+            ? (bool)$options[Options::REFRESH_CONTENT_VERSION_ONLY]
+            : false;
     }
 }
