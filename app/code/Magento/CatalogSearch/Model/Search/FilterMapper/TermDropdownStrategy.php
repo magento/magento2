@@ -83,7 +83,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
             'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
             $alias,
             $attribute->getId(),
-            $this->storeManager->getWebsite()->getId()
+            $this->storeManager->getStore()->getId()
         );
         $select->joinLeft(
             [$alias => $this->resourceConnection->getTableName('catalog_product_index_eav')],
