@@ -16,7 +16,6 @@ class DefaultMessageConfiguration implements MessageConfigurationInterface
     private $messageFactory;
 
     /**
-     * UrlRewriteExceptionRendererIdentifier constructor.
      * @param Factory $messageFactory
      */
     public function __construct(Factory $messageFactory)

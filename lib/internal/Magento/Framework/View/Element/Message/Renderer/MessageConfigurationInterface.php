@@ -12,6 +12,8 @@ use Magento\Framework\Exception\NotFoundException;
 interface MessageConfigurationInterface
 {
     /**
+     * Generates specific message based on Exception type and the data it contains
+     *
      * @param \Exception $exception
      * @return MessageInterface
      * @throws NotFoundException

@@ -107,7 +107,7 @@ class DbStorage extends AbstractStorage
         }
         try {
             $this->insertMultiple($data);
-        } catch (\Exception $e) {
+        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urlConflicted */
             $urlConflicted = [];
             foreach ($urls as $url) {
@@ -117,19 +117,15 @@ class DbStorage extends AbstractStorage
                         UrlRewriteData::STORE_ID => $url->getStoreId()
                     ]
                 );
-                $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url->toArray();
-            }
-            if (!empty($urlConflicted)) {
-                if ($e instanceof \Magento\Framework\Exception\AlreadyExistsException) {
-                    throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
-                        __('URL key for specified store already exists.'),
-                        null,
-                        $urlConflicted
-                    );
-                } else {
-                    throw $e;
+                if (isset($urlFound[UrlRewriteData::URL_REWRITE_ID])) {
+                    $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url->toArray();
                 }
             }
+            throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
+                __('URL key for specified store already exists.'),
+                null,
+                $urlConflicted
+            );
         }
 
         return $urls;

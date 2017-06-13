@@ -148,7 +148,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, $e->getMessage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->messageManager->addError($e->getMessage());
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }

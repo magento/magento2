@@ -85,7 +85,6 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
-        $this->messageGeneratorsPool = $messageConfigurationsPool;
         $this->messageGeneratorsPool = $messageConfigurationsPool ?: ObjectManager::getInstance()
             ->get(MessageConfigurationsPool::class);
     }
