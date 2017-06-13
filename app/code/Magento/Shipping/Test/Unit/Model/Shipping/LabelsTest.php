@@ -156,7 +156,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @dataProvider testRequestToShipmentLocalizedExceptionDataProvider
+     * @dataProvider requestToShipmentLocalizedExceptionDataProvider
      */
     public function testRequestToShipmentLocalizedException($isShipmentCarrierNotNull)
     {
@@ -280,7 +280,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
      * Data provider to testRequestToShipmentLocalizedException
      * @return array
      */
-    public function testRequestToShipmentLocalizedExceptionDataProvider()
+    public function requestToShipmentLocalizedExceptionDataProvider()
     {
         return [
             [
