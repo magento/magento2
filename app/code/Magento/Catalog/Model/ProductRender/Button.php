@@ -58,7 +58,7 @@ class Button extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @inheritdoc
      */
-    public function getRequiredOptions()
+    public function hasRequiredOptions()
     {
         return $this->getData('required_options');
     }

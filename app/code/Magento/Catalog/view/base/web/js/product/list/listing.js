@@ -87,7 +87,7 @@ define([
         /**
          * Sort and filter rows, that are come from backend
          *
-         * @param rows
+         * @param {Object} rows
          */
         filterRowsFromServer: function (rows) {
             this._filterRows(rows);
