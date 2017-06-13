@@ -10,11 +10,11 @@ namespace Magento\Catalog\Model\ResourceModel\Indexer;
  */
 class ActiveTableSwitcher
 {
-    /** Suffix for outdated index table. */
-    const OUTDATED_TABLE_SUFFIX = '_outdated';
-
     /** Suffix for replica index table. */
-    const ADDITIONAL_TABLE_SUFFIX = '_replica';
+    private $additionalTableSuffix = '_replica';
+
+    /** Suffix for outdated index table. */
+    private $outdatedTableSuffix = '_outdated';
 
     /**
      * Switch index tables from replica to active.
@@ -25,8 +25,8 @@ class ActiveTableSwitcher
      */
     public function switchTable(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $tableName)
     {
-        $outdatedTableName = $tableName . self::OUTDATED_TABLE_SUFFIX;
-        $replicaTableName = $tableName . self::ADDITIONAL_TABLE_SUFFIX;
+        $outdatedTableName = $tableName . $this->outdatedTableSuffix;
+        $replicaTableName = $tableName . $this->additionalTableSuffix;
 
         $connection->renameTablesBatch(
             [
@@ -52,6 +52,6 @@ class ActiveTableSwitcher
      */
     public function getAdditionalTableName($tableName)
     {
-        return $tableName . self::ADDITIONAL_TABLE_SUFFIX;
+        return $tableName . $this->additionalTableSuffix;
     }
 }

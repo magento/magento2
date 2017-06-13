@@ -49,7 +49,7 @@ class ActiveTableSwitcherTest extends \PHPUnit_Framework_TestCase
     {
         $tableName = 'table_name';
         $this->assertEquals(
-            $tableName . \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::ADDITIONAL_TABLE_SUFFIX,
+            $tableName . '_replica',
             $this->model->getAdditionalTableName($tableName)
         );
     }
