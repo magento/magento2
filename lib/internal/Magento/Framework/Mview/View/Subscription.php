@@ -53,6 +53,14 @@ class Subscription implements SubscriptionInterface
     protected $linkedViews = [];
 
     /**
+     * List of columns that can be updated in a subscribed table
+     * without creating a new change log entry
+     *
+     * @var array
+     */
+    protected $ignoredUpdateColumns = ['updated_at'];
+
+    /**
      * @var Resource
      */
     protected $resource;
@@ -175,7 +183,7 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
-     * Build trigger statement for INSER, UPDATE, DELETE events
+     * Build trigger statement for INSERT, UPDATE, DELETE events
      *
      * @param string $event
      * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
@@ -183,54 +191,46 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
-        $skipColumns = ['updated_at'];
-        $describe = $this->connection->describeTable($this->getTableName());
         $columns = [];
-        if (is_array($describe)) {
+        if ($describe = $this->connection->describeTable($this->getTableName())) {
             foreach ($describe as $column) {
-                if (!in_array($column['COLUMN_NAME'], $skipColumns)) {
-                    $columns[] = sprintf('NEW.%1$s != OLD.%1$s',
-                        $this->connection->quoteIdentifier($column['COLUMN_NAME']));
+                if (in_array($column['COLUMN_NAME'], $this->ignoredUpdateColumns)) {
+                    continue;
                 }
+                $columns[] = sprintf(
+                    'NEW.%1$s != OLD.%1$s',
+                    $this->connection->quoteIdentifier($column['COLUMN_NAME'])
+                );
             }
         }
 
         switch ($event) {
             case Trigger::EVENT_INSERT:
-                return sprintf(
-                    "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);",
-                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                    $this->connection->quoteIdentifier($changelog->getColumnName()),
-                    $this->connection->quoteIdentifier($this->getColumnName())
-                );
+                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
+                break;
             case Trigger::EVENT_UPDATE:
+                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 if ($columns) {
-                    return sprintf(
-                        "IF (%s) THEN INSERT IGNORE INTO %s (%s) VALUES (NEW.%s); END IF;",
+                    $trigger = sprintf(
+                        "IF (%s) THEN %s END IF;",
                         implode(' OR ', $columns),
-                        $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                        $this->connection->quoteIdentifier($changelog->getColumnName()),
-                        $this->connection->quoteIdentifier($this->getColumnName())
+                        $trigger
                     );
                 }
-                return sprintf(
-                    "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);",
-                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                    $this->connection->quoteIdentifier($changelog->getColumnName()),
-                    $this->connection->quoteIdentifier($this->getColumnName())
-                );
-
+                break;
             case Trigger::EVENT_DELETE:
-                return sprintf(
-                    "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);",
-                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                    $this->connection->quoteIdentifier($changelog->getColumnName()),
-                    $this->connection->quoteIdentifier($this->getColumnName())
-                );
-
+                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);";
+                break;
             default:
                 return '';
+
         }
+        return sprintf(
+            $trigger,
+            $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+            $this->connection->quoteIdentifier($changelog->getColumnName()),
+            $this->connection->quoteIdentifier($this->getColumnName())
+        );
     }
 
     /**
