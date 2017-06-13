@@ -8,7 +8,7 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Exception\NotFoundException;
 
-interface ExceptionMessageInterface
+interface ExceptionMessageFactoryInterface
 {
     /**
      * Creates error message based on Exception type and the data it contains

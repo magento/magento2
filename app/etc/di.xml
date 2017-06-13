@@ -1328,7 +1328,7 @@
     </type>
     <type name="Magento\Framework\Message\ExceptionMessagePool">
         <arguments>
-            <argument name="defaultConfiguration" xsi:type="object">\Magento\Framework\Message\DefaultExceptionMessage</argument>
+            <argument name="defaultExceptionMessageFactory" xsi:type="object">\Magento\Framework\Message\DefaultExceptionMessageFactory</argument>
         </arguments>
     </type>
 </config>

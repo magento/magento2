@@ -11,32 +11,32 @@ class ExceptionMessagePool
     /**
      * Key of instance is the exception format parameter
      *
-     * @var ExceptionMessageInterface[]
+     * @var ExceptionMessageFactoryInterface[]
      */
-    private $messageConfigurationsMap = [];
+    private $exceptionMessageFactoryMap = [];
 
     /**
-     * @param ExceptionMessageInterface $defaultConfiguration
-     * @param ExceptionMessageInterface[] $messageConfigurationsMap
+     * @param ExceptionMessageFactoryInterface $defaultExceptionMessageFactory
+     * @param ExceptionMessageFactoryInterface[] $exceptionMessageFactoryMap
      */
     public function __construct(
-        ExceptionMessageInterface $defaultConfiguration,
-        array $messageConfigurationsMap = []
+        ExceptionMessageFactoryInterface $defaultExceptionMessageFactory,
+        array $exceptionMessageFactoryMap = []
     ) {
-        $this->defaultConfiguration = $defaultConfiguration;
-        $this->messageConfigurationsMap = $messageConfigurationsMap;
+        $this->defaultConfiguration = $defaultExceptionMessageFactory;
+        $this->exceptionMessageFactoryMap = $exceptionMessageFactoryMap;
     }
 
     /**
      * Gets instance of a message exception message
      *
      * @param \Exception $exception
-     * @return ExceptionMessageInterface|null
+     * @return ExceptionMessageFactoryInterface|null
      */
     public function getMessageGenerator(\Exception $exception)
     {
-        if (isset($this->messageConfigurationsMap[get_class($exception)])) {
-            return $this->messageConfigurationsMap[get_class($exception)];
+        if (isset($this->exceptionMessageFactoryMap[get_class($exception)])) {
+            return $this->exceptionMessageFactoryMap[get_class($exception)];
         }
         return $this->defaultConfiguration;
     }

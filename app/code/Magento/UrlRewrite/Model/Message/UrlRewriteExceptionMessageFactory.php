@@ -6,13 +6,13 @@
 
 namespace Magento\UrlRewrite\Model\Message;
 
-use Magento\Framework\Message\ExceptionMessageInterface;
+use Magento\Framework\Message\ExceptionMessageFactoryInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Factory;
 use Magento\Framework\Exception\NotFoundException;
 
-class UrlRewriteExceptionMessage implements ExceptionMessageInterface
+class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
     const ADD_URL_DUPLICATE_MESSAGE = 'addUrlDuplicateMessage';
 

@@ -8,7 +8,7 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Exception\NotFoundException;
 
-class DefaultExceptionMessage implements ExceptionMessageInterface
+class DefaultExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
     /** @var Factory */
     private $messageFactory;
