@@ -7,7 +7,7 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool;
+use Magento\Framework\Message\MessageConfigurationsPool;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -57,7 +57,7 @@ class Manager implements ManagerInterface
     protected $hasMessages = false;
 
     /**
-     * @var \Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool
+     * @var \Magento\Framework\Message\MessageConfigurationsPool
      */
     private $messageGeneratorsPool;
 
@@ -297,7 +297,7 @@ class Manager implements ManagerInterface
             $this->addErrorMessage($alternativeText, $group);
         } else {
             $messageGenerator = $this->messageGeneratorsPool->getMessageGenerator($exception);
-            $this->addMessage($messageGenerator->generateMessage($exception), $group);
+            $this->addMessage($messageGenerator->createMessage($exception), $group);
         }
 
         return $this;

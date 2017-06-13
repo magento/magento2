@@ -12,7 +12,7 @@ use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Session;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool;
+use Magento\Framework\Message\MessageConfigurationsPool;
 
 /**
  * \Magento\Framework\Message\Manager test case
@@ -90,7 +90,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         $this->messageConfigurationsPool = $this->getMockBuilder(
-            \Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool::class
+            \Magento\Framework\Message\MessageConfigurationsPool::class
         )
             ->disableOriginalConstructor()
             ->setMethods(
@@ -252,7 +252,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $messageConfiguration = $this->getMock(
-            \Magento\Framework\View\Element\Message\Renderer\MessageConfigurationInterface::class
+            \Magento\Framework\Message\ExceptionMessageInterface::class
         );
 
         $this->messageConfigurationsPool->expects(

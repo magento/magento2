@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\UrlRewrite\Block\View\Element\Message\Renderer;
+namespace Magento\UrlRewrite\Model\Message;
 
-use Magento\Framework\View\Element\Message\Renderer\MessageConfigurationInterface;
+use Magento\Framework\Message\ExceptionMessageInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Factory;
 use Magento\Framework\Exception\NotFoundException;
 
-class UrlRewriteMessageConfiguration implements MessageConfigurationInterface
+class UrlRewriteExceptionMessage implements ExceptionMessageInterface
 {
     const ADD_URL_DUPLICATE_MESSAGE = 'addUrlDuplicateMessage';
 
@@ -39,7 +39,7 @@ class UrlRewriteMessageConfiguration implements MessageConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function generateMessage(\Exception $exception)
+    public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR)
     {
         if ($exception instanceof UrlAlreadyExistsException) {
             $generatedUrls = [];
@@ -53,7 +53,7 @@ class UrlRewriteMessageConfiguration implements MessageConfigurationInterface
                     $generatedUrls[$adminEditUrl] = $url['request_path'];
                 }
             }
-            return $this->messageFactory->create(MessageInterface::TYPE_ERROR)
+            return $this->messageFactory->create($type)
                 ->setIdentifier(self::ADD_URL_DUPLICATE_MESSAGE)
                 ->setText($exception->getMessage())
                 ->setData(['urls' => $generatedUrls]);

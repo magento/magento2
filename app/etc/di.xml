@@ -1326,9 +1326,9 @@
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool">
+    <type name="Magento\Framework\Message\MessageConfigurationsPool">
         <arguments>
-            <argument name="defaultConfiguration" xsi:type="object">\Magento\Framework\View\Element\Message\Renderer\DefaultMessageConfiguration</argument>
+            <argument name="defaultConfiguration" xsi:type="object">\Magento\Framework\Message\DefaultExceptionMessage</argument>
         </arguments>
     </type>
 </config>

@@ -4,23 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\View\Element\Message\Renderer;
+namespace Magento\Framework\Message;
 
 class MessageConfigurationsPool
 {
     /**
      * Key of instance is the exception format parameter
      *
-     * @var MessageConfigurationInterface[]
+     * @var ExceptionMessageInterface[]
      */
     private $messageConfigurationsMap = [];
 
     /**
-     * @param MessageConfigurationInterface $defaultConfiguration
-     * @param MessageConfigurationInterface[] $messageConfigurationsMap
+     * @param ExceptionMessageInterface $defaultConfiguration
+     * @param ExceptionMessageInterface[] $messageConfigurationsMap
      */
     public function __construct(
-        MessageConfigurationInterface $defaultConfiguration,
+        ExceptionMessageInterface $defaultConfiguration,
         array $messageConfigurationsMap = []
     ) {
         $this->defaultConfiguration = $defaultConfiguration;
@@ -28,10 +28,10 @@ class MessageConfigurationsPool
     }
 
     /**
-     * Gets instance of a message configuration
+     * Gets instance of a message exception message
      *
      * @param \Exception $exception
-     * @return MessageConfigurationInterface|null
+     * @return ExceptionMessageInterface|null
      */
     public function getMessageGenerator(\Exception $exception)
     {

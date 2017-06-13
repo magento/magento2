@@ -30,7 +30,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         );
 
         $messageConfigurationsPool = $this->getMockBuilder(
-            \Magento\Framework\View\Element\Message\Renderer\MessageConfigurationsPool::class
+            \Magento\Framework\Message\MessageConfigurationsPool::class
         )
             ->disableOriginalConstructor()
             ->setMethods(

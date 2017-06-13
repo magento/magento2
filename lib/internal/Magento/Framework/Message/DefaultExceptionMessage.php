@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\View\Element\Message\Renderer;
+namespace Magento\Framework\Message;
 
-use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\Message\Factory;
 use Magento\Framework\Exception\NotFoundException;
 
-class DefaultMessageConfiguration implements MessageConfigurationInterface
+class DefaultExceptionMessage implements ExceptionMessageInterface
 {
     /** @var Factory */
     private $messageFactory;
@@ -26,10 +24,10 @@ class DefaultMessageConfiguration implements MessageConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function generateMessage(\Exception $exception)
+    public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR)
     {
         if ($exception instanceof \Exception) {
-            return $this->messageFactory->create(MessageInterface::TYPE_ERROR)
+            return $this->messageFactory->create($type)
                 ->setText($exception->getMessage());
         } else {
             throw new NotFoundException(
