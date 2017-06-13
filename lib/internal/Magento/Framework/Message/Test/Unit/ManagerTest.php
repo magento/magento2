@@ -12,7 +12,7 @@ use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Session;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Message\MessageConfigurationsPool;
+use Magento\Framework\Message\ExceptionMessagePool;
 
 /**
  * \Magento\Framework\Message\Manager test case
@@ -62,9 +62,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var MessageConfigurationsPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExceptionMessagePool | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $messageConfigurationsPool;
+    private $exceptionMessagePool;
 
     protected function setUp()
     {
@@ -89,8 +89,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
-        $this->messageConfigurationsPool = $this->getMockBuilder(
-            \Magento\Framework\Message\MessageConfigurationsPool::class
+        $this->exceptionMessagePool = $this->getMockBuilder(
+            \Magento\Framework\Message\ExceptionMessagePool::class
         )
             ->disableOriginalConstructor()
             ->setMethods(
@@ -107,7 +107,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->eventManager,
             $this->logger,
             Manager::DEFAULT_GROUP,
-            $this->messageConfigurationsPool
+            $this->exceptionMessagePool
         );
     }
 
@@ -255,7 +255,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Message\ExceptionMessageInterface::class
         );
 
-        $this->messageConfigurationsPool->expects(
+        $this->exceptionMessagePool->expects(
             $this->once()
         )->method(
             'getMessageGenerator'
@@ -278,7 +278,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $messageConfiguration->expects(
             $this->once()
         )->method(
-            'generateMessage'
+            'createMessage'
         )->with(
             $exception
         )->will(

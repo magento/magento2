@@ -7,7 +7,6 @@ namespace Magento\Framework\Message;
 
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Message\MessageConfigurationsPool;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -57,9 +56,9 @@ class Manager implements ManagerInterface
     protected $hasMessages = false;
 
     /**
-     * @var \Magento\Framework\Message\MessageConfigurationsPool
+     * @var ExceptionMessagePool
      */
-    private $messageGeneratorsPool;
+    private $exceptionMessagePool;
 
     /**
      * @param Session $session
@@ -68,7 +67,7 @@ class Manager implements ManagerInterface
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
-     * @param MessageConfigurationsPool|null $messageConfigurationsPool
+     * @param ExceptionMessagePool|null $exceptionMessagePool
      */
     public function __construct(
         Session $session,
@@ -77,7 +76,7 @@ class Manager implements ManagerInterface
         Event\ManagerInterface $eventManager,
         LoggerInterface $logger,
         $defaultGroup = self::DEFAULT_GROUP,
-        $messageConfigurationsPool = null
+        $exceptionMessagePool = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;
@@ -85,8 +84,8 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
-        $this->messageGeneratorsPool = $messageConfigurationsPool ?: ObjectManager::getInstance()
-            ->get(MessageConfigurationsPool::class);
+        $this->exceptionMessagePool = $exceptionMessagePool ?: ObjectManager::getInstance()
+            ->get(ExceptionMessagePool::class);
     }
 
     /**
@@ -257,8 +256,8 @@ class Manager implements ManagerInterface
         if ($alternativeText) {
             $this->addError($alternativeText, $group);
         } else {
-            $messageGenerator = $this->messageGeneratorsPool->getMessageGenerator($exception);
-            $this->addMessage($messageGenerator->generateMessage($exception), $group);
+            $messageGenerator = $this->exceptionMessagePool->getMessageGenerator($exception);
+            $this->addMessage($messageGenerator->createMessage($exception), $group);
         }
 
         return $this;
@@ -296,7 +295,7 @@ class Manager implements ManagerInterface
         if ($alternativeText) {
             $this->addErrorMessage($alternativeText, $group);
         } else {
-            $messageGenerator = $this->messageGeneratorsPool->getMessageGenerator($exception);
+            $messageGenerator = $this->exceptionMessagePool->getMessageGenerator($exception);
             $this->addMessage($messageGenerator->createMessage($exception), $group);
         }
 

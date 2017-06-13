@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Message;
 
-class MessageConfigurationsPool
+class ExceptionMessagePool
 {
     /**
      * Key of instance is the exception format parameter
