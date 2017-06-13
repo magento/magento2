@@ -49,7 +49,6 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         );
     }
 
-
     /**
      * Get the select object for get stock status by grouped product ids
      *

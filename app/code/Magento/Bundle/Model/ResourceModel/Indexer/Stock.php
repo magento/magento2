@@ -44,7 +44,6 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         );
     }
 
-
     /**
      * Retrieve table name for temporary bundle option stock index
      *
