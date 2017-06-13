@@ -70,4 +70,24 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
+        <plugin name="designConfigTheme" type="Magento\Deploy\Model\Plugin\DesignConfigTheme" sortOrder="50"/>
+    </type>
+    <type name="Magento\Deploy\Model\Plugin\DesignConfigTheme">
+        <arguments>
+            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+        </arguments>
+    </type>
+    <virtualType name="systemConfigPreProcessorComposite" type="Magento\Framework\App\Config\PreProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="designConfigTheme" xsi:type="object">Magento\Deploy\Model\Config\Processor\DesignTheme\Proxy</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Deploy\Model\Config\Processor\DesignTheme">
+        <arguments>
+            <argument name="themeList" xsi:type="object">Magento\Theme\Model\ResourceModel\Theme\Collection</argument>
+        </arguments>
+    </type>
 </config>
