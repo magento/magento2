@@ -226,11 +226,11 @@ class Queue
             $this->imageCache->generate($product);
             $this->output->write('.');
             exit();
-        } else {
-            $this->imageCache->generate($product);
-            $this->output->write('.');
-            return true;
         }
+
+        $this->imageCache->generate($product);
+        $this->output->write('.');
+        return true;
     }
 
     /**
