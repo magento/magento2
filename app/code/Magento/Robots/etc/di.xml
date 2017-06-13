@@ -21,4 +21,13 @@
             <argument name="resultPageFactory" xsi:type="object">robotsResultPageFactory</argument>
         </arguments>
     </type>
+    <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="custom_instructions" xsi:type="array">
+                    <item name="backend_model" xsi:type="string">Magento\Robots\Model\Config\Value</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
