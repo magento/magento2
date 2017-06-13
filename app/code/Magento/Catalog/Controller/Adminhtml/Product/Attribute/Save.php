@@ -48,6 +48,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     protected $groupCollectionFactory;
 
     /**
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     private $layoutFactory;
@@ -59,6 +64,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
+     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
@@ -73,6 +79,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory,
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
@@ -87,6 +94,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $this->validatorFactory = $validatorFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -125,8 +133,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
 
             $attributeId = $this->getRequest()->getParam('attribute_id');
-            $attributeCode = $this->getRequest()->getParam('attribute_code')
-                ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
+
+            $attributeCode = $attributeId ?
+                $this->attributeRepository->get($attributeId)->getAttributeCode() :
+                $this->getRequest()->getParam('attribute_code');
+
+            if (!$attributeCode) {
+                $attributeCode = $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
+            }
+
             if (strlen($attributeCode) > 0) {
                 $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']);
                 if (!$validatorAttrCode->isValid($attributeCode)) {
