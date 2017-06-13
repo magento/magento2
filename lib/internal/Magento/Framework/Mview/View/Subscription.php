@@ -192,7 +192,9 @@ class Subscription implements SubscriptionInterface
     protected function buildStatement($event, $changelog)
     {
         $columns = [];
-        if ($describe = $this->connection->describeTable($this->getTableName())) {
+        if ($this->connection->isTableExists($this->getTableName())
+            && $describe = $this->connection->describeTable($this->getTableName())
+        ) {
             foreach ($describe as $column) {
                 if (in_array($column['COLUMN_NAME'], $this->ignoredUpdateColumns)) {
                     continue;
