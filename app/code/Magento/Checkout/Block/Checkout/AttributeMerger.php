@@ -321,24 +321,14 @@ class AttributeMerger
                     return $this->getCustomer()->getFirstname();
                 }
                 break;
-            case 'lastname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getLastname();
-                }
-                break;
             case 'middlename':
                 if ($this->getCustomer()) {
                     return $this->getCustomer()->getMiddlename();
                 }
                 break;
-            case 'prefix':
+            case 'lastname':
                 if ($this->getCustomer()) {
-                    return $this->getCustomer()->getPrefix();
-                }
-                break;
-            case 'suffix':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getSuffix();
+                    return $this->getCustomer()->getLastname();
                 }
                 break;
             case 'country_id':
