@@ -23,6 +23,11 @@ class Save extends Action
     protected $fileProcessor;
 
     /**
+     * Authorization level
+     */
+    const ADMIN_RESOURCE = 'Magento_Theme::theme';
+
+    /**
      * @param Context $context
      * @param FileProcessor $fileProcessor
      */
