@@ -317,13 +317,13 @@ class AttributeMerger
     {
         switch ($attributeCode) {
             case 'prefix':
-                return $this->getCustomer() ? $this->getCustomer()->getPrefix() : null;
+                return $this->getDefaultPrefix();
             case 'firstname':
-                return $this->getCustomer() ? $this->getCustomer()->getFirstname() : null;
+                return $this->getDefaultFirstname();
             case 'lastname':
-                return $this->getCustomer() ? $this->getCustomer()->getLastname() : null;
+                return $this->getDefaultLastname();
             case 'suffix':
-                return $this->getCustomer() ? $this->getCustomer()->getSuffix() : null;
+                return $this->getDefaultSuffix();
             case 'country_id':
                 return $this->directoryHelper->getDefaultCountry();
             default:
@@ -386,5 +386,37 @@ class AttributeMerger
             }
         }
         return array_merge($headOptions, $tailOptions);
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getDefaultPrefix()
+    {
+        return $this->getCustomer() ? $this->getCustomer()->getPrefix() : null;
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getDefaultFirstname()
+    {
+        return $this->getCustomer() ? $this->getCustomer()->getFirstname() : null;
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getDefaultLastname()
+    {
+        return $this->getCustomer() ? $this->getCustomer()->getLastname() : null;
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getDefaultSuffix()
+    {
+        return $this->getCustomer() ? $this->getCustomer()->getSuffix() : null;
     }
 }
