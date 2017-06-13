@@ -1326,7 +1326,7 @@
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Message\ExceptionMessagePool">
+    <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">
         <arguments>
             <argument name="defaultExceptionMessageFactory" xsi:type="object">\Magento\Framework\Message\DefaultExceptionMessageFactory</argument>
         </arguments>

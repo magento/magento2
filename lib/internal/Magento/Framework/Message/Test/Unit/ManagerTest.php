@@ -12,7 +12,7 @@ use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Session;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Message\ExceptionMessagePool;
+use Magento\Framework\Message\ExceptionMessageFactoryPool;
 
 /**
  * \Magento\Framework\Message\Manager test case
@@ -62,9 +62,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var ExceptionMessagePool | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExceptionMessageFactoryPool | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $exceptionMessagePool;
+    private $exceptionMessageFactoryPool;
 
     protected function setUp()
     {
@@ -89,8 +89,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
-        $this->exceptionMessagePool = $this->getMockBuilder(
-            \Magento\Framework\Message\ExceptionMessagePool::class
+        $this->exceptionMessageFactoryPool = $this->getMockBuilder(
+            \Magento\Framework\Message\ExceptionMessageFactoryPool::class
         )
             ->disableOriginalConstructor()
             ->setMethods(
@@ -107,7 +107,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->eventManager,
             $this->logger,
             Manager::DEFAULT_GROUP,
-            $this->exceptionMessagePool
+            $this->exceptionMessageFactoryPool
         );
     }
 
@@ -255,7 +255,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Message\ExceptionMessageFactoryInterface::class
         );
 
-        $this->exceptionMessagePool->expects(
+        $this->exceptionMessageFactoryPool->expects(
             $this->once()
         )->method(
             'getMessageGenerator'

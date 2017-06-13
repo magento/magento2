@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Message;
 
-class ExceptionMessagePool
+class ExceptionMessageFactoryPool
 {
     /**
      * Key of instance is the exception format parameter
@@ -28,7 +28,7 @@ class ExceptionMessagePool
     }
 
     /**
-     * Gets instance of a message exception message
+     * Gets instance of a exception message factory
      *
      * @param \Exception $exception
      * @return ExceptionMessageFactoryInterface|null

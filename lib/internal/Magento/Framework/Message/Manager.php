@@ -56,9 +56,9 @@ class Manager implements ManagerInterface
     protected $hasMessages = false;
 
     /**
-     * @var ExceptionMessagePool
+     * @var ExceptionMessageFactoryPool
      */
-    private $exceptionMessagePool;
+    private $exceptionMessageFactoryPool;
 
     /**
      * @param Session $session
@@ -67,7 +67,7 @@ class Manager implements ManagerInterface
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
-     * @param ExceptionMessagePool|null $exceptionMessagePool
+     * @param ExceptionMessageFactoryPool|null $exceptionMessageFactoryPool
      */
     public function __construct(
         Session $session,
@@ -76,7 +76,7 @@ class Manager implements ManagerInterface
         Event\ManagerInterface $eventManager,
         LoggerInterface $logger,
         $defaultGroup = self::DEFAULT_GROUP,
-        $exceptionMessagePool = null
+        $exceptionMessageFactoryPool = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;
@@ -84,8 +84,8 @@ class Manager implements ManagerInterface
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->defaultGroup = $defaultGroup;
-        $this->exceptionMessagePool = $exceptionMessagePool ?: ObjectManager::getInstance()
-            ->get(ExceptionMessagePool::class);
+        $this->exceptionMessageFactoryPool = $exceptionMessageFactoryPool ?: ObjectManager::getInstance()
+            ->get(ExceptionMessageFactoryPool::class);
     }
 
     /**
@@ -256,7 +256,7 @@ class Manager implements ManagerInterface
         if ($alternativeText) {
             $this->addError($alternativeText, $group);
         } else {
-            $messageGenerator = $this->exceptionMessagePool->getMessageGenerator($exception);
+            $messageGenerator = $this->exceptionMessageFactoryPool->getMessageGenerator($exception);
             $this->addMessage($messageGenerator->createMessage($exception), $group);
         }
 
@@ -295,7 +295,7 @@ class Manager implements ManagerInterface
         if ($alternativeText) {
             $this->addErrorMessage($alternativeText, $group);
         } else {
-            $messageGenerator = $this->exceptionMessagePool->getMessageGenerator($exception);
+            $messageGenerator = $this->exceptionMessageFactoryPool->getMessageGenerator($exception);
             $this->addMessage($messageGenerator->createMessage($exception), $group);
         }
 
