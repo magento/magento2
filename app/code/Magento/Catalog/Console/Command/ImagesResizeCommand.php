@@ -69,7 +69,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    public function configure()
     {
         $this->setName('catalog:images:resize')
             ->setDescription('Creates resized product images')
@@ -79,7 +79,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(
+    public function execute(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
     ) {
@@ -139,7 +139,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param array $options
      * @return int
      */
-    protected function getProcessesAmount(array $options)
+    public function getProcessesAmount(array $options)
     {
         return isset($options[Options::JOBS_AMOUNT])
             ? (int)$options[Options::JOBS_AMOUNT]
@@ -150,7 +150,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param array $options
      * @return int
      */
-    protected function getLimit(array $options)
+    public function getLimit(array $options)
     {
         return isset($options[Options::PRODUCT_LIMIT])
             ? (int)$options[Options::PRODUCT_LIMIT]
@@ -161,7 +161,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param array $options
      * @return int
      */
-    protected function getOffset(array $options)
+    public function getOffset(array $options)
     {
         return isset($options[Options::PRODUCT_OFFSET])
             ? (int)$options[Options::PRODUCT_OFFSET]
