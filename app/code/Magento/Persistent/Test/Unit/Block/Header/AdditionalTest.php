@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Block\Header;
@@ -149,8 +149,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             '',
             false,
             true,
-            true,
-            ['getValue']
+            true
         );
         $this->cacheStateMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\Cache\StateInterface::class,
@@ -267,12 +266,6 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $this->eventManagerMock->expects($this->at(1))
             ->method('dispatch')
             ->with('view_block_abstract_to_html_after');
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with(
-                'advanced/modules_disable_output/Magento_Persistent',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )->willReturn(false);
 
         // get cache
         $this->cacheStateMock->expects($this->at(0))

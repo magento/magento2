@@ -1,13 +1,14 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint jquery:true*/
+
+/* @api */
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
 
     $.widget('mage.creditCardType', {
         options: {
@@ -19,7 +20,7 @@ define([
          * the Switch/Maestro or Solo credit card type container for those credit card types.
          * @private
          */
-        _create: function() {
+        _create: function () {
             this.element.on('change', $.proxy(this._toggleCardType, this)).trigger('change');
         },
 
@@ -28,7 +29,7 @@ define([
          * credit card type is selected.
          * @private
          */
-        _toggleCardType: function() {
+        _toggleCardType: function () {
             $(this.options.creditCardTypeContainer)
                 .toggle($.inArray(this.element.val(), this.options.typeCodes) !== -1);
         }

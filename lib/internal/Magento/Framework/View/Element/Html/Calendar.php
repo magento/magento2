@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\Html;
@@ -11,6 +11,8 @@ use Magento\Framework\Locale\Bundle\DataBundle;
  * Calendar block for page header
  *
  * Prepares localization data for calendar
+ *
+ * @api
  */
 class Calendar extends \Magento\Framework\View\Element\Template
 {
@@ -76,14 +78,31 @@ class Calendar extends \Magento\Framework\View\Element\Template
             ]
         );
 
-        // get months names
+        /**
+         * Month names in abbreviated format values was added to ICU Data tables
+         * starting ICU library version 52.1. For some OS, like CentOS, default
+         * installation version of ICU library is 50.1.2, which not contain
+         * 'abbreviated' key, and that may cause a PHP fatal error when passing
+         * as an argument of function 'iterator_to_array'. This issue affects
+         * locales like ja_JP, ko_KR etc.
+         *
+         * @see http://source.icu-project.org/repos/icu/tags/release-50-1-2/icu4c/source/data/locales/ja.txt
+         * @see http://source.icu-project.org/repos/icu/tags/release-52-1/icu4c/source/data/locales/ja.txt
+         * @var \ResourceBundle $monthsData
+         */
         $monthsData = $localeData['calendar']['gregorian']['monthNames'];
         $this->assign(
             'months',
             [
                 'wide' => $this->encoder->encode(array_values(iterator_to_array($monthsData['format']['wide']))),
                 'abbreviated' => $this->encoder->encode(
-                    array_values(iterator_to_array($monthsData['format']['abbreviated']))
+                    array_values(
+                        iterator_to_array(
+                            null !== $monthsData->get('format')->get('abbreviated')
+                            ? $monthsData['format']['abbreviated']
+                            : $monthsData['format']['wide']
+                        )
+                    )
                 ),
             ]
         );

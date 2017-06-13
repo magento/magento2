@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Sales\Test\Constraint\AssertOrderGrandTotal;
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Sales\Test\Constraint\AssertOrderGrandTotal;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Assert first step on Checkout page is available.
@@ -75,7 +75,7 @@ class AssertCustomerIsRedirectedToCheckoutFromCart extends AbstractConstraint
         }
 
         //Assert that Order Grand Total is correct on order page in backend.
-        $assertOrderGrandTotal->processAssert($salesOrderView, $orderIndex, $this->orderId, $prices);
+        $assertOrderGrandTotal->processAssert($salesOrderView, $orderIndex, $prices, $this->orderId);
     }
 
     /**

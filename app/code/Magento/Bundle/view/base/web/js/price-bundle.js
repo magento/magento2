@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
@@ -48,7 +52,10 @@ define([
                 priceBox = $(this.options.priceBoxSelector, form),
                 qty = $(this.options.qtyFieldSelector, form);
 
-            if (priceBox.data('magePriceBox') && priceBox.priceBox('option') && priceBox.priceBox('option').priceConfig) {
+            if (priceBox.data('magePriceBox') &&
+                priceBox.priceBox('option') &&
+                priceBox.priceBox('option').priceConfig
+            ) {
                 if (priceBox.priceBox('option').priceConfig.optionTemplate) {
                     this._setOption('optionTemplate', priceBox.priceBox('option').priceConfig.optionTemplate);
                 }
@@ -78,7 +85,7 @@ define([
             if (handler && handler instanceof Function) {
                 changes = handler(bundleOption, this.options.optionConfig, this);
             } else {
-                changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);
+                changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);//eslint-disable-line
             }
 
             if (changes) {
@@ -117,12 +124,13 @@ define([
          */
         _applyQtyFix: function applyQtyFix() {
             var config = this.options.optionConfig;
+
             if (config.isFixedPrice) {
                 _.each(config.options, function (option) {
                     _.each(option.selections, function (item) {
                         if (item.qty && item.qty !== 1) {
                             _.each(item.prices, function (price) {
-                                price.amount = price.amount / item.qty;
+                                price.amount /= item.qty;
                             });
                         }
                     });
@@ -141,13 +149,13 @@ define([
             var config = this.options,
                 format = config.priceFormat,
                 template = config.optionTemplate;
+
             template = mageTemplate(template);
             options.filter('select').each(function (index, element) {
                 var $element = $(element),
                     optionId = utils.findOptionId($element),
-                    optionName = $element.prop('name'),
-                    optionType = $element.prop('type'),
-                    optionConfig = config.optionConfig && config.optionConfig.options[optionId].selections;
+                    optionConfig = config.optionConfig && config.optionConfig.options[optionId].selections,
+                    value;
 
                 $element.find('option').each(function (idx, option) {
                     var $option,
@@ -170,8 +178,8 @@ define([
                     prices = optionConfig[optionValue].prices;
 
                     _.each(prices, function (price, type) {
-                        var value = +(price.amount);
-                        value += _.reduce(price.adjustments, function (sum, x) {
+                        value = +price.amount;
+                        value += _.reduce(price.adjustments, function (sum, x) {//eslint-disable-line
                             return sum + x;
                         }, 0);
                         toTemplate.data[type] = {
@@ -234,7 +242,6 @@ define([
 
         switch (optionType) {
             case 'radio':
-
             case 'select-one':
 
                 if (optionType === 'radio' && !element.is(':checked')) {
@@ -247,13 +254,17 @@ define([
                 if (optionValue) {
                     optionQty = optionConfig[optionValue].qty || 0;
                     canQtyCustomize = optionConfig[optionValue].customQty === '1';
-                    toggleQtyField(qtyField, optionQty, optionId, optionValue, canQtyCustomize);
+                    toggleQtyField(qtyField, optionQty, optionId, optionValue, canQtyCustomize);//eslint-disable-line
                     tempChanges = utils.deepClone(optionConfig[optionValue].prices);
-                    tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig[optionValue]);
-                    tempChanges = applyQty(tempChanges, optionQty);
+                    tempChanges = applyTierPrice(//eslint-disable-line
+                        tempChanges,
+                        optionQty,
+                        optionConfig[optionValue]
+                    );
+                    tempChanges = applyQty(tempChanges, optionQty);//eslint-disable-line
                 } else {
                     tempChanges = {};
-                    toggleQtyField(qtyField, '0', optionId, optionValue, false);
+                    toggleQtyField(qtyField, '0', optionId, optionValue, false);//eslint-disable-line
                 }
                 optionHash = 'bundle-option-' + optionName;
                 changes[optionHash] = tempChanges;
@@ -267,8 +278,8 @@ define([
                     optionHash = 'bundle-option-' + optionName + '##' + optionValueCode;
                     optionQty = row.qty || 0;
                     tempChanges = utils.deepClone(row.prices);
-                    tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig);
-                    tempChanges = applyQty(tempChanges, optionQty);
+                    tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig);//eslint-disable-line
+                    tempChanges = applyQty(tempChanges, optionQty);//eslint-disable-line
                     changes[optionHash] = _.contains(optionValue, optionValueCode) ? tempChanges : {};
                 });
 
@@ -279,8 +290,8 @@ define([
                 optionHash = 'bundle-option-' + optionName + '##' + optionValue;
                 optionQty = optionConfig[optionValue].qty || 0;
                 tempChanges = utils.deepClone(optionConfig[optionValue].prices);
-                tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig);
-                tempChanges = applyQty(tempChanges, optionQty);
+                tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig);//eslint-disable-line
+                tempChanges = applyQty(tempChanges, optionQty);//eslint-disable-line
                 changes[optionHash] = element.is(':checked') ? tempChanges : {};
 
                 selectedIds[optionId] = selectedIds[optionId] || [];
@@ -298,10 +309,10 @@ define([
                 canQtyCustomize = optionConfig[optionValue].customQty === '1';
                 qtyField = element.data('qtyField');
                 qtyField.data('option', element);
-                toggleQtyField(qtyField, optionQty, optionId, optionValue, canQtyCustomize);
+                toggleQtyField(qtyField, optionQty, optionId, optionValue, canQtyCustomize);//eslint-disable-line
                 tempChanges = utils.deepClone(optionConfig[optionValue].prices);
-                tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig);
-                tempChanges = applyQty(tempChanges, optionQty);
+                tempChanges = applyTierPrice(tempChanges, optionQty, optionConfig);//eslint-disable-line
+                tempChanges = applyQty(tempChanges, optionQty);//eslint-disable-line
 
                 optionHash = 'bundle-option-' + optionName;
                 changes[optionHash] = tempChanges;
@@ -366,11 +377,9 @@ define([
             lowest = false;
 
         _.each(tiers, function (tier, index) {
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            if (tier.price_qty > qty) {
+            if (tier['price_qty'] > qty) {
                 return;
             }
-            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
             if (tier.prices[magicKey].amount < oneItemPrice[magicKey].amount) {
                 lowest = index;

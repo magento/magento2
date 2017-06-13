@@ -1,12 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
+
 class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var \Magento\Checkout\Block\Cart\LayoutProcessor
+     */
+    private $layoutProcessor;
+
     /**
      * @var \Magento\Checkout\Block\Cart\LayoutProcessor
      */
@@ -27,28 +34,37 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $regionCollection;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $topDestinationCountries;
+
     protected function setUp()
     {
-        $this->merger = $this->getMock(\Magento\Checkout\Block\Checkout\AttributeMerger::class, [], [], '', false);
-        $this->countryCollection = $this->getMock(
-            \Magento\Directory\Model\ResourceModel\Country\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->regionCollection = $this->getMock(
-            \Magento\Directory\Model\ResourceModel\Region\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->model = new \Magento\Checkout\Block\Cart\LayoutProcessor(
-            $this->merger,
-            $this->countryCollection,
-            $this->regionCollection
+        $this->merger = $this->getMockBuilder(\Magento\Checkout\Block\Checkout\AttributeMerger::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->countryCollection =
+            $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\Collection::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->regionCollection =
+            $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->topDestinationCountries =
+            $this->getMockBuilder(\Magento\Directory\Model\TopDestinationCountries::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->layoutProcessor = $objectManager->getObject(
+            \Magento\Checkout\Block\Cart\LayoutProcessor::class,
+            [
+                'merger' => $this->merger,
+                'countryCollection' => $this->countryCollection,
+                'regionCollection' => $this->regionCollection,
+                'topDestinationCountries' => $this->topDestinationCountries
+            ]
         );
     }
 
@@ -56,6 +72,7 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $countries = [];
         $regions = [];
+        $topDestinationCountries = ['UA','AF'];
 
         $layout = [];
         $layout['components']['block-summary']['children']['block-shipping']['children']
@@ -67,10 +84,18 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
         ['children']['address-fieldsets']['children'];
 
         $this->countryCollection->expects($this->once())->method('loadByStore')->willReturnSelf();
+        $this->countryCollection
+            ->expects($this->once())
+            ->method('setForegroundCountries')
+            ->with($topDestinationCountries)
+            ->willReturnSelf();
         $this->countryCollection->expects($this->once())->method('toOptionArray')->willReturn($countries);
 
         $this->regionCollection->expects($this->once())->method('addAllowedCountriesFilter')->willReturnSelf();
         $this->regionCollection->expects($this->once())->method('toOptionArray')->willReturn($regions);
+
+        $this->topDestinationCountries->expects($this->once())->method('getTopDestinations')
+            ->willReturn($topDestinationCountries);
 
         $layoutMerged = $layout;
         $layoutMerged['components']['block-summary']['children']['block-shipping']['children']
@@ -111,12 +136,11 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
                 'value' => null
             ]
         ];
-
         $this->merger->expects($this->once())
             ->method('merge')
             ->with($elements, 'checkoutProvider', 'shippingAddress', $layoutPointer)
             ->willReturn($layoutMergedPointer);
 
-        $this->assertEquals($layoutMerged, $this->model->process($layout));
+        $this->assertEquals($layoutMerged, $this->layoutProcessor->process($layout));
     }
 }

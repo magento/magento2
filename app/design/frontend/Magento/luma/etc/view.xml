@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -77,9 +77,17 @@
                 <height>140</height>
             </image>
             <image id="product_page_image_large" type="image"/>
+            <image id="product_page_image_large_no_frame" type="image">
+                <frame>false</frame>
+            </image>
             <image id="product_page_image_medium" type="image">
                 <width>700</width>
                 <height>560</height>
+            </image>
+            <image id="product_page_image_medium_no_frame" type="image">
+                <width>700</width>
+                <height>700</height>
+                <frame>false</frame>
             </image>
             <image id="product_page_image_small" type="thumbnail">
                 <width>88</width>

@@ -1,17 +1,23 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
-    "jquery",
-    "jquery/ui",
-    "domReady!"
+    'jquery',
+    'jquery/ui',
+    'domReady!'
 ], function ($) {
     'use strict';
 
-    // Mark notification as read via AJAX call
+    /**
+     * Mark notification as read via AJAX call.
+     *
+     * @param {String} notificationId
+     */
     var markNotificationAsRead = function (notificationId) {
             var requestUrl = $('.notifications-wrapper .admin__action-dropdown-menu').attr('data-mark-as-read-url');
+
             $.ajax({
                 url: requestUrl,
                 type: 'POST',
@@ -22,19 +28,24 @@ define([
                 showLoader: false
             });
         },
-
         notificationCount = $('.notifications-wrapper').attr('data-notification-count'),
 
-        // Remove notification from the list
+        /**
+         * Remove notification from the list.
+         *
+         * @param {jQuery} notificationEntry
+         */
         removeNotificationFromList = function (notificationEntry) {
+            var notificationIcon, actionElement;
+
             notificationEntry.remove();
             notificationCount--;
             $('.notifications-wrapper').attr('data-notification-count', notificationCount);
 
-            if (notificationCount == 0) {
+            if (notificationCount == 0) {// eslint-disable-line eqeqeq
                 // Change appearance of the bubble and its behavior when the last notification is removed
                 $('.notifications-wrapper .admin__action-dropdown-menu').remove();
-                var notificationIcon = $('.notifications-wrapper .notifications-icon');
+                notificationIcon = $('.notifications-wrapper .notifications-icon');
                 notificationIcon.removeAttr('data-toggle');
                 notificationIcon.off('click.dropdown');
                 $('.notifications-action .notifications-counter').text('').hide();
@@ -45,12 +56,16 @@ define([
                 }
                 $('.notifications-entry-last .notifications-counter').text(notificationCount);
                 // Modify caption of the 'See All' link
-                var actionElement = $('.notifications-wrapper .admin__action-dropdown-menu .last .action-more');
+                actionElement = $('.notifications-wrapper .admin__action-dropdown-menu .last .action-more');
                 actionElement.text(actionElement.text().replace(/\d+/, notificationCount));
             }
         },
 
-        // Show notification details
+        /**
+         * Show notification details.
+         *
+         * @param {jQuery} notificationEntry
+         */
         showNotificationDetails = function (notificationEntry) {
             var notificationDescription = notificationEntry.find('.notifications-entry-description'),
                 notificationDescriptionEnd = notificationEntry.find('.notifications-entry-description-end');
@@ -59,20 +74,22 @@ define([
                 notificationDescriptionEnd.addClass('_show');
             }
 
-            if(notificationDescription.hasClass('_cutted')) {
+            if (notificationDescription.hasClass('_cutted')) {
                 notificationDescription.removeClass('_cutted');
             }
         };
 
     // Show notification description when corresponding item is clicked
-    $('.notifications-wrapper .admin__action-dropdown-menu .notifications-entry').on('click.showNotification', function (event) {
-        // hide notification dropdown
-        $('.notifications-wrapper .notifications-icon').trigger('click.dropdown');
+    $('.notifications-wrapper .admin__action-dropdown-menu .notifications-entry').on(
+        'click.showNotification',
+        function (event) {
+            // hide notification dropdown
+            $('.notifications-wrapper .notifications-icon').trigger('click.dropdown');
 
-        showNotificationDetails($(this));
-        event.stopPropagation();
-
-    });
+            showNotificationDetails($(this));
+            event.stopPropagation();
+        }
+    );
 
     // Remove corresponding notification from the list and mark it as read
     $('.notifications-close').on('click.removeNotification', function (event) {
@@ -83,19 +100,19 @@ define([
         removeNotificationFromList(notificationEntry);
 
         // Checking for last unread notification to hide dropdown
-        if (notificationCount == 0) {
+        if (notificationCount == 0) {// eslint-disable-line eqeqeq
             $('.notifications-wrapper').removeClass('active')
-                                       .find('.notifications-action').removeAttr('data-toggle')
-                                                                     .off('click.dropdown');
+                .find('.notifications-action')
+                .removeAttr('data-toggle')
+                .off('click.dropdown');
         }
         event.stopPropagation();
     });
 
     // Hide notifications bubble
-    if (notificationCount == 0) {
+    if (notificationCount == 0) {// eslint-disable-line eqeqeq
         $('.notifications-action .notifications-counter').hide();
     } else {
         $('.notifications-action .notifications-counter').show();
     }
-
 });

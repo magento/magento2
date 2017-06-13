@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Composer;
@@ -47,7 +47,7 @@ class ComposerInformation
     /**
      * Default composer repository key
      */
-    const COMPOSER_DEFAULT_REPO_KEY = 'packagist';
+    const COMPOSER_DEFAULT_REPO_KEY = 'packagist.org';
 
     /**#@+
      * Composer command

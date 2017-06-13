@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Block\Cart\Item\Renderer\Actions;
@@ -9,6 +9,9 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\Json\Encoder;
 
+/**
+ * @api
+ */
 class GiftOptions extends Generic
 {
     /**

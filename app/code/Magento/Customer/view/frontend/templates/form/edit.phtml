@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,7 +50,7 @@
                 <input type="password" class="input-text" name="current_password" id="current-password" data-input="current-password" autocomplete="off" />
             </div>
         </div>
-        <div class="field new password required" data-container="new-password" data-mage-init='{"passwordStrengthIndicator": {}}'>
+        <div class="field new password required" data-container="new-password">
             <label class="label" for="password"><span><?php echo $block->escapeHtml(__('New Password')) ?></span></label>
             <div class="control">
                 <input type="password" class="input-text" name="password" id="password"
@@ -77,8 +77,8 @@
                     autocomplete="off" />
             </div>
         </div>
-        <?php echo $block->getChildHtml('form_additional_info'); ?>
     </fieldset>
+    <?php echo $block->getChildHtml('form_additional_info'); ?>
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?php echo $block->escapeHtmlAttr(__('Save')) ?>"><span><?php echo $block->escapeHtml(__('Save')) ?></span></button>
@@ -125,6 +125,11 @@
                 "titleChangeEmail": "<?php echo $block->escapeJs($block->escapeHtml(__('Change Email'))) ?>",
                 "titleChangePassword": "<?php echo $block->escapeJs($block->escapeHtml(__('Change Password'))) ?>",
                 "titleChangeEmailAndPassword": "<?php echo $block->escapeJs($block->escapeHtml(__('Change Email and Password'))) ?>"
+            }
+        },
+        "[data-container=new-password]": {
+            "passwordStrengthIndicator": {
+                "formSelector": "form.form-edit-account"
             }
         }
     }

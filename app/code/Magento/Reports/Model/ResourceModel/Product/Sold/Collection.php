@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Sold;
+
+use Magento\Framework\DB\Select;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
@@ -107,6 +109,19 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
         }
 
         return $this;
+    }
+
+    /**
+     * @return Select
+     */
+    public function getSelectCountSql()
+    {
+        $countSelect = clone parent::getSelectCountSql();
+
+        $countSelect->reset(Select::COLUMNS);
+        $countSelect->columns('COUNT(DISTINCT order_items.item_id)');
+
+        return $countSelect;
     }
 
     /**

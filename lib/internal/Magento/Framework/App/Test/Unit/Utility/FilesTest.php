@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Utility;
@@ -13,25 +13,19 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dirSearch;
-
-    /**
-     * @var ComponentRegistrar
-     */
-    private $componentRegistrar;
+    private $dirSearchMock;
 
     protected function setUp()
     {
-        $this->componentRegistrar = new ComponentRegistrar();
-        $this->dirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
-        $themePackageList = $this->getMock(
-            \Magento\Framework\View\Design\Theme\ThemePackageList::class,
-            [],
-            [],
-            '',
-            false
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->dirSearchMock = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
+        $fileUtilities = $objectManager->getObject(
+            Files::class,
+            [
+                'dirSearch' => $this->dirSearchMock
+            ]
         );
-        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch, $themePackageList));
+        Files::setInstance($fileUtilities);
     }
 
     protected function tearDown()
@@ -41,7 +35,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfigFiles()
     {
-        $this->dirSearch->expects($this->once())
+        $this->dirSearchMock->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::MODULE, '/etc/some.file')
             ->willReturn(['/one/some.file', '/two/some.file', 'some.other.file']);
@@ -55,7 +49,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLayoutConfigFiles()
     {
-        $this->dirSearch->expects($this->once())
+        $this->dirSearchMock->expects($this->once())
             ->method('collectFiles')
             ->with(ComponentRegistrar::THEME, '/etc/some.file')
             ->willReturn(['/one/some.file', '/two/some.file']);

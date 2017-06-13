@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
@@ -35,7 +35,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
     {
         $this->swatchesHelperMock = $this->getMock(
             \Magento\Swatches\Helper\Data::class,
-            ['loadVariationByFallback', 'isSwatchAttribute'],
+            ['loadVariationByFallback', 'isSwatchAttribute', 'isProductHasSwatch'],
             [],
             '',
             false
@@ -98,6 +98,10 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly($expected['loadVariationByFallback_count']))
             ->method('loadVariationByFallback')
             ->willReturn($expected['product']);
+        $this->swatchesHelperMock
+            ->method('isProductHasSwatch')
+            ->with($this->productMock)
+            ->willReturn(false);
 
         $productImageMock = $this->getMock(\Magento\Catalog\Block\Product\AbstractProduct::class, [], [], '', false);
 

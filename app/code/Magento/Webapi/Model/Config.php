@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,9 +12,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
- * Web API Config Model.
+ * This class gives access to consolidated web API configuration from <Module_Name>/etc/webapi.xml files.
  *
- * This is a parent class for storing information about service configuration.
+ * @api
  */
 class Config
 {

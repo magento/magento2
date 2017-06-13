@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -53,8 +53,6 @@ define([
             if (isConfigurable) {
                 this.disable();
                 this.clear();
-            } else {
-                this.enable();
             }
         }
     });

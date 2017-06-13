@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -84,6 +84,30 @@
             </field>
         </dataset>
 
+        <dataset name="attribute_type_multiple_select">
+            <field name="frontend_label" xsi:type="string">multipleselect%isolation%</field>
+            <field name="attribute_code" xsi:type="string">multipleselect%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Multiple Select</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string">option_0_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">white</item>
+                    <item name="view" xsi:type="string">option_1_%isolation%</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">green</item>
+                    <item name="view" xsi:type="string">option_2_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="attribute_type_dropdown_two_options">
             <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
             <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
@@ -113,6 +137,20 @@
                     <item name="is_default" xsi:type="string">Yes</item>
                     <item name="admin" xsi:type="string">black</item>
                     <item name="view" xsi:type="string">option_0_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="attribute_type_dropdown_one_option_without_view">
+            <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string"></item>
                 </item>
             </field>
         </dataset>
@@ -180,6 +218,11 @@
             </field>
         </dataset>
 
+        <dataset name="attribute_type_textarea">
+            <field name="frontend_label" xsi:type="string">textarea_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Area</field>
+        </dataset>
+
         <dataset name="attribute_type_fpt">
             <field name="frontend_label" xsi:type="string">fpt_%isolation%</field>
             <field name="frontend_input" xsi:type="string">Fixed Product Tax</field>
@@ -203,6 +246,94 @@
                     <item name="view" xsi:type="string">option_1_%isolation%</item>
                 </item>
             </field>
+        </dataset>
+
+        <dataset name="sizes_S_M_L">
+            <field name="frontend_label" xsi:type="string">size_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">size_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_S</item>
+                    <item name="view" xsi:type="string">SIZE_S</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_M</item>
+                    <item name="view" xsi:type="string">SIZE_M</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_L</item>
+                    <item name="view" xsi:type="string">SIZE_L</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="sizes_for_promo_rules">
+            <field name="frontend_label" xsi:type="string">size_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">size_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_used_for_promo_rules" xsi:type="string">Yes</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">SIZE_S_%isolation%</item>
+                    <item name="view" xsi:type="string">SIZE_S</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_M_%isolation%</item>
+                    <item name="view" xsi:type="string">SIZE_M</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_L_%isolation%</item>
+                    <item name="view" xsi:type="string">SIZE_L</item>
+                    <item name="promo" xsi:type="string">Yes</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="search_weight_term_once_weight_1">
+            <field name="frontend_label" xsi:type="string">search_weight_term_once_weight_1_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">search_weight_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_searchable" xsi:type="string">Yes</field>
+            <field name="search_weight" xsi:type="string">1</field>
+            <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit amet</field>
+        </dataset>
+
+        <dataset name="search_weight_term_once_weight_5">
+            <field name="frontend_label" xsi:type="string">search_weight_term_once_weight_5_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">search_weight_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_searchable" xsi:type="string">Yes</field>
+            <field name="search_weight" xsi:type="string">5</field>
+            <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit amet</field>
+        </dataset>
+
+        <dataset name="search_weight_term_twice_weight_1">
+            <field name="frontend_label" xsi:type="string">search_weight_term_twice_weight_1_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">search_weight_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_searchable" xsi:type="string">Yes</field>
+            <field name="search_weight" xsi:type="string">1</field>
+            <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit Alaska amet</field>
+        </dataset>
+
+        <dataset name="free_shipping">
+            <field name="frontend_label" xsi:type="string">free_shipping_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">free_shipping_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Yes/No</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_used_for_promo_rules" xsi:type="string">Yes</field>
         </dataset>
     </repository>
 </config>

@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config;
 
 use Magento\Framework\ObjectManager\ConfigInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
@@ -32,20 +30,15 @@ class Compiled implements ConfigInterface
     private $preferences;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * Constructor
      *
      * @param array $data
      */
     public function __construct($data)
     {
-        $this->arguments = $data['arguments'];
-        $this->virtualTypes = $data['instanceTypes'];
-        $this->preferences = $data['preferences'];
+        $this->arguments = $data['arguments'] ?: [];
+        $this->virtualTypes = $data['instanceTypes'] ?: [];
+        $this->preferences = $data['preferences'] ?: [];
     }
 
     /**
@@ -82,13 +75,13 @@ class Compiled implements ConfigInterface
      */
     public function getArguments($type)
     {
-        if (isset($this->arguments[$type])) {
-            if (is_string($this->arguments[$type])) {
-                $this->arguments[$type] = $this->getSerializer()->unserialize($this->arguments[$type]);
+        if (array_key_exists($type, $this->arguments)) {
+            if ($this->arguments[$type] === null) {
+                $this->arguments[$type] = [];
             }
             return $this->arguments[$type];
         } else {
-            return [['_i_' => \Magento\Framework\ObjectManagerInterface::class]];
+            return null;
         }
     }
 
@@ -170,20 +163,5 @@ class Compiled implements ConfigInterface
     public function getPreferences()
     {
         return $this->preferences;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }

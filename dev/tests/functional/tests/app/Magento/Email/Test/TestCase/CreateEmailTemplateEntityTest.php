@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Email\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
+use Magento\Email\Test\Fixture\EmailTemplate;
 use Magento\Email\Test\Page\Adminhtml\EmailTemplateIndex;
 use Magento\Email\Test\Page\Adminhtml\EmailTemplateNew;
-use Magento\Email\Test\Fixture\EmailTemplate;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:
@@ -66,7 +66,6 @@ class CreateEmailTemplateEntityTest extends Injectable
     /**
      * @param EmailTemplate $emailTemplate
      */
-
     public function test(EmailTemplate $emailTemplate)
     {
         $this->emailTemplateIndex->open();

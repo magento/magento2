@@ -1,19 +1,18 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing;
 
-
 use Magento\Cms\Ui\Component\DataProvider;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Authorization;
-use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Authorization;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -130,6 +129,5 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $metadata,
             $this->dataProvider->prepareMetadata()
         );
-
     }
 }

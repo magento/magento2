@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ namespace Magento\Store\Model;
 /**
  * Class Group
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
@@ -462,6 +463,22 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getCode()
+    {
+        return $this->getData('code');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCode($code)
+    {
+        return $this->setData('code', $code);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getExtensionAttributes()
@@ -476,16 +493,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Retrieve scope code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return '';
     }
 
     /**

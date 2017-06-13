@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Pricing\Render;
 
 use Magento\Bundle\Pricing\Render\FinalPriceBox;
-use Magento\Bundle\Pricing\Price;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 
 class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +39,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $enableCustomOptionMocks = ($optMinValue == $optMaxValue);
 
         $priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
-        $bundleOptionPrice = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class)
+        $bundlePrice = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\FinalPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customOptionPrice = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\CustomOptionPrice::class)
@@ -53,8 +52,8 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
         $priceInfo->expects($this->at(0))
             ->method('getPrice')
-            ->with(Price\BundleOptionPrice::PRICE_CODE)
-            ->will($this->returnValue($bundleOptionPrice));
+            ->with(\Magento\Bundle\Pricing\Price\FinalPrice::PRICE_CODE)
+            ->will($this->returnValue($bundlePrice));
         if ($enableCustomOptionMocks) {
             $priceInfo->expects($this->at(1))
                 ->method('getPrice')
@@ -62,11 +61,11 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($customOptionPrice));
         }
 
-        $bundleOptionPrice->expects($this->once())
-            ->method('getValue')
+        $bundlePrice->expects($this->once())
+            ->method('getMinimalPrice')
             ->will($this->returnValue($optMinValue));
-        $bundleOptionPrice->expects($this->once())
-            ->method('getMaxValue')
+        $bundlePrice->expects($this->once())
+            ->method('getMaximalPrice')
             ->will($this->returnValue($optMaxValue));
 
         if ($enableCustomOptionMocks) {

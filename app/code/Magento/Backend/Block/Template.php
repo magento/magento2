@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
@@ -8,6 +8,7 @@ namespace Magento\Backend\Block;
 /**
  * Backend abstract block
  *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Template extends \Magento\Framework\View\Element\Template
@@ -63,24 +64,19 @@ class Template extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Check whether or not the module output is enabled
+     * Check whether or not the module output is enabled.
      *
      * Because many module blocks belong to Backend module,
-     * the feature "Disable module output" doesn't cover Admin area
+     * the feature "Disable module output" doesn't cover Admin area.
      *
      * @param string $moduleName Full module name
      * @return boolean
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isOutputEnabled($moduleName = null)
     {
-        if ($moduleName === null) {
-            $moduleName = $this->getModuleName();
-        }
-
-        return !$this->_scopeConfig->isSetFlag(
-            'advanced/modules_disable_output/' . $moduleName,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return true;
     }
 
     /**

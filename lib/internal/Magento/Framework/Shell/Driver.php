@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Shell;
@@ -31,7 +31,6 @@ class Driver
      * @return Response
      * @throws LocalizedException
      */
-
     public function execute($command, $arguments)
     {
         $disabled = explode(',', str_replace(' ', ',', ini_get('disable_functions')));

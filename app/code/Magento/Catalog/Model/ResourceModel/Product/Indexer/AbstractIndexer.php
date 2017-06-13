@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
@@ -9,6 +9,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog Product Indexer Abstract Resource Model
+ *
+ * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -194,7 +196,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
             $childIds
         );
 
-        return $connection->fetchCol($select);
+        return array_map('intval', (array) $connection->fetchCol($select));
     }
 
     /**
@@ -226,7 +228,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
             $result = $connection->fetchCol($select);
         }
 
-        return $result;
+        return array_map('intval', $result);
     }
 
     /**

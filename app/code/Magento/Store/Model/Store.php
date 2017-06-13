@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -22,6 +22,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Store model
  *
+ * @api
  * @method Store setGroupId($value)
  * @method int getSortOrder()
  * @method int getStoreId()

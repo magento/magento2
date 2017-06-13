@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,20 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
  */
 class Curl extends AbstractCurl implements CatalogProductAttributeInterface
 {
+    /**
+     * Relative action path with parameters.
+     *
+     * @var string
+     */
+    protected $urlActionPath = 'catalog/product_attribute/save/back/edit';
+
+    /**
+     * Message for Exception when was received not successful response.
+     *
+     * @var string
+     */
+    protected $responseExceptionMessage = 'Product Attribute creating by curl handler was not successful!';
+
     /**
      * Mapping values for data.
      *
@@ -35,6 +49,10 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'Fixed Product Tax' => 'weee',
         ],
         'is_required' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
+        'is_searchable' => [
             'Yes' => 1,
             'No' => 0,
         ],
@@ -85,14 +103,15 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
         }
 
         $data = $this->changeStructureOfTheData($data);
-        $url = $_ENV['app_backend_url'] . 'catalog/product_attribute/save/back/edit';
+        $url = $_ENV['app_backend_url'] . $this->urlActionPath;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            throw new \Exception("Product Attribute creating by curl handler was not successful! \n" . $response);
+            $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
+            throw new \Exception($this->responseExceptionMessage);
         }
 
         $resultData = [];

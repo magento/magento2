@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 namespace Magento\Catalog\Model\Product;
 
@@ -13,13 +12,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product option model
  *
+ * @api
  * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
@@ -30,34 +30,6 @@ use Magento\Framework\EntityManager\MetadataPool;
  */
 class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
-    const OPTION_GROUP_TEXT = 'text';
-
-    const OPTION_GROUP_FILE = 'file';
-
-    const OPTION_GROUP_SELECT = 'select';
-
-    const OPTION_GROUP_DATE = 'date';
-
-    const OPTION_TYPE_FIELD = 'field';
-
-    const OPTION_TYPE_AREA = 'area';
-
-    const OPTION_TYPE_FILE = 'file';
-
-    const OPTION_TYPE_DROP_DOWN = 'drop_down';
-
-    const OPTION_TYPE_RADIO = 'radio';
-
-    const OPTION_TYPE_CHECKBOX = 'checkbox';
-
-    const OPTION_TYPE_MULTIPLE = 'multiple';
-
-    const OPTION_TYPE_DATE = 'date';
-
-    const OPTION_TYPE_DATE_TIME = 'date_time';
-
-    const OPTION_TYPE_TIME = 'time';
-
     /**
      * @var Option\Repository
      */
@@ -216,6 +188,17 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         }
 
         return null;
+    }
+
+    /**
+     * Whether or not the option type contains sub-values
+     *
+     * @param string $type
+     * @return bool
+     */
+    public function hasValues($type = null)
+    {
+        return $this->getGroupByType($type) == self::OPTION_GROUP_SELECT;
     }
 
     /**
@@ -912,5 +895,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         }
         return $this->metadataPool;
     }
+
     //@codeCoverageIgnoreEnd
 }

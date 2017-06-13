@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Widget\Company $block */
+?>
+<div class="field company <?php echo $block->isRequired() ? 'required' : '' ?>">
+    <label for="company" class="label">
+        <span>
+            <?php echo $block->escapeHtml(__('Company')) ?>
+        </span>
+    </label>
+    <div class="control">
+        <?php
+            $_validationClass = $block->escapeHtmlAttr(
+                $this->helper('Magento\Customer\Helper\Address')
+                     ->getAttributeValidationClass('company')
+            );
+        ?>
+        <input type="text"
+               name="company"
+               id="company"
+               value="<?php echo $block->escapeHtmlAttr($block->getCompany()) ?>"
+               title="<?php echo $block->escapeHtmlAttr(__('Company')) ?>"
+               class="input-text <?php echo $_validationClass ?: '' ?>"
+         >
+    </div>
+</div>

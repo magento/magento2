@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Install;
+use Magento\Setup\Controller\Install;
 use Magento\Setup\Model\RequestDataConverter;
 
 /**
@@ -107,6 +107,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('messages', $variables);
         $this->assertFalse($variables['success']);
     }
+
     public function testStartActionInstallException()
     {
         $this->webLogger->expects($this->once())->method('clear');

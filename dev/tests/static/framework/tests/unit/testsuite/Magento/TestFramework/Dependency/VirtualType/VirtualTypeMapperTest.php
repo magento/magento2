@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency\VirtualType;
@@ -95,7 +95,6 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
             $expectedVirtualTypesDependencies,
             $mapper->loadMap($diFilesPath)
         );
-
     }
 
     /**
@@ -116,7 +115,6 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
                 self::assertEquals($baseType, $mapper->getType($virtualType, $scope));
             }
         }
-
     }
 
     /**
@@ -135,7 +133,7 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            
+
             /**
              * expectation is the same for global area,
              * but extended for adminhtml as it contains own virtual types definitions

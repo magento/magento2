@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
- 
+
 class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetOptionWhenOptionsAreSet()
@@ -144,8 +144,8 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsSerialized()
     {
-        $rule = serialize('some value');
-        $expected = 'some test result';
+        $rule = json_encode(['some value']);
+        $expected = ['some value'];
 
         $modelClassName = \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class;
         $model = $this->getMockForAbstractClass($modelClassName, [], '', false);

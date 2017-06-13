@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,10 +61,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getPaths')
             ->willReturn(['configKeyOne' => 'config.php', 'configKeyTwo' => 'env.php']);
-        $this->configFilePool
-            ->expects($this->any())
-            ->method('getInitialFilePools')
-            ->willReturn([]);
     }
 
     public function testGetFile()
@@ -107,7 +103,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
         $configFilePool->expects($this->any())->method('getPaths')->willReturn([$file]);
         $configFilePool->expects($this->any())->method('getPath')->willReturn($file);
-        $configFilePool->expects($this->any())->method('getInitialFilePools')->willReturn([]);
         $object = new Reader($this->dirList, $this->driverPool, $configFilePool, $file);
         $this->assertSame($expected, $object->load($file));
     }
@@ -121,51 +116,5 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ['custom.php', ['bazKey' => 'baz']],
             ['nonexistent.php', []],
         ];
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Key collision
-     */
-    public function testMerging()
-    {
-        $configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
-        $files = [['configKeyOne', 'mergeOne.php'], ['configKeyTwo','mergeTwo.php']];
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap($files));
-        $configFilePool->expects($this->any())
-            ->method('getInitialFilePools')
-            ->willReturn([]);
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPaths')
-            ->willReturn(['configKeyOne' => 'mergeOne.php', 'configKeyTwo' => 'mergeTwo.php']);
-        $object = new Reader($this->dirList, $this->driverPool, $configFilePool);
-        $object->load();
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Key collision
-     */
-    public function testMergingWithDuplicateEndValues()
-    {
-        $configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
-        $files = [['configKeyOne', 'config.php'], ['configKeyTwo','duplicateConfig.php']];
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap($files));
-        $configFilePool->expects($this->any())
-            ->method('getInitialFilePools')
-            ->willReturn([]);
-        $configFilePool
-            ->expects($this->any())
-            ->method('getPaths')
-            ->willReturn(['configKeyOne' => 'config.php', 'configKeyTwo' => 'duplicateConfig.php']);
-        $object = new Reader($this->dirList, $this->driverPool, $configFilePool);
-        $object->load();
     }
 }
