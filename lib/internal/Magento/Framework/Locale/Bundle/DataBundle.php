@@ -66,6 +66,9 @@ class DataBundle
         if (isset($localeParts['language'])) {
             $cleanLocaleParts['language'] = $localeParts['language'];
         }
+        if (isset($localeParts['region'])) {
+            $cleanLocaleParts['region'] = $localeParts['region'];
+        }
         if (isset($localeParts['script'])) {
             $cleanLocaleParts['script'] = $localeParts['script'];
         }
