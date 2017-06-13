@@ -117,7 +117,7 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
         $package->expects($this->exactly(1))->method('isVirtual')->willReturn(false);
         $package->expects($this->exactly(3))->method('getArea')->willReturn('area');
         $package->expects($this->exactly(3))->method('getTheme')->willReturn('theme');
-        $package->expects($this->exactly(2))->method('getLocale')->willReturn('locale');
+        $package->expects($this->exactly(3))->method('getLocale')->willReturn('locale');
 
         $packages = [
             'package' => $package
