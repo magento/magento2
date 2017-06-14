@@ -168,6 +168,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @param string $linkedProductId
      * @param string $parentProductId
      * @return \Magento\Bundle\Model\Selection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function mapProductLinkToSelectionModel(
         \Magento\Bundle\Model\Selection $selectionModel,
@@ -177,10 +178,10 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     ) {
         $selectionModel->setProductId($linkedProductId);
         $selectionModel->setParentProductId($parentProductId);
-        if (($productLink->getSelectionId() !== null)) {
+        if ($productLink->getSelectionId() !== null) {
             $selectionModel->setSelectionId($productLink->getSelectionId());
         }
-        if (($productLink->getOptionId() !== null)) {
+        if ($productLink->getOptionId() !== null) {
             $selectionModel->setOptionId($productLink->getOptionId());
         }
         if ($productLink->getPosition() !== null) {
