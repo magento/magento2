@@ -315,19 +315,15 @@ class AttributeMerger
      */
     protected function getDefaultValue($attributeCode)
     {
-        switch ($attributeCode) {
-            case 'firstname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getFirstname();
-                }
-                break;
-            case 'lastname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getLastname();
-                }
-                break;
-            case 'country_id':
-                return $this->directoryHelper->getDefaultCountry();
+        if ($attributeCode === 'country_id') {
+            return $this->directoryHelper->getDefaultCountry();
+        }
+        if (!$this->getCustomer()) {
+            return null;
+        }
+        if (in_array($attributeCode, ['prefix', 'firstname', 'middlename', 'lastname', 'suffix'])) {
+            $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $attributeCode)));
+            return $this->getCustomer()->{$methodName}();
         }
         return null;
     }
