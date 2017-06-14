@@ -9,7 +9,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\CallbackPool;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Exception\AfterCommitException;
 
 /**
  * Abstract resource model
@@ -92,7 +91,7 @@ abstract class AbstractResource
                     call_user_func($callback);
                 }
             } catch (\Exception $e) {
-                throw new AfterCommitException(null, null, $e);
+                throw $e;
             }
         }
         return $this;
