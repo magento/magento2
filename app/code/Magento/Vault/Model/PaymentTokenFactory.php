@@ -26,7 +26,7 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
      * @param ObjectManagerInterface $objectManager
      * @param array $tokenTypes
      */
-    public function __construct(ObjectManagerInterface $objectManager, $tokenTypes = [])
+    public function __construct(ObjectManagerInterface $objectManager, array $tokenTypes = [])
     {
         $this->objectManager = $objectManager;
         $this->tokenTypes = $tokenTypes;
