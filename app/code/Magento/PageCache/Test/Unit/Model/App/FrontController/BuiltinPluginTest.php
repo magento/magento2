@@ -219,7 +219,7 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->will($this->returnValue(true));
         $this->versionMock
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('process');
         $this->stateMock->expects($this->any())
             ->method('getMode')

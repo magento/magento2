@@ -196,10 +196,8 @@ define([
             var countryData,
                 privateContent = $.cookieStorage.get('private_content_version');
 
-            if (_.isEmpty(storage.keys())) {
-                if (!_.isEmpty(privateContent)) {
-                    this.reload([], false);
-                }
+            if (_.isEmpty(storage.keys()) && !_.isEmpty(privateContent)) {
+                this.reload([], false);
             } else if (this.needReload()) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
