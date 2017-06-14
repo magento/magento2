@@ -7,12 +7,16 @@ namespace Magento\Catalog\Test\Unit\Console\Command;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Console\Command\ImagesResizeCommand;
+use Magento\Catalog\Console\ImageResizeOptions;
 use Magento\Catalog\Model\Product\Image\Cache as ImageCache;
 use Magento\Catalog\Model\Product\Image\CacheFactory as ImageCacheFactory;
+use Magento\Catalog\Model\Product\Image\Process\Queue;
+use Magento\Catalog\Model\Product\Image\Process\QueueFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Tester\CommandTester;
 use \Magento\Framework\App\Area;
 
@@ -27,34 +31,54 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
     protected $command;
 
     /**
-     * @var AppState | \PHPUnit_Framework_MockObject_MockObject
+     * @var AppState | Mock
      */
     protected $appState;
 
     /**
-     * @var ProductCollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollectionFactory | Mock
      */
     protected $productCollectionFactory;
 
     /**
-     * @var ProductCollection | \PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollection | Mock
      */
     protected $productCollection;
 
     /**
-     * @var ProductRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface | Mock
      */
     protected $productRepository;
 
     /**
-     * @var ImageCacheFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ImageCacheFactory | Mock
      */
     protected $imageCacheFactory;
 
     /**
-     * @var ImageCache | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection | Mock
+     */
+    protected $resourceConnection;
+
+    /**
+     * @var QueueFactory | Mock
+     */
+    protected $queueFactory;
+
+    /**
+     * @var Queue | Mock
+     */
+    protected $queue;
+
+    /**
+     * @var ImageCache | Mock
      */
     protected $imageCache;
+
+    /**
+     * @var \Symfony\Component\Console\Output\Output | Mock
+     */
+    protected $output;
 
     protected function setUp()
     {
@@ -65,14 +89,23 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
         $this->productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
             ->getMockForAbstractClass();
 
+        $this->resourceConnection = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->output = $this->getMockBuilder(\Symfony\Component\Console\Output\Output::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->prepareProductCollection();
         $this->prepareImageCache();
+        $this->prepareQueueFactory();
 
         $this->command = new ImagesResizeCommand(
             $this->appState,
             $this->productCollectionFactory,
-            $this->productRepository,
-            $this->imageCacheFactory
+            $this->queueFactory,
+            new ImageResizeOptions()
         );
     }
 
@@ -96,9 +129,15 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @dataProvider resizeDataProvider
+     * @param int $expectProducts
+     * @param null|int $limit
+     * @param null|int $offset
+     */
+    public function testExecute($expectProducts, $limit = null, $offset = null)
     {
-        $productsIds = [1, 2];
+        $productsIds = [1, 2, 3, 4];
 
         $this->appState->expects($this->once())
             ->method('setAreaCode')
@@ -113,27 +152,65 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productRepository->expects($this->at(0))
-            ->method('getById')
-            ->with($productsIds[0])
-            ->willReturn($productMock);
-        $this->productRepository->expects($this->at(1))
-            ->method('getById')
-            ->with($productsIds[1])
-            ->willThrowException(new NoSuchEntityException());
+        if (!$offset) {
+            $this->productRepository->expects($this->at(0))
+                ->method('getById')
+                ->with($productsIds[0])
+                ->willReturn($productMock);
 
-        $this->imageCache->expects($this->exactly(count($productsIds) - 1))
+            $this->productRepository->expects($this->at(1))
+                ->method('getById')
+                ->with($productsIds[1])
+                ->willThrowException(new NoSuchEntityException());
+
+            if (!$limit) {
+                $this->productRepository->expects($this->at(2))
+                    ->method('getById')
+                    ->with($productsIds[2])
+                    ->willReturn($productMock);
+
+                $this->productRepository->expects($this->at(3))
+                    ->method('getById')
+                    ->with($productsIds[3])
+                    ->willReturn($productMock);
+            }
+        } elseif ($offset < 4) {
+            $this->productRepository->expects($this->at(0))
+                ->method('getById')
+                ->with($productsIds[2])
+                ->willReturn($productMock);
+
+            $this->productRepository->expects($this->at(1))
+                ->method('getById')
+                ->with($productsIds[3])
+                ->willReturn($productMock);
+        } else {
+            $this->productRepository->expects($this->never())
+                ->method('getById');
+        }
+
+        $this->imageCache->expects($this->exactly($expectProducts))
             ->method('generate')
             ->with($productMock)
             ->willReturnSelf();
 
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute([]);
+        $commandTester->execute([
+            '--' . ImageResizeOptions::PRODUCT_LIMIT => $limit,
+            '--' . ImageResizeOptions::PRODUCT_OFFSET => $offset,
+        ]);
 
-        $this->assertContains(
-            'Product images resized successfully',
-            $commandTester->getDisplay()
-        );
+        if ($offset === 4) {
+            $this->assertContains(
+                'Offset may not be higher than 3',
+                $commandTester->getDisplay()
+            );
+        } else {
+            $this->assertContains(
+                'Product images resized successfully',
+                $commandTester->getDisplay()
+            );
+        }
     }
 
     public function testExecuteWithException()
@@ -207,5 +284,64 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
         $this->imageCacheFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->imageCache);
+    }
+
+    protected function prepareQueueFactory()
+    {
+        $this->queueFactory = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\Process\QueueFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->queue = $this->getMock(
+            \Magento\Catalog\Model\Product\Image\Process\Queue::class,
+            [],
+            [
+                'productRepository' => $this->productRepository,
+                'resourceConnection' => $this->resourceConnection,
+                'imageCacheFactory' => $this->imageCacheFactory,
+                'output' => $this->output,
+            ],
+            '',
+            false,
+            true,
+            true,
+            false,
+            true
+        );
+
+        $this->queueFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->queue);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function resizeDataProvider()
+    {
+        return [
+            [
+                'expectProducts' => 3,
+                ImageResizeOptions::PRODUCT_LIMIT => null,
+                ImageResizeOptions::PRODUCT_OFFSET => null,
+            ],
+            [
+                'expectProducts' => 1,
+                ImageResizeOptions::PRODUCT_LIMIT => 2,
+                ImageResizeOptions::PRODUCT_OFFSET => null,
+            ],
+            [
+                'expectProducts' => 2,
+                ImageResizeOptions::PRODUCT_LIMIT => 2,
+                ImageResizeOptions::PRODUCT_OFFSET => 2,
+            ],
+            [
+                'expectProducts' => 0,
+                ImageResizeOptions::PRODUCT_LIMIT => 2,
+                ImageResizeOptions::PRODUCT_OFFSET => 4,
+            ],
+        ];
     }
 }
