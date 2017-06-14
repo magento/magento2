@@ -65,7 +65,7 @@ interface ButtonInterface extends ExtensibleDataInterface
      *
      * @return bool
      */
-    public function getRequiredOptions();
+    public function hasRequiredOptions();
 
     /**
      * Retrieve existing extension attributes object or create a new one.

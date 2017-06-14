@@ -4,7 +4,7 @@
  */
 
 define([
-    'Magento_UI/js/grid/columns/column',
+    'Magento_Ui/js/grid/columns/column',
     'mage/translate'
 ], function (Element, $t) {
     'use strict';
