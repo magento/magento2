@@ -13,7 +13,7 @@ class Exception extends Base
     /**
      * @var string
      */
-    protected $fileName = '/var/log/exception.log';
+    protected $fileName = 'exception.log';
 
     /**
      * @var int
