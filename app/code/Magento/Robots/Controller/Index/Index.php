@@ -11,7 +11,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
- * Processes request to robots.txt file and returns robots.txt data as result
+ * Processes request to robots.txt file and returns robots.txt content as result
  */
 class Index extends Action
 {

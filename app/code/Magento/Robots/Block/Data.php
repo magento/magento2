@@ -49,7 +49,7 @@ class Data extends AbstractBlock implements IdentityInterface
     }
 
     /**
-     * Prepare base content for robots.txt file
+     * Retrieve base content for robots.txt file
      *
      * @return string
      */
