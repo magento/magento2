@@ -70,11 +70,6 @@ class Queue
     protected $imageCacheFactory;
 
     /**
-     * @var array
-     */
-    protected $options = [];
-
-    /**
      * @var int
      */
     protected $start = 0;
@@ -99,7 +94,6 @@ class Queue
      * @param ResourceConnection $resourceConnection
      * @param CacheFactory $imageCacheFactory
      * @param OutputInterface $output
-     * @param array $options
      * @param int $maxProcesses
      */
     public function __construct(
@@ -107,14 +101,12 @@ class Queue
         ResourceConnection $resourceConnection,
         CacheFactory $imageCacheFactory,
         OutputInterface $output,
-        array $options = [],
         $maxProcesses = self::DEFAULT_MAX_PROCESSES_AMOUNT
     ) {
         $this->productRepository = $productRepository;
         $this->resourceConnection = $resourceConnection;
         $this->output = $output;
         $this->imageCacheFactory = $imageCacheFactory;
-        $this->options = $options;
         $this->maxProcesses = $maxProcesses;
         $this->imageCache = $this->imageCacheFactory->create();
     }

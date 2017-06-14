@@ -22,16 +22,6 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     protected $productCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Image\CacheFactory
-     */
-    protected $imageCacheFactory;
-
-    /**
      * @var QueueFactory
      */
     protected $queueFactory;
@@ -44,23 +34,17 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory
      * @param QueueFactory $queueFactory
      * @param Options $options
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory,
         QueueFactory $queueFactory,
         Options $options
     ) {
         $this->appState = $appState;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->productRepository = $productRepository;
-        $this->imageCacheFactory = $imageCacheFactory;
         $this->queueFactory = $queueFactory;
         $this->options = $options;
         parent::__construct();
