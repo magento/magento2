@@ -53,6 +53,8 @@ class Product extends AbstractPlugin
                 $this->reindexRow($product->getEntityId());
             });
             $productResource->commit();
+        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
+            throw $e->getPrevious();
         } catch (\Exception $e) {
             $productResource->rollBack();
             throw $e;

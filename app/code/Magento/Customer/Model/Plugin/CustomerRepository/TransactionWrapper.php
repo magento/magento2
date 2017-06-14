@@ -44,6 +44,8 @@ class TransactionWrapper
             $result = $proceed($customer, $passwordHash);
             $this->resourceModel->commit();
             return $result;
+        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
+            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->resourceModel->rollBack();
             throw $e;

@@ -119,6 +119,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         try {
             $this->_prepareIndexTable();
             $this->commit();
+        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
+            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->rollBack();
             throw $e;

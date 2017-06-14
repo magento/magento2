@@ -48,6 +48,8 @@ class Category extends AbstractPlugin
                 }
             });
             $resourceCategory->commit();
+        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
+            throw $e->getPrevious();
         } catch (\Exception $e) {
             $resourceCategory->rollBack();
             throw $e;
