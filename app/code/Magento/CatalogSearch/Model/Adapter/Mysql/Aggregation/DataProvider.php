@@ -15,6 +15,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\CatalogInventory\Model\Stock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -79,7 +80,13 @@ class DataProvider implements DataProviderInterface
 
         $select = $this->getSelect();
 
-        if ($attribute->getAttributeCode() == 'price') {
+        $select->joinInner(
+            ['entities' => $entityIdsTable->getName()],
+            'main_table.entity_id  = entities.entity_id',
+            []
+        );
+
+        if ($attribute->getAttributeCode() === 'price') {
             /** @var \Magento\Store\Model\Store $store */
             $store = $this->scopeResolver->getScope($currentScope);
             if (!$store instanceof \Magento\Store\Model\Store) {
@@ -94,18 +101,23 @@ class DataProvider implements DataProviderInterface
             $currentScopeId = $this->scopeResolver->getScope($currentScope)
                 ->getId();
             $table = $this->resource->getTableName(
-                'catalog_product_index_eav' . ($attribute->getBackendType() == 'decimal' ? '_decimal' : '')
+                'catalog_product_index_eav' . ($attribute->getBackendType() === 'decimal' ? '_decimal' : '')
             );
-            $select->from(['main_table' => $table], ['value'])
+            $subSelect = $select;
+            $subSelect->from(['main_table' => $table], ['main_table.value'])
+                ->joinLeft(
+                    ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
+                    'main_table.source_id = stock_index.product_id',
+                    []
+                )
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
-                ->where('main_table.store_id = ? ', $currentScopeId);
+                ->where('main_table.store_id = ? ', $currentScopeId)
+                ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK)
+                ->group(['main_table.entity_id', 'main_table.value']);
+            $parentSelect = $this->getSelect();
+            $parentSelect->from(['main_table' => $subSelect], ['main_table.value']);
+            $select = $parentSelect;
         }
-
-        $select->joinInner(
-            ['entities' => $entityIdsTable->getName()],
-            'main_table.entity_id  = entities.entity_id',
-            []
-        );
 
         return $select;
     }

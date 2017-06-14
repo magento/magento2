@@ -37,7 +37,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      * Estimate shipment for product that match salesrule with free shipping.
      *
      * @magentoDataFixture Magento/SalesRule/_files/rule_free_shipping_by_product_weight.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      */
     public function testRuleByProductWeightWithFreeShipping()
     {
@@ -53,7 +53,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      * Estimate shipment for product that doesn't match salesrule with free shipping.
      *
      * @magentoDataFixture Magento/SalesRule/_files/rule_free_shipping_by_product_weight.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      */
     public function testRuleByProductWeightWithoutFreeShipping()
     {
