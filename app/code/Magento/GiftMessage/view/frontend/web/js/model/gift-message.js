@@ -102,8 +102,13 @@ define([
             /**
              * Reset.
              */
-            reset: function () {
-                this.getObservable('isClear')(true);
+            reset: function (remove) {
+                if (remove) {
+                    this.getObservable('sender')(null);
+                    this.getObservable('recipient')(null);
+                    this.getObservable('message')(null);
+                }
+                this.getObservable('isClear')(true);;
             },
 
             /**
@@ -126,9 +131,7 @@ define([
              * After submit.
              */
             afterSubmit: function () {
-                window.location.href = url.build('checkout/cart/updatePost') +
-                    '?form_key=' + window.checkoutConfig.formKey +
-                    '&cart[]';
+
             },
 
             /**

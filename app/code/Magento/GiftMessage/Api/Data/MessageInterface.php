@@ -5,11 +5,14 @@
  */
 namespace Magento\GiftMessage\Api\Data;
 
+use Magento\GiftMessage\Api\Data\MessageExtensionInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface MessageInterface
  * @api
  */
-interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface MessageInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -110,6 +113,6 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\GiftMessage\Api\Data\MessageExtensionInterface $extensionAttributes
+        MessageExtensionInterface $extensionAttributes
     );
 }

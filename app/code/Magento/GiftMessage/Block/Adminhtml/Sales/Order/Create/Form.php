@@ -5,13 +5,18 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Model\Session\Quote;
+use Magento\GiftMessage\Helper\Message;
+
 /**
  * Adminhtml sales order create gift message form
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Form extends \Magento\Backend\Block\Template
+class Form extends Template
 {
     /**
      * @var \Magento\Backend\Model\Session\Quote
@@ -30,9 +35,9 @@ class Form extends \Magento\Backend\Block\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Session\Quote $sessionQuote,
-        \Magento\GiftMessage\Helper\Message $messageHelper,
+        Context $context,
+        Quote $sessionQuote,
+        Message $messageHelper,
         array $data = []
     ) {
         $this->_messageHelper = $messageHelper;

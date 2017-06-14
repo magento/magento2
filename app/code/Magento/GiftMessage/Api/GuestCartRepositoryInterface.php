@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Api;
 
+use Magento\GiftMessage\Api\Data\MessageInterface;
+
 /**
  * Interface GuestCartRepositoryInterface
  * @api
@@ -29,5 +31,5 @@ interface GuestCartRepositoryInterface
      * @throws \Magento\Framework\Exception\InputException You cannot add gift messages to empty carts.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message could not be saved.
      */
-    public function save($cartId, \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage);
+    public function save($cartId, MessageInterface $giftMessage);
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Api;
 
+use Magento\GiftMessage\Api\Data\MessageInterface;
+
 /**
  * Interface OrderRepositoryInterface
  * @api

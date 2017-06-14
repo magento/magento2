@@ -46,20 +46,30 @@ define([
         }
         messageList.clear();
 
+        giftMessage.observables.isLoading(true);
+
         storage.post(
             serviceUrl,
             JSON.stringify({
-                'gift_message': giftMessage.getSubmitParams(remove)
+                gift_message: giftMessage.getSubmitParams(remove)
             })
-        ).done(function () {
-            giftMessage.reset();
-            _.each(giftMessage.getAfterSubmitCallbacks(), function (callback) {
-                if (_.isFunction(callback)) {
-                    callback();
-                }
-            });
-        }).fail(function (response) {
-            errorProcessor.process(response);
-        });
+        ).always(
+            function () {
+                giftMessage.observables.isLoading(false);
+            }
+        ).done(
+            function (response) {
+                giftMessage.reset(remove);
+                _.each(giftMessage.getAfterSubmitCallbacks(), function (callback) {
+                    if (_.isFunction(callback)) {
+                        callback();
+                    }
+                });
+            }
+        ).fail(
+            function (response) {
+                errorProcessor.process(response);
+            }
+        );
     };
 });

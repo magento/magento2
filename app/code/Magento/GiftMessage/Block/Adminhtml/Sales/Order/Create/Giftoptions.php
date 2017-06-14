@@ -5,6 +5,8 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
+use Magento\Backend\Block\Template;
+
 /**
  * Adminhtml sales order create gift options block
  *
@@ -12,7 +14,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */
-class Giftoptions extends \Magento\Backend\Block\Template
+class Giftoptions extends Template
 {
     /**
      * Get order item object from parent block

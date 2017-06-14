@@ -5,13 +5,17 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\GiftMessage\Helper\Message;
+
 /**
  * Gift message adminhtml sales order view items
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Items extends \Magento\Backend\Block\Template
+class Items extends Template
 {
     /**
      * Gift message array
@@ -31,8 +35,8 @@ class Items extends \Magento\Backend\Block\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\GiftMessage\Helper\Message $messageHelper,
+        Context $context,
+        Message $messageHelper,
         array $data = []
     ) {
         $this->_messageHelper = $messageHelper;

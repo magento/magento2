@@ -5,13 +5,21 @@
  */
 namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
 
+use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config as ConfigHelper;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\GiftMessage\Helper\Message;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Adminhtml additional helper block for product configuration
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */
-class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
+class Config extends ConfigHelper
 {
     /**
      * Core store config
@@ -28,10 +36,10 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
-        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
+        ScopeConfigInterface $scopeConfig,
         $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -46,8 +54,8 @@ class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
     protected function _getValueFromConfig()
     {
         return $this->_scopeConfig->getValue(
-            \Magento\GiftMessage\Helper\Message::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            Message::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
+            ScopeInterface::SCOPE_STORE
         );
     }
 }
