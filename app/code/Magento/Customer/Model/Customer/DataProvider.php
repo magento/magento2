@@ -9,23 +9,24 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Customer\Model\Address;
-use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\ResourceModel\Customer\Collection;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
@@ -122,6 +123,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * @var ContextInterface
+     */
+    private $context;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -143,9 +149,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         Config $eavConfig,
         FilterPool $filterPool,
         FileProcessorFactory $fileProcessorFactory = null,
+        ContextInterface $context = null,
         array $meta = [],
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $customerCollectionFactory->create();
@@ -153,6 +161,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
         $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
+        $this->context = $context ?: ObjectManager::getInstance()->get(ContextInterface::class);
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
@@ -329,13 +338,35 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (!empty($rules)) {
                 $meta[$code]['arguments']['data']['config']['validation'] = $rules;
             }
+
             $meta[$code]['arguments']['data']['config']['componentType'] = Field::NAME;
+
+            if ($this->canShowAttribute($attribute)) {
+                $meta[$code]['arguments']['data']['config']['visible'] = true;
+            }
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
 
         $this->processWebsiteMeta($meta);
         return $meta;
+    }
+
+    /**
+     * Check whether we can show attribute in admin or not
+     *
+     * @param Attribute $customerAttribute
+     * @return bool
+     */
+    private function canShowAttribute(AbstractAttribute $customerAttribute)
+    {
+        $isRegistration = is_null($this->context->getRequestParam($this->getRequestFieldName()));
+
+        return is_array($customerAttribute->getUsedInForms()) &&
+            (
+                (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
+                (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
+            );
     }
 
     /**
