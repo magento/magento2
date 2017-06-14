@@ -7,6 +7,7 @@
 namespace Magento\Tax\Model\Rate;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Tax\Model\Rate\Provider;
 
 class SourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +21,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         /** @var $taxRate \Magento\Tax\Model\Calculation\Rate */
         foreach ($collection as $taxRate) {
             $expectedResult[] = ['value' => $taxRate->getId(), 'label' => $taxRate->getCode()];
+            if (count($expectedResult) >= Provider::PAGE_SIZE) {
+                break;
+            }
         }
+
         /** @var \Magento\Tax\Model\Rate\Source $source */
         if (empty($expectedResult)) {
             $this->fail('Preconditions failed: At least one tax rate should be available.');
