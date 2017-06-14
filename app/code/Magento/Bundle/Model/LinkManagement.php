@@ -177,14 +177,30 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     ) {
         $selectionModel->setProductId($linkedProductId);
         $selectionModel->setParentProductId($parentProductId);
-        $selectionModel->setSelectionId($productLink->getSelectionId());
-        $selectionModel->setOptionId($productLink->getOptionId());
-        $selectionModel->setPosition($productLink->getPosition());
-        $selectionModel->setSelectionQty($productLink->getQty());
-        $selectionModel->setSelectionPriceType($productLink->getPriceType());
-        $selectionModel->setSelectionPriceValue($productLink->getPrice());
-        $selectionModel->setSelectionCanChangeQty($productLink->getCanChangeQuantity());
-        $selectionModel->setIsDefault($productLink->getIsDefault());
+        if (($productLink->getSelectionId() !== null)) {
+            $selectionModel->setSelectionId($productLink->getSelectionId());
+        }
+        if (($productLink->getOptionId() !== null)) {
+            $selectionModel->setOptionId($productLink->getOptionId());
+        }
+        if ($productLink->getPosition() !== null) {
+            $selectionModel->setPosition($productLink->getPosition());
+        }
+        if ($productLink->getQty() !== null) {
+            $selectionModel->setSelectionQty($productLink->getQty());
+        }
+        if ($productLink->getPriceType() !== null) {
+            $selectionModel->setSelectionPriceType($productLink->getPriceType());
+        }
+        if ($productLink->getPrice() !== null) {
+            $selectionModel->setSelectionPriceValue($productLink->getPrice());
+        }
+        if ($productLink->getCanChangeQuantity() !== null) {
+            $selectionModel->setSelectionCanChangeQty($productLink->getCanChangeQuantity());
+        }
+        if ($productLink->getIsDefault() !== null) {
+            $selectionModel->setIsDefault($productLink->getIsDefault());
+        }
 
         return $selectionModel;
     }
