@@ -151,7 +151,6 @@
         <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
             <settings>
                 <filter>dateRange</filter>
-                <dateFormat>MMM dd, YYYY, H:mm:ss</dateFormat>
                 <dataType>date</dataType>
                 <label translate="true">Purchase Date</label>
             </settings>
