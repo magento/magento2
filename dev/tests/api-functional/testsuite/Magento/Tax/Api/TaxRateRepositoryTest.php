@@ -140,7 +140,6 @@ class TaxRateRepositoryTest extends WebapiAbstract
 
     public function testCreateTaxRateWithoutValue()
     {
-        $expectedMessage = '%fieldName is a required field.';
         $data = [
             'tax_rate' => [
                 'tax_country_id' => 'US',
@@ -166,13 +165,13 @@ class TaxRateRepositoryTest extends WebapiAbstract
             $this->fail('Expected exception was not raised');
         } catch (\SoapFault $e) {
             $this->assertContains(
-                $expectedMessage,
+                'SOAP-ERROR: Encoding: object has no \'rate\' property',
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
             );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals('%fieldName is a required field.', $errorObj['message']);
             $this->assertEquals(['fieldName' => 'percentage_rate'], $errorObj['parameters']);
         }
     }
