@@ -121,10 +121,12 @@ class Queue
 
     /**
      * @param array $productIds
+     * @return Queue
      */
     public function setProducts(array $productIds)
     {
         $this->products = array_combine($productIds, $productIds);
+        return $this;
     }
 
     /**

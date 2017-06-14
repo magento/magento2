@@ -8,7 +8,8 @@ namespace Magento\Catalog\Console;
 
 use Symfony\Component\Console\Input\InputOption;
 
-class ImageResizeOptions {
+class ImageResizeOptions
+{
 
     /**
      * Key for jobs option
