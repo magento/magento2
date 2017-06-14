@@ -248,7 +248,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @return void
      * @throws \Exception
      */
-    protected function runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId)
+    public function runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId)
     {
         $scheduleLifetime = (int)$this->scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_LIFETIME,
@@ -293,7 +293,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    protected function getPendingSchedules()
+    public function getPendingSchedules()
     {
         if (!$this->pendingSchedules) {
             $this->pendingSchedules = $this->scheduleFactory->create()->getCollection()->addFieldToFilter(
@@ -310,7 +310,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return $this
      */
-    protected function generate($groupId)
+    public function generate($groupId)
     {
         /**
          * check if schedule generation is needed
@@ -359,7 +359,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param   string $groupId
      * @return  $this
      */
-    protected function generateJobs($jobs, $exists, $groupId)
+    public function generateJobs($jobs, $exists, $groupId)
     {
         foreach ($jobs as $jobCode => $jobConfig) {
             $cronExpression = null;
@@ -389,7 +389,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return $this
      */
-    protected function cleanup($groupId)
+    public function cleanup($groupId)
     {
         // check if history cleanup is needed
         $lastCleanup = (int)$this->cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
@@ -455,7 +455,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param array $jobConfig
      * @return mixed
      */
-    protected function getConfigSchedule($jobConfig)
+    public function getConfigSchedule($jobConfig)
     {
         $cronExpr = $this->scopeConfig->getValue(
             $jobConfig['config_path'],
@@ -472,7 +472,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param array $exists
      * @return void
      */
-    protected function saveSchedule($jobCode, $cronExpression, $timeInterval, $exists)
+    public function saveSchedule($jobCode, $cronExpression, $timeInterval, $exists)
     {
         $currentTime = $this->timezone->scopeTimeStamp();
         $timeAhead = $currentTime + $timeInterval;
@@ -496,7 +496,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param int $time
      * @return Schedule
      */
-    protected function generateSchedule($jobCode, $cronExpression, $time)
+    public function generateSchedule($jobCode, $cronExpression, $time)
     {
         $schedule = $this->scheduleFactory->create()
             ->setCronExpr($cronExpression)
@@ -512,7 +512,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return int
      */
-    protected function getScheduleTimeInterval($groupId)
+    public function getScheduleTimeInterval($groupId)
     {
         $scheduleAheadFor = (int)$this->scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_AHEAD_FOR,
