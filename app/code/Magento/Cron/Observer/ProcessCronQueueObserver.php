@@ -109,12 +109,17 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @var \Magento\Framework\App\State
      */
-    private $state;
+    protected $state;
+
+    /**
+     * @var array
+     */
+    protected $invalid = [];
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -180,7 +185,8 @@ class ProcessCronQueueObserver implements ObserverInterface
             $this->generate($groupId);
             if ($this->request->getParam('group') !== null
                 && $this->request->getParam('group') !== '\'' . ($groupId) . '\''
-                && $this->request->getParam('group') !== $groupId) {
+                && $this->request->getParam('group') !== $groupId
+            ) {
                 continue;
             }
             if (($this->request->getParam(self::STANDALONE_PROCESS_STARTED) !== '1') && (
@@ -188,7 +194,8 @@ class ProcessCronQueueObserver implements ObserverInterface
                         'system/cron/' . $groupId . '/use_separate_process',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ) == 1
-                )) {
+                )
+            ) {
                 $this->shell->execute(
                     $phpPath . ' %s cron:run --group=' . $groupId . ' --' . Cli::INPUT_KEY_BOOTSTRAP . '='
                     . self::STANDALONE_PROCESS_STARTED . '=1',
@@ -336,7 +343,9 @@ class ProcessCronQueueObserver implements ObserverInterface
          * generate global crontab jobs
          */
         $jobs = $this->config->getJobs();
+        $this->invalid = [];
         $this->generateJobs($jobs[$groupId], $exists, $groupId);
+        $this->cleanupScheduleMismatches();
 
         /**
          * save time schedules generation was ran with no expiration
@@ -469,13 +478,20 @@ class ProcessCronQueueObserver implements ObserverInterface
         $currentTime = $this->timezone->scopeTimeStamp();
         $timeAhead = $currentTime + $timeInterval;
         for ($time = $currentTime; $time < $timeAhead; $time += self::SECONDS_IN_MINUTE) {
-            $timestamp = strftime('%Y-%m-%d %H:%M:00', $time);
-            if (!empty($exists[$jobCode . '/' . $timestamp])) {
-                // already scheduled
+            $scheduledAt = strftime('%Y-%m-%d %H:%M:00', $time);
+            $alreadyScheduled = !empty($exists[$jobCode . '/' . $scheduledAt]);
+            $schedule = $this->generateSchedule($jobCode, $cronExpression, $time);
+            $valid = $schedule->trySchedule();
+            if (!$valid) {
+                if ($alreadyScheduled) {
+                    if (!isset($this->invalid[$jobCode])) {
+                        $this->invalid[$jobCode] = [];
+                    }
+                    $this->invalid[$jobCode][] = $scheduledAt;
+                }
                 continue;
             }
-            $schedule = $this->generateSchedule($jobCode, $cronExpression, $time);
-            if ($schedule->trySchedule()) {
+            if (!$alreadyScheduled) {
                 // time matches cron expression
                 $schedule->save();
             }
@@ -516,6 +532,9 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
+     * Clean up scheduled jobs that are disabled in the configuration
+     * This can happen when you turn off a cron job in the config and flush the cache
+     *
      * @param $groupId
      */
     public function cleanupDisabledJobs($groupId)
@@ -550,5 +569,25 @@ class ProcessCronQueueObserver implements ObserverInterface
             }
         }
         return $cronExpression;
+    }
+
+    /**
+     * Clean up scheduled jobs that do not match their cron expression anymore
+     * This can happen when you change the cron expression and flush the cache
+     *
+     * @return $this
+     */
+    public function cleanupScheduleMismatches()
+    {
+        foreach ($this->invalid as $jobCode => $scheduledAtList) {
+            /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
+            $scheduleResource = $this->scheduleFactory->create()->getResource();
+            $scheduleResource->getConnection()->delete($scheduleResource->getMainTable(), [
+                'status=?' => Schedule::STATUS_PENDING,
+                'job_code=?' => $jobCode,
+                'scheduled_at in (?)' => $scheduledAtList,
+            ]);
+        }
+        return $this;
     }
 }
