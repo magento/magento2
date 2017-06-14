@@ -81,10 +81,6 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             $productIds = array_slice($productIds, $offset, $limit);
         }
 
-        if ($limit > $productCount) {
-            $output->writeln("<error>Limit may not be higher than $productCount</error>");
-        }
-
         $maxOffset = $productCount - 1;
         if ($offset > $maxOffset) {
             $output->writeln("<error>Offset may not be higher than $maxOffset</error>");
