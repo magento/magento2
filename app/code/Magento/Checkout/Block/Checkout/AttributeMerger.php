@@ -321,7 +321,7 @@ class AttributeMerger
         if (!$this->getCustomer()) {
             return null;
         }
-        if (in_array($attributeCode, ['prefix', 'firstname', 'lastname', 'suffix'])) {
+        if (in_array($attributeCode, ['prefix', 'firstname', 'middlename', 'lastname', 'suffix'])) {
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $attributeCode)));
             return $this->getCustomer()->{$methodName}();
         }

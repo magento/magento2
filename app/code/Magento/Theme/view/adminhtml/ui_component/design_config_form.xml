@@ -56,14 +56,14 @@
             </settings>
             <field name="head_shortcut_icon" formElement="fileUploader">
                 <settings>
-                    <notice translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng, svg. Not all browsers support all these formats!</notice>
+                    <notice translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!</notice>
                     <label translate="true">Favicon Icon</label>
                     <componentType>fileUploader</componentType>
                 </settings>
                 <formElements>
                     <fileUploader>
                         <settings>
-                            <allowedExtensions>jpg jpeg gif png svg ico apng</allowedExtensions>
+                            <allowedExtensions>jpg jpeg gif png ico apng</allowedExtensions>
                             <maxFileSize>2097152</maxFileSize>
                             <uploaderConfig>
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
@@ -153,14 +153,14 @@
             </settings>
             <field name="header_logo_src" formElement="fileUploader">
                 <settings>
-                    <notice translate="true">Allowed file types: png, gif, jpg, jpeg, svg.</notice>
+                    <notice translate="true">Allowed file types: png, gif, jpg, jpeg.</notice>
                     <label translate="true">Logo Image</label>
                     <componentType>fileUploader</componentType>
                 </settings>
                 <formElements>
                     <fileUploader>
                         <settings>
-                            <allowedExtensions>jpg jpeg gif png svg</allowedExtensions>
+                            <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                             <maxFileSize>2097152</maxFileSize>
                             <uploaderConfig>
                                 <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
