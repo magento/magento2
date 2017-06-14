@@ -21,7 +21,7 @@ interface PaymentTokenFactoryInterface
 
     /**
      * Create payment token entity
-     * @param $type string
+     * @param $type string|null
      * @return PaymentTokenInterface
      */
     public function create($type = null);

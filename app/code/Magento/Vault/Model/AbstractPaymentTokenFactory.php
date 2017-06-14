@@ -36,7 +36,7 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
         ObjectManagerInterface $objectManager,
         PaymentTokenFactoryInterface $paymentTokenFactory = null
     ) {
-        if (!$paymentTokenFactory) {
+        if ($paymentTokenFactory === null) {
             $paymentTokenFactory = $objectManager->get(PaymentTokenFactoryInterface::class);
         }
 
@@ -52,9 +52,4 @@ abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFacto
     {
         return $this->paymentTokenFactory->create($this->getType());
     }
-
-    /**
-     * @return string
-     */
-    abstract public function getType();
 }
