@@ -176,6 +176,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         $phpPath = $this->phpExecutableFinder->find() ?: 'php';
 
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
+            $this->cleanup($groupId);
+            $this->generate($groupId);
             if ($this->request->getParam('group') !== null
                 && $this->request->getParam('group') !== '\'' . ($groupId) . '\''
                 && $this->request->getParam('group') !== $groupId) {
@@ -232,9 +234,6 @@ class ProcessCronQueueObserver implements ObserverInterface
                 }
                 $schedule->save();
             }
-
-            $this->generate($groupId);
-            $this->cleanup($groupId);
         }
     }
 
