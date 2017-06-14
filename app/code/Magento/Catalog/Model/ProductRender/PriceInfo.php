@@ -64,7 +64,7 @@ class PriceInfo extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     public function getMinimalRegularPrice()
     {
         if (!$this->hasData('minimal_regular_price')) {
-            return $this->getData('min_price');
+            return $this->getData('minimal_price');
         }
 
         return $this->getData('minimal_regular_price');

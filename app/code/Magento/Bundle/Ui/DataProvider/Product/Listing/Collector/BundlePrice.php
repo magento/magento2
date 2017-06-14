@@ -22,6 +22,9 @@ use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
  */
 class BundlePrice implements ProductRenderCollectorInterface
 {
+    /**
+     * Product type code
+     */
     const PRODUCT_TYPE = "bundle";
 
     /**

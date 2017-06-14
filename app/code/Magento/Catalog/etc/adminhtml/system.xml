@@ -37,10 +37,10 @@
             <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Recently Viewed/Compared Products</label>
                 <field id="recently_viewed_lifetime" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Widget Recently Viewed Lifetime</label>
+                    <label>Lifetime of products in Recently Viewed Widget</label>
                 </field>
                 <field id="recently_compared_lifetime" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Widget Recently Compared Lifetime</label>
+                    <label>Lifetime of products in Recently Compared Widget</label>
                 </field>
                 <field id="synchronize_with_backend" translate="label" type="select" showInDefault="1" canRestore="1">
                     <label>Synchronize product actions with backend</label>

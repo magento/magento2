@@ -27,8 +27,6 @@ use Magento\Store\Model\StoreManager;
  */
 class ProductViewCounter extends Template
 {
-    const SYNC_VIEWED_PATH = "catalog/product/recently_viewed";
-
     /**
      * @var ProductRepository
      */
@@ -127,8 +125,8 @@ class ProductViewCounter extends Template
 
         $productRender = $this->productRenderFactory->create();
 
-        $productRender->setStoreId($this->storeManager->getStore()->getId());
-        $productRender->setCurrencyCode($this->storeManager->getStore()->getCurrentCurrencyCode());
+        $productRender->setStoreId($store->getId());
+        $productRender->setCurrencyCode($store->getCurrentCurrencyCode());
         $this->productRenderCollectorComposite
             ->collect($product, $productRender);
         $data = $this->hydrator->extract($productRender);
