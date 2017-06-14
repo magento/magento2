@@ -77,6 +77,7 @@ class RegisterCustomerFrontendEntityTest extends Injectable
      */
     public function test(Customer $customer)
     {
+        $this->logoutCustomerOnFrontendStep->run();
         // Steps
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
