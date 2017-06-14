@@ -152,8 +152,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ContextInterface $context = null,
         array $meta = [],
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $customerCollectionFactory->create();
