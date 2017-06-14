@@ -469,8 +469,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         $currentTime = $this->timezone->scopeTimeStamp();
         $timeAhead = $currentTime + $timeInterval;
         for ($time = $currentTime; $time < $timeAhead; $time += self::SECONDS_IN_MINUTE) {
-            $ts = strftime('%Y-%m-%d %H:%M:00', $time);
-            if (!empty($exists[$jobCode . '/' . $ts])) {
+            $timestamp = strftime('%Y-%m-%d %H:%M:00', $time);
+            if (!empty($exists[$jobCode . '/' . $timestamp])) {
                 // already scheduled
                 continue;
             }
