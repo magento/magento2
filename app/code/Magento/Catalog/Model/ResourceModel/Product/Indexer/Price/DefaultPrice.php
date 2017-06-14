@@ -167,8 +167,6 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         try {
             $this->reindex();
             $this->commit();
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->rollBack();
             throw $e;

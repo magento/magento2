@@ -185,8 +185,6 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);

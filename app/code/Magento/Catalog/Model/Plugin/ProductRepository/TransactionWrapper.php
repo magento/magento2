@@ -44,8 +44,6 @@ class TransactionWrapper
             $result = $proceed($product, $saveOptions);
             $this->resourceModel->commit();
             return $result;
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->resourceModel->rollBack();
             throw $e;
@@ -71,8 +69,6 @@ class TransactionWrapper
             $result = $proceed($product);
             $this->resourceModel->commit();
             return $result;
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->resourceModel->rollBack();
             throw $e;
@@ -98,8 +94,6 @@ class TransactionWrapper
             $result = $proceed($productSku);
             $this->resourceModel->commit();
             return $result;
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->resourceModel->rollBack();
             throw $e;

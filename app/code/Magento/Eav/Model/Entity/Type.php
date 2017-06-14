@@ -254,8 +254,6 @@ class Type extends \Magento\Framework\Model\AbstractModel
 
             // Commit increment_last_id changes
             $this->_getResource()->commit();
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $exception) {
             $this->_getResource()->rollBack();
             throw $exception;

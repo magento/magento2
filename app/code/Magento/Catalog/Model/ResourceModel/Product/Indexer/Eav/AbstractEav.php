@@ -77,8 +77,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->_removeNotVisibleEntityFromIndex();
             $this->syncData();
             $this->commit();
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $e) {
             $this->rollBack();
             throw $e;
