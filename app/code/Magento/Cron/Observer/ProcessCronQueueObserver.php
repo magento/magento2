@@ -362,17 +362,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     public function generateJobs($jobs, $exists, $groupId)
     {
         foreach ($jobs as $jobCode => $jobConfig) {
-            $cronExpression = null;
-            if (isset($jobConfig['config_path'])) {
-                $cronExpression = $this->getConfigSchedule($jobConfig) ?: null;
-            }
-
-            if (!$cronExpression) {
-                if (isset($jobConfig['schedule'])) {
-                    $cronExpression = $jobConfig['schedule'];
-                }
-            }
-
+            $cronExpression = $this->getCronExpression($jobConfig);
             if (!$cronExpression) {
                 continue;
             }
@@ -384,13 +374,15 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
-     * Clean existed jobs
+     * Clean expired jobs
      *
      * @param string $groupId
      * @return $this
      */
     public function cleanup($groupId)
     {
+        $this->cleanupDisabledJobs($groupId);
+
         // check if history cleanup is needed
         $lastCleanup = (int)$this->cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
         $historyCleanUp = (int)$this->scopeConfig->getValue(
@@ -521,5 +513,42 @@ class ProcessCronQueueObserver implements ObserverInterface
         $scheduleAheadFor = $scheduleAheadFor * self::SECONDS_IN_MINUTE;
 
         return $scheduleAheadFor;
+    }
+
+    /**
+     * @param $groupId
+     */
+    public function cleanupDisabledJobs($groupId)
+    {
+        $jobs = $this->config->getJobs();
+        foreach ($jobs[$groupId] as $jobCode => $jobConfig) {
+            if (!$this->getCronExpression($jobConfig)) {
+                /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
+                $scheduleResource = $this->scheduleFactory->create()->getResource();
+                $scheduleResource->getConnection()->delete($scheduleResource->getMainTable(), [
+                    'status=?' => Schedule::STATUS_PENDING,
+                    'job_code=?' => $jobCode,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param $jobConfig
+     * @return null|string
+     */
+    public function getCronExpression($jobConfig)
+    {
+        $cronExpression = null;
+        if (isset($jobConfig['config_path'])) {
+            $cronExpression = $this->getConfigSchedule($jobConfig) ?: null;
+        }
+
+        if (!$cronExpression) {
+            if (isset($jobConfig['schedule'])) {
+                $cronExpression = $jobConfig['schedule'];
+            }
+        }
+        return $cronExpression;
     }
 }
