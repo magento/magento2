@@ -142,11 +142,12 @@ Node &lt;attribute&gt; contains  the following attributes:
 |name|name of column|True|
 
 The name has to be equivalent to the column name in DB. The column alias attribute can be used in the same way as a column alias in the SQL.
-Additional columns can be added through custom iterator declaration as described in first section [Creating a new report](#creating-a-new-report).
+Additional columns can be added through custom iterator declaration as described in first section [Creating a new report](#creating-a-new-report) .
 
 ### Report filters
 The report can be filtered using the &lt;filter&gt; tag. Filters are declared inside &lt;source&gt; node. Filters have attribute glue. Glue is used to filter records based on more than one condition. Glue can have type __OR__ or __AND__. Glue type is __AND__ by default.
 The node filter can have nested filters or/and &lt;conditions&gt;.
+
 **Example of nested condition in SQL:**
 ```
 WHERE ((billing.entity_id IS NULL AND ((billing.entity_id < '200' AND billing.entity_id != '42') AND (billing.entity_id > '200' OR billing.entity_id != '201'))))
@@ -240,7 +241,9 @@ The confirmation modal window is added to content of 'app/code/Magento/Analytics
 </body>
 ```
 A subscription form is added as a UI component 'app/code/Magento/Analytics/view/adminhtml/ui_component/analytics_subscription_form.xml'. The form contains two actions 'OK' and 'Cancel' that call controllers '\Magento\Analytics\Controller\Adminhtml\Subscription\Activate' and '\Magento\Analytics\Controller\Adminhtml\Subscription\Postpone' respectively.
+
 Activate controller enables subscription through a '\Magento\Analytics\Model\Subscription' service. The service sets 'default/analytics/subscription/enabled' config to "true" that triggers '\Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler::process()' and sets a cron job (refer to 'app/code/Magento/Analytics/etc/crontab.xml').
+
 Postpone controller registers time of the most recent notification which is being used by cron to calculate the time of the next notification.
 
 ### Config Management
@@ -283,6 +286,7 @@ The number of allowed attempts is stored in the flag \Magento\Analytics\Model\Co
 ### Overview
 Subscription for Magento Business Intelligence (MBI) service may be canceled (disabled) or restored (enabled) at any time in 'Stores > Configuration > General > Analytics' section of Admin area.
 When configuration value is changed, '\Magento\Analytics\Model\Config\Backend\Enabled::afterSave()' use '\Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler' service for processing of activation/deactivation MBI subscription.
+
 Magento receives the MBI token only once during the first success sign-up request. Moreover, the MBI token will not be removed if the subscription is canceled (disabled).
 So there will not be additional sign-up request when the subscription is restored (enabled) after cancellation. Please note that '\Magento\Analytics\Model\AnalyticsToken' class is responsible for all necessary operations with the MBI token (set/get value, check if the token exists).
 
@@ -425,11 +429,11 @@ Advanced Analytics service cron job which collecting data makes a call to notify
 Request URL is declared in config.xml in Analytics module. Config value stored in the config storage path (XML path or DB field in core_config_data table) 'default/analytics/url/notify_data_changed'.
 
 #### Request format
-Method: POST
+**Method:** POST
 
-Headers: Content-Type: application/json
+**Headers:** Content-Type: application/json
 
-Body: {"access-token": "mbi-user-secret-token", "url": "secure-url-to-magento-store"}
+**Body:** {"access-token": "mbi-user-secret-token", "url": "secure-url-to-magento-store"}
 
 #### Response
 MBI does not provide any response which can be used in Magento.
@@ -438,6 +442,7 @@ MBI does not provide any response which can be used in Magento.
   Advanced Analytics service provides API for pull link and initialization vector.
   
 #### Request and Responses through API
+
 
 **Request and response when file prepared already.**
 
@@ -464,7 +469,7 @@ MBI does not provide any response which can be used in Magento.
 |/rest/V1/analytics/link|HTTP_CODE: 401 Unauthorized;  BODY:{"message":"Consumer is not authorized to access %resources","parameters":{"resources":"Magento_Analytics::analytics_api"}}|
 
 #### File lifecycle
- ![File lifecycle](./docs/images/mbi_files_exchange.png)
+ ![File lifecycle](./docs/images/mbi_file_exchange.png)
  
 #### File decoding
  The file could be decoded in any tools that support algorithm from section "Encription of collected data" below.
