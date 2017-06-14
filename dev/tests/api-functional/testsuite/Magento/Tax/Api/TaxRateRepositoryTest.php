@@ -173,7 +173,7 @@ class TaxRateRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(['percentage_rate'], $errorObj['parameters']);
+            $this->assertEquals(['fieldName' => 'percentage_rate'], $errorObj['parameters']);
         }
     }
 
