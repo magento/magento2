@@ -318,14 +318,32 @@ class AttributeMerger
         if ($attributeCode === 'country_id') {
             return $this->directoryHelper->getDefaultCountry();
         }
-        if (!$this->getCustomer()) {
+
+        $customer = $this->getCustomer();
+        if ($customer === null) {
             return null;
         }
-        if (in_array($attributeCode, ['prefix', 'firstname', 'middlename', 'lastname', 'suffix'])) {
-            $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $attributeCode)));
-            return $this->getCustomer()->{$methodName}();
+
+        $attributeValue = null;
+        switch ($attributeCode) {
+            case 'prefix':
+                $attributeValue = $customer->getPrefix();
+                break;
+            case 'firstname':
+                $attributeValue = $customer->getFirstname();
+                break;
+            case 'middlename':
+                $attributeValue = $customer->getMiddlename();
+                break;
+            case 'lastname':
+                $attributeValue = $customer->getLastname();
+                break;
+            case 'suffix':
+                $attributeValue = $customer->getSuffix();
+                break;
         }
-        return null;
+
+        return $attributeValue;
     }
 
     /**
