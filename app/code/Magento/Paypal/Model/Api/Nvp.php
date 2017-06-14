@@ -1285,6 +1285,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         );
         $this->_logger->critical($exceptionLogMessage);
 
+        /**
+         * The response code 10415 'Transaction has already been completed for this token'
+         * must not fails place order. The old Paypal interface does not lock 'Send' button
+         * it may result to re-send data.
+         */
+        if (in_array((string)ProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED, $this->_callErrors)) {
+            return;
+        }
+
         $exceptionPhrase = __('PayPal gateway has rejected request. %1', $errorMessages);
 
         /** @var \Magento\Framework\Exception\LocalizedException $exception */
