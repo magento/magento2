@@ -225,6 +225,8 @@ define([
             });
         });
         describe('"getLastUpdate" method', function () {
+            var getItem = window.localStorage.getItem;
+
             beforeEach(function () {
                 window.localStorage.getItem = jasmine.createSpy().and.returnValue('value');
             });
@@ -239,8 +241,14 @@ define([
                 expect(obj.getLastUpdate(name)).toBe('value');
                 expect(window.localStorage.getItem).toHaveBeenCalledWith(obj[name].namespace + '_last_update');
             });
+
+            afterEach(function () {
+                window.localStorage.getItem = getItem;
+            })
         });
         describe('"setLastUpdate" method', function () {
+            var setItem = window.localStorage.setItem;
+
             beforeEach(function () {
                 window.localStorage.setItem = jasmine.createSpy().and.returnValue('value');
             });
@@ -257,6 +265,10 @@ define([
                 obj.setLastUpdate(name);
                 expect(window.localStorage.setItem).toHaveBeenCalledWith(obj[name].namespace + '_last_update', utcTime);
             });
+
+            afterEach(function () {
+                window.localStorage.setItem = setItem;
+            })
         });
         describe('"dataFilter" method', function () {
             var data = [
