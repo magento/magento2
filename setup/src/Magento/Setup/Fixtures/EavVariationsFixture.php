@@ -114,8 +114,7 @@ class EavVariationsFixture extends Fixture
      */
     private function generateAttribute($optionCount)
     {
-        $stores = $this->storeManager->getStores();
-        $storeIds = array_merge([0], array_keys($stores));
+        $storeIds = array_keys($this->storeManager->getStores(true));
         $options = [];
 
         for ($option = 1; $option <= $optionCount; $option++) {
