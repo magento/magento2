@@ -138,16 +138,18 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
-                return $this->processorFacadeFactory->create()->process(
+                $message =  $this->processorFacadeFactory->create()->process(
                     $input->getArgument(static::ARG_PATH),
                     $input->getArgument(static::ARG_VALUE),
                     $input->getOption(static::OPTION_SCOPE),
                     $input->getOption(static::OPTION_SCOPE_CODE),
                     $input->getOption(static::OPTION_LOCK)
                 );
-            });
 
-            $this->hash->regenerate(System::CONFIG_TYPE);
+                $this->hash->regenerate(System::CONFIG_TYPE);
+
+                return $message;
+            });
 
             $output->writeln('<info>' . $message . '</info>');
 

@@ -7,6 +7,7 @@ namespace Magento\Config\Test\Unit\Console\Command;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
@@ -49,6 +50,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $processorFacadeFactoryMock;
 
     /**
+     * @var ProcessorFacade|Mock
+     */
+    private $processorFacadeMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -65,6 +71,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->processorFacadeMock = $this->getMockBuilder(ProcessorFacade::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
@@ -79,9 +88,17 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(false);
-        $this->emulatedAreProcessorMock->expects($this->once())
+        $this->processorFacadeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->processorFacadeMock);
+        $this->processorFacadeMock->expects($this->once())
             ->method('process')
             ->willReturn('Some message');
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
         $this->hashMock->expects($this->once())
             ->method('regenerate')
             ->with(System::CONFIG_TYPE);

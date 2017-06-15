@@ -135,15 +135,14 @@ class Importer implements ImporterInterface
                 $this->scopeConfig->clean();
             }
 
-            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData) {
+            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData, $data, $flag) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
                 // Invoke saving of new values.
                 $this->saveProcessor->process($changedData);
+                $flag->setFlagData($data);
+                $this->flagResource->save($flag);
             });
-
-            $flag->setFlagData($data);
-            $this->flagResource->save($flag);
         } catch (\Exception $e) {
             throw new InvalidTransitionException(__('%1', $e->getMessage()), $e);
         } finally {

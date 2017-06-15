@@ -155,8 +155,8 @@ class SensitiveConfigSetCommand extends Command
         try {
             $this->emulatedAreaProcessor->process(function () use ($input, $output) {
                 $this->facade->process($input, $output);
+                $this->hash->regenerate(System::CONFIG_TYPE);
             });
-            $this->hash->regenerate(System::CONFIG_TYPE);
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
