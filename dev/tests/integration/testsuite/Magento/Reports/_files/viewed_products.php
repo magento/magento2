@@ -54,8 +54,6 @@ $reportResource->beginTransaction();
 try {
     $reportResource->aggregate();
     $reportResource->commit();
-} catch (\Magento\Framework\Exception\AfterCommitException $e) {
-    throw $e->getPrevious();
 } catch (\Exception $e) {
     $reportResource->rollBack();
     throw $e;

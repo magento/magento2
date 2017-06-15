@@ -105,8 +105,6 @@ class Importer implements ImporterInterface
             foreach ($actions as $action) {
                 $this->processFactory->create($action)->run($data);
             }
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Exception $exception) {
             $this->resource->rollBack();
             $this->reinitStores();
