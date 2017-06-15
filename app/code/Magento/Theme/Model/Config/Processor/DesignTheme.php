@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Deploy\Model\Config\Processor;
+namespace Magento\Theme\Model\Config\Processor;
 
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -27,6 +27,7 @@ class DesignTheme implements PreProcessorInterface
 
     /**
      * DesignTheme constructor.
+     *
      * @param ArrayManager $arrayManager
      * @param ListInterface $themeList
      */

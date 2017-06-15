@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Deploy\Model\Plugin;
+namespace Magento\Theme\Model\Design\Config\Plugin;
 
 use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -11,11 +11,12 @@ use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\DesignInterface;
 
 /**
- * This is plugin for Magento\Framework\App\Config\Scope\Converter class.
+ * This is plugin for Magento\Config\App\Config\Source\DumpConfigSourceAggregated class.
  *
- * Detects the design theme configuration data (path ) and convert theme identifier from theme_id to theme_full_path.
+ * Detects the design theme configuration data (path \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID)
+ * and convert theme identifier from theme_id to theme_full_path.
  */
-class DesignConfigTheme
+class Dump
 {
     /**
      * @var ListInterface
@@ -69,16 +70,19 @@ class DesignConfigTheme
      */
     private function changeThemeIdToFullPath($configItems)
     {
+        $theme = null;
         if ($this->arrayManager->exists(DesignInterface::XML_PATH_THEME_ID, $configItems)) {
             $themeIdentifier = $this->arrayManager->get(DesignInterface::XML_PATH_THEME_ID, $configItems);
             if (is_numeric($themeIdentifier)) {
                 $theme = $this->themeList->getItemById($themeIdentifier);
-            } else {
-                $theme = $this->themeList->getThemeByFullPath($themeIdentifier);
             }
 
-            if ($theme && $theme->getId()) {
-                return $this->arrayManager->set(DesignInterface::XML_PATH_THEME_ID, $configItems, $theme->getFullPath());
+            if ($theme && $theme->getFullPath()) {
+                return $this->arrayManager->set(
+                    DesignInterface::XML_PATH_THEME_ID,
+                    $configItems,
+                    $theme->getFullPath()
+                );
             }
         }
 

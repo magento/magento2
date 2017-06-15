@@ -82,7 +82,7 @@
             <argument name="source" xsi:type="object">systemConfigSourceAggregatedProxy</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorCompositeProxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-            <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
+            <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
         </arguments>
     </type>
@@ -139,13 +139,13 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="systemConfigPreProcessorComposite" type="Magento\Framework\App\Config\PreProcessorComposite">
+    <type name="Magento\Framework\App\Config\PreProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="environmentPlaceholder" xsi:type="object">Magento\Config\Model\Config\Processor\EnvironmentPlaceholder</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <virtualType name="systemConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
