@@ -541,7 +541,8 @@ class ProcessCronQueueObserver implements ObserverInterface
      * Clean up scheduled jobs that are disabled in the configuration
      * This can happen when you turn off a cron job in the config and flush the cache
      *
-     * @param $groupId
+     * @param string $groupId
+     * @return void
      */
     public function cleanupDisabledJobs($groupId)
     {
@@ -559,7 +560,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
-     * @param $jobConfig
+     * @param array $jobConfig
      * @return null|string
      */
     private function getCronExpression($jobConfig)
@@ -602,7 +603,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function getJobs()
     {
-        if (is_null($this->jobs)) {
+        if ($this->jobs === null) {
             $this->jobs = $this->config->getJobs();
         }
         return $this->jobs;
