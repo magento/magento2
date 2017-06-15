@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Context;
 use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreResolver;
 
 /**
@@ -36,10 +37,16 @@ class Robots extends AbstractBlock implements IdentityInterface
     private $sitemapHelper;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Context $context
      * @param StoreResolver $storeResolver
      * @param CollectionFactory $sitemapCollectionFactory
      * @param SitemapHelper $sitemapHelper
+     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -47,11 +54,13 @@ class Robots extends AbstractBlock implements IdentityInterface
         StoreResolver $storeResolver,
         CollectionFactory $sitemapCollectionFactory,
         SitemapHelper $sitemapHelper,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->storeResolver = $storeResolver;
         $this->sitemapCollectionFactory = $sitemapCollectionFactory;
         $this->sitemapHelper = $sitemapHelper;
+        $this->storeManager = $storeManager;
 
         parent::__construct($context, $data);
     }
@@ -59,36 +68,62 @@ class Robots extends AbstractBlock implements IdentityInterface
     /**
      * Prepare sitemap links to add to the robots.txt file
      *
-     * Detects if sitemap file information is required to be added to robots.txt,
-     * then gets the name of sitemap files that linked with current store,
-     * and adds record for this sitemap files into result data.
+     * Collects sitemap links for all stores of given website.
+     * Detects if sitemap file information is required to be added to robots.txt
+     * and adds links for this sitemap files into result data.
      *
      * @return string
      */
     protected function _toHtml()
     {
-        $result = '';
+        $defaultStoreId = $this->storeResolver->getCurrentStoreId();
+        $defalutStore = $this->storeManager->getStore($defaultStoreId);
 
-        $storeId = $this->storeResolver->getCurrentStoreId();
+        /** @var \Magento\Store\Model\Website $website */
+        $website = $this->storeManager->getWebsite($defalutStore->getWebsiteId());
 
-        if ((bool)$this->sitemapHelper->getEnableSubmissionRobots($storeId)) {
-            /** @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection $collection */
-            $collection = $this->sitemapCollectionFactory->create();
-            $collection->addStoreFilter([$storeId]);
-
-            foreach ($collection as $sitemap) {
-                /** @var \Magento\Sitemap\Model\Sitemap $sitemap */
-                $sitemapFilename = $sitemap->getSitemapFilename();
-                $sitemapPath = $sitemap->getSitemapPath();
-
-                $robotsSitemapLine = 'Sitemap: ' . $sitemap->getSitemapUrl($sitemapPath, $sitemapFilename);
-                if (strpos($result, $robotsSitemapLine) === false) {
-                    $result .= PHP_EOL . $robotsSitemapLine;
-                }
+        $storeIds = [];
+        foreach ($website->getStoreIds() as $storeId) {
+            if ((bool)$this->sitemapHelper->getEnableSubmissionRobots($storeId)) {
+                $storeIds[] = (int)$storeId;
             }
         }
 
-        return $result;
+        $links = [];
+        if ($storeIds) {
+            $links = array_merge($links, $this->getSitemapLinks($storeIds));
+        }
+
+        return $links ? implode(PHP_EOL, $links) . PHP_EOL : '';
+    }
+
+    /**
+     * Retrieve sitemap links for given store
+     *
+     * Gets the names of sitemap files that linked with given store,
+     * and adds links for this sitemap files into result array.
+     *
+     * @param int[] $storeIds
+     * @return array
+     */
+    protected function getSitemapLinks(array $storeIds)
+    {
+        $sitemapLinks = [];
+
+        /** @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection $collection */
+        $collection = $this->sitemapCollectionFactory->create();
+        $collection->addStoreFilter($storeIds);
+
+        foreach ($collection as $sitemap) {
+            /** @var \Magento\Sitemap\Model\Sitemap $sitemap */
+            $sitemapFilename = $sitemap->getSitemapFilename();
+            $sitemapPath = $sitemap->getSitemapPath();
+
+            $sitemapUrl = $sitemap->getSitemapUrl($sitemapPath, $sitemapFilename);
+            $sitemapLinks[$sitemapUrl] = 'Sitemap: ' . $sitemapUrl;
+        }
+
+        return $sitemapLinks;
     }
 
     /**

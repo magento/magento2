@@ -55,7 +55,7 @@ class Data extends AbstractBlock implements IdentityInterface
      */
     protected function _toHtml()
     {
-        return $this->robots->getData();
+        return $this->robots->getData() . PHP_EOL;
     }
 
     /**

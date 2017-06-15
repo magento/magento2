@@ -1,1 +1,3 @@
-The Robots module contains router to match application action class for robots.txt requests and realizes the possibility of obtaining content of robots.txt file depending on the current website.
+The Robots module provides the following functionalities: 
+* contains a router to match application action class for requests to the `robots.txt` file;
+* allows obtaining the content of the `robots.txt` file depending on the settings of the current website.

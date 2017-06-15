@@ -65,15 +65,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $expected = 'test';
+        $data = 'test';
 
-        $this->initEventManagerMock($expected);
+        $this->initEventManagerMock($data);
 
         $this->robots->expects($this->once())
             ->method('getData')
-            ->willReturn($expected);
+            ->willReturn($data);
 
-        $this->assertEquals($expected, $this->block->toHtml());
+        $this->assertEquals($data . PHP_EOL, $this->block->toHtml());
     }
 
     /**

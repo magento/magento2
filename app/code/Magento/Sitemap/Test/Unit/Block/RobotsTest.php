@@ -37,6 +37,11 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
      */
     private $eventManagerMock;
 
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
+
     protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
@@ -64,11 +69,15 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+
         $this->block = new \Magento\Sitemap\Block\Robots(
             $this->context,
             $this->storeResolver,
             $this->sitemapCollectionFactory,
-            $this->sitemapHelper
+            $this->sitemapHelper,
+            $this->storeManager
         );
     }
 
@@ -77,7 +86,8 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtmlRobotsSubmissionIsDisabled()
     {
-        $storeId = 1;
+        $defaultStoreId = 1;
+        $defaultWebsiteId = 1;
 
         $expected = '';
 
@@ -85,11 +95,33 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
 
         $this->storeResolver->expects($this->once())
             ->method('getCurrentStoreId')
-            ->willReturn($storeId);
+            ->willReturn($defaultStoreId);
+
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->getMockForAbstractClass();
+        $storeMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($defaultWebsiteId);
+
+        $websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $websiteMock->expects($this->any())
+            ->method('getStoreIds')
+            ->willReturn([$defaultStoreId]);
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($defaultStoreId)
+            ->willReturn($storeMock);
+        $this->storeManager->expects($this->once())
+            ->method('getWebsite')
+            ->with($defaultWebsiteId)
+            ->willReturn($websiteMock);
 
         $this->sitemapHelper->expects($this->once())
             ->method('getEnableSubmissionRobots')
-            ->with($storeId)
+            ->with($defaultStoreId)
             ->willReturn(false);
 
         $this->assertEquals($expected, $this->block->toHtml());
@@ -100,29 +132,54 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGetDataRobotsSubmissionIsEnabled()
     {
-        $storeId = 1;
+        $defaultStoreId = 1;
+        $secondStoreId = 2;
+        $defaultWebsiteId = 1;
 
         $sitemapPath = '/';
         $sitemapFilenameOne = 'sitemap.xml';
         $sitemapFilenameTwo = 'sitemap_custom.xml';
         $sitemapFilenameThree = 'sitemap.xml';
 
-        $expected = ''
+        $expected = 'Sitemap: ' . $sitemapFilenameOne
             . PHP_EOL
-            . 'Sitemap: ' . $sitemapFilenameOne
-            . PHP_EOL
-            . 'Sitemap: ' . $sitemapFilenameTwo;
+            . 'Sitemap: ' . $sitemapFilenameTwo
+            . PHP_EOL;
 
         $this->initEventManagerMock($expected);
 
         $this->storeResolver->expects($this->once())
             ->method('getCurrentStoreId')
-            ->willReturn($storeId);
+            ->willReturn($defaultStoreId);
 
-        $this->sitemapHelper->expects($this->once())
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->getMockForAbstractClass();
+        $storeMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($defaultWebsiteId);
+
+        $websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $websiteMock->expects($this->any())
+            ->method('getStoreIds')
+            ->willReturn([$defaultStoreId, $secondStoreId]);
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($defaultStoreId)
+            ->willReturn($storeMock);
+        $this->storeManager->expects($this->once())
+            ->method('getWebsite')
+            ->with($defaultWebsiteId)
+            ->willReturn($websiteMock);
+
+        $this->sitemapHelper->expects($this->any())
             ->method('getEnableSubmissionRobots')
-            ->with($storeId)
-            ->willReturn(true);
+            ->willReturnMap([
+                [$defaultStoreId, true],
+                [$secondStoreId, false],
+            ]);
 
         $sitemapMockOne = $this->getSitemapMock($sitemapPath, $sitemapFilenameOne);
         $sitemapMockTwo = $this->getSitemapMock($sitemapPath, $sitemapFilenameTwo);
@@ -131,9 +188,9 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $sitemapCollectionMock = $this->getMockBuilder(\Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $sitemapCollectionMock->expects($this->once())
+        $sitemapCollectionMock->expects($this->any())
             ->method('addStoreFilter')
-            ->with([$storeId])
+            ->with([$defaultStoreId])
             ->willReturnSelf();
 
         $sitemapCollectionMock->expects($this->any())

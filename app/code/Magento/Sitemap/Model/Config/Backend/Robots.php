@@ -3,31 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Robots\Model\Config;
+namespace Magento\Sitemap\Model\Config\Backend;
 
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\Value as ConfigValue;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Robots\Model\Config\Value as RobotsValue;
 use Magento\Store\Model\StoreResolver;
 
 /**
- * Backend model for design/search_engine_robots/custom_instructions configuration value.
+ * Backend model for sitemap/search_engines/submission_robots configuration value.
  * Required to implement Page Cache functionality.
- *
- * @api
  */
-class Value extends ConfigValue implements IdentityInterface
+class Robots extends Value implements IdentityInterface
 {
-    /**
-     * Cache tag for robots.txt cached data
-     */
-    const CACHE_TAG = 'robots';
-
     /**
      * Model cache tag for clear cache in after save and after delete
      *
@@ -81,7 +75,7 @@ class Value extends ConfigValue implements IdentityInterface
     public function getIdentities()
     {
         return [
-            self::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+            RobotsValue::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
         ];
     }
 }
