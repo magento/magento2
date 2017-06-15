@@ -5,6 +5,9 @@
  */
 namespace Magento\Sitemap\Test\Unit\Block;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RobotsTest extends \PHPUnit_Framework_TestCase
 {
     /**
