@@ -122,6 +122,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $invalid = [];
 
     /**
+     * @var array
+     */
+    protected $jobs;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Cron\Model\ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -206,6 +211,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                 continue;
             }
 
+            /** @var \Magento\Cron\Model\Schedule $schedule */
             foreach ($pendingJobs as $schedule) {
                 $jobConfig = isset($jobsRoot[$schedule->getJobCode()]) ? $jobsRoot[$schedule->getJobCode()] : null;
                 if (!$jobConfig) {
@@ -342,7 +348,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         /**
          * generate global crontab jobs
          */
-        $jobs = $this->config->getJobs();
+        $jobs = $this->getJobs();
         $this->invalid = [];
         $this->generateJobs($jobs[$groupId], $exists, $groupId);
         $this->cleanupScheduleMismatches();
@@ -539,7 +545,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     public function cleanupDisabledJobs($groupId)
     {
-        $jobs = $this->config->getJobs();
+        $jobs = $this->getJobs();
         foreach ($jobs[$groupId] as $jobCode => $jobConfig) {
             if (!$this->getCronExpression($jobConfig)) {
                 /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
@@ -589,5 +595,16 @@ class ProcessCronQueueObserver implements ObserverInterface
             ]);
         }
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getJobs()
+    {
+        if (is_null($this->jobs)) {
+            $this->jobs = $this->config->getJobs();
+        }
+        return $this->jobs;
     }
 }
