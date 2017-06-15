@@ -121,8 +121,6 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $connection->commit();
             $this->aclDataCache->clean();
-        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
-            throw $e->getPrevious();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $connection->rollBack();
             throw $e;

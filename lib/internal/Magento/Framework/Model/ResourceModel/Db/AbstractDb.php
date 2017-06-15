@@ -419,6 +419,8 @@ abstract class AbstractDb extends AbstractResource
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
+        } catch (\Magento\Framework\Exception\AfterCommitException $e) {
+            throw $e->getPrevious();
         } catch (DuplicateException $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
