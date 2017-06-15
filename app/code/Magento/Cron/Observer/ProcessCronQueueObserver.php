@@ -374,7 +374,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param   string $groupId
      * @return  $this
      */
-    public function generateJobs($jobs, $exists, $groupId)
+    private function generateJobs($jobs, $exists, $groupId)
     {
         foreach ($jobs as $jobCode => $jobConfig) {
             $cronExpression = $this->getCronExpression($jobConfig);
@@ -394,7 +394,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return $this
      */
-    public function cleanup($groupId)
+    private function cleanup($groupId)
     {
         $this->cleanupDisabledJobs($groupId);
 
@@ -462,7 +462,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param array $jobConfig
      * @return mixed
      */
-    public function getConfigSchedule($jobConfig)
+    private function getConfigSchedule($jobConfig)
     {
         $cronExpr = $this->scopeConfig->getValue(
             $jobConfig['config_path'],
@@ -479,7 +479,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param array $exists
      * @return void
      */
-    public function saveSchedule($jobCode, $cronExpression, $timeInterval, $exists)
+    private function saveSchedule($jobCode, $cronExpression, $timeInterval, $exists)
     {
         $currentTime = $this->timezone->scopeTimeStamp();
         $timeAhead = $currentTime + $timeInterval;
@@ -510,7 +510,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param int $time
      * @return Schedule
      */
-    public function generateSchedule($jobCode, $cronExpression, $time)
+    private function generateSchedule($jobCode, $cronExpression, $time)
     {
         $schedule = $this->scheduleFactory->create()
             ->setCronExpr($cronExpression)
@@ -526,7 +526,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return int
      */
-    public function getScheduleTimeInterval($groupId)
+    private function getScheduleTimeInterval($groupId)
     {
         $scheduleAheadFor = (int)$this->scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_AHEAD_FOR,
@@ -562,7 +562,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param $jobConfig
      * @return null|string
      */
-    public function getCronExpression($jobConfig)
+    private function getCronExpression($jobConfig)
     {
         $cronExpression = null;
         if (isset($jobConfig['config_path'])) {
@@ -600,7 +600,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @return array
      */
-    public function getJobs()
+    private function getJobs()
     {
         if (is_null($this->jobs)) {
             $this->jobs = $this->config->getJobs();
