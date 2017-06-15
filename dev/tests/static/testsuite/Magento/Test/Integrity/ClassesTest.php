@@ -169,6 +169,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $badClasses = [];
         $badUsages = [];
         foreach ($classes as $class) {
+            $class = trim($class, '\\');
             try {
                 if (strrchr($class, '\\') === false and !Classes::isVirtual($class)) {
                     $badUsages[] = $class;
@@ -188,7 +189,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 }
                 self::$_existingClasses[$class] = 1;
             } catch (\PHPUnit_Framework_AssertionFailedError $e) {
-                $badClasses[] = $class;
+                $badClasses[] = '\\' . $class;
             }
         }
         if ($badClasses) {
@@ -598,13 +599,8 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     {
         $files = Files::init();
         $errors = [];
-        $filesToTest = $files->getPhpFiles(Files::INCLUDE_TESTS);
 
-        if (($key = array_search(__FILE__, $filesToTest)) !== false) {
-            unset($filesToTest[$key]);
-        }
-
-        foreach ($filesToTest as $file) {
+        foreach ($files->getFiles([BP . '/dev/tests/{integration,unit}'], '*') as $file) {
             $code = file_get_contents($file);
             if (preg_match('/@covers(DefaultClass)?\s+([\w\\\\]+)(::([\w\\\\]+))?/', $code, $matches)) {
                 if ($this->isNonexistentEntityCovered($matches)) {

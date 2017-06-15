@@ -17,6 +17,7 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\Category\Attribute\Backend\Image as ImageBackendModel;
 
 /**
  * Class DataProvider
@@ -206,14 +207,53 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
             $categoryData = $this->filterFields($categoryData);
-            if (isset($categoryData['image'])) {
-                unset($categoryData['image']);
-                $categoryData['image'][0]['name'] = $category->getData('image');
-                $categoryData['image'][0]['url'] = $category->getImageUrl();
-            }
+            $categoryData = $this->convertValues($category, $categoryData);
+
             $this->loadedData[$category->getId()] = $categoryData;
         }
         return $this->loadedData;
+    }
+
+    /**
+     * Converts category image data to acceptable format for rendering.
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @param array $categoryData
+     * @return array
+     */
+    private function convertValues(Category $category, array $categoryData)
+    {
+        $imageAttributes = $this->getImageAttributes($category, $categoryData);
+        $attributeCodes = array_keys($imageAttributes);
+        foreach ($attributeCodes as $attributeCode) {
+            unset($categoryData[$attributeCode]);
+            $categoryData[$attributeCode][0]['name'] = $category->getData($attributeCode);
+            $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
+        }
+
+        return $categoryData;
+    }
+
+    /**
+     * Get all category image attributes.
+     *
+     * @param \Magento\Catalog\Model\Category $category
+     * @param array $categoryData
+     * @return array
+     */
+    private function getImageAttributes(Category $category, array $categoryData)
+    {
+        $imageAttributes = [];
+        foreach ($category->getAttributes() as $attributeCode => $attribute) {
+            if (!isset($categoryData[$attributeCode])) {
+                continue;
+            }
+            if ($attribute->getBackend() instanceof ImageBackendModel) {
+                $imageAttributes[$attributeCode] = $attribute;
+            }
+        }
+
+        return $imageAttributes;
     }
 
     /**
