@@ -24,19 +24,25 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     /** @var StoreViewService */
     protected $storeViewService;
 
+    /** @var \Magento\Catalog\Model\ResourceModel\Category **/
+    protected $categoryResource;
+
     /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
+     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
-        StoreViewService $storeViewService
+        StoreViewService $storeViewService,
+        \Magento\Catalog\Model\ResourceModel\Category $categoryResource
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->storeViewService = $storeViewService;
+        $this->categoryResource = $categoryResource;
     }
 
     /**
@@ -57,7 +63,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             $category->setUrlKey($resultUrlKey)
                 ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             if (!$category->isObjectNew()) {
-                $category->getResource()->saveAttribute($category, 'url_path');
+                $this->categoryResource->saveAttribute($category, 'url_path');
                 if ($category->dataHasChangedFor('url_path')) {
                     $this->updateUrlPathForChildren($category);
                 }
