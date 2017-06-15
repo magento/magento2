@@ -155,11 +155,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('emulateAreaCode')
             ->with(Area::AREA_ADMINHTML, $this->anything())
             ->willReturnCallback(function ($area, $function) {
+                $this->assertEquals(Area::AREA_ADMINHTML, $area);
                 return $function();
             });
         $this->scopeMock->expects($this->at(1))
             ->method('setCurrentScope')
-            ->with('adminhtml');
+            ->with(Area::AREA_ADMINHTML);
         $this->scopeMock->expects($this->at(2))
             ->method('setCurrentScope')
             ->with('oldScope');
