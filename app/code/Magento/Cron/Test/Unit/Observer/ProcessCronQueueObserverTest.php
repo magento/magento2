@@ -651,4 +651,81 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->cronQueueObserver->execute($this->observer);
     }
+
+    /**
+     * Testing if mismatching schedules will be deleted and
+     * if disabled jobs will be deleted
+     */
+    public function testDispatchRemoveConfigMismatch()
+    {
+        $jobConfig = ['default' => [
+            'test_job1' => ['instance' => 'CronJob', 'method' => 'execute', 'schedule' => '*/10 * * * *'],
+            'test_job2' => ['instance' => 'CronJob', 'method' => 'execute', 'schedule' => null]
+        ]];
+        $this->config->expects($this->exactly(2))->method('getJobs')->will($this->returnValue($jobConfig));
+        $this->request->expects($this->any())->method('getParam')->will($this->returnValue('default'));
+
+        $this->cache->expects($this->any())->method('load')->willReturnMap([
+            // skip cleanup
+            [ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'default', time() + 1000],
+            // do generation
+            [ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'default', time() - 1000],
+        ]);
+
+        $jobs = [];
+        for ($i = 0; $i<20; $i++) {
+            $time = date('Y-m-d H:i:00', strtotime("+$i minutes"));
+            $jobs[] = [
+                'age' => $time,
+                'delete' => !preg_match('#0$#', date('i', strtotime($time)))
+            ];
+        }
+
+        foreach ($jobs as $job) {
+            /** @var Schedule | Mock $schedule */
+            $schedule = $this->getMockBuilder(Schedule::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['getJobCode', 'getScheduledAt', 'getStatus', 'delete', 'save', '__wakeup'])->getMock();
+            $schedule->expects($this->any())->method('getStatus')->will($this->returnValue('pending'));
+            $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
+            $schedule->expects($this->any())->method('getScheduledAt')->will($this->returnValue($job['age']));
+            $this->collection->addItem($schedule);
+        }
+
+        /** @var Schedule | Mock $schedule */
+        $schedule = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getJobCode', 'getScheduledAt', 'getStatus', 'delete', 'save', '__wakeup'])->getMock();
+        $schedule->expects($this->any())->method('getStatus')->will($this->returnValue('pending'));
+        $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job2'));
+        $schedule->expects($this->any())->method('getScheduledAt')->will($this->returnValue(date('Y-m-d H:i:00')));
+        $this->collection->addItem($schedule);
+
+        $scheduleMock = $this->getMockBuilder(Schedule::class)->disableOriginalConstructor()
+            ->setMethods(['save', 'getCollection', 'getResource'])->getMock();
+        $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->collection));
+        $scheduleMock->expects($this->any())->method('getResource')->will($this->returnValue($this->scheduleResource));
+        $this->scheduleFactory->expects($this->any())->method('create')->will($this->returnValue($scheduleMock));
+
+        $query = [
+            'status=?' => Schedule::STATUS_PENDING,
+            'job_code=?' => 'test_job2',
+        ];
+        $this->connection->expects($this->at(0))->method('delete')->with(null, $query);
+
+        $scheduledAtList = [];
+        foreach ($jobs as $job) {
+            if ($job['delete'] === true) {
+                $scheduledAtList[] = $job['age'];
+            }
+        }
+        $query = [
+            'status=?' => Schedule::STATUS_PENDING,
+            'job_code=?' => 'test_job1',
+            'scheduled_at in (?)' => $scheduledAtList,
+        ];
+        $this->connection->expects($this->at(1))->method('delete')->with(null, $query);
+
+        $this->cronQueueObserver->execute($this->observer);
+    }
 }
