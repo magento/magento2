@@ -14,7 +14,7 @@
 
         <div class="field choice" id="add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
             <input type="checkbox" name="allow_gift_options" id="allow_gift_options" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-container"}'<?php if ($block->getItemsHasMesssages() || $block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
-            <label for="allow_gift_options" class="label"><span><?= /* @escapeNotVerified */ __('Add gift options') ?></span></label>
+            <label for="allow_gift_options" class="label"><span><?php /* @escapeNotVerified */ echo __('Add Gift Options') ?></span></label>
         </div>
 
         <dl class="options-items" id="allow-gift-options-container">
@@ -146,9 +146,9 @@
     <fieldset id="add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="fieldset gift-message">
         <legend class="legend"><span><?= /* @escapeNotVerified */ __('Do you have any gift items in your order?') ?></span></legend><br>
 
-        <div class="field choice" id="add-gift-options-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
-            <input type="checkbox" name="allow_gift_options_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" id="allow_gift_options_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}'<?php if ($block->getItemsHasMesssages() || $block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
-            <label for="allow_gift_options_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="label"><span><?= /* @escapeNotVerified */ __('Add gift options') ?></span></label>
+        <div class="field choice" id="add-gift-options-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>">
+            <input type="checkbox" name="allow_gift_options_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>" id="allow_gift_options_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"}'<?php if ($block->getItemsHasMesssages() || $block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <label for="allow_gift_options_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>" class="label"><span><?php /* @escapeNotVerified */ echo __('Add Gift Options') ?></span></label>
         </div>
 
         <dl class="options-items" id="allow-gift-options-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>">
@@ -196,8 +196,8 @@
             <?php if ($block->isItemsAvailable()): ?>
             <dt id="add-gift-options-for-items-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="order-title individual">
                 <div class="field choice">
-                    <input type="checkbox" name="allow_gift_options_for_items_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" id="allow_gift_options_for_items_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-items-container-<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>"}'<?php if ($block->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
-                    <label for="allow_gift_options_for_items_<?= /* @escapeNotVerified */ $block->getEntity()->getId() ?>" class="label"><span><?= /* @escapeNotVerified */ __('Add gift options for Individual Items') ?></span></label>
+                    <input type="checkbox" name="allow_gift_options_for_items_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>" id="allow_gift_options_for_items_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-items-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"}'<?php if ($block->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                    <label for="allow_gift_options_for_items_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>" class="label"><span><?php /* @escapeNotVerified */ echo __('Add Gift Options for Individual Items') ?></span></label>
                 </div>
             </dt>
 
