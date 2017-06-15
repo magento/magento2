@@ -31,6 +31,16 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $contextMock = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())
+            ->method('getMultipleValueSeparator')
+            ->willReturn(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR);
+        $contextMock->expects($this->any())
+            ->method('retrieveMessageTemplate')
+            ->with(Media::ERROR_INVALID_MEDIA_URL_OR_PATH)
+            ->willReturn('%s');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->media = $this->objectManagerHelper->getObject(
@@ -39,6 +49,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'validator' => $this->validatorMock
             ]
         );
+        $this->media->init($contextMock);
     }
 
     public function testInit()
@@ -50,26 +61,12 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $data
      * @param array $expected
-     * @param \Closure|null $validatorCallback
      * @dataProvider isMediaValidDataProvider
      */
-    public function testIsValid($data, $expected, \Closure $validatorCallback = null)
+    public function testIsValid($data, $expected)
     {
-        if ($validatorCallback !== null) {
-            $validatorCallback($this->validatorMock);
-        }
-
-        $contextMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contextMock->expects($this->any())
-            ->method('getMultipleValueSeparator')
-            ->willReturn(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR);
-        $contextMock->expects($this->any())
-            ->method('retrieveMessageTemplate')
-            ->with(Media::ERROR_INVALID_MEDIA_URL_OR_PATH)
-            ->willReturn('%s');
-        $this->media->init($contextMock);
+        $this->validatorMock->expects($this->never())
+            ->method('isValid');
 
         $result = $this->media->isValid($data);
         $this->assertEquals($expected['result'], $result);
@@ -92,6 +89,47 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $data
+     * @param array $expected
+     * @dataProvider isValidAdditionalImagesPathDataProvider
+     */
+    public function testIsValidAdditionalImagesPath($data, $expected)
+    {
+        if ($expected['result']) {
+            $this->validatorMock->expects($this->never())
+                ->method('isValid');
+        } else {
+            $this->validatorMock->expects($this->once())
+                ->method('isValid')
+                ->with($data['additional_images'])
+                ->willReturn(false);
+        }
+
+        $result = $this->media->isValid($data);
+        $this->assertEquals($expected['result'], $result);
+        $messages = $this->media->getMessages();
+        $this->assertEquals($expected['messages'], $messages);
+    }
+
+    /**
+     * @param array $data
+     * @param array $expected
+     * @dataProvider isValidAdditionalImagesUrlDataProvider
+     */
+    public function testIsValidAdditionalImagesUrl($data, $expected)
+    {
+        $this->validatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($data['additional_images'])
+            ->willReturn($expected['result']);
+
+        $result = $this->media->isValid($data);
+        $this->assertEquals($expected['result'], $result);
+        $messages = $this->media->getMessages();
+        $this->assertEquals($expected['messages'], $messages);
+    }
+
+    /**
      * @return array
      */
     public function isMediaValidDataProvider()
@@ -109,6 +147,15 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 ['_media_image' => 1],
                 ['result' => true,'messages' => []],
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function isValidAdditionalImagesPathDataProvider()
+    {
+        return [
             'additional_images' => [
                 ['additional_images' => 'image1.png,image2.jpg'],
                 ['result' => true, 'messages' => []]
@@ -117,26 +164,23 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 ['additional_images' => 'image1.png|image2.jpg|image3.gif'],
                 ['result' => false, 'messages' => [0 => 'additional_images']]
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function isValidAdditionalImagesUrlDataProvider()
+    {
+        return [
             'additional_images_wrong_domain' => [
                 ['additional_images' => 'https://example/images/some-name.jpg'],
                 ['result' => false, 'messages' => [0 => 'additional_images']],
-                function ($validatorMock) {
-                    $validatorMock->expects($this->once())
-                        ->method('isValid')
-                        ->with('https://example/images/some-name.jpg')
-                        ->willReturn(false);
-                }
             ],
             'additional_images_url_multiple_underscores' => [
                 ['additional_images' => 'https://example.com/images/some-name__with___multiple____underscores.jpg'],
-                ['result' => true, 'messages' => []],
-                function ($validatorMock) {
-                    $validatorMock->expects($this->once())
-                        ->method('isValid')
-                        ->with('https://example.com/images/some-name__with___multiple____underscores.jpg')
-                        ->willReturn(true);
-                }
-            ],
+                ['result' => true, 'messages' => []]
+            ]
         ];
     }
 }
