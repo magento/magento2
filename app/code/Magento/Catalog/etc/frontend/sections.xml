@@ -16,4 +16,12 @@
     <action name="catalog/product_compare/clear">
         <section name="compare-products"/>
     </action>
+    <action name="customer/account/loginPost">
+        <section name="recently_viewed_product"/>
+        <section name="recently_compared_product"/>
+    </action>
+    <action name="customer/account/logout">
+        <section name="recently_viewed_product"/>
+        <section name="recently_compared_product"/>
+    </action>
 </config>

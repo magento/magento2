@@ -6,9 +6,29 @@ define([
     'underscore',
     'uiElement',
     'mageUtils',
-    'Magento_Catalog/js/product/storage/storage-service'
-], function (_, Element, utils, storage) {
+    'Magento_Catalog/js/product/storage/storage-service',
+    'Magento_Customer/js/section-config',
+    'jquery'
+], function (_, Element, utils, storage, sectionConfig, $) {
     'use strict';
+
+    /**
+     * Flush events, that are clones of the same customer data sections
+     * Events listener
+     */
+    $(document).on('submit', function (event) {
+        var sections;
+
+        if (event.target.method.match(/post|put|delete/i)) {
+            sections = sectionConfig.getAffectedSections(event.target.action);
+
+            if (sections && window.localStorage) {
+                _.each(sections, function (section) {
+                    window.localStorage.removeItem(section);
+                });
+            }
+        }
+    });
 
     return Element.extend({
         defaults: {
