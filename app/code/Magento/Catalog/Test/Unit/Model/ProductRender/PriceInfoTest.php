@@ -31,7 +31,7 @@ class PriceInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeValueFactoryMock;
+    private $attributeValueFactoryMock;
 
     protected function setUp()
     {
@@ -49,7 +49,6 @@ class PriceInfoTest extends \PHPUnit_Framework_TestCase
         $this->attributeValueFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $this->priceInfo = new PriceInfo(
             $this->contextMock,
