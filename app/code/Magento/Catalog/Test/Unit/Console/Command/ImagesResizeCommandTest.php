@@ -8,8 +8,9 @@ namespace Magento\Catalog\Test\Unit\Console\Command;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Console\Command\ImagesResizeCommand;
 use Magento\Catalog\Console\ImageResizeOptions;
-use Magento\Catalog\Model\Product\Image\Cache as ImageCache;
-use Magento\Catalog\Model\Product\Image\CacheFactory as ImageCacheFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Image\Process\Cache as ImageCache;
+use Magento\Catalog\Model\Product\Image\Process\CacheFactory as ImageCacheFactory;
 use Magento\Catalog\Model\Product\Image\Process\Queue;
 use Magento\Catalog\Model\Product\Image\Process\QueueFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
@@ -148,7 +149,7 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getAllIds')
             ->willReturn($productsIds);
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -176,7 +177,7 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        if ($offset < 4) {
+        if ($offset && $offset < 4) {
             $this->productRepository->expects($this->at(0))
                 ->method('getById')
                 ->with($productsIds[2])
@@ -225,7 +226,7 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getAllIds')
             ->willReturn($productsIds);
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -251,14 +252,14 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
     protected function prepareProductCollection()
     {
         $this->productCollectionFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
+            ProductCollectionFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->productCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
+            ProductCollection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -270,12 +271,12 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareImageCache()
     {
-        $this->imageCacheFactory = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\CacheFactory::class)
+        $this->imageCacheFactory = $this->getMockBuilder(ImageCacheFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->imageCache = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\Cache::class)
+        $this->imageCache = $this->getMockBuilder(ImageCache::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -286,13 +287,13 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareQueueFactory()
     {
-        $this->queueFactory = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\Process\QueueFactory::class)
+        $this->queueFactory = $this->getMockBuilder(QueueFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->queue = $this->getMock(
-            \Magento\Catalog\Model\Product\Image\Process\Queue::class,
+            Queue::class,
             [],
             [
                 'productRepository' => $this->productRepository,

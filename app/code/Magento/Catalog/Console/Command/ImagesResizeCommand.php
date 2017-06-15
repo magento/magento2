@@ -82,7 +82,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         }
 
         $maxOffset = $productCount - 1;
-        if ($offset > $maxOffset) {
+        if ($offset && $offset > $maxOffset) {
             $output->writeln("<error>Offset may not be higher than $maxOffset</error>");
             return Cli::RETURN_FAILURE;
         }
@@ -94,6 +94,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         }
 
         $processes = $this->getProcessesAmount($options);
+        /** @var \Magento\Catalog\Model\Product\Image\Process\Queue $queue */
         $queue = $this->queueFactory->create(
             [
                 'maxProcesses' => $processes,
