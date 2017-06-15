@@ -194,13 +194,13 @@ class Bundle
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param $linkData
+     * @param array $linkData
      *
      * @return \Magento\Bundle\Api\Data\LinkInterface
      */
     private function buildLink(
         \Magento\Catalog\Model\Product $product,
-        $linkData
+        array $linkData
     ) {
         $link = $this->linkFactory->create(['data' => $linkData]);
 
