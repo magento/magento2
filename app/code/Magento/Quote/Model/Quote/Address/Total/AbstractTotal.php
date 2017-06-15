@@ -7,6 +7,8 @@ namespace Magento\Quote\Model\Quote\Address\Total;
 
 /**
  * Sales Quote Address Total  abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractTotal implements CollectorInterface, ReaderInterface

@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
 /**
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated in favour of UI component implementation
  */
 class Additional extends \Magento\Backend\Block\Widget\Form\Generic
 {

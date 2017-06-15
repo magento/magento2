@@ -16,6 +16,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  * that is used on fronted for read operations.
  * Please note that the table name is provided at runtime based on indexer's state
  * so this resource should be only used for table name resolving purposes.
+ * @api
  */
 class FrontendResource extends AbstractDb
 {
