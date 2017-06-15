@@ -4,7 +4,7 @@
  */
 define([
     "jquery",
-    'Magento_Ui/js/modal/alert',
+    'alert',
     "mage/translate",
     "prototype"
 ], function(jQuery){

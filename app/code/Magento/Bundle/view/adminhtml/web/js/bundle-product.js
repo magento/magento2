@@ -9,7 +9,7 @@
 define([
     "jquery",
     "Magento_Catalog/js/product/weight-handler",
-    "Magento_Ui/js/modal/modal",
+    "modal",
     "jquery/ui",
     "mage/translate",
     "Magento_Theme/js/sortable",

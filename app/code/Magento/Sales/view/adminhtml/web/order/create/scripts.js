@@ -5,8 +5,8 @@
  */
 define([
     "jquery",
-    'Magento_Ui/js/modal/confirm',
-    'Magento_Ui/js/modal/alert',
+    'confirm',
+    'alert',
     "mage/translate",
     "prototype",
     "Magento_Catalog/catalog/product/composite/configure",

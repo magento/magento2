@@ -5,7 +5,7 @@
 /*jshint browser:true jquery:true*/
 define([
     'jquery',
-    'Magento_Ui/js/modal/confirm',
+    'confirm',
     'Magento_Customer/js/customer-data',
     'jquery/ui',
     'mage/mage'

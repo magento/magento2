@@ -6,8 +6,8 @@
 define([
     'jquery',
     'Magento_Ui/js/form/form',
-    'Magento_Ui/js/modal/prompt',
-    'Magento_Ui/js/modal/alert'
+    'prompt',
+    'alert'
 ], function ($, Form, prompt, alert) {
     'use strict';
 

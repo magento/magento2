@@ -7,7 +7,7 @@
 define([
     'jquery',
     'uiComponent',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'Magento_Ui/js/lib/view/utils/dom-observer',
     'mage/translate',
     'Magento_Braintree/js/validator'

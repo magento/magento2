@@ -8,7 +8,7 @@
 define([
     'jquery',
     'mage/template',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'jquery/ui',
     'mage/translate'
 ], function ($, mageTemplate, alert) {

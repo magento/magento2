@@ -5,7 +5,7 @@
 /*jshint browser:true jquery:true*/
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'jquery/ui'
 ], function ($, alert) {
         'use strict';

@@ -5,7 +5,7 @@
 define([
     'jquery',
     'mage/template',
-    'Magento_Ui/js/modal/confirm',
+    'confirm',
     'jquery/ui',
     'mage/backend/tabs'
 ], function ($, mageTemplate, confirm) {

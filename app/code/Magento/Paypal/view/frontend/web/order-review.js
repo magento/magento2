@@ -6,7 +6,7 @@
 /*global alert*/
 define([
     "jquery",
-    'Magento_Ui/js/modal/alert',
+    'alert',
     "jquery/ui",
     "mage/translate",
     "mage/mage",

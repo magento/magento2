@@ -6,7 +6,7 @@ define([
     'jquery',
     'Magento_Catalog/catalog/type-events',
     'collapsible',
-    'Magento_Ui/js/modal/modal',
+    'modal',
     'mage/translate',
     'domReady!'
 ], function ($, productType) {

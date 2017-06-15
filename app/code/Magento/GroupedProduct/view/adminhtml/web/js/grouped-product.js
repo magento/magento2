@@ -7,7 +7,7 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
-    'Magento_Ui/js/modal/modal',
+    'modal',
     'mage/translate',
     'mage/adminhtml/grid'
 ], function ($, mageTemplate) {

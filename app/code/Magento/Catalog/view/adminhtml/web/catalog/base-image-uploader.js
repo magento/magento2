@@ -6,7 +6,7 @@
 define([
     'jquery',
     'mage/template',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'jquery/ui',
     'jquery/file-uploader',
     'mage/translate',

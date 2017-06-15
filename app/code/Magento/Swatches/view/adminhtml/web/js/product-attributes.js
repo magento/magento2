@@ -4,8 +4,8 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert',
-    'Magento_Ui/js/modal/prompt',
+    'alert',
+    'prompt',
     'uiRegistry',
     'collapsable'
 ], function ($, alert, prompt, rg) {

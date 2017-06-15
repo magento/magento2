@@ -9,7 +9,7 @@ define([
     'mage/translate',
     'mageUtils',
     'underscore',
-    'Magento_Ui/js/modal/alert',
+    'alert',
     'Magento_Ui/js/lib/view/utils/bindings',
     'Magento_Ui/js/lib/view/utils/async'
 ], function (Element, $, $t, utils, _, alert) {

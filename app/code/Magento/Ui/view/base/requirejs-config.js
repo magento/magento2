@@ -16,7 +16,11 @@ var config = {
             uiEvents:       'Magento_Ui/js/lib/core/events',
             uiRegistry:     'Magento_Ui/js/lib/registry/registry',
             uiLayout:       'Magento_Ui/js/core/renderer/layout',
-            buttonAdapter:  'Magento_Ui/js/form/button-adapter'
+            buttonAdapter:  'Magento_Ui/js/form/button-adapter',
+            alert:          'Magento_Ui/js/modal/alert',
+            confirm:        'Magento_Ui/js/modal/confirm',
+            modal:          'Magento_Ui/js/modal/modal',
+            prompt:         'Magento_Ui/js/modal/prompt'
         }
     }
 };

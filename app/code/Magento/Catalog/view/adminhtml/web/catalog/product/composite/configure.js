@@ -7,7 +7,7 @@ define([
     "jquery/ui",
     "mage/translate",
     "prototype",
-    "Magento_Ui/js/modal/modal"
+    "modal"
 ], function(jQuery){
 
     window.ProductConfigure = Class.create();

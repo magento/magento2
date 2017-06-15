@@ -6,7 +6,7 @@ define([
     'jquery',
     'mage/template',
     'jquery/ui',
-    'Magento_Ui/js/modal/modal'
+    'modal'
 ], function ($, mageTemplate) {
     'use strict';
 
