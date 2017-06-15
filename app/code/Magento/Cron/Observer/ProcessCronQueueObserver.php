@@ -59,72 +59,72 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    protected $pendingSchedules;
+    private $pendingSchedules;
 
     /**
      * @var \Magento\Cron\Model\ConfigInterface
      */
-    protected $config;
+    private $config;
 
     /**
      * @var \Magento\Framework\App\ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var ScheduleFactory
      */
-    protected $scheduleFactory;
+    private $scheduleFactory;
 
     /**
      * @var \Magento\Framework\App\Console\Request
      */
-    protected $request;
+    private $request;
 
     /**
      * @var \Magento\Framework\ShellInterface
      */
-    protected $shell;
+    private $shell;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $timezone;
+    private $timezone;
 
     /**
      * @var \Symfony\Component\Process\PhpExecutableFinder
      */
-    protected $phpExecutableFinder;
+    private $phpExecutableFinder;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var \Magento\Framework\App\State
      */
-    protected $state;
+    private $state;
 
     /**
      * @var array
      */
-    protected $invalid = [];
+    private $invalid = [];
 
     /**
      * @var array
      */
-    protected $jobs;
+    private $jobs;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
