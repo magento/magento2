@@ -78,6 +78,15 @@ define([
             this.productStorage = storage.createStorage(this.productStorageConfig);
             this.productStorage.data.subscribe(this.dataCollectionHandler.bind(this));
 
+            if (this.idsStorage.allowToSendRequest) {
+                customerData.reload([idsStorage.namespace], null, this._resolveDataByIds.bind(this));
+                window.localStorage.removeItem(idsStorage.namespace);
+            } else {
+                this._resolveDataByIds();
+            }
+        },
+
+        _resolveDataByIds: function () {
             this.initIdsListener();
             this.idsMerger(
                 this.idsStorage.get(),
