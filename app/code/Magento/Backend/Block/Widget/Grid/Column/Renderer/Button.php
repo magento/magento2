@@ -7,6 +7,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * @api
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class Button extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

@@ -10,6 +10,7 @@ namespace Magento\Quote\Model\Quote\Address\Total;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 abstract class AbstractTotal implements CollectorInterface, ReaderInterface
 {
