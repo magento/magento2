@@ -32,6 +32,7 @@ interface SourceInterface extends ExtensibleDataInterface
     const PHONE = 'phone';
     const FAX = 'fax';
     const PRIORITY = 'priority';
+    const USE_DEFAULT_CARRIER_CONFIG = 'use_default_carrier_config';
     const CARRIER_LINKS = 'carrier_links';
     /**#@-*/
 
@@ -289,6 +290,17 @@ interface SourceInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setPriority($priority);
+
+    /**
+     * @return bool
+     */
+    public function isUseDefaultCarrierConfig();
+
+    /**
+     * @param bool $useDefaultCarrierConfig
+     * @return $this
+     */
+    public function setUseDefaultCarrierConfig($useDefaultCarrierConfig);
 
     /**
      * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface[]

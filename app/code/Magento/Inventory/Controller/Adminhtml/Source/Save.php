@@ -51,10 +51,16 @@ class Save extends Action
     private $registry;
 
     /**
+     * @var CarrierRequestDataHydrator
+     */
+    private $carrierRequestDataHydrator;
+
+    /**
      * @param Context $context
      * @param SourceInterfaceFactory $sourceFactory
      * @param SourceRepositoryInterface $sourceRepository
      * @param HydratorInterface $hydrator
+     * @param CarrierRequestDataHydrator $carrierRequestDataHydrator
      * @param Registry $registry
      */
     public function __construct(
@@ -62,13 +68,15 @@ class Save extends Action
         SourceInterfaceFactory $sourceFactory,
         SourceRepositoryInterface $sourceRepository,
         HydratorInterface $hydrator,
-        Registry $registry
+        Registry $registry,
+        CarrierRequestDataHydrator $carrierRequestDataHydrator
     ) {
         parent::__construct($context);
         $this->sourceFactory = $sourceFactory;
         $this->sourceRepository = $sourceRepository;
         $this->hydrator = $hydrator;
         $this->registry = $registry;
+        $this->carrierRequestDataHydrator = $carrierRequestDataHydrator;
     }
 
     /**
@@ -135,6 +143,8 @@ class Save extends Action
             $source = $this->sourceFactory->create();
         }
         $source = $this->hydrator->hydrate($source, $requestData);
+        $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData);
+
         $sourceId = $this->sourceRepository->save($source);
         return $sourceId;
     }

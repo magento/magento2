@@ -83,8 +83,10 @@ class SourceDataProvider extends DataProvider
             // For details see \Magento\Ui\Component\Form::getDataSourceData
             if ($data['totalRecords'] > 0) {
                 $sourceId = $data['items'][0][SourceInterface::SOURCE_ID];
+                $sourceGeneralData = $data['items'][0];
+                $sourceGeneralData['carrier_codes'] =  $this->getAssignedCarrierCodes($sourceId);
                 $dataForSingle[$sourceId] = [
-                    'general' => $data['items'][0],
+                    'general' => $sourceGeneralData,
                 ];
                 $data = $dataForSingle;
             } else {
@@ -109,5 +111,20 @@ class SourceDataProvider extends DataProvider
             SourceInterface::SOURCE_ID
         );
         return $searchResult;
+    }
+
+    /**
+     * @param int $sourceId
+     * @return array
+     */
+    private function getAssignedCarrierCodes($sourceId)
+    {
+        $source = $this->sourceRepository->get($sourceId);
+
+        $carrierCodes = [];
+        foreach ($source->getCarrierLinks() as $carrierLink) {
+            $carrierCodes[] = $carrierLink->getCarrierCode();
+        }
+        return $carrierCodes;
     }
 }

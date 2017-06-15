@@ -58,6 +58,7 @@ class InstallSchema implements InstallSchemaInterface
         $sourceTable = $this->createSourceTable($setup);
         $sourceTable = $this->addAddressFields($sourceTable);
         $sourceTable = $this->addContactInfoFields($sourceTable);
+        $sourceTable = $this->addSourceCarrierFields($sourceTable);
         $setup->getConnection()->createTable($sourceTable);
 
         $setup->getConnection()->createTable($this->createSourceCarrierLinkTable($setup));
@@ -244,6 +245,26 @@ class InstallSchema implements InstallSchemaInterface
                 InstallSchema::OPTION_NULLABLE => true,
             ],
             'Fax'
+        );
+        return $sourceTable;
+    }
+
+    /**
+     * @param Table $sourceTable
+     * @return Table
+     */
+    private function addSourceCarrierFields(Table $sourceTable)
+    {
+        $sourceTable->addColumn(
+            'use_default_carrier_config',
+            Table::TYPE_SMALLINT,
+            null,
+            [
+                'unsigned' => true,
+                'nullable' => false,
+                'default' => '1'
+            ],
+            'Use default carrier configuration'
         );
         return $sourceTable;
     }

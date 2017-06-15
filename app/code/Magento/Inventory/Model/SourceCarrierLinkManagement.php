@@ -9,7 +9,6 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink as ResourceSourceCarrierLink;
 use Magento\Inventory\Model\ResourceModel\SourceCarrierLink\CollectionFactory as CarrierLinkCollectionFactory;
@@ -107,7 +106,6 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     private function saveNewCarrierLinks(SourceInterface $source)
     {
         $carrierLinkData = [];
-        /** @var SourceCarrierLinkInterface|AbstractModel $carrierLink */
         foreach ($source->getCarrierLinks() as $carrierLink) {
             $carrierLinkData[] = [
                 'source_id' => $source->getSourceId(),
