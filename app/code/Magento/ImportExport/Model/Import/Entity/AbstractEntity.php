@@ -543,6 +543,7 @@ abstract class AbstractEntity
         if (!isset(
             $this->_parameters['behavior']
         ) ||
+            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE &&
             $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND &&
             $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE &&
             $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
