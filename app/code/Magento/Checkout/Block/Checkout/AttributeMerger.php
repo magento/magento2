@@ -321,6 +321,11 @@ class AttributeMerger
                     return $this->getCustomer()->getFirstname();
                 }
                 break;
+            case 'middlename':
+                if ($this->getCustomer()) {
+                    return $this->getCustomer()->getMiddlename();
+                }
+                break;
             case 'lastname':
                 if ($this->getCustomer()) {
                     return $this->getCustomer()->getLastname();
