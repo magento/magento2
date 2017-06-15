@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Controller\Category;
+namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
 use Magento\Catalog\Controller\Adminhtml\Category\Move;
 use Magento\Framework\Message\ManagerInterface;
