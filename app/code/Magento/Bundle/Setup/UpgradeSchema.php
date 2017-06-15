@@ -18,6 +18,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

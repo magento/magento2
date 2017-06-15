@@ -46,7 +46,6 @@ class UpdateBundleOptionsShoppingCartTest extends Injectable
      */
     private $catalogProductEdit;
 
-
     /**
      * Factory for Test Steps.
      *
@@ -70,6 +69,7 @@ class UpdateBundleOptionsShoppingCartTest extends Injectable
         $this->catalogProductEdit = $catalogProductEditPage;
         $this->testStepFactory = $testStepFactory;
     }
+    
     /**
      * Test update bundle product option title after adding to the shopping cart
      *

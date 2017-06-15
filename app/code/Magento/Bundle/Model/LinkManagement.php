@@ -169,6 +169,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @param string $parentProductId
      * @return \Magento\Bundle\Model\Selection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function mapProductLinkToSelectionModel(
         \Magento\Bundle\Model\Selection $selectionModel,

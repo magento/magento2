@@ -147,25 +147,7 @@ class Bundle
                 if (!empty($linkData['selection_id'])) {
                     $linkData['id'] = $linkData['selection_id'];
                 }
-                $link = $this->linkFactory->create(['data' => $linkData]);
-
-                if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
-                    if (array_key_exists('selection_price_value', $linkData)) {
-                        $link->setPrice($linkData['selection_price_value']);
-                    }
-                    if (array_key_exists('selection_price_type', $linkData)) {
-                        $link->setPriceType($linkData['selection_price_type']);
-                    }
-                }
-
-                $linkProduct = $this->productRepository->getById($linkData['product_id']);
-                $link->setSku($linkProduct->getSku());
-                $link->setQty($linkData['selection_qty']);
-
-                if (array_key_exists('selection_can_change_qty', $linkData)) {
-                    $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
-                }
-                $links[] = $link;
+                $links[] = $this->buildLink($product, $linkData);;
             }
             $option->setProductLinks($links);
             $options[] = $option;
@@ -208,5 +190,37 @@ class Bundle
             $newOptions[] = $customOption;
         }
         $product->setOptions($newOptions);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param $linkData
+     *
+     * @return \Magento\Bundle\Api\Data\LinkInterface
+     */
+    private function buildLink(
+        \Magento\Catalog\Model\Product $product,
+        $linkData
+    ) {
+        $link = $this->linkFactory->create(['data' => $linkData]);
+
+        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+            if (array_key_exists('selection_price_value', $linkData)) {
+                $link->setPrice($linkData['selection_price_value']);
+            }
+            if (array_key_exists('selection_price_type', $linkData)) {
+                $link->setPriceType($linkData['selection_price_type']);
+            }
+        }
+
+        $linkProduct = $this->productRepository->getById($linkData['product_id']);
+        $link->setSku($linkProduct->getSku());
+        $link->setQty($linkData['selection_qty']);
+
+        if (array_key_exists('selection_can_change_qty', $linkData)) {
+            $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
+        }
+
+        return $link;
     }
 }
