@@ -7,6 +7,11 @@ namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\Import;
 
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
+/**
+ * Tests the import process
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StartTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -96,7 +101,6 @@ class StartTest extends \PHPUnit_Framework_TestCase
         $this->reportHelperMock = $this->getMockBuilder(\Magento\ImportExport\Helper\Report::class)
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $this->importModelMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)
             ->disableOriginalConstructor()

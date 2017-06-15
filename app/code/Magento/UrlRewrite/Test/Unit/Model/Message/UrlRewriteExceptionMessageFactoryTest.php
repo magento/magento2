@@ -26,7 +26,6 @@ class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $urlRewriteExceptionMessageFactory;
 
-
     protected function setUp()
     {
         $this->urlMock = $this->getMock(\Magento\Framework\UrlInterface::class);

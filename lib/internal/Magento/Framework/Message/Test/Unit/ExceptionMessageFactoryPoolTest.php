@@ -31,15 +31,14 @@ class ExceptionMessageFactoryPoolTest extends \PHPUnit_Framework_TestCase
      */
     private $exceptionMessageFactoryPool;
 
-
     protected function setUp()
     {
         $this->specificExceptionMessageFactoryPool = $this->getMock(ExceptionMessageFactoryInterface::class);
         $this->defaultExceptionMessageFactoryMock = $this->getMock(ExceptionMessageFactoryInterface::class);
 
         $this->exceptionMessageFactoryMapMock = [
-            '\Magento\Framework\Exception\LocalizedException' => $this->specificExceptionMessageFactoryPool
-            ];
+            \Magento\Framework\Exception\LocalizedException::class => $this->specificExceptionMessageFactoryPool
+        ];
         $this->exceptionMessageFactoryPool = new \Magento\Framework\Message\ExceptionMessageFactoryPool(
             $this->defaultExceptionMessageFactoryMock,
             $this->exceptionMessageFactoryMapMock

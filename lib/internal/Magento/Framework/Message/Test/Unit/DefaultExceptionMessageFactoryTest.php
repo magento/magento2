@@ -20,7 +20,6 @@ class DefaultExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $defaultExceptionMessageFactory;
 
-
     protected function setUp()
     {
         $this->messageFactoryMock = $this->getMock(
