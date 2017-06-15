@@ -142,7 +142,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
                 __('Some exception')
             ));
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('There was a category move error.'));
         $this->messageManager->expects($this->once())
             ->method('getMessages')
@@ -305,7 +305,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You moved the category.'));
         $categoryMock->expects($this->once())
             ->method('move')
