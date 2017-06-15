@@ -53,7 +53,11 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         $rowCount = $this->getConnection()->insertMultiple($this->getMessageTable(), $data);
         $firstId = $this->getConnection()->lastInsertId($this->getMessageTable());
-        return range($firstId, $firstId + $rowCount - 1);
+        $select = $this->getConnection()->select()
+            ->from(['qm' => $this->getMessageTable()], ['id'])
+            ->where('qm.id >= ?', $firstId)
+            ->limit($rowCount);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
