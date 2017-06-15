@@ -224,7 +224,7 @@ class BundleProductGenerator
 
             $this->sequenceValues[$tableName] = $connection->fetchOne(
                 $connection->select()->from(
-                    $connection->getTableName($tableName),
+                    $this->resource->getTableName($tableName),
                     'MAX(`sequence_value`)'
                 )
             );
