@@ -69,8 +69,7 @@ define([
                 dataType: 'json',
                 ajaxSaveType: 'default',
                 ignoreProcessEvents: true
-            },
-            lastUpdatePeriod: 1000
+            }
         },
 
         /**
@@ -159,23 +158,20 @@ define([
          * Handlers for storages "data" property
          */
         updateDataHandler: function (name, data) {
-            var lastUpdate = this.getLastUpdate(name),
-                currentTime = this.getUtcTime(),
+            var currentTime = this.getUtcTime(),
                 result,
                 previousData = this[name].previous ? this[name].previous.get() : false;
 
             if (!_.isEmpty(previousData) &&
                 !_.isEmpty(data) &&
-                !utils.compare(data, previousData).equal &&
-                currentTime - lastUpdate > this.lastUpdatePeriod) {
+                !utils.compare(data, previousData).equal) {
                 result = this.dataFilter(data, currentTime, name);
                 this[name].set(result);
                 this[name].previous.set(result);
                 this.sendRequest(name, result);
             } else if (
                 _.isEmpty(previousData) &&
-                !_.isEmpty(data) &&
-                currentTime - lastUpdate > this.lastUpdatePeriod
+                !_.isEmpty(data)
             ) {
                 result = this.dataFilter(data, currentTime, name);
                 this[name].set(result);
@@ -241,7 +237,7 @@ define([
                 url = params.syncUrl,
                 typeId = params.typeId;
 
-            if (_.isEmpty(data) || !~~this.storagesConfiguration[name].allowToSendRequest) {
+            if (!~~this.storagesConfiguration[name].allowToSendRequest) {
                 return;
             }
 

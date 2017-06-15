@@ -128,6 +128,23 @@ class Synchronizer
     }
 
     /**
+     * Retrieve product ids
+     *
+     * @param array $actions
+     * @return array
+     */
+    private function getProductIdsByActions(array $actions)
+    {
+        $productIds = [];
+
+        foreach ($actions as $action) {
+            $productIds[] = $action['product_id'];
+        }
+
+        return $productIds;
+    }
+
+    /**
      * Save ids by action -> recently viewed or recently compared product ids data (product id and js timestamp)
      * Javascript timestamp is used because all filtering information is done on frontend and Magento backend
      * application do not know about ids relevance
@@ -142,6 +159,7 @@ class Synchronizer
         $customerId = $this->session->getCustomerId();
         $visitorId = $this->visitor->getId();
         $collection = $this->getActionsByType($typeId);
+        $collection->addFieldToFilter('product_id', $this->getProductIdsByActions($productsData));
 
         /**
          * Note that collection is also filtered by visitor id and customer id
