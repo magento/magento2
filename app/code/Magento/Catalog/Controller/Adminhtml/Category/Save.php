@@ -211,13 +211,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $category->unsetData('use_post_data_config');
 
                 $category->save();
-                $this->messageManager->addSuccess(__('You saved the category.'));
+                $this->messageManager->addSuccessMessage(__('You saved the category.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e);
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving the category.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             }

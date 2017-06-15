@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Message;
 
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\RuntimeException;
 
 class DefaultExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
@@ -29,10 +29,9 @@ class DefaultExceptionMessageFactory implements ExceptionMessageFactoryInterface
         if ($exception instanceof \Exception) {
             return $this->messageFactory->create($type)
                 ->setText($exception->getMessage());
-        } else {
-            throw new NotFoundException(
-                new \Magento\Framework\Phrase("Exception instance doesn't match %1 type", [\Exception::class])
-            );
         }
+        throw new RuntimeException(
+            new \Magento\Framework\Phrase("Exception instance doesn't match %1 type", [\Exception::class])
+        );
     }
 }

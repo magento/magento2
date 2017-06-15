@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Message;
 
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\RuntimeException;
 
 interface ExceptionMessageFactoryInterface
 {
@@ -16,7 +16,7 @@ interface ExceptionMessageFactoryInterface
      * @param \Exception $exception
      * @param string $type
      * @return MessageInterface
-     * @throws NotFoundException
+     * @throws RuntimeException
      */
     public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR);
 }

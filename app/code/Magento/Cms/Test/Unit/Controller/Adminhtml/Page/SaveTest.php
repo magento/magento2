@@ -264,7 +264,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
 
         $this->dataPersistorMock->expects($this->any())
             ->method('set')

@@ -72,12 +72,12 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
             $this->messageManager->addExceptionMessage($e);
         } catch (\Exception $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a category move error.'));
+            $this->messageManager->addErrorMessage(__('There was a category move error.'));
             $this->logger->critical($e);
         }
 
         if (!$error) {
-            $this->messageManager->addSuccess(__('You moved the category.'));
+            $this->messageManager->addSuccessMessage(__('You moved the category.'));
         }
 
         $block->setMessages($this->messageManager->getMessages(true));
