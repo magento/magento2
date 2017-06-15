@@ -147,7 +147,7 @@ class Bundle
                 if (!empty($linkData['selection_id'])) {
                     $linkData['id'] = $linkData['selection_id'];
                 }
-                $links[] = $this->buildLink($product, $linkData);;
+                $links[] = $this->buildLink($product, $linkData);
             }
             $option->setProductLinks($links);
             $options[] = $option;
