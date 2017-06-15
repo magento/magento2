@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Product\Image\Process;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Image\CacheFactory;
+use Magento\Catalog\Model\Product\Image\Process\CacheFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,62 +32,62 @@ class Queue
     /**
      * @var array
      */
-    protected $products = [];
+    private $products = [];
 
     /**
      * @var int[]
      */
-    protected $processIds = [];
+    private $processIds = [];
 
     /**
      * @var int[]
      */
-    protected $inProgress = [];
+    private $inProgress = [];
 
     /**
      * @var int
      */
-    protected $maxProcesses;
+    private $maxProcesses;
 
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var ResourceConnection
      */
-    protected $resourceConnection;
+    private $resourceConnection;
 
     /**
      * @var OutputInterface
      */
-    protected $output;
+    private $output;
 
     /**
      * @var CacheFactory
      */
-    protected $imageCacheFactory;
+    private $imageCacheFactory;
 
     /**
      * @var int
      */
-    protected $start = 0;
+    private $start = 0;
 
     /**
      * @var array
      */
-    protected $state = [];
+    private $state = [];
 
     /**
      * @var int
      */
-    protected $lastJobStarted = 0;
+    private $lastJobStarted = 0;
 
     /**
-     * @var Product\Image\Cache
+     * @var Product\Image\Process\Cache
      */
-    protected $imageCache;
+    private $imageCache;
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -136,7 +136,9 @@ class Queue
      */
     public function process()
     {
-        $this->imageCache->getData();
+        if ($this->isCanBeParalleled()) {
+            $this->imageCache->preloadData();
+        }
         $returnStatus = 0;
         $this->start = $this->lastJobStarted = time();
         $products = $this->products;
@@ -164,7 +166,7 @@ class Queue
      * @param array $products
      * @return void
      */
-    public function assertAndExecute($productId, array & $products)
+    private function assertAndExecute($productId, array & $products)
     {
         if ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses)) {
             unset($products[$productId]);
@@ -177,7 +179,7 @@ class Queue
      *
      * @return void
      */
-    public function awaitForAllProcesses()
+    private function awaitForAllProcesses()
     {
         while ($this->inProgress) {
             foreach ($this->inProgress as $productId => $product) {
@@ -196,7 +198,7 @@ class Queue
     /**
      * @return bool
      */
-    public function isCanBeParalleled()
+    private function isCanBeParalleled()
     {
         return function_exists('pcntl_fork') && $this->maxProcesses > 1;
     }
@@ -206,11 +208,12 @@ class Queue
      * @return bool true on success for main process and exit for child process
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function execute(int $productId)
+    private function execute(int $productId)
     {
         $this->lastJobStarted = time();
+        $isCanBeParalleled = $this->isCanBeParalleled();
 
-        if ($this->isCanBeParalleled()) {
+        if ($isCanBeParalleled) {
             $pid = pcntl_fork();
             if ($pid === -1) {
                 throw new \RuntimeException('Unable to fork a new process');
@@ -221,20 +224,6 @@ class Queue
                 $this->processIds[$productId] = $pid;
                 return true;
             }
-
-            try {
-                /** @var \Magento\Catalog\Model\Product $product */
-                $product = $this->productRepository->getById($productId);
-                $product->getMediaGalleryImages();
-            } catch (NoSuchEntityException $e) {
-                exit();
-            }
-
-            // process child process
-            $this->inProgress = [];
-            $this->imageCache->generate($product);
-            $this->output->write('.');
-            exit();
         }
 
         try {
@@ -242,11 +231,21 @@ class Queue
             $product = $this->productRepository->getById($productId);
             $product->getMediaGalleryImages();
         } catch (NoSuchEntityException $e) {
+            if ($isCanBeParalleled) {
+                exit();
+            }
             return true;
         }
 
+        if ($isCanBeParalleled) {
+            // process child process
+            $this->inProgress = [];
+        }
         $this->imageCache->generate($product);
         $this->output->write('.');
+        if ($isCanBeParalleled) {
+            exit();
+        }
         return true;
     }
 
@@ -254,7 +253,7 @@ class Queue
      * @param int $productId
      * @return bool
      */
-    public function isResized($productId)
+    private function isResized($productId)
     {
         if ($this->isCanBeParalleled()) {
             if ($this->getState($productId) === null) {
@@ -276,7 +275,7 @@ class Queue
      * @param int $productId
      * @return null|int
      */
-    public function getState($productId)
+    private function getState($productId)
     {
         return isset($this->state[$productId]) ?: null;
     }
@@ -286,7 +285,7 @@ class Queue
      * @param int $state
      * @return null|int
      */
-    public function setState($productId, $state)
+    private function setState($productId, $state)
     {
         return $this->state[$productId] = $state;
     }
@@ -295,7 +294,7 @@ class Queue
      * @param int $productId
      * @return int|null
      */
-    public function getPid($productId)
+    private function getPid($productId)
     {
         return isset($this->processIds[$productId])
             ? $this->processIds[$productId]

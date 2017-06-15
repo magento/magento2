@@ -174,7 +174,9 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
                     ->with($productsIds[3])
                     ->willReturn($productMock);
             }
-        } elseif ($offset < 4) {
+        }
+
+        if ($offset < 4) {
             $this->productRepository->expects($this->at(0))
                 ->method('getById')
                 ->with($productsIds[2])
@@ -184,7 +186,9 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
                 ->method('getById')
                 ->with($productsIds[3])
                 ->willReturn($productMock);
-        } else {
+        }
+
+        if ($offset === 4) {
             $this->productRepository->expects($this->never())
                 ->method('getById');
         }
@@ -200,17 +204,11 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
             '--' . ImageResizeOptions::PRODUCT_OFFSET => $offset,
         ]);
 
+        $message = 'Product images resized successfully';
         if ($offset === 4) {
-            $this->assertContains(
-                'Offset may not be higher than 3',
-                $commandTester->getDisplay()
-            );
-        } else {
-            $this->assertContains(
-                'Product images resized successfully',
-                $commandTester->getDisplay()
-            );
+            $message = 'Offset may not be higher than 3';
         }
+        $this->assertContains($message, $commandTester->getDisplay());
     }
 
     public function testExecuteWithException()
@@ -314,7 +312,6 @@ class ImagesResizeCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->queue);
     }
-
 
     /**
      * @return array

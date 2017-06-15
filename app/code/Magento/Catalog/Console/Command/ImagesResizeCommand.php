@@ -53,7 +53,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    protected function configure()
     {
         $this->setName('catalog:images:resize')
             ->setDescription('Creates resized product images')
@@ -63,7 +63,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * {@inheritdoc}
      */
-    public function execute(
+    protected function execute(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
     ) {
@@ -84,6 +84,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         $maxOffset = $productCount - 1;
         if ($offset > $maxOffset) {
             $output->writeln("<error>Offset may not be higher than $maxOffset</error>");
+            return Cli::RETURN_FAILURE;
         }
 
         if (!count($productIds)) {
@@ -119,7 +120,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param array $options
      * @return int
      */
-    public function getProcessesAmount(array $options)
+    private function getProcessesAmount(array $options)
     {
         return isset($options[Options::JOBS_AMOUNT])
             ? (int)$options[Options::JOBS_AMOUNT]
@@ -130,7 +131,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param array $options
      * @return int
      */
-    public function getLimit(array $options)
+    private function getLimit(array $options)
     {
         return isset($options[Options::PRODUCT_LIMIT])
             ? (int)$options[Options::PRODUCT_LIMIT]
@@ -141,7 +142,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
      * @param array $options
      * @return int
      */
-    public function getOffset(array $options)
+    private function getOffset(array $options)
     {
         return isset($options[Options::PRODUCT_OFFSET])
             ? (int)$options[Options::PRODUCT_OFFSET]

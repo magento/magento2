@@ -48,16 +48,6 @@ class ImageResizeOptions
      */
     public function getOptionsList()
     {
-        return $this->getBasicOptions();
-    }
-
-    /**
-     * Basic options
-     *
-     * @return array
-     */
-    private function getBasicOptions()
-    {
         return [
             new InputOption(
                 self::JOBS_AMOUNT,
