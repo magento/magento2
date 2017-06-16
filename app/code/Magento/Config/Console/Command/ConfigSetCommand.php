@@ -80,7 +80,7 @@ class ConfigSetCommand extends Command
                 new InputArgument(
                     static::ARG_PATH,
                     InputArgument::REQUIRED,
-                    'Configuration path in format group/section/field_name'
+                    'Configuration path in format section/group/field_name'
                 ),
                 new InputArgument(static::ARG_VALUE, InputArgument::REQUIRED, 'Configuration value'),
                 new InputOption(

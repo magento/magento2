@@ -104,7 +104,7 @@ class SensitiveConfigSetCommand extends Command
         $this->addArgument(
             self::INPUT_ARGUMENT_PATH,
             InputArgument::OPTIONAL,
-            'Configuration path for example group/section/field_name'
+            'Configuration path for example section/group/field_name'
         );
         $this->addArgument(
             self::INPUT_ARGUMENT_VALUE,
