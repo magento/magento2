@@ -45,4 +45,40 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         return false;
     }
+
+    /**
+     * If job is currently in $currentStatus and there are no existing jobs
+     * with $newStatus, set it to $newStatus and return true. Otherwise,
+     * return false and do not change the job.
+     * This method is used to implement locking for cron jobs that share a
+     * job code.
+     *
+     * @param string $scheduleId
+     * @param string $newStatus
+     * @param string $currentStatus
+     * @return bool
+     */
+    public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
+    {
+        $connection = $this->getConnection();
+
+        $match = $connection->quoteInto('existing.job_code = current.job_code AND existing.status = ?', $newStatus);
+        $selectIfUnlocked = $connection->select()
+            ->joinLeft(
+                ['existing' => $this->getTable('cron_schedule')],
+                $match,
+                ['status' => new \Zend_Db_Expr($connection->quote($newStatus))]
+            )
+            ->where('current.schedule_id = ?', $scheduleId)
+            ->where('current.status = ?', $currentStatus)
+            ->where('existing.schedule_id IS NULL');
+
+        $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
+        $result = $connection->query($update)->rowCount();
+
+        if ($result == 1) {
+            return true;
+        }
+        return false;
+    }
 }
