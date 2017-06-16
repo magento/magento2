@@ -72,6 +72,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableProductsFixture extends Fixture
 {
