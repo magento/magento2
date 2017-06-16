@@ -127,15 +127,13 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
-                $message =  $this->processorFacadeFactory->create()->process(
+                return $this->processorFacadeFactory->create()->process(
                     $input->getArgument(static::ARG_PATH),
                     $input->getArgument(static::ARG_VALUE),
                     $input->getOption(static::OPTION_SCOPE),
                     $input->getOption(static::OPTION_SCOPE_CODE),
                     $input->getOption(static::OPTION_LOCK)
                 );
-
-                return $message;
             });
 
             $output->writeln('<info>' . $message . '</info>');
