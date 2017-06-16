@@ -170,7 +170,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation11" summary="Create Configurable Product with out of stock child" ticketId="MAGETWO-65660">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">with_out_of_stock_item</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
@@ -188,7 +188,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation12" summary="Create Configurable Product with disabled child" ticketId="MAGETWO-65661">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">with_disabled_item</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
@@ -206,7 +206,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation13" summary="Create Configurable Product with one disabled child and with one out of stock child" ticketId="MAGETWO-65662">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="product/data/configurable_attributes_data/dataset" xsi:type="string">with_one_disabled_item_and_one_out_of_stock_item</data>
             <data name="product/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="product/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
