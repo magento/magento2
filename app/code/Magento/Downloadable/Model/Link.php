@@ -11,11 +11,12 @@ use Magento\Downloadable\Model\ResourceModel\Link as Resource;
 /**
  * Downloadable link model
  *
+ * @api
  * @method Resource getResource()
  * @method int getProductId()
  * @method Link setProductId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, LinkInterface
 {

@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Widget Instance Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Widget\Model\ResourceModel\Widget;
 
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Widget Instance Resource Model
+ *
+ * @api
+ */
 class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

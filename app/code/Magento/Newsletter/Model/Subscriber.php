@@ -32,6 +32,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ *
+ * @api
  */
 class Subscriber extends \Magento\Framework\Model\AbstractModel
 {

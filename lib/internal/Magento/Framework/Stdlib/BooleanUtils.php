@@ -65,4 +65,21 @@ class BooleanUtils
             'Boolean value is expected, supported values: ' . var_export($allowedValues, true)
         );
     }
+
+    /**
+     * Try to convert $value to boolean else return non processed $value
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    public function convert($value)
+    {
+        if (in_array($value, $this->trueValues, true)) {
+            return true;
+        } elseif (in_array($value, $this->falseValues, true)) {
+            return false;
+        } else {
+            return $value;
+        }
+    }
 }

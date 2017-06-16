@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Product\View\Type;
 
+/**
+ * @api
+ */
 class Simple extends \Magento\Catalog\Block\Product\View\AbstractView
 {
 }

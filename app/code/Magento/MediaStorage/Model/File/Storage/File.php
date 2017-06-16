@@ -7,6 +7,8 @@ namespace Magento\MediaStorage\Model\File\Storage;
 
 /**
  * Class File
+ *
+ * @api
  */
 class File
 {

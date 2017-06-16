@@ -6,12 +6,19 @@
 namespace Magento\Store\Model\Config\Processor;
 
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\App\Config\Type\Scopes;
+use Magento\Store\Model\ResourceModel\Store;
+use Magento\Store\Model\ResourceModel\Store\AllStoresCollectionFactory;
+use Magento\Store\Model\ResourceModel\Website;
+use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollection;
+use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollectionFactory;
 
 /**
- * Fallback throguh different scopes and merge them
- *
- * @package Magento\Store\Model\Config\Processor
+ * Fallback through different scopes and merge them
  */
 class Fallback implements PostProcessorInterface
 {
@@ -21,12 +28,56 @@ class Fallback implements PostProcessorInterface
     private $scopes;
 
     /**
-     * Fallback constructor.
-     * @param Scopes $scopes
+     * @var ResourceConnection
      */
-    public function __construct(Scopes $scopes)
-    {
+    private $resourceConnection;
+
+    /**
+     * @var array
+     */
+    private $storeData = [];
+
+    /**
+     * @var array
+     */
+    private $websiteData = [];
+
+    /**
+     * @var Store
+     */
+    private $storeResource;
+
+    /**
+     * @var Website
+     */
+    private $websiteResource;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * Fallback constructor.
+     *
+     * @param Scopes $scopes
+     * @param ResourceConnection $resourceConnection
+     * @param Store $storeResource
+     * @param Website $websiteResource
+     * @param DeploymentConfig $deploymentConfig
+     */
+    public function __construct(
+        Scopes $scopes,
+        ResourceConnection $resourceConnection,
+        Store $storeResource,
+        Website $websiteResource,
+        DeploymentConfig $deploymentConfig
+    ) {
         $this->scopes = $scopes;
+        $this->resourceConnection = $resourceConnection;
+        $this->storeResource = $storeResource;
+        $this->websiteResource = $websiteResource;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -34,6 +85,14 @@ class Fallback implements PostProcessorInterface
      */
     public function process(array $data)
     {
+        if ($this->deploymentConfig->isDbAvailable()) {//read only from db
+            $this->storeData = $this->storeResource->readAllStores();
+            $this->websiteData = $this->websiteResource->readAllWebsites();
+        } else {
+            $this->storeData = $this->scopes->get('stores');
+            $this->websiteData = $this->scopes->get('websites');
+        }
+
         $defaultConfig = isset($data['default']) ? $data['default'] : [];
         $result = [
             'default' => $defaultConfig,
@@ -57,12 +116,14 @@ class Fallback implements PostProcessorInterface
      * @param array $websitesConfig
      * @return array
      */
-    private function prepareWebsitesConfig(array $defaultConfig, array $websitesConfig)
-    {
+    private function prepareWebsitesConfig(
+        array $defaultConfig,
+        array $websitesConfig
+    ) {
         $result = [];
-        foreach ((array)$this->scopes->get('websites') as $websiteData) {
-            $code = $websiteData['code'];
-            $id = $websiteData['website_id'];
+        foreach ((array)$this->websiteData as $website) {
+            $code = $website['code'];
+            $id = $website['website_id'];
             $websiteConfig = isset($websitesConfig[$code]) ? $websitesConfig[$code] : [];
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig);
             $result[$id] = $result[$code];
@@ -78,15 +139,19 @@ class Fallback implements PostProcessorInterface
      * @param array $storesConfig
      * @return array
      */
-    private function prepareStoresConfig(array $defaultConfig, array $websitesConfig, array $storesConfig)
-    {
+    private function prepareStoresConfig(
+        array $defaultConfig,
+        array $websitesConfig,
+        array $storesConfig
+    ) {
         $result = [];
-        foreach ((array)$this->scopes->get('stores') as $storeData) {
-            $code = $storeData['code'];
-            $id = $storeData['store_id'];
+
+        foreach ((array)$this->storeData as $store) {
+            $code = $store['code'];
+            $id = $store['store_id'];
             $websiteConfig = [];
-            if (isset($storeData['website_id'])) {
-                $websiteConfig = $this->getWebsiteConfig($websitesConfig, $storeData['website_id']);
+            if (isset($store['website_id'])) {
+                $websiteConfig = $this->getWebsiteConfig($websitesConfig, $store['website_id']);
             }
             $storeConfig = isset($storesConfig[$code]) ? $storesConfig[$code] : [];
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig, $storeConfig);
@@ -96,17 +161,17 @@ class Fallback implements PostProcessorInterface
     }
 
     /**
-     * Retrieve Website Config
+     * Find information about website by its ID.
      *
-     * @param array $websites
+     * @param array $websites Has next format: (website_code => [website_data])
      * @param int $id
      * @return array
      */
     private function getWebsiteConfig(array $websites, $id)
     {
-        foreach ($this->scopes->get('websites') as $websiteData) {
-            if ($websiteData['website_id'] == $id) {
-                $code = $websiteData['code'];
+        foreach ((array)$this->websiteData as $website) {
+            if ($website['website_id'] == $id) {
+                $code = $website['code'];
                 return isset($websites[$code]) ? $websites[$code] : [];
             }
         }

@@ -10,6 +10,8 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Interface LocatorInterface
+ *
+ * @api
  */
 interface LocatorInterface
 {

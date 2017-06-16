@@ -34,6 +34,8 @@ use Magento\Framework\App\TemplateTypesInterface;
  * @method \Magento\Newsletter\Model\Queue setQueueFinishAt(string $value)
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTypesInterface
 {

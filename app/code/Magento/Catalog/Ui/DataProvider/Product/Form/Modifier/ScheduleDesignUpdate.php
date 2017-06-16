@@ -9,6 +9,8 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class ScheduleDesignUpdateMetaProvider customizes Schedule Design Update panel
+ *
+ * @api
  */
 class ScheduleDesignUpdate extends AbstractModifier
 {

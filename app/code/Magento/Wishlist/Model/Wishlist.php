@@ -26,6 +26,8 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ *
+ * @api
  */
 class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -416,8 +418,16 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
-            $buyRequestData = $this->serializer->unserialize($buyRequest);
-            if (!is_array($buyRequestData)) {
+            $isInvalidItemConfiguration = false;
+            try {
+                $buyRequestData = $this->serializer->unserialize($buyRequest);
+                if (!is_array($buyRequestData)) {
+                    $isInvalidItemConfiguration = true;
+                }
+            } catch (\InvalidArgumentException $exception) {
+                $isInvalidItemConfiguration = true;
+            }
+            if ($isInvalidItemConfiguration) {
                 throw new \InvalidArgumentException('Invalid wishlist item configuration.');
             }
             $_buyRequest = new \Magento\Framework\DataObject($buyRequestData);

@@ -28,7 +28,7 @@
                     <argument name="logo_image_src" xsi:type="string">images/magento-icon.svg</argument>
                 </arguments>
             </block>
-            <block class="Magento\Backend\Block\GlobalSearch" name="global.search" as="search" after="logo" acl="Magento_Backend::global_search"/>
+            <block class="Magento\Backend\Block\GlobalSearch" name="global.search" as="search" after="logo" aclResource="Magento_Backend::global_search"/>
             <block class="Magento\Backend\Block\Page\Header" name="user" after="-">
                 <arguments>
                     <argument name="show_part" xsi:type="string">user</argument>

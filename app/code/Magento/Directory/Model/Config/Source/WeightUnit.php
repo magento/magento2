@@ -5,6 +5,11 @@
  */
 namespace Magento\Directory\Model\Config\Source;
 
+/**
+ * Options provider for weight units list
+ *
+ * @api
+ */
 class WeightUnit implements \Magento\Framework\Option\ArrayInterface
 {
     /**

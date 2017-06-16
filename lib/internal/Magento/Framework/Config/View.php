@@ -3,16 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * View configuration files handler
- */
 namespace Magento\Framework\Config;
 
 /**
- * Class View
+ * View configuration files handler
  *
- * @property DesignResolverInterface $_fileResolver
+ * @api
  */
 class View extends \Magento\Framework\Config\Reader\Filesystem
 {

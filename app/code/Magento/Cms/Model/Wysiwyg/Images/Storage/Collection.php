@@ -12,6 +12,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images storage collection
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {

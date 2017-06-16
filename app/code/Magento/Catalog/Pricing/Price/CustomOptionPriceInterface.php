@@ -7,6 +7,8 @@ namespace Magento\Catalog\Pricing\Price;
 
 /**
  * Option price interface
+ *
+ * @api
  */
 interface CustomOptionPriceInterface
 {

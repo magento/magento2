@@ -9,11 +9,13 @@
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Mail\Message;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api
+ */
 class TransportBuilder
 {
     /**
@@ -273,7 +275,7 @@ class TransportBuilder
         $body = $template->processTemplate();
         $this->message->setMessageType($types[$template->getType()])
             ->setBody($body)
-            ->setSubject($template->getSubject());
+            ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
 
         return $this;
     }

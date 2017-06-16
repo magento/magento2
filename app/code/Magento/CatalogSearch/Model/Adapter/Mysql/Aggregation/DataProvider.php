@@ -89,7 +89,7 @@ class DataProvider implements DataProviderInterface
         $this->scopeResolver = $scopeResolver;
         $this->customerSession = $customerSession;
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
-            Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
         );
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
@@ -139,7 +139,8 @@ class DataProvider implements DataProviderInterface
             );
             $table .= $tableSufix;
             $subSelect = $select;
-            $subSelect->from(['main_table' => $table], ['main_table.value'])
+            $subSelect->from(['main_table' => $table], ['main_table.entity_id', 'main_table.value'])
+                ->distinct()
                 ->joinLeft(
                     ['stock_index' => $this->indexerStockFrontendResource->getMainTable()],
                     'main_table.source_id = stock_index.product_id',
@@ -147,8 +148,7 @@ class DataProvider implements DataProviderInterface
                 )
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
                 ->where('main_table.store_id = ? ', $currentScopeId)
-                ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK)
-                ->group(['main_table.entity_id', 'main_table.value']);
+                ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK);
             $parentSelect = $this->getSelect();
             $parentSelect->from(['main_table' => $subSelect], ['main_table.value']);
             $select = $parentSelect;

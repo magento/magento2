@@ -105,7 +105,7 @@ class Generic implements LayoutInterface
                 if ($child instanceof DataSourceInterface) {
                     continue;
                 }
-                if ($child instanceof BlockWrapperInterface) {
+                if ($child->getData('wrapper')) {
                     $this->addWrappedBlock($child, $childrenNode);
                     continue;
                 }
@@ -144,8 +144,7 @@ class Generic implements LayoutInterface
      */
     protected function addWrappedBlock(BlockWrapperInterface $childComponent, array &$childrenNode)
     {
-        $config = $childComponent->getConfiguration();
-        if (!$config['canShow']) {
+        if (!($childComponent->getData('wrapper/canShow') && $childComponent->getData('wrapper/componentType'))) {
             return $this;
         }
 
@@ -154,10 +153,10 @@ class Generic implements LayoutInterface
         $childrenNode[$name] = [
             'type' => $panelComponent->getComponentName(),
             'dataScope' => $name,
-            'config' => $config,
+            'config' => $childComponent->getConfiguration(),
             'children' => [
                 $name => [
-                    'type' => $this->getConfig(self::CONFIG_COMPONENT_NAME),
+                    'type' => $childComponent->getComponentName(),
                     'dataScope' => $name,
                     'config' => [
                         'content' => $childComponent->render()
@@ -181,7 +180,7 @@ class Generic implements LayoutInterface
     {
         $panelComponent = $this->uiComponentFactory->create(
             $name,
-            $this->getConfig(self::CONFIG_PANEL_COMPONENT),
+            $childComponent->getData('wrapper/componentType'),
             [
                 'context' => $this->component->getContext(),
                 'components' => [$childComponent->getName() => $childComponent]

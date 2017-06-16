@@ -23,6 +23,7 @@ use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -789,7 +790,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if ($attributesOption = $product->getCustomOption('attributes')) {
-            $data = $this->serializer->unserialize($attributesOption->getValue());
+            $data = $attributesOption->getValue();
+            if (!$data) {
+                return $attributes;
+            }
+            $data = $this->serializer->unserialize($data);
             $this->getUsedProductAttributeIds($product);
 
             $usedAttributes = $product->getData($this->_usedAttributes);
@@ -1303,7 +1308,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private function readUsedProductsCacheData($cacheKey)
     {
         $usedProducts = null;
-        $data = $this->serializer->unserialize($this->getCache()->load($cacheKey));
+        $data = $this->getCache()->load($cacheKey);
+        if (!$data) {
+            return $usedProducts;
+        }
+        $data = $this->serializer->unserialize($data);
         if (!empty($data)) {
             $usedProducts = [];
             foreach ($data as $item) {

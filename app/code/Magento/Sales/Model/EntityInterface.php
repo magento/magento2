@@ -8,6 +8,7 @@ namespace Magento\Sales\Model;
 
 /**
  * Interface EntityInterface
+ * @api
  */
 interface EntityInterface
 {

@@ -7,6 +7,8 @@ namespace Magento\Framework\Exception;
 
 /**
  * Exception for Security violation cases
+ *
+ * @api
  */
 class SecurityViolationException extends LocalizedException
 {

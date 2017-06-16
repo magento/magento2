@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Provide list of bundle selection prices
+ * @api
  */
 interface SelectionPriceListProviderInterface
 {

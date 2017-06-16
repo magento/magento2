@@ -12,6 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - collection abstract
+ *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

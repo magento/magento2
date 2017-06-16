@@ -25,6 +25,8 @@ namespace Magento\Framework\Webapi\Rest\Request;
  * ParamOverriderCustomerId would return the current authenticated user's customer id. If you
  * create new ParamOverriderInterface implementations, you can register new implementations by
  * adding to the parameter list for ParamsOverrider's dependency injection configuration.
+ *
+ * @api
  */
 interface ParamOverriderInterface
 {

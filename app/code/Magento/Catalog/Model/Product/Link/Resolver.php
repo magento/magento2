@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\Product\Link;
 
+/**
+ * @api
+ */
 class Resolver
 {
     /**

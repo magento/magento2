@@ -17,6 +17,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Catalog category
  *
+ * @api
  * @method Category setAffectedProductIds(array $productIds)
  * @method array getAffectedProductIds()
  * @method Category setMovedCategoryId(array $productIds)
@@ -116,6 +117,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
+     * @deprecated since 2.2.0
      */
     protected $_urlRewrite;
 

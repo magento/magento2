@@ -12,6 +12,7 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * Order Item Model
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Item getResource()
  * @method int getGiftMessageId()
@@ -477,7 +478,10 @@ class Item extends AbstractModel implements OrderItemInterface
     public function getProductOptions()
     {
         $data = $this->_getData('product_options');
-        return is_string($data) ? $this->serializer->unserialize($data) : $data;
+        if (is_string($data)) {
+            $data = $this->serializer->unserialize($data);
+        }
+        return $data;
     }
 
     /**
@@ -2391,4 +2395,14 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     //@codeCoverageIgnoreEnd
+
+    /**
+     * Check if it is possible to process item after cancellation
+     *
+     * @return bool
+     */
+    public function isProcessingAvailable()
+    {
+        return $this->getQtyToShip() > $this->getQtyToCancel();
+    }
 }

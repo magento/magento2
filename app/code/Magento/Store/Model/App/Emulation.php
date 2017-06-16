@@ -6,13 +6,14 @@
 
 /**
  * Emulation model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Store\Model\App;
 
 use Magento\Framework\Translate\Inline\ConfigInterface;
 
+/**
+ * @api
+ */
 class Emulation extends \Magento\Framework\DataObject
 {
     /**

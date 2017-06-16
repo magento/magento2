@@ -12,7 +12,6 @@ use Magento\Store\Model\Config\Placeholder as ConfigPlaceholder;
 
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
- * @package Magento\Store\Model\Config\Processor
  */
 class Placeholder implements PostProcessorInterface
 {

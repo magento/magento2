@@ -68,7 +68,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $inContextPaypalCheckout = '#paypal-express-in-context-mini-cart';
+    protected $inContextPaypalCheckout = 'ul.checkout-methods-items a[data-action="paypal-in-context-checkout"]';
 
     /**
      * Product name element.

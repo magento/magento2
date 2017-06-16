@@ -9,6 +9,9 @@
  */
 namespace Magento\Cookie\Block;
 
+/**
+ * @api
+ */
 class RequireCookie extends \Magento\Framework\View\Element\Template
 {
     /**

@@ -8,6 +8,8 @@ namespace Magento\Backend\Block\Store;
 
 /**
  * Store switcher block
+ *
+ * @api
  */
 class Switcher extends \Magento\Backend\Block\Template
 {

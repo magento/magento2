@@ -11,6 +11,9 @@
  */
 namespace Magento\Multishipping\Block\Checkout;
 
+/**
+ * @api
+ */
 class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 {
     /**

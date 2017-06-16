@@ -11,7 +11,9 @@ use Magento\Catalog\Model\Product;
 /**
  * Catalog bundle product info block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {

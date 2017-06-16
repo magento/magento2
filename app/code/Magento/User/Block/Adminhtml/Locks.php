@@ -8,6 +8,8 @@ namespace Magento\User\Block\Adminhtml;
 
 /**
  * Locked administrators page
+ *
+ * @api
  */
 class Locks extends \Magento\Backend\Block\Widget\Grid\Container
 {
