@@ -58,7 +58,7 @@ class Mail implements MailInterface
                 ->setTemplateIdentifier($this->contactsConfig->emailTemplate())
                 ->setTemplateOptions(
                     [
-                        'area' => 'adminhtml',
+                        'area' => 'frontend',
                         'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                     ]
                 )

@@ -12,8 +12,13 @@
 "var data.telephone":"Sender Telephone"
 } @-->
 
-{{trans "Name: %name" name=$data.name}}
-{{trans "Email: %email" email=$data.email}}
-{{trans "Phone Number: %telephone" telephone=$data.telephone}}
+{{template config_path="design/email/header_template"}}
 
-{{trans "Comment: %comment" comment=$data.comment}}
+<ul>
+    <li>{{trans "Name: %name" name=$data.name}}</li>
+    <li>{{trans "Email: %email" email=$data.email}}</li>
+    <li>{{trans "Phone Number: %telephone" telephone=$data.telephone}}</li>
+    <li>{{trans "Comment: %comment" comment=$data.comment}}</li>
+</ul>
+
+{{template config_path="design/email/footer_template"}}
