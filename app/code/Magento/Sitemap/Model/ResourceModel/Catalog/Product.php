@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
@@ -14,6 +17,9 @@ use Magento\Framework\App\ObjectManager;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -72,6 +78,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @deprecated unused
      */
     protected $_mediaConfig;
 
@@ -397,6 +404,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return \Magento\Catalog\Model\Product\Media\Config
      * @deprecated No longer used, as we're getting full image URL from getProductImageUrl method
+     * @see getProductImageUrl()
      */
     protected function _getMediaConfig()
     {
