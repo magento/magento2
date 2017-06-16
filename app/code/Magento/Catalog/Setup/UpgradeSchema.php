@@ -88,7 +88,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
-        if (version_compare($context->getVersion(), '2.1.4', '<')) {
+        if (version_compare($context->getVersion(), '2.2.3', '<')) {
             $this->addCatalogProductFrontendActionTable($setup);
         }
 
@@ -177,6 +177,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'entity_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
+            //should be uncommented when this issue become fixed @MAGETWO-69393
 //            ->addForeignKey(
 //                $installer->getFkName(
 //                    'catalog_product_frontend_action',
