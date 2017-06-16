@@ -116,7 +116,7 @@ Below is an example of the `reports.xml` file:
 
 ### Data sources
 
-The data sources (that must match the table names in a database) are described inside the _&lt;report&gt;_ node. The main table is specified with the _&lt;source&gt;_ tag. After rendering, it is represented as the `FROM` statement in an SQL query.
+The data sources (that must correspond to table names in a database) are described inside the _&lt;report&gt;_ node. The main table is specified with the _&lt;source&gt;_ tag. After rendering, it is represented as the `FROM` statement in an SQL query.
 
 The _&lt;source&gt;_ node contains the following attributes:
 
@@ -125,7 +125,7 @@ The _&lt;source&gt;_ node contains the following attributes:
 |name|Table name|True|
 |alias|Table alias|False|
 
-The name has to match the table name in DB. The `alias` attribute can be used in the same way as an alias in the SQL.
+The name must be the same as the table name in DB. The `alias` attribute can be used in the same way as an alias in the SQL.
 
 In the source node, you can also add a data source with the _&lt;link-source&gt;_ tag. After rendering it is represented as the `JOIN` statement in an SQL query.
 
@@ -137,7 +137,7 @@ The _&lt;link-source&gt;_ node contains the following attributes:
 |alias|Table alias|False|
 |link-type|Join type|False|
 
-The name has to match the table name in DB. The `alias` attribute can be used in the same way as an alias in the SQL. The `link-type` attribute specifies the type of join in SQL query and can be either `INNER` or `LEFT`.
+The name must be the same as the table name in DB. The `alias` attribute can be used in the same way as an alias in the SQL. The `link-type` attribute specifies the type of join in SQL query and can be either `INNER` or `LEFT`.
 
 Join conditions are described in the _&lt;link-source&gt;_ node using the _&lt;using&gt;_ tag. After rendering it is represented as the `ON` statement in an SQL query. _&lt;using&gt;_ works in the same way as the filter, described below in this document.
 
@@ -182,7 +182,7 @@ The _&lt;attribute&gt;_ node contains the following attributes:
 |name|Column name|True|
 |alias|Column alias|False|
 
-The name has to match the column name in DB. The `alias` attribute can be used in the same way as the column alias in SQL.
+The name must be the same as the column name in DB. The `alias` attribute can be used in the same way as the column alias in SQL.
 Additional columns can be added using a custom iterator declaration (see the [Creating a new report](#creating-a-new-report) section above).
 
 ### Report filters
@@ -227,7 +227,7 @@ The _&lt;conditions&gt;_ node contains the following attributes:
 |type|Type of comaprsion value|False|
 |operator|Comparison operator|True|
 
-The attribute has to match the column name in DB.
+The attribute must be the same as the column name in DB.
 
 The attribute type can be a value or an identifier. In case the type is an identifier, the value inside a condition is the column. In case type is value, it means it is the scalar value. By default, the type is the value.
 
