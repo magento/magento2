@@ -68,6 +68,7 @@
         "ext-openssl": "*",
         "ext-zip": "*",
         "ext-pdo_mysql": "*",
+        "ext-soap": "*",
         "sjparkinson/static-review": "~4.1",
         "ramsey/uuid": "3.6.1"
     },
@@ -98,7 +99,6 @@
         "magento/module-catalog-analytics": "100.2.0-dev",
         "magento/module-catalog-import-export": "100.2.0-dev",
         "magento/module-catalog-inventory": "100.2.0-dev",
-        "magento/module-catalog-inventory-configurable-product": "100.2.0-dev",
         "magento/module-catalog-rule": "100.2.0-dev",
         "magento/module-catalog-rule-configurable": "100.2.0-dev",
         "magento/module-catalog-search": "100.2.0-dev",

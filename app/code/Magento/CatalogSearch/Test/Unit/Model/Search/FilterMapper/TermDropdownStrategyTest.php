@@ -11,7 +11,7 @@ use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\DB\Select;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -85,7 +85,7 @@ class TermDropdownStrategyTest extends \PHPUnit_Framework_TestCase
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $website = $this->getMockBuilder(WebsiteInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -99,9 +99,9 @@ class TermDropdownStrategyTest extends \PHPUnit_Framework_TestCase
             ->method('getAttribute')
             ->willReturn($attribute);
         $this->storeManager->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($website);
-        $website->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+        $store->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $attribute->expects($this->once())
