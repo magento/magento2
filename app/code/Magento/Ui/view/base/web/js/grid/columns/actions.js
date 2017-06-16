@@ -187,7 +187,7 @@ define([
                 return action.target;
             }
 
-            return "_self";
+            return '_self';
         },
 
         /**
