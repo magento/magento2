@@ -188,7 +188,7 @@ define([
             }
 
             return "_self";
-        }
+        },
 
         /**
          * Checks if specified action requires a handler function.
