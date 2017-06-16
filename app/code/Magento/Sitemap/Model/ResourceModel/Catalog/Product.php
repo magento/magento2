@@ -10,7 +10,6 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\Store;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Sitemap resource product collection model
@@ -83,6 +82,16 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_mediaConfig;
 
     /**
+     * @var \Magento\Catalog\Model\Product
+     */
+    protected $productModel;
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $catalogImageHelper;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
@@ -93,6 +102,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param string $connectionName
+     * @param \Magento\Catalog\Model\Product $productModel
+     * @param \Magento\Catalog\Helper\Image $catalogImageHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,7 +116,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel,
         \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Catalog\Model\Product $productModel = null,
+        \Magento\Catalog\Helper\Image $catalogImageHelper = null
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
@@ -115,6 +128,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->mediaGalleryReadHandler = $mediaGalleryReadHandler;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
+        $this->productModel = $productModel ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
+        $this->catalogImageHelper = $catalogImageHelper ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Helper\Image::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -419,12 +434,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function getProductImageUrl($image)
     {
-        $productObject = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
-        $imgUrl = ObjectManager::getInstance()
-                               ->get(\Magento\Catalog\Helper\Image::class)
-                               ->init($productObject, 'product_page_image_large')
-                               ->setImageFile($image)
-                               ->getUrl();
+        $productObject = $this->productModel;
+        $imgUrl = $this->catalogImageHelper
+            ->init($productObject, 'product_page_image_large')
+            ->setImageFile($image)
+            ->getUrl();
 
         return $imgUrl;
     }
