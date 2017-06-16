@@ -9,6 +9,7 @@ namespace Magento\ProductAlert\Model\ResourceModel\Price;
  * Product alert for changed price collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

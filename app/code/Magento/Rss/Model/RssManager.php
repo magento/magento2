@@ -11,7 +11,7 @@ use Magento\Framework\App\Rss\RssManagerInterface;
 /**
  * Rss Manager
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class RssManager implements RssManagerInterface
 {

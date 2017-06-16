@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Api\Test\Unit;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
@@ -144,7 +142,8 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
-            $data, \Magento\Customer\Api\Data\AddressInterface::class
+            $data,
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
 
         $this->assertEquals($id, $addressDataObject->getId());
@@ -198,7 +197,8 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customAttribute);
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
-            $data, \Magento\Customer\Api\Data\AddressInterface::class
+            $data,
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
 
         $this->assertEquals($id, $addressDataObject->getId());
@@ -260,7 +260,8 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customAttribute);
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
-            $data, \Magento\Customer\Api\Data\AddressInterface::class
+            $data,
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
 
         $this->assertEquals($id, $addressDataObject->getId());

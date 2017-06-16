@@ -16,6 +16,7 @@ use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {

@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Bundle selection price factory
+ * @api
  */
 class BundleSelectionFactory
 {

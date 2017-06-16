@@ -22,7 +22,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Perform asserts.
  *
  * @group Search_Frontend
- * @ZephyrId MAGETWO-24671
+ * @ZephyrId MAGETWO-24671, MAGETWO-23186
  */
 class SuggestSearchingResultEntityTest extends Injectable
 {
@@ -34,12 +34,12 @@ class SuggestSearchingResultEntityTest extends Injectable
      * Run suggest searching result test.
      *
      * @param CmsIndex $cmsIndex
-     * @param CatalogSearchQuery $catalogSearch
+     * @param CatalogSearchQuery $searchTerm
      * @return void
      */
-    public function testSearch(CmsIndex $cmsIndex, CatalogSearchQuery $catalogSearch)
+    public function testSearch(CmsIndex $cmsIndex, CatalogSearchQuery $searchTerm)
     {
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->search($catalogSearch->getQueryText());
+        $cmsIndex->getSearchBlock()->search($searchTerm->getQueryText());
     }
 }

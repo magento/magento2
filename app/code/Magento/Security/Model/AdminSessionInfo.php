@@ -13,6 +13,8 @@ namespace Magento\Security\Model;
  * @method int getStatus()
  * @method string getUpdatedAt()
  * @method string getCreatedAt()
+ *
+ * @api
  */
 class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
 {

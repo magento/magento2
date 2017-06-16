@@ -164,6 +164,48 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $expectedId,
         $expectedPath
     ) {
+        $elementMock = $this->getElementReturnsEmptyElementIfNotExistingElementIsRequested(
+            $expectedType,
+            $expectedId,
+            $expectedPath
+        );
+
+        $this->assertEquals($elementMock, $this->_model->getElement($path));
+    }
+
+    /**
+     * @param string $path
+     * @param string $expectedType
+     * @param string $expectedId
+     * @param string $expectedPath
+     * @dataProvider emptyElementDataProvider
+     */
+    public function testGetElementReturnsEmptyByConfigPathElementIfNotExistingElementIsRequested(
+        $path,
+        $expectedType,
+        $expectedId,
+        $expectedPath
+    ) {
+        $elementMock = $this->getElementReturnsEmptyElementIfNotExistingElementIsRequested(
+            $expectedType,
+            $expectedId,
+            $expectedPath
+        );
+
+        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath($path));
+    }
+
+    /**
+     * @param string $expectedType
+     * @param string $expectedId
+     * @param string $expectedPath
+     * @return Mock
+     */
+    private function getElementReturnsEmptyElementIfNotExistingElementIsRequested(
+        $expectedType,
+        $expectedId,
+        $expectedPath
+    ) {
         $expectedConfig = ['id' => $expectedId, 'path' => $expectedPath, '_elementType' => $expectedType];
 
         $elementMock = $this->getMockBuilder(Structure\ElementInterface::class)
@@ -176,7 +218,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
             ->with($expectedType)
             ->willReturn($elementMock);
 
-        $this->assertEquals($elementMock, $this->_model->getElement($path));
+        return $elementMock;
     }
 
     public function emptyElementDataProvider()
@@ -190,6 +232,23 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testGetElementReturnsProperElementByPath()
+    {
+        $elementMock = $this->getElementPathReturnsProperElementByPath();
+
+        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+    }
+
+    public function testGetElementByConfigPathReturnsProperElementByPath()
+    {
+        $elementMock = $this->getElementPathReturnsProperElementByPath();
+
+        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
+    }
+
+    /**
+     * @return Mock
+     */
+    private function getElementPathReturnsProperElementByPath()
     {
         $section = $this->_structureData['config']['system']['sections']['section_1'];
         $fieldData = $section['children']['group_level_1']['children']['field_3'];
@@ -206,7 +265,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
             ->with('field')
             ->willReturn($elementMock);
 
-        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+        return $elementMock;
     }
 
     public function testGetElementByPathPartsIfSectionDataIsEmpty()
@@ -272,6 +331,25 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     public function testGetElementReturnsProperElementByPathCachesObject()
     {
+        $elementMock = $this->getElementReturnsProperElementByPathCachesObject();
+
+        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+    }
+
+    public function testGetElementByConfigPathReturnsProperElementByPathCachesObject()
+    {
+        $elementMock = $this->getElementReturnsProperElementByPathCachesObject();
+
+        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
+        $this->assertEquals($elementMock, $this->_model->getElementByConfigPath('section_1/group_level_1/field_3'));
+    }
+
+    /**
+     * @return Mock
+     */
+    private function getElementReturnsProperElementByPathCachesObject()
+    {
         $section = $this->_structureData['config']['system']['sections']['section_1'];
         $fieldData = $section['children']['group_level_1']['children']['field_3'];
 
@@ -287,8 +365,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
             ->with('field')
             ->willReturn($elementMock);
 
-        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
-        $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
+        return $elementMock;
     }
 
     /**

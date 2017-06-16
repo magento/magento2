@@ -6,6 +6,9 @@
 /*global FORM_KEY*/
 /*global bSelection*/
 /*global $H*/
+/**
+ * @api
+ */
 define([
     'jquery',
     'Magento_Catalog/js/product/weight-handler',

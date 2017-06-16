@@ -10,6 +10,7 @@ use Magento\Integration\Controller\Adminhtml\Integration as IntegrationControlle
 /**
  * Main Integration properties edit form
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Tokens extends \Magento\Backend\Block\Widget\Form\Generic

@@ -8,6 +8,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 /**
  * Attribute add/edit form options tab
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Labels extends \Magento\Backend\Block\Template

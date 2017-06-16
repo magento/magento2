@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
-* Helper class that simplifies gz files stream reading and writing
-*/
+ * Helper class that simplifies gz files stream reading and writing
+ */
 namespace Magento\Framework\Archive\Helper\File;
 
 class Gz extends \Magento\Framework\Archive\Helper\File

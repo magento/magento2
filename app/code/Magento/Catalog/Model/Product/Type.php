@@ -6,6 +6,8 @@
 
 /**
  * Product type model
+ *
+ * @api
  */
 namespace Magento\Catalog\Model\Product;
 

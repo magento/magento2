@@ -14,6 +14,9 @@ namespace Magento\Wishlist\Model\ResourceModel\Item\Option;
 use Magento\Catalog\Model\Product;
 use Magento\Wishlist\Model\Item;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

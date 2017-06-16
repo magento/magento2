@@ -7,6 +7,8 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 /**
  * Obtain all carts contents for specified client
+ *
+ * @api
  */
 class Carts extends \Magento\Backend\Block\Template
 {

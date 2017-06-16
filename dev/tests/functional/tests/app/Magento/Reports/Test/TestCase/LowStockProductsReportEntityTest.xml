@@ -7,9 +7,11 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Reports\Test\TestCase\LowStockProductsReportEntityTest" summary="Generate &quot;Low Stock Products&quot; Report" ticketId="MAGETWO-27193">
-        <variation name="LowStockProductsReportEntityTestVariation1">
+        <variation name="LowStockProductsReportEntityTestVariation1" summary="Generate Low Stock Products Report and Set Notify for Quantity Below = 2" ticketId="MAGETWO-52213">
             <data name="issue" xsi:type="string">MAGETWO-62279: Low stock products report doesn't work</data>
-            <data name="product/dataset" xsi:type="string">low_stock_product</data>
+            <data name="product" xsi:type="string">catalogProductSimple::low_stock_product</data>
+            <data name="configData" xsi:type="string">notify_stock_quantity_2</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertLowStockProductInGrid" />
         </variation>
     </testCase>

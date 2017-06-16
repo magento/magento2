@@ -70,7 +70,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
             [
                 'indexerEavProcessor' => $this->eavProcessorMock,
                 'filter' => $this->filterMock,
-                'setFactory' => $this->setFactoryMock
+                'attributeSetFactory' => $this->setFactoryMock
             ]
         );
 

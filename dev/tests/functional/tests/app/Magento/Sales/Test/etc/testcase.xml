@@ -119,7 +119,8 @@
         <step name="createShipment" module="Magento_Sales" />
     </scenario>
     <scenario name="CreateInvoiceEntityTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Config" next="createOrder" />
+        <step name="setupConfiguration" module="Magento_Config" next="getDashboardOrder" />
+        <step name="getDashboardOrder" module="Magento_Backend" next="createOrder" />
         <step name="createOrder" module="Magento_Sales" next="createInvoice" />
         <step name="createInvoice" module="Magento_Sales" />
     </scenario>

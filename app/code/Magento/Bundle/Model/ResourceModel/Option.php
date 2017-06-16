@@ -11,8 +11,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Option Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

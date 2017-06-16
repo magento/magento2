@@ -10,6 +10,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * @codeCoverageIgnore
+ * @api
  */
 class DownloadableOption extends AbstractExtensibleModel implements DownloadableOptionInterface
 {

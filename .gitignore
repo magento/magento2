@@ -5,8 +5,12 @@
 /.settings
 atlassian*
 /nbproject
+/robots.txt
+/pub/robots.txt
 /sitemap
 /sitemap.xml
+/pub/sitemap
+/pub/sitemap.xml
 /.idea
 /.gitattributes
 /app/config_sandbox
@@ -44,6 +48,7 @@ atlassian*
 /pub/media/favicon/*
 /pub/media/import/*
 !/pub/media/import/.htaccess
+/pub/media/logo/*
 /pub/media/theme/*
 /pub/media/theme_customization/*
 !/pub/media/theme_customization/.htaccess
@@ -61,3 +66,4 @@ atlassian*
 !/vendor/.htaccess
 /generated/*
 !/generated/.htaccess
+.DS_Store

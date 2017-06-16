@@ -53,7 +53,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects(static::any())
+        $this->contextMock->expects(static::atLeastOnce())
             ->method('getProcessor')
             ->willReturn($processor);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)

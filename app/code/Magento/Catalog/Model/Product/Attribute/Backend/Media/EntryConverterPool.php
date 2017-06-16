@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
 
 /**
  * Class aggregate all Media Gallery Entry Converters
+ *
+ * @api
  */
 class EntryConverterPool
 {

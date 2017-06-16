@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model;
 
 /**
  * Catalog session model
+ *
+ * @api
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
