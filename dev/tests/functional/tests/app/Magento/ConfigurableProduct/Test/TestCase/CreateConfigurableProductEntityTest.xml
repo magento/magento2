@@ -186,6 +186,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductOutOfStockPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation12" summary="Create Configurable Product with disabled child" ticketId="MAGETWO-65661">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
