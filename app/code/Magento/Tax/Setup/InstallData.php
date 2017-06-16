@@ -6,6 +6,8 @@
 
 namespace Magento\Tax\Setup;
 
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -23,13 +25,33 @@ class InstallData implements InstallDataInterface
     private $taxSetupFactory;
 
     /**
+     * Region collection factory.
+     *
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
+     */
+    private $regionCollectionFactory;
+
+    /**
+     * Region collection.
+     *
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
+     */
+    private $regionCollection;
+
+    /**
      * Init
      *
      * @param TaxSetupFactory $taxSetupFactory
+     * @param CollectionFactory $collectionFactory
      */
-    public function __construct(TaxSetupFactory $taxSetupFactory)
-    {
+    public function __construct(
+        TaxSetupFactory $taxSetupFactory,
+        CollectionFactory $collectionFactory = null
+    ) {
         $this->taxSetupFactory = $taxSetupFactory;
+        $this->regionCollectionFactory = $collectionFactory ?: ObjectManager::getInstance()->get(
+            \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
+        );
     }
 
     /**
@@ -101,7 +123,7 @@ class InstallData implements InstallDataInterface
             [
                 'tax_calculation_rate_id' => 1,
                 'tax_country_id' => 'US',
-                'tax_region_id' => 12,
+                'tax_region_id' => $this->getRegionId('CA'),
                 'tax_postcode' => '*',
                 'code' => 'US-CA-*-Rate 1',
                 'rate' => '8.2500',
@@ -109,14 +131,33 @@ class InstallData implements InstallDataInterface
             [
                 'tax_calculation_rate_id' => 2,
                 'tax_country_id' => 'US',
-                'tax_region_id' => 43,
+                'tax_region_id' => $this->getRegionId('NY'),
                 'tax_postcode' => '*',
                 'code' => 'US-NY-*-Rate 1',
                 'rate' => '8.3750'
             ],
         ];
+
         foreach ($data as $row) {
             $setup->getConnection()->insertForce($setup->getTable('tax_calculation_rate'), $row);
         }
+    }
+
+    /**
+     * Return region id by code.
+     * 
+     * @param string $regionCode
+     * @return mixed
+     */
+    private function getRegionId($regionCode)
+    {
+        if ($this->regionCollection === null) {
+            /** @var \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection */
+            $this->regionCollection = $this->regionCollectionFactory->create();
+            $this->regionCollection->addCountryFilter('US')
+                ->addRegionCodeOrNameFilter(['CA', 'NY']);
+        }
+
+        return $this->regionCollection->getItemByColumnValue('code', $regionCode)->getId();
     }
 }
