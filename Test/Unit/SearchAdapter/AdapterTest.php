@@ -131,7 +131,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($client);
 
-        $queryContainer = $this->getMockBuilder(        QueryContainer::class)
+        $queryContainer = $this->getMockBuilder(QueryContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

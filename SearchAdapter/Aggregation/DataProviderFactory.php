@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Elasticsearch\SearchAdapter\Aggregation;
-
 
 use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
@@ -24,7 +22,7 @@ class DataProviderFactory
      *
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -56,6 +54,7 @@ class DataProviderFactory
             $className = get_class($dataProvider);
             $result = $this->objectManager->create($className, ['queryContainer' => $query]);
         }
+
         return $result;
     }
 }

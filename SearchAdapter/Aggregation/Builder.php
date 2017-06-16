@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\SearchAdapter\Aggregation;
 
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
@@ -36,11 +37,12 @@ class Builder
     /**
      * @param  DataProviderInterface[] $dataProviderContainer
      * @param  BucketBuilderInterface[] $aggregationContainer
+     * @param DataProviderFactory|null $dataProviderFactory
      */
     public function __construct(
         array $dataProviderContainer,
         array $aggregationContainer,
-        DataProviderFactory $dataProviderFactory
+        DataProviderFactory $dataProviderFactory = null
     ) {
         $this->dataProviderContainer = array_map(
             function (DataProviderInterface $dataProvider) {
@@ -54,7 +56,8 @@ class Builder
             },
             $aggregationContainer
         );
-        $this->dataProviderFactory = $dataProviderFactory;
+        $this->dataProviderFactory = $dataProviderFactory
+            ?: ObjectManager::getInstance()->get(DataProviderFactory::class);
     }
 
     /**
@@ -86,7 +89,7 @@ class Builder
             );
         }
 
-        $this->clean();
+        $this->query = null;
 
         return $aggregations;
     }
@@ -102,14 +105,5 @@ class Builder
         $this->query = $query;
 
         return $this;
-    }
-
-    /**
-     * Resets an internal state of the current builder
-     * @return void
-     */
-    private function clean()
-    {
-        $this->query = null;
     }
 }

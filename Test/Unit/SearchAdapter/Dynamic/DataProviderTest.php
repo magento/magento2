@@ -301,7 +301,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAggregation()
     {
-        $dimensionValue = 1;
         $expectedResult = [
             1 => 1,
         ];

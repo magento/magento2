@@ -124,7 +124,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturnArgument(0);
 
-        $queryContainer = $this->getMockBuilder(        QueryContainer::class)
+        $queryContainer = $this->getMockBuilder(QueryContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

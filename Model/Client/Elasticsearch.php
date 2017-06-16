@@ -288,7 +288,7 @@ class Elasticsearch implements ClientInterface
     /**
      * Execute search by $query
      *
-     * @param array|QueryContainer $query
+     * @param array $query
      * @return array
      */
     public function query($query)

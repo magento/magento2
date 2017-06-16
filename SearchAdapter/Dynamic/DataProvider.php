@@ -236,8 +236,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     private function getBasicSearchQuery(
         \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage,
         array $dimensions = []
-    ): array
-    {
+    ): array {
         if (null !== $this->queryContainer) {
             return $this->queryContainer->getQuery();
         }
