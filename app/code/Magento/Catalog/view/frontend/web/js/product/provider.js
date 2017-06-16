@@ -79,8 +79,9 @@ define([
             this.productStorage.data.subscribe(this.dataCollectionHandler.bind(this));
 
             if (this.idsStorage.allowToSendRequest) {
-                customerData.reload([idsStorage.namespace], null, this._resolveDataByIds.bind(this));
+                customerData.reload([idsStorage.namespace]).done(this._resolveDataByIds.bind(this));
                 window.localStorage.removeItem(idsStorage.namespace);
+                idsStorage.data();
             } else {
                 this._resolveDataByIds();
             }
@@ -124,6 +125,25 @@ define([
         },
 
         /**
+         * Filter ids by their lifetime in order to show only hot ids :)
+         *
+         * @param {Object} ids
+         * @returns {Array}
+         */
+        filterIds: function (ids) {
+            var _ids = {},
+                currentTime = new Date().getTime() / 1000;
+
+            _.each(ids, function (id) {
+                if (currentTime - id['added_at'] < ~~this.idsStorage.lifetime) {
+                    _ids[id['product_id']] = id;
+                }
+            }, this);
+
+            return _ids;
+        },
+
+        /**
          * Merges id from storage and customer data
          *
          * @param {Object} data
@@ -135,7 +155,9 @@ define([
             }
 
             if (!_.isEmpty(data)) {
-                this.ids(_.extend(this.ids(), data));
+                this.ids(
+                    this.filterIds(_.extend(this.ids(), data))
+                );
             }
         },
 
@@ -154,7 +176,7 @@ define([
          * @param {Object} data
          */
         processData: function (data) {
-            var curData = utils.copy(this.data),//
+            var curData = utils.copy(this.data),
                 ids = this.ids();
 
             delete data['data_id'];

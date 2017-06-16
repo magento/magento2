@@ -53,17 +53,8 @@ define([
          * @param {Object} idsStorage - storage instance
          */
         idsStorageHandler: function (idsStorage) {
-            this.initProductStorage();
             this.idsStorage = idsStorage;
             this.idsStorage.add(this.getIdentifiers());
-        },
-
-        /**
-         * Init product storage
-         */
-        initProductStorage: function () {
-            this.productStorage = storage.createStorage(this.productStorageConfig);
-            this.productStorage.providerHandler(this.data);
         },
 
         /**

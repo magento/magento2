@@ -313,16 +313,11 @@ define([
         /**
          * @param {Array} sectionNames
          * @param {Number} updateSectionId
-         * @param {Function} callback
          * @return {*}
          */
-        reload: function (sectionNames, updateSectionId, callback) {
+        reload: function (sectionNames, updateSectionId) {
             return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
                 buffer.update(sections);
-
-                if (_.isFunction(callback)) {
-                    callback();
-                }
             });
         },
 
