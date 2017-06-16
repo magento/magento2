@@ -57,11 +57,14 @@ class BundleProductGenerator
     }
 
     /**
-     * Generate bundle products products
+     * Generates bundle products.
      *
      * @param int $products
      * @param array $fixtureMap
+     *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function generate($products, $fixtureMap)
     {
