@@ -21,6 +21,10 @@ define([
                     checkout: jasmine.createSpyObj('checkout',
                         ['setup', 'initXO', 'startFlow', 'closeFlow']
                     )
+                },
+                'Magento_Customer/js/customer-data': {
+                    set: jasmine.createSpy(),
+                    invalidate: jasmine.createSpy()
                 }
             };
 
@@ -79,6 +83,36 @@ define([
 
                 model.clientConfig.click(event);
 
+                expect(event.preventDefault).toHaveBeenCalled();
+                expect(paypalExpressCheckout.checkout.initXO).toHaveBeenCalled();
+                expect(model.clientConfig.checkoutInited).toEqual(true);
+                expect(jQuery.get).toHaveBeenCalled();
+                expect(jQuery('body').trigger).toHaveBeenCalledWith(
+                    jasmine.arrayContaining(['processStart'], ['processStop'])
+                );
+            });
+
+            it('Check call "click" method', function () {
+                var message = {
+                    text: 'text',
+                    type: 'error'
+                };
+
+                spyOn(jQuery.fn, 'trigger');
+                spyOn(jQuery, 'get').and.callFake(function () {
+                    var d = $.Deferred();
+
+                    d.resolve({
+                        message: message
+                    });
+
+                    return d.promise();
+                });
+
+                model.clientConfig.click(event);
+                expect(mocks['Magento_Customer/js/customer-data'].set).toHaveBeenCalledWith('messages', {
+                    messages: [message]
+                });
                 expect(event.preventDefault).toHaveBeenCalled();
                 expect(paypalExpressCheckout.checkout.initXO).toHaveBeenCalled();
                 expect(model.clientConfig.checkoutInited).toEqual(true);

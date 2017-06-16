@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "54e536d6a16773c0efc4d6a7a6e668d4",
-    "content-hash": "83b07861c465af490d6cf0c75adc78fd",
+    "hash": "16d03df808a8938009a500a058708054",
+    "content-hash": "755acb21c6c819ea0af7fdf2fa8a1e26",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1910,24 +1910,29 @@
         },
         {
             "name": "tubalmartin/cssmin",
-            "version": "v3.0.0",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port.git",
-                "reference": "210b058bf9b3b43516e2c80e6db526c1ce215b04"
+                "reference": "1c7ae93cf6b392d4dae5c4ae18979918413af16e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/210b058bf9b3b43516e2c80e6db526c1ce215b04",
-                "reference": "210b058bf9b3b43516e2c80e6db526c1ce215b04",
+                "url": "https://api.github.com/repos/tubalmartin/YUI-CSS-compressor-PHP-port/zipball/1c7ae93cf6b392d4dae5c4ae18979918413af16e",
+                "reference": "1c7ae93cf6b392d4dae5c4ae18979918413af16e",
                 "shasum": ""
             },
             "require": {
+                "ext-pcre": "*",
                 "php": ">=5.3.2"
             },
             "require-dev": {
-                "cogpowered/finediff": "0.3.*"
+                "cogpowered/finediff": "0.3.*",
+                "phpunit/phpunit": "4.8.*"
             },
+            "bin": [
+                "cssmin"
+            ],
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1954,7 +1959,7 @@
                 "minify",
                 "yui"
             ],
-            "time": "2017-04-04 14:33:00"
+            "time": "2017-05-16 13:45:26"
         },
         {
             "name": "zendframework/zend-captcha",
@@ -5449,7 +5454,8 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-zip": "*",
-        "ext-pdo_mysql": "*"
+        "ext-pdo_mysql": "*",
+        "ext-soap": "*"
     },
     "platform-dev": []
 }

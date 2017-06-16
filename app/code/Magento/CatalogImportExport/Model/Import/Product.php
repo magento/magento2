@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Model\Product\Visibility;
@@ -30,6 +27,7 @@ use Magento\Catalog\Model\Config as CatalogConfig;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -1230,15 +1228,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                         'linked_product_id' => $linkedId,
                                         'link_type_id' => $linkId,
                                     ];
-                                    if (!empty($linkPositions[$linkedKey])) {
-                                        $positionRows[] = [
-                                            'link_id' => $productLinkKeys[$linkKey],
-                                            'product_link_attribute_id' => $positionAttrId[$linkId],
-                                            'value' => $linkPositions[$linkedKey],
-                                        ];
-                                    }
-                                    $nextLinkId++;
                                 }
+                                if (!empty($linkPositions[$linkedKey])) {
+                                    $positionRows[] = [
+                                        'link_id' => $productLinkKeys[$linkKey],
+                                        'product_link_attribute_id' => $positionAttrId[$linkId],
+                                        'value' => $linkPositions[$linkedKey],
+                                    ];
+                                }
+                                $nextLinkId++;
                             }
                         }
                     }

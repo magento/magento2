@@ -13,19 +13,23 @@ class InvoicedTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection\Invoiced
      */
-    private $_collection;
+    private $collection;
 
     /**
-     * Set up.
-     *
-     * @return void
+     * @var \Magento\Framework\ObjectManagerInterface
      */
+    private $objectManager;
+
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->collection = $this->objectManager->create(
             \Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection\Invoiced::class
         );
-        $this->_collection->setPeriod('day')->setDateRange(null, null)->addStoreFilter([1]);
+        $this->collection->setPeriod('day')
+            ->setDateRange(null, null)
+            ->addStoreFilter([1]);
     }
 
     /**
@@ -36,16 +40,26 @@ class InvoicedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItems()
     {
+
         /** @var \Magento\Sales\Model\Order $order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Sales\Model\Order::class);
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
-        $invoiceCreatedAt = $order->getInvoiceCollection()->getFirstItem()->getCreatedAt();
+        $invoiceCreatedAt = $order->getInvoiceCollection()
+            ->getFirstItem()
+            ->getCreatedAt();
         /** @var \Magento\Framework\Stdlib\DateTime\DateTime $dateTime */
-        $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Stdlib\DateTime\DateTimeFactory::class
-        )
+        $dateTime = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\DateTimeFactory::class)
             ->create();
+        /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone */
+        $timezone = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $invoiceCreatedAt = $timezone->formatDateTime(
+            $invoiceCreatedAt,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            null,
+            null,
+            'yyyy-MM-dd'
+        );
         $invoiceCreatedAtDate = $dateTime->date('Y-m-d', $invoiceCreatedAt);
 
         $expectedResult = [
@@ -57,7 +71,7 @@ class InvoicedTest extends \PHPUnit_Framework_TestCase
         ];
         $actualResult = [];
         /** @var \Magento\Reports\Model\Item $reportItem */
-        foreach ($this->_collection->getItems() as $reportItem) {
+        foreach ($this->collection->getItems() as $reportItem) {
             $actualResult[] = [
                 'orders_count' => $reportItem->getData('orders_count'),
                 'orders_invoiced' => $reportItem->getData('orders_invoiced'),
