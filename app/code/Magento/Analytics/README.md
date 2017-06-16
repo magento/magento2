@@ -2,7 +2,7 @@
 
 |Term|Meaning|Description|
 |--- |--- |--- |
-|MBI|Magento Business Intelligence|SaaS reporting service|
+|MBI|Magento Business Intelligence|Software as a service reporting service|
 |Advance Reporting||The free MBI service for Magento Community Edition (CE) customers. Users can access the Advanced Reporting page from Magento|
 |BI Essentials||The paid MBI service for CE customers. Users can access the BI Essentials page from Magento|
 |DD|Data Definition|The file with a list of data to be transferred to the MBI service. After being converted to the report format, the data is shown on the Advanced Reporting page|
