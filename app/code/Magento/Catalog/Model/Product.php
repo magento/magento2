@@ -2509,13 +2509,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Catalog\Api\Data\ProductExtensionInterface|null
+     * @return \Magento\Catalog\Api\Data\ProductExtensionInterface
      */
     public function getExtensionAttributes()
     {
         $extensionAttributes = $this->_getExtensionAttributes();
-        if (!$extensionAttributes) {
-            return $this->extensionAttributesFactory->create(\Magento\Catalog\Api\Data\ProductInterface::class);
+        if (null === $extensionAttributes) {
+            /** @var \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes */
+            $extensionAttributes = $this->extensionAttributesFactory->create(ProductInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
         }
         return $extensionAttributes;
     }
@@ -2637,6 +2639,70 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setAssociatedProductIds(array $productIds)
     {
         $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
+        return $this;
+    }
+
+    /**
+     * Get quantity and stock status data
+     *
+     * @return array|null
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function getQuantityAndStockStatus()
+    {
+        return $this->getData('quantity_and_stock_status');
+    }
+
+    /**
+     * Set quantity and stock status data
+     *
+     * @param array $quantityAndStockStatusData
+     * @return $this
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function setQuantityAndStockStatus($quantityAndStockStatusData)
+    {
+        $this->setData('quantity_and_stock_status', $quantityAndStockStatusData);
+        return $this;
+    }
+
+    /**
+     * Get stock data
+     *
+     * @return array|null
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function getStockData()
+    {
+        return $this->getData('stock_data');
+    }
+
+    /**
+     * Set stock data
+     *
+     * @param array $stockData
+     * @return $this
+     *
+     * @deprecated as Product model shouldn't be responsible for stock status
+     * @see StockItemInterface when you want to change the stock data
+     * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+     * @see StockItemRepositoryInterface::save as extension point for customization of saving process
+     */
+    public function setStockData($stockData)
+    {
+        $this->setData('stock_data', $stockData);
         return $this;
     }
 }
