@@ -78,7 +78,7 @@ define([
             this.productStorage = storage.createStorage(this.productStorageConfig);
             this.productStorage.data.subscribe(this.dataCollectionHandler.bind(this));
 
-            if (this.idsStorage.allowToSendRequest) {
+            if (~~this.idsStorage.allowToSendRequest) {
                 customerData.reload([idsStorage.namespace]).done(this._resolveDataByIds.bind(this));
                 window.localStorage.removeItem(idsStorage.namespace);
                 idsStorage.data();
