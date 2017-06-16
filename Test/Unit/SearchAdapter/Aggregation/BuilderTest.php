@@ -6,12 +6,19 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Aggregation;
 
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder;
+use Magento\Elasticsearch\SearchAdapter\Aggregation\DataProviderFactory;
+use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var DataProviderFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataProviderFactory;
+
     /**
      * @var Builder
      */
@@ -54,12 +61,20 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->dataProviderFactory = $this->getMockBuilder(
+            \Magento\Elasticsearch\SearchAdapter\Aggregation\DataProviderFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder::class,
             [
                 'dataProviderContainer' => ['indexName' => $this->dataProviderContainer],
                 'aggregationContainer' => ['bucketType' => $this->aggregationContainer],
+                'dataProviderFactory' => $this->dataProviderFactory,
             ]
         );
     }
@@ -105,11 +120,34 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('build')
             ->willReturn([]);
 
+        $this->dataProviderFactory->expects($this->once())
+            ->method('create')
+            ->willReturnArgument(0);
+
+        $queryContainer = $this->getMockBuilder(        QueryContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model->setQuery($queryContainer);
+
         $this->assertEquals(
             [
                 'price_bucket' => [],
             ],
             $this->model->build($this->requestInterface, [])
         );
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Query is the required field and must be set to the builder
+     */
+    public function testBuildWithoutQuery()
+    {
+        $this->requestInterface = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model->build($this->requestInterface, []);
     }
 }

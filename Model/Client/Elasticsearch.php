@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Model\Client;
 
+use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
@@ -287,7 +288,7 @@ class Elasticsearch implements ClientInterface
     /**
      * Execute search by $query
      *
-     * @param array $query
+     * @param array|QueryContainer $query
      * @return array
      */
     public function query($query)

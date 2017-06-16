@@ -48,7 +48,7 @@ class Aggregation
      *
      * @param array $searchQuery
      * @param BucketInterface $bucket
-     * @return void
+     * @return array
      */
     protected function buildBucket(
         array $searchQuery,

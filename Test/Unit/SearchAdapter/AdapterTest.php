@@ -6,6 +6,8 @@
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
 use Magento\Elasticsearch\SearchAdapter\Adapter;
+use Magento\Elasticsearch\SearchAdapter\QueryContainer;
+use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -13,6 +15,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var QueryContainerFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $queryContainerFactory;
+
     /**
      * @var Adapter
      */
@@ -74,7 +81,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         )
             ->setMethods([
                 'build',
+                'setQuery'
             ])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->queryContainerFactory = $this->getMockBuilder(QueryContainerFactory::class)
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,7 +98,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
                 'connectionManager' => $this->connectionManager,
                 'mapper' => $this->mapper,
                 'responseFactory' => $this->responseFactory,
-                'aggregationBuilder' => $this->aggregationBuilder
+                'aggregationBuilder' => $this->aggregationBuilder,
+                'queryContainerFactory' => $this->queryContainerFactory,
             ]
         );
     }
@@ -97,6 +111,17 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testQuery()
     {
+        $searchQuery = [
+            'index' => 'indexName',
+            'type' => 'product',
+            'body' => [
+                'from' => 0,
+                'size' => 1000,
+                'fields' => ['_id', '_score'],
+                'query' => [],
+            ],
+        ];
+
         $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
             ->setMethods(['query'])
             ->disableOriginalConstructor()
@@ -106,20 +131,23 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($client);
 
-        $this->mapper
-            ->expects($this->once())
+        $queryContainer = $this->getMockBuilder(        QueryContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->queryContainerFactory->expects($this->once())
+            ->method('create')
+            ->with(['query' => $searchQuery])
+            ->willReturn($queryContainer);
+
+        $this->aggregationBuilder->expects($this->once())
+            ->method('setQuery')
+            ->with($queryContainer);
+
+        $this->mapper->expects($this->once())
             ->method('buildQuery')
             ->with($this->request)
-            ->willReturn([
-                'index' => 'indexName',
-                'type' => 'product',
-                'body' => [
-                    'from' => 0,
-                    'size' => 1000,
-                    'fields' => ['_id', '_score'],
-                    'query' => [],
-                ],
-            ]);
+            ->willReturn($searchQuery);
 
         $client->expects($this->once())
             ->method('query')
@@ -136,7 +164,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ]);
-
         $this->aggregationBuilder->expects($this->once())
             ->method('build')
             ->willReturn($client);
