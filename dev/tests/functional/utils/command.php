@@ -9,6 +9,7 @@ $commandList = [
     'cache:disable',
     'cache:enable',
     'setup:static-content:deploy',
+    'cron:run',
 ];
 
 if (isset($_GET['command'])) {

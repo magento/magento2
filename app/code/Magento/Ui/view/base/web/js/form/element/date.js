@@ -5,7 +5,8 @@
 define([
     'moment',
     'mageUtils',
-    './abstract'
+    './abstract',
+    'moment-timezone-with-data'
 ], function (moment, utils, Abstract) {
     'use strict';
 
@@ -13,7 +14,7 @@ define([
         defaults: {
             options: {},
 
-            timeOffset: 0,
+            storeTimeZone: 'UTC',
 
             validationParams: {
                 dateFormat: '${ $.outputDateFormat }'
@@ -61,7 +62,7 @@ define([
 
             /**
              * Date/time value shifted to corresponding timezone
-             * according to this.timeOffset property. This value
+             * according to this.storeTimeZone property. This value
              * will be sent to the server.
              *
              * @type {String}
@@ -109,7 +110,7 @@ define([
 
             if (value) {
                 if (this.options.showsTime) {
-                    shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
+                    shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
                     dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
 
@@ -133,12 +134,13 @@ define([
          * @param {String} shiftedValue
          */
         onShiftedValueChange: function (shiftedValue) {
-            var value;
+            var value,
+                formattedValue;
 
             if (shiftedValue) {
                 if (this.options.showsTime) {
-                    value = moment.utc(shiftedValue, this.pickerDateTimeFormat);
-                    value = value.subtract(this.timeOffset, 'seconds').toISOString();
+                    formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
+                    value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
                     value = moment(shiftedValue, this.pickerDateTimeFormat);
                     value = value.format(this.outputDateFormat);
