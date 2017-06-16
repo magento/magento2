@@ -202,7 +202,7 @@ define([
          *
          * @param {Object} data
          * @param {String} currentTime
-         *
+         * @param {String} name
          * @returns {Object} result
          */
         dataFilter: function (data, currentTime, name) {
