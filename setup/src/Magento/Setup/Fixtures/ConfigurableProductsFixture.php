@@ -151,7 +151,11 @@ class ConfigurableProductsFixture extends Fixture
     private $swatchesGenerator;
 
     /**
-     * ConfigurableProductsFixture constructor.
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param FixtureModel $fixtureModel
      * @param AttributeSet\AttributeSetFixture $attributeSetsFixture
      * @param AttributeSet\Pattern $attributePattern
@@ -163,7 +167,8 @@ class ConfigurableProductsFixture extends Fixture
      * @param CategoryResolver $categoryResolver
      * @param WebsiteCategoryProvider $websiteCategoryProvider
      * @param PriceProvider $priceProvider
-     * @param \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator $swatchesGenerator
+     * @param AttributeSet\SwatchesGenerator $swatchesGenerator
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -178,7 +183,8 @@ class ConfigurableProductsFixture extends Fixture
         CategoryResolver $categoryResolver,
         WebsiteCategoryProvider $websiteCategoryProvider,
         PriceProvider $priceProvider,
-        \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator $swatchesGenerator
+        \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator $swatchesGenerator,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         parent::__construct($fixtureModel);
         $this->attributeSetsFixture = $attributeSetsFixture;
@@ -192,6 +198,7 @@ class ConfigurableProductsFixture extends Fixture
         $this->websiteCategoryProvider = $websiteCategoryProvider;
         $this->priceProvider = $priceProvider;
         $this->swatchesGenerator = $swatchesGenerator;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -638,7 +645,7 @@ class ConfigurableProductsFixture extends Fixture
      */
     private function getCustomAttributeSet(array $attributes)
     {
-        $attributeSetHash = md5(json_encode($attributes));
+        $attributeSetHash = crc32($this->serializer->serialize($attributes));
         $attributeSetName = sprintf('Dynamic Attribute Set %s', $attributeSetHash);
 
         $pattern = $this->attributePattern->generateAttributeSet(
