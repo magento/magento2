@@ -417,7 +417,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $image
      * @return mixed
      */
-    protected function getProductImageUrl($image)
+    private function getProductImageUrl($image)
     {
         $productObject = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
         $imgUrl = ObjectManager::getInstance()
