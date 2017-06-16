@@ -64,9 +64,9 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     protected $_cronGroupConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $timezone;
+    protected $dateTimeMock;
 
     /**
      * @var \Magento\Framework\Event\Observer
@@ -126,8 +126,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->observer = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
 
-        $this->timezone = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->timezone->expects($this->any())->method('scopeTimeStamp')->will($this->returnValue(time()));
+        $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeMock->expects($this->any())->method('gmtTimestamp')->will($this->returnValue(time()));
 
         $phpExecutableFinder = $this->getMock(\Symfony\Component\Process\PhpExecutableFinder::class, [], [], '', false);
         $phpExecutableFinder->expects($this->any())->method('find')->willReturn('php');
@@ -148,7 +150,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->_scopeConfig,
             $this->_request,
             $this->_shell,
-            $this->timezone,
+            $this->dateTimeMock,
             $phpExecutableFinderFactory,
             $this->loggerMock,
             $this->appStateMock
