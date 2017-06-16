@@ -193,6 +193,10 @@
                 <select>
                     <settings>
                         <options class="Magento\Inventory\Model\OptionSource\RegionSource"/>
+                        <filterBy>
+                            <field>country_id</field>
+                            <target>${ $.provider }:${ $.parentScope }.country_id</target>
+                        </filterBy>
                     </settings>
                 </select>
             </formElements>
