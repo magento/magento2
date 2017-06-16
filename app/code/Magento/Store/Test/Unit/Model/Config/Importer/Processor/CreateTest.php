@@ -19,6 +19,7 @@ use Magento\Store\Model\WebsiteFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CreateTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,15 +54,67 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     private $abstractDbMock;
 
     /**
+     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $websiteMock;
+
+    /**
+     * @var Group|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $groupMock;
+
+    /**
+     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeMock;
+
+    /**
      * @var Create
      */
     private $processor;
+
+    /**
+     * @var array
+     */
+    private $websites = [];
+
+    /**
+     * @var array
+     */
+    private $trimmedWebsite = [];
+
+    /**
+     * @var array
+     */
+    private $groups = [];
+
+    /**
+     * @var array
+     */
+    private $trimmedGroup = [];
+
+    /**
+     * @var array
+     */
+    private $stores = [];
+
+    /**
+     * @var array
+     */
+    private $trimmedStore = [];
+
+    /**
+     * @var array
+     */
+    private $data = [];
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
+        $this->initTestData();
+
         $this->dataDifferenceCalculatorMock = $this->getMockBuilder(DataDifferenceCalculator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -83,6 +136,30 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['save', 'load', 'addCommitCallback'])
             ->getMockForAbstractClass();
+        $this->websiteMock = $this->getMockBuilder(Website::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setData', 'getResource', 'setDefaultGroupId'])
+            ->getMock();
+        $this->groupMock = $this->getMockBuilder(Group::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getResource', 'getId', 'setData', 'setRootCategoryId',
+                'getDefaultStoreId', 'setDefaultStoreId', 'setWebsite'
+            ])
+            ->getMock();
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setData', 'getResource', 'setGroup', 'setWebsite', 'getStoreId'])
+            ->getMock();
+        $this->websiteFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->websiteMock);
+        $this->groupFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->groupMock);
+        $this->storeFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->storeMock);
 
         $this->processor = new Create(
             $this->dataDifferenceCalculatorMock,
@@ -93,9 +170,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testRunWebsite()
+    private function initTestData()
     {
-        $websites = [
+        $this->websites = [
             'base' => [
                 'website_id' => '1',
                 'code' => 'base',
@@ -105,61 +182,13 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'is_default' => '1',
             ],
         ];
-        $trimmedWebsite = [
+        $this->trimmedWebsite = [
             'code' => 'base',
             'name' => 'Main Website',
             'sort_order' => '0',
             'is_default' => '1',
         ];
-        $data = [
-            'websites' => $websites,
-            'groups' => [],
-            'stores' => [],
-        ];
-
-        $this->dataDifferenceCalculatorMock->expects($this->any())
-            ->method('getItemsToCreate')
-            ->willReturnMap([
-                [ScopeInterface::SCOPE_WEBSITES, $websites, $websites],
-            ]);
-
-        /** @var Website|\PHPUnit_Framework_MockObject_MockObject $websiteMock */
-        $websiteMock = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource'])
-            ->getMock();
-        $websiteMock->expects($this->once())
-            ->method('setData')
-            ->with($trimmedWebsite)
-            ->willReturnSelf();
-        $websiteMock->expects($this->exactly(2))
-            ->method('getResource')
-            ->willReturn($this->abstractDbMock);
-
-        $this->websiteFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($websiteMock);
-        $this->abstractDbMock->expects($this->once())
-            ->method('save')
-            ->with($websiteMock)
-            ->willReturnSelf();
-
-        $this->processor->run($data);
-    }
-
-    public function testRunGroup()
-    {
-        $websites = [
-            'base' => [
-                'website_id' => '1',
-                'code' => 'base',
-                'name' => 'Main Website',
-                'sort_order' => '0',
-                'default_group_id' => '1',
-                'is_default' => '1',
-            ],
-        ];
-        $groups = [
+        $this->groups = [
             1 => [
                 'group_id' => '1',
                 'website_id' => '1',
@@ -169,96 +198,13 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'code' => 'default',
             ]
         ];
-        $trimmedGroup = [
+        $this->trimmedGroup = [
             'name' => 'Default',
             'root_category_id' => '1',
             'code' => 'default',
             'default_store_id' => '1',
         ];
-        $data = [
-            'websites' => $websites,
-            'groups' => $groups,
-            'stores' => [],
-        ];
-
-        $this->dataDifferenceCalculatorMock->expects($this->any())
-            ->method('getItemsToCreate')
-            ->willReturnMap([
-                [ScopeInterface::SCOPE_WEBSITES, $websites, []],
-                [ScopeInterface::SCOPE_GROUPS, $groups, $groups],
-            ]);
-
-        /** @var Website|\PHPUnit_Framework_MockObject_MockObject $websiteMock */
-        $websiteMock = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResource'])
-            ->getMock();
-        $websiteMock->expects($this->once())
-            ->method('getResource')
-            ->willReturn($this->abstractDbMock);
-        $this->websiteFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($websiteMock);
-        $this->abstractDbMock->expects($this->once())
-            ->method('load')
-            ->with($websiteMock, 'base', 'code')
-            ->willReturnSelf();
-
-        /** @var Group|\PHPUnit_Framework_MockObject_MockObject $groupMock */
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setWebsite', 'setRootCategoryId'])
-            ->getMock();
-        $groupMock->expects($this->once())
-            ->method('setData')
-            ->with($trimmedGroup)
-            ->willReturnSelf();
-        $groupMock->expects($this->exactly(2))
-            ->method('getResource')
-            ->willReturn($this->abstractDbMock);
-        $groupMock->expects($this->once())
-            ->method('setRootCategoryId')
-            ->with(0);
-
-        $this->groupFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($groupMock);
-        $this->abstractDbMock->expects($this->once())
-            ->method('save')
-            ->with($groupMock)
-            ->willReturnSelf();
-        $this->abstractDbMock->expects($this->once())
-            ->method('addCommitCallback');
-
-        $this->processor->run($data);
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testRunStore()
-    {
-        $websites = [
-            'base' => [
-                'website_id' => '1',
-                'code' => 'base',
-                'name' => 'Main Website',
-                'sort_order' => '0',
-                'default_group_id' => '1',
-                'is_default' => '1',
-            ],
-        ];
-        $groups = [
-            1 => [
-                'group_id' => '1',
-                'website_id' => '1',
-                'name' => 'Default',
-                'root_category_id' => '1',
-                'default_store_id' => '1',
-                'code' => 'default',
-            ]
-        ];
-        $stores = [
+        $this->stores = [
             'default' => [
                 'store_id' => '1',
                 'code' => 'default',
@@ -269,79 +215,178 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'is_active' => '1',
             ],
         ];
-        $trimmedStore = [
+        $this->trimmedStore = [
             'code' => 'default',
             'name' => 'Default Store View',
             'sort_order' => '0',
             'is_active' => '1',
         ];
-        $data = [
-            'websites' => $websites,
-            'groups' => $groups,
-            'stores' => $stores,
+        $this->data = [
+            'websites' => $this->websites,
+            'groups' => $this->groups,
+            'stores' => $this->stores,
         ];
+    }
 
+    public function testRunWebsite()
+    {
+        $groupId = 1;
         $this->dataDifferenceCalculatorMock->expects($this->any())
             ->method('getItemsToCreate')
             ->willReturnMap([
-                [ScopeInterface::SCOPE_WEBSITES, $websites, []],
-                [ScopeInterface::SCOPE_GROUPS, $groups, []],
-                [ScopeInterface::SCOPE_STORES, $stores, $stores],
+                [ScopeInterface::SCOPE_WEBSITES, $this->websites, $this->websites],
             ]);
 
-        /** @var Website|\PHPUnit_Framework_MockObject_MockObject $websiteMock */
-        $websiteMock = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResource'])
-            ->getMock();
-        $websiteMock->expects($this->once())
+        $this->websiteMock->expects($this->once())
+            ->method('setData')
+            ->with($this->trimmedWebsite)
+            ->willReturnSelf();
+        $this->websiteMock->expects($this->exactly(3))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
-        $this->websiteFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($websiteMock);
+        $this->websiteMock->expects($this->once())
+            ->method('setDefaultGroupId')
+            ->with($groupId);
 
-        /** @var Group|\PHPUnit_Framework_MockObject_MockObject $groupMock */
-        $groupMock = $this->getMockBuilder(Group::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResource'])
-            ->getMock();
-        $groupMock->expects($this->once())
+        $this->groupMock->expects($this->once())
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
-        $this->groupFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($groupMock);
+        $this->groupMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($groupId);
+
+        $this->abstractDbMock->expects($this->once())
+            ->method('addCommitCallback')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
+
+        $this->abstractDbMock->expects($this->exactly(2))
+            ->method('save')
+            ->with($this->websiteMock)
+            ->willReturnSelf();
+
+        $this->processor->run($this->data);
+    }
+
+    public function testRunGroup()
+    {
+        $defaultStoreId = 1;
+        $storeId = 1;
+        $this->dataDifferenceCalculatorMock->expects($this->any())
+            ->method('getItemsToCreate')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITES, $this->websites, []],
+                [ScopeInterface::SCOPE_GROUPS, $this->groups, $this->groups],
+            ]);
+
+        $this->websiteMock->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->abstractDbMock);
+
+        $this->groupMock->expects($this->once())
+            ->method('setData')
+            ->with($this->trimmedGroup)
+            ->willReturnSelf();
+        $this->groupMock->expects($this->exactly(3))
+            ->method('getResource')
+            ->willReturn($this->abstractDbMock);
+        $this->groupMock->expects($this->once())
+            ->method('setRootCategoryId')
+            ->with(0);
+        $this->groupMock->expects($this->once())
+            ->method('getDefaultStoreId')
+            ->willReturn($defaultStoreId);
+        $this->groupMock->expects($this->once())
+            ->method('setDefaultStoreId')
+            ->with($storeId);
+        $this->groupMock->expects($this->once())
+            ->method('setWebsite')
+            ->with($this->websiteMock);
+
+        $this->storeMock->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->abstractDbMock);
+        $this->storeMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->abstractDbMock->expects($this->any())
+            ->method('load')
+            ->withConsecutive([$this->websiteMock, 'base', 'code'], [$this->storeMock, 'default', 'code'])
+            ->willReturnSelf();
+        $this->abstractDbMock->expects($this->exactly(2))
+            ->method('save')
+            ->with($this->groupMock)
+            ->willReturnSelf();
+        $this->abstractDbMock->expects($this->once())
+            ->method('addCommitCallback')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('store_group_save', ['group' => $this->groupMock]);
+
+        $this->processor->run($this->data);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testRunStore()
+    {
+        $this->dataDifferenceCalculatorMock->expects($this->any())
+            ->method('getItemsToCreate')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITES, $this->websites, []],
+                [ScopeInterface::SCOPE_GROUPS, $this->groups, []],
+                [ScopeInterface::SCOPE_STORES, $this->stores, $this->stores],
+            ]);
+
+        $this->websiteMock->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->abstractDbMock);
+
+        $this->groupMock->expects($this->once())
+            ->method('getResource')
+            ->willReturn($this->abstractDbMock);
 
         $this->abstractDbMock->expects($this->exactly(2))
             ->method('load')
-            ->withConsecutive([$groupMock, 'default', 'code'], [$websiteMock, 'base', 'code'])
+            ->withConsecutive([$this->groupMock, 'default', 'code'], [$this->websiteMock, 'base', 'code'])
             ->willReturnSelf();
 
-        /** @var Store|\PHPUnit_Framework_MockObject_MockObject $storeMock */
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setGroup', 'setWebsite'])
-            ->getMock();
-        $storeMock->expects($this->once())
+        $this->storeMock->expects($this->once())
             ->method('setData')
-            ->with($trimmedStore)
+            ->with($this->trimmedStore)
             ->willReturnSelf();
-        $storeMock->expects($this->exactly(2))
+        $this->storeMock->expects($this->exactly(3))
             ->method('getResource')
             ->willReturn($this->abstractDbMock);
+        $this->storeMock->expects($this->once())
+            ->method('setGroup')
+            ->with($this->groupMock);
+        $this->storeMock->expects($this->once())
+            ->method('setWebsite')
+            ->with($this->websiteMock);
 
-        $this->storeFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($storeMock);
-        $this->abstractDbMock->expects($this->once())
+        $this->abstractDbMock->expects($this->exactly(2))
             ->method('save')
-            ->with($storeMock)
+            ->with($this->storeMock)
             ->willReturnSelf();
         $this->abstractDbMock->expects($this->once())
-            ->method('addCommitCallback');
+            ->method('addCommitCallback')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
 
-        $this->processor->run($data);
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('store_add', ['store' => $this->storeMock]);
+
+        $this->processor->run($this->data);
     }
 
     /**

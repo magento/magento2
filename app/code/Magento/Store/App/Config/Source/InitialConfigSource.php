@@ -8,7 +8,6 @@ namespace Magento\Store\App\Config\Source;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
 
 /**
@@ -69,7 +68,7 @@ class InitialConfigSource implements ConfigSourceInterface
     {
         /**
          * Magento store configuration should not be read from file source
-         * on installed instance.
+         * on not installed instance.
          *
          * @see \Magento\Store\Model\Config\Importer To import store configs
          */
