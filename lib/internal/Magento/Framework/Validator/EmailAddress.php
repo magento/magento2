@@ -7,7 +7,7 @@
  */
 /**
  * @deprecated
- * @see \Magento\Framework\Validator\Email
+ * @see \Magento\Framework\Validator\EmailMinimal
  */
 namespace Magento\Framework\Validator;
 

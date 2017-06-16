@@ -355,13 +355,9 @@ abstract class AbstractData
                     /**
                     __('"%1" is not a valid email address.')
                      */
-                    $validator = new \Magento\Framework\Validator\Email();
-                    $validator->setMessage(
-                        __('"%1" is not a valid email address.', $label),
-                        \Magento\Framework\Validator\Email::INVALID
-                    );
+                    $validator = new \Magento\Framework\Validator\EmailMinimal();
                     if (!$validator->isValid($value)) {
-                        return array_unique($validator->getMessages());
+                        return $validator->getMessages();
                     }
                     break;
                 case 'url':

@@ -5,7 +5,7 @@
  */
 namespace Magento\User\Model;
 
-use Magento\Framework\Validator\Email;
+use Magento\Framework\Validator\EmailMinimal;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\StringLength;
@@ -36,8 +36,8 @@ class UserValidationRules
         $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $lastNameNotEmpty = new NotEmpty();
         $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $emailValidity = new Email();
-        $emailValidity->setMessage(__('Please enter a valid email.'), \Magento\Framework\Validator\Email::INVALID);
+        $emailValidity = new EmailMinimal();
+        $emailValidity->setMessage(__('Please enter a valid email.'), \Magento\Framework\Validator\EmailMinimal::INVALID);
 
         /** @var $validator \Magento\Framework\Validator\DataObject */
         $validator->addRule(
