@@ -214,6 +214,7 @@ define([
                     this.reload(storageInvalidation.keys(), false);
                 }
             }
+
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
 

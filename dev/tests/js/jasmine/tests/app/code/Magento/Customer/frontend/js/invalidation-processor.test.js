@@ -17,6 +17,13 @@ define([
             processor = new Constr({
                 name: 'processor'
             });
+            processor.invalidationRules = {
+                'website-rule': {
+                    'Magento_Customer/js/invalidation-rules/website-rule': {
+                        process: jasmine.createSpy()
+                    }
+                }
+            };
             done();
         });
     });
@@ -26,15 +33,7 @@ define([
         describe('"process" method', function () {
             it('record status is 1', function () {
                 var requireTmp = require;
-
-                processor.invalidationRules = {
-                    'website-rule': {
-                        'Magento_Customer/js/invalidation-rules/website-rule': {
-                            process: jasmine.createSpy()
-                        }
-                    }
-                };
-
+                /* eslint-disable no-global-assign */
                 require = jasmine.createSpy();
                 processor.process();
 
