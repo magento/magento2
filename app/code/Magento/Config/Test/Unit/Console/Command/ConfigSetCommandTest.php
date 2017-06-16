@@ -5,13 +5,11 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command;
 
-use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -40,11 +38,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $changeDetectorMock;
 
     /**
-     * @var Hash|Mock
-     */
-    private $hashMock;
-
-    /**
      * @var ProcessorFacadeFactory|Mock
      */
     private $processorFacadeFactoryMock;
@@ -65,9 +58,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->hashMock = $this->getMockBuilder(Hash::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -78,7 +68,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
             $this->changeDetectorMock,
-            $this->hashMock,
             $this->processorFacadeFactoryMock
         );
     }
@@ -99,9 +88,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function ($function) {
                 return $function();
             });
-        $this->hashMock->expects($this->once())
-            ->method('regenerate')
-            ->with(System::CONFIG_TYPE);
 
         $tester = new CommandTester($this->command);
         $tester->execute([

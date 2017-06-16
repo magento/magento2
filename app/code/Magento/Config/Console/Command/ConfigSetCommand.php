@@ -8,7 +8,6 @@ namespace Magento\Config\Console\Command;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -47,13 +46,6 @@ class ConfigSetCommand extends Command
     private $changeDetector;
 
     /**
-     * The hash manager.
-     *
-     * @var Hash
-     */
-    private $hash;
-
-    /**
      * The factory for processor facade.
      *
      * @var ProcessorFacadeFactory
@@ -63,18 +55,15 @@ class ConfigSetCommand extends Command
     /**
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param ChangeDetector $changeDetector The config change detector
-     * @param Hash $hash The hash manager
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
      */
     public function __construct(
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
         ChangeDetector $changeDetector,
-        Hash $hash,
         ProcessorFacadeFactory $processorFacadeFactory
     ) {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
-        $this->hash = $hash;
         $this->processorFacadeFactory = $processorFacadeFactory;
 
         parent::__construct();
@@ -145,8 +134,6 @@ class ConfigSetCommand extends Command
                     $input->getOption(static::OPTION_SCOPE_CODE),
                     $input->getOption(static::OPTION_LOCK)
                 );
-
-                $this->hash->regenerate(System::CONFIG_TYPE);
 
                 return $message;
             });

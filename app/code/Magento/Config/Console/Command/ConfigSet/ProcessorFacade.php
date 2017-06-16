@@ -12,6 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Config\App\Config\Type\System;
 
 /**
  * Processor facade for config:set command.
@@ -47,18 +49,28 @@ class ProcessorFacade
     private $configSetProcessorFactory;
 
     /**
+     * The hash manager.
+     *
+     * @var Hash
+     */
+    private $hash;
+
+    /**
      * @param ValidatorInterface $scopeValidator The scope validator
      * @param PathValidator $pathValidator The path validator
      * @param ConfigSetProcessorFactory $configSetProcessorFactory The factory for config:set processors
+     * @param Hash $hash The hash manager
      */
     public function __construct(
         ValidatorInterface $scopeValidator,
         PathValidator $pathValidator,
-        ConfigSetProcessorFactory $configSetProcessorFactory
+        ConfigSetProcessorFactory $configSetProcessorFactory,
+        Hash $hash
     ) {
         $this->scopeValidator = $scopeValidator;
         $this->pathValidator = $pathValidator;
         $this->configSetProcessorFactory = $configSetProcessorFactory;
+        $this->hash = $hash;
     }
 
     /**
@@ -92,6 +104,8 @@ class ProcessorFacade
 
         // The processing flow depends on --lock option.
         $processor->process($path, $value, $scope, $scopeCode);
+
+        $this->hash->regenerate(System::CONFIG_TYPE);
 
         return $message;
     }
