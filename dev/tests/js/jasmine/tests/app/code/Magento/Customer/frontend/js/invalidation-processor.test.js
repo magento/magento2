@@ -32,8 +32,10 @@ define([
 
         describe('"process" method', function () {
             it('record status is 1', function () {
+                /*eslint no-global-assign: "error"*/
+
                 var requireTmp = require;
-                /* eslint-disable no-global-assign */
+
                 require = jasmine.createSpy();
                 processor.process();
 

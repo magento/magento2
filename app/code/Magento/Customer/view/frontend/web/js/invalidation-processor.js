@@ -10,6 +10,9 @@ define([
     'use strict';
 
     return Element.extend({
+        /**
+         * Initialize object
+         */
         initialize: function () {
             this._super();
             this.process(customerData);
@@ -24,12 +27,12 @@ define([
             _.each(this.invalidationRules, function (rule, ruleName) {
                 _.each(rule, function (ruleArgs, rulePath) {
                     require([rulePath], function (Rule) {
-                        var rule = new Rule(ruleArgs);
+                        var currentRule = new Rule(ruleArgs);
 
-                        if (!_.isFunction(rule.process)) {
+                        if (!_.isFunction(currentRule.process)) {
                             throw new Error('Rule ' + ruleName + ' should implement invalidationProcessor interface');
                         }
-                        rule.process(customerDataObject);
+                        currentRule.process(customerDataObject);
                     });
                 });
             });
