@@ -23,19 +23,31 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $outPut = "data";
         $resultRawMock = $this->getMock(
             \Magento\Framework\Controller\Result\Raw::class,
-            ['setContents'], [], '', false)
-        ;
+            ['setContents'],
+            [],
+            '',
+            false
+        );
         $resultRawFactoryMock = $this->getMock(
             \Magento\Framework\Controller\Result\RawFactory::class,
-            ['create'], [], '', false
+            ['create'],
+            [],
+            '',
+            false
         );
         $layoutFactoryMock = $this->getMock(
             \Magento\Framework\View\LayoutFactory::class,
-            ['create'], [], '', false
+            ['create'],
+            [],
+            '',
+            false
         );
         $layoutMock = $this->getMock(
             \Magento\Framework\View\Layout::class,
-            ['createBlock', 'toHtml'], [], '', false
+            ['createBlock', 'toHtml'],
+            [],
+            '',
+            false
         );
         $layoutFactoryMock->expects($this->once())->method('create')->will($this->returnValue($layoutMock));
         $layoutMock->expects($this->once())->method('createBlock')->with($blockName)->will($this->returnSelf());

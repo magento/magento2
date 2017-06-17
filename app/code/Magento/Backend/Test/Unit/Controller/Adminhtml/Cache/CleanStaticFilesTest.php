@@ -58,7 +58,7 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = $objectHelper->getObject(
             \Magento\Backend\Controller\Adminhtml\Cache\CleanStaticFiles::class,
-            ['context' => $context,]
+            ['context' => $context]
         );
     }
 

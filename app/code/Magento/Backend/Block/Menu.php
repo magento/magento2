@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block;
 
 /**
@@ -146,11 +148,13 @@ class Menu extends \Magento\Backend\Block\Template
     protected function _renderItemCssClass($menuItem, $level)
     {
         $isLast = 0 == $level && (bool)$this->getMenuModel()->isLast($menuItem) ? 'last' : '';
-        $output = ($this->menuItemChecker->isItemActive(
+        $isItemActive = $this->menuItemChecker->isItemActive(
             $this->getActiveItemModel(),
-                $menuItem,
-                $level
-            ) ? '_current _active' : '') .
+            $menuItem,
+            $level
+        ) ? '_current _active' : '';
+
+        $output =  $isItemActive .
             ' ' .
             ($menuItem->hasChildren() ? 'parent' : '') .
             ' ' .
