@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block;
 
 /**
@@ -411,7 +409,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     public function getActiveItemModel()
     {
-        if (is_null($this->_activeItemModel)) {
+        if ($this->_activeItemModel === null) {
             $this->_activeItemModel = $this->getMenuModel()->get($this->getActive());
             if (false == $this->_activeItemModel instanceof \Magento\Backend\Model\Menu\Item) {
                 $this->_activeItemModel = false;

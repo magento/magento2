@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
 class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
