@@ -14,7 +14,7 @@ class Cleaner
     /**
      * @var array
      */
-    private $requestData;
+    protected $requestData;
 
     /**
      * @var array
@@ -24,7 +24,7 @@ class Cleaner
     /**
      * @var array
      */
-    private $mappedFilters;
+    protected $mappedFilters;
 
     /**
      * @var AggregationStatus
@@ -154,7 +154,7 @@ class Cleaner
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function cleanFilter($filterName)
+    protected function cleanFilter($filterName)
     {
         if (!isset($this->requestData['filters'][$filterName])) {
             throw new \Exception('Filter ' . $filterName . ' does not exist');
@@ -220,7 +220,7 @@ class Cleaner
      * @param array $filterReference
      * @return array
      */
-    private function processFilterReference($filterReference)
+    protected function processFilterReference($filterReference)
     {
         foreach ($filterReference as $key => $value) {
             $this->cleanFilter($value['ref']);
