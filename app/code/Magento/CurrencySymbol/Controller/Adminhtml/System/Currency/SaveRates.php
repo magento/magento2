@@ -22,7 +22,8 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
                 foreach ($data as $currencyCode => $rate) {
                     foreach ($rate as $currencyTo => $value) {
                         $value = abs($this->_objectManager->get(
-                            \Magento\Framework\Locale\FormatInterface::class)->getNumber($value));
+                            \Magento\Framework\Locale\FormatInterface::class)->getNumber($value)
+                        );
                         $data[$currencyCode][$currencyTo] = $value;
                         if ($value == 0) {
                             $this->messageManager->addWarning(
