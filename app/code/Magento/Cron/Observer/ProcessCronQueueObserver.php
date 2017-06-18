@@ -59,7 +59,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    protected $pendingSchedules;
+    protected $_pendingSchedules;
 
     /**
      * @var \Magento\Cron\Model\ConfigInterface
@@ -109,7 +109,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var \Magento\Framework\App\State
@@ -308,13 +308,13 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     protected function _getPendingSchedules()
     {
-        if (!$this->pendingSchedules) {
-            $this->pendingSchedules = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
+        if (!$this->_pendingSchedules) {
+            $this->_pendingSchedules = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
                 'status',
                 Schedule::STATUS_PENDING
             )->load();
         }
-        return $this->pendingSchedules;
+        return $this->_pendingSchedules;
     }
 
     /**
