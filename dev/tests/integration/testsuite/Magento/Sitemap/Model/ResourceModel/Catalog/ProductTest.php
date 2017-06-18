@@ -17,8 +17,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Base product image path
      */
-    const BASE_IMAGE_PATH = 'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff';    
-
+    const BASE_IMAGE_PATH = 'http://localhost/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff';
+    
     /**
      * Test getCollection None images
      * 1) Check that image attributes were not loaded
@@ -190,4 +190,3 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
     }
 }
-
