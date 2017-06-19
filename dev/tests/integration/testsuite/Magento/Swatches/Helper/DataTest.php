@@ -6,6 +6,7 @@
 
 namespace Magento\Swatches\Helper;
 
+// @codingStandardsIgnoreStart
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
@@ -30,6 +31,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestFramework\Helper\Bootstrap;
+// @codingStandardsIgnoreEnd
 
 class DataTest extends AbstractController
 {
@@ -69,7 +71,6 @@ class DataTest extends AbstractController
         self::imageFixtureRollback();
         parent::tearDownAfterClass();
     }
-
 
     /**
      * Data provider for testSwatchReplacedByImage.
