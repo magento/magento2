@@ -57,7 +57,7 @@ class Date extends Column
                     $date = $this->timezone->date(new \DateTime($item[$this->getData('name')]));
                     $timezone = isset($this->getConfiguration()['timezone'])
                         ? $this->booleanUtils->convert($this->getConfiguration()['timezone'])
-                        : false;
+                        : true;
                     if (!$timezone) {
                         $date = new \DateTime($item[$this->getData('name')]);
                     }
