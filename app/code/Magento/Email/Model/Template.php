@@ -5,25 +5,10 @@
  */
 namespace Magento\Email\Model;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Template model
- *
- * Example:
- *
- * // Loading of template
- * \Magento\Email\Model\TemplateFactory $templateFactory
- * $templateFactory->create()->load($this->_scopeConfig->getValue(
- *  'path_to_email_template_id_config',
- *  \Magento\Store\Model\ScopeInterface::SCOPE_STORE
- *  ));
- * $variables = array(
- *    'someObject' => $this->_coreResourceEmailTemplate
- *    'someString' => 'Some string value'
- * );
- * $emailTemplate->send('some@domain.com', 'Name Of User', $variables);
  *
  * @method \Magento\Email\Model\ResourceModel\Template _getResource()
  * @method \Magento\Email\Model\ResourceModel\Template getResource()
@@ -62,7 +47,10 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
-     * Config path to mail sending setting that shows if email communications are disabled
+     * Config path to mail sending setting that shows if email communications are disabled.
+     *
+     * @deprecated
+     * @see \Magento\Email\Model\Plugin\TransportInterfacePlugin::XML_PATH_SYSTEM_SMTP_DISABLE
      */
     const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 
@@ -190,14 +178,13 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     }
 
     /**
-     * Return true if this template can be used for sending queue as main template
+     * Return true if this template can be used for sending queue as main template.
      *
      * @return bool
      */
     public function isValidForSend()
     {
-        return !$this->scopeConfig->isSetFlag(Template::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)
-            && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
+        return $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
     }
 
     /**

@@ -6,6 +6,7 @@
 
 namespace Magento\Backend\Test\Fixture\Source;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Mtf\Fixture\DataSource;
 
 /**
@@ -13,6 +14,7 @@ use Magento\Mtf\Fixture\DataSource;
  *
  * Data keys:
  *  - pattern (Format a local time/date with delta, e.g. 'm/d/Y -3 days' = current day - 3 days)
+ *  - apply_timezone (true if it is needed to apply timezone)
  */
 class Date extends DataSource
 {
@@ -35,7 +37,17 @@ class Date extends DataSource
             if (!$timestamp) {
                 throw new \Exception('Invalid date format for "' . $this->params['attribute_code'] . '" field');
             }
-            $date = date(str_replace($delta, '', $data['pattern']), $timestamp);
+            if (isset($data['apply_timezone']) && $data['apply_timezone'] === true) {
+
+                $timezone = ObjectManager::getInstance()
+                    ->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+                $date = new \DateTime();
+                $date->setTimestamp($timestamp);
+                $date->setTimezone(new \DateTimeZone($timezone->getConfigTimezone()));
+                $date = $date->format(str_replace($delta, '', $data['pattern']));
+            } else {
+                $date = date(str_replace($delta, '', $data['pattern']), $timestamp);
+            }
             if (!$date) {
                 $date = date('m/d/Y');
             }

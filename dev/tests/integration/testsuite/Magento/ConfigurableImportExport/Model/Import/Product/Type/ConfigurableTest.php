@@ -37,6 +37,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMetadata;
 
+    /**
+     * Configurable product test Name.
+     */
+    const TEST_PRODUCT_NAME = 'Configurable 1';
+
+    /**
+     * Configurable product options SKU list
+     *
+     * @var array
+     */
+    protected $optionSkuList = ['Configurable 1-Option 2-Option 1'];
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -155,6 +167,65 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('values', $optionData);
             $valuesData = $optionData['values'];
             $this->assertEquals(2, count($valuesData));
+        }
+    }
+
+    /**
+     * Tests that after import configurable products super attributes retain ordering.
+     *
+     * @magentoDataFixture Magento/ConfigurableImportExport/Model/Import/_files/configurable_attributes.php
+     * @magentoAppArea adminhtml
+     */
+    public function testConfigurableWithAttributesSortingImport()
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/../../_files/import_configurable_with_attributes_sorting.csv';
+        $filesystem = $this->objectManager->create(
+            \Magento\Framework\Filesystem::class
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->model->setSource($source)
+            ->setParameters(
+                [
+                    'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                    'entity' => 'catalog_product'
+                ]
+            )
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->model->importData();
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
+        $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
+        $this->assertTrue(is_numeric($productId));
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->get(ProductRepositoryInterface::class)->getById($productId);
+        $configurableProductOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
+
+        $attributesPositionExpectation = [
+            'test_attribute_2' => 0,
+            'test_attribute_1' => 1,
+        ];
+
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableProductOption */
+        foreach ($configurableProductOptions as $configurableProductOption) {
+            $productAttribute = $configurableProductOption->getProductAttribute();
+            $productAttributeCode = $productAttribute->getAttributeCode();
+
+            if (isset($attributesPositionExpectation[$productAttributeCode])) {
+                $expectedPosition = $attributesPositionExpectation[$productAttributeCode];
+                $this->assertEquals($expectedPosition, $configurableProductOption->getPosition());
+            }
         }
     }
 }
