@@ -9,6 +9,7 @@ use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -90,44 +91,28 @@ class Save extends Action
         $requestData = $this->getRequest()->getParam('general');
         if ($this->getRequest()->isPost() && $requestData) {
             try {
-                $sourceId = $this->processSave($requestData);
+                $sourceId = !empty($requestData[SourceInterface::SOURCE_ID])
+                    ? $requestData[SourceInterface::SOURCE_ID] : null;
 
+                $sourceId = $this->processSave($sourceId, $requestData);
                 // Keep data for plugins on Save controller. Now we can not call separate services from one form.
                 $this->registry->register(self::REGISTRY_SOURCE_ID_KEY, $sourceId);
 
                 $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
-                if ($this->getRequest()->getParam('back')) {
-                    $resultRedirect->setPath('*/*/edit', [
-                        SourceInterface::SOURCE_ID => $sourceId,
-                        '_current' => true,
-                    ]);
-                } elseif ($this->getRequest()->getParam('redirect_to_new')) {
-                    $resultRedirect->setPath('*/*/new', [
-                        '_current' => true,
-                    ]);
-                } else {
-                    $resultRedirect->setPath('*/*/');
-                }
+                $this->processRedirectAfterSuccessSave($resultRedirect, $sourceId);
+
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
-                $resultRedirect->setPath('*/*/');
+                $this->processRedirectAfterFailureSave($resultRedirect);
             } catch (CouldNotSaveException $e) {
-                $errorMessage = $e->getMessage();
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             } catch (InputException $e) {
-                $errorMessage = $e->getMessage();
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             } catch (Exception $e) {
-                $errorMessage = __('Could not save source');
-            }
-            if (isset($errorMessage)) {
-                $this->messageManager->addErrorMessage($errorMessage);
-                if (empty($sourceId)) {
-                    $resultRedirect->setPath('*/*/');
-                } else {
-                    $resultRedirect->setPath('*/*/edit', [
-                        SourceInterface::SOURCE_ID => $sourceId,
-                        '_current' => true,
-                    ]);
-                }
+                $this->messageManager->addErrorMessage(__('Could not save source'));
+                $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             }
         } else {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
@@ -137,14 +122,12 @@ class Save extends Action
     }
 
     /**
+     * @param $sourceId
      * @param array $requestData
      * @return int
      */
-    private function processSave(array $requestData)
+    private function processSave($sourceId, array $requestData)
     {
-        $sourceId = !empty($requestData[SourceInterface::SOURCE_ID])
-            ? $requestData[SourceInterface::SOURCE_ID] : null;
-
         if ($sourceId) {
             $source = $this->sourceRepository->get($sourceId);
         } else {
@@ -156,5 +139,43 @@ class Save extends Action
 
         $sourceId = $this->sourceRepository->save($source);
         return $sourceId;
+    }
+
+    /**
+     * @param Redirect $resultRedirect
+     * @param int $sourceId
+     * @return void
+     */
+    private function processRedirectAfterSuccessSave(Redirect $resultRedirect, $sourceId)
+    {
+        if ($this->getRequest()->getParam('back')) {
+            $resultRedirect->setPath('*/*/edit', [
+                SourceInterface::SOURCE_ID => $sourceId,
+                '_current' => true,
+            ]);
+        } elseif ($this->getRequest()->getParam('redirect_to_new')) {
+            $resultRedirect->setPath('*/*/new', [
+                '_current' => true,
+            ]);
+        } else {
+            $resultRedirect->setPath('*/*/');
+        }
+    }
+
+    /**
+     * @param $resultRedirect
+     * @param int|null $sourceId
+     * @return void
+     */
+    private function processRedirectAfterFailureSave(Redirect $resultRedirect, $sourceId = null)
+    {
+        if (null === $sourceId) {
+            $resultRedirect->setPath('*/*/');
+        } else {
+            $resultRedirect->setPath('*/*/edit', [
+                SourceInterface::SOURCE_ID => $sourceId,
+                '_current' => true,
+            ]);
+        }
     }
 }

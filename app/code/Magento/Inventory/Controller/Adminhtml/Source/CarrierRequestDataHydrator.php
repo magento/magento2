@@ -78,6 +78,7 @@ class CarrierRequestDataHydrator
 
     /**
      * @param array $carrierCodes
+     * @return void
      * @throws InputException
      */
     private function checkCarrierCodes(array $carrierCodes)
