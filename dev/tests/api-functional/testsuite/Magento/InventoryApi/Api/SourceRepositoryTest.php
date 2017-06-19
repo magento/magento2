@@ -194,6 +194,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $source->setEnabled($enabled);
         $source->setPriority($priority);
         $source->setCarrierLinks($carriers);
+        $source->setUseDefaultCarrierConfig(true);
 
         return $source;
     }
