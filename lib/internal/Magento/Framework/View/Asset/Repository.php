@@ -270,7 +270,6 @@ class Repository
                     'areaType' => $area,
                     'themePath' => $themePath,
                     'localeCode' => $locale,
-                    'isSecure' => $isSecure
                 ]
             );
         }
