@@ -33,21 +33,25 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
 
     /**
      * @var \Magento\Elasticsearch\Model\Config
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $clientConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $searchIndexNameResolver;
 
     /**
      * @var string
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $indexerId;
 
@@ -72,6 +76,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
      * @param string $indexerId
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param QueryContainer|null $queryContainer
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,

@@ -50,6 +50,7 @@ class DataProviderFactory
      * @param DataProviderInterface $dataProvider
      * @param QueryContainer $query
      * @return DataProviderInterface
+     * @throws \LogicException when the query is missing but it required according to the QueryAwareInterface
      */
     public function create(DataProviderInterface $dataProvider, QueryContainer $query = null)
     {

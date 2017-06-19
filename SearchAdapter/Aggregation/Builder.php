@@ -61,10 +61,16 @@ class Builder
     }
 
     /**
+     * Builds aggregations from the search request.
+     *
+     * This method iterates through buckets and builds all aggregations one by one, passing buckets and relative
+     * data into bucket aggregation builders which are responsible for aggregation calculation.
+     *
      * @param RequestInterface $request
      * @param array $queryResult
      * @return array
-     * @throws \LogicException for the case when not required fields are filled
+     * @throws \LogicException thrown by DataProviderFactory for validation issues
+     * @see \Magento\Elasticsearch\SearchAdapter\Aggregation\DataProviderFactory
      */
     public function build(RequestInterface $request, array $queryResult)
     {
