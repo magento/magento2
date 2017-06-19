@@ -49,7 +49,8 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $customer->setExtensionAttributes($customerExtension);
         $encodedCustomerData = json_decode($this->encoder->encode('customer.created', $customer), true);
         $createdAt = $customer->getCreatedAt();
-        $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt), true);
+        $updatedAt = $customer->getUpdatedAt();
+        $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt, $updatedAt), true);
         $this->assertEquals($expectedEncodedCustomerData, $encodedCustomerData);
     }
 
@@ -69,13 +70,14 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $customer->setExtensionAttributes($customerExtension);
         $encodedCustomerData = json_decode($this->encoder->encode('customer.list.retrieved', [$customer]), true);
         $createdAt = $customer->getCreatedAt();
-        $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt), true);
+        $updatedAt = $customer->getUpdatedAt();
+        $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt, $updatedAt), true);
         $this->assertEquals($expectedEncodedCustomerData, $encodedCustomerData[0]);
     }
 
     public function testDecode()
     {
-        $encodedMessage = $this->getCustomerDataAsJson('2015-07-22 12:43:36');
+        $encodedMessage = $this->getCustomerDataAsJson('2015-07-22 12:43:36', '2015-07-22 12:45:36');
         /** @var \Magento\Customer\Api\Data\CustomerInterface $decodedCustomerObject */
         $decodedCustomerObject = $this->encoder->decode('customer.created', $encodedMessage);
         $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $decodedCustomerObject);
@@ -149,9 +151,10 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      * Get fixture customer data in Json format
      *
      * @param string $createdAt
+     * @param string $updatedAt
      * @return string
      */
-    protected function getCustomerDataAsJson($createdAt)
+    protected function getCustomerDataAsJson($createdAt, $updatedAt)
     {
         return <<<JSON
 {
@@ -160,7 +163,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     "default_billing": "1",
     "default_shipping": "1",
     "created_at": "{$createdAt}",
-    "updated_at": "{$createdAt}",
+    "updated_at": "{$updatedAt}",
     "email": "customer@example.com",
     "firstname": "John",
     "lastname": "Smith",
