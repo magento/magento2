@@ -121,24 +121,21 @@ class AssertCustomerForm extends AbstractConstraint
      */
     private function assertCustomerGroupName(Customer $customer, array $formData)
     {
-        $isCustomerGroupNotEmpty = false;
         $customerGroupName = $customer->getGroupId();
 
-        if ($customerGroupName && !empty($formData['customer']['group_id'])) {
-            $isCustomerGroupNotEmpty = true;
-        }
-
-        \PHPUnit_Framework_Assert::assertTrue(
-            $isCustomerGroupNotEmpty,
-            'Customer Group value is empty.'
-        );
-
-        if ($isCustomerGroupNotEmpty) {
-            \PHPUnit_Framework_Assert::assertContains(
-                $customerGroupName,
+        if ($customerGroupName) {
+            \PHPUnit_Framework_Assert::assertNotEmpty(
                 $formData['customer']['group_id'],
-                'Customer Group name is incorrect.'
+                'Customer Group value is empty.'
             );
+
+            if (!empty($formData['customer']['group_id'])) {
+                \PHPUnit_Framework_Assert::assertContains(
+                    $customerGroupName,
+                    $formData['customer']['group_id'],
+                    'Customer Group name is incorrect.'
+                );
+            }
         }
     }
 
