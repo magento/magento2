@@ -5,10 +5,12 @@
  */
 namespace Magento\Inventory\Controller\Adminhtml\Source;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -41,9 +43,9 @@ class Save extends Action
     private $sourceRepository;
 
     /**
-     * @var HydratorInterface
+     * @var DataObjectHelper
      */
-    private $hydrator;
+    private $dataObjectHelper;
 
     /**
      * @var Registry
@@ -59,7 +61,7 @@ class Save extends Action
      * @param Context $context
      * @param SourceInterfaceFactory $sourceFactory
      * @param SourceRepositoryInterface $sourceRepository
-     * @param HydratorInterface $hydrator
+     * @param DataObjectHelper $dataObjectHelper
      * @param CarrierRequestDataHydrator $carrierRequestDataHydrator
      * @param Registry $registry
      */
@@ -67,14 +69,14 @@ class Save extends Action
         Context $context,
         SourceInterfaceFactory $sourceFactory,
         SourceRepositoryInterface $sourceRepository,
-        HydratorInterface $hydrator,
+        DataObjectHelper $dataObjectHelper,
         Registry $registry,
         CarrierRequestDataHydrator $carrierRequestDataHydrator
     ) {
         parent::__construct($context);
         $this->sourceFactory = $sourceFactory;
         $this->sourceRepository = $sourceRepository;
-        $this->hydrator = $hydrator;
+        $this->dataObjectHelper = $dataObjectHelper;
         $this->registry = $registry;
         $this->carrierRequestDataHydrator = $carrierRequestDataHydrator;
     }
@@ -110,7 +112,14 @@ class Save extends Action
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $resultRedirect->setPath('*/*/');
             } catch (CouldNotSaveException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
+                $errorMessage = $e->getMessage();
+            } catch (InputException $e) {
+                $errorMessage = $e->getMessage();
+            } catch (Exception $e) {
+                $errorMessage = __('Could not save source');
+            }
+            if (isset($errorMessage)) {
+                $this->messageManager->addErrorMessage($errorMessage);
                 if (empty($sourceId)) {
                     $resultRedirect->setPath('*/*/');
                 } else {
@@ -142,7 +151,7 @@ class Save extends Action
             /** @var SourceInterface $source */
             $source = $this->sourceFactory->create();
         }
-        $source = $this->hydrator->hydrate($source, $requestData);
+        $source = $this->dataObjectHelper->populateWithArray($source, $requestData, SourceInterface::class);
         $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData);
 
         $sourceId = $this->sourceRepository->save($source);

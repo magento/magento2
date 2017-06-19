@@ -5,6 +5,7 @@
  */
 namespace Magento\Inventory\Model\ResourceModel;
 
+use Exception;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -66,7 +67,7 @@ class Source extends AbstractDb
             /** @var SourceInterface $object */
             $this->sourceCarrierLinkManagement->saveCarrierLinksBySource($object);
             $connection->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $connection->rollBack();
             throw $e;
         }

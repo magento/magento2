@@ -82,7 +82,7 @@ class CarrierRequestDataHydrator
      */
     private function checkCarrierCodes(array $carrierCodes)
     {
-        $availableCarriers = $this->shippingConfig->getActiveCarriers();
+        $availableCarriers = $this->shippingConfig->getAllCarriers();
 
         if (count(array_intersect_key(array_flip($carrierCodes), $availableCarriers)) !== count($carrierCodes)) {
             throw new InputException(__('Wrong carrier codes data'));

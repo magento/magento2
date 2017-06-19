@@ -43,7 +43,7 @@ class CarrierSource implements OptionSourceInterface
     public function toOptionArray()
     {
         if (null === $this->sourceData) {
-            $carriers = $this->shippingConfig->getActiveCarriers();
+            $carriers = $this->shippingConfig->getAllCarriers();
             foreach ($carriers as $carrier) {
                 $this->sourceData[] = [
                     'value' => $carrier->getCarrierCode(),

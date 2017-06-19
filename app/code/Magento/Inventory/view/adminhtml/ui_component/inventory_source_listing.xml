@@ -267,7 +267,6 @@
             </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction">
-            <!-- TODO: adapt to new syntaxis -->
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="editUrlPath" xsi:type="string">inventory/source/edit</item>
