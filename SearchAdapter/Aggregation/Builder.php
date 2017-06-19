@@ -68,10 +68,6 @@ class Builder
      */
     public function build(RequestInterface $request, array $queryResult)
     {
-        if (null === $this->query) {
-            throw new \LogicException('Query is the required field and must be set to the builder');
-        }
-
         $aggregations = [];
         $buckets = $request->getAggregation();
 

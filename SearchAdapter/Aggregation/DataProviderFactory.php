@@ -36,21 +36,32 @@ class DataProviderFactory
      * Recreates an instance of the DataProviderInterface in order to support QueryContainer interface
      * and add a QueryContainer to the DataProvider
      *
+     * The Query is an optional argument as it's not required to pass the QueryContainer for data providers
+     * who not implementing QueryAwareInterface, but the method is also responsible for checking
+     * if the query is passed for those who expects it.
+     *
      * IMPORTANT: This code will not work correctly with virtual types,
      * so please avoid usage of virtual types and QueryAwareInterface for the same object.
      *
      * This happens as virtual type ain't create its own class,
-     * and therefore get_class will return a name of the origin class
+     * and therefore get_class will return a name of the original class
      * which will be recreated with its default configuration.
      *
      * @param DataProviderInterface $dataProvider
      * @param QueryContainer $query
      * @return DataProviderInterface
      */
-    public function create(DataProviderInterface $dataProvider, QueryContainer $query)
+    public function create(DataProviderInterface $dataProvider, QueryContainer $query = null)
     {
         $result = $dataProvider;
         if ($dataProvider instanceof QueryAwareInterface) {
+            if (null === $query) {
+                throw new \LogicException(
+                    'Instance of ' . QueryAwareInterface::class . ' must be configured with a search query,'
+                    . ' but the query is empty'
+                );
+            }
+
             $className = get_class($dataProvider);
             $result = $this->objectManager->create($className, ['queryContainer' => $query]);
         }

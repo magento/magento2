@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
 use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
@@ -155,11 +156,13 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $dimension = current($dimensions);
         $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
 
-        return $this->intervalFactory->create([
-            'entityIds' => $entityIds,
-            'storeId' => $storeId,
-            'fieldName' => $fieldName
-        ]);
+        return $this->intervalFactory->create(
+            [
+                'entityIds' => $entityIds,
+                'storeId' => $storeId,
+                'fieldName' => $fieldName,
+            ]
+        );
     }
 
     /**
@@ -191,6 +194,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
             $key = intval($bucket['key'] / $range + 1);
             $result[$key] = $bucket['doc_count'];
         }
+
         return $result;
     }
 
@@ -213,6 +217,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
                 ];
             }
         }
+
         return $data;
     }
 

@@ -5,7 +5,6 @@
  */
 namespace Magento\Elasticsearch\Model\Client;
 
-use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
