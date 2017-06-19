@@ -159,7 +159,7 @@ class InstallData implements InstallDataInterface
         }
 
         $regionId = '';
-        /** @var  $item */
+        /** @var \Magento\Directory\Model\Region $item */
         $item = $this->regionCollection->getItemByColumnValue('code', $regionCode);
         if ($item) {
             $regionId = $item->getId();
