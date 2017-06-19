@@ -34,7 +34,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     /**
      * If there are no currently locked jobs, locking one of them should succeed
      */
-    public function testTryLockJob_NoLockedJobsSucceeds()
+    public function testTryLockJobNoLockedJobsSucceeds()
     {
         for ($i = 1; $i < 6; $i++) {
             $this->createSchedule("test_job", Schedule::STATUS_PENDING, 60 * $i);
@@ -47,7 +47,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     /**
      * If the job is already locked, attempting to lock it again should fail
      */
-    public function testTryLockJob_AlreadyLockedFails()
+    public function testTryLockJobAlreadyLockedFails()
     {
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_RUNNING);
 
@@ -57,7 +57,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     /**
      * If there's a job already locked, should not be able to lock another job
      */
-    public function testTryLockJob_OtherLockedFails()
+    public function testTryLockJobOtherLockedFails()
     {
         $this->createSchedule("test_job", Schedule::STATUS_RUNNING);
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING, 60);
@@ -68,7 +68,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     /**
      * Should be able to lock a job if a job with a different code is locked
      */
-    public function testTryLockJob_DifferentJobLocked()
+    public function testTryLockJobDifferentJobLocked()
     {
         $this->createSchedule("test_job_other", Schedule::STATUS_RUNNING);
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);
