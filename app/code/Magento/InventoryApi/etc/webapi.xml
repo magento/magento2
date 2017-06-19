@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/inventory/source/:sourceId" method="GET">
+        <service class="Magento\InventoryApi\Api\SourceRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/source/:sourceId" method="PUT">
+        <service class="Magento\InventoryApi\Api\SourceRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source_edit"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/source" method="POST">
+        <service class="Magento\InventoryApi\Api\SourceRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source_edit"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/source/search" method="GET">
+        <service class="Magento\InventoryApi\Api\SourceRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+</routes>
