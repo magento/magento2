@@ -52,8 +52,8 @@ define([
                 this.data = ko.observable({});
             }
 
-            this.initCustomerDataReloadListener()
-                .initLocalStorage()
+            this.initLocalStorage()
+                .initCustomerDataReloadListener()
                 .cachesDataFromLocalStorage()
                 .initDataListener()
                 .initProvideStorage()
@@ -68,14 +68,21 @@ define([
          * @return Chainable.
          */
         initCustomerDataReloadListener: function () {
-            $(document).on('customer-data-invalidate', function (event, sections) {
-                if (_.isEmpty(sections) || _.contains()) {
-                    this.data({});
-                    localStorage.removeItem('product_data_storage');
-                }
-            }.bind(this));
+            $(document).on('customer-data-invalidate', this._flushProductStorage.bind(this));
 
             return this;
+        },
+
+        /**
+         * Flush product storage
+         *
+         * @private
+         * @return void
+         */
+        _flushProductStorage: function (event, sections) {
+            if (_.isEmpty(sections) || _.contains(sections, 'product_data_storage')) {
+                window.localStorage.removeItem('product_data_storage');
+            }
         },
 
         /**

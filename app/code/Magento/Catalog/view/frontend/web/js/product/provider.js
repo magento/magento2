@@ -19,7 +19,7 @@ define([
             },
             productStorageConfig: {
                 namespace: 'product_data_storage',
-                customerDataProvider: 'products_render_info',
+                customerDataProvider: 'product_data_storage',
                 updateRequestConfig: {
                     url: '',
                     method: 'GET',
