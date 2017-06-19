@@ -40,7 +40,7 @@ class TotalsReader
     public function fetch(\Magento\Quote\Model\Quote $quote, array $total)
     {
         $output = [];
-        $total = $this->totalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class)->setData($total);
+        $total = $this->totalFactory->create()->setData($total);
         /** @var ReaderInterface $reader */
         foreach ($this->collectorList->getCollectors($quote->getStoreId()) as $reader) {
             $data = $reader->fetch($quote, $total);
@@ -73,14 +73,12 @@ class TotalsReader
         if (count(array_column($total, 'code')) > 0) {
             $totals = [];
             foreach ($total as $item) {
-                $totals[] = $this->totalFactory->create(
-                    \Magento\Quote\Model\Quote\Address\Total::class
-                )->setData($item);
+                $totals[] = $this->totalFactory->create()->setData($item);
             }
             return $totals;
         }
 
-        return $this->totalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class)->setData($total);
+        return $this->totalFactory->create()->setData($total);
     }
 
     /**
