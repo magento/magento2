@@ -52,7 +52,7 @@ define([
                 this.data = ko.observable({});
             }
 
-            this.initCustomerDataInvalidateListener()
+            this.initCustomerDataReloadListener()
                 .initLocalStorage()
                 .cachesDataFromLocalStorage()
                 .initDataListener()
@@ -63,14 +63,15 @@ define([
         },
 
         /**
-         * Initialize listener to customer data invalidation
+         * Initialize listener to customer data reload
          *
          * @return Chainable.
          */
-        initCustomerDataInvalidateListener: function () {
+        initCustomerDataReloadListener: function () {
             $(document).on('customer-data-invalidate', function (event, sections) {
-                if (_.contains(sections, '*')) {
+                if (_.isEmpty(sections) || _.contains()) {
                     this.data({});
+                    localStorage.removeItem('product_data_storage');
                 }
             }.bind(this));
 
@@ -181,7 +182,10 @@ define([
                 id;
 
             for (id in ids) {
-                if (!data.hasOwnProperty(id)) {
+                if (!data.hasOwnProperty(id) ||
+                    data[id]['currency_code'] !== currency ||
+                    data[id]['store_id'] !== store
+                ) {
                     return false;
                 }
             }

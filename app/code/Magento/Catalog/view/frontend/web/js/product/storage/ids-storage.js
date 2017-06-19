@@ -28,7 +28,8 @@ define([
                 this.data = ko.observable({});
             }
 
-            this.initLocalStorage()
+            this.initCustomerDataReloadListener()
+                .initLocalStorage()
                 .cachesDataFromLocalStorage()
                 .initDataListener();
 
@@ -71,6 +72,22 @@ define([
          */
         initDataListener: function () {
             this.data.subscribe(this.internalDataHandler.bind(this));
+        },
+
+        /**
+         * Initialize listener to customer data reload
+         *
+         * @return Chainable.
+         */
+        initCustomerDataReloadListener: function () {
+            $(document).on('customer-data-reload', function (event, sections) {
+                if (_.isEmpty(sections) || _.contains(sections, this.namespace)) {
+                    localStorage.removeItem(this.namespace);
+                    this.data();
+                }
+            }.bind(this));
+
+            return this;
         },
 
         /**
