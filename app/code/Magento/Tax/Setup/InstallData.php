@@ -147,7 +147,7 @@ class InstallData implements InstallDataInterface
      * Return region id by code.
      * 
      * @param string $regionCode
-     * @return mixed
+     * @return string
      */
     private function getRegionId($regionCode)
     {
@@ -158,6 +158,13 @@ class InstallData implements InstallDataInterface
                 ->addRegionCodeOrNameFilter(['CA', 'NY']);
         }
 
-        return $this->regionCollection->getItemByColumnValue('code', $regionCode)->getId();
+        $regionId = '';
+        /** @var  $item */
+        $item = $this->regionCollection->getItemByColumnValue('code', $regionCode);
+        if ($item) {
+            $regionId = $item->getId();
+        }
+
+        return $regionId;
     }
 }
