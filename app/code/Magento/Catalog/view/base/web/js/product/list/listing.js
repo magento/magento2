@@ -13,7 +13,7 @@ define([
     return Listing.extend({
         defaults: {
             additionalClasses: '',
-            filteredRows: ko.observable(),
+            filteredRows: {},
             limit: 5,
             shouldMergeFromSource: ['displayMode', 'additionalClasses'],
             listens: {
@@ -25,6 +25,7 @@ define([
         /** @inheritdoc */
         initialize: function () {
             this._super();
+            this.filteredRows = ko.observable();
             this.initializeListingConfig()
                 .initProductsLimit();
             this.hideLoader();
