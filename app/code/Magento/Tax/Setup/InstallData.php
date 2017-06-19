@@ -7,7 +7,6 @@
 namespace Magento\Tax\Setup;
 
 use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -46,12 +45,10 @@ class InstallData implements InstallDataInterface
      */
     public function __construct(
         TaxSetupFactory $taxSetupFactory,
-        CollectionFactory $collectionFactory = null
+        CollectionFactory $collectionFactory
     ) {
         $this->taxSetupFactory = $taxSetupFactory;
-        $this->regionCollectionFactory = $collectionFactory ?: ObjectManager::getInstance()->get(
-            \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
-        );
+        $this->regionCollectionFactory = $collectionFactory;
     }
 
     /**
