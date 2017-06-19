@@ -7,15 +7,12 @@
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="product_columns" class="Magento\Catalog\Ui\Component\Listing\Columns">
-        <column name="qty">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="label" xsi:type="string" translate="true">Quantity</item>
-                    <item name="sortOrder" xsi:type="number">75</item>
-                </item>
-            </argument>
+        <column name="qty" sortOrder="75">
+            <settings>
+                <addField>true</addField>
+                <filter>textRange</filter>
+                <label translate="true">Quantity</label>
+            </settings>
         </column>
     </columns>
 </listing>

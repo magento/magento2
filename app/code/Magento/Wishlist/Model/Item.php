@@ -32,6 +32,8 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Item extends AbstractModel implements ItemInterface
 {

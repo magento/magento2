@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\ResourceModel;
 
 /**
  * Class GridPool
+ * @api
  */
 class GridPool
 {

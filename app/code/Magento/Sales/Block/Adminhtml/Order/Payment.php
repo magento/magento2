@@ -10,6 +10,7 @@ use Magento\Payment\Model\Info;
 /**
  * Adminhtml sales order payment information
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Payment extends \Magento\Backend\Block\Template

@@ -41,9 +41,11 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
+            var iframeHostName;
+
             // prevent cross origin iframe content reading
             if ($(element).prop('tagName') === 'IFRAME') {
-                var iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                iframeHostName = $('<a>').prop('href', $(element).prop('src'))
                                              .prop('hostname');
 
                 if (window.location.hostname !== iframeHostName) {

@@ -6,10 +6,11 @@
 namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Config\Model\Config;
 use Magento\Framework\HTTP\ZendClient;
-use Magento\Store\Model\Store;
+use Magento\Config\Model\Config;
 use Psr\Log\LoggerInterface;
+use Magento\Store\Model\Store;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 
 /**
  * Command notifies MBI about that data collection was finished.
@@ -37,6 +38,11 @@ class NotifyDataChangedCommand implements CommandInterface
     private $config;
 
     /**
+     * @var ResponseResolver
+     */
+    private $responseResolver;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -46,56 +52,44 @@ class NotifyDataChangedCommand implements CommandInterface
      * @param AnalyticsToken $analyticsToken
      * @param Http\ClientInterface $httpClient
      * @param Config $config
+     * @param ResponseResolver $responseResolver
      * @param LoggerInterface $logger
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
         Config $config,
+        ResponseResolver $responseResolver,
         LoggerInterface $logger
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->httpClient = $httpClient;
         $this->config = $config;
+        $this->responseResolver = $responseResolver;
         $this->logger = $logger;
     }
 
     /**
      * Notify MBI about that data collection was finished
+     *
      * @return bool
      */
     public function execute()
     {
         $result = false;
-        try {
-            if ($this->analyticsToken->isTokenExist()) {
-                $this->httpClient->request(
-                    ZendClient::POST,
-                    $this->config->getConfigDataValue($this->notifyDataChangedUrlPath),
-                    $this->getRequestJson(),
-                    ['Content-Type: application/json']
-                );
-                $result = true;
-            }
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
+        if ($this->analyticsToken->isTokenExist()) {
+            $response = $this->httpClient->request(
+                ZendClient::POST,
+                $this->config->getConfigDataValue($this->notifyDataChangedUrlPath),
+                [
+                    "access-token" => $this->analyticsToken->getToken(),
+                    "url" => $this->config->getConfigDataValue(
+                        Store::XML_PATH_SECURE_BASE_URL
+                    ),
+                ]
+            );
+            $result = $this->responseResolver->getResult($response);
         }
         return $result;
-    }
-
-    /**
-     * Prepares request data in JSON format.
-     * @return string
-     */
-    private function getRequestJson()
-    {
-        return json_encode(
-            [
-                "access-token" => $this->analyticsToken->getToken(),
-                "url" => $this->config->getConfigDataValue(
-                    Store::XML_PATH_SECURE_BASE_URL
-                ),
-            ]
-        );
     }
 }

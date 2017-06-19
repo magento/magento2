@@ -7,6 +7,8 @@ namespace Magento\Store\Model\ResourceModel;
 
 /**
  * Store Resource Model
+ *
+ * @api
  */
 class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -153,6 +155,20 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         }
         return $this;
+    }
+
+    /**
+     * Read information about all stores
+     *
+     * @return array
+     */
+    public function readAllStores()
+    {
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('store'));
+
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**

@@ -13,6 +13,8 @@ use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Class AbstractCarrier
+ *
+ * @api
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
@@ -433,12 +435,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                     }
                 }
             }
-        } else {
-            /**
-             * if we can apply free shipping for all order we should force price
-             * to $0.00 for shipping with out sending second request to carrier
-             */
-            $price = 0;
         }
 
         /**

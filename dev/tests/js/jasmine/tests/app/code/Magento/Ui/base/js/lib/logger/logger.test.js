@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /* eslint-disable max-nested-callbacks */
@@ -138,7 +138,7 @@ define([
             it('removes previously applied filter criteria', function () {
                 var logger = createLogger(),
                     criteria = function () {
-                        return false
+                        return false;
                     };
 
                 spyOn(entryHandler, 'show');
@@ -189,6 +189,7 @@ define([
                 spyOn(entryHandler, 'show');
                 spyOn(entryFactory, 'createEntry').and.callThrough();
 
+                logger.setDisplayLevel(levels.WARN);
                 entry = logger.warn('warn message', logData);
 
                 expect(entry instanceof LogEntry).toBe(true);

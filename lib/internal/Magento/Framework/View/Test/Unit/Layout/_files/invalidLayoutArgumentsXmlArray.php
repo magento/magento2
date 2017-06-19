@@ -131,7 +131,7 @@ return [
             </page>',
         [
             "Element 'argument': Duplicate key-sequence ['string'] in key identity-constraint"
-                . " 'actionArgumentName'.\nLine: 6\n"
+                . " 'blockActionArgumentName'.\nLine: 6\n"
         ],
     ],
 ];

@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model\Product\Configuration\Item;
 
 /**
  * Product configurational item interface
+ *
+ * @api
  */
 interface ItemInterface
 {

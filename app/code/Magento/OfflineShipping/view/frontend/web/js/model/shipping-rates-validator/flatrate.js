@@ -31,7 +31,7 @@ define([
                 }
             });
 
-            return !Boolean(this.validationErrors.length);
+            return !this.validationErrors.length;
         }
     };
 });

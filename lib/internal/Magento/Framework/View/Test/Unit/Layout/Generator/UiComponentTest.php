@@ -165,7 +165,7 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'uiComponent',
                 null,
-                ['context' => $contextMock]
+                ['context' => $contextMock, 'structure' => $structureMock]
             )->willReturn($componentMock);
 
         $this->blockFactoryMock->expects($this->once())

@@ -39,7 +39,6 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
     {
         $errors = [];
         $attribute = $this->getAttribute();
-        $label = $attribute->getStoreLabel();
 
         if ($value === false) {
             // try to load original value and validate it
@@ -47,6 +46,7 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
         }
 
         if ($attribute->getIsRequired() && empty($value)) {
+            $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
 
@@ -68,6 +68,7 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
         ) > $validateRules['date_range_max']
         ) {
             if (!empty($validateRules['date_range_min']) && !empty($validateRules['date_range_max'])) {
+                $label = __($attribute->getStoreLabel());
                 $errors[] = __(
                     'Please enter a valid date between %1 and %2 at %3.',
                     date('d/m/Y', $validateRules['date_range_min']),
@@ -75,12 +76,14 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
                     $label
                 );
             } elseif (!empty($validateRules['date_range_min'])) {
+                $label = __($attribute->getStoreLabel());
                 $errors[] = __(
                     'Please enter a valid date equal to or greater than %1 at %2.',
                     date('d/m/Y', $validateRules['date_range_min']),
                     $label
                 );
             } elseif (!empty($validateRules['date_range_max'])) {
+                $label = __($attribute->getStoreLabel());
                 $errors[] = __(
                     'Please enter a valid date less than or equal to %1 at %2.',
                     date('d/m/Y', $validateRules['date_range_max']),

@@ -83,12 +83,13 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attrOptionFactory = $this->getMockBuilder(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class
-        )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->attrOptionFactory = $this->getMock(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
 
         $this->sourceMock = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()

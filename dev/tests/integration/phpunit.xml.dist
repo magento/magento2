@@ -47,7 +47,7 @@
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <!-- Whether to cleanup the application before running tests or not -->
-        <const name="TESTS_CLEANUP" value=""/>
+        <const name="TESTS_CLEANUP" value="enabled"/>
         <!-- Memory usage and estimated leaks thresholds -->
         <!--<const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>-->
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
@@ -61,6 +61,8 @@
         <!--<const name="TESTS_BAMBOO_PROFILER_FILE" value="profiler.csv"/>-->
         <!-- Metrics for Bamboo Profiler Output in PHP file that returns array -->
         <!--<const name="TESTS_BAMBOO_PROFILER_METRICS_FILE" value="../../build/profiler_metrics.php"/>-->
+        <!-- Whether to output all CLI commands executed by the bootstrap and tests -->
+        <const name="TESTS_EXTRA_VERBOSE_LOG" value="1"/>
         <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
         <const name="TESTS_MAGENTO_MODE" value="developer"/>
         <!-- Minimum error log level to listen for. Possible values: -1 ignore all errors, and level constants form http://tools.ietf.org/html/rfc5424 standard -->

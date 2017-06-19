@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit\Router;
 
 class NoRouteHandlerListTest extends \PHPUnit_Framework_TestCase

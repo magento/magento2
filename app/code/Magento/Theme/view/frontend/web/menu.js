@@ -157,7 +157,7 @@ define([
         //mainNav();
 
         //run navigation with delays
-        mainNav('nav', {
+        window.mainNav('nav', {
             'show_delay': '100',
             'hide_delay': '100'
         });

@@ -66,7 +66,7 @@ define([
                         component: bindingContext.$data.name
                     });
                     source.nodes(rendered);
-                }).fail(function (err) {
+                }).fail(function () {
                     consoleLogger.error('templateLoadingFail', {
                         template: templateId,
                         component: bindingContext.$data.name

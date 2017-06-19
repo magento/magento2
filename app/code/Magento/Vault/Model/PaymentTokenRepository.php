@@ -85,10 +85,10 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Lists payment tokens that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
      * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface Payment token search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Vault\Model\ResourceModel\PaymentToken\Collection $collection */
         $collection = $this->collectionFactory->create();

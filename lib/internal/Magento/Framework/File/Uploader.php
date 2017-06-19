@@ -13,7 +13,7 @@ use Magento\Framework\Filesystem\DriverInterface;
  * ATTENTION! This class must be used like abstract class and must added
  * validation by protected file extension list to extended class
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Uploader
 {

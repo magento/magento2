@@ -20,6 +20,8 @@ namespace Magento\Newsletter\Model;
  * @method \Magento\Newsletter\Model\Problem setProblemErrorText(string $value)
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Problem extends \Magento\Framework\Model\AbstractModel
 {

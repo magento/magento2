@@ -96,7 +96,6 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->versionStorage->expects($this->once())->method('save');
 
         $this->service = new DeployStaticContent(
             $this->objectManager,
@@ -107,43 +106,57 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testDeploy()
+    /**
+     * @param array $options
+     * @param string $expectedContentVersion
+     * @dataProvider deployDataProvider
+     */
+    public function testDeploy($options, $expectedContentVersion)
     {
-        $options = [
-            'strategy' =>  'compact',
-            'no-javascript' => false,
-            'no-html-minify' => false
-        ];
-
         $package = $this->getMock(Package::class, [], [], '', false);
-        $package->expects($this->exactly(1))->method('isVirtual')->willReturn(false);
-        $package->expects($this->exactly(3))->method('getArea')->willReturn('area');
-        $package->expects($this->exactly(3))->method('getTheme')->willReturn('theme');
-        $package->expects($this->exactly(2))->method('getLocale')->willReturn('locale');
+        if ($options['refresh-content-version-only']) {
+            $package->expects($this->never())->method('isVirtual');
+            $package->expects($this->never())->method('getArea');
+            $package->expects($this->never())->method('getTheme');
+            $package->expects($this->never())->method('getLocale');
+        } else {
+            $package->expects($this->exactly(1))->method('isVirtual')->willReturn(false);
+            $package->expects($this->exactly(3))->method('getArea')->willReturn('area');
+            $package->expects($this->exactly(3))->method('getTheme')->willReturn('theme');
+            $package->expects($this->exactly(3))->method('getLocale')->willReturn('locale');
+        }
+        $packages = ['package' => $package];
 
-        $packages = [
-            'package' => $package
-        ];
-
-        $this->versionStorage->expects($this->once())->method('save');
+        if ($expectedContentVersion) {
+            $this->versionStorage->expects($this->once())->method('save')->with($expectedContentVersion);
+        } else {
+            $this->versionStorage->expects($this->once())->method('save');
+        }
 
         $queue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->queueFactory->expects($this->once())->method('create')->willReturn($queue);
+        if ($options['refresh-content-version-only']) {
+            $this->queueFactory->expects($this->never())->method('create');
+        } else {
+            $this->queueFactory->expects($this->once())->method('create')->willReturn($queue);
+        }
 
         $strategy = $this->getMockBuilder(CompactDeploy::class)
             ->setMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $strategy->expects($this->once())->method('deploy')
-            ->with($options)
-            ->willReturn($packages);
-        $this->deployStrategyFactory->expects($this->once())
-            ->method('create')
-            ->with('compact', ['queue' => $queue])
-            ->willReturn($strategy);
-
+        if ($options['refresh-content-version-only']) {
+            $strategy->expects($this->never())->method('deploy');
+        } else {
+            $strategy->expects($this->once())->method('deploy')
+                ->with($options)
+                ->willReturn($packages);
+            $this->deployStrategyFactory->expects($this->once())
+                ->method('create')
+                ->with('compact', ['queue' => $queue])
+                ->willReturn($strategy);
+        }
         $deployPackageService = $this->getMockBuilder(DeployPackage::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -164,33 +177,63 @@ class DeployStaticContentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->objectManager->expects($this->exactly(4))
-            ->method('create')
-            ->withConsecutive(
-                [DeployPackage::class, ['logger' => $this->logger]],
-                [DeployRequireJsConfig::class, ['logger' => $this->logger]],
-                [DeployTranslationsDictionary::class, ['logger' => $this->logger]],
-                [Bundle::class, ['logger' => $this->logger]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $deployPackageService,
-                $deployRjsConfig,
-                $deployI18n,
-                $deployBundle
-            );
+        if ($options['refresh-content-version-only']) {
+            $this->objectManager->expects($this->never())->method('create');
+            $this->objectManager->expects($this->never())->method('get');
+        } else {
+            $this->objectManager->expects($this->exactly(4))
+                ->method('create')
+                ->withConsecutive(
+                    [DeployPackage::class, ['logger' => $this->logger]],
+                    [DeployRequireJsConfig::class, ['logger' => $this->logger]],
+                    [DeployTranslationsDictionary::class, ['logger' => $this->logger]],
+                    [Bundle::class, ['logger' => $this->logger]]
+                )
+                ->willReturnOnConsecutiveCalls(
+                    $deployPackageService,
+                    $deployRjsConfig,
+                    $deployI18n,
+                    $deployBundle
+                );
 
-        $this->objectManager->expects($this->exactly(1))
-            ->method('get')
-            ->withConsecutive(
-                [MinifyTemplates::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $minifyTemplates
-            );
+            $this->objectManager->expects($this->exactly(1))
+                ->method('get')
+                ->withConsecutive([MinifyTemplates::class])
+                ->willReturnOnConsecutiveCalls($minifyTemplates);
+        }
 
-        $this->assertEquals(
-            null,
-            $this->service->deploy($options)
-        );
+        $this->assertEquals(null, $this->service->deploy($options));
+    }
+
+    public function deployDataProvider()
+    {
+        return [
+            [
+                [
+                    'strategy' =>  'compact',
+                    'no-javascript' => false,
+                    'no-html-minify' => false,
+                    'refresh-content-version-only' => false,
+                ],
+                null // content version value should not be asserted in this case
+            ],
+            [
+                [
+                    'strategy' =>  'compact',
+                    'no-javascript' => false,
+                    'no-html-minify' => false,
+                    'refresh-content-version-only' => false,
+                    'content-version' =>  '123456',
+                ],
+                '123456'
+            ],
+            [
+                [
+                    'refresh-content-version-only' => true,
+                    'content-version' =>  '654321',
+                ],
+                '654321'
+            ]
+        ];
     }
 }

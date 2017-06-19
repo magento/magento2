@@ -6,6 +6,7 @@
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
@@ -48,14 +49,19 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
-     * Expand section by its name.
+     * Expand section by its name
      *
      * @param string $sectionName
      * @return $this
+     * @throws LocalizedException if section is not visible
      */
     public function openSection($sectionName)
     {
-        $section = $this->getContainerElement($sectionName)->find($this->collapsedSection);
+        $container = $this->getContainerElement($sectionName);
+        if (!$container->isVisible()) {
+            throw new LocalizedException(__('Container is not found "' . $sectionName . '""'));
+        }
+        $section = $container->find($this->collapsedSection);
         if ($section->isVisible()) {
             $section->click();
         }

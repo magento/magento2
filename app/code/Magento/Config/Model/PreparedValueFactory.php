@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\ScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
 
@@ -87,11 +88,15 @@ class PreparedValueFactory
             /** @var Structure $structure */
             $structure = $this->structureFactory->create();
             /** @var Structure\ElementInterface $field */
-            $field = $structure->getElement($path);
+            $field = $structure->getElementByConfigPath($path);
+            $configPath = $path;
             /** @var string $backendModelName */
-            $backendModelName = $field instanceof Structure\Element\Field && $field->hasBackendModel()
-                ? $field->getData()['backend_model']
-                : ValueInterface::class;
+            if ($field instanceof Structure\Element\Field && $field->hasBackendModel()) {
+                $backendModelName = $field->getData()['backend_model'];
+                $configPath = $field->getConfigPath() ?: $path;
+            } else {
+                $backendModelName = ValueInterface::class;
+            }
             /** @var ValueInterface $backendModel */
             $backendModel = $this->valueFactory->create(
                 $backendModelName,
@@ -101,12 +106,18 @@ class PreparedValueFactory
             if ($backendModel instanceof Value) {
                 $scopeId = 0;
 
+                if (in_array($scope, [StoreScopeInterface::SCOPE_WEBSITE, StoreScopeInterface::SCOPE_WEBSITES])) {
+                    $scope = StoreScopeInterface::SCOPE_WEBSITES;
+                } elseif (in_array($scope, [StoreScopeInterface::SCOPE_STORE, StoreScopeInterface::SCOPE_STORES])) {
+                    $scope = StoreScopeInterface::SCOPE_STORES;
+                }
+
                 if ($scope !== ScopeInterface::SCOPE_DEFAULT) {
                     $scopeResolver = $this->scopeResolverPool->get($scope);
                     $scopeId = $scopeResolver->getScope($scopeCode)->getId();
                 }
 
-                $backendModel->setPath($path);
+                $backendModel->setPath($configPath);
                 $backendModel->setScope($scope);
                 $backendModel->setScopeId($scopeId);
                 $backendModel->setValue($value);

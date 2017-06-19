@@ -33,7 +33,7 @@ define([
                 }
             });
 
-            if (!Boolean(this.validationErrors.length)) {
+            if (!this.validationErrors.length) {
                 if (address['country_id'] == checkoutConfig.originCountryCode) { //eslint-disable-line eqeqeq
                     return !utils.isEmpty(address.postcode);
                 }

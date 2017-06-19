@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Update;
 
 /**
  * Adminhtml block for result of catalog product composite update
  * Forms response for a popup window for a case when form is directly submitted
  * for single item
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Update;
-
 class Result extends \Magento\Framework\View\Element\Template
 {
     /**

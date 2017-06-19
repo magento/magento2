@@ -9,6 +9,9 @@
  */
 namespace Magento\Sales\Block\Order\Creditmemo;
 
+/**
+ * @api
+ */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**

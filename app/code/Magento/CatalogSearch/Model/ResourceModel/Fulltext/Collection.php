@@ -127,8 +127,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
      * @param \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -159,7 +161,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
         MetadataPool $metadataPool = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
     ) {
         $this->queryFactory = $catalogSearchData;
         if ($searchResultFactory === null) {
@@ -189,7 +192,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection,
             $productLimitationFactory,
             $metadataPool,
-            $indexerFrontendResource
+            $indexerFrontendResource,
+            $categoryProductIndexerFrontend
         );
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
@@ -357,8 +361,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
             []
         );
-
-        $this->_totalRecords = $this->searchResult->getTotalCount();
 
         if ($this->order && 'relevance' === $this->order['field']) {
             $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);

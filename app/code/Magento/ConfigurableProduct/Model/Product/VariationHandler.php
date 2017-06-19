@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class VariationHandler
 {

@@ -25,7 +25,7 @@ class NotificationTime
     /**
      * NotificationTime constructor.
      *
-     * @param \Magento\Analytics\Model\FlagManager $flagManager
+     * @param FlagManager $flagManager
      */
     public function __construct(
         FlagManager $flagManager
