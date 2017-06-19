@@ -105,6 +105,48 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testFetchTransactionInfo()
+    {
+        $transactionId = 10555;
+        $transactionInfo = ['test_key' => 'test_value'];
+
+        $valueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
+        $command = $this->getMockForAbstractClass(CommandInterface::class);
+
+        /** @var  InfoInterface|MockObject $paymentInfo */
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+
+        $this->valueHandlerPool->expects(static::once())
+            ->method('get')
+            ->with('can_fetch_transaction_information')
+            ->willReturn($valueHandler);
+        $valueHandler->expects(static::once())
+            ->method('handle')
+            ->with(['field' => 'can_fetch_transaction_information'])
+            ->willReturn(true);
+
+        $this->paymentDataObjectFactory->expects(static::once())
+            ->method('create')
+            ->with($paymentInfo)
+            ->willReturn($paymentDO);
+
+        $this->commandPool->expects(static::once())
+            ->method('get')
+            ->with('fetch_transaction_information')
+            ->willReturn($command);
+        $command->expects(static::once())
+            ->method('execute')
+            ->with(['transactionId' => $transactionId, 'payment' => $paymentDO])
+            ->willReturn($transactionInfo);
+
+        $this->assertEquals(
+            $transactionInfo,
+            $this->adapter->fetchTransactionInfo($paymentInfo, $transactionId)
+        );
+
+    }
+
     /**
      * @covers \Magento\Payment\Model\Method\Adapter::isAvailable
      */
