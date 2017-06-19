@@ -116,13 +116,13 @@ class Save extends Action
             }
         } else {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
-            $resultRedirect->setPath('*/*');
+            $this->processRedirectAfterFailureSave($resultRedirect);
         }
         return $resultRedirect;
     }
 
     /**
-     * @param $sourceId
+     * @param int $sourceId
      * @param array $requestData
      * @return int
      */
@@ -163,7 +163,7 @@ class Save extends Action
     }
 
     /**
-     * @param $resultRedirect
+     * @param Redirect $resultRedirect
      * @param int|null $sourceId
      * @return void
      */
