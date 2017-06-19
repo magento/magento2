@@ -35,7 +35,7 @@ class TotalsReader
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @param array $total
-     * @return array
+     * @return Total[]
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, array $total)
     {
@@ -62,7 +62,7 @@ class TotalsReader
 
     /**
      * @param array $total
-     * @return Total|array
+     * @return Total|Total[]
      */
     protected function convert($total)
     {
@@ -85,10 +85,10 @@ class TotalsReader
 
     /**
      * @param Total $totalInstance
-     * @param array $output
-     * @return array
+     * @param Total[] $output
+     * @return Total[]
      */
-    protected function merge($totalInstance, $output)
+    protected function merge(Total $totalInstance, $output)
     {
         if (array_key_exists($totalInstance->getCode(), $output)) {
             $output[$totalInstance->getCode()] = $output[$totalInstance->getCode()]->addData(

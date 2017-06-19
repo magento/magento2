@@ -5,6 +5,9 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+/**
+ * @method string getCode()
+ */
 class Total extends \Magento\Framework\DataObject
 {
     /**
