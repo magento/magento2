@@ -180,8 +180,15 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     {
         $isChanged = false;
         foreach ($valuesToUpdate as $key => $value) {
-            if ($oldValues[$key]['price'] != $value['value']
-                || $this->getPercentage($oldValues[$key]) != $this->getPercentage($value)
+            $oldPrice = $this->prepareFloatValue($oldValues[$key]['price']);
+            $newPrice = $this->prepareFloatValue($value['value']);
+            $oldQty = $this->prepareFloatValue($oldValues[$key]['price_qty']);
+            $newQty = $this->prepareFloatValue($value['qty']);
+            $oldPercentageValue = $this->prepareFloatValue($this->getPercentage($oldValues[$key]));
+            $newPercentageValue = $this->prepareFloatValue($this->getPercentage($value));
+            if (($oldPrice !== $newPrice)
+                || ($oldQty !== $newQty)
+                || ($oldPercentageValue !== $newPercentageValue)
             ) {
                 $price = new \Magento\Framework\DataObject(
                     [
@@ -196,6 +203,17 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
             }
         }
         return $isChanged;
+    }
+
+    /**
+     * Prepare float value for comparison
+     *
+     * @param string|float|int $value
+     * @return float
+     */
+    private function prepareFloatValue($value)
+    {
+        return floatval(str_replace(',', '.', (string)$value));
     }
 
     /**

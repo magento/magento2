@@ -179,7 +179,7 @@ class Helper
         } else {
             $productOptions = [];
         }
-
+        $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
         $product->addData($productData);
 
         if ($wasLockedMedia) {
