@@ -137,17 +137,4 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             $this->model->build($this->requestInterface, [])
         );
     }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Query is the required field and must be set to the builder
-     */
-    public function testBuildWithoutQuery()
-    {
-        $this->requestInterface = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->model->build($this->requestInterface, []);
-    }
 }
