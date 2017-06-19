@@ -317,6 +317,7 @@ define([
          */
         reload: function (sectionNames, updateSectionId) {
             return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
+                $(document).trigger('customer-data-reload', [sectionNames]);
                 buffer.update(sections);
             });
         },
@@ -329,6 +330,7 @@ define([
                 sectionsNamesForInvalidation;
 
             sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            $(document).trigger('customer-data-invalidate', [sectionsNamesForInvalidation]);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 

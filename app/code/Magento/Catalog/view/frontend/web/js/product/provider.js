@@ -80,8 +80,6 @@ define([
 
             if (~~this.idsStorage.allowToSendRequest) {
                 customerData.reload([idsStorage.namespace]).done(this._resolveDataByIds.bind(this));
-                window.localStorage.removeItem(idsStorage.namespace);
-                idsStorage.data();
             } else {
                 this._resolveDataByIds();
             }
@@ -97,7 +95,7 @@ define([
             if (!_.isEmpty(this.productStorage.data())) {
                 this.dataCollectionHandler(this.productStorage.data());
             } else {
-                this.productStorage.setIds(this.ids());
+                this.productStorage.setIds(this.data.currency, this.data.store, this.ids());
             }
         },
 
