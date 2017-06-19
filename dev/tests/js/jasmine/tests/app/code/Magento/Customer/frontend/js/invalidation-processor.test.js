@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 define([
     'squire'
 ], function (Squire) {
@@ -32,7 +33,7 @@ define([
 
         describe('"process" method', function () {
             it('record status is 1', function () {
-                /*eslint no-global-assign: "error"*/
+                /* eslint-disable no-native-reassign */
 
                 var requireTmp = require;
 
