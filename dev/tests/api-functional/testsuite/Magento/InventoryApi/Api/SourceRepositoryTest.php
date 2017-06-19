@@ -126,6 +126,7 @@ class SourceRepositoryTest extends WebapiAbstract
             SourceInterface::LONGITUDE => $source->getLongitude(),
             SourceInterface::ENABLED => $source->isEnabled(),
             SourceInterface::PRIORITY => $source->getPriority(),
+            SourceInterface::USE_DEFAULT_CARRIER_CONFIG => $source->isUseDefaultCarrierConfig(),
             SourceInterface::CARRIER_LINKS => []
         ];
 
@@ -193,6 +194,7 @@ class SourceRepositoryTest extends WebapiAbstract
         $source->setEnabled($enabled);
         $source->setPriority($priority);
         $source->setCarrierLinks($carriers);
+        $source->setUseDefaultCarrierConfig(true);
 
         return $source;
     }

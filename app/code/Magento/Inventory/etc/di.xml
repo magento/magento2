@@ -11,14 +11,4 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink" />
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement" />
-    <type name="Magento\Framework\EntityManager\MetadataPool">
-        <arguments>
-            <argument name="metadata" xsi:type="array">
-                <item name="Magento\InventoryApi\Api\Data\SourceInterface" xsi:type="array">
-                    <item name="entityTableName" xsi:type="const">Magento\Inventory\Setup\InstallSchema::TABLE_NAME_SOURCE</item>
-                    <item name="identifierField" xsi:type="const">Magento\InventoryApi\Api\Data\SourceInterface::SOURCE_ID</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
 </config>

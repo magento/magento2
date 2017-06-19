@@ -254,10 +254,6 @@
             </formElements>
         </field>
         <field name="carrier_codes" formElement="checkboxset" sortOrder="20">
-            <!-- TODO: communicate with frontend team. New semantic is not working -->
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Inventory\Model\OptionSource\CarrierSource</item>
-            </argument>
             <settings>
                 <label translate="true">Shipping methods</label>
                 <imports>
@@ -265,11 +261,11 @@
                 </imports>
             </settings>
             <formElements>
-                <select>
+                <checkboxset>
                     <settings>
                         <options class="Magento\Inventory\Model\OptionSource\CarrierSource"/>
                     </settings>
-                </select>
+                </checkboxset>
             </formElements>
         </field>
     </fieldset>
