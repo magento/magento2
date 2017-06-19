@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 define([
     'squire'
 ], function (Squire) {
@@ -17,6 +18,13 @@ define([
             processor = new Constr({
                 name: 'processor'
             });
+            processor.invalidationRules = {
+                'website-rule': {
+                    'Magento_Customer/js/invalidation-rules/website-rule': {
+                        process: jasmine.createSpy()
+                    }
+                }
+            };
             done();
         });
     });
@@ -25,15 +33,9 @@ define([
 
         describe('"process" method', function () {
             it('record status is 1', function () {
-                var requireTmp = require;
+                /* eslint-disable no-native-reassign */
 
-                processor.invalidationRules = {
-                    'website-rule': {
-                        'Magento_Customer/js/invalidation-rules/website-rule': {
-                            process: jasmine.createSpy()
-                        }
-                    }
-                };
+                var requireTmp = require;
 
                 require = jasmine.createSpy();
                 processor.process();

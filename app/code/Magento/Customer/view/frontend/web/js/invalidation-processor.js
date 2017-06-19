@@ -3,14 +3,16 @@
  * See COPYING.txt for license details.
  */
 define([
-    "underscore",
-    "uiElement",
+    'underscore',
+    'uiElement',
     'Magento_Customer/js/customer-data'
 ], function (_, Element, customerData) {
-    "use strict";
-    var invalidationRules;
+    'use strict';
 
     return Element.extend({
+        /**
+         * Initialize object
+         */
         initialize: function () {
             this._super();
             this.process(customerData);
@@ -19,17 +21,18 @@ define([
         /**
          * Process all rules in loop, each rule can invalidate some sections in customer data
          *
-         * @param {Object} customerData
+         * @param {Object} customerDataObject
          */
-        process: function (customerData) {
+        process: function (customerDataObject) {
             _.each(this.invalidationRules, function (rule, ruleName) {
                 _.each(rule, function (ruleArgs, rulePath) {
                     require([rulePath], function (Rule) {
-                        var rule = new Rule(ruleArgs);
-                        if (!_.isFunction(rule.process)) {
-                            throw new Error("Rule " + ruleName + " should implement invalidationProcessor interface");
+                        var currentRule = new Rule(ruleArgs);
+
+                        if (!_.isFunction(currentRule.process)) {
+                            throw new Error('Rule ' + ruleName + ' should implement invalidationProcessor interface');
                         }
-                        rule.process(customerData);
+                        currentRule.process(customerDataObject);
                     });
                 });
             });

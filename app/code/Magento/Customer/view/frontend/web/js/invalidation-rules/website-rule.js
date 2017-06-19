@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    "uiClass"
+    'uiClass'
 ], function (Element) {
     'use strict';
 
@@ -12,7 +12,7 @@ define([
         defaults: {
             scopeConfig: {}
         },
-        
+
         /**
          * Takes website id from current customer data and compare it with current website id
          * If customer belongs to another scope, we need to invalidate current section
@@ -22,7 +22,7 @@ define([
         process: function (customerData) {
             var customer = customerData.get('customer');
 
-            if (this.scopeConfig && customer() && customer().websiteId != this.scopeConfig.website_id) {
+            if (this.scopeConfig && customer() && customer().websiteId !== this.scopeConfig.websiteId) {
                 customerData.reload(['customer']);
             }
         }
