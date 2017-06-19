@@ -65,7 +65,7 @@
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="recently_viewed_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyViewedProductsSection</item>
                 <item name="recently_compared_product" xsi:type="string">Magento\Catalog\CustomerData\RecentlyComparedProductsSection</item>
-                <item name="products_render_info" xsi:type="string">Magento\Catalog\CustomerData\ProductsRenderInfoSection</item>
+                <item name="product_data_storage" xsi:type="string">Magento\Catalog\CustomerData\ProductsRenderInfoSection</item>
             </argument>
         </arguments>
     </type>
