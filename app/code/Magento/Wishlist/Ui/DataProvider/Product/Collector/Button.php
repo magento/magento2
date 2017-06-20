@@ -20,6 +20,7 @@ use Magento\Wishlist\Helper\Data;
  */
 class Button implements ProductRenderCollectorInterface
 {
+    /** Url Key */
     const KEY_WISHLIST_URL_PARAMS = "wishlist_url_params";
 
     /**
