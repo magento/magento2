@@ -38,7 +38,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      */
     protected function populateFlatTables(array $stores)
     {
-        $identifierField = $this->getCategoryMetadata()->getIdentifierField();
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $categories = [];
         $categoriesIds = [];
@@ -69,12 +68,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                 $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
                 $data = [];
                 foreach ($categories[$store->getRootCategoryId()] as $category) {
-                    if (!isset($attributesData[$category[$identifierField]])) {
+                    if (!isset($attributesData[$category['entity_id']])) {
                         continue;
                     }
                     $category['store_id'] = $store->getId();
                     $data[] = $this->prepareValuesToInsert(
-                        array_merge($category, $attributesData[$category[$identifierField]])
+                        array_merge($category, $attributesData[$category['entity_id']])
                     );
                 }
                 $this->connection->insertMultiple(
