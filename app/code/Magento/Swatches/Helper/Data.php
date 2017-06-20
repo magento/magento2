@@ -352,6 +352,7 @@ class Data
                 $this->populateAdditionalDataEavAttribute($attribute);
             }
         }
+
         return $attributes;
     }
 
