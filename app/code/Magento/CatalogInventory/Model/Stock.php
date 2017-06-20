@@ -32,7 +32,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @var string
      */
-    protected $eventObject = 'stock';
+    protected $_eventObject = 'stock';
 
     const BACKORDERS_NO = 0;
 

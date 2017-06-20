@@ -21,11 +21,27 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $installer = $setup;
-        $installer->startSetup();
-        $tableAdmins = $installer->getTable('admin_user');
+        $setup->startSetup();
 
-        $installer->getConnection()->addColumn(
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $this->addFailuresToAdminUserTable($setup);
+            $this->createAdminPasswordsTable($setup);
+        }
+
+        $setup->endSetup();
+    }
+
+    /**
+     * Adds 'failures_num', 'first_failure', and 'lock_expires' columns to 'admin_user' table
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addFailuresToAdminUserTable(SchemaSetupInterface $setup)
+    {
+        $tableAdmins = $setup->getTable('admin_user');
+
+        $setup->getConnection()->addColumn(
             $tableAdmins,
             'failures_num',
             [
@@ -35,7 +51,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Failure Number'
             ]
         );
-        $installer->getConnection()->addColumn(
+        $setup->getConnection()->addColumn(
             $tableAdmins,
             'first_failure',
             [
@@ -43,7 +59,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'First Failure'
             ]
         );
-        $installer->getConnection()->addColumn(
+        $setup->getConnection()->addColumn(
             $tableAdmins,
             'lock_expires',
             [
@@ -51,12 +67,22 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Expiration Lock Dates'
             ]
         );
+    }
 
-        /**
-         * Create table 'admin_passwords'
-         */
-        $table = $installer->getConnection()->newTable(
-            $installer->getTable('admin_passwords')
+    /**
+     * Create table 'admin_passwords'
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function createAdminPasswordsTable(SchemaSetupInterface $setup)
+    {
+        if ($setup->tableExists($setup->getTable('admin_passwords'))) {
+            return;
+        }
+
+        $table = $setup->getConnection()->newTable(
+            $setup->getTable('admin_passwords')
         )->addColumn(
             'password_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -88,19 +114,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Last Updated'
         )->addIndex(
-            $installer->getIdxName('admin_passwords', ['user_id']),
+            $setup->getIdxName('admin_passwords', ['user_id']),
             ['user_id']
         )->addForeignKey(
-            $installer->getFkName('admin_passwords', 'user_id', 'admin_user', 'user_id'),
+            $setup->getFkName('admin_passwords', 'user_id', 'admin_user', 'user_id'),
             'user_id',
-            $installer->getTable('admin_user'),
+            $setup->getTable('admin_user'),
             'user_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Admin Passwords'
         );
-        $installer->getConnection()->createTable($table);
-
-        $installer->endSetup();
+        $setup->getConnection()->createTable($table);
     }
 }
