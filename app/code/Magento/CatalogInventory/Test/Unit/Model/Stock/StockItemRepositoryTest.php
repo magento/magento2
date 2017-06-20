@@ -13,8 +13,6 @@ use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class StockItemRepositoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -22,77 +20,77 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var StockItemRepository
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemMock;
+    private $stockItemMock;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockConfigurationMock;
+    private $stockConfigurationMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productMock;
+    private $productMock;
 
     /**
      * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockStateProviderMock;
+    private $stockStateProviderMock;
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemResourceMock;
+    private $stockItemResourceMock;
 
     /**
      * @var InventoryApiData\StockItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemFactoryMock;
+    private $stockItemFactoryMock;
 
     /**
      * @var InventoryApiData\StockItemCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemCollectionMock;
+    private $stockItemCollectionMock;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productFactoryMock;
+    private $productFactoryMock;
 
     /**
      * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $queryBuilderFactoryMock;
+    private $queryBuilderFactoryMock;
 
     /**
      * @var \Magento\Framework\DB\MapperFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mapperMock;
+    private $mapperMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeDateMock;
+    private $localeDateMock;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexProcessorMock;
+    private $indexProcessorMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dateTime;
+    private $dateTime;
 
     /**
      * @var StockRegistryStorage|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockRegistryStorage;
+    private $stockRegistryStorage;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

@@ -17,7 +17,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInt
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 

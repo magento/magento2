@@ -111,7 +111,7 @@ class DeployStaticContentCommand extends Command
                     . PHP_EOL . 'In "default" and "developer" modes static contents are being deployed '
                     . 'automatically on demand.'
                     . PHP_EOL . 'If you still want to deploy in these modes, use -f option: '
-                    . "'bin/magento setup:deploy:static-content -f'"
+                    . "'bin/magento setup:static-content:deploy -f'"
                 )
             );
         }
@@ -120,11 +120,15 @@ class DeployStaticContentCommand extends Command
 
         $options = $input->getOptions();
         $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'];
+        $refreshOnly = isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
+            && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
 
         $verbose = $output->getVerbosity() > 1 ? $output->getVerbosity() : OutputInterface::VERBOSITY_VERBOSE;
 
         $logger = $this->consoleLoggerFactory->getLogger($output, $verbose);
-        $logger->alert(PHP_EOL . "Deploy using {$options[Options::STRATEGY]} strategy");
+        if (!$refreshOnly) {
+            $logger->alert(PHP_EOL . "Deploy using {$options[Options::STRATEGY]} strategy");
+        }
 
         $this->mockCache();
 
@@ -135,7 +139,9 @@ class DeployStaticContentCommand extends Command
 
         $deployService->deploy($options);
 
-        $logger->alert(PHP_EOL . "Execution time: " . (microtime(true) - $time));
+        if (!$refreshOnly) {
+            $logger->alert(PHP_EOL . "Execution time: " . (microtime(true) - $time));
+        }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }

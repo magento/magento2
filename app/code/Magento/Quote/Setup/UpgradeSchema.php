@@ -55,6 +55,50 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $setup->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id')
             );
         }
+        if (version_compare($context->getVersion(), '2.0.5', '<')) {
+            $connection = $setup->getConnection();
+            $connection->modifyColumn(
+                $setup->getTable('quote_address'),
+                'shipping_method',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 120
+                ]
+            );
+        }
+        if (version_compare($context->getVersion(), '2.0.6', '<')) {
+            $connection = $setup->getConnection(self::$connectionName);
+            $connection->modifyColumn(
+                $setup->getTable('quote_address', self::$connectionName),
+                'firstname',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 255,
+                ]
+            )->modifyColumn(
+                $setup->getTable('quote_address', self::$connectionName),
+                'middlename',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 40,
+                ]
+            )->modifyColumn(
+                $setup->getTable('quote_address', self::$connectionName),
+                'lastname',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 255,
+                ]
+            )->modifyColumn(
+                $setup->getTable('quote', self::$connectionName),
+                'updated_at',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    'nullable' => false,
+                    'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE,
+                ]
+            );
+        }
         $setup->endSetup();
     }
 }
