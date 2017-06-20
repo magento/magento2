@@ -277,7 +277,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getProductWeeeAttributes'])
             ->getMock();
-        $tax->expects($this->once())->method('getProductWeeeAttributes')->willReturn([$weeeDataHelper, $weeeDataHelper]);
+        $tax->expects($this->once())->method('getProductWeeeAttributes')
+            ->willReturn([$weeeDataHelper, $weeeDataHelper]);
         $this->assertEquals(40, $tax->getWeeeAmountExclTax($product));
     }
 
@@ -333,7 +334,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function  getWeeeAmountExclTaxDataProvider()
+    public function getWeeeAmountExclTaxDataProvider()
     {
         return [
             [
