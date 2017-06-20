@@ -149,7 +149,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
                     $output = $this->_wrapEsi($block, $layout);
                 } elseif ($block->isScopePrivate()) {
                     $output = sprintf(
-                        '<!-- BLOCK %1$s -->%2$s<!-- /BLOCK %1$s -->',
+                        '<!-- BLOCK %1$s --><!-- /BLOCK %1$s -->',
                         $block->getNameInLayout(),
                         $output
                     );
