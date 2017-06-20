@@ -38,7 +38,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      */
     protected function populateFlatTables(array $stores)
     {
-        $identifierField = $this->categoryMetadata->getIdentifierField();
+        $identifierField = $this->getCategoryMetadata()->getIdentifierField();
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $categories = [];
         $categoriesIds = [];
