@@ -3,20 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
-use Magento\Framework\DB\Select;
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\ScopeInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
-use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,11 +31,6 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
-
-    /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $metadataMock;
 
     /**
      * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -69,70 +63,39 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
     private $attributeResource;
 
     /**
-     * @var StockStatusRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionSelectBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stockStatusRepository;
-
-    /**
-     * @var StockStatusCriteriaInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockStatusCriteriaFactory;
-
-    /**
-     * @var StockStatusCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockStatusCriteriaInterface;
-
-    /**
-     * @var StockStatusCollectionInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stockStatusCollection;
+    private $optionSelectBuilder;
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select', 'fetchAll'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'joinInner', 'joinLeft', 'where'])
+            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($this->select);
 
-        $this->metadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getBackendTable', 'getAttributeId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->attributeResource = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getTable', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeResource->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-        $this->stockStatusRepository = $this->getMockBuilder(StockStatusRepositoryInterface::class)
+
+        $this->optionSelectBuilder = $this->getMockBuilder(OptionSelectBuilderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->stockStatusCriteriaFactory = $this->getMockBuilder(StockStatusCriteriaInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stockStatusCriteriaInterface = $this->getMockBuilder(StockStatusCriteriaInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->stockStatusCollection = $this->getMockBuilder(StockStatusCollectionInterface::class)
+
+        $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(['getSourceModel', 'getSource'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -141,36 +104,83 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
             AttributeOptionProvider::class,
             [
                 'attributeResource' => $this->attributeResource,
-                'stockStatusRepository' => $this->stockStatusRepository,
-                'stockStatusCriteriaFactory' => $this->stockStatusCriteriaFactory,
                 'scopeResolver' => $this->scopeResolver,
+                'optionSelectBuilder' => $this->optionSelectBuilder,
             ]
         );
     }
 
     /**
      * @param array $options
-     * @dataProvider testOptionsDataProvider
+     * @dataProvider getAttributeOptionsDataProvider
      */
     public function testGetAttributeOptions(array $options)
     {
-        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($this->scope);
-        $this->scope->expects($this->any())->method('getId')->willReturn(123);
-
-        $this->select->expects($this->any())->method('from')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinInner')->willReturnSelf();
-        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->select->expects($this->any())->method('where')->willReturnSelf();
-
-        $this->abstractAttribute->expects($this->any())
-            ->method('getBackendTable')
-            ->willReturn('getBackendTable value');
-        $this->abstractAttribute->expects($this->any())
-            ->method('getAttributeId')
-            ->willReturn('getAttributeId value');
+        $this->scopeResolver->expects($this->any())
+            ->method('getScope')
+            ->willReturn($this->scope);
+        
+        $this->optionSelectBuilder->expects($this->any())
+            ->method('getSelect')
+            ->with($this->abstractAttribute, 4, $this->scope)
+            ->willReturn($this->select);
+        
+        $this->attributeResource->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
+            ->with($this->select)
+            ->willReturn($options);
+
+        $this->assertEquals(
+            $options,
+            $this->model->getAttributeOptions($this->abstractAttribute, 4)
+        );
+    }
+
+    /**
+     * @param array $options
+     * @dataProvider optionsWithBackendModelDataProvider
+     */
+    public function testGetAttributeOptionsWithBackendModel(array $options)
+    {
+        $this->scopeResolver->expects($this->any())
+            ->method('getScope')
+            ->willReturn($this->scope);
+
+        $source = $this->getMockBuilder(AbstractSource::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllOptions'])
+            ->getMockForAbstractClass();
+        $source->expects($this->once())
+            ->method('getAllOptions')
+            ->willReturn([
+                ['value' => 13, 'label' => 'Option Value for index 13'],
+                ['value' => 14, 'label' => 'Option Value for index 14'],
+                ['value' => 15, 'label' => 'Option Value for index 15']
+            ]);
+        
+        $this->abstractAttribute->expects($this->any())
+            ->method('getSource')
+            ->willReturn($source);
+        $this->abstractAttribute->expects($this->atLeastOnce())
+            ->method('getSourceModel')
+            ->willReturn('getSourceModel value');
+
+        $this->optionSelectBuilder->expects($this->any())
+            ->method('getSelect')
+            ->with($this->abstractAttribute, 1, $this->scope)
+            ->willReturn($this->select);
+
+        $this->attributeResource->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($this->select)
             ->willReturn($options);
 
         $this->assertEquals(
@@ -182,7 +192,7 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testOptionsDataProvider()
+    public function getAttributeOptionsDataProvider()
     {
         return [
             [
@@ -192,24 +202,61 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
                         'product_id' => 4,
                         'attribute_code' => 'color',
                         'value_index' => '13',
-                        'option_title' => 'Black'
+                        'option_title' => 'Black',
                     ],
                     [
                         'sku' => 'Configurable1-White',
                         'product_id' => 4,
                         'attribute_code' => 'color',
                         'value_index' => '14',
-                        'option_title' => 'White'
+                        'option_title' => 'White',
                     ],
                     [
                         'sku' => 'Configurable1-Red',
                         'product_id' => 4,
                         'attribute_code' => 'color',
                         'value_index' => '15',
-                        'option_title' => 'Red'
-                    ]
-                ]
-            ]
+                        'option_title' => 'Red',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function optionsWithBackendModelDataProvider()
+    {
+        return [
+            [
+                [
+                    [
+                        'sku' => 'Configurable1-Black',
+                        'product_id' => 4,
+                        'attribute_code' => 'color',
+                        'value_index' => '13',
+                        'option_title' => 'Option Value for index 13',
+                        'default_title' => 'Option Value for index 13',
+                    ],
+                    [
+                        'sku' => 'Configurable1-White',
+                        'product_id' => 4,
+                        'attribute_code' => 'color',
+                        'value_index' => '14',
+                        'option_title' => 'Option Value for index 14',
+                        'default_title' => 'Option Value for index 14',
+                    ],
+                    [
+                        'sku' => 'Configurable1-Red',
+                        'product_id' => 4,
+                        'attribute_code' => 'color',
+                        'value_index' => '15',
+                        'option_title' => 'Option Value for index 15',
+                        'default_title' => 'Option Value for index 15',
+                    ],
+                ],
+            ],
         ];
     }
 }

@@ -127,6 +127,16 @@ class DeployStaticOptions
     const LANGUAGES_ARGUMENT = 'languages';
 
     /**
+     * Static content version
+     */
+    const CONTENT_VERSION = 'content-version';
+
+    /**
+     * Key for refresh content version only mode
+     */
+    const REFRESH_CONTENT_VERSION_ONLY = 'refresh-content-version-only';
+
+    /**
      * Deploy static command options list
      *
      * @return array
@@ -211,7 +221,21 @@ class DeployStaticOptions
                 null,
                 InputOption::VALUE_NONE,
                 'Create symlinks for the files of those locales, which are passed for deployment, '
-                . 'but have no customizations'
+                . 'but have no customizations.'
+            ),
+            new InputOption(
+                self::CONTENT_VERSION,
+                null,
+                InputArgument::OPTIONAL,
+                'Custom version of static content can be used if running deployment on multiple nodes '
+                . 'to ensure that static content version is identical and caching works properly.'
+            ),
+            new InputOption(
+                self::REFRESH_CONTENT_VERSION_ONLY,
+                null,
+                InputOption::VALUE_NONE,
+                'Refreshing the version of static content only can be used to refresh static content '
+                . 'in browser cache and CDN cache.'
             ),
             new InputArgument(
                 self::LANGUAGES_ARGUMENT,

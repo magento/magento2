@@ -8,6 +8,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 /**
  * Adminhtml sales order create gift message form
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Template

@@ -133,7 +133,7 @@
                 <input type="email" name="email" autocomplete="email" id="email_address" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getEmail()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
             </div>
         </div>
-        <div class="field password required" data-mage-init='{"passwordStrengthIndicator": {}}'>
+        <div class="field password required">
             <label for="password" class="label"><span><?php echo $block->escapeHtml(__('Password')) ?></span></label>
             <div class="control">
                 <input type="password" name="password" id="password"
@@ -220,3 +220,13 @@ require([
     }
 </script>
 <?php endif; ?>
+
+<script type="text/x-magento-init">
+    {
+        ".field.password": {
+            "passwordStrengthIndicator": {
+                "formSelector": "form.form-create-account"
+            }
+        }
+    }
+</script>

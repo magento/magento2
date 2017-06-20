@@ -83,6 +83,19 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
      */
     private $stateFactoryMock;
 
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSessionMock;
+
+    /**
+     * @var int
+     */
+    private $customerGroupId = 42;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -167,6 +180,16 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCustomerGroupId'])
+            ->getMock();
+
+        $this->customerSessionMock->expects($this->any())
+            ->method('getCustomerGroupId')
+            ->willReturn($this->customerGroupId);
+
         $this->target = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor::class,
             [
@@ -177,14 +200,15 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 'attributePrefix' => 'attr_',
                 'metadataPool' => $this->metadataPoolMock,
                 'aliasResolver' => $this->aliasResolver,
-                'stateFactory' => $this->stateFactoryMock
+                'stateFactory' => $this->stateFactoryMock,
+                'customerSession' => $this->customerSessionMock
             ]
         );
     }
 
     public function testProcessPrice()
     {
-        $expectedResult = 'price_index.min_price = 23';
+        $expectedResult = 'price_index.min_price = 23 AND price_index.customer_group_id = ' . $this->customerGroupId;
         $isNegation = false;
         $query = 'price = 23';
 

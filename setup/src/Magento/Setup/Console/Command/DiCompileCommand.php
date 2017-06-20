@@ -132,17 +132,21 @@ class DiCompileCommand extends Command
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+        $setupPath = $this->directoryList->getPath(DirectoryList::SETUP);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATED_CODE);
 
         $this->objectManager->get(\Magento\Framework\App\Cache::class)->clean();
         $compiledPathsList = [
             'application' => $modulePaths,
             'library' => $libraryPaths,
+            'setup' => $setupPath,
             'generated_helpers' => $generationPath
         ];
+
         $this->excludedPathsList = [
             'application' => $this->getExcludedModulePaths($modulePaths),
             'framework' => $this->getExcludedLibraryPaths($libraryPaths),
+            'setup' => $this->getExcludedSetupPaths($setupPath),
         ];
         $this->configureObjectManager($output);
 
@@ -248,6 +252,19 @@ class DiCompileCommand extends Command
     }
 
     /**
+     * Get excluded setup application paths
+     *
+     * @param string $setupPath
+     * @return string[]
+     */
+    private function getExcludedSetupPaths($setupPath)
+    {
+        return [
+            '#^(?:' . $setupPath . ')(/[\\w]+)*/Test#'
+        ];
+    }
+
+    /**
      * Delete directories by their code from "var" directory
      *
      * @param array $directoryCodeList
@@ -331,6 +348,7 @@ class DiCompileCommand extends Command
                 'paths' => [
                     $compiledPathsList['application'],
                     $compiledPathsList['library'],
+                    $compiledPathsList['setup'],
                     $compiledPathsList['generated_helpers'],
                 ],
                 'filePatterns' => ['php' => '/\.php$/'],

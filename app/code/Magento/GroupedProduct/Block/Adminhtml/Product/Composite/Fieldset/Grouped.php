@@ -10,6 +10,7 @@
 namespace Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated
  */

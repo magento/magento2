@@ -15,38 +15,41 @@ define([
     'use strict';
 
     var cacheKey = 'checkout-data',
-        checkoutData,
-
-        /**
-         * @return {*}
-         */
-        getData = function () {
-            return storage.get(cacheKey)();
-        },
 
         /**
          * @param {Object} data
          */
         saveData = function (data) {
             storage.set(cacheKey, data);
-        };
+        },
 
-    if ($.isEmptyObject(getData())) {
-        checkoutData = {
-            'selectedShippingAddress': null,
-            'shippingAddressFromData': null,
-            'newCustomerShippingAddress': null,
-            'selectedShippingRate': null,
-            'selectedPaymentMethod': null,
-            'selectedBillingAddress': null,
-            'billingAddressFormData': null,
-            'newCustomerBillingAddress': null
+        /**
+         * @return {*}
+         */
+        getData = function () {
+            var data = storage.get(cacheKey)();
+
+            if ($.isEmptyObject(data)) {
+                data = {
+                    'selectedShippingAddress': null, //Selected shipping address pulled from persistence storage
+                    'shippingAddressFromData': null, //Shipping address pulled from persistence storage
+                    'newCustomerShippingAddress': null, //Shipping address pulled from persistence storage for customer
+                    'selectedShippingRate': null, //Shipping rate pulled from persistence storage
+                    'selectedPaymentMethod': null, //Payment method pulled from persistence storage
+                    'selectedBillingAddress': null, //Selected billing address pulled from persistence storage
+                    'billingAddressFromData': null, //Billing address pulled from persistence storage
+                    'newCustomerBillingAddress': null //Billing address pulled from persistence storage for new customer
+                };
+                saveData(data);
+            }
+
+            return data;
         };
-        saveData(checkoutData);
-    }
 
     return {
         /**
+         * Setting the selected shipping address pulled from persistence storage
+         *
          * @param {Object} data
          */
         setSelectedShippingAddress: function (data) {
@@ -57,6 +60,8 @@ define([
         },
 
         /**
+         * Pulling the selected shipping address from persistence storage
+         *
          * @return {*}
          */
         getSelectedShippingAddress: function () {
@@ -64,6 +69,8 @@ define([
         },
 
         /**
+         * Setting the shipping address pulled from persistence storage
+         *
          * @param {Object} data
          */
         setShippingAddressFromData: function (data) {
@@ -74,6 +81,8 @@ define([
         },
 
         /**
+         * Pulling the shipping address from persistence storage
+         *
          * @return {*}
          */
         getShippingAddressFromData: function () {
@@ -81,6 +90,8 @@ define([
         },
 
         /**
+         * Setting the shipping address pulled from persistence storage for new customer
+         *
          * @param {Object} data
          */
         setNewCustomerShippingAddress: function (data) {
@@ -91,6 +102,8 @@ define([
         },
 
         /**
+         * Pulling the shipping address from persistence storage for new customer
+         *
          * @return {*}
          */
         getNewCustomerShippingAddress: function () {
@@ -98,6 +111,8 @@ define([
         },
 
         /**
+         * Setting the selected shipping rate pulled from persistence storage
+         *
          * @param {Object} data
          */
         setSelectedShippingRate: function (data) {
@@ -108,6 +123,8 @@ define([
         },
 
         /**
+         * Pulling the selected shipping rate from local storage
+         *
          * @return {*}
          */
         getSelectedShippingRate: function () {
@@ -115,6 +132,8 @@ define([
         },
 
         /**
+         * Setting the selected payment method pulled from persistence storage
+         *
          * @param {Object} data
          */
         setSelectedPaymentMethod: function (data) {
@@ -125,6 +144,8 @@ define([
         },
 
         /**
+         * Pulling the payment method from persistence storage
+         *
          * @return {*}
          */
         getSelectedPaymentMethod: function () {
@@ -132,6 +153,8 @@ define([
         },
 
         /**
+         * Setting the selected billing address pulled from persistence storage
+         *
          * @param {Object} data
          */
         setSelectedBillingAddress: function (data) {
@@ -142,6 +165,8 @@ define([
         },
 
         /**
+         * Pulling the selected billing address from persistence storage
+         *
          * @return {*}
          */
         getSelectedBillingAddress: function () {
@@ -149,6 +174,8 @@ define([
         },
 
         /**
+         * Setting the billing address pulled from persistence storage
+         *
          * @param {Object} data
          */
         setBillingAddressFromData: function (data) {
@@ -159,6 +186,8 @@ define([
         },
 
         /**
+         * Pulling the billing address from persistence storage
+         *
          * @return {*}
          */
         getBillingAddressFromData: function () {
@@ -166,6 +195,8 @@ define([
         },
 
         /**
+         * Setting the billing address pulled from persistence storage for new customer
+         *
          * @param {Object} data
          */
         setNewCustomerBillingAddress: function (data) {
@@ -176,6 +207,8 @@ define([
         },
 
         /**
+         * Pulling the billing address from persistence storage for new customer
+         *
          * @return {*}
          */
         getNewCustomerBillingAddress: function () {
@@ -183,6 +216,8 @@ define([
         },
 
         /**
+         * Pulling the email address from persistence storage
+         *
          * @return {*}
          */
         getValidatedEmailValue: function () {
@@ -192,6 +227,8 @@ define([
         },
 
         /**
+         * Setting the email address pulled from persistence storage
+         *
          * @param {String} email
          */
         setValidatedEmailValue: function (email) {
@@ -202,6 +239,8 @@ define([
         },
 
         /**
+         * Pulling the email input field value from persistence storage
+         *
          * @return {*}
          */
         getInputFieldEmailValue: function () {
@@ -211,6 +250,8 @@ define([
         },
 
         /**
+         * Setting the email input field value pulled from persistence storage
+         *
          * @param {String} email
          */
         setInputFieldEmailValue: function (email) {

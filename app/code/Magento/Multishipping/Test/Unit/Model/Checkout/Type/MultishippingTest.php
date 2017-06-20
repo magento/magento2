@@ -44,6 +44,9 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
+use Magento\Quote\Model\Quote\Payment;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Directory\Model\AllowedCountries;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -146,6 +149,17 @@ class MultishippingTest extends PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->atLeastOnce())->method('getCustomerDataObject')
             ->willReturn($this->customerMock);
         $this->totalsCollectorMock = $this->createSimpleMock(TotalsCollector::class);
+        $this->cartExtensionFactoryMock = $this->getMockBuilder(CartExtensionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $allowedCountryReaderMock = $this->getMockBuilder(AllowedCountries::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllowedCountries'])
+            ->getMock();
+        $allowedCountryReaderMock->method('getAllowedCountries')
+            ->willReturn(['EN'=>'EN']);
+
         $this->model = new Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
@@ -168,21 +182,14 @@ class MultishippingTest extends PHPUnit_Framework_TestCase
             $this->searchCriteriaBuilderMock,
             $this->filterBuilderMock,
             $this->totalsCollectorMock,
-            $data
+            $data,
+            $this->cartExtensionFactoryMock,
+            $allowedCountryReaderMock
         );
 
-        $this->cartExtensionFactoryMock = $this->getMockBuilder(CartExtensionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->shippingAssignmentProcessorMock = $this->createSimpleMock(ShippingAssignmentProcessor::class);
 
         $objectManager = new ObjectManager($this);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'cartExtensionFactory',
-            $this->cartExtensionFactoryMock
-        );
         $objectManager->setBackwardCompatibleProperty(
             $this->model,
             'shippingAssignmentProcessor',
@@ -355,6 +362,49 @@ class MultishippingTest extends PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->model->setShippingMethods($methodsArray);
+    }
+
+    /**
+     * Tests exception for addresses with country id not in the allowed countries list.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Some addresses cannot be used due to country-specific configurations.
+     */
+    public function testCreateOrdersCountryNotPresentInAllowedListException()
+    {
+        $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isAvailable'])
+            ->getMockForAbstractClass();
+        $abstractMethod->method('isAvailable')
+            ->willReturn(true);
+
+        $paymentMock = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getMethodInstance'])
+            ->getMock();
+        $paymentMock->method('getMethodInstance')
+            ->willReturn($abstractMethod);
+
+        $shippingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate', 'getShippingMethod', 'getShippingRateByCode', 'getCountryId'])
+            ->getMock();
+        $shippingAddressMock->method('validate')
+            ->willReturn(true);
+        $shippingAddressMock->method('getShippingMethod')
+            ->willReturn('carrier');
+        $shippingAddressMock->method('getShippingRateByCode')
+            ->willReturn('code');
+        $shippingAddressMock->method('getCountryId')
+            ->willReturn('EU');
+
+        $this->quoteMock->method('getPayment')
+            ->willReturn($paymentMock);
+        $this->quoteMock->method('getAllShippingAddresses')
+            ->willReturn([$shippingAddressMock]);
+
+        $this->model->createOrders();
     }
 
     /**

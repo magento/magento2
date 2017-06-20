@@ -8,6 +8,9 @@ namespace Magento\Backend\Model\View\Result;
 use Magento\Framework\Translate;
 use Magento\Framework\View;
 
+/**
+ * @api
+ */
 class Page extends View\Result\Page
 {
     /**

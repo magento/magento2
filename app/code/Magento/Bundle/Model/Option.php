@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model;
 /**
  * Bundle Option Model
  *
+ * @api
  * @method int getParentId()
  * @method null|\Magento\Catalog\Model\Product[] getSelections()
  * @method Option setParentId(int $value)

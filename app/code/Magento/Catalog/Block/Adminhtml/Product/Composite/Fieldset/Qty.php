@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset;
 
 /**
  * Adminhtml block for fieldset of product custom options
+ *
+ * @api
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset;
-
 class Qty extends \Magento\Framework\View\Element\Template
 {
     /**

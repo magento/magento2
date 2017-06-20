@@ -7,6 +7,8 @@ namespace Magento\Search\Block\Adminhtml\Term;
 
 /**
  * Admin term edit block
+ *
+ * @api
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
