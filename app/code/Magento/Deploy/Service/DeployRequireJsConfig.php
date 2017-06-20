@@ -5,6 +5,8 @@
  */
 namespace Magento\Deploy\Service;
 
+use Magento\Framework\Locale\ResolverInterfaceFactory;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\RequireJs\Model\FileManagerFactory;
 use Magento\Framework\View\DesignInterfaceFactory;
 use Magento\Framework\View\Design\Theme\ListInterface;
@@ -47,6 +49,11 @@ class DeployRequireJsConfig
     private $requireJsConfigFactory;
 
     /**
+     * @var ResolverInterfaceFactory
+     */
+    private $localeFactory;
+
+    /**
      * DeployRequireJsConfig constructor
      *
      * @param ListInterface $themeList
@@ -54,31 +61,40 @@ class DeployRequireJsConfig
      * @param RepositoryFactory $assetRepoFactory
      * @param FileManagerFactory $fileManagerFactory
      * @param ConfigFactory $requireJsConfigFactory
+     * @param ResolverInterfaceFactory $localeFactory
      */
     public function __construct(
         ListInterface $themeList,
         DesignInterfaceFactory $designFactory,
         RepositoryFactory $assetRepoFactory,
         FileManagerFactory $fileManagerFactory,
-        ConfigFactory $requireJsConfigFactory
+        ConfigFactory $requireJsConfigFactory,
+        ResolverInterfaceFactory $localeFactory
     ) {
         $this->themeList = $themeList;
         $this->designFactory = $designFactory;
         $this->assetRepoFactory = $assetRepoFactory;
         $this->fileManagerFactory = $fileManagerFactory;
         $this->requireJsConfigFactory = $requireJsConfigFactory;
+        $this->localeFactory = $localeFactory;
     }
 
     /**
      * @param string $areaCode
      * @param string $themePath
+     * @param string $localeCode
      * @return bool true on success
      */
-    public function deploy($areaCode, $themePath)
+    public function deploy($areaCode, $themePath, $localeCode)
     {
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
         $theme = $this->themeList->getThemeByFullPath($areaCode . '/' . $themePath);
+        /** @var \Magento\Theme\Model\View\Design $design */
         $design = $this->designFactory->create()->setDesignTheme($theme, $areaCode);
+        /** @var ResolverInterface $locale */
+        $locale = $this->localeFactory->create();
+        $locale->setLocale($localeCode);
+        $design->setLocale($locale);
 
         $assetRepo = $this->assetRepoFactory->create(['design' => $design]);
         /** @var \Magento\RequireJs\Model\FileManager $fileManager */

@@ -22,11 +22,21 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     private $resource;
 
     /**
-     * @param ResourceConnection $resource
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      */
-    public function __construct(ResourceConnection $resource)
-    {
+    private $stockConfig;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface|null $stockConfig
+     */
+    public function __construct(
+        ResourceConnection $resource,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfig = null
+    ) {
         $this->resource = $resource;
+        $this->stockConfig = $stockConfig ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
     }
 
     /**
@@ -39,13 +49,15 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
     {
         $stockStatusTable = $this->resource->getTableName('cataloginventory_stock_status');
 
-        /** @var Select $select */
-        $select->join(
-            ['stock' => $stockStatusTable],
-            sprintf('stock.product_id = %s.entity_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
-            []
-        )
-            ->where('stock.stock_status = ?', Stock::STOCK_IN_STOCK);
+        if (!$this->stockConfig->isShowOutOfStock()) {
+            /** @var Select $select */
+            $select->join(
+                ['stock' => $stockStatusTable],
+                sprintf('stock.product_id = %s.entity_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
+                []
+            )->where('stock.stock_status = ?', Stock::STOCK_IN_STOCK);
+        }
+
         return $select;
     }
 }

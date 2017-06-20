@@ -111,7 +111,6 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
         $attr = $objectManager->get(\Magento\Eav\Model\Config::class)
            ->getAttribute('catalog_product', 'multiselect_attribute');
-        $attr->setIsFilterable(1)->save();
 
         /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
         $options = $objectManager->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class);
