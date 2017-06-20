@@ -79,21 +79,41 @@ class UpgradeData implements UpgradeDataInterface
 
             // Updating data of the 'catalog_product_bundle_selection_price' table.
             $tableName = $setup->getTable('catalog_product_bundle_selection_price');
-            $oldTableName = $setup->getTable('catalog_product_bundle_selection_price_old');
+            $tmpTableName = $setup->getTable('catalog_product_bundle_selection_price_tmp');
 
-            $setup->getConnection()->renameTable($tableName, $oldTableName);
+            $existingForeignKeys = $setup->getConnection()->getForeignKeys($tableName);
 
-            $tableCopy = $setup->getConnection()->createTableByDdl($oldTableName, $tableName);
-
-            foreach ($setup->getConnection()->getForeignKeys($oldTableName) as $key) {
-                $setup->getConnection()->dropForeignKey($oldTableName, $key['FK_NAME']);
+            foreach ($existingForeignKeys as $key) {
+                $setup->getConnection()->dropForeignKey($key['TABLE_NAME'], $key['FK_NAME']);
             }
 
-            $setup->getConnection()->createTable($tableCopy);
+            $setup->getConnection()->createTable(
+                $setup->getConnection()->createTableByDdl($tableName, $tmpTableName)
+            );
+
+            foreach ($existingForeignKeys as $key) {
+                $setup->getConnection()->addForeignKey(
+                    $key['FK_NAME'],
+                    $key['TABLE_NAME'],
+                    $key['COLUMN_NAME'],
+                    $key['REF_TABLE_NAME'],
+                    $key['REF_COLUMN_NAME'],
+                    $key['ON_DELETE']
+                );
+            }
+
+            $setup->getConnection()->query(
+                $setup->getConnection()->insertFromSelect(
+                    $setup->getConnection()->select()->from($tableName),
+                    $tmpTableName
+                )
+            );
+
+            $setup->getConnection()->truncateTable($tableName);
 
             $columnsToSelect = [];
 
-            foreach ($setup->getConnection()->describeTable($oldTableName) as $column) {
+            foreach ($setup->getConnection()->describeTable($tmpTableName) as $column) {
                 $alias = $column['COLUMN_NAME'] == 'parent_product_id' ? 'selections.' : 'prices.';
 
                 $columnsToSelect[] = $alias . $column['COLUMN_NAME'];
@@ -101,7 +121,7 @@ class UpgradeData implements UpgradeDataInterface
 
             $select = $setup->getConnection()->select()
                 ->from(
-                    ['prices' => $oldTableName],
+                    ['prices' => $tmpTableName],
                     []
                 )->joinLeft(
                     ['selections' => $setup->getTable('catalog_product_bundle_selection')],
@@ -113,7 +133,7 @@ class UpgradeData implements UpgradeDataInterface
                 $setup->getConnection()->insertFromSelect($select, $tableName)
             );
 
-            $setup->getConnection()->dropTable($oldTableName);
+            $setup->getConnection()->dropTable($tmpTableName);
         }
 
         $setup->endSetup();
