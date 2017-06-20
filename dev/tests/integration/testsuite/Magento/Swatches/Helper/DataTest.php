@@ -24,21 +24,21 @@ use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as TypeConfigurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestFramework\Helper\Bootstrap;
-
 /**
- * class DataTest
+ * Class DataTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataTest extends AbstractController
 {
-
     const SWATCH_ATTRIBUTE_NAME = 'test_swatch_attribute';
     const CATEGORY_NAME = 'test_category';
     const CATEGORY_ID = 123456;
@@ -268,12 +268,12 @@ class DataTest extends AbstractController
      */
     private static function attributeFixture()
     {
-        $eavConfig = Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
-        /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-        $installer = Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+        $eavConfig = Bootstrap::getObjectManager()->get(EavConfig::class);
+        /** @var $installer CategorySetup */
+        $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
         $data = [
             'is_required' => 0,
-            'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Table',
+            'source_model' => Table::class,
             'is_visible_on_front' => 1,
             'is_visible_in_advanced_search' => 0,
             'attribute_code' => self::SWATCH_ATTRIBUTE_NAME,
@@ -300,6 +300,7 @@ class DataTest extends AbstractController
                         dechex(255 * $index / $optionsPerAttribute),
                         3
                     );
+
                 return $values;
             },
             []
@@ -308,6 +309,7 @@ class DataTest extends AbstractController
             range(1, $optionsPerAttribute),
             function ($values, $index) {
                 $values['option_' . $index] = ['option ' . $index];
+
                 return $values;
             },
             []
@@ -319,6 +321,7 @@ class DataTest extends AbstractController
                     'label' => 'option ' . $index,
                     'value' => 'option_' . $index
                 ];
+
                 return $values;
             },
             []
