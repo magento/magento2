@@ -31,11 +31,6 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Swatches\Model\Plugin\ProductImage|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $pluginModel;
 
-    /**
-     * @var ProductSubstitute|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $productSubstitute;
-
     protected function setUp()
     {
         $this->swatchesHelperMock = $this->getMock(
@@ -75,21 +70,12 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->productSubstitute = $objectManager->getObject(
-            \Magento\Swatches\Model\ProductSubstitute::class,
-            [
-                'swatchesHelperData' => $this->swatchesHelperMock,
-                'eavConfig' => $this->eavConfigMock,
-                'request' => $this->requestMock,
-            ]
-        );
         $this->pluginModel = $objectManager->getObject(
             \Magento\Swatches\Model\Plugin\ProductImage::class,
             [
                 'swatchesHelperData' => $this->swatchesHelperMock,
                 'eavConfig' => $this->eavConfigMock,
                 'request' => $this->requestMock,
-                'productSubstitute' => $this->productSubstitute
             ]
         );
     }

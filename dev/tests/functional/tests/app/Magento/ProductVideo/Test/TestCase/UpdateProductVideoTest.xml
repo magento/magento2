@@ -49,6 +49,8 @@
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect" />
         </variation>
         <variation name="GetVideoInfoTestVariation2" summary="Validate Vimeo video info" ticketId="MAGETWO-43663">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-64241: Magento\ProductVideo\Test\TestCase\UpdateProductVideoTest.test with data set "GetVideoInfoTestVariation2"</data>
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="productVideo/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>

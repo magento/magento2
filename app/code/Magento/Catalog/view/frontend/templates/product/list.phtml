@@ -13,7 +13,6 @@ use Magento\Framework\App\Action\Action;
  * Product list template
  *
  * @var $block \Magento\Catalog\Block\Product\ListProduct
- * @var $imageBlockBuilder \Magento\Catalog\Block\Product\ImageBlockBuilder
  */
 ?>
 <?php
@@ -28,12 +27,12 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
     <?php
     if ($block->getMode() == 'grid') {
         $viewMode = 'grid';
-        $imageDisplayArea = 'category_page_grid';
+        $image = 'category_page_grid';
         $showDescription = false;
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
     } else {
         $viewMode = 'list';
-        $imageDisplayArea = 'category_page_list';
+        $image = 'category_page_list';
         $showDescription = true;
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
     }
@@ -50,7 +49,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                 <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <div class="product-item-info" data-container="product-grid">
                     <?php
-                    $productImage = $imageBlockBuilder->buildBlock($_product, $imageDisplayArea);
+                    $productImage = $block->getImage($_product, $image);
                     if ($pos != null) {
                         $position = ' style="left:' . $productImage->getWidth() . 'px;'
                             . 'top:' . $productImage->getHeight() . 'px;"';

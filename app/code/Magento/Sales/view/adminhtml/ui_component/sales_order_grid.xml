@@ -20,6 +20,7 @@
                 <item name="url" xsi:type="string">sales/order_create/start</item>
             </item>
         </item>
+        <item name="acl" xsi:type="string">Magento_Sales::sales_order</item>
     </argument>
     <dataSource name="sales_order_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -186,7 +187,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Purchase Date</item>
-                    <item name="dateFormat" xsi:type="string">MMM dd, YYYY, H:MM:SS A</item>
+                    <item name="dateFormat" xsi:type="string">MMM dd, YYYY, H:mm:ss A</item>
                 </item>
             </argument>
         </column>

@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class TableBuilder
@@ -47,14 +48,18 @@ class TableBuilder
     /**
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param BuilderInterfaceFactory|null $tableBuilderFactory
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        BuilderInterfaceFactory $tableBuilderFactory = null
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->resource = $resource;
         $this->_connection = $resource->getConnection();
+        $this->tableBuilderFactory = $tableBuilderFactory ?:
+            ObjectManager::getInstance()->get(BuilderInterfaceFactory::class);
     }
 
     /**
@@ -128,13 +133,13 @@ class TableBuilder
         $valueTables = [];
         if (!empty($columns)) {
             $valueTableName = $tableName . $valueFieldSuffix;
-            $temporaryTableBuilder = $this->getTableBuilderFactory()->create(
+            $temporaryTableBuilder = $this->tableBuilderFactory->create(
                 [
                     'connection' => $this->_connection,
                     'tableName' => $tableName
                 ]
             );
-            $valueTemporaryTableBuilder = $this->getTableBuilderFactory()->create(
+            $valueTemporaryTableBuilder = $this->tableBuilderFactory->create(
                 [
                     'connection' => $this->_connection,
                     'tableName' => $valueTableName
@@ -350,26 +355,13 @@ class TableBuilder
     }
 
     /**
-     * @return BuilderInterfaceFactory
-     */
-    private function getTableBuilderFactory()
-    {
-        if (null === $this->tableBuilderFactory) {
-            $this->tableBuilderFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(BuilderInterfaceFactory::class);
-        }
-
-        return $this->tableBuilderFactory;
-    }
-
-    /**
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

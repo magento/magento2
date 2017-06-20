@@ -78,7 +78,7 @@ define(['uiElement', 'underscore', 'mage/url'],
                 },
                 afterSubmit: function() {
                     window.location.href = url.build('checkout/cart/updatePost')
-                        + '?form_key=' + window.giftOptionsConfig.giftMessage.formKey
+                        + '?form_key=' + window.checkoutConfig.formKey
                         + '&cart[]';
                 },
                 getSubmitParams: function(remove) {
