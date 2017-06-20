@@ -544,7 +544,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return void
      */
-    public function cleanupDisabledJobs($groupId)
+    private function cleanupDisabledJobs($groupId)
     {
         $jobs = $this->getJobs();
         foreach ($jobs[$groupId] as $jobCode => $jobConfig) {
