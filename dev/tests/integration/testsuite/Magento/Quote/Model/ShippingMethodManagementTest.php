@@ -19,6 +19,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * @return void
      */
     public function testEstimateByAddressWithCartPriceRule()
     {
@@ -32,6 +33,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
      * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * @return void
      */
     public function testEstimateByAddress()
     {

@@ -5,6 +5,7 @@
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var \Magento\Framework\App\ResourceConnection $resource */
 $resource = $objectManager->get(\Magento\Framework\App\ResourceConnection::class);
 $connection = $resource->getConnection();
 $resourceModel = $objectManager->create(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate::class);
@@ -19,9 +20,4 @@ $data = [
     'price' => 10,
     'cost' => 10,
 ];
-$connection->query(
-    "INSERT INTO {$entityTable} (`website_id`,  `dest_country_id`, `dest_region_id`, `dest_zip`, `condition_name`,"
-    . "`condition_value`, `price`, `cost`) VALUES (:website_id,  :dest_country_id, :dest_region_id, :dest_zip,"
-    . " :condition_name, :condition_value, :price, :cost);",
-    $data
-);
+$connection->insert($entityTable, $data);
