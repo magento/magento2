@@ -10,6 +10,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Website;
 use Magento\Tax\Model\Calculation;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Bundle\Model\Product\Price;
+use Magento\Catalog\Model\Product\Type;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -189,8 +191,10 @@ class Tax extends \Magento\Framework\Model\AbstractModel
             true,
             false
         );
-        foreach ($attributes as $attribute) {
-            $amountExclTax += $attribute->getAmountExclTax();
+        if (Type::TYPE_BUNDLE !== $product->getTypeId() || Price::PRICE_TYPE_DYNAMIC !== (int)$product->getPriceType()) {
+            foreach ($attributes as $attribute) {
+                $amountExclTax += $attribute->getAmountExclTax();
+            }
         }
         return $amountExclTax;
     }
