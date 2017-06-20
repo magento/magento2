@@ -125,6 +125,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testImport()
     {
         $data = [];
@@ -145,8 +148,17 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->willReturn('oldScope');
         $this->stateMock->expects($this->once())
             ->method('emulateAreaCode')
-            ->with(Area::AREA_ADMINHTML, $this->anything());
-        $this->scopeMock->expects($this->once())
+            ->with(Area::AREA_ADMINHTML, $this->anything())
+            ->willReturnCallback(function ($area, $function) {
+                return $function();
+            });
+        $this->saveProcessorMock->expects($this->once())
+            ->method('process')
+            ->with([]);
+        $this->scopeMock->expects($this->at(1))
+            ->method('setCurrentScope')
+            ->with(Area::AREA_ADMINHTML);
+        $this->scopeMock->expects($this->at(2))
             ->method('setCurrentScope')
             ->with('oldScope');
         $this->flagManagerMock->expects($this->once())
