@@ -5,11 +5,9 @@
  */
 namespace Magento\Config\Console\Command;
 
-use Magento\Framework\App\Config;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -48,13 +46,6 @@ class ConfigSetCommand extends Command
     private $changeDetector;
 
     /**
-     * The hash manager.
-     *
-     * @var Hash
-     */
-    private $hash;
-
-    /**
      * The factory for processor facade.
      *
      * @var ProcessorFacadeFactory
@@ -62,31 +53,18 @@ class ConfigSetCommand extends Command
     private $processorFacadeFactory;
 
     /**
-     * The application config storage.
-     *
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param ChangeDetector $changeDetector The config change detector
-     * @param Hash $hash The hash manager
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
-     * @param ScopeConfigInterface $scopeConfig The application config storage
      */
     public function __construct(
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
         ChangeDetector $changeDetector,
-        Hash $hash,
-        ProcessorFacadeFactory $processorFacadeFactory,
-        ScopeConfigInterface $scopeConfig
+        ProcessorFacadeFactory $processorFacadeFactory
     ) {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
-        $this->hash = $hash;
         $this->processorFacadeFactory = $processorFacadeFactory;
-        $this->scopeConfig = $scopeConfig;
 
         parent::__construct();
     }
@@ -102,7 +80,7 @@ class ConfigSetCommand extends Command
                 new InputArgument(
                     static::ARG_PATH,
                     InputArgument::REQUIRED,
-                    'Configuration path in format group/section/field_name'
+                    'Configuration path in format section/group/field_name'
                 ),
                 new InputArgument(static::ARG_VALUE, InputArgument::REQUIRED, 'Configuration value'),
                 new InputOption(
@@ -157,12 +135,6 @@ class ConfigSetCommand extends Command
                     $input->getOption(static::OPTION_LOCK)
                 );
             });
-
-            $this->hash->regenerate(System::CONFIG_TYPE);
-
-            if ($this->scopeConfig instanceof Config) {
-                $this->scopeConfig->clean();
-            }
 
             $output->writeln('<info>' . $message . '</info>');
 
