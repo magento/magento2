@@ -6,7 +6,6 @@
 
 namespace Magento\Swatches\Helper;
 
-// @codingStandardsIgnoreStart
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
@@ -31,8 +30,12 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestFramework\Helper\Bootstrap;
-// @codingStandardsIgnoreEnd
 
+/**
+ * class DataTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends AbstractController
 {
 
@@ -159,7 +162,9 @@ class DataTest extends AbstractController
                 ->setPrice(10)
                 ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
                 ->setStatus(Status::STATUS_ENABLED)
-                ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+                ->setStockData(
+                    ['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]
+                );
             $product->setData($attribute->getAttributeCode(), $option->getValue());
             $product = $productRepository->save($product);
             // simple products must be in stock
