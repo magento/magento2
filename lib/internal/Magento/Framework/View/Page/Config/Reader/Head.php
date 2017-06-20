@@ -86,7 +86,7 @@ class Head implements Layout\ReaderInterface
                     break;
 
                 case self::HEAD_TITLE:
-                    $pageConfigStructure->setTitle($node);
+                    $pageConfigStructure->setTitle(__($node));
                     break;
 
                 case self::HEAD_META:
