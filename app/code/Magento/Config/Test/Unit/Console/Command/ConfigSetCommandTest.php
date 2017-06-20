@@ -11,6 +11,7 @@ use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Framework\App\Config;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -49,6 +50,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $processorFacadeFactoryMock;
 
     /**
+     * @var Config|Mock
+     */
+    private $config;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -65,12 +71,16 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
             $this->changeDetectorMock,
             $this->hashMock,
-            $this->processorFacadeFactoryMock
+            $this->processorFacadeFactoryMock,
+            $this->config
         );
     }
 
@@ -85,6 +95,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->hashMock->expects($this->once())
             ->method('regenerate')
             ->with(System::CONFIG_TYPE);
+        $this->config->expects($this->once())
+            ->method('clean');
 
         $tester = new CommandTester($this->command);
         $tester->execute([
@@ -106,6 +118,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->emulatedAreProcessorMock->expects($this->never())
             ->method('process');
+        $this->config->expects($this->never())
+            ->method('clean');
 
         $tester = new CommandTester($this->command);
         $tester->execute([
@@ -128,6 +142,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
             ->willThrowException(new ValidatorException(__('The "test/test/test" path does not exists')));
+        $this->config->expects($this->never())
+            ->method('clean');
 
         $tester = new CommandTester($this->command);
         $tester->execute([

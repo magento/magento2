@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig\FileReader;
@@ -508,5 +509,88 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                 'value',
             ]
         ];
+    }
+
+    /**
+     * Test scenarios of setting default and allowed currencies
+     */
+    public function testSetDefaultCurrency()
+    {
+        $this->setDefaultCurrency('GBP', false);
+
+        $currencies = 'USD,GBP';
+        $inputMock = clone $this->inputMock;
+        $outputMock = clone $this->outputMock;
+        $inputMock->expects($this->any())
+            ->method('getArgument')
+            ->willReturnMap([
+                [ConfigSetCommand::ARG_PATH, Currency::XML_PATH_CURRENCY_ALLOW],
+                [ConfigSetCommand::ARG_VALUE, $currencies]
+            ]);
+        $inputMock->expects($this->any())
+            ->method('getOption')
+            ->willReturnMap([
+                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
+            ]);
+        $outputMock->expects($this->once())
+            ->method('writeln')
+            ->with('<info>Value was saved.</info>');
+
+        /** @var ConfigSetCommand $command */
+        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $status = $command->run($inputMock, $outputMock);
+
+        $this->assertSame(Cli::RETURN_SUCCESS, $status);
+        $this->assertSame(
+            $currencies,
+            $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_ALLOW)
+        );
+
+        $this->setDefaultCurrency('GBP', true);
+    }
+
+    /**
+     * @param string $currency
+     * @param bool $success
+     */
+    private function setDefaultCurrency($currency = 'GBP', $success = true)
+    {
+        $inputMock = clone $this->inputMock;
+        $outputMock = clone $this->outputMock;
+        $inputMock->expects($this->any())
+            ->method('getArgument')
+            ->willReturnMap([
+                [ConfigSetCommand::ARG_PATH, Currency::XML_PATH_CURRENCY_DEFAULT],
+                [ConfigSetCommand::ARG_VALUE, $currency]
+            ]);
+        $inputMock->expects($this->any())
+            ->method('getOption')
+            ->willReturnMap([
+                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
+            ]);
+        $outputMessage = $success ?
+            '<info>Value was saved.</info>' :
+            '<error>Sorry, the default display currency you selected is not available in allowed currencies.</error>';
+        $outputMock->expects($this->once())
+            ->method('writeln')
+            ->with($outputMessage);
+
+        /** @var ConfigSetCommand $command */
+        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $status = $command->run($inputMock, $outputMock);
+
+        if ($success) {
+            $this->assertSame(Cli::RETURN_SUCCESS, $status);
+            $this->assertSame(
+                $currency,
+                $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_DEFAULT)
+            );
+        } else {
+            $this->assertSame(Cli::RETURN_FAILURE, $status);
+            $this->assertNotSame(
+                $currency,
+                $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_DEFAULT)
+            );
+        }
     }
 }

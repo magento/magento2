@@ -6,6 +6,7 @@
 namespace Magento\Config\Test\Unit\Model;
 
 use Magento\Config\Model\Config\BackendFactory;
+use Magento\Config\Model\Config\PreparedValue\AdditionalData;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Config\Model\Config\StructureFactory;
@@ -70,6 +71,11 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
     private $scopeMock;
 
     /**
+     * @var AdditionalData|Mock
+     */
+    private $additionalDataMock;
+
+    /**
      * @var PreparedValueFactory
      */
     private $preparedValueFactory;
@@ -107,12 +113,16 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
+        $this->additionalDataMock = $this->getMockBuilder(AdditionalData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->preparedValueFactory = new PreparedValueFactory(
             $this->scopeResolverPoolMock,
             $this->structureFactoryMock,
             $this->valueFactoryMock,
-            $this->configMock
+            $this->configMock,
+            $this->additionalDataMock
         );
     }
 
@@ -178,6 +188,9 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('setValue')
             ->with($value)
             ->willReturnSelf();
+        $this->additionalDataMock->expects($this->once())
+            ->method('apply')
+            ->with($this->valueMock);
 
         $this->assertInstanceOf(
             Value::class,
@@ -294,6 +307,8 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('setScopeId');
         $this->valueMock->expects($this->never())
             ->method('setValue');
+        $this->additionalDataMock->expects($this->never())
+            ->method('apply');
 
         $this->assertSame(
             $value,

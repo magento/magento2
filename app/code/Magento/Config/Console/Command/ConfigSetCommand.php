@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Framework\App\Config;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
@@ -61,21 +62,31 @@ class ConfigSetCommand extends Command
     private $processorFacadeFactory;
 
     /**
+     * The application config storage.
+     *
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param ChangeDetector $changeDetector The config change detector
      * @param Hash $hash The hash manager
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
+     * @param ScopeConfigInterface $scopeConfig The application config storage
      */
     public function __construct(
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
         ChangeDetector $changeDetector,
         Hash $hash,
-        ProcessorFacadeFactory $processorFacadeFactory
+        ProcessorFacadeFactory $processorFacadeFactory,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
         $this->hash = $hash;
         $this->processorFacadeFactory = $processorFacadeFactory;
+        $this->scopeConfig = $scopeConfig;
 
         parent::__construct();
     }
@@ -148,6 +159,10 @@ class ConfigSetCommand extends Command
             });
 
             $this->hash->regenerate(System::CONFIG_TYPE);
+
+            if ($this->scopeConfig instanceof Config) {
+                $this->scopeConfig->clean();
+            }
 
             $output->writeln('<info>' . $message . '</info>');
 
