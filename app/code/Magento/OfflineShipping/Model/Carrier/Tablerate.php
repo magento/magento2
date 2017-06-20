@@ -164,7 +164,6 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
 
             $result->append($method);
         } elseif (empty($rate) && $request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
-
             /**
              * Promotion rule was applied for the whole cart.
              * In this case all other shipping methods could be omitted.
