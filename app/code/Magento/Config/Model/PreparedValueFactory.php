@@ -12,7 +12,6 @@ use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\ScopeInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
@@ -123,7 +122,7 @@ class PreparedValueFactory
                     $scope = StoreScopeInterface::SCOPE_STORES;
                 }
 
-                if ($scope !== ScopeInterface::SCOPE_DEFAULT) {
+                if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                     $scopeResolver = $this->scopeResolverPool->get($scope);
                     $scopeId = $scopeResolver->getScope($scopeCode)->getId();
                 }
