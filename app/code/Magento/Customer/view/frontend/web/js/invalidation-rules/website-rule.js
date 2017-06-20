@@ -24,7 +24,6 @@ define([
 
             if (this.scopeConfig && customer() &&
                 (~~customer().websiteId !== ~~this.scopeConfig.websiteId) && ~~customer().websiteId !== 0) {
-                console.log(~~customer().websiteId, this.scopeConfig.websiteId);
                 customerData.reload(['customer']);
             }
         }
