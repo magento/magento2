@@ -1,10 +1,8 @@
 <?php
-
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
