@@ -32,6 +32,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Class DataTest
  *
