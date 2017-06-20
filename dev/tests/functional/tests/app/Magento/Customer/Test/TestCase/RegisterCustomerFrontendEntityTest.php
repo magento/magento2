@@ -57,7 +57,6 @@ class RegisterCustomerFrontendEntityTest extends Injectable
      * @param CustomerAccountCreate $customerAccountCreate
      * @param CmsIndex $cmsIndex
      * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontendStep
-     * @return void
      */
     public function __inject(
         CustomerAccountCreate $customerAccountCreate,
@@ -80,7 +79,7 @@ class RegisterCustomerFrontendEntityTest extends Injectable
         $this->logoutCustomerOnFrontendStep->run();
         // Steps
         $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
+        $this->cmsIndex->getLinksBlock()->openCustomerCreateLink();
         $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);
     }
 
