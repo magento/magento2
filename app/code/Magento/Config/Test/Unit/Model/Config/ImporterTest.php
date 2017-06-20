@@ -15,7 +15,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
-use Magento\Framework\FlagFactory;
+use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
@@ -33,19 +33,14 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var FlagFactory|Mock
+     * @var FlagManager|Mock
      */
-    private $flagFactoryMock;
+    private $flagManagerMock;
 
     /**
      * @var Flag|Mock
      */
     private $flagMock;
-
-    /**
-     * @var FlagResource|Mock
-     */
-    private $flagResourceMock;
 
     /**
      * @var ArrayUtils|Mock
@@ -87,7 +82,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->flagMock = $this->getMockBuilder(Flag::class)
@@ -116,13 +111,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->flagFactoryMock->expects($this->any())
+        $this->flagManagerMock->expects($this->any())
             ->method('create')
             ->willReturn($this->flagMock);
 
         $this->model = new Importer(
-            $this->flagFactoryMock,
-            $this->flagResourceMock,
+            $this->flagManagerMock,
             $this->arrayUtilsMock,
             $this->saveProcessorMock,
             $this->scopeConfigMock,
@@ -136,11 +130,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $currentData = ['current' => '2'];
 
-        $this->flagResourceMock->expects($this->once())
-            ->method('load')
-            ->with($this->flagMock, Importer::FLAG_CODE, 'flag_code');
-        $this->flagMock->expects($this->once())
+        $this->flagManagerMock->expects($this->once())
             ->method('getFlagData')
+            ->with(Importer::FLAG_CODE)
             ->willReturn($currentData);
         $this->arrayUtilsMock->expects($this->exactly(2))
             ->method('recursiveDiff')
@@ -157,12 +149,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->scopeMock->expects($this->once())
             ->method('setCurrentScope')
             ->with('oldScope');
-        $this->flagMock->expects($this->once())
-            ->method('setFlagData')
-            ->with($data);
-        $this->flagResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->flagMock);
+        $this->flagManagerMock->expects($this->once())
+            ->method('saveFlag')
+            ->with(Importer::FLAG_CODE, $data);
 
         $this->assertSame(['System config was processed'], $this->model->import($data));
     }
@@ -176,10 +165,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $currentData = ['current' => '2'];
 
-        $this->flagResourceMock->expects($this->once())
-            ->method('load')
-            ->with($this->flagMock, Importer::FLAG_CODE, 'flag_code');
-        $this->flagMock->expects($this->once())
+        $this->flagManagerMock->expects($this->once())
             ->method('getFlagData')
             ->willReturn($currentData);
         $this->arrayUtilsMock->expects($this->exactly(2))
