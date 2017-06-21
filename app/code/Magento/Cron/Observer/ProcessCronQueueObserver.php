@@ -97,9 +97,9 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $_shell;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $timezone;
+    protected $dateTime;
 
     /**
      * @var \Symfony\Component\Process\PhpExecutableFinder
@@ -124,7 +124,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Console\Request $request
      * @param \Magento\Framework\ShellInterface $shell
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\State $state
@@ -138,7 +138,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Console\Request $request,
         \Magento\Framework\ShellInterface $shell,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\State $state
@@ -150,7 +150,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->_scopeConfig = $scopeConfig;
         $this->_request = $request;
         $this->_shell = $shell;
-        $this->timezone = $timezone;
+        $this->dateTime = $dateTime;
         $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
         $this->logger = $logger;
         $this->state = $state;
@@ -170,7 +170,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $pendingJobs = $this->_getPendingSchedules();
-        $currentTime = $this->timezone->scopeTimeStamp();
+        $currentTime = $this->dateTime->gmtTimestamp();
         $jobGroupsRoot = $this->_config->getJobs();
 
         $phpPath = $this->phpExecutableFinder->find() ?: 'php';
@@ -274,7 +274,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             );
         }
 
-        $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->timezone->scopeTimeStamp()))->save();
+        $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))->save();
 
         try {
             call_user_func_array($callback, [$schedule]);
@@ -285,7 +285,7 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         $schedule->setStatus(Schedule::STATUS_SUCCESS)->setFinishedAt(strftime(
             '%Y-%m-%d %H:%M:%S',
-            $this->timezone->scopeTimeStamp()
+            $this->dateTime->gmtTimestamp()
         ));
     }
 
@@ -322,7 +322,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $schedulePeriod = $rawSchedulePeriod * self::SECONDS_IN_MINUTE;
-        if ($lastRun > $this->timezone->scopeTimeStamp() - $schedulePeriod) {
+        if ($lastRun > $this->dateTime->gmtTimestamp() - $schedulePeriod) {
             return $this;
         }
 
@@ -343,7 +343,7 @@ class ProcessCronQueueObserver implements ObserverInterface
          * save time schedules generation was ran with no expiration
          */
         $this->_cache->save(
-            $this->timezone->scopeTimeStamp(),
+            $this->dateTime->gmtTimestamp(),
             self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId,
             ['crontab'],
             null
@@ -398,7 +398,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_CLEANUP_EVERY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if ($lastCleanup > $this->timezone->scopeTimeStamp() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
+        if ($lastCleanup > $this->dateTime->gmtTimestamp() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
             return $this;
         }
 
@@ -431,7 +431,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             Schedule::STATUS_ERROR => $historyFailure * self::SECONDS_IN_MINUTE,
         ];
 
-        $now = $this->timezone->scopeTimeStamp();
+        $now = $this->dateTime->gmtTimestamp();
         /** @var Schedule $record */
         foreach ($history as $record) {
             $checkTime = $record->getExecutedAt() ? strtotime($record->getExecutedAt()) :
@@ -443,7 +443,7 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         // save time history cleanup was ran with no expiration
         $this->_cache->save(
-            $this->timezone->scopeTimeStamp(),
+            $this->dateTime->gmtTimestamp(),
             self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId,
             ['crontab'],
             null
@@ -475,7 +475,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     protected function saveSchedule($jobCode, $cronExpression, $timeInterval, $exists)
     {
-        $currentTime = $this->timezone->scopeTimeStamp();
+        $currentTime = $this->dateTime->gmtTimestamp();
         $timeAhead = $currentTime + $timeInterval;
         for ($time = $currentTime; $time < $timeAhead; $time += self::SECONDS_IN_MINUTE) {
             $ts = strftime('%Y-%m-%d %H:%M:00', $time);
@@ -503,7 +503,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             ->setCronExpr($cronExpression)
             ->setJobCode($jobCode)
             ->setStatus(Schedule::STATUS_PENDING)
-            ->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', $this->timezone->scopeTimeStamp()))
+            ->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))
             ->setScheduledAt(strftime('%Y-%m-%d %H:%M', $time));
 
         return $schedule;
