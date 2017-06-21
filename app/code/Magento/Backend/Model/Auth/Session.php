@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 /**
  * Backend Auth session model
  *
+ * @api
  * @method \Magento\User\Model\User|null getUser()
  * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
  * @method \Magento\Framework\Acl|null getAcl()
