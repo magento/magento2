@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Widget;
 
 /**
@@ -351,7 +349,7 @@ class Grid extends \Magento\Backend\Block\Widget
             $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
             $filter = $this->getParam($this->getVarNameFilter(), null);
 
-            if (is_null($filter)) {
+            if ($filter === null) {
                 $filter = $this->_defaultFilter;
             }
 
