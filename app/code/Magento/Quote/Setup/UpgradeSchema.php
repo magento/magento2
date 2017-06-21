@@ -55,7 +55,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $setup->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id')
             );
         }
-        if (version_compare($context->getVersion(), '2.0.5', '<')) {
+        if (version_compare($context->getVersion(), '2.0.4', '<')) {
             $setup->getConnection(self::$connectionName)->changeColumn(
                 $setup->getTable('quote_address', self::$connectionName),
                 'firstname',
