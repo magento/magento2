@@ -50,7 +50,7 @@ class ExceptionMessageFactoryPoolTest extends \PHPUnit_Framework_TestCase
         $exception = new \Exception('message');
         $this->assertEquals(
             $this->defaultExceptionMessageFactoryMock,
-            $this->exceptionMessageFactoryPool->getMessageGenerator($exception)
+            $this->exceptionMessageFactoryPool->getMessageFactory($exception)
         );
     }
 
@@ -59,7 +59,7 @@ class ExceptionMessageFactoryPoolTest extends \PHPUnit_Framework_TestCase
         $localizedException = new LocalizedException(__('message'));
         $this->assertEquals(
             $this->specificExceptionMessageFactoryPoolMock,
-            $this->exceptionMessageFactoryPool->getMessageGenerator($localizedException)
+            $this->exceptionMessageFactoryPool->getMessageFactory($localizedException)
         );
     }
 }

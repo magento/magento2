@@ -29,7 +29,7 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->exceptionMessageFactoryPool = $this->getMock(
             \Magento\Framework\Message\ExceptionMessageFactoryPool::class,
-            ['getMessageGenerator'],
+            ['getMessageFactory'],
             [],
             '',
             false
@@ -58,7 +58,7 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit_Framework_TestCase
         $this->exceptionMessageFactoryPool->expects(
             $this->once()
         )->method(
-            'getMessageGenerator'
+            'getMessageFactory'
         )->with(
             $exception
         )->will(

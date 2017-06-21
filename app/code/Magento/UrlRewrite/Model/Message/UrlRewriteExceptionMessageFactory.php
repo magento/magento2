@@ -16,8 +16,6 @@ class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterf
 {
     const URL_DUPLICATE_MESSAGE = 'urlDuplicateMessage';
 
-    const EXCEPTION_CLASS = UrlAlreadyExistsException::class;
-
     /** @var Factory */
     private $messageFactory;
 

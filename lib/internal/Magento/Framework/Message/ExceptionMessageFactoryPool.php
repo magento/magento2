@@ -33,7 +33,7 @@ class ExceptionMessageFactoryPool
      * @param \Exception $exception
      * @return ExceptionMessageFactoryInterface|null
      */
-    public function getMessageGenerator(\Exception $exception)
+    public function getMessageFactory(\Exception $exception)
     {
         if (isset($this->exceptionMessageFactoryMap[get_class($exception)])) {
             return $this->exceptionMessageFactoryMap[get_class($exception)];

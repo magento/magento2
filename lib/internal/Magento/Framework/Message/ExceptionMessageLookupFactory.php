@@ -26,7 +26,7 @@ class ExceptionMessageLookupFactory implements ExceptionMessageFactoryInterface
      */
     public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR)
     {
-        $messageGenerator = $this->exceptionMessageFactoryPool->getMessageGenerator($exception);
+        $messageGenerator = $this->exceptionMessageFactoryPool->getMessageFactory($exception);
         return $messageGenerator->createMessage($exception, $type);
     }
 }
