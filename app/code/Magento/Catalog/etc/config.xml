@@ -52,7 +52,6 @@
             <media_storage_configuration>
                 <allowed_resources>
                     <tmp_images_folder>tmp</tmp_images_folder>
-                    <catalog_product_images>media/catalog/product/cache/</catalog_product_images>
                     <catalog_images_folder>catalog</catalog_images_folder>
                     <product_custom_options_fodler>custom_options</product_custom_options_fodler>
                 </allowed_resources>

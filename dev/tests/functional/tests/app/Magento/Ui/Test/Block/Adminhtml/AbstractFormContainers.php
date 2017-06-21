@@ -44,7 +44,7 @@ abstract class AbstractFormContainers extends Form
      *
      * @var string
      */
-    protected $closeButton = 'aside[style]:not([style=""]) [data-role="closeBtn"]';
+    protected $closeButton = '*//aside[@style!=\'\']//button[@data-role="closeBtn"]';
 
     /**
      * Initialize.
@@ -201,8 +201,8 @@ abstract class AbstractFormContainers extends Form
                         unset($this->unassignedFields[$fieldName]);
                     }
                 }
-                if ($this->browser->find($this->closeButton)->isVisible()) {
-                    $this->browser->find($this->closeButton)->click();
+                if ($this->browser->find($this->closeButton, Locator::SELECTOR_XPATH)->isVisible()) {
+                    $this->browser->find($this->closeButton, Locator::SELECTOR_XPATH)->click();
                 }
                 if (empty($this->unassignedFields)) {
                     break;

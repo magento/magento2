@@ -9,34 +9,40 @@ namespace Magento\Customer\Test\Block\Account\Dashboard;
 use Magento\Mtf\Block\Block;
 
 /**
- * Class Address
- * Customer Dashboard Address Book block
+ * Customer Dashboard Address Book block.
  */
 class Address extends Block
 {
     /**
-     * Default Billing Address Edit link
+     * Default Billing Address Edit link.
      *
      * @var string
      */
     protected $defaultBillingAddressEdit = '[data-ui-id=default-billing-edit-link]';
 
     /**
-     * Shipping address block selector
+     * Default Shipping Address Edit link.
+     *
+     * @var string
+     */
+    protected $defaultShippingAddressEdit = '[data-ui-id=default-shipping-edit-link]';
+
+    /**
+     * Shipping address block selector.
      *
      * @var string
      */
     protected $shippingAddressBlock = '.box-shipping-address';
 
     /**
-     * Billing address block selector
+     * Billing address block selector.
      *
      * @var string
      */
     protected $billingAddressBlock = '.box-billing-address';
 
     /**
-     * Edit Default Billing Address
+     * Edit Default Billing Address.
      *
      * @return void
      */
@@ -46,7 +52,17 @@ class Address extends Block
     }
 
     /**
-     * Returns Default Billing Address Text
+     * Edit Default Shipping Address.
+     *
+     * @return void
+     */
+    public function editShippingAddress()
+    {
+        $this->_rootElement->find($this->defaultShippingAddressEdit)->click();
+    }
+
+    /**
+     * Returns Default Billing Address Text.
      *
      * @return array|string
      */
@@ -56,7 +72,7 @@ class Address extends Block
     }
 
     /**
-     * Returns Default Shipping Address Text
+     * Returns Default Shipping Address Text.
      *
      * @return array|string
      */

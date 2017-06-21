@@ -8,9 +8,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Helper;
 
-use Magento\Catalog\Model\Product\Image\UrlBuilder;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -28,28 +25,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $_productMock;
 
-    /**
-     * @var UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $imageUrlBuilder;
-
     protected function setUp()
     {
-        $objectManager = new ObjectManager($this);
-        $this->imageUrlBuilder = $this->getMockBuilder(UrlBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->_imageHelperMock = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->_productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
         $this->_model = new \Magento\ConfigurableProduct\Helper\Data($this->_imageHelperMock);
-        $this->_model = $objectManager->getObject(
-            \Magento\ConfigurableProduct\Helper\Data::class,
-            [
-                '_imageHelper' => $this->_imageHelperMock
-            ]
-        );
-        $objectManager->setBackwardCompatibleProperty($this->_model, 'imageUrlBuilder', $this->imageUrlBuilder);
     }
 
     public function testGetAllowAttributes()
@@ -213,77 +194,5 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $map['attribute_code_' . $k] = 'attribute_code_value_' . $k;
         }
         return $map[$key];
-    }
-
-    public function testGetGalleryImages()
-    {
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->setMethods(['getMediaGalleryImages'])
-            ->getMockForAbstractClass();
-        $productMock->expects($this->once())
-            ->method('getMediaGalleryImages')
-            ->willReturn($this->getImagesCollection());
-
-        $this->imageUrlBuilder->expects($this->exactly(3))
-            ->method('getUrl')
-            ->withConsecutive(
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_small')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_medium_no_frame')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_large_no_frame')
-                ]
-            )
-            ->will(self::onConsecutiveCalls(
-                'testSmallImageUrl',
-                'testMediumImageUrl',
-                'testLargeImageUrl'
-            ));
-        $this->_imageHelperMock->expects(self::never())
-            ->method('setImageFile')
-            ->with('test_file')
-            ->willReturnSelf();
-        $this->_imageHelperMock->expects(self::never())
-            ->method('getUrl')
-            ->willReturn('product_page_image_small_url');
-        $this->_imageHelperMock->expects(self::never())
-            ->method('getUrl')
-            ->willReturn('product_page_image_medium_url');
-        $this->_imageHelperMock->expects(self::never())
-            ->method('getUrl')
-            ->willReturn('product_page_image_large_url');
-
-        $this->assertInstanceOf(
-            \Magento\Framework\Data\Collection::class,
-            $this->_model->getGalleryImages($productMock)
-        );
-    }
-
-    /**
-     * @return \Magento\Framework\Data\Collection
-     */
-    private function getImagesCollection()
-    {
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $items = [
-            new \Magento\Framework\DataObject([
-                'file' => 'test_file'
-            ]),
-        ];
-
-        $collectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($items));
-
-        return $collectionMock;
     }
 }
