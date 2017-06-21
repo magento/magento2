@@ -1265,6 +1265,33 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(2, count(array_intersect($attributeCodes, $expectedAttribute)));
     }
 
+    /**
+     * Tests the ability to "reset" (nullify) a special_price by passing null in the web api request.
+     *
+     * Steps:
+     *  1. Save the product with a special_price of $5.00
+     *  2. Save the product with a special_price of null
+     *  3. Confirm that the special_price is no longer set
+     */
+    public function testResetSpecialPrice()
+    {
+        $productData = $this->getSimpleProductData();
+        $productData['custom_attributes'] = [
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => 5.00]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $customAttributes = array_column($response['custom_attributes'], 'value', 'attribute_code');
+        $this->assertEquals(5, $customAttributes[self::KEY_SPECIAL_PRICE]);
+        $productData['custom_attributes'] = [
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => null]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $customAttributes = array_column($response['custom_attributes'], 'value', 'attribute_code');
+        $this->assertFalse(array_key_exists(self::KEY_SPECIAL_PRICE, $customAttributes));
+    }
+
     public function testUpdateStatus()
     {
         // Create simple product
