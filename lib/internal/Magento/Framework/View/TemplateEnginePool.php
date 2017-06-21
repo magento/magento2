@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\View;
 
+/**
+ * @api
+ */
 class TemplateEnginePool
 {
     /**
