@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\App\RequestInterface;
+use Magento\Catalog\Controller\Product\Frontend\Action\Synchronize;
 
 class SynchronizeTest extends \PHPUnit_Framework_TestCase
 {
