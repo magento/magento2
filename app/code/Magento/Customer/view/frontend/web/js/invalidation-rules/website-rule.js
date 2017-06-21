@@ -22,7 +22,8 @@ define([
         process: function (customerData) {
             var customer = customerData.get('customer');
 
-            if (this.scopeConfig && customer() && customer().websiteId !== this.scopeConfig.websiteId) {
+            if (this.scopeConfig && customer() &&
+                (~~customer().websiteId !== ~~this.scopeConfig.websiteId) && ~~customer().websiteId !== 0) {
                 customerData.reload(['customer']);
             }
         }

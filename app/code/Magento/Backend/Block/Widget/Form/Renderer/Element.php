@@ -4,18 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Widget\Form\Renderer;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Form element default renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Element extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Element extends \Magento\Backend\Block\Template implements RendererInterface
 {
     /**
      * @var AbstractElement
