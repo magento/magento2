@@ -6,6 +6,7 @@
 namespace Magento\Config\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSetCommand;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
 use Magento\Framework\Exception\LocalizedException;
@@ -14,6 +15,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Config;
 
 /**
  * Processor facade for config:set command.
@@ -56,21 +58,31 @@ class ProcessorFacade
     private $hash;
 
     /**
+     * The application config storage.
+     *
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param ValidatorInterface $scopeValidator The scope validator
      * @param PathValidator $pathValidator The path validator
      * @param ConfigSetProcessorFactory $configSetProcessorFactory The factory for config:set processors
      * @param Hash $hash The hash manager
+     * @param ScopeConfigInterface $scopeConfig The application config storage
      */
     public function __construct(
         ValidatorInterface $scopeValidator,
         PathValidator $pathValidator,
         ConfigSetProcessorFactory $configSetProcessorFactory,
-        Hash $hash
+        Hash $hash,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeValidator = $scopeValidator;
         $this->pathValidator = $pathValidator;
         $this->configSetProcessorFactory = $configSetProcessorFactory;
         $this->hash = $hash;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -106,6 +118,10 @@ class ProcessorFacade
         $processor->process($path, $value, $scope, $scopeCode);
 
         $this->hash->regenerate(System::CONFIG_TYPE);
+
+        if ($this->scopeConfig instanceof Config) {
+            $this->scopeConfig->clean();
+        }
 
         return $message;
     }
