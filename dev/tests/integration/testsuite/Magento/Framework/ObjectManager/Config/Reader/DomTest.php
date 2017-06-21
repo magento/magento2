@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager\Config\Reader;
 
+/**
+ * Class DomTest @covers \Magento\Framework\ObjectManager\Config\Reader\Dom
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DomTest extends \PHPUnit_Framework_TestCase
 {
     /**
