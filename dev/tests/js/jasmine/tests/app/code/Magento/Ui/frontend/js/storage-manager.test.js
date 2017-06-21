@@ -244,7 +244,7 @@ define([
 
             afterEach(function () {
                 window.localStorage.getItem = getItem;
-            })
+            });
         });
         describe('"setLastUpdate" method', function () {
             var setItem = window.localStorage.setItem;

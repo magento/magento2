@@ -122,7 +122,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->once())
+        $collection->expects($this->any())
             ->method('addFieldToFilter')
             ->with('type_id', 'recently_compared_product');
 
