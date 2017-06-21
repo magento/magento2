@@ -82,7 +82,7 @@ class DeployTest extends \PHPUnit_Framework_TestCase
         Options::EXCLUDE_AREA => ['none'],
         Options::THEME => ['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3'],
         Options::EXCLUDE_THEME => ['none'],
-        Options::LANGUAGE => ['en_US'],
+        Options::LANGUAGE => ['en_US', 'fr_FR', 'pl_PL'],
         Options::EXCLUDE_LANGUAGE => ['none'],
         Options::JOBS_AMOUNT => 0,
         Options::SYMLINK_LOCALE => false,
@@ -137,6 +137,12 @@ class DeployTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($this->staticDir->getAbsolutePath('frontend/Magento/zoom3/default/css/root.css'));
         $this->assertFileExists($this->staticDir->getAbsolutePath('frontend/Magento/zoom3/default/css/local.css'));
 
+        $this->assertFileExistsIsGenerated('requirejs-config.js');
+        $this->assertFileExistsIsGenerated('requirejs-map.js');
+        $this->assertFileExistsIsGenerated('map.json');
+        $this->assertFileExistsIsGenerated('js-translation.json');
+        $this->assertFileExistsIsGenerated('result_map.json');
+
         $actualFileContent = $this->staticDir->readFile('frontend/Magento/zoom3/default/css/root.css');
         $this->assertLessPreProcessor($actualFileContent);
         $this->assertCssUrlFixerPostProcessor($actualFileContent);
@@ -145,6 +151,25 @@ class DeployTest extends \PHPUnit_Framework_TestCase
             $this->assertBundleSize($theme);
             $this->assertExcluded($theme, $this->config->getExcludedFiles());
             $this->assertExcluded($theme, $this->config->getExcludedDir());
+        }
+    }
+
+    /**
+     * Assert file exists in all themes and locales
+     *
+     * @param string $fileName
+     * @return void
+     */
+    private function assertFileExistsIsGenerated($fileName)
+    {
+        foreach (['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3'] as $theme) {
+            foreach ($this->options[Options::LANGUAGE] as $locale) {
+                $this->assertFileExists(
+                    $this->staticDir->getAbsolutePath(
+                        'frontend/' . $theme . '/' . $locale . '/' . $fileName
+                    )
+                );
+            }
         }
     }
 

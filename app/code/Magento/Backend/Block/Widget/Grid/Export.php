@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Widget\Grid;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -263,7 +261,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
             $originalCollection->setPageSize($this->getExportPageSize());
             $originalCollection->setCurPage($page);
             $originalCollection->load();
-            if (is_null($count)) {
+            if ($count === null) {
                 $count = $originalCollection->getSize();
                 $lPage = $originalCollection->getLastPageNumber();
             }
@@ -286,8 +284,10 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
      * @return void
      */
-    protected function _exportCsvItem(\Magento\Framework\DataObject $item, \Magento\Framework\Filesystem\File\WriteInterface $stream)
-    {
+    protected function _exportCsvItem(
+        \Magento\Framework\DataObject $item,
+        \Magento\Framework\Filesystem\File\WriteInterface $stream
+    ) {
         $row = [];
         foreach ($this->_getColumns() as $column) {
             if (!$column->getIsSystem()) {
