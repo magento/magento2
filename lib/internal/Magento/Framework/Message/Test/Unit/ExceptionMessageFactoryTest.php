@@ -8,7 +8,7 @@ namespace Magento\Framework\Message\Test\Unit;
 
 use Magento\Framework\Message\MessageInterface;
 
-class DefaultExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
+class ExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Message\Factory | \PHPUnit_Framework_MockObject_MockObject
@@ -16,9 +16,9 @@ class DefaultExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
     private $messageFactoryMock;
 
     /**
-     * @var \Magento\Framework\Message\DefaultExceptionMessageFactory
+     * @var \Magento\Framework\Message\ExceptionMessageFactory
      */
-    private $defaultExceptionMessageFactory;
+    private $exceptionMessageFactory;
 
     protected function setUp()
     {
@@ -30,7 +30,7 @@ class DefaultExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->defaultExceptionMessageFactory = new \Magento\Framework\Message\DefaultExceptionMessageFactory(
+        $this->exceptionMessageFactory = new \Magento\Framework\Message\ExceptionMessageFactory(
             $this->messageFactoryMock
         );
     }
@@ -52,7 +52,7 @@ class DefaultExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $message,
-            $this->defaultExceptionMessageFactory->createMessage($exception)
+            $this->exceptionMessageFactory->createMessage($exception)
         );
     }
 }

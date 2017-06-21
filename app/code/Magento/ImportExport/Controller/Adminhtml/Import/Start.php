@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\ExceptionMessageLookupFactory;
+use Magento\Framework\App\ObjectManager;
 
 class Start extends ImportResultController
 {
@@ -16,21 +18,30 @@ class Start extends ImportResultController
     protected $importModel;
 
     /**
+     * @var \Magento\Framework\Message\ExceptionMessageFactoryInterface
+     */
+    private $exceptionMessageFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\ImportExport\Model\Import $importModel
+     * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
         \Magento\ImportExport\Model\History $historyModel,
         \Magento\ImportExport\Helper\Report $reportHelper,
-        \Magento\ImportExport\Model\Import $importModel
+        \Magento\ImportExport\Model\Import $importModel,
+        \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
     ) {
         parent::__construct($context, $reportProcessor, $historyModel, $reportHelper);
         $this->importModel = $importModel;
+        $this->exceptionMessageFactory = $exceptionMessageFactory ?: ObjectManager::getInstance()
+            ->get(ExceptionMessageLookupFactory::class);
     }
 
     /**
@@ -59,8 +70,7 @@ class Start extends ImportResultController
             } catch (\Exception $e) {
                 /** @var \Magento\Framework\View\Element\Messages $resultMessageBlock */
                 $resultMessageBlock = $resultLayout->getLayout()->getBlock('messages');
-                $this->messageManager->addExceptionMessage($e, null, 'importFile');
-                $message = $this->messageManager->getMessages(true, 'importFile')->getLastAddedMessage();
+                $message = $this->exceptionMessageFactory->createMessage($e);
                 $html = $resultMessageBlock->addMessage($message)->toHtml();
                 $errorAggregator->addError(
                     \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,

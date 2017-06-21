@@ -67,7 +67,7 @@ class UrlRewriteExceptionMessageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $message->expects($this->once())
             ->method('setIdentifier')
-            ->with(UrlRewriteExceptionMessageFactory::ADD_URL_DUPLICATE_MESSAGE)
+            ->with(UrlRewriteExceptionMessageFactory::URL_DUPLICATE_MESSAGE)
             ->willReturnSelf();
 
         $message->expects($this->once())

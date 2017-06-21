@@ -29,8 +29,8 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
             $helper->getConstructArguments(\Magento\Backend\Model\Session::class)
         );
 
-        $exceptionMessageFactoryPool = $this->getMockBuilder(
-            \Magento\Framework\Message\ExceptionMessageFactoryPool::class
+        $exceptionMessageFactory = $this->getMockBuilder(
+            \Magento\Framework\Message\ExceptionMessageLookupFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(
@@ -40,7 +40,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
 
         $messageManagerParams = $helper->getConstructArguments(\Magento\Framework\Message\Manager::class);
 
-        $messageManagerParams['exceptionMessageFactoryPool'] = $exceptionMessageFactoryPool;
+        $messageManagerParams['exceptionMessageFactory'] = $exceptionMessageFactory;
 
         $messageManager = $this->getMock(
             \Magento\Framework\Message\Manager::class,
