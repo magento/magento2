@@ -33,7 +33,7 @@ class DataProviderFactory
     }
 
     /**
-     * Recreates an instance of the DataProviderInterface in order to support QueryContainer interface
+     * Recreates an instance of the DataProviderInterface in order to support QueryAware interface
      * and add a QueryContainer to the DataProvider
      *
      * The Query is an optional argument as it's not required to pass the QueryContainer for data providers
