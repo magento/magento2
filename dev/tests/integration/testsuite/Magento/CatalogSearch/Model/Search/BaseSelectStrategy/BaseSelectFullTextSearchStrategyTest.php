@@ -62,13 +62,13 @@ class BaseSelectFullTextSearchStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $select = $this->resource->getConnection()->select();
         $select->from(
-                ['search_index' => $this->scopeResolver->resolve('', [])],
-                ['entity_id' => 'entity_id']
-            )->joinInner(
-                ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
-                'search_index.attribute_id = cea.attribute_id',
-                []
-            );
+            ['search_index' => $this->scopeResolver->resolve('', [])],
+            ['entity_id' => 'entity_id']
+        )->joinInner(
+            ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
+            'search_index.attribute_id = cea.attribute_id',
+            []
+        );
 
         return $select;
     }

@@ -52,14 +52,19 @@ class BaseSelectFullTextSearchStrategy implements BaseSelectStrategyInterface
     {
         $select = $this->resource->getConnection()->select();
 
+        $tableName = $this->scopeResolver->resolve(
+            $selectContainer->getUsedIndex(),
+            $selectContainer->getDimensions()
+        );
+
         $select->from(
-                ['search_index' => $this->scopeResolver->resolve($selectContainer->getUsedIndex(), $selectContainer->getDimensions())],
-                ['entity_id' => 'entity_id']
-            )->joinInner(
-                ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
-                'search_index.attribute_id = cea.attribute_id',
-                []
-            );
+            ['search_index' => $tableName],
+            ['entity_id' => 'entity_id']
+        )->joinInner(
+            ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
+            'search_index.attribute_id = cea.attribute_id',
+            []
+        );
 
         $selectContainer = $selectContainer->updateSelect($select);
         return $selectContainer;

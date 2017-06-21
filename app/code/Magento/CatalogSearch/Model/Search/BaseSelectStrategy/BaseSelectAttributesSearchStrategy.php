@@ -83,8 +83,13 @@ class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
             );
 
         if ($selectContainer->isFullTextSearchRequired()) {
+            $tableName = $this->scopeResolver->resolve(
+                $selectContainer->getUsedIndex(),
+                $selectContainer->getDimensions()
+            );
+
             $select->joinInner(
-                ['search_index' => $this->scopeResolver->resolve($selectContainer->getUsedIndex(), $selectContainer->getDimensions())],
+                ['search_index' => $tableName],
                 'eav_index.entity_id = search_index.entity_id',
                 []
             )->joinInner(

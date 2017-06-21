@@ -89,6 +89,13 @@ class StockStatusFilter
         return $select;
     }
 
+    /**
+     * Adds filter join for products by stock status
+     *
+     * @param Select $select
+     * @param $stockValues
+     * @param $mainTableAlias
+     */
     private function addMainStockStatusJoin(Select $select, $stockValues, $mainTableAlias)
     {
         $select->joinInner(
@@ -118,6 +125,13 @@ class StockStatusFilter
         );
     }
 
+    /**
+     * Adds filter join for sub products by stock status
+     *
+     * @param Select $select
+     * @param $stockValues
+     * @param $mainTableAlias
+     */
     private function addStockStatusJoinForSubProducts(Select $select, $stockValues, $mainTableAlias)
     {
         $select->joinInner(

@@ -28,14 +28,14 @@ class StrategyMapperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->baseSelectAttributeSearchStrategyMock = $this->getMockBuilder(
-            BaseSelectAttributesSearchStrategy::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        BaseSelectAttributesSearchStrategy::class
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $this->baseSelectFullTextSearchStrategyMock = $this->getMockBuilder(
-            BaseSelectFullTextSearchStrategy::class
-            )->disableOriginalConstructor()
-            ->getMock();
+        BaseSelectFullTextSearchStrategy::class
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $this->selectContainerMock = $this->getMockBuilder(SelectContainer::class)
             ->disableOriginalConstructor()

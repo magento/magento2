@@ -77,7 +77,7 @@ class CustomAttributeFilter
      * @throws \InvalidArgumentException
      * @throws \DomainException
      */
-    public function apply(Select $select, FilterInterface ...$filters)
+    public function apply(Select $select, FilterInterface ... $filters)
     {
         $select = clone $select;
         $mainTableAlias = $this->extractTableAliasFromSelect($select);

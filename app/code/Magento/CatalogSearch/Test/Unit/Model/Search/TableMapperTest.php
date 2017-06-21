@@ -137,10 +137,17 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->with($query)
             ->willReturn($filters);
 
+        $consecutiveFilters = array_map(
+            function ($filter) {
+                return [$filter];
+            },
+            $filters
+        );
+
         $this->aliasResolver
             ->expects($this->exactly(count($filters)))
             ->method('getAlias')
-            ->withConsecutive(...array_map(function($filter) {return [$filter];}, $filters))
+            ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
                 function (FilterInterface $filter) {
                     return $filter->getField() . '_alias';
@@ -173,20 +180,34 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->with($query)
             ->willReturn($filters);
 
+        $consecutiveFilters = array_map(
+            function ($filter) {
+                return [$filter];
+            },
+            $filters
+        );
+
         $this->aliasResolver
             ->expects($this->exactly(count($filters)))
             ->method('getAlias')
-            ->withConsecutive(...array_map(function($filter) {return [$filter];}, $filters))
+            ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
                 function (FilterInterface $filter) {
                     return $filter->getField() . '_alias';
                 }
             );
 
+        $consecutiveUniqueFilters = array_map(
+            function($filter) use ($select) {
+                return [$filter, $select];
+            },
+            $uniqueFilters
+        );
+
         $this->filterStrategy
             ->expects($this->exactly(count($uniqueFilters)))
             ->method('apply')
-            ->withConsecutive(...array_map(function($filter) use ($select) {return [$filter, $select];}, $uniqueFilters))
+            ->withConsecutive(...$consecutiveUniqueFilters)
             ->willReturn(true);
 
         $this->tableMapper->addTables($select, $request);
@@ -208,20 +229,34 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->with($query)
             ->willReturn($filters);
 
+        $consecutiveFilters = array_map(
+            function($filter) {
+                return [$filter];
+            },
+            $filters
+        );
+
         $this->aliasResolver
             ->expects($this->exactly(count($filters)))
             ->method('getAlias')
-            ->withConsecutive(...array_map(function($filter) {return [$filter];}, $filters))
+            ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
                 function (FilterInterface $filter) {
                     return $filter->getField() . '_alias';
                 }
             );
 
+        $consecutiveFilters = array_map(
+            function($filter) use ($select) {
+                return [$filter, $select];
+            },
+            $filters
+        );
+
         $this->filterStrategy
             ->expects($this->exactly(count($filters)))
             ->method('apply')
-            ->withConsecutive(...array_map(function($filter) use ($select) {return [$filter, $select];}, $filters))
+            ->withConsecutive(...$consecutiveFilters)
             ->willReturnCallback(
                 function (FilterInterface $filter) {
                     return !($filter->getName() === 'name1' || $filter->getName() === 'name3')

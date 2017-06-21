@@ -139,7 +139,10 @@ class ExclusionStrategy implements FilterStrategyInterface
                 $alias => $tableName
             ],
             $this->resourceConnection->getConnection()->quoteInto(
-                sprintf('%s.entity_id = category_ids_index.product_id AND category_ids_index.store_id = ?', $mainTableAlias),
+                sprintf(
+                    '%s.entity_id = category_ids_index.product_id AND category_ids_index.store_id = ?',
+                    $mainTableAlias
+                ),
                 $this->storeManager->getStore()->getId()
             ),
             []
