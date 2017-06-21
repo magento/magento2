@@ -23,7 +23,7 @@ define([
             var customer = customerData.get('customer');
 
             if (this.scopeConfig && customer() &&
-                (~~customer().websiteId !== ~~this.scopeConfig.websiteId) && ~~customer().websiteId !== 0) {
+                ~~customer().websiteId !== ~~this.scopeConfig.websiteId && ~~customer().websiteId !== 0) {
                 customerData.reload(['customer']);
             }
         }
