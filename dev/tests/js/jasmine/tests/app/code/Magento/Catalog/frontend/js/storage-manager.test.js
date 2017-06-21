@@ -265,7 +265,7 @@ define([
 
             afterEach(function () {
                 window.localStorage.setItem = setItem;
-            })
+            });
         });
         describe('"dataFilter" method', function () {
             var data = [

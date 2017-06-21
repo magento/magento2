@@ -65,7 +65,7 @@ define([
                         imageCode: 'code'
                     }
                 }
-            })
+            });
         });
         describe('"getImages" method', function () {
             it('Check returned value', function () {

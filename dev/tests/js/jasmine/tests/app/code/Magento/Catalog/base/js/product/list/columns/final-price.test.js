@@ -344,8 +344,7 @@ define([
                 expect(adjustment.setPriceType).toHaveBeenCalledWith(arg);
             });
             it('Check returned value', function () {
-                var arg = 'type',
-                    source = {};
+                var source = {};
 
                 obj.source = source;
 
