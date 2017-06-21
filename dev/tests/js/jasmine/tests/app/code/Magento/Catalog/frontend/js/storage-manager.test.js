@@ -80,6 +80,7 @@ define([
                 };
 
                 obj.initStartData();
+                expect(obj.updateDataHandler).toHaveBeenCalledWith('first', obj[obj.storagesNamespace[0]].get());
                 expect(obj.updateDataHandler).toHaveBeenCalledWith('second', obj[obj.storagesNamespace[1]].get());
             });
             it('check returned value', function () {
@@ -161,11 +162,10 @@ define([
                 obj.sendRequest = jasmine.createSpy();
             });
 
-            it('check calling "getLastUpdate", "getUtcTime"', function () {
+            it('check calling "getUtcTime"', function () {
                 obj[name] = {};
                 obj.updateDataHandler(name, {});
 
-                expect(obj.getLastUpdate).toHaveBeenCalledWith('first');
                 expect(obj.getUtcTime).toHaveBeenCalled();
             });
             it('check calls with data and without previous data', function () {

@@ -8,6 +8,7 @@ namespace Magento\Catalog\Block\Ui;
 
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite;
+use Magento\Catalog\Model\ProductRenderFactory;
 use Magento\Framework\EntityManager\Hydrator;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Url;
