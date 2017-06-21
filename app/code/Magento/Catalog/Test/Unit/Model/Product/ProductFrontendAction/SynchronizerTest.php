@@ -126,7 +126,7 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->exactly(2))
+        $collection->expects($this->any())
             ->method('addFieldToFilter')
             ->withConsecutive(['type_id'], ['product_id']);
 

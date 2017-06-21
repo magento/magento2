@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Controller\Product\Frontend\Action;
+namespace Magento\Catalog\Test\Unit\Controller\Product\Frontend\Action;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;

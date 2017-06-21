@@ -85,6 +85,11 @@ define([
             }
         },
 
+        /**
+         * Callback, which load by ids from ids-storage product data
+         *
+         * @private
+         */
         _resolveDataByIds: function () {
             this.initIdsListener();
             this.idsMerger(

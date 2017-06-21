@@ -162,11 +162,10 @@ define([
                 obj.sendRequest = jasmine.createSpy();
             });
 
-            it('check calling "getLastUpdate", "getUtcTime"', function () {
+            it('check calling "getUtcTime"', function () {
                 obj[name] = {};
                 obj.updateDataHandler(name, {});
 
-                expect(obj.getLastUpdate).toHaveBeenCalledWith('first');
                 expect(obj.getUtcTime).toHaveBeenCalled();
             });
             it('check calls with data and without previous data', function () {
@@ -242,7 +241,7 @@ define([
 
             afterEach(function () {
                 window.localStorage.getItem = getItem;
-            })
+            });
         });
         describe('"setLastUpdate" method', function () {
             var setItem = window.localStorage.setItem;
