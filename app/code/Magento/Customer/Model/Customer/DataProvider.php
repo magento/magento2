@@ -42,6 +42,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     const MAX_FILE_SIZE = 2097152;
 
     /**
+     * Says that data is provided to admin and admin user will see customer account
+     */
+    const ADMIN_SCOPE = "admin";
+
+    /**
+     * Says that data is provided to customer
+     */
+    const FRONTEND_SCOPE = "frontend";
+
+    /**
      * @var Collection
      */
     protected $collection;
@@ -128,6 +138,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $context;
 
     /**
+     * Enum: can be frontend or admin
+     * Shows what user is used dataProvider
+     *
+     * @var string
+     */
+    private $userScope;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -151,7 +169,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         FileProcessorFactory $fileProcessorFactory = null,
         ContextInterface $context = null,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        $userScope = self::ADMIN_SCOPE
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
@@ -161,6 +180,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->filterPool = $filterPool;
         $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->context = $context ?: ObjectManager::getInstance()->get(ContextInterface::class);
+        $this->userScope = $userScope;
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
@@ -339,10 +359,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
 
             $meta[$code]['arguments']['data']['config']['componentType'] = Field::NAME;
+            $meta[$code]['arguments']['data']['config']['visible'] = $this->canShowAttribute($attribute);
 
-            if ($this->canShowAttribute($attribute)) {
-                $meta[$code]['arguments']['data']['config']['visible'] = true;
-            }
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
@@ -360,12 +378,20 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private function canShowAttribute(AbstractAttribute $customerAttribute)
     {
         $isRegistration = is_null($this->context->getRequestParam($this->getRequestFieldName()));
+        $userDefined = (bool) $customerAttribute->getIsUserDefined();
 
-        return is_array($customerAttribute->getUsedInForms()) &&
+        if (!$userDefined) {
+            return $customerAttribute->getIsVisible();
+        }
+
+        $canShowOnForm = is_array($customerAttribute->getUsedInForms()) &&
             (
                 (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
                 (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
             );
+
+        return ($this->userScope === self::ADMIN_SCOPE && $canShowOnForm) ||
+            ($this->userScope === self::FRONTEND_SCOPE && $canShowOnForm && $customerAttribute->getIsVisible());
     }
 
     /**
