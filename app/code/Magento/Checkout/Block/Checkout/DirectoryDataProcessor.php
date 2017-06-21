@@ -53,6 +53,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
      * @param @deprecated $storeResolver
      * @param DirectoryHelper $directoryHelper
      * @param StoreManagerInterface $storeManager
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection,
