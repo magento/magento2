@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
+/**
+ * @api
+ */
 class DefaultFrontend extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
 }

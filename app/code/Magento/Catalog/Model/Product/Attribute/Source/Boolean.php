@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 /**
  * Product attribute source model for enable/disable option
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Model\Product\Attribute\Source;
-
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\Boolean
 {
     /**
