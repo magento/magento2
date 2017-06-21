@@ -23,9 +23,8 @@ echo $block->escapeHtml(
 );
 
 if (!empty($urls)) {
-    foreach ($urls as $adminUrl => $requestPath) {
-        // key is the url that has been setup by the controller with the information from the exception
-        echo '<p> - <a href="' . $block->escapeHtml($adminUrl) . '">' . $block->escapeHtml($requestPath) . '</a></p>';
+    foreach ($urls as $url => $urlTitle) {
+        echo '<p> - <a href="' . $block->escapeHtml($url) . '">' . $block->escapeHtml($urlTitle) . '</a></p>';
     }
 }
 ?>
