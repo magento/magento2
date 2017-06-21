@@ -14,11 +14,21 @@
 
 {{template config_path="design/email/header_template"}}
 
-<ul>
-    <li>{{trans "Name: %name" name=$data.name}}</li>
-    <li>{{trans "Email: %email" email=$data.email}}</li>
-    <li>{{trans "Phone Number: %telephone" telephone=$data.telephone}}</li>
-    <li>{{trans "Comment: %comment" comment=$data.comment}}</li>
-</ul>
+<table class="message-details">
+    <tr>
+        <th>{{trans "Name"}}</th>
+        <td>{{var data.name}}</td>
+    </tr>
+    <tr>
+        <th>{{trans "Email"}}</th>
+        <td>{{var data.email}}</td>
+    </tr>
+    <tr>
+        <th>{{trans "Phone"}}</th>
+        <td>{{var data.telephone}}</td>
+    </tr>
+</table>
+<p><strong>{{trans "Message"}}</strong></p>
+<p>{{var data.comment}}</p>
 
 {{template config_path="design/email/footer_template"}}
