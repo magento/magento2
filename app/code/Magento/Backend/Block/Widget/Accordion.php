@@ -8,7 +8,6 @@ namespace Magento\Backend\Block\Widget;
 /**
  * Magento_Backend accordion widget
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  */
 class Accordion extends \Magento\Backend\Block\Widget

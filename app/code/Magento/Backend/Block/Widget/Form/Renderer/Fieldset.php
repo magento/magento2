@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Widget\Form\Renderer;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Form fieldset default renderer
@@ -17,7 +16,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  */
-class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface
 {
     /**
      * @var AbstractElement

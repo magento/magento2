@@ -8,6 +8,8 @@ namespace Magento\Backend\Block\Widget;
 /**
  * Backend form widget
  *
+ * @api
+ * @deprecated in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
  */

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Model\Menu\Director;
 
 /**
@@ -46,8 +44,11 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * @param \Psr\Log\LoggerInterface $logger
      * @return void
      */
-    public function direct(array $config, \Magento\Backend\Model\Menu\Builder $builder, \Psr\Log\LoggerInterface $logger)
-    {
+    public function direct(
+        array $config,
+        \Magento\Backend\Model\Menu\Builder $builder,
+        \Psr\Log\LoggerInterface $logger
+    ) {
         foreach ($config as $data) {
             $builder->processCommand($this->_getCommand($data, $logger));
         }

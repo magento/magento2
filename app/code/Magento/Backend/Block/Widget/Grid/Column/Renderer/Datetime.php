@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Backend grid item renderer datetime
- */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
+ * Backend grid item renderer datetime
+ *
  * @api
+ * @deprecated in favour of UI component implementation
  */
 class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @api
- * @deprecated
+ * @deprecated in favour of UI component implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Model\Widget\Grid;
 
 /**
@@ -49,8 +47,10 @@ abstract class AbstractTotals implements \Magento\Backend\Model\Widget\Grid\Tota
      * @param \Magento\Framework\DataObject\Factory $factory
      * @param \Magento\Backend\Model\Widget\Grid\Parser $parser
      */
-    public function __construct(\Magento\Framework\DataObject\Factory $factory, \Magento\Backend\Model\Widget\Grid\Parser $parser)
-    {
+    public function __construct(
+        \Magento\Framework\DataObject\Factory $factory,
+        \Magento\Backend\Model\Widget\Grid\Parser $parser
+    ) {
         $this->_factory = $factory;
         $this->_parser = $parser;
     }

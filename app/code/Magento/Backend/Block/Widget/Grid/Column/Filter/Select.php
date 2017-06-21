@@ -8,8 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Select grid column filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @deprecated in favour of UI component implementation
  */
 class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {

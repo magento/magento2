@@ -10,6 +10,7 @@
 namespace Magento\Backend\App;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
  */

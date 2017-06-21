@@ -9,7 +9,9 @@ use Magento\Framework\DataObject;
 
 /**
  * Backend grid item renderer
+ *
  * @api
+ * @deprecated in favour of UI component implementation
  */
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
