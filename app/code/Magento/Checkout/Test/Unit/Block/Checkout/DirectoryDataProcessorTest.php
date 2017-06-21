@@ -40,6 +40,11 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $storeManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $directoryDataHelperMock;
 
     protected function setUp()
@@ -75,6 +80,9 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
         $this->storeResolverMock = $this->getMock(
             \Magento\Store\Api\StoreResolverInterface::class
         );
+        $this->storeManagerMock = $this->getMock(
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
         $this->directoryDataHelperMock = $this->getMock(
             \Magento\Directory\Helper\Data::class,
             [],
@@ -87,7 +95,8 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
             $this->countryCollectionFactoryMock,
             $this->regionCollectionFactoryMock,
             $this->storeResolverMock,
-            $this->directoryDataHelperMock
+            $this->directoryDataHelperMock,
+            $this->storeManagerMock
         );
     }
 
