@@ -384,11 +384,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $customerAttribute->getIsVisible();
         }
 
-        $canShowOnForm = is_array($customerAttribute->getUsedInForms()) &&
-            (
-                (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
-                (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
-            );
+        if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
+            $canShowOnForm = is_array($customerAttribute->getUsedInForms()) &&
+                (
+                    (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
+                    (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
+                );
+        } else {
+            $canShowOnForm = is_array($customerAttribute->getUsedInForms()) &&
+                in_array('customer_address_edit', $customerAttribute->getUsedInForms());
+        }
 
         return ($this->userScope === self::ADMIN_SCOPE && $canShowOnForm) ||
             ($this->userScope === self::FRONTEND_SCOPE && $canShowOnForm && $customerAttribute->getIsVisible());
