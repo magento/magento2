@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
@@ -428,7 +425,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get product image URL from image filename and path
      *
      * @param string $image
-     * @return mixed
+     * @return string
      */
     private function getProductImageUrl($image)
     {
