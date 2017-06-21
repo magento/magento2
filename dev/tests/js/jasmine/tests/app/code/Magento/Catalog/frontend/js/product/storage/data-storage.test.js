@@ -38,8 +38,8 @@ define([
 
     beforeEach(function (done) {
         injector.mock(mocks);
-        injector.require(['Magento_Catalog/js/product/storage/data-storage'], function (insance) {
-            obj = _.extend({}, insance);
+        injector.require(['Magento_Catalog/js/product/storage/data-storage'], function (instance) {
+            obj = _.extend({}, instance);
             done();
         });
     });
@@ -47,7 +47,7 @@ define([
     describe('Magento_Catalog/js/product/storage/data-storage', function () {
         describe('"initCustomerDataInvalidateListener" method', function () {
             it('check returned value', function () {
-                expect(obj.initCustomerDataInvalidateListener()).toBe(obj);
+                expect(obj.initCustomerDataReloadListener()).toBe(obj);
             });
         });
         describe('"initDataListener" method', function () {
@@ -209,10 +209,14 @@ define([
             beforeEach(function () {
                 obj.data = jasmine.createSpy().and.returnValue({
                     '1': {
-                        value: 'firstValue'
+                        value: 'firstValue',
+                        'currency_code': currency,
+                        'store_id': store
                     },
                     '2': {
-                        value: 'secondValue'
+                        value: 'secondValue',
+                        'currency_code': currency,
+                        'store_id': store
                     }
                 });
             });
@@ -220,10 +224,14 @@ define([
             it('check calls "hasInCache" with ids that exists in data', function () {
                 var ids  = {
                         '1': {
-                            id: '1'
+                            id: '1',
+                            'currency_code': currency,
+                            'store_id': store
                         },
                         '2': {
-                            id: '2'
+                            id: '2',
+                            'currency_code': currency,
+                            'store_id': store
                         }
                     },
                     result = obj.hasInCache(currency, store, ids);
@@ -234,10 +242,14 @@ define([
             it('check calls "hasInCache" with ids that does not exists in data', function () {
                 var ids  = {
                         '5': {
-                            id: '5'
+                            id: '5',
+                            'currency_code': currency,
+                            'store_id': store
                         },
                         '6': {
-                            id: '6'
+                            id: '6',
+                            'currency_code': currency,
+                            'store_id': store
                         }
                     },
                     result = obj.hasInCache(currency, store, ids);

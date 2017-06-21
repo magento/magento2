@@ -80,7 +80,6 @@ define([
                 };
 
                 obj.initStartData();
-                expect(obj.updateDataHandler).toHaveBeenCalledWith('first', obj[obj.storagesNamespace[0]].get());
                 expect(obj.updateDataHandler).toHaveBeenCalledWith('second', obj[obj.storagesNamespace[1]].get());
             });
             it('check returned value', function () {
