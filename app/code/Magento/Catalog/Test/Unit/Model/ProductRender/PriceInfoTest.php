@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Model\ProductRender;
+namespace Magento\Catalog\Test\Unit\Model\ProductRender;
+
+use Magento\Catalog\Model\ProductRender\PriceInfo;
 
 class PriceInfoTest extends \PHPUnit_Framework_TestCase
 {

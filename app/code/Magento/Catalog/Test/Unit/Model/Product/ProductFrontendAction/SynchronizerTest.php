@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Product\ProductFrontendAction;
+namespace Magento\Catalog\Test\Unit\Model\Product\ProductFrontendAction;
 
 use Magento\Catalog\Api\Data\ProductFrontendActionInterface;
 use Magento\Catalog\Model\ResourceModel\ProductFrontendAction\Collection;

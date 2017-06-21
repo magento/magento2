@@ -6,9 +6,8 @@
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
-    'squire',
-    'ko'
-], function ($, Squire, ko) {
+    'squire'
+], function ($, Squire) {
     'use strict';
 
     var injector = new Squire(),
@@ -17,7 +16,8 @@ define([
 
     beforeEach(function (done) {
         injector.mock(mocks);
-        injector.require(['Magento_Catalog/js/product/list/columns/image', 'knockoutjs/knockout-es5'], function (Constr) {
+        injector.require(['Magento_Catalog/js/product/list/columns/image', 'knockoutjs/knockout-es5'],
+            function (Constr) {
             obj = new Constr({
                 sortable: true,
                 sorting: false,
@@ -30,7 +30,7 @@ define([
                         column: {
                             image: 'image'
                         }
-                    }
+                    };
                 }
             });
             done();
@@ -42,7 +42,7 @@ define([
             url: 'url',
             width: 100,
             height: 100,
-            "resized_width": 200
+            'resized_width': 200
         },
         code = 'code',
         row = {

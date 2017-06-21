@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Block\Ui;
+namespace Magento\Catalog\Test\Unit\Block\Ui;
 
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite;
@@ -18,7 +18,11 @@ use Magento\Store\Model\Store;
 use Magento\Framework\Registry;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
+use Magento\Catalog\Block\Ui\ProductViewCounter;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductViewCounterTest extends \PHPUnit_Framework_TestCase
 {
     /**

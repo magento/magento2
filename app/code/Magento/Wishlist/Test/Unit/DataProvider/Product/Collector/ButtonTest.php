@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Wishlist\Ui\DataProvider\Product\Collector;
+namespace Magento\Wishlist\Test\Unit\DataProvider\Product\Collector;
 
 use Magento\Catalog\Api\Data\ProductRenderExtensionFactory;
 use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Api\Data\ProductRenderExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRender\ButtonInterface;
+use Magento\Wishlist\Ui\DataProvider\Product\Collector\Button;
 
 /**
  * Collect information needed to render wishlist button on front

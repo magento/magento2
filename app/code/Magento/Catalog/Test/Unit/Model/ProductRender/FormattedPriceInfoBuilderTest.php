@@ -4,12 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Model\ProductRender;
+namespace Magento\Catalog\Test\Unit\Model\ProductRender;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterfaceFactory;
+use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 
 class FormattedPriceInfoBuilderTest extends \PHPUnit_Framework_TestCase
 {
