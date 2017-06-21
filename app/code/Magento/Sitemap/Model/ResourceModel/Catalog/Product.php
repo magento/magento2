@@ -10,15 +10,12 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Sitemap resource product collection model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.LongVariable)
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
- * @SuppressWarnings(PHPMD.CamelCaseMethodName)
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -84,12 +81,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @var \Magento\Catalog\Model\Product
      */
-    protected $productModel;
+    private $productModel;
 
     /**
      * @var \Magento\Catalog\Helper\Image
      */
-    protected $catalogImageHelper;
+    private $catalogImageHelper;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -128,8 +125,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->mediaGalleryReadHandler = $mediaGalleryReadHandler;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
-        $this->productModel = $productModel ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
-        $this->catalogImageHelper = $catalogImageHelper ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Helper\Image::class);
+        $this->productModel = $productModel ?: ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
+        $this->catalogImageHelper = $catalogImageHelper ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Helper\Image::class);
         parent::__construct($context, $connectionName);
     }
 
