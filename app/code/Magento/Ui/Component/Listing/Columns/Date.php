@@ -11,7 +11,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class Date
+ * @api
  */
 class Date extends Column
 {
