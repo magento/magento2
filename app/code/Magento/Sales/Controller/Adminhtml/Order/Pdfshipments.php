@@ -42,6 +42,11 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
     protected $shipmentCollectionFactory;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
@@ -88,5 +93,13 @@ class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMas
             DirectoryList::VAR_DIR,
             'application/pdf'
         );
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

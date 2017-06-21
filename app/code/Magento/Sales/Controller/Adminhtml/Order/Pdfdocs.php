@@ -67,6 +67,11 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
     protected $creditmemoCollectionFactory;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param FileFactory $fileFactory
@@ -149,5 +154,13 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
             DirectoryList::VAR_DIR,
             'application/pdf'
         );
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

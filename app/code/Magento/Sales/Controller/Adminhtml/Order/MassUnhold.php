@@ -13,6 +13,11 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 class MassUnhold extends AbstractMassAction
 {
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
@@ -62,5 +67,13 @@ class MassUnhold extends AbstractMassAction
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath($this->getComponentRefererUrl());
         return $resultRedirect;
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }

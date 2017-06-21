@@ -41,6 +41,11 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
     protected $pdfShipment;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param DateTime $dateTime
@@ -76,5 +81,13 @@ abstract class Pdfshipments extends \Magento\Sales\Controller\Adminhtml\Order\Ab
             DirectoryList::VAR_DIR,
             'application/pdf'
         );
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function getCollection()
+    {
+        return $this->collectionFactory->create();
     }
 }
