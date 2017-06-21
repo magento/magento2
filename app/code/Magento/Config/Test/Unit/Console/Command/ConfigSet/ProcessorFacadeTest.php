@@ -24,6 +24,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * Test for ProcessorFacade.
  *
  * @see ProcessorFacade
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProcessorFacadeTest extends \PHPUnit_Framework_TestCase
 {
