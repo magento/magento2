@@ -477,33 +477,37 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      *
      * @param $eventName
      * @param $methodName
+     * @param $objectName
      *
      * @dataProvider eventsDataProvider
      */
-    public function testDispatchEvents($eventName, $methodName)
+    public function testDispatchEvents($eventName, $methodName, $objectName)
     {
         $isCalledWithRightPrefix = 0;
+        $isObjectNameRight = 0;
         $this->eventDispatcher->expects($this->any())->method('dispatch')->with(
             $this->callback(function ($arg) use (&$isCalledWithRightPrefix, $eventName) {
                 $isCalledWithRightPrefix |= ($arg === $eventName);
                 return true;
             }),
-            $this->anything()
+            $this->callback(function ($data) use (&$isObjectNameRight, $objectName) {
+                $isObjectNameRight |= isset($data[$objectName]);
+                return true;
+            })
         );
 
         $this->item->$methodName();
-        $this->assertEquals(
-            1,
-            (int) $isCalledWithRightPrefix,
-            sprintf("Event %s doesn't dispatched", $eventName)
+        $this->assertTrue(
+            ($isCalledWithRightPrefix && $isObjectNameRight),
+            sprintf('Event "%s" with object name "%s" doesn\'t dispatched properly', $eventName, $objectName)
         );
     }
 
     public function eventsDataProvider()
     {
         return [
-            ['cataloginventory_stock_item_save_before', 'beforeSave'],
-            ['cataloginventory_stock_item_save_after', 'afterSave'],
+            ['cataloginventory_stock_item_save_before', 'beforeSave', 'item'],
+            ['cataloginventory_stock_item_save_after', 'afterSave', 'item'],
         ];
     }
 }

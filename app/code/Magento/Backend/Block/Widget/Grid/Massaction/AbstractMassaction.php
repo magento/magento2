@@ -11,9 +11,10 @@ use Magento\Framework\DataObject;
 /**
  * Grid widget massaction block
  *
+ * @api
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
- * @deprecated
+ * @deprecated in favour of UI component implementation
  */
 abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
 {
