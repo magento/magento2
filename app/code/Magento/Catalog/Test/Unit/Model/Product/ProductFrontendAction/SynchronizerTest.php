@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\ProductFrontendAction;
 
 use Magento\Catalog\Api\Data\ProductFrontendActionInterface;
+use Magento\Catalog\Model\ResourceModel\ProductFrontendAction\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -103,11 +104,14 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('recently_compared_product')
             ->willReturn($frontendConfiguration);
-        $action1 = $this->getMock(ProductFrontendActionInterface::class);
-        $action2 = $this->getMock(ProductFrontendActionInterface::class);
+        $action1 = $this->getMockBuilder(ProductFrontendActionInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
+            ->getMockForAbstractClass();
+
         $frontendAction = $this->getMock(ProductFrontendActionInterface::class);
-        $collection = $this
-            ->getMockBuilder(\Magento\Catalog\Model\ResourceModel\ProductFrontendAction\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionMock->expects($this->any())
@@ -122,9 +126,9 @@ class SynchronizerTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->once())
+        $collection->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->with('type_id', 'recently_compared_product');
+            ->withConsecutive(['type_id'], ['product_id']);
 
         $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
         $collection->expects($this->once())
