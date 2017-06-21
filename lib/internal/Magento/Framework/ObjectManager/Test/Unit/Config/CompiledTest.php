@@ -165,4 +165,122 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(null, $this->compiled->getArguments('class_not_stored_in_config'));
     }
+
+    /**
+     * Test that $arguments, $virtualTypes and $preferences initializing in construct must be array.
+     *
+     * @param $data
+     * @param array $expectedResult
+     *
+     * @dataProvider constructorFieldsValidation
+     */
+    public function testConstructorFieldsValidation($data, $expectedResult)
+    {
+        /** @var Compiled $compiled */
+        $compiled = $this->objectManager->getObject(
+            Compiled::class,
+            [
+                'data' => $data
+            ]
+        );
+
+        $reflection = new \ReflectionClass(Compiled::class);
+        $arguments = $reflection->getProperty('arguments');
+        $arguments->setAccessible(true);
+
+        $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
+        $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
+        $this->assertEquals($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
+    }
+
+    /**
+     * Data provider for testConstructorFieldsValidation.
+     *
+     * @return array
+     */
+    public function constructorFieldsValidation()
+    {
+        return [
+            [
+                'no array',
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [],
+                    'preferences' => []
+                ]
+            ],
+            [
+                [
+                    'arguments' => 1,
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => 'test'
+                ],
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => []
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Test that $arguments, $virtualTypes and $preferences initializing in extend must be array.
+     *
+     * @param $data
+     * @param array $expectedResult
+     *
+     * @dataProvider extendFieldsValidation
+     */
+    public function testExtendFieldsValidation($data, $expectedResult)
+    {
+        /** @var Compiled $compiled */
+        $compiled = $this->objectManager->getObject(
+            Compiled::class,
+            [
+                'data' => $data
+            ]
+        );
+
+        $compiled->extend($data);
+
+        $reflection = new \ReflectionClass(Compiled::class);
+        $arguments = $reflection->getProperty('arguments');
+        $arguments->setAccessible(true);
+
+        $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
+        $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
+        $this->assertEquals($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
+    }
+
+    /**
+     * Data provider for testExtendFieldsValidation.
+     *
+     * @return array
+     */
+    public function extendFieldsValidation()
+    {
+        return [
+            [
+                [],
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [],
+                    'preferences' => []
+                ]
+            ],
+            [
+                [
+                    'arguments' => 1,
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => 'test'
+                ],
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => []
+                ]
+            ]
+        ];
+    }
 }
