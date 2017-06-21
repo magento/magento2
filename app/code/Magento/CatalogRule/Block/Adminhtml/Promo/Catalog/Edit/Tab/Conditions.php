@@ -8,6 +8,7 @@ namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Rule\Model\Condition\AbstractCondition;
 
 class Conditions extends Generic implements TabInterface
 {
@@ -175,22 +176,24 @@ class Conditions extends Generic implements TabInterface
             ->setRenderer($this->_conditions);
 
         $form->setValues($model->getData());
-        $this->setConditionFormName($model->getConditions(), $formName);
+        $this->setConditionFormName($model->getConditions(), $formName, $model->getConditionsFieldSetId($formName));
         return $form;
     }
 
     /**
-     * @param \Magento\Rule\Model\Condition\AbstractCondition $conditions
+     * @param AbstractCondition $conditions
      * @param string $formName
+     * @param string $jsFormName
      * @return void
      */
-    private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
+    private function setConditionFormName(AbstractCondition $conditions, $formName, $jsFormName)
     {
         $conditions->setFormName($formName);
-        $conditions->setJsFormObject($formName);
+        $conditions->setJsFormObject($jsFormName);
+
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
-                $this->setConditionFormName($condition, $formName);
+                $this->setConditionFormName($condition, $formName, $jsFormName);
             }
         }
     }
