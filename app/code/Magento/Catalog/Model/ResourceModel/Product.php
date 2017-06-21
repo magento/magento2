@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Product entity resource model
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
