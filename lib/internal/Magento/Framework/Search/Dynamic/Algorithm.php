@@ -297,9 +297,9 @@ class Algorithm
                 $interval->load($intervalValuesCount + 1, $offset, $lowerValue, $this->_upperLimit)
             );
         }
-        $lastValue = $values[$intervalValuesCount - 1];
+        $lastValue = end($values);
         $bestRoundValue = [];
-        if ($lastValue == $values[0]) {
+        if ($lastValue && ($lastValue == $values[0])) {
             if ($quantileNumber == 1 && $offset) {
                 $additionalValues = $interval->loadPrevious($lastValue, $quantileInterval[0], $this->_lowerLimit);
                 if ($additionalValues) {
@@ -338,10 +338,12 @@ class Algorithm
                 }
             }
         } else {
-            $bestRoundValue = $this->_findRoundValue(
-                $values[0] + self::MIN_POSSIBLE_VALUE / 10,
-                $lastValue
-            );
+            if ($lastValue) {
+                $bestRoundValue = $this->_findRoundValue(
+                    $values[0] + self::MIN_POSSIBLE_VALUE / 10,
+                    $lastValue
+                );
+            }
         }
 
         $this->_quantileInterval = $quantileInterval;
