@@ -79,6 +79,7 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
         $websiteId = 1;
         $selectMock = $this->getMock(Select::class, [], [], '', false);
         $selectMock->expects($this->any())->method('joinInner')->willReturnSelf();
+        $selectMock->expects($this->any())->method('getPart')->willReturn([]);
 
         $searchFilterMock = $this->getMock(Term::class, [], [], '', false);
         $searchFilterMock->expects($this->any())->method('getField')->willReturn($attributeCode);

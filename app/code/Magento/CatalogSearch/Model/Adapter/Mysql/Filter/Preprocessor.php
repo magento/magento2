@@ -175,6 +175,8 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
+        } elseif ($filter->getField() === 'visibility') {
+            return '';
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
             in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
         ) {
@@ -277,29 +279,7 @@ class Preprocessor implements PreprocessorInterface
             $value
         );
 
-        if ($this->isAddStockFilter()) {
-            $resultQuery = sprintf(
-                '%1$s AND %2$s%3$s.stock_status = %4$s',
-                $resultQuery,
-                $alias,
-                AliasResolver::STOCK_FILTER_SUFFIX,
-                Stock::STOCK_IN_STOCK
-            );
-        }
-
         return $resultQuery;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isAddStockFilter()
-    {
-        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            ScopeInterface::SCOPE_STORE
-        );
-        return false === $isShowOutOfStock;
     }
 
     /**

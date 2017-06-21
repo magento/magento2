@@ -111,6 +111,8 @@ class Full extends AbstractAction
     {
         try {
             $this->useIdxTable(false);
+            $this->_cleanMainTable();
+
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
             $columns = array_keys($this->_getConnection()->describeTable($this->_getIdxTable()));

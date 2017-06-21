@@ -29,6 +29,7 @@ class FilterContext implements FilterStrategyInterface
 
     /**
      * @var TermDropdownStrategy
+     * @deprecated
      */
     private $termDropdownStrategy;
 
@@ -39,6 +40,7 @@ class FilterContext implements FilterStrategyInterface
 
     /**
      * @var AliasResolver
+     * @deprecated
      */
     private $aliasResolver;
 
@@ -78,7 +80,7 @@ class FilterContext implements FilterStrategyInterface
                 if ($filter->getType() === \Magento\Framework\Search\Request\FilterInterface::TYPE_TERM
                     && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
                 ) {
-                    $isApplied = $this->termDropdownStrategy->apply($filter, $select);
+                    $isApplied = false;
                 } elseif ($attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                     $isApplied = $this->staticAttributeStrategy->apply($filter, $select);
                 }

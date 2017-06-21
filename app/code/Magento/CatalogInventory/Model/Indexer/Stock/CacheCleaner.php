@@ -119,10 +119,17 @@ class CacheCleaner
      */
     private function getProductIds(array $productStatusesBefore, array $productStatusesAfter)
     {
-        $productIds = [];
+        $disabledProductsIds = array_diff(array_keys($productStatusesBefore), array_keys($productStatusesAfter));
+        $enabledProductsIds = array_diff(array_keys($productStatusesAfter), array_keys($productStatusesBefore));
+        $commonProductsIds = array_intersect(array_keys($productStatusesBefore), array_keys($productStatusesAfter));
+        $productIds = array_merge($disabledProductsIds, $enabledProductsIds);
+
         $stockThresholdQty = $this->stockConfiguration->getStockThresholdQty();
-        foreach ($productStatusesBefore as $productId => $statusBefore) {
+
+        foreach ($commonProductsIds as $productId) {
+            $statusBefore = $productStatusesBefore[$productId];
             $statusAfter = $productStatusesAfter[$productId];
+
             if ($statusBefore['stock_status'] !== $statusAfter['stock_status']
                 || ($stockThresholdQty && $statusAfter['qty'] <= $stockThresholdQty)) {
                 $productIds[] = $productId;

@@ -127,8 +127,10 @@ class Mapper
      * Build adapter dependent query
      *
      * @param RequestInterface $request
-     * @throws \LogicException
      * @return Select
+     * @throws \LogicException
+     * @throws \Zend_Db_Exception
+     * @throws \InvalidArgumentException
      */
     public function buildQuery(RequestInterface $request)
     {

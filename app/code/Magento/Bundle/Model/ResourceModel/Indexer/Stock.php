@@ -7,11 +7,13 @@ namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * Bundle Stock Status Indexer Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
@@ -135,6 +137,9 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         $this->_prepareBundleOptionStockData($entityIds, $usePrimaryTable);
         $connection = $this->getConnection();
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+
         $select->reset(
             \Magento\Framework\DB\Select::COLUMNS
         )->columns(
@@ -143,9 +148,35 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
             ['o' => $this->_getBundleOptionTable()],
             'o.entity_id = e.entity_id AND o.website_id = cis.website_id AND o.stock_id = cis.stock_id',
             []
+        )->joinInner(
+            ['cpr' => $this->getTable('catalog_product_relation')],
+            'e.' . $linkField . ' = cpr.parent_id',
+            []
         )->columns(
             ['qty' => new \Zend_Db_Expr('0')]
         );
+
+        if ($metadata->getIdentifierField() === $metadata->getLinkField()) {
+            $select->joinInner(
+                ['cpei' => $this->getTable('catalog_product_entity_int')],
+                'cpr.child_id = cpei.' . $linkField
+                . ' AND cpei.attribute_id = ' . $this->_getAttribute('status')->getId()
+                . ' AND cpei.value = ' . ProductStatus::STATUS_ENABLED,
+                []
+            );
+        } else {
+            $select->joinInner(
+                ['cpel' => $this->getTable('catalog_product_entity')],
+                'cpel.entity_id = cpr.child_id',
+                []
+            )->joinInner(
+                ['cpei' => $this->getTable('catalog_product_entity_int')],
+                'cpel.'. $linkField . ' = cpei.' . $linkField
+                . ' AND cpei.attribute_id = ' . $this->_getAttribute('status')->getId()
+                . ' AND cpei.value = ' . ProductStatus::STATUS_ENABLED,
+                []
+            );
+        }
 
         $statusExpr = $this->getStatusExpression($connection);
         $select->columns(

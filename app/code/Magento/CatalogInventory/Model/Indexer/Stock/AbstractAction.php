@@ -229,6 +229,39 @@ abstract class AbstractAction
     }
 
     /**
+     * Delete records by their ids from index table
+     * Is used to clean table before re-indexation
+     *
+     * @param array $ids
+     *
+     * @return bool
+     */
+    protected function _deleteOldRecords(array $ids)
+    {
+        if (count($ids) === 0) {
+            return false;
+        }
+
+        $result = $this->_getConnection()->delete(
+            $this->indexerStockFrontendResource->getMainTable(),
+            ['product_id in (?)' => $ids]
+        );
+
+        return (bool) $result;
+    }
+
+    /**
+     * Delete all records from index table
+     * Is used to clean table before re-indexation
+     *
+     * @return void
+     */
+    protected function _cleanMainTable()
+    {
+        $this->_getConnection()->truncateTable($this->indexerStockFrontendResource->getMainTable());
+    }
+
+    /**
      * Refresh entities index
      *
      * @param array $productIds
@@ -265,6 +298,9 @@ abstract class AbstractAction
             ->from($this->_getTable('catalog_product_entity'), ['entity_id', 'type_id'])
             ->where('entity_id IN(?)', $processIds);
         $pairs = $connection->fetchPairs($select);
+
+        // delete current records from index
+        $this->_deleteOldRecords($processIds);
 
         $byType = [];
         foreach ($pairs as $productId => $typeId) {
