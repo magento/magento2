@@ -117,25 +117,22 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
         $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
-        $this->valueHandlerPool->expects(static::once())
-            ->method('get')
+        $this->valueHandlerPool->method('get')
             ->with('can_fetch_transaction_information')
             ->willReturn($valueHandler);
-        $valueHandler->expects(static::once())
+        $valueHandler->expects($this->atLeastOnce())
             ->method('handle')
             ->with(['field' => 'can_fetch_transaction_information'])
             ->willReturn(true);
 
-        $this->paymentDataObjectFactory->expects(static::once())
-            ->method('create')
+        $this->paymentDataObjectFactory->method('create')
             ->with($paymentInfo)
             ->willReturn($paymentDO);
 
-        $this->commandPool->expects(static::once())
-            ->method('get')
+        $this->commandPool->method('get')
             ->with('fetch_transaction_information')
             ->willReturn($command);
-        $command->expects(static::once())
+        $command->expects($this->atLeastOnce())
             ->method('execute')
             ->with(['transactionId' => $transactionId, 'payment' => $paymentDO])
             ->willReturn($transactionInfo);
