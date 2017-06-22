@@ -207,7 +207,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                     'arguments' => [],
                     'instanceTypes' => [],
                     'preferences' => [],
-                ]
+                ],
             ],
             [
                 [
@@ -219,8 +219,8 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                     'arguments' => [],
                     'instanceTypes' => [1, 2, 3],
                     'preferences' => [],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -267,7 +267,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                     'arguments' => [],
                     'instanceTypes' => [],
                     'preferences' => [],
-                ]
+                ],
             ],
             [
                 [
@@ -279,8 +279,8 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                     'arguments' => [],
                     'instanceTypes' => [1, 2, 3],
                     'preferences' => [],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 }
