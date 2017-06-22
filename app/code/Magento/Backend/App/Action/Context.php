@@ -20,7 +20,6 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @api
  */
 class Context extends \Magento\Framework\App\Action\Context
 {

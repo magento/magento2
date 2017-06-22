@@ -12,7 +12,6 @@ namespace Magento\Backend\App;
 /**
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @api
  */
 abstract class Action extends \Magento\Backend\App\AbstractAction
 {

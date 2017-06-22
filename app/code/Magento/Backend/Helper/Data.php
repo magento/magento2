@@ -11,7 +11,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
  * @api
  * @deprecated
  * @SuppressWarnings(PHPMD.LongVariable)
- * @api
  */
 class Data extends AbstractHelper
 {

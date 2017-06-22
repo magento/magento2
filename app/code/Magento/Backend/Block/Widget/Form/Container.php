@@ -11,7 +11,6 @@ namespace Magento\Backend\Block\Widget\Form;
  * @api
  * @deprecated in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @api
  */
 class Container extends \Magento\Backend\Block\Widget\Container
 {

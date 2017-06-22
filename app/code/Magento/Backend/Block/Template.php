@@ -23,7 +23,6 @@ namespace Magento\Backend\Block;
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @api
  */
 class Template extends \Magento\Framework\View\Element\Template
 {

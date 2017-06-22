@@ -24,7 +24,6 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @api
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {

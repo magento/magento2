@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Widget\Form;
  * @api
  * @deprecated in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @api
  */
 class Generic extends \Magento\Backend\Block\Widget\Form
 {
