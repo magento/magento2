@@ -32,7 +32,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             $additionalAttributes = [
                 CustomerInterface::DEFAULT_BILLING,
                 CustomerInterface::DEFAULT_SHIPPING,
-                'confirmation',
                 'sendemail_store_id',
                 'extension_attributes',
             ];
