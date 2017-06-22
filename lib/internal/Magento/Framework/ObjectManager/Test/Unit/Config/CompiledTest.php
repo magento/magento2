@@ -180,7 +180,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $compiled = $this->objectManager->getObject(
             Compiled::class,
             [
-                'data' => $data
+                'data' => $data,
             ]
         );
 
@@ -206,19 +206,19 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 [
                     'arguments' => [],
                     'instanceTypes' => [],
-                    'preferences' => []
+                    'preferences' => [],
                 ]
             ],
             [
                 [
                     'arguments' => 1,
                     'instanceTypes' => [1, 2, 3],
-                    'preferences' => 'test'
+                    'preferences' => 'test',
                 ],
                 [
                     'arguments' => [],
                     'instanceTypes' => [1, 2, 3],
-                    'preferences' => []
+                    'preferences' => [],
                 ]
             ]
         ];
@@ -238,7 +238,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $compiled = $this->objectManager->getObject(
             Compiled::class,
             [
-                'data' => $data
+                'data' => $data,
             ]
         );
 
@@ -266,19 +266,19 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 [
                     'arguments' => [],
                     'instanceTypes' => [],
-                    'preferences' => []
+                    'preferences' => [],
                 ]
             ],
             [
                 [
                     'arguments' => 1,
                     'instanceTypes' => [1, 2, 3],
-                    'preferences' => 'test'
+                    'preferences' => 'test',
                 ],
                 [
                     'arguments' => [],
                     'instanceTypes' => [1, 2, 3],
-                    'preferences' => []
+                    'preferences' => [],
                 ]
             ]
         ];
