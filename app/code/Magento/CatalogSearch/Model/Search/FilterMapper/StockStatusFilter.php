@@ -22,7 +22,7 @@ class StockStatusFilter
      * Defines strategies of how filter should be applied
      */
     const FILTER_JUST_ENTITY = 'general_filter';
-    const FILTER_ENTITY_AND_SOURCE = 'filter_with_sub_products';
+    const FILTER_ENTITY_AND_SUB_PRODUCTS = 'filter_with_sub_products';
 
     /**
      * @var FrontendResource
@@ -68,22 +68,23 @@ class StockStatusFilter
      * @param Select $select
      * @param mixed $stockValues
      * @param string $type
+     * @param bool $showOutOfStockFlag
      * @return Select
      * @throws \InvalidArgumentException
      */
-    public function apply(Select $select, $stockValues, $type)
+    public function apply(Select $select, $stockValues, $type, $showOutOfStockFlag)
     {
-        if ($type !== self::FILTER_JUST_ENTITY && $type !== self::FILTER_ENTITY_AND_SOURCE) {
+        if ($type !== self::FILTER_JUST_ENTITY && $type !== self::FILTER_ENTITY_AND_SUB_PRODUCTS) {
             throw new \InvalidArgumentException(sprintf('Invalid filter type: %s', $type));
         }
 
         $select = clone $select;
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
-        $this->addMainStockStatusJoin($select, $stockValues, $mainTableAlias);
+        $this->addMainStockStatusJoin($select, $stockValues, $mainTableAlias, $showOutOfStockFlag);
 
-        if ($type === self::FILTER_ENTITY_AND_SOURCE) {
-            $this->addStockStatusJoinForSubProducts($select, $stockValues, $mainTableAlias);
+        if ($type === self::FILTER_ENTITY_AND_SUB_PRODUCTS) {
+            $this->addSubProductsStockStatusJoin($select, $stockValues, $mainTableAlias, $showOutOfStockFlag);
         }
 
         return $select;
@@ -91,13 +92,15 @@ class StockStatusFilter
 
     /**
      * Adds filter join for products by stock status
+     * In case when $showOutOfStockFlag is true - joins are still required to filter only enabled products
      *
      * @param Select $select
      * @param array|int $stockValues
      * @param string $mainTableAlias
+     * @param bool $showOutOfStockFlag
      * @return void
      */
-    private function addMainStockStatusJoin(Select $select, $stockValues, $mainTableAlias)
+    private function addMainStockStatusJoin(Select $select, $stockValues, $mainTableAlias, $showOutOfStockFlag)
     {
         $select->joinInner(
             ['stock_index' => $this->indexerStockFrontendResource->getMainTable()],
@@ -109,11 +112,13 @@ class StockStatusFilter
                         '=',
                         $this->stockConfiguration->getDefaultScopeId()
                     ),
-                    $this->conditionManager->generateCondition(
-                        'stock_index.stock_status',
-                        is_array($stockValues) ? 'in' : '=',
-                        $stockValues
-                    ),
+                    $showOutOfStockFlag
+                        ? ''
+                        : $this->conditionManager->generateCondition(
+                            'stock_index.stock_status',
+                            is_array($stockValues) ? 'in' : '=',
+                            $stockValues
+                        ),
                     $this->conditionManager->generateCondition(
                         'stock_index.stock_id',
                         '=',
@@ -128,13 +133,15 @@ class StockStatusFilter
 
     /**
      * Adds filter join for sub products by stock status
+     * In case when $showOutOfStockFlag is true - joins are still required to filter only enabled products
      *
      * @param Select $select
      * @param array|int $stockValues
      * @param string $mainTableAlias
+     * @param bool $showOutOfStockFlag
      * @return void
      */
-    private function addStockStatusJoinForSubProducts(Select $select, $stockValues, $mainTableAlias)
+    private function addSubProductsStockStatusJoin(Select $select, $stockValues, $mainTableAlias, $showOutOfStockFlag)
     {
         $select->joinInner(
             ['sub_products_stock_index' => $this->indexerStockFrontendResource->getMainTable()],
@@ -146,11 +153,13 @@ class StockStatusFilter
                         '=',
                         $this->stockConfiguration->getDefaultScopeId()
                     ),
-                    $this->conditionManager->generateCondition(
-                        'sub_products_stock_index.stock_status',
-                        is_array($stockValues) ? 'in' : '=',
-                        $stockValues
-                    ),
+                    $showOutOfStockFlag
+                        ? ''
+                        : $this->conditionManager->generateCondition(
+                            'sub_products_stock_index.stock_status',
+                            is_array($stockValues) ? 'in' : '=',
+                            $stockValues
+                        ),
                     $this->conditionManager->generateCondition(
                         'sub_products_stock_index.stock_id',
                         '=',

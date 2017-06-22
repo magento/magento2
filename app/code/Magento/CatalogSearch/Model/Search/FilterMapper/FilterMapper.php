@@ -81,15 +81,17 @@ class FilterMapper
             $select = $this->customAttributeFilter->apply($select, ...$selectContainer->getCustomAttributesFilters());
         }
 
-        if (!$selectContainer->isShowOutOfStockEnabled()) {
-
-            $filterType = StockStatusFilter::FILTER_JUST_ENTITY;
-            if ($selectContainer->hasCustomAttributesFilters()) {
-                $filterType = StockStatusFilter::FILTER_ENTITY_AND_SOURCE;
-            }
-
-            $select = $this->stockStatusFilter->apply($select, Stock::STOCK_IN_STOCK, $filterType);
+        $filterType = StockStatusFilter::FILTER_JUST_ENTITY;
+        if ($selectContainer->hasCustomAttributesFilters()) {
+            $filterType = StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS;
         }
+
+        $select = $this->stockStatusFilter->apply(
+            $select,
+            Stock::STOCK_IN_STOCK,
+            $filterType,
+            $selectContainer->isShowOutOfStockEnabled()
+        );
 
         $appliedFilters = [];
 
