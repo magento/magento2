@@ -284,7 +284,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(count($expectedLinks), $productLinks);
         $resultLinks = [];
 
-        $this->assertTrue(is_array($this->productMock->getData('tier_price')));
+        $this->assertEquals($tierPrice ?: [], $this->productMock->getData('tier_price'));
 
         foreach ($productLinks as $link) {
             $this->assertInstanceOf(ProductLink::class, $link);
