@@ -93,8 +93,8 @@ class StockStatusFilter
      * Adds filter join for products by stock status
      *
      * @param Select $select
-     * @param $stockValues
-     * @param $mainTableAlias
+     * @param array|int $stockValues
+     * @param string $mainTableAlias
      */
     private function addMainStockStatusJoin(Select $select, $stockValues, $mainTableAlias)
     {
@@ -129,8 +129,8 @@ class StockStatusFilter
      * Adds filter join for sub products by stock status
      *
      * @param Select $select
-     * @param $stockValues
-     * @param $mainTableAlias
+     * @param array|int $stockValues
+     * @param string $mainTableAlias
      */
     private function addStockStatusJoinForSubProducts(Select $select, $stockValues, $mainTableAlias)
     {
