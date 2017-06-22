@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
 /**
  * Backend model for attribute with multiple values
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
