@@ -221,7 +221,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Sets a job to STATUS_RUNNING only if it is currently in STATUS_PENDING.
+     * Sets a job to STATUS_RUNNING only if it is currently in STATUS_PENDING
+     * and no other jobs of the same code are currently in STATUS_RUNNING.
      * Returns true if status was changed and false otherwise.
      *
      * This is used to implement locking for cron jobs.
@@ -230,7 +231,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function tryLockJob()
     {
-        if ($this->_getResource()->trySetJobStatusAtomic(
+        if ($this->_getResource()->trySetJobUniqueStatusAtomic(
             $this->getId(),
             self::STATUS_RUNNING,
             self::STATUS_PENDING
