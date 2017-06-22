@@ -211,7 +211,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getMappedSqlField()
     {
         $result = '';
-        if ($this->getAttribute() == 'category_ids') {
+        if (in_array($this->getAttribute(), ['category_ids', 'sku'])) {
             $result = parent::getMappedSqlField();
         } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
             $result = $this->joinedAttributes[$this->getAttribute()];
