@@ -100,11 +100,10 @@ class Image implements ProductRenderCollectorInterface
                 ->emulateAreaCode(
                     'frontend',
                     [$this, "emulateImageCreating"],
-                    [$product, $imageCode, (int) $productRender->getStoreId()]
+                    [$product, $imageCode, (int) $productRender->getStoreId(), $image]
                 );
             $resizedInfo = $helper->getResizedImageInfo();
 
-            $image->setUrl($helper->getUrl());
             $image->setCode($imageCode);
             $image->setHeight($helper->getHeight());
             $image->setWidth($helper->getWidth());
@@ -127,12 +126,14 @@ class Image implements ProductRenderCollectorInterface
      * @param int $storeId
      * @return \Magento\Catalog\Helper\Image
      */
-    public function emulateImageCreating(ProductInterface $product, $imageCode, $storeId)
+    public function emulateImageCreating(ProductInterface $product, $imageCode, $storeId, ImageInterface $image)
     {
         $this->storeManager->setCurrentStore($storeId);
         $this->design->setDefaultDesignTheme();
 
-        $image = $this->imageFactory->create();
-        return $image->init($product, $imageCode);
+        $imageHelper = $this->imageFactory->create();
+        $imageHelper->init($product, $imageCode);
+        $image->setUrl($imageHelper->getUrl());
+        return $imageHelper;
     }
 }
