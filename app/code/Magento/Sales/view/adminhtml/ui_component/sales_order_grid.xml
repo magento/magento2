@@ -31,7 +31,7 @@
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
-                <primaryFieldName>entity_id</primaryFieldName>
+                <primaryFieldName>main_table.entity_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
