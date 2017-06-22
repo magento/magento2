@@ -191,7 +191,7 @@ define([
             for (id in ids) {
                 if (!data.hasOwnProperty(id) ||
                     data[id]['currency_code'] !== currency ||
-                    data[id]['store_id'] !== store
+                    ~~data[id]['store_id'] !== ~~store
                 ) {
                     return false;
                 }

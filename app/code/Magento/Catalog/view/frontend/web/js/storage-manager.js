@@ -62,6 +62,11 @@ define([
                         className: '${ $.storagesConfiguration.recently_compared_product.className }'
                     },
                     allowToSendRequest: 0
+                },
+                'product_data_storage': {
+                    namespace: 'product_data_storage',
+                    className: 'DataStorage',
+                    allowToSendRequest: 0
                 }
             },
             requestConfig: {
@@ -69,7 +74,8 @@ define([
                 dataType: 'json',
                 ajaxSaveType: 'default',
                 ignoreProcessEvents: true
-            }
+            },
+            requestSent: 0
         },
 
         /**
@@ -158,24 +164,20 @@ define([
          * Handlers for storages "data" property
          */
         updateDataHandler: function (name, data) {
-            var currentTime = this.getUtcTime(),
-                result,
-                previousData = this[name].previous ? this[name].previous.get() : false;
+            var previousData = this[name].previous ? this[name].previous.get() : false;
 
             if (!_.isEmpty(previousData) &&
                 !_.isEmpty(data) &&
                 !utils.compare(data, previousData).equal) {
-                result = this.dataFilter(data, currentTime, name);
-                this[name].set(result);
-                this[name].previous.set(result);
-                this.sendRequest(name, result);
+                this[name].set(data);
+                this[name].previous.set(data);
+                this.sendRequest(name, data);
             } else if (
                 _.isEmpty(previousData) &&
                 !_.isEmpty(data)
             ) {
-                result = this.dataFilter(data, currentTime, name);
-                this[name].set(result);
-                this.sendRequest(name, result);
+                this[name].set(data);
+                this.sendRequest(name, data);
             }
         },
 
@@ -198,32 +200,13 @@ define([
         },
 
         /**
-         * Filters data by update time
-         *
-         * @param {Object} data
-         * @param {String} currentTime
-         * @param {String} name
-         * @returns {Object} result
-         */
-        dataFilter: function (data, currentTime, name) {
-            var result = {};
-
-            _.each(data, function (id) {
-                if (currentTime - id['added_at'] < ~~this.storagesConfiguration[name].lifetime) {
-                    result[id['product_id']] = id;
-                }
-            }, this);
-
-            return result;
-        },
-
-        /**
          * Request handler
          *
          * @param {String} name - storage name
          */
         requestHandler: function (name) {
             this.setLastUpdate(name);
+            this.requestSent = 1;
         },
 
         /**
@@ -237,7 +220,7 @@ define([
                 url = params.syncUrl,
                 typeId = params.typeId;
 
-            if (!~~this.storagesConfiguration[name].allowToSendRequest) {
+            if (this.requestSent || !~~this.storagesConfiguration[name].allowToSendRequest) {
                 return;
             }
 

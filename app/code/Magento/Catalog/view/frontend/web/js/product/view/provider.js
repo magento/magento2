@@ -31,7 +31,8 @@ define([
          */
         initialize: function () {
             this._super()
-                .initIdsStorage();
+                .initIdsStorage()
+                .initDataStorage();
 
             return this;
         },
@@ -45,6 +46,27 @@ define([
             storage.onStorageInit(this.identifiersConfig.namespace, this.idsStorageHandler.bind(this));
 
             return this;
+        },
+
+        /**
+         * Init data storage
+         *
+         * @returns {Object} Chainable.
+         */
+        initDataStorage: function () {
+            storage.onStorageInit(this.productStorageConfig.namespace, this.dataStorageHandler.bind(this));
+
+            return this;
+        },
+
+        /**
+         * Init data storage handler
+         *
+         * @param {Object} dataStorage - storage instance
+         */
+        dataStorageHandler: function (dataStorage) {
+            this.productStorage = dataStorage;
+            this.productStorage.add(this.data());
         },
 
         /**
