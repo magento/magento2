@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved. 
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,15 +8,20 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory;
+use Magento\Catalog\Helper\ImageFactory;
 use Magento\Catalog\Api\Data\ProductRender\ImageInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Catalog\Helper\ImageFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ImageFactory | \PHPUnit_Framework_MockObject_MockObject */
     private $imageFactory;
 
     /** @var  \Magento\Framework\App\State | \PHPUnit_Framework_MockObject_MockObject */
@@ -31,7 +36,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     /** @var  Image */
     private $model;
 
-    /** @var array  */
+    /** @var array */
     private $imageCodes = ['widget_recently_viewed'];
 
     /** @var \Magento\Catalog\Api\Data\ProductRender\ImageInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -39,7 +44,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->imageFactory = $this->getMockBuilder(\Magento\Catalog\Helper\ImageFactory::class)
+        $this->imageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -80,7 +85,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $productRenderInfoDto->expects($this->once())
             ->method('getStoreId')
             ->willReturn('1');
-        $imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+        $imageHelper = $this->getMockBuilder(ImageHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->imageInterfaceFactory
@@ -96,12 +101,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'frontend',
                 [$this->model, "emulateImageCreating"],
-                [$product, $imageCode, 1]
+                [$product, $imageCode, 1, $image]
             )
             ->willReturn($imageHelper);
-        $imageHelper->expects($this->once())
-            ->method('getUrl')
-            ->willReturn('url');
+
         $imageHelper->expects($this->once())
             ->method('getHeight')
             ->willReturn(10);
@@ -111,18 +114,16 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageHelper->expects($this->once())
             ->method('getLabel')
             ->willReturn('Label');
+
         $image->expects($this->once())
-            ->method('setUrl')
+            ->method('setCode')
             ->with();
-        $image->expects($this->once())
-                ->method('setCode')
-                ->with();
         $image->expects($this->once())
             ->method('setWidth')
             ->with();
         $image->expects($this->once())
-        ->method('setLabel')
-        ->with();
+            ->method('setLabel')
+            ->with();
         $image->expects($this->once())
             ->method('setResizedHeight')
             ->with(11);
@@ -138,5 +139,36 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         $this->model->collect($product, $productRenderInfoDto);
+    }
+
+    public function testEmulateImageCreating()
+    {
+        $productMock = $this->getMockBuilder(ProductInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $imageMock = $this->getMockBuilder(ImageInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $imageHelperMock = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->imageFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($imageHelperMock);
+
+        $imageHelperMock->expects($this->once())
+            ->method('init')
+            ->with($productMock, 'widget_recently_viewed');
+        $imageHelperMock->expects($this->once())
+            ->method('getUrl')
+            ->willReturn('url');
+        $imageMock->expects($this->once())
+            ->method('setUrl')
+            ->with('url');
+
+        $this->assertEquals(
+            $imageHelperMock,
+            $this->model->emulateImageCreating($productMock, 'widget_recently_viewed', 1, $imageMock)
+        );
     }
 }
