@@ -1,10 +1,8 @@
 <?php
 /**
- * @api
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Mtf\Util\Generate\Factory;
 
 /**
@@ -12,6 +10,7 @@ namespace Magento\Mtf\Util\Generate\Factory;
  *
  * Repository Factory generator
  *
+ * @api
  */
 class Repository extends AbstractFactory
 {

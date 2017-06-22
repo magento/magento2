@@ -11,6 +11,8 @@ use Magento\Quote\Model\Quote\Address;
 
 /**
  * Sales Rules resource collection model.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
