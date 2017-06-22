@@ -156,7 +156,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->_eventManager->dispatch(
             'cms_page_render',
-            ['page' => $this->_page, 'controller_action' => $action]
+            ['page' => $this->_page, 'controller_action' => $action, 'request' => $this->_getRequest()]
         );
 
         if ($this->_page->getCustomLayoutUpdateXml() && $inRange) {

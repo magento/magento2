@@ -69,7 +69,6 @@ class Date extends AbstractDataType
         $config['options']['dateFormat'] = $localeDateFormat;
         $config['outputDateFormat'] = $localeDateFormat;
         $this->setData('config', $config);
-
         parent::prepare();
     }
 

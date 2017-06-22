@@ -32,9 +32,9 @@ class AddAttributeToAttributeSetStep implements TestStepInterface
     protected $catalogProductSetEdit;
 
     /**
-     * Catalog Product Attribute fixture.
+     * Catalog Product Attribute fixtures.
      *
-     * @var CatalogProductAttribute
+     * @var CatalogProductAttribute[]
      */
     protected $attribute;
 
@@ -49,18 +49,22 @@ class AddAttributeToAttributeSetStep implements TestStepInterface
      * @constructor
      * @param CatalogProductSetIndex $catalogProductSetIndex
      * @param CatalogProductSetEdit $catalogProductSetEdit
-     * @param CatalogProductAttribute $attribute
+     * @param CatalogProductAttribute|array $attribute
      * @param CatalogAttributeSet $attributeSet
      */
     public function __construct(
         CatalogProductSetIndex $catalogProductSetIndex,
         CatalogProductSetEdit $catalogProductSetEdit,
-        CatalogProductAttribute $attribute,
+        $attribute,
         CatalogAttributeSet $attributeSet
     ) {
         $this->catalogProductSetIndex = $catalogProductSetIndex;
         $this->catalogProductSetEdit = $catalogProductSetEdit;
-        $this->attribute = $attribute;
+        if (!is_array($attribute)) {
+            $this->attribute = [$attribute];
+        } else {
+            $this->attribute = $attribute;
+        }
         $this->attributeSet = $attributeSet;
     }
 
@@ -73,7 +77,9 @@ class AddAttributeToAttributeSetStep implements TestStepInterface
     {
         $filterAttribute = ['set_name' => $this->attributeSet->getAttributeSetName()];
         $this->catalogProductSetIndex->open()->getGrid()->searchAndOpen($filterAttribute);
-        $this->catalogProductSetEdit->getAttributeSetEditBlock()->moveAttribute($this->attribute->getData());
+        foreach ($this->attribute as $attribute) {
+            $this->catalogProductSetEdit->getAttributeSetEditBlock()->moveAttribute($attribute->getData());
+        }
         $this->catalogProductSetEdit->getPageActions()->save();
     }
 }
