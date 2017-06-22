@@ -60,6 +60,9 @@ class EmailNotification implements EmailNotificationInterface
         self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
     ];
 
+    /**
+     * Map of templates. Use for backward compatibility
+     */
     const TEMPLATE_MAP = [
         self::XML_PATH_FORGOT_EMAIL_TEMPLATE => self::XML_PATH_RESET_PASSWORD_TEMPLATE
     ];
@@ -245,7 +248,7 @@ class EmailNotification implements EmailNotificationInterface
         $storeId = null,
         $email = null
     ) {
-        $templateId = $this->getCorrectTemplateId($template, 'store', $storeId);
+        $templateId = $this->getTemplateId($template, 'store', $storeId);
         if ($email === null) {
             $email = $customer->getEmail();
         }
@@ -390,7 +393,7 @@ class EmailNotification implements EmailNotificationInterface
      * @param string $storeId
      * @return string
      */
-    private function getCorrectTemplateId($template, $scopeType, $storeId)
+    private function getTemplateId($template, $scopeType, $storeId)
     {
         if (array_key_exists($template, self::TEMPLATE_MAP)) {
             $templateId = $this->scopeConfig->getValue(self::TEMPLATE_MAP[$template], $scopeType, $storeId);
