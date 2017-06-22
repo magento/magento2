@@ -298,7 +298,6 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             ScopeInterface::SCOPE_GROUPS => [],
-            ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []
         ];
 
