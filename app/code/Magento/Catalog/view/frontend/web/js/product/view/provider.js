@@ -66,7 +66,7 @@ define([
          */
         dataStorageHandler: function (dataStorage) {
             this.productStorage = dataStorage;
-            this.productStorage.add(this.data());
+            this.productStorage.add(this.data.items);
         },
 
         /**
