@@ -83,7 +83,7 @@ class GuestValidationTest extends \PHPUnit_Framework_TestCase
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @dataProvider dataProvider
      * @param string[] $agreementNames
