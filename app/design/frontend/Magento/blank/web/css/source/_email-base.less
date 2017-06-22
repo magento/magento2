@@ -291,12 +291,15 @@ body {
 .message-details {
     margin-bottom: @indent__s;
 
-    th,
+    b {
+        font-weight: bold;
+    }
+
     td {
         padding-bottom: @indent__xs;
 
-        & + td {
-            padding-left: @indent__s;
+        b {
+            margin-right: @indent__s;
         }
     }
 }
