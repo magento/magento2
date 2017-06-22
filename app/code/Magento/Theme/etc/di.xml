@@ -247,8 +247,8 @@
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="themes" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Theme\Model\Config\Importer</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="importer_class" xsi:type="string">Magento\Theme\Model\Config\Importer</item>
+                    <item name="sort_order" xsi:type="number">20</item>
                 </item>
             </argument>
         </arguments>
