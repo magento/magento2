@@ -21,7 +21,7 @@ define([
                 price;
 
             price = _.filter(elems, function (elem) {
-                return elem.index.split(".").shift() === code;
+                return elem.index.split('.').shift() === code;
             }, this).pop();
 
             price.source = this.source();
