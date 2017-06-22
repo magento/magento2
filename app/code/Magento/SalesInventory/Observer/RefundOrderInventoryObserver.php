@@ -94,7 +94,7 @@ class RefundOrderInventoryObserver implements ObserverInterface
             $creditmemo,
             $order,
             $returnToStockItems,
-            $this->stockConfiguration->isAutoReturnEnabled()
+            empty($returnToStockItems) ? false : $this->stockConfiguration->isAutoReturnEnabled()
         );
     }
 }
