@@ -15,6 +15,10 @@ use Magento\Framework\View\DesignInterface;
  *
  * Detects the design theme configuration data (path \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID)
  * and convert theme identifier from theme_id to theme_full_path.
+ * As a result of Magento\Config\App\Config\Source\DumpConfigSourceAggregated expected
+ * to be shared between environments where IDs can not be used, we need
+ * to change theme id to full path value what can be used as an identifier.
+ * @see \Magento\Config\App\Config\Source\DumpConfigSourceAggregated
  */
 class Dump
 {
@@ -41,6 +45,9 @@ class Dump
     }
 
     /**
+     * Change value from theme_id field to full path for every existed scope.
+     * All other values leave without changes.
+     *
      * @param DumpConfigSourceAggregated $subject
      * @param array $result
      * @return array

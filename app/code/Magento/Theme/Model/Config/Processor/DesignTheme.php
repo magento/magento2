@@ -12,6 +12,9 @@ use Magento\Framework\View\DesignInterface;
 
 /**
  * Allows to convert configurations from \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID variables.
+ *
+ * Detects the design theme configuration data (path \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID)
+ * and convert theme identifier from theme_full_path (Ex. "frontend/Magento/blank") to theme_id.
  */
 class DesignTheme implements PreProcessorInterface
 {
@@ -26,8 +29,6 @@ class DesignTheme implements PreProcessorInterface
     private $themeList;
 
     /**
-     * DesignTheme constructor.
-     *
      * @param ArrayManager $arrayManager
      * @param ListInterface $themeList
      */
@@ -40,7 +41,11 @@ class DesignTheme implements PreProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Change value from theme_full_path (Ex. "frontend/Magento/blank") to theme_id field for every existed scope.
+     * All other values leave without changes.
+     *
+     * @param array $config
+     * @return array
      */
     public function process(array $config)
     {
@@ -66,6 +71,7 @@ class DesignTheme implements PreProcessorInterface
      */
     private function changeThemeFullPathToIdentifier($configItems)
     {
+        $theme = null;
         if ($this->arrayManager->exists(DesignInterface::XML_PATH_THEME_ID, $configItems)) {
             $themeIdentifier = $this->arrayManager->get(DesignInterface::XML_PATH_THEME_ID, $configItems);
             if (!is_numeric($themeIdentifier)) {
