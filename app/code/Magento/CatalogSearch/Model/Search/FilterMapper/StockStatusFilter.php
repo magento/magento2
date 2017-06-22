@@ -95,6 +95,7 @@ class StockStatusFilter
      * @param Select $select
      * @param array|int $stockValues
      * @param string $mainTableAlias
+     * @return void
      */
     private function addMainStockStatusJoin(Select $select, $stockValues, $mainTableAlias)
     {
@@ -131,6 +132,7 @@ class StockStatusFilter
      * @param Select $select
      * @param array|int $stockValues
      * @param string $mainTableAlias
+     * @return void
      */
     private function addStockStatusJoinForSubProducts(Select $select, $stockValues, $mainTableAlias)
     {
