@@ -50,6 +50,10 @@
                 <selector>[name="product[news_to_date]"]</selector>
                 <strategy>css selector</strategy>
             </news_to_date>
+            <use_default_name>
+                <selector>[name="use_default[name]"]</selector>
+                <input>checkbox</input>
+            </use_default_name>
         </fields>
     </product-details>
     <advanced-pricing>
@@ -184,6 +188,11 @@
                 <selector>input[name$="[title]"]</selector>
                 <strategy>css selector</strategy>
             </title>
+            <use_default_title>
+                <selector>fieldset[data-index="container_common"] [name^="options_use_default"]</selector>
+                <strategy>css selector</strategy>
+                <input>checkbox</input>
+            </use_default_title>
             <is_require>
                 <selector>input[name$="[is_require]"]</selector>
                 <strategy>css selector</strategy>

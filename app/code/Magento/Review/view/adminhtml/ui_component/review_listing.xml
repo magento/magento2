@@ -12,6 +12,7 @@
             <item name="deps" xsi:type="string">review_listing.review_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">review_columns</item>
+        <item name="acl" xsi:type="string">Magento_Review::reviews_all</item>
     </argument>
     <dataSource name="review_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">

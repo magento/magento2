@@ -146,5 +146,21 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation12" summary="Correct scope filter caching in UI grids" ticketId="MAGETWO-64958">
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
+            <data name="store/dataset" xsi:type="string">custom_store_main_website</data>
+            <data name="product/data/use_default_name" xsi:type="string">No</data>
+            <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductGridFilterCorrect" />
+        </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation13" summary="Custom options must be displayed correctly on a store view level" ticketId="MAGETWO-61706">
+            <data name="initialProduct/dataset" xsi:type="string">with_one_custom_option</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_percent_price_updated</data>
+            <data name="assertInitialProduct">true</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductCustomOptionsOnProductPage" />
+        </variation>
     </testCase>
 </config>

@@ -47,6 +47,10 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'No' => 0,
             'Yes' => 1,
         ],
+        'is_global' => [
+            'Store View' => '0',
+            'Global' => '1',
+        ],
         'used_in_product_listing' => [
             'No' => '0',
             'Yes' => '1',

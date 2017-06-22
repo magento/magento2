@@ -172,19 +172,16 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
                 ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
+
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
 
-        $coupons = [];
-        /** @var \Magento\SalesRule\Model\Coupon $couponModel */
-        foreach ($collection->getItems() as $couponModel) {
-            $coupons[] = $couponModel->getData();
-        }
-
+        /** @var \Magento\SalesRule\Api\Data\CouponSearchResultInterface $searchResults */
         $searchResults = $this->searchResultFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
-        $searchResults->setItems($coupons);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
+
         return $searchResults;
     }
 

@@ -120,6 +120,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * Customer fields that must be removed
+     *
+     * @var array
+     */
+    private $forbiddenCustomerFields = [
+       'password_hash',
+       'rp_token',
+       'confirmation',
+    ];
+    
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -165,7 +176,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function getSession()
     {
         if ($this->session === null) {
-            $this->session = ObjectManager::getInstance()->get('Magento\Framework\Session\SessionManagerInterface');
+            $this->session = ObjectManager::getInstance()->get(
+                \Magento\Framework\Session\SessionManagerInterface::class
+            );
         }
         return $this->session;
     }
@@ -187,6 +200,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->overrideFileUploaderData($customer, $result['customer']);
 
+            $result['customer'] = array_diff_key(
+                $result['customer'],
+                array_flip($this->forbiddenCustomerFields)
+            );
             unset($result['address']);
 
             /** @var Address $address */
@@ -479,7 +496,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param AttributeInterface $attribute
      * @param array $meta
-     * @return array
+     * @return void
      */
     private function processFrontendInput(AttributeInterface $attribute, array &$meta)
     {
@@ -529,7 +546,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         if ($this->fileProcessorFactory === null) {
             $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get('Magento\Customer\Model\FileProcessorFactory');
+                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
         }
         return $this->fileProcessorFactory;
     }

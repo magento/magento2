@@ -11,6 +11,11 @@ use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Config\DataInterface;
+use Magento\Mtf\System\Event\EventManagerInterface;
+use Magento\Mtf\Util\Command\Website;
 
 /**
  * Class Curl
@@ -18,6 +23,45 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
  */
 class Curl extends AbstractCurl implements WebsiteInterface
 {
+    /**
+     * Website folder creation class instance.
+     *
+     * @var Website
+     */
+    private $website;
+
+    /**
+     * Website fixture.
+     *
+     * @var WebsiteFixture
+     */
+    private $fixture;
+
+    /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * @constructor
+     * @param DataInterface $configuration
+     * @param EventManagerInterface $eventManager
+     * @param Website $website
+     * @param FixtureFactory $fixtureFactory
+     */
+    public function __construct(
+        DataInterface $configuration,
+        EventManagerInterface $eventManager,
+        Website $website,
+        FixtureFactory $fixtureFactory
+    ) {
+        parent::__construct($configuration, $eventManager);
+        $this->website = $website;
+        $this->fixtureFactory = $fixtureFactory;
+    }
+
     /**
      * POST request for creating Website
      *
@@ -37,7 +81,19 @@ class Curl extends AbstractCurl implements WebsiteInterface
             throw new \Exception("Website entity creating by curl handler was not successful! Response: $response");
         }
 
-        return ['website_id' => $this->getWebSiteIdByWebsiteName($fixture->getName())];
+        $websiteId = $this->getWebSiteIdByWebsiteName($fixture->getName());
+
+        // Update website fixture data.
+        $this->fixture = $this->fixtureFactory->createByCode(
+            'website',
+            ['data' => array_merge($fixture->getData(), ['website_id' => $websiteId])]
+        );
+        $data['website']['website_id'] = $websiteId;
+        // Creates Website folder in root directory.
+        $this->website->create($data['website']['code']);
+        $this->setConfiguration($data);
+
+        return ['website_id' => $websiteId];
     }
 
     /**
@@ -84,5 +140,25 @@ class Curl extends AbstractCurl implements WebsiteInterface
         $data['website']['website_id'] = isset($data['website']['website_id']) ? $data['website']['website_id'] : '';
 
         return $data;
+    }
+
+    /**
+     * Set Website configuration Base url.
+     *
+     * @param array $data
+     * @return void
+     * @throws \Exception
+     */
+    private function setConfiguration(array $data)
+    {
+        $configData = [
+            'web/unsecure/base_link_url' => [
+                'value' => '{{unsecure_base_url}}websites/' . $data['website']['code'] . '/',
+            ],
+            'scope' => ['fixture' => $this->fixture, 'scope_type' => 'website', 'set_level' => 'website']
+        ];
+
+        $configFixture = $this->fixtureFactory->createByCode('configData', ['data' => $configData]);
+        $configFixture->persist();
     }
 }

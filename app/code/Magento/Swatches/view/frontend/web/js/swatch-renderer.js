@@ -711,7 +711,7 @@ define([
                 }
             );
 
-            if (result.oldPrice.amount !== result.finalPrice.amount) {
+            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();

@@ -6,21 +6,17 @@
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
 
 /**
+ * Product type configurable import test.
+ *
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Configurable product test Name
-     */
-    const TEST_PRODUCT_NAME = 'Configurable 1';
-
     /**
      * Configurable product test Type
      */
@@ -32,13 +28,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * Configurable product options SKU list
-     *
-     * @var array
-     */
-    protected $optionSkuList = ['Configurable 1-Option 1', 'Configurable 1-Option 2'];
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
@@ -47,6 +36,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $productMetadata;
+
+    /**
+     * Configurable product test Name.
+     */
+    const TEST_PRODUCT_NAME = 'Configurable 1';
+
+    /**
+     * Configurable product options SKU list
+     *
+     * @var array
+     */
+    protected $optionSkuList = ['Configurable 1-Option 2-Option 1'];
 
     protected function setUp()
     {
@@ -59,13 +60,35 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return array
+     */
+    public function configurableImportDataProvider()
+    {
+        return [
+            'Configurable 1' => [
+                __DIR__ . '/../../_files/import_configurable.csv',
+                'Configurable 1',
+                ['Configurable 1-Option 1', 'Configurable 1-Option 2'],
+            ],
+            '12345' => [
+                __DIR__ . '/../../_files/import_configurable_12345.csv',
+                '12345',
+                ['Configurable 1-Option 1', 'Configurable 1-Option 2'],
+            ],
+        ];
+    }
+
+    /**
+     * @param string $pathToFile Path to import file
+     * @param string $productName Name/sku of configurable product
+     * @param array $optionSkuList Name of variations for configurable product
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppArea adminhtml
+     * @dataProvider configurableImportDataProvider
      */
-    public function testConfigurableImport()
+    public function testConfigurableImport($pathToFile, $productName, $optionSkuList)
     {
         // import data from CSV file
-        $pathToFile = __DIR__ . '/../../_files/import_configurable.csv';
         $filesystem = $this->objectManager->create(
             \Magento\Framework\Filesystem::class
         );
@@ -92,23 +115,23 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
-        $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
+        $productId = $resource->getIdBySku($productName);
         $this->assertTrue(is_numeric($productId));
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->get(ProductRepositoryInterface::class)->getById($productId);
 
         $this->assertFalse($product->isObjectNew());
-        $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
+        $this->assertEquals($productName, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
         $optionCollection = $product->getTypeInstance()->getConfigurableOptions($product);
         foreach ($optionCollection as $option) {
             foreach ($option as $optionData) {
-                $this->assertContains($optionData['sku'], $this->optionSkuList);
+                $this->assertContains($optionData['sku'], $optionSkuList);
             }
         }
 
-        $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
+        $optionIdList = $resource->getProductsIdsBySkus($optionSkuList);
         foreach ($optionIdList as $optionId) {
             $this->assertArrayHasKey($optionId, $product->getExtensionAttributes()->getConfigurableProductLinks());
         }
@@ -144,6 +167,65 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('values', $optionData);
             $valuesData = $optionData['values'];
             $this->assertEquals(2, count($valuesData));
+        }
+    }
+
+    /**
+     * Tests that after import configurable products super attributes retain ordering.
+     *
+     * @magentoDataFixture Magento/ConfigurableImportExport/Model/Import/_files/configurable_attributes.php
+     * @magentoAppArea adminhtml
+     */
+    public function testConfigurableWithAttributesSortingImport()
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/../../_files/import_configurable_with_attributes_sorting.csv';
+        $filesystem = $this->objectManager->create(
+            \Magento\Framework\Filesystem::class
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->model->setSource($source)
+            ->setParameters(
+                [
+                    'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                    'entity' => 'catalog_product'
+                ]
+            )
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->model->importData();
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
+        $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
+        $this->assertTrue(is_numeric($productId));
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->get(ProductRepositoryInterface::class)->getById($productId);
+        $configurableProductOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
+
+        $attributesPositionExpectation = [
+            'test_attribute_2' => 0,
+            'test_attribute_1' => 1,
+        ];
+
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableProductOption */
+        foreach ($configurableProductOptions as $configurableProductOption) {
+            $productAttribute = $configurableProductOption->getProductAttribute();
+            $productAttributeCode = $productAttribute->getAttributeCode();
+
+            if (isset($attributesPositionExpectation[$productAttributeCode])) {
+                $expectedPosition = $attributesPositionExpectation[$productAttributeCode];
+                $this->assertEquals($expectedPosition, $configurableProductOption->getPosition());
+            }
         }
     }
 }

@@ -568,7 +568,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /** @var array */
     protected $productUrlSuffix = [];
 
-    /** @var array */
+    /**
+     * @var array
+     * @deprecated
+     */
     protected $productUrlKeys = [];
 
     /**
@@ -1039,8 +1042,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
-                        'Entity type model must be an instance of '
-                        . 'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
+                        "Entity type model must be an instance of '%1'",
+                        \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
                     )
                 );
             }
@@ -1249,7 +1252,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $linkId = $this->_connection->fetchOne(
                     $this->_connection->select()
                         ->from($this->getResource()->getTable('catalog_product_entity'))
-                        ->where('sku = ?', $sku)
+                        ->where('sku = ?', (string)$sku)
                         ->columns($this->getProductEntityLinkField())
                 );
 
@@ -1520,6 +1523,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     continue;
                 }
                 $rowScope = $this->getRowScope($rowData);
+
+                if (empty($rowData[self::URL_KEY])) {
+                    $rowData[self::URL_KEY] = $this->getUrlKey($rowData);
+                }
 
                 $rowSku = $rowData[self::COL_SKU];
 
@@ -2636,18 +2643,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Return url key if specified, or generate one from product name otherwise.
+     *
      * @param array $rowData
      * @return string
      */
     protected function getUrlKey($rowData)
     {
         if (!empty($rowData[self::URL_KEY])) {
-            $this->productUrlKeys[$rowData[self::COL_SKU]] = $rowData[self::URL_KEY];
+            return $rowData[self::URL_KEY];
         }
-        $urlKey = !empty($this->productUrlKeys[$rowData[self::COL_SKU]])
-            ? $this->productUrlKeys[$rowData[self::COL_SKU]]
-            : $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
-        return $urlKey;
+
+        if (!empty($rowData[self::COL_NAME])) {
+            return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
+        }
+
+        return '';
     }
 
     /**
