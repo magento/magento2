@@ -22,20 +22,28 @@ use Magento\CatalogInventory\Model\Stock;
 
 class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
+    /** @var ResourceConnection */
     private $resource;
 
+    /** @var ConditionManager */
     private $conditionManager;
 
+    /** @var FrontendResource */
     private $indexerEavFrontendResource;
 
+    /** @var StoreManagerInterface */
     private $storeManager;
 
+    /** @var EavConfig|\PHPUnit_Framework_MockObject_MockObject */
     private $eavConfigMock;
 
+    /** @var VisibilityFilter */
     private $visibilityFilter;
 
+    /** @var int */
     private $answerToLifeTheUniverseAndEverything = 42;
 
     protected function setUp()

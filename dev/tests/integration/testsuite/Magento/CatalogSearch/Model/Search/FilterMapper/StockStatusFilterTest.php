@@ -15,18 +15,31 @@ use Magento\CatalogInventory\Model\Stock;
 
 class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Const to define if 'show out of stock' configuration flag enabled or not
+     */
+    const SHOW_OUT_OF_STOCK_ENABLED = true;
+    const SHOW_OUT_OF_STOCK_DISABLED = false;
+
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
+    /** @var ResourceConnection */
     private $resource;
 
+    /** @var ConditionManager */
     private $conditionManager;
 
+    /** @var FrontendResource */
     private $indexerStockFrontendResource;
 
+    /** @var StockConfigurationInterface */
     private $stockConfiguration;
 
+    /** @var StockRegistryInterface */
     private $stockRegistry;
 
+    /** @var StockStatusFilter */
     private $stockStatusFilter;
 
     protected function setUp()
@@ -50,11 +63,12 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
         $this->stockStatusFilter->apply(
             $select,
             Stock::STOCK_IN_STOCK,
-            'Luke I am your father!'
+            'Luke I am your father!',
+            self::SHOW_OUT_OF_STOCK_ENABLED
         );
     }
 
-    public function testApplyWithGeneralFilter()
+    public function testApplyGeneralFilterWithOutOfStock()
     {
         $select = $this->resource->getConnection()->select();
         $select->from(
@@ -65,10 +79,11 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
         $resultSelect = $this->stockStatusFilter->apply(
             $select,
             Stock::STOCK_IN_STOCK,
-            StockStatusFilter::FILTER_JUST_ENTITY
+            StockStatusFilter::FILTER_JUST_ENTITY,
+            self::SHOW_OUT_OF_STOCK_ENABLED
         );
 
-        $expectedSelect = $this->getExpectedSelectForGeneralFilter();
+        $expectedSelect = $this->getExpectedSelectForGeneralFilter(self::SHOW_OUT_OF_STOCK_ENABLED);
 
         $this->assertEquals(
             (string) $expectedSelect,
@@ -77,7 +92,7 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testApplyWithFullFilter()
+    public function testApplyGeneralFilterWithoutOutOfStock()
     {
         $select = $this->resource->getConnection()->select();
         $select->from(
@@ -88,10 +103,11 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
         $resultSelect = $this->stockStatusFilter->apply(
             $select,
             Stock::STOCK_IN_STOCK,
-            StockStatusFilter::FILTER_ENTITY_AND_SOURCE
+            StockStatusFilter::FILTER_JUST_ENTITY,
+            self::SHOW_OUT_OF_STOCK_DISABLED
         );
 
-        $expectedSelect = $this->getExpectedSelectForFullFilter();
+        $expectedSelect = $this->getExpectedSelectForGeneralFilter(self::SHOW_OUT_OF_STOCK_DISABLED);
 
         $this->assertEquals(
             (string) $expectedSelect,
@@ -100,7 +116,59 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private function getExpectedSelectForGeneralFilter()
+    public function testApplyFullFilterWithOutOfStock()
+    {
+        $select = $this->resource->getConnection()->select();
+        $select->from(
+            ['some_index' => 'some_table'],
+            ['entity_id' => 'entity_id']
+        );
+
+        $resultSelect = $this->stockStatusFilter->apply(
+            $select,
+            Stock::STOCK_IN_STOCK,
+            StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS,
+            self::SHOW_OUT_OF_STOCK_ENABLED
+        );
+
+        $expectedSelect = $this->getExpectedSelectForFullFilter(self::SHOW_OUT_OF_STOCK_ENABLED);
+
+        $this->assertEquals(
+            (string) $expectedSelect,
+            (string) $resultSelect,
+            'Select queries must be the same'
+        );
+    }
+
+    public function testApplyFullFilterWithoutOutOfStock()
+    {
+        $select = $this->resource->getConnection()->select();
+        $select->from(
+            ['some_index' => 'some_table'],
+            ['entity_id' => 'entity_id']
+        );
+
+        $resultSelect = $this->stockStatusFilter->apply(
+            $select,
+            Stock::STOCK_IN_STOCK,
+            StockStatusFilter::FILTER_ENTITY_AND_SUB_PRODUCTS,
+            self::SHOW_OUT_OF_STOCK_DISABLED
+        );
+
+        $expectedSelect = $this->getExpectedSelectForFullFilter(self::SHOW_OUT_OF_STOCK_DISABLED);
+
+        $this->assertEquals(
+            (string) $expectedSelect,
+            (string) $resultSelect,
+            'Select queries must be the same'
+        );
+    }
+
+    /**
+     * @param bool $withOutOfStock
+     * @return Select
+     */
+    private function getExpectedSelectForGeneralFilter($withOutOfStock)
     {
         $select = $this->resource->getConnection()->select();
         $select->from(
@@ -116,11 +184,13 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
                         '=',
                         $this->stockConfiguration->getDefaultScopeId()
                     ),
-                    $this->conditionManager->generateCondition(
-                        'stock_index.stock_status',
-                        '=',
-                        Stock::STOCK_IN_STOCK
-                    ),
+                    $withOutOfStock
+                        ? ''
+                        : $this->conditionManager->generateCondition(
+                            'stock_index.stock_status',
+                            '=',
+                            Stock::STOCK_IN_STOCK
+                        ),
                     $this->conditionManager->generateCondition(
                         'stock_index.stock_id',
                         '=',
@@ -135,9 +205,13 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
         return $select;
     }
 
-    private function getExpectedSelectForFullFilter()
+    /**
+     * @param bool $withOutOfStock
+     * @return Select
+     */
+    private function getExpectedSelectForFullFilter($withOutOfStock)
     {
-        $select = $this->getExpectedSelectForGeneralFilter();
+        $select = $this->getExpectedSelectForGeneralFilter($withOutOfStock);
         $select->joinInner(
             ['sub_products_stock_index' => $this->indexerStockFrontendResource->getMainTable()],
             $this->conditionManager->combineQueries(
@@ -148,11 +222,13 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
                         '=',
                         $this->stockConfiguration->getDefaultScopeId()
                     ),
-                    $this->conditionManager->generateCondition(
-                        'sub_products_stock_index.stock_status',
-                        '=',
-                        Stock::STOCK_IN_STOCK
-                    ),
+                    $withOutOfStock
+                        ? ''
+                        : $this->conditionManager->generateCondition(
+                            'sub_products_stock_index.stock_status',
+                            '=',
+                            Stock::STOCK_IN_STOCK
+                        ),
                     $this->conditionManager->generateCondition(
                         'sub_products_stock_index.stock_id',
                         '=',

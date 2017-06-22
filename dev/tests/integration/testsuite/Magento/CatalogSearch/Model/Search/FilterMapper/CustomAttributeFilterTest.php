@@ -17,18 +17,25 @@ use Magento\Framework\DB\Select;
 
 class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
+    /** @var ResourceConnection */
     private $resource;
 
+    /** @var  */
     private $customAttributeFilter;
 
+    /** @var EavConfig|\PHPUnit_Framework_MockObject_MockObject */
     private $eavConfigMock;
 
+    /** @var FrontendResource */
     private $indexerEavFrontendResource;
 
+    /** @var StoreManagerInterface */
     private $storeManager;
 
+    /** @var ConditionManager */
     private $conditionManager;
 
     protected function setUp()
