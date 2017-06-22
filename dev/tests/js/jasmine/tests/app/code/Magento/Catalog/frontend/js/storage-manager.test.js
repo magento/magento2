@@ -267,34 +267,5 @@ define([
                 window.localStorage.setItem = setItem;
             });
         });
-        describe('"dataFilter" method', function () {
-            var data = [
-                    {
-                        'added_at': 1400000000,
-                        'product_id': 0
-                    },
-                    {
-                        'added_at': 1200000000,
-                        'product_id': 1
-                    }
-                ],
-                currentTime = 1500000000,
-                name = 'first';
-
-            beforeEach(function () {
-                obj.storagesConfiguration = {
-                    first: {
-                        lifetime: 200000000
-                    }
-                };
-            });
-
-            it('check result of "dataFilter" method', function () {
-                var result = obj.dataFilter(data, currentTime, name);
-
-                expect(result[0]).toBe(data[0]);
-                expect(result[1]).toBe(undefined);
-            });
-        });
     });
 });
