@@ -154,10 +154,17 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
+        $consecutiveFilters = array_map(
+            function ($filter) use ($select) {
+                return [$filter, $select];
+            },
+            $filters
+        );
+
         $this->filterStrategy
             ->expects($this->exactly(count($filters)))
             ->method('apply')
-            ->withConsecutive(...array_map(function($filter) use ($select) {return [$filter, $select];}, $filters))
+            ->withConsecutive(...$consecutiveFilters)
             ->willReturn(true);
 
         $this->tableMapper->addTables($select, $request);
@@ -198,7 +205,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             );
 
         $consecutiveUniqueFilters = array_map(
-            function($filter) use ($select) {
+            function ($filter) use ($select) {
                 return [$filter, $select];
             },
             $uniqueFilters
@@ -230,7 +237,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($filters);
 
         $consecutiveFilters = array_map(
-            function($filter) {
+            function ($filter) {
                 return [$filter];
             },
             $filters
@@ -247,7 +254,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             );
 
         $consecutiveFilters = array_map(
-            function($filter) use ($select) {
+            function ($filter) use ($select) {
                 return [$filter, $select];
             },
             $filters
