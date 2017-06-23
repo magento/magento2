@@ -5,15 +5,15 @@
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
 
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Framework\App\DeploymentConfig\ValidatorInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for importers.
+ * Factory for validators.
  *
- * Creates object instance that implements Magento\Framework\App\DeploymentConfig\ImporterInterface interface.
+ * Creates object instance that implements Magento\Framework\App\DeploymentConfig\ValidatorInterface interface.
  */
-class ImporterFactory
+class ValidatorFactory
 {
     /**
      * Magento object manager.
@@ -35,16 +35,16 @@ class ImporterFactory
      *
      * @param string $className the name of class for creation of its object instance
      * @param array $data the array with some additional configuration data for creation of object instance
-     * @return ImporterInterface the created object instance
-     * @throws \InvalidArgumentException is thrown when object instance does not implement ImporterInterface
+     * @return ValidatorInterface the created object instance
+     * @throws \InvalidArgumentException is thrown when object instance does not implement ValidatorInterface
      */
     public function create($className, array $data = [])
     {
         $importer = $this->objectManager->create($className, $data);
 
-        if (!$importer instanceof ImporterInterface) {
+        if (!$importer instanceof ValidatorInterface) {
             throw new \InvalidArgumentException(
-                'Type "' . $className . '" is not instance of ' . ImporterInterface::class
+                'Type "' . $className . '" is not instance of ' . ValidatorInterface::class
             );
         }
 
