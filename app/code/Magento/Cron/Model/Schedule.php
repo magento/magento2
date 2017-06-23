@@ -221,11 +221,11 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Lock the cron job so no other scheduled instances run simultaneously.
+     *
      * Sets a job to STATUS_RUNNING only if it is currently in STATUS_PENDING
      * and no other jobs of the same code are currently in STATUS_RUNNING.
      * Returns true if status was changed and false otherwise.
-     *
-     * This is used to implement locking for cron jobs.
      *
      * @return boolean
      */
