@@ -84,6 +84,14 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
             <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
+            <argument name="reader" xsi:type="object">Magento\Config\App\Config\Type\System\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\App\Config\Type\System\Reader">
+        <arguments>
+            <argument name="source" xsi:type="object">systemConfigSourceAggregated</argument>
+            <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorComposite</argument>
+            <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
         </arguments>
     </type>
     <virtualType name="systemSnapshot" type="Magento\Config\App\Config\Type\System">
