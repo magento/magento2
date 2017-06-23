@@ -6,7 +6,7 @@
 
 namespace Magento\Config\Controller\Adminhtml\System;
 
-use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * System Configuration Abstract Controller
@@ -26,6 +26,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
+     * @deprecated
      * @var ConfigSectionChecker
      */
     protected $_sectionChecker;
@@ -54,7 +55,11 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         if (!$request->getParam('section')) {
-            $request->setParam('section', $this->_configStructure->getFirstSection()->getId());
+            try {
+                $request->setParam('section', $this->_configStructure->getFirstSection()->getId());
+            } catch (LocalizedException $e) {
+                /** If visible section not found need to show only config index page without sections if it allow. */
+            }
         }
         return parent::dispatch($request);
     }

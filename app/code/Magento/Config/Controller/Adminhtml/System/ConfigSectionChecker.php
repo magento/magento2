@@ -8,6 +8,9 @@ namespace Magento\Config\Controller\Adminhtml\System;
 
 use Magento\Framework\Exception\NotFoundException;
 
+/**
+ * @deprecated Due of not use.
+ */
 class ConfigSectionChecker
 {
     /**
