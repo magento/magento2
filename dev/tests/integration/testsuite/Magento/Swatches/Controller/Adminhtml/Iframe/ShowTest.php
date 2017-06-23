@@ -24,6 +24,7 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->dispatch('backend/swatches/iframe/show/');
 
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $this->assertNotContains('Access denied', $this->getResponse()->getBody());
     }
 
@@ -41,6 +42,7 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->dispatch('backend/swatches/iframe/show/');
 
+        $this->assertEquals(403, $this->getResponse()->getHttpResponseCode());
         $this->assertContains('Access denied', $this->getResponse()->getBody());
     }
 }
