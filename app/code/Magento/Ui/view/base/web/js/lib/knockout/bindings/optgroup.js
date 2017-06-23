@@ -302,9 +302,8 @@ define([
                         space = '\u2007\u2007\u2007';
 
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
-                    
-                    if(disabled) {
-                        obj['disabled'] = disabled;
+                    if (disabled) {
+                        obj.disabled = disabled;
                     }
 
                     label = label.replace(nbspRe, '').trim();
