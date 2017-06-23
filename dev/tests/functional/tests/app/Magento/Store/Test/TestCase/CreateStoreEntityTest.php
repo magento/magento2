@@ -78,8 +78,6 @@ class CreateStoreEntityTest extends Injectable
         $this->storeIndex->getGridPageActions()->addStoreView();
         $this->storeNew->getStoreForm()->fill($store);
         $this->storeNew->getFormPageActions()->save();
-        if ($this->storeNew->getModalBlock()->isVisible()) {
-            $this->storeNew->getModalBlock()->acceptAlert();
-        }
+        $this->storeNew->getModalBlock()->acceptAlert();
     }
 }
