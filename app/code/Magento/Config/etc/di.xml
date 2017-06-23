@@ -288,7 +288,8 @@
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="system" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Config\Model\Config\Importer</item>
+                    <item name="importer_class" xsi:type="string">Magento\Config\Model\Config\Importer</item>
+                    <item name="sort_order" xsi:type="number">30</item>
                 </item>
             </argument>
         </arguments>
