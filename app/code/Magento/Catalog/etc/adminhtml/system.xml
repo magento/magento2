@@ -43,7 +43,7 @@
                     <label>Lifetime of products in Recently Compared Widget</label>
                 </field>
                 <field id="synchronize_with_backend" translate="label" type="select" showInDefault="1" canRestore="1">
-                    <label>Synchronize product actions with backend</label>
+                    <label>Synchronize widget products with backend storage</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
