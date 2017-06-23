@@ -20,6 +20,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Class Create
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Create implements CreateInterface
 {
