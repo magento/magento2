@@ -23,8 +23,9 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Open Backend
  * 2. Go to Stores -> All Stores
  * 3. Click "Create Store View" button
- * 4. Fill data according to dataset
- * 5. Perform all assertions
+ * 4. Fill data according to dataset - Warning message "This operation can take a long time" appears.
+ * 5. Click "OK".
+ * 6. Perform all assertions
  *
  * @group Store_Management
  * @ZephyrId MAGETWO-27647
@@ -77,5 +78,8 @@ class CreateStoreEntityTest extends Injectable
         $this->storeIndex->getGridPageActions()->addStoreView();
         $this->storeNew->getStoreForm()->fill($store);
         $this->storeNew->getFormPageActions()->save();
+        if ($this->storeNew->getModalBlock()->isVisible()) {
+            $this->storeNew->getModalBlock()->acceptAlert();
+        }
     }
 }
