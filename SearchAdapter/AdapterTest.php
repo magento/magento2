@@ -315,6 +315,40 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     }
 
     /**
+     * Test search product by multiselect attribute text value.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Elasticsearch/_files/multiselect_attribute.php
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     */
+    public function testCustomMultiselectAttributeSearchByTextValue()
+    {
+        // Reindex Elastic Search since filterable_attribute data fixture added new fields to be indexed.
+        $this->reindexAll();
+
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $this->objectManager->get(\Magento\Catalog\Model\ProductRepository::class)
+            ->get('simple_product_with_multiselect_attribute');
+        $productAttributeValue = $product->getCustomAttribute('multiselect_attribute')
+            ? $product->getCustomAttribute('multiselect_attribute')->getValue() : '';
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
+        $searchText = '';
+        foreach ($attribute->getOptions() as $option) {
+            if ($option->getValue() == $productAttributeValue) {
+                $searchText = $option->getLabel();
+            }
+        }
+        $this->requestBuilder->bind('search_term', $searchText);
+        $this->requestBuilder->setRequestName('quick_search_container');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
      * Perform full reindex
      *
      * @return void
