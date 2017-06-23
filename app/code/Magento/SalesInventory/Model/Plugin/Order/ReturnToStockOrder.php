@@ -87,15 +87,11 @@ class ReturnToStockOrder
         ) {
             $returnToStockItems = $arguments->getExtensionAttributes()->getReturnToStockItems();
         }
-
-        $creditmemo = $this->creditmemoRepository->get($resultEntityId);
-        $this->returnProcessor->execute(
-            $creditmemo,
-            $order,
-            $returnToStockItems,
-            $this->stockConfiguration->isAutoReturnEnabled()
-        );
-
+        $isAutoReturn = $this->stockConfiguration->isAutoReturnEnabled();
+        if ($isAutoReturn || !empty($returnToStockItems)) {
+            $creditmemo = $this->creditmemoRepository->get($resultEntityId);
+            $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems, $isAutoReturn);
+        }
         return $resultEntityId;
     }
 }

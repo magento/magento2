@@ -90,11 +90,8 @@ class RefundOrderInventoryObserver implements ObserverInterface
                 $returnToStockItems[] = $item->getOrderItemId();
             }
         }
-        $this->returnProcessor->execute(
-            $creditmemo,
-            $order,
-            $returnToStockItems,
-            empty($returnToStockItems) ? false : $this->stockConfiguration->isAutoReturnEnabled()
-        );
+        if (!empty($returnToStockItems)) {
+            $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems);
+        }
     }
 }
