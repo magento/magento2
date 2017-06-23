@@ -5,15 +5,13 @@
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Stock Status Indexer Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
@@ -21,6 +19,16 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
+
+    /**
+     * @var \Magento\Bundle\Model\ResourceModel\Indexer\StockStatusSelectBuilder
+     */
+    private $stockStatusSelectBuilder;
+
+    /**
+     * @var \Magento\Bundle\Model\ResourceModel\Indexer\BundleOptionStockDataSelectBuilder
+     */
+    private $bundleOptionStockDataSelectBuilder;
 
     /**
      * Class constructor
@@ -32,6 +40,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @param string $connectionName
      * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
      * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     * @param null|\Magento\Bundle\Model\ResourceModel\Indexer\StockStatusSelectBuilder $stockStatusSelectBuilder
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -40,11 +49,20 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null,
         \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null,
+        StockStatusSelectBuilder $stockStatusSelectBuilder = null,
+        BundleOptionStockDataSelectBuilder $bundleOptionStockDataSelectBuilder = null
     ) {
         parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
+
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+
+        $this->stockStatusSelectBuilder = $stockStatusSelectBuilder ?: ObjectManager::getInstance()
+            ->get(StockStatusSelectBuilder::class);
+
+        $this->bundleOptionStockDataSelectBuilder = $bundleOptionStockDataSelectBuilder ?: ObjectManager::getInstance()
+            ->get(BundleOptionStockDataSelectBuilder::class);
     }
 
     /**
@@ -67,45 +85,20 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     protected function _prepareBundleOptionStockData($entityIds = null, $usePrimaryTable = false)
     {
         $this->_cleanBundleOptionStockData();
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $connection = $this->getConnection();
         $table = $this->getActionType() === Full::ACTION_TYPE
             ? $this->getMainTable()
             : $this->indexerStockFrontendResource->getMainTable();
         $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
-        $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['product' => $this->getTable('catalog_product_entity')],
-            ['entity_id']
-        );
-        $select->join(
-            ['bo' => $this->getTable('catalog_product_bundle_option')],
-            "bo.parent_id = product.$linkField",
-            []
-        );
+        $select = $this->bundleOptionStockDataSelectBuilder->buildSelect($idxTable);
+
         $status = new \Zend_Db_Expr(
-            'MAX(' . $connection->getCheckSql('e.required_options = 0', 'i.stock_status', '0') . ')'
+            'MAX('
+            . $connection->getCheckSql('e.required_options = 0', 'i.stock_status', '0')
+            . ')'
         );
-        $select->join(
-            ['cis' => $this->getTable('cataloginventory_stock')],
-            '',
-            ['website_id', 'stock_id']
-        )->joinLeft(
-            ['bs' => $this->getTable('catalog_product_bundle_selection')],
-            'bs.option_id = bo.option_id',
-            []
-        )->joinLeft(
-            ['i' => $idxTable],
-            'i.product_id = bs.product_id AND i.website_id = cis.website_id AND i.stock_id = cis.stock_id',
-            []
-        )->joinLeft(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = bs.product_id',
-            []
-        )->group(
-            ['product.entity_id', 'cis.website_id', 'cis.stock_id', 'bo.option_id']
-        )->columns(
-            ['option_id' => 'bo.option_id', 'status' => $status]
-        );
+
+        $select->columns(['status' => $status]);
 
         if ($entityIds !== null) {
             $select->where('product.entity_id IN(?)', $entityIds);
@@ -136,56 +129,18 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     {
         $this->_prepareBundleOptionStockData($entityIds, $usePrimaryTable);
         $connection = $this->getConnection();
+
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $linkField = $metadata->getLinkField();
+        $select = $this->stockStatusSelectBuilder->buildSelect($select);
 
-        $select->reset(
-            \Magento\Framework\DB\Select::COLUMNS
-        )->columns(
-            ['e.entity_id', 'cis.website_id', 'cis.stock_id']
-        )->joinLeft(
-            ['o' => $this->_getBundleOptionTable()],
-            'o.entity_id = e.entity_id AND o.website_id = cis.website_id AND o.stock_id = cis.stock_id',
-            []
-        )->joinInner(
-            ['cpr' => $this->getTable('catalog_product_relation')],
-            'e.' . $linkField . ' = cpr.parent_id',
-            []
-        )->columns(
-            ['qty' => new \Zend_Db_Expr('0')]
-        );
-
-        if ($metadata->getIdentifierField() === $metadata->getLinkField()) {
-            $select->joinInner(
-                ['cpei' => $this->getTable('catalog_product_entity_int')],
-                'cpr.child_id = cpei.' . $linkField
-                . ' AND cpei.attribute_id = ' . $this->_getAttribute('status')->getId()
-                . ' AND cpei.value = ' . ProductStatus::STATUS_ENABLED,
-                []
-            );
-        } else {
-            $select->joinInner(
-                ['cpel' => $this->getTable('catalog_product_entity')],
-                'cpel.entity_id = cpr.child_id',
-                []
-            )->joinInner(
-                ['cpei' => $this->getTable('catalog_product_entity_int')],
-                'cpel.'. $linkField . ' = cpei.' . $linkField
-                . ' AND cpei.attribute_id = ' . $this->_getAttribute('status')->getId()
-                . ' AND cpei.value = ' . ProductStatus::STATUS_ENABLED,
-                []
-            );
-        }
-
+        $statusNotNullExpr = $connection->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0');
         $statusExpr = $this->getStatusExpression($connection);
+
         $select->columns(
             [
                 'status' => $connection->getLeastSql(
                     [
-                        new \Zend_Db_Expr(
-                            'MIN(' . $connection->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0') . ')'
-                        ),
+                        new \Zend_Db_Expr('MIN(' . $statusNotNullExpr . ')'),
                         new \Zend_Db_Expr('MIN(' . $statusExpr . ')'),
                     ]
                 ),
