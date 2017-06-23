@@ -453,7 +453,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @param null|string $lastmod
      * @param null|string $changefreq
      * @param null|string $priority
-     * @param null|array $images
+     * @param null|array|\Magento\Framework\DataObject $images
      * @return string
      * Sitemap images
      * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
@@ -478,7 +478,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             // Add Images to sitemap
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
-                $row .= '<image:loc>' . htmlspecialchars($this->_getMediaUrl($image->getUrl())) . '</image:loc>';
+                $row .= '<image:loc>' . htmlspecialchars($image->getUrl()) . '</image:loc>';
                 $row .= '<image:title>' . htmlspecialchars($images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
                     $row .= '<image:caption>' . htmlspecialchars($image->getCaption()) . '</image:caption>';
@@ -488,9 +488,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             // Add PageMap image for Google web search
             $row .= '<PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0"><DataObject type="thumbnail">';
             $row .= '<Attribute name="name" value="' . htmlspecialchars($images->getTitle()) . '"/>';
-            $row .= '<Attribute name="src" value="' . htmlspecialchars(
-                $this->_getMediaUrl($images->getThumbnail())
-            ) . '"/>';
+            $row .= '<Attribute name="src" value="' . htmlspecialchars($images->getThumbnail()) . '"/>';
             $row .= '</DataObject></PageMap>';
         }
 
@@ -596,6 +594,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getStoreBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
     {
+        /** @var \Magento\Store\Model\Store $store */
         $store = $this->_storeManager->getStore($this->getStoreId());
         $isSecure = $store->isUrlSecure();
         return rtrim($store->getBaseUrl($type, $isSecure), '/') . '/';
@@ -618,6 +617,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $url
      * @return string
+     * @deprecated No longer used, as we're generating product image URLs inside collection instead
+     * @see \Magento\Sitemap\Model\ResourceModel\Catalog\Product::_loadProductImages()
      */
     protected function _getMediaUrl($url)
     {
