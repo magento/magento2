@@ -1944,7 +1944,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Get all quote totals (sorted by priority)
      *
-     * @return array
+     * @return Address\Total[]
      */
     public function getTotals()
     {
