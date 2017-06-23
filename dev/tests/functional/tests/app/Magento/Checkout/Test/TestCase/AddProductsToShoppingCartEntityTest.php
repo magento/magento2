@@ -1,8 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+     * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
 
 namespace Magento\Checkout\Test\TestCase;
 
@@ -12,6 +12,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
  * Preconditions:
@@ -95,14 +96,18 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      *
      * @param string $productsData
      * @param array $cart
-     * @param string $configData
+     * @param string|null $configData [optional]
      * @return array
      */
     public function test($productsData, array $cart, $configData = null)
     {
+        // Preconditions
         $this->configData = $configData;
 
-        // Preconditions
+        $this->testStepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData]
+        )->run();
         $products = $this->prepareProducts($productsData);
         $this->setupConfiguration();
 
@@ -112,7 +117,8 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         $cart['data']['items'] = ['products' => $products];
         return [
             'cart' => $this->fixtureFactory->createByCode('cart', $cart),
-            'product' => array_shift($products)
+            'product' => array_shift($products),
+            'products' => $products,
         ];
     }
 
@@ -165,7 +171,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     {
         $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData]
+            ['configData' => $this->configData, 'rollback' => true]
         )->cleanup();
     }
 }

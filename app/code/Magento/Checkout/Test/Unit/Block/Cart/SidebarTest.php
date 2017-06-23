@@ -5,6 +5,11 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
+/**
+ * Test for Magento\Checkout\Block\Cart\SideBar.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SidebarTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
@@ -54,14 +59,14 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
-        $this->layoutMock = $this->getMock('\Magento\Framework\View\Layout', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-        $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::clas);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::clas, [], [], '', false);
+        $this->imageHelper = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
         $this->scopeConfigMock = $this->getMock(
-            '\Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             [],
             '',
@@ -69,7 +74,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         );
 
         $contextMock = $this->getMock(
-            '\Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             ['getLayout', 'getUrlBuilder', 'getStoreManager', 'getScopeConfig', 'getRequest'],
             [],
             '',
@@ -92,7 +97,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->requestMock));
 
         $this->model = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\Sidebar',
+            \Magento\Checkout\Block\Cart\Sidebar::class,
             [
                 'context' => $contextMock,
                 'imageHelper' => $this->imageHelper,
@@ -104,7 +109,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     public function testGetTotalsHtml()
     {
         $totalsHtml = "$134.36";
-        $totalsBlockMock = $this->getMockBuilder('\Magento\Checkout\Block\Shipping\Price')
+        $totalsBlockMock = $this->getMockBuilder(\Magento\Checkout\Block\Shipping\Price::class)
             ->disableOriginalConstructor()
             ->setMethods(['toHtml'])
             ->getMock();
@@ -123,7 +128,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $websiteId = 100;
 
         $shoppingCartUrl = 'http://url.com/cart';
@@ -141,7 +146,8 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             'imageTemplate' => $imageTemplate,
             'baseUrl' => $baseUrl,
             'minicartMaxItemsVisible' => 3,
-            'websiteId' => $websiteId
+            'websiteId' => $websiteId,
+            'maxItemsToDisplay' => 8,
         ];
 
         $valueMap = [
@@ -160,15 +166,21 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($valueMap);
         $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
-        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
         $this->imageHelper->expects($this->once())->method('getFrame')->willReturn(false);
-
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->with(
                 \Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn(3);
+        $this->scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->with(
+                'checkout/sidebar/max_items_display_count',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn(8);
+        
+        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
@@ -187,7 +199,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTotalsCache()
     {
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $totalsMock = ['totals'];
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getTotals')->willReturn($totalsMock);

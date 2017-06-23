@@ -22,6 +22,7 @@
                 <tax_including>1</tax_including>
             </minimum_order>
             <orders>
+                <items_per_page>20</items_per_page>
                 <delete_pending_after>480</delete_pending_after>
             </orders>
         </sales>

@@ -6,14 +6,15 @@
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
-use Magento\Sales\Model\ResourceModel\Order\Item;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 
 /**
  * Test class for \Magento\Sales\Model\Order
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,9 +69,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     protected $salesOrderCollectionMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productRepository;
+    private $productCollectionFactoryMock;
 
     protected function setUp()
     {
@@ -96,48 +97,50 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->productCollectionFactoryMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->salesOrderCollectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->item = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Item',
-            ['isDeleted', 'getQtyToInvoice', 'getParentItemId', 'getQuoteItemId', 'getLockedDoInvoice'],
-            [],
-            '',
-            false
-        );
-        $this->item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+            \Magento\Sales\Model\ResourceModel\Order\Item::class,
+            [
                 'isDeleted',
                 'getQtyToInvoice',
                 'getParentItemId',
                 'getQuoteItemId',
                 'getLockedDoInvoice',
                 'getProductId'
-            ])
-            ->getMock();
-        $this->salesOrderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Collection')
-            ->disableOriginalConstructor()
+            ],
+            [],
+            '',
+            false
+        );
+        $this->salesOrderCollectionMock = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Order\Collection::class
+        )->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'load', 'getFirstItem'])
             ->getMock();
-        $collection = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Item\Collection', [], [], '', false);
-        $collection->expects($this->any())
-            ->method('setOrderFilter')
-            ->willReturnSelf();
-        $collection->expects($this->any())
-            ->method('getItems')
-            ->willReturn([$this->item]);
-        $collection->expects(self::any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->item]));
-        $this->orderItemCollectionFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($collection);
+        $collection = $this->getMock(
+            \Magento\Sales\Model\ResourceModel\Order\Item\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $collection->expects($this->any())->method('setOrderFilter')->willReturnSelf();
+        $collection->expects($this->any())->method('getItems')->willReturn([$this->item]);
+        $collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([$this->item]));
+        $this->orderItemCollectionFactoryMock->expects($this->any())->method('create')->willReturn($collection);
 
         $this->priceCurrency = $this->getMockForAbstractClass(
             'Magento\Framework\Pricing\PriceCurrencyInterface',
@@ -149,15 +152,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ['round']
         );
 
-        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
-
         $this->incrementId = '#00000001';
-        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
-        $context = $this->getMock('Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
-        $context->expects($this->any())
-            ->method('getEventDispatcher')
-            ->willReturn($this->eventManager);
+        $this->eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $context = $this->getMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher'], [], '', false);
+        $context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManager);
 
         $this->order = $helper->getObject(
             'Magento\Sales\Model\Order',
@@ -169,7 +167,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 'historyCollectionFactory' => $this->historyCollectionFactoryMock,
                 'salesOrderCollectionFactory' => $this->salesOrderCollectionFactoryMock,
                 'priceCurrency' => $this->priceCurrency,
-                'productRepository' => $this->productRepository
+                'productListFactory' => $this->productCollectionFactoryMock
             ]
         );
     }
@@ -405,7 +403,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->order->setState(Order::STATE_PROCESSING);
         $this->order->setActionFlag(Order::ACTION_FLAG_REORDER, true);
 
-        $this->item->expects(static::once())
+        $this->item->expects($this->any())
             ->method('getProductId')
             ->willReturn($productId);
 
@@ -416,10 +414,29 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('isSalable')
             ->willReturn(true);
 
-        $this->productRepository->expects(static::once())
-            ->method('getById')
-            ->with($productId, false)
+        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
+            ->getMock();
+        $productCollection->expects($this->once())
+            ->method('setStoreId')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('addIdFilter')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('getItemById')
+            ->with($productId)
             ->willReturn($product);
+        $this->productCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($productCollection);
 
         $this->assertTrue($this->order->canReorder());
     }
@@ -455,7 +472,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->order->setState(Order::STATE_PROCESSING);
         $this->order->setActionFlag(Order::ACTION_FLAG_REORDER, true);
 
-        $this->item->expects(static::once())
+        $this->item->expects($this->any())
             ->method('getProductId')
             ->willReturn($productId);
 
@@ -465,10 +482,29 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::never())
             ->method('isSalable');
 
-        $this->productRepository->expects(static::once())
-            ->method('getById')
-            ->with($productId, false)
-            ->willThrowException(new NoSuchEntityException(__('Requested product doesn\'t exist')));
+        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
+            ->getMock();
+        $productCollection->expects($this->once())
+            ->method('setStoreId')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('addIdFilter')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('getItemById')
+            ->with($productId)
+            ->willReturn(null);
+        $this->productCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($productCollection);
+        $productCollection->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
 
         $this->assertFalse($this->order->canReorder());
     }
@@ -483,7 +519,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->order->setState(Order::STATE_PROCESSING);
         $this->order->setActionFlag(Order::ACTION_FLAG_REORDER, true);
 
-        $this->item->expects(static::once())
+        $this->item->expects($this->any())
             ->method('getProductId')
             ->willReturn($productId);
 
@@ -494,10 +530,29 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('isSalable')
             ->willReturn(false);
 
-        $this->productRepository->expects(static::once())
-            ->method('getById')
-            ->with($productId, false)
+        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
+            ->getMock();
+        $productCollection->expects($this->once())
+            ->method('setStoreId')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('addIdFilter')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('getItemById')
+            ->with($productId)
             ->willReturn($product);
+        $this->productCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($productCollection);
+        $productCollection->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
 
         $this->assertFalse($this->order->canReorder());
     }
@@ -889,6 +944,85 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->salesOrderCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($this->order);
         $this->assertSame($this->order, $this->order->loadByIncrementIdAndStoreId($incrementId, $storeId));
+    }
+
+    /**
+     * Test method setPayment with Id.
+     *
+     * @return void
+     */
+    public function testSetPaymentWithId()
+    {
+        $this->order->setId(123);
+        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->order->setData(OrderInterface::PAYMENT, $payment);
+        $this->order->setDataChanges(false);
+
+        $payment->expects($this->once())
+            ->method('setOrder')
+            ->with($this->order)
+            ->willReturnSelf();
+
+        $payment->expects($this->once())
+            ->method('setParentId')
+            ->with(123)
+            ->willReturnSelf();
+
+        $payment->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->order->setPayment($payment);
+
+        $this->assertEquals(
+            $this->order->getData(
+                OrderInterface::PAYMENT
+            ),
+            $payment
+        );
+
+        $this->assertFalse(
+            $this->order->hasDataChanges()
+        );
+    }
+
+    /**
+     * Test method setPayment without Id.
+     *
+     * @return void
+     */
+    public function testSetPaymentNoId()
+    {
+        $this->order->setId(123);
+        $this->order->setDataChanges(false);
+        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $payment->expects($this->once())
+            ->method('setOrder')
+            ->with($this->order)
+            ->willReturnSelf();
+        $payment->expects($this->once())
+            ->method('setParentId')
+            ->with(123)
+            ->willReturnSelf();
+        $payment->expects($this->any())
+            ->method('getId')
+            ->willReturn(null);
+        $this->order->setPayment($payment);
+
+        $this->assertEquals(
+            $this->order->getData(
+                OrderInterface::PAYMENT
+            ),
+            $payment
+        );
+
+        $this->assertTrue(
+            $this->order->hasDataChanges()
+        );
     }
 
     public function notInvoicingStatesProvider()

@@ -92,10 +92,13 @@ class Shipping extends Form
         }
 
         $element = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
-        if (!$element->isDisabled()) {
-            $element->click();
-        } else {
-            throw new \Exception("Unable to set value to field '$selector' as it's disabled.");
+
+        if (!$element->isSelected()) {
+            if (!$element->isDisabled()) {
+                $element->click();
+            } else {
+                throw new \Exception("Unable to set value to field '$selector' as it's disabled.");
+            }
         }
     }
 
