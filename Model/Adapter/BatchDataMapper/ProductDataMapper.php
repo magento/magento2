@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
+use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
-use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 
 /**
  * Map product index data to search engine metadata
@@ -168,10 +169,12 @@ class ProductDataMapper implements BatchDataMapperInterface
                 if (!$attributeData) {
                     continue;
                 }
+                list($attributeData, $productAttributes) = $this->processAttributeOptions(
+                    $attributeData,
+                    $productAttributes,
+                    $value
+                );
                 $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
-                if (isset($attributeData[AttributeInterface::OPTIONS][$value])) {
-                    $productAttributes[$attributeCode . '_value'] = $attributeData[AttributeInterface::OPTIONS][$value];
-                }
                 $value = $this->formatProductAttributeValue($value, $attributeData, $storeId);
                 $productAttributes[$attributeCode] = $value;
             }
@@ -192,7 +195,7 @@ class ProductDataMapper implements BatchDataMapperInterface
             $attribute = $this->dataProvider->getSearchableAttribute($attributeId);
             if ($attribute) {
                 $options = [];
-                if ($attribute->getFrontendInput() === 'select') {
+                if (in_array($attribute->getFrontendInput(), ['select', 'multiselect'])) {
                     foreach ($attribute->getOptions() as $option) {
                         $options[$option->getValue()] = $option->getLabel();
                     }
@@ -229,5 +232,64 @@ class ProductDataMapper implements BatchDataMapperInterface
         } else {
             return $value;
         }
+    }
+
+    /**
+     * Process attributes options for search by attribute text values.
+     *
+     * @param array $attributeData
+     * @param string $value
+     * @param array $productAttributes
+     * @return array
+     */
+    private function processAttributeOptions(
+        array $attributeData,
+        array $productAttributes,
+        string $value
+    ) {
+        $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
+        if ($attributeData[AttributeInterface::FRONTEND_INPUT] === 'multiselect') {
+            list($attributeData, $productAttributes) = $this->processMultiselectOptions(
+                $value,
+                $attributeData,
+                $productAttributes
+            );
+        } else {
+            if (isset($attributeData[AttributeInterface::OPTIONS][$value])) {
+                $productAttributes[$attributeCode . '_value'] =
+                    $attributeData[AttributeInterface::OPTIONS][$value];
+            }
+        }
+
+        return [$attributeData, $productAttributes];
+    }
+
+    /**
+     * Process multiselect options for search by attribute text values.
+     *
+     * @param string $value
+     * @param array $attributeData
+     * @param array $productAttributes
+     * @return array
+     */
+    private function processMultiselectOptions(
+        string $value,
+        array $attributeData,
+        array $productAttributes
+    ) {
+        $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
+        $multiselectValues = explode(',', $value);
+        $multiselectOptionValues = '';
+        foreach ($multiselectValues as $multiselectValue) {
+            if (isset($attributeData[AttributeInterface::OPTIONS][$multiselectValue])) {
+                $multiselectOptionValues
+                    .= $attributeData[AttributeInterface::OPTIONS][$multiselectValue] . ' ';
+            }
+        }
+        if ($multiselectOptionValues) {
+            $productAttributes[$attributeCode . '_value'] = rtrim($multiselectOptionValues);
+        }
+
+        return [$attributeData, $productAttributes];
     }
 }
