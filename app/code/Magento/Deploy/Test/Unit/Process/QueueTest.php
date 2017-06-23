@@ -113,8 +113,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $package = $this->getMock(Package::class, [], [], '', false);
-        $package->expects($this->any())->method('getState')->willReturn(1);
-        $package->expects($this->once())->method('getParent')->willReturn(null);
+        $package->expects($this->any())->method('getState')->willReturn(0);
+        $package->expects($this->exactly(2))->method('getParent')->willReturn(true);
         $package->expects($this->any())->method('getArea')->willReturn('area');
         $package->expects($this->any())->method('getPath')->willReturn('path');
         $package->expects($this->any())->method('getFiles')->willReturn([]);

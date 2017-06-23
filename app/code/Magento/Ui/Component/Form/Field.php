@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class Field
+ * @api
  */
 class Field extends AbstractComponent
 {
