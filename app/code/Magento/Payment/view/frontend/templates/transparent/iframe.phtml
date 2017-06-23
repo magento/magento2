@@ -14,7 +14,7 @@ $params = $block->getParams();
     <head>
         <script>
         <?php if (isset($params['redirect'])): ?>
-            window.location="<?php echo $block->escapeUrl($params['redirect']); ?>";
+            window.location="<?= $block->escapeUrl($params['redirect']) ?>";
         <?php elseif (isset($params['redirect_parent'])): ?>
             var require = window.top.require;
             require(
@@ -24,7 +24,7 @@ $params = $block->getParams();
                 function($) {
                     var parent = window.top;
                     $(parent).trigger('clearTimeout');
-                    parent.location="<?php echo $block->escapeUrl($params['redirect_parent']); ?>";
+                    parent.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
                 }
             );
         <?php elseif (isset($params['error_msg'])): ?>
@@ -44,7 +44,7 @@ $params = $block->getParams();
                 }
             );
         <?php elseif (isset($params['order_success'])): ?>
-            window.top.location = "<?php echo $block->escapeUrl($params['order_success']); ?>";
+            window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
         <?php else: ?>
             var require = window.top.require;
             require(

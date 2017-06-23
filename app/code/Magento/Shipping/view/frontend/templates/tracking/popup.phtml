@@ -16,7 +16,7 @@ $results = $block->getTrackingInfo();
     <?php if (!empty($results)): ?>
         <?php foreach ($results as $shipId => $result): ?>
             <?php if ($shipId): ?>
-                <div class="order subtitle caption"><?php /* @noEscape */ echo $block->escapeHtml(__('Shipment #')) . $shipId; ?></div>
+                <div class="order subtitle caption"><?= /* @noEscape */ $block->escapeHtml(__('Shipment #')) . $shipId ?></div>
             <?php endif; ?>
             <?php if (!empty($result)): ?>
                 <?php foreach ($result as $counter => $track): ?>
@@ -29,7 +29,7 @@ $results = $block->getTrackingInfo();
                             ]
                         );
                         ?>
-                        <?php /* @noEscape */ echo $block->getChildHtml('shipping.tracking.details.' . $counter); ?>
+                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.details.' . $counter) ?>
                     </div>
                     <?php if (is_object($track) && !empty($track->getProgressdetail())): ?>
                         <?php
@@ -38,26 +38,26 @@ $results = $block->getTrackingInfo();
                                 'template' => 'Magento_Shipping::tracking/progress.phtml'
                             ]);
                         ?>
-                        <?php /* @noEscape  */echo $block->getChildHtml('shipping.tracking.progress.' . $counter); ?>
+                        <?= /* @noEscape  */ $block->getChildHtml('shipping.tracking.progress.' . $counter) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="message info empty">
-                    <div><?php echo $block->escapeHtml(__('There is no tracking available for this shipment.')); ?></div>
+                    <div><?= $block->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php else: ?>
         <div class="message info empty">
-            <div><?php echo $block->escapeHtml(__('There is no tracking available.')); ?></div>
+            <div><?= $block->escapeHtml(__('There is no tracking available.')) ?></div>
         </div>
     <?php endif; ?>
     <div class="actions">
         <button type="button"
-                title="<?php echo $block->escapeHtml(__('Close Window')); ?>"
+                title="<?= $block->escapeHtml(__('Close Window')) ?>"
                 class="action close"
                 onclick="window.close(); window.opener.focus();">
-            <span><?php echo $block->escapeHtml(__('Close Window')); ?></span>
+            <span><?= $block->escapeHtml(__('Close Window')) ?></span>
         </button>
     </div>
 </div>
