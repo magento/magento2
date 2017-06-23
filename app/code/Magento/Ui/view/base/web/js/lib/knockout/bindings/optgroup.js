@@ -297,10 +297,15 @@ define([
                 ko.utils.arrayForEach(options, function (option) {
                     var value = applyToObject(option, optionsValue, option),
                         label = applyToObject(option, optionsText, value) || '',
+                        disabled = applyToObject(option, 'disabled', false) || false,
                         obj = {},
                         space = '\u2007\u2007\u2007';
 
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
+                    
+                    if(disabled) {
+                        obj['disabled'] = disabled;
+                    }
 
                     label = label.replace(nbspRe, '').trim();
 
