@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+/**
+ * Persist product prices to index table.
+ */
 class RuleProductPricesPersistor
 {
     /**
@@ -39,14 +42,16 @@ class RuleProductPricesPersistor
     }
 
     /**
-     * @param array $arrData
+     * Persist prices data to index table.
+     *
+     * @param array $priceData
      * @param bool $useAdditionalTable
      * @return bool
      * @throws \Exception
      */
-    public function execute(array $arrData, $useAdditionalTable = false)
+    public function execute(array $priceData, $useAdditionalTable = false)
     {
-        if (empty($arrData)) {
+        if (empty($priceData)) {
             return false;
         }
 
@@ -61,13 +66,13 @@ class RuleProductPricesPersistor
         $productIds = [];
 
         try {
-            foreach ($arrData as $key => $data) {
+            foreach ($priceData as $key => $data) {
                 $productIds['product_id'] = $data['product_id'];
-                $arrData[$key]['rule_date'] = $this->dateFormat->formatDate($data['rule_date'], false);
-                $arrData[$key]['latest_start_date'] = $this->dateFormat->formatDate($data['latest_start_date'], false);
-                $arrData[$key]['earliest_end_date'] = $this->dateFormat->formatDate($data['earliest_end_date'], false);
+                $priceData[$key]['rule_date'] = $this->dateFormat->formatDate($data['rule_date'], false);
+                $priceData[$key]['latest_start_date'] = $this->dateFormat->formatDate($data['latest_start_date'], false);
+                $priceData[$key]['earliest_end_date'] = $this->dateFormat->formatDate($data['earliest_end_date'], false);
             }
-            $connection->insertOnDuplicate($indexTable, $arrData);
+            $connection->insertOnDuplicate($indexTable, $priceData);
         } catch (\Exception $e) {
             throw $e;
         }

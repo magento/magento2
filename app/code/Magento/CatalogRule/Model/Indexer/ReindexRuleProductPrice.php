@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+/**
+ * Reindex product prices according rule settings.
+ */
 class ReindexRuleProductPrice
 {
     /**
@@ -55,6 +58,8 @@ class ReindexRuleProductPrice
     }
 
     /**
+     * Reindex product prices.
+     *
      * @param int $batchCount
      * @param \Magento\Catalog\Model\Product|null $product
      * @param bool $useAdditionalTable

@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+/**
+ * Reindex information about rule relations with customer groups and websites.
+ */
 class ReindexRuleGroupWebsite
 {
     /**
@@ -44,6 +47,8 @@ class ReindexRuleGroupWebsite
     }
 
     /**
+     * Prepare and persist information about rule relations with customer groups and websites to index table.
+     *
      * @param bool $useAdditionalTable
      * @return bool
      */

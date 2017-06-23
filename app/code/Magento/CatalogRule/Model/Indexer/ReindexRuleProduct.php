@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+/**
+ * Reindex rule relations with products.
+ */
 class ReindexRuleProduct
 {
     /**
@@ -31,6 +34,8 @@ class ReindexRuleProduct
     }
 
     /**
+     * Reindex information about rule relations with products.
+     *
      * @param \Magento\CatalogRule\Model\Rule $rule
      * @param int $batchCount
      * @param bool $useAdditionalTable

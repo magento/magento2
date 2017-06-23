@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+/**
+ * Build select for rule relation with product.
+ */
 class RuleProductsSelectBuilder
 {
     /**
@@ -55,6 +58,8 @@ class RuleProductsSelectBuilder
     }
 
     /**
+     * Build select for indexer according passed parameters.
+     *
      * @param int $websiteId
      * @param \Magento\Catalog\Model\Product|null $product
      * @param bool $useAdditionalTable
@@ -142,7 +147,7 @@ class RuleProductsSelectBuilder
             []
         );
         $select->columns([
-            'default_price' =>$connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
+            'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
         ]);
 
         return $connection->query($select);

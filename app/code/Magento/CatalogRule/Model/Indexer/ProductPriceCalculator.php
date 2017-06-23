@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+/**
+ * Product price calculation according rules settings.
+ */
 class ProductPriceCalculator
 {
     /**
@@ -14,7 +17,6 @@ class ProductPriceCalculator
     private $priceCurrency;
 
     /**
-     * ProductPriceCalculator constructor.
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
     public function __construct(\Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency)
@@ -23,6 +25,8 @@ class ProductPriceCalculator
     }
 
     /**
+     * Calculates product price.
+     *
      * @param array $ruleData
      * @param null $productData
      * @return float
