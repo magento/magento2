@@ -29,6 +29,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $batchProvider;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
+     */
+    private $activeTableSwitcher;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -37,10 +42,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator|null $batchSizeCalculator
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -52,10 +58,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator $batchSizeCalculator = null,
-        \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null
+        \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         parent::__construct(
             $config,
@@ -65,8 +71,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $dateTime,
             $catalogProductType,
             $indexerPriceFactory,
-            $defaultIndexerResource,
-            $indexerFrontendResource
+            $defaultIndexerResource
         );
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(
             \Magento\Framework\EntityManager\MetadataPool::class
@@ -76,6 +81,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         );
         $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Indexer\BatchProviderInterface::class
+        );
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
     }
 
@@ -94,6 +102,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $this->_prepareWebsiteDateTable();
 
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $replicaTable = $this->activeTableSwitcher->getAdditionalTableName(
+                $this->_defaultIndexerResource->getMainTable()
+            );
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
             foreach ($this->getTypeIndexers() as $indexer) {
@@ -130,13 +141,17 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                         $indexer->reindexEntity($entityIds);
 
                         // Sync data from temp table to index table
-                        $this->_insertFromTable($idxTableName, $this->_defaultIndexerResource->getMainTable());
+                        $this->_insertFromTable($idxTableName, $replicaTable);
 
                         // Drop temporary index table
                         $connection->dropTable($idxTableName);
                     }
                 }
             }
+            $this->activeTableSwitcher->switchTable(
+                $this->_defaultIndexerResource->getConnection(),
+                $this->_defaultIndexerResource->getMainTable()
+            );
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
@@ -147,6 +162,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      */
     protected function getIndexTargetTable()
     {
-        return $this->_defaultIndexerResource->getMainTable();
+        return $this->activeTableSwitcher->getAdditionalTableName($this->_defaultIndexerResource->getMainTable());
     }
 }
