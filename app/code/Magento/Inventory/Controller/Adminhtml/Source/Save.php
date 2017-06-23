@@ -134,7 +134,7 @@ class Save extends Action
             /** @var SourceInterface $source */
             $source = $this->sourceFactory->create();
         }
-        $source = $this->dataObjectHelper->populateWithArray($source, $requestData, SourceInterface::class);
+        $this->dataObjectHelper->populateWithArray($source, $requestData, SourceInterface::class);
         $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData);
 
         $sourceId = $this->sourceRepository->save($source);
