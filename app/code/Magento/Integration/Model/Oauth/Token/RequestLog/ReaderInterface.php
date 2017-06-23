@@ -19,4 +19,13 @@ interface ReaderInterface
      * @return int
      */
     public function getFailuresCount($userName, $userType);
+
+    /**
+     * Get the Datetime when the lock will expire.
+     *
+     * @param string $userName
+     * @param int $userType
+     * @return int
+     */
+    public function getLockExpiresAt($userName, $userType);
 }
