@@ -23,9 +23,10 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * If job is currently in $currentStatus, set it to $newStatus
-     * and return true. Otherwise, return false and do not change the job.
-     * This method is used to implement locking for cron jobs.
+     * Sets new schedule status only if it's in the expected current status.
+     *
+     * If schedule is currently in $currentStatus, set it to $newStatus and
+     * return true. Otherwise, return false.
      *
      * @param string $scheduleId
      * @param string $newStatus
@@ -47,11 +48,12 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * If job is currently in $currentStatus and there are no existing jobs
-     * with $newStatus, set it to $newStatus and return true. Otherwise,
-     * return false and do not change the job.
-     * This method is used to implement locking for cron jobs that share a
-     * job code.
+     * Sets schedule status only if no existing schedules with the same job code
+     * have that status.  This is used to implement locking for cron jobs.
+     *
+     * If the schedule is currently in $currentStatus and there are no existing
+     * schedules with the same job code and $newStatus, set the schedule to
+     * $newStatus and return true. Otherwise, return false.
      *
      * @param string $scheduleId
      * @param string $newStatus
