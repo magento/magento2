@@ -124,6 +124,7 @@ class Image implements ProductRenderCollectorInterface
      * @param ProductInterface $product
      * @param string $imageCode
      * @param int $storeId
+     * @param ImageInterface $image
      * @return \Magento\Catalog\Helper\Image
      */
     public function emulateImageCreating(ProductInterface $product, $imageCode, $storeId, ImageInterface $image)

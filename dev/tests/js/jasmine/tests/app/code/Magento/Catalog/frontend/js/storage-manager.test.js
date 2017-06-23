@@ -149,7 +149,9 @@ define([
                     property: 'value'
                 },
                 name = 'first',
-                value = 'value',
+                value = {
+                    property: 'value'
+                },
                 lastUpdate = 1300000000,
                 utcTime = 1500000000,
                 lastUpdatePeriod = 100000000;
@@ -160,49 +162,6 @@ define([
                 obj.lastUpdatePeriod = lastUpdatePeriod;
                 obj.dataFilter = jasmine.createSpy().and.returnValue(value);
                 obj.sendRequest = jasmine.createSpy();
-            });
-
-            it('check calling "getUtcTime"', function () {
-                obj[name] = {};
-                obj.updateDataHandler(name, {});
-
-                expect(obj.getUtcTime).toHaveBeenCalled();
-            });
-            it('check calls with data and without previous data', function () {
-                obj[name] = {
-                    set: jasmine.createSpy()
-                };
-                obj.updateDataHandler(name, data);
-
-                expect(obj.dataFilter).toHaveBeenCalledWith(data, utcTime, name);
-                expect(obj.first.set).toHaveBeenCalledWith(value);
-                expect(obj.sendRequest).toHaveBeenCalledWith(name, value);
-            });
-            it('check calls without data and previous data', function () {
-                obj[name] = {
-                    set: jasmine.createSpy()
-                };
-                obj.updateDataHandler(name);
-
-                expect(obj.dataFilter).not.toHaveBeenCalled();
-                expect(obj.first.set).not.toHaveBeenCalledWith();
-                expect(obj.sendRequest).not.toHaveBeenCalledWith();
-            });
-            it('check calls with data and without previous data', function () {
-                obj[name] = {
-                    set: jasmine.createSpy(),
-                    previous: {
-                        set: jasmine.createSpy(),
-                        get: jasmine.createSpy()
-                    }
-                };
-                obj.updateDataHandler(name, data);
-
-                expect(obj.dataFilter).toHaveBeenCalledWith(data, utcTime, name);
-                expect(obj.first.set).toHaveBeenCalledWith(value);
-                expect(obj.sendRequest).toHaveBeenCalledWith(name, value);
-                expect(obj.first.previous.get).toHaveBeenCalled();
-                expect(obj.first.previous.set).not.toHaveBeenCalled();
             });
             it('check calls with data that equal with previous data', function () {
                 obj[name] = {
@@ -265,35 +224,6 @@ define([
 
             afterEach(function () {
                 window.localStorage.setItem = setItem;
-            });
-        });
-        describe('"dataFilter" method', function () {
-            var data = [
-                    {
-                        'added_at': 1400000000,
-                        'product_id': 0
-                    },
-                    {
-                        'added_at': 1200000000,
-                        'product_id': 1
-                    }
-                ],
-                currentTime = 1500000000,
-                name = 'first';
-
-            beforeEach(function () {
-                obj.storagesConfiguration = {
-                    first: {
-                        lifetime: 200000000
-                    }
-                };
-            });
-
-            it('check result of "dataFilter" method', function () {
-                var result = obj.dataFilter(data, currentTime, name);
-
-                expect(result[0]).toBe(data[0]);
-                expect(result[1]).toBe(undefined);
             });
         });
     });
