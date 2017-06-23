@@ -4,6 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @codingStandardsIgnoreFile
+ * Coding Standards have to be ignored in this file, as it is just a data source for tests.
+ */
+
 namespace Magento\SomeModule\Model;
 
 use Magento\SomeModule\Model\Two\Test as TestTwo;
@@ -41,4 +46,6 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
     public function testMethod2($data = 'test_default', $flag = true);
 
     public function testMethod3();
+
+
 }
