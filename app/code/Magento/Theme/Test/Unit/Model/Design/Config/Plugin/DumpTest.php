@@ -32,6 +32,7 @@ class DumpTest extends \PHPUnit_Framework_TestCase
         2 => 'frontend/Magento/blank',
         3 => 'frontend/Magento/luma',
     ];
+
     /**
      * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -96,11 +97,7 @@ class DumpTest extends \PHPUnit_Framework_TestCase
                                 'timezone' => 'America/Chicago',
                             ],
                         ],
-                        'design' => [
-                            'theme' => [
-                                'theme_id' => 2,
-                            ],
-                        ],
+                        'design' => ['theme' => ['theme_id' => 2]],
                     ],
                 ],
                 [
@@ -111,11 +108,7 @@ class DumpTest extends \PHPUnit_Framework_TestCase
                                 'timezone' => 'America/Chicago',
                             ],
                         ],
-                        'design' => [
-                            'theme' => [
-                                'theme_id' => 'frontend/Magento/blank',
-                            ],
-                        ],
+                        'design' => ['theme' => ['theme_id' => 'frontend/Magento/blank']],
                     ],
                 ],
             ],
@@ -139,7 +132,6 @@ class DumpTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-
                 ],
             ],
             [
@@ -149,34 +141,14 @@ class DumpTest extends \PHPUnit_Framework_TestCase
                 [
                     'stores' => [
                         'default' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 3,
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 3]],
                         ],
                     ],
                 ],
                 [
                     'stores' => [
                         'default' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 'frontend/Magento/luma',
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 'frontend/Magento/luma']],
                         ],
                     ],
                 ],
@@ -185,34 +157,14 @@ class DumpTest extends \PHPUnit_Framework_TestCase
                 [
                     'websites' => [
                         'base' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 3,
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 3]],
                         ],
                     ],
                 ],
                 [
                     'websites' => [
                         'base' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 'frontend/Magento/luma',
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 'frontend/Magento/luma']],
                         ],
                     ],
                 ],

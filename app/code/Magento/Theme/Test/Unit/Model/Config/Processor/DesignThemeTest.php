@@ -32,6 +32,7 @@ class DesignThemeTest extends \PHPUnit_Framework_TestCase
         2 => 'frontend/Magento/blank',
         3 => 'frontend/Magento/luma',
     ];
+
     /**
      * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -90,11 +91,7 @@ class DesignThemeTest extends \PHPUnit_Framework_TestCase
                                 'timezone' => 'America/Chicago',
                             ],
                         ],
-                        'design' => [
-                            'theme' => [
-                                'theme_id' => 'frontend/Magento/blank',
-                            ],
-                        ],
+                        'design' => ['theme' => ['theme_id' => 'frontend/Magento/blank']],
                     ],
                 ],
                 [
@@ -105,11 +102,7 @@ class DesignThemeTest extends \PHPUnit_Framework_TestCase
                                 'timezone' => 'America/Chicago',
                             ],
                         ],
-                        'design' => [
-                            'theme' => [
-                                'theme_id' => 2,
-                            ],
-                        ],
+                        'design' => ['theme' => ['theme_id' => 2]],
                     ],
                 ],
             ],
@@ -133,7 +126,6 @@ class DesignThemeTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-
                 ],
             ],
             [
@@ -143,34 +135,14 @@ class DesignThemeTest extends \PHPUnit_Framework_TestCase
                 [
                     'stores' => [
                         'default' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 'frontend/Magento/luma',
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 'frontend/Magento/luma']],
                         ],
                     ],
                 ],
                 [
                     'stores' => [
                         'default' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 3,
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 3]],
                         ],
                     ],
                 ],
@@ -179,34 +151,14 @@ class DesignThemeTest extends \PHPUnit_Framework_TestCase
                 [
                     'websites' => [
                         'base' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 'frontend/Magento/luma',
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 'frontend/Magento/luma']],
                         ],
                     ],
                 ],
                 [
                     'websites' => [
                         'base' => [
-                            'general' => [
-                                'locale' => [
-                                    'code' => 'en_US',
-                                    'timezone' => 'America/Chicago',
-                                ],
-                            ],
-                            'design' => [
-                                'theme' => [
-                                    'theme_id' => 3,
-                                ],
-                            ],
+                            'design' => ['theme' => ['theme_id' => 3]],
                         ],
                     ],
                 ],
