@@ -10,6 +10,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Test class for \Magento\Backend\Block\Menu
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MenuTest extends \PHPUnit_Framework_TestCase
 {

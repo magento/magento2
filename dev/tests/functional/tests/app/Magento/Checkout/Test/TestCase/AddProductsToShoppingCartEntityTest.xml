@@ -167,7 +167,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartPresentInSummaryBlock" />
         </variation>
-        <variation name="VariationWithCartItemsDisplayCustomLimitations" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-70142, MAGETWO-70143, MAGETWO-70144">
+        <variation name="VariationWithCartItemsDisplayCustomLimitations" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-70144">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::default</data>
