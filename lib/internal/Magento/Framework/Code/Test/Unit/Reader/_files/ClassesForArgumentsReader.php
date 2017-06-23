@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 class ClassWithAllArgumentTypes
 {
     const DEFAULT_VALUE = 'Const Value';
