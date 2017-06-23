@@ -10,12 +10,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 
 /**
- * Assert that link Go To Cart are not present in summary block.
+ * Assert that link Go To Cart is not present in summary block.
  */
 class AssertLinkGoToCartNotPresentInSummaryBlock extends AbstractConstraint
 {
     /**
-     * Assert that Go to Cart link not present in checkout summary block.
+     * Assert that Go to Cart link is not present in checkout summary block.
      *
      * @param CheckoutOnepage $checkoutPage
      * @return void
@@ -35,6 +35,6 @@ class AssertLinkGoToCartNotPresentInSummaryBlock extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Verify that Go to Cart link not present in checkout summary block';
+        return 'Verify that Go to Cart link is not present in checkout summary block';
     }
 }

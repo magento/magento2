@@ -44,7 +44,6 @@ class RemoveProductsFromTheCartStep implements TestStepInterface
     private $fixtureFactory;
 
     /**
-     * @constructor
      * @param CheckoutCart $cartPage
      * @param FixtureFactory $fixtureFactory
      * @param array $products

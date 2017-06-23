@@ -28,7 +28,6 @@ class MergePreconditionProductsStep implements TestStepInterface
     private $preconditionProducts;
 
     /**
-     * @constructor
      * @param array $products [optional]
      * @param array $preconditionProducts [optional]
      */

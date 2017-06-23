@@ -87,6 +87,11 @@ class LastOrderedItemsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers \Magento\Sales\CustomerData\LastOrderedItems
+     *
+     * @return void
+     */
     public function testGetSectionData()
     {
         $websiteId = 4;
@@ -140,6 +145,11 @@ class LastOrderedItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['items' => [$expectedItem]], $this->section->getSectionData());
     }
 
+    /**
+     * Return last order mock object.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getLastOrderMock()
     {
         $customerId = 1;

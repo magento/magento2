@@ -38,6 +38,11 @@ class CheckoutSummaryConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->model = new CheckoutSummaryConfigProvider($this->urlBuilderMock, $this->scopeConfigMock);
     }
 
+    /**
+     * @covers \Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider
+     * 
+     * @return void
+     */
     public function testGetConfig()
     {
         $maxItemsCount = 10;

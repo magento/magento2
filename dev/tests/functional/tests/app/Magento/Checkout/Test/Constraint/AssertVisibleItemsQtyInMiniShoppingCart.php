@@ -13,12 +13,12 @@ use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Assert that items qty are visible in mini shopping cart.
+ * Assert that quantity of visible Cart items is the same as minicart configuration value.
  */
 class AssertVisibleItemsQtyInMiniShoppingCart extends AbstractConstraint
 {
     /**
-     * Assert that quantity of visible Cart items are the same as minicart configuration value.
+     * Assert that quantity of visible Cart items is the same as minicart configuration value.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -55,6 +55,6 @@ class AssertVisibleItemsQtyInMiniShoppingCart extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Quantity of visible Cart items the same as minicart configuration value.';
+        return 'Quantity of visible Cart items is the same as minicart configuration value.';
     }
 }

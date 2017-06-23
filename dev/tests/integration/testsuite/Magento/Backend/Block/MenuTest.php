@@ -43,7 +43,8 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->blockMenu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Backend\Block\Menu::class
         );
-        $this->auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Auth::class);
+        $this->auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Backend\Model\Auth::class);
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');

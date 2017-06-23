@@ -947,7 +947,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test method setPayment with Id.
+     * Tests setPayment() method with Id.
      *
      * @return void
      */
@@ -959,21 +959,17 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->order->setData(OrderInterface::PAYMENT, $payment);
         $this->order->setDataChanges(false);
-
         $payment->expects($this->once())
             ->method('setOrder')
             ->with($this->order)
             ->willReturnSelf();
-
         $payment->expects($this->once())
             ->method('setParentId')
             ->with(123)
             ->willReturnSelf();
-
         $payment->expects($this->any())
             ->method('getId')
             ->willReturn(1);
-
         $this->order->setPayment($payment);
 
         $this->assertEquals(
@@ -989,7 +985,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test method setPayment without Id.
+     * Tests setPayment() method without Id.
      *
      * @return void
      */

@@ -11,7 +11,7 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Cms\Test\Page\CmsIndex;
 
 /**
- * Assert that items qty message is visible on checkout summary block.
+ * Assert that quantity of visible Cart items is the same as minicart configuration value.
  */
 class AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock extends AbstractConstraint
 {
@@ -26,7 +26,7 @@ class AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock extends AbstractConstra
     const VISIBLE_ITEMS_COUNTER_MASSAGE = "%s of %s Items in Cart";
 
     /**
-     * Assert that quantity of visible Cart items are the same as minicart configuration value.
+     * Assert that quantity of visible Cart items is the same as minicart configuration value.
      *
      * @param CmsIndex $cmsIndex
      * @param CheckoutOnepage $checkoutPage
@@ -70,6 +70,6 @@ class AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock extends AbstractConstra
      */
     public function toString()
     {
-        return 'Quantity of visible Cart items the same as minicart configuration value.';
+        return 'Quantity of visible Cart items is the same as minicart configuration value.';
     }
 }

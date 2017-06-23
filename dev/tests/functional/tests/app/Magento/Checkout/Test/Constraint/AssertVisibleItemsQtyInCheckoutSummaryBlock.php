@@ -12,12 +12,12 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Assert that items qty are visible on checkout summary block.
+ * Assert that visible cart items count is the same as configuration value.
  */
 class AssertVisibleItemsQtyInCheckoutSummaryBlock extends AbstractConstraint
 {
     /**
-     * Assert that visible cart items count are the same as configuration value
+     * Assert that visible cart items count is the same as configuration value
      *
      * @param CheckoutOnepage $checkoutPage
      * @param Cart $cart
@@ -56,6 +56,6 @@ class AssertVisibleItemsQtyInCheckoutSummaryBlock extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Quantity of visible Cart items the same as checkout configuration value.';
+        return 'Quantity of visible Cart items is the same as checkout configuration value.';
     }
 }

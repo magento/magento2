@@ -10,7 +10,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that items qty message is visible in mini shopping cart.
+ * Assert that quantity of visible Cart items is the same as minicart configuration value.
  */
 class AssertVisibleItemsQtyMessageInMiniShoppingCart extends AbstractConstraint
 {
@@ -25,7 +25,7 @@ class AssertVisibleItemsQtyMessageInMiniShoppingCart extends AbstractConstraint
     const VISIBLE_ITEMS_COUNTER_MASSAGE = "%s of %s Items in Cart";
 
     /**
-     * Assert that quantity of visible Cart items are the same as minicart configuration value.
+     * Assert that quantity of visible Cart items is the same as minicart configuration value.
      *
      * @param CmsIndex $cmsIndex
      * @param int $minicartMaxVisibleCartItemsCount
@@ -59,6 +59,6 @@ class AssertVisibleItemsQtyMessageInMiniShoppingCart extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Quantity of visible Cart items the same as minicart configuration value.';
+        return 'Quantity of visible Cart items is the same as minicart configuration value.';
     }
 }

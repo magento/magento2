@@ -35,9 +35,7 @@ class AssertSubtotalInMiniShoppingCart extends AbstractAssertForm
     }
 
     /**
-     * Returns a string representation of the object.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function toString()
     {

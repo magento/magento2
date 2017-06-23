@@ -87,7 +87,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
-        <variation name="VariationWithCartItemsDisplayDefaultLimitation" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-70089">
+        <variation name="VariationWithCartItemsDisplayDefaultLimitation" summary="Minicart products list is trimmed if qty of products exceeds display limit" ticketId="MAGETWO-70089">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
@@ -107,7 +107,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
         </variation>
-        <variation name="VariationWithCartItemsDisplayDefaultLimitationAndDefaultTotalQty" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-70090">
+        <variation name="VariationWithCartItemsDisplayDefaultLimitationAndDefaultTotalQty" summary="Products in minicart are NOT trimmed if qty of products less than default display limit" ticketId="MAGETWO-70090">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
@@ -126,7 +126,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
         </variation>
-        <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckoutAndDefaultTotalQty" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-70091">
+        <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckoutAndDefaultTotalQty" summary="Products list in checkout order summary block is NOT trimmed if qty less than display limit" ticketId="MAGETWO-70091">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
@@ -146,7 +146,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartNotPresentInSummaryBlock" />
         </variation>
-        <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckout" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-70092">
+        <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckout" summary="Products list in checkout order summary block is trimmed if qty exceeds display limit" ticketId="MAGETWO-70092">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
@@ -167,7 +167,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartPresentInSummaryBlock" />
         </variation>
-        <variation name="VariationWithCartItemsDisplayCustomLimitations" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63445, MAGETWO-63449, MAGETWO-63452">
+        <variation name="VariationWithCartItemsDisplayCustomLimitations" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-70142, MAGETWO-70143, MAGETWO-70144">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::default</data>

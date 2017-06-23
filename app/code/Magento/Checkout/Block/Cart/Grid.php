@@ -10,7 +10,7 @@ namespace Magento\Checkout\Block\Cart;
  * Block on checkout/cart/index page to display a pager on the  cart items grid.
  * The pager will be displayed if items quantity in the shopping cart > than number from
  * Store->Configuration->Sales->Checkout->Shopping Cart->Number of items to display pager and
- * custom_items weren't set to cart block
+ * custom_items weren't set to cart block.
  */
 class Grid extends \Magento\Checkout\Block\Cart
 {
@@ -20,30 +20,35 @@ class Grid extends \Magento\Checkout\Block\Cart
     const XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER = 'checkout/cart/number_items_to_display_pager';
 
     /**
+     * Quote item resource collection.
+     *
      * @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
      */
     private $itemsCollection;
 
     /**
+     * Quote item resource collection factory.
+     *
      * @var \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory
      *
      */
     private $itemCollectionFactory;
 
     /**
+     * Join extension attributes processor.
+     *
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
     private $joinAttributeProcessor;
 
     /**
-     * Is display pager on shopping cart page.
+     * Is pager displayed on shopping cart page.
      *
      * @var bool
      */
     private $isPagerDisplayed;
 
     /**
-     * Grid constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -80,9 +85,9 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * Prepare Quote Item Product URLs.
-     * When we don't have custom_items, items URLs will be collected for Collection limited by pager
-     * Pager limit on checkout/cart/index is determined by configuration
-     * Configuration path is Store->Configuration->Sales->Checkout->Shopping Cart->Number of items to display pager
+     * When we don't have custom_items, items URLs will be collected for Collection limited by pager.
+     * Pager limit on checkout/cart/index is determined by configuration.
+     * Configuration path is Store->Configuration->Sales->Checkout->Shopping Cart->Number of items to display pager.
      *
      * @return void
      */
@@ -115,6 +120,7 @@ class Grid extends \Magento\Checkout\Block\Cart
             $itemsCollection->load();
             $this->prepareItemUrls();
         }
+
         return $this;
     }
 
@@ -128,13 +134,12 @@ class Grid extends \Magento\Checkout\Block\Cart
         if (!$this->itemsCollection) {
             /** @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection $itemCollection */
             $itemCollection = $this->itemCollectionFactory->create();
-
             $itemCollection->setQuote($this->getQuote());
             $itemCollection->addFieldToFilter('parent_item_id', ['null' => true]);
             $this->joinAttributeProcessor->process($itemCollection);
-
             $this->itemsCollection = $itemCollection;
         }
+
         return $this->itemsCollection;
     }
 
@@ -146,12 +151,13 @@ class Grid extends \Magento\Checkout\Block\Cart
         if (!$this->isPagerDisplayedOnPage()) {
             return parent::getItems();
         }
+
         return $this->getItemsForGrid()->getItems();
     }
 
     /**
-     * Verify if display pager on shopping cart.
-     * If cart block has custom_items and items qty in the shopping cart<limit from stores configuration
+     * Verify pager visibility.
+     * If cart block has custom_items and items qty in the shopping cart < limit from stores configuration.
      *
      * @return bool
      */
@@ -164,6 +170,7 @@ class Grid extends \Magento\Checkout\Block\Cart
             );
             $this->isPagerDisplayed = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
         }
+
         return $this->isPagerDisplayed;
     }
 }

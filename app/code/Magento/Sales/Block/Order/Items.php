@@ -28,14 +28,14 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     private $itemsPerPage;
 
     /**
-     * Flat sales order payment collection factory.
+     * Sales order item collection factory.
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory
      */
     private $itemCollectionFactory;
 
     /**
-     * Flat sales order payment collection.
+     * Sales order item collection.
      *
      * @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection|null
      */

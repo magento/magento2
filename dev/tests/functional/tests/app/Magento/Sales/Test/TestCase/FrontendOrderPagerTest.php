@@ -10,9 +10,9 @@ use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
- * 1. 20(21) products created.
+ * 1. Products based on a specific dataset are created.
  * 2. Customer is created.
- * 3. Customer placed the order with 20(21) products.
+ * 3. Customer placed the order with products from first step of preconditions.
  *
  * Steps:
  * 1. Login to Storefront as Customer.
@@ -20,7 +20,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 3. Click 'View Order' link on order from preconditions
  *
  * @group Order_Management
- * @ZephyrId MAGETWO-63457
+ * @ZephyrId MAGETWO-70168
  */
 class FrontendOrderPagerTest extends Scenario
 {

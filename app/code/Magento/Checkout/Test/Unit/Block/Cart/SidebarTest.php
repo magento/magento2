@@ -59,11 +59,11 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::clas);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
         $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
         $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::clas, [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
         $this->imageHelper = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
         $this->scopeConfigMock = $this->getMock(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
@@ -113,11 +113,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['toHtml'])
             ->getMock();
-
         $totalsBlockMock->expects($this->once())
             ->method('toHtml')
             ->will($this->returnValue($totalsHtml));
-
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('checkout.cart.minicart.totals')
@@ -160,7 +158,6 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->any())
             ->method('isSecure')
             ->willReturn(false);
-
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
@@ -179,7 +176,6 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
                 'checkout/sidebar/max_items_display_count',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn(8);
-        
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());

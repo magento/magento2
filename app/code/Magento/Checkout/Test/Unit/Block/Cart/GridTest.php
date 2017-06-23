@@ -108,20 +108,29 @@ class GridTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetTemplate()
     {
         $this->assertEquals('cart/form1.phtml', $this->block->getTemplate());
     }
 
+    /**
+     * @covers \Magento\Checkout\Block\Cart\Grid::getItemsForGrid
+     *
+     * @return void
+     */
     public function testGetItemsForGrid()
     {
         $this->getMockItemsForGrid();
-        
         $this->assertEquals($this->itemCollectionMock, $this->block->getItemsForGrid());
     }
 
     /**
      * @cover \Magento\Checkout\Block\Cart\Grid::_prepareLayout
+     *
+     * @return void
      */
     public function testSetLayout()
     {
@@ -158,6 +167,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->block->setLayout($this->layoutMock);
     }
 
+    /**
+     * @covers \Magento\Checkout\Block\Cart\Grid::getItems
+     *
+     * @return void
+     */
     public function testGetItems()
     {
         $this->getMockItemsForGrid();
@@ -167,6 +181,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['expected'], $this->block->getItems());
     }
 
+    /**
+     * Prepare data for getItemsForGrid() method.
+     *
+     * @return void
+     */
     private function getMockItemsForGrid()
     {
         $this->itemCollectionFactoryMock
@@ -185,6 +204,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @cover \Magento\Checkout\Block\Cart::prepareItemUrls
+     *
+     * @return void
      */
     public function testGetItemsIfCustomItemsExists()
     {
@@ -214,6 +235,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$itemMock], $this->block->getItems());
     }
 
+    /**
+     * Test getItems() method when pager is not displayed on page.
+     *
+     * @return void
+     */
     public function testGetItemsWhenPagerNotVisible()
     {
         $this->assertEquals([], $this->block->getItems());
