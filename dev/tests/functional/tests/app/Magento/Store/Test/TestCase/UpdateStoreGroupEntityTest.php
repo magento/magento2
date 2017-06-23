@@ -71,9 +71,10 @@ class UpdateStoreGroupEntityTest extends Injectable
      *
      * @param StoreGroup $storeGroupOrigin
      * @param StoreGroup $storeGroup
+     * @param string $acceptAlert
      * @return void
      */
-    public function test(StoreGroup $storeGroupOrigin, StoreGroup $storeGroup)
+    public function test(StoreGroup $storeGroupOrigin, StoreGroup $storeGroup, $acceptAlert)
     {
 
         //Preconditions
@@ -84,7 +85,7 @@ class UpdateStoreGroupEntityTest extends Injectable
         $this->storeIndex->getStoreGrid()->searchAndOpenStoreGroup($storeGroupOrigin);
         $this->editGroup->getEditFormGroup()->fill($storeGroup);
         $this->editGroup->getFormPageActions()->save();
-        if ($this->editGroup->getModalBlock()->isVisible()) {
+        if ($acceptAlert) {
             $this->editGroup->getModalBlock()->acceptAlert();
         }
     }
