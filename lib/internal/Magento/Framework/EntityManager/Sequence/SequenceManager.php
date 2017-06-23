@@ -53,33 +53,39 @@ class SequenceManager
     }
 
     /**
-     * Force sequence value creation
+     * Forces creation of a sequence value.
      *
      * @param string $entityType
      * @param string|int $identifier
+     *
      * @return int
+     *
      * @throws \Exception
      */
     public function force($entityType, $identifier)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
         $sequenceInfo = $this->sequenceRegistry->retrieve($entityType);
 
         if (!isset($sequenceInfo['sequenceTable'])) {
-            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists');
+            throw new \Exception(
+                'TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists'
+            );
         }
 
         try {
-            $connection = $this->appResource->getConnectionByName($metadata->getEntityConnectionName());
-            $sequenceTable = $this->appResource->getTableName($sequenceInfo['sequenceTable']);
+            $metadata = $this->metadataPool->getMetadata($entityType);
 
-            if (!$this->isIdentifierExists($connection, $sequenceTable, $identifier)) {
-                return $connection->insert($sequenceTable, ['sequence_value' => $identifier]);
-            }
+            $connection = $this->appResource->getConnectionByName(
+                $metadata->getEntityConnectionName()
+            );
 
-            return $identifier;
+            return $connection->insert(
+                $this->appResource->getTableName($sequenceInfo['sequenceTable']),
+                ['sequence_value' => $identifier]
+            );
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
+
             throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
         }
     }
@@ -107,27 +113,5 @@ class SequenceManager
             $this->logger->critical($e->getMessage(), $e->getTrace());
             throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
         }
-    }
-
-    /**
-     * Checks whether given identifier exists in the corresponding sequence table.
-     *
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param string $sequenceTable
-     * @param int $identifier
-     *
-     * @return bool
-     */
-    private function isIdentifierExists(
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection,
-        $sequenceTable,
-        $identifier
-    ) {
-        return (bool) $connection->fetchOne(
-            $connection->select()
-                ->from($sequenceTable, ['sequence_value'])
-                ->where('sequence_value = ?', $identifier)
-                ->limit(1)
-        );
     }
 }
