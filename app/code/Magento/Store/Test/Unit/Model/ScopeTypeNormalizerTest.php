@@ -56,4 +56,30 @@ class ScopeTypeNormalizerTest extends \PHPUnit_Framework_TestCase
             ['default', false, 'default'],
         ];
     }
+
+    /**
+     * @param string $scopeType
+     * @param string $expectedResult
+     * @dataProvider normalizeDefaultDataProvider
+     */
+    public function testNormalizeDefault($scopeType, $expectedResult)
+    {
+        $this->assertEquals($expectedResult, $this->scopeTypeNormalizer->normalize($scopeType));
+    }
+
+    /**
+     * @return array
+     */
+    public function normalizeDefaultDataProvider()
+    {
+        return [
+            [ScopeInterface::SCOPE_WEBSITE, ScopeInterface::SCOPE_WEBSITES],
+            [ScopeInterface::SCOPE_WEBSITES, ScopeInterface::SCOPE_WEBSITES],
+            [ScopeInterface::SCOPE_GROUP, ScopeInterface::SCOPE_GROUPS],
+            [ScopeInterface::SCOPE_GROUPS, ScopeInterface::SCOPE_GROUPS],
+            [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_STORES],
+            [ScopeInterface::SCOPE_STORES, ScopeInterface::SCOPE_STORES],
+            ['default', 'default'],
+        ];
+    }
 }

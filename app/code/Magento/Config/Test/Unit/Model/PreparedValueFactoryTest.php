@@ -99,7 +99,6 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->fieldMock = $this->getMockBuilder(Field::class)
-            //->setMethods(['getData', 'getConfigPath', 'getId', 'hasBackendModel'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
