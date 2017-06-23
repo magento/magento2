@@ -15,7 +15,6 @@ define([
             additionalClasses: '',
             filteredRows: {},
             limit: 5,
-            shouldMergeFromSource: ['displayMode', 'additionalClasses'],
             listens: {
                 elems: 'filterRowsFromCache',
                 '${ $.provider }:data.items': 'filterRowsFromServer'
@@ -26,8 +25,7 @@ define([
         initialize: function () {
             this._super();
             this.filteredRows = ko.observable();
-            this.initializeListingConfig()
-                .initProductsLimit();
+            this.initProductsLimit();
             this.hideLoader();
         },
 
@@ -56,22 +54,6 @@ define([
                 .track({
                     rows: []
                 });
-
-            return this;
-        },
-
-        /**
-         * Initialize all configs, that are required for product listing ui component
-         * @returns {this}
-         */
-        initializeListingConfig: function () {
-            var listingSource = this.source.listing;
-
-            _.each(this.shouldMergeFromSource, function (attributeToMerge) {
-                if (listingSource.hasOwnProperty(attributeToMerge)) {
-                    this[attributeToMerge] = listingSource[attributeToMerge];
-                }
-            }, this);
 
             return this;
         },

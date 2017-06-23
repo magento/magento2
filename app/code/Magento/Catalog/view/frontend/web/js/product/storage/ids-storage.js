@@ -82,7 +82,7 @@ define([
         initCustomerDataReloadListener: function () {
             $(document).on('customer-data-reload', function (event, sections) {
                 if ((_.isEmpty(sections) || _.contains(sections, this.namespace)) && ~~this.allowToSendRequest) {
-                    localStorage.removeItem(this.namespace);
+                    this.localStorage.removeAll();
                     this.data();
                 }
             }.bind(this));

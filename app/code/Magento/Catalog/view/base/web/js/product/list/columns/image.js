@@ -14,14 +14,7 @@ define([
         defaults: {
             bodyTmpl: 'Magento_Catalog/product/list/columns/image',
             imageCode: 'default',
-            shouldMergeFromSource: ['imageCode'],
             image: {}
-        },
-
-        /** @inheritdoc */
-        initialize: function () {
-            this._super();
-            this.initializeColumnConfig();
         },
 
         /**
@@ -34,22 +27,6 @@ define([
             return _.filter(images, function (image) {
                 return this.imageCode === image.code;
             }, this).pop();
-        },
-
-        /**
-         * Initialize all configs, that are required for column in ui component
-         * @returns {this}
-         */
-        initializeColumnConfig: function () {
-            var columnSource = this.source().column.image;
-
-            _.each(this.shouldMergeFromSource, function (attributeToMerge) {
-                if (columnSource.hasOwnProperty(attributeToMerge)) {
-                    this[attributeToMerge] = columnSource[attributeToMerge];
-                }
-            }, this);
-
-            return this;
         },
 
         /**

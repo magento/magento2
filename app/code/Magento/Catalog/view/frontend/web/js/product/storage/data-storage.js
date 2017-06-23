@@ -81,7 +81,7 @@ define([
          */
         _flushProductStorage: function (event, sections) {
             if (_.isEmpty(sections) || _.contains(sections, 'product_data_storage')) {
-                window.localStorage.removeItem('product_data_storage');
+                this.localStorage.removeAll();
             }
         },
 
