@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -19,24 +20,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->addSupportVideoMediaAttributes($setup);
             $this->removeGroupPrice($setup);
         }
-
         if (version_compare($context->getVersion(), '2.0.6', '<')) {
             $this->addUniqueKeyToCategoryProductTable($setup);
         }
-
         if (version_compare($context->getVersion(), '2.1.4', '<')) {
             $this->addSourceEntityIdToProductEavIndex($setup);
         }
-
         if (version_compare($context->getVersion(), '2.1.5', '<')) {
             $this->addPercentageValueColumn($setup);
             $tables = [
@@ -57,14 +55,53 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $setup->getConnection()->modifyColumn(
                     $setup->getTable($table),
                     'customer_group_id',
-                    ['type' => 'integer', 'nullable' => false]
+                    [
+                        'type' => Table::TYPE_INTEGER,
+                        'nullable' => false,
+                        'unsigned' => true,
+                        'default' => '0',
+                        'comment' => 'Customer Group ID',
+                    ]
                 );
             }
             $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
-
         if (version_compare($context->getVersion(), '2.2.0', '<')) {
-            $this->addProductEavIndexReplicaTables($setup);
+            //remove fk from price index table
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable('catalog_product_index_price'),
+                $setup->getFkName(
+                    'catalog_product_index_price',
+                    'entity_id',
+                    'catalog_product_entity',
+                    'entity_id'
+                )
+            );
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable('catalog_product_index_price'),
+                $setup->getFkName(
+                    'catalog_product_index_price',
+                    'website_id',
+                    'store_website',
+                    'website_id'
+                )
+            );
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable('catalog_product_index_price'),
+                $setup->getFkName(
+                    'catalog_product_index_price',
+                    'customer_group_id',
+                    'customer_group',
+                    'customer_group_id'
+                )
+            );
+
+            $this->addReplicaTable($setup, 'catalog_product_index_eav', 'catalog_product_index_eav_replica');
+            $this->addReplicaTable(
+                $setup,
+                'catalog_product_index_eav_decimal',
+                'catalog_product_index_eav_decimal_replica'
+            );
             $this->addPathKeyToCategoryEntityTableIfNotExists($setup);
             //  By adding 'catalog_product_index_price_replica' we provide separation of tables
             //  used for indexation write and read operations and affected models.
@@ -79,6 +116,36 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'catalog_category_product_index',
                 'catalog_category_product_index_replica'
             );
+        }
+        if (version_compare($context->getVersion(), '2.2.2', '<')) {
+            $tables = [
+                'catalog_product_entity_tier_price',
+                'catalog_product_index_price_cfg_opt_agr_idx',
+                'catalog_product_index_price_cfg_opt_agr_tmp',
+                'catalog_product_index_price_cfg_opt_idx',
+                'catalog_product_index_price_cfg_opt_tmp',
+                'catalog_product_index_price_final_idx',
+                'catalog_product_index_price_final_tmp',
+                'catalog_product_index_price_idx',
+                'catalog_product_index_price_opt_agr_idx',
+                'catalog_product_index_price_opt_agr_tmp',
+                'catalog_product_index_price_opt_idx',
+                'catalog_product_index_price_opt_tmp',
+                'catalog_product_index_price_tmp',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    [
+                        'type' => Table::TYPE_INTEGER,
+                        'nullable' => false,
+                        'unsigned' => true,
+                        'default' => '0',
+                        'comment' => 'Customer Group ID',
+                    ]
+                );
+            }
         }
         $setup->endSetup();
     }
@@ -513,37 +580,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {
-        $setup->getConnection()->createTable(
-            $setup->getConnection()->createTableByDdl(
-                $setup->getTable($existingTable),
-                $setup->getTable($replicaTable)
-            )
+        $sql = sprintf(
+            'CREATE TABLE IF NOT EXISTS %s LIKE %s',
+            $setup->getConnection()->quoteIdentifier($setup->getTable($replicaTable)),
+            $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
         );
-    }
-
-    /**
-     * Add Replica for Catalog Product Eav Index Tables.
-     *
-     * By adding 'catalog_product_index_eav_replica', 'catalog_product_index_eav_decimal_replica' we provide separation
-     * of tables used for indexation write and read operations and affected models.
-     *
-     * @param SchemaSetupInterface $setup
-     * @return void
-     */
-    private function addProductEavIndexReplicaTables(SchemaSetupInterface $setup)
-    {
-        $setup->getConnection()->createTable(
-            $setup->getConnection()->createTableByDdl(
-                $setup->getTable('catalog_product_index_eav'),
-                $setup->getTable('catalog_product_index_eav_replica')
-            )
-        );
-
-        $setup->getConnection()->createTable(
-            $setup->getConnection()->createTableByDdl(
-                $setup->getTable('catalog_product_index_eav_decimal'),
-                $setup->getTable('catalog_product_index_eav_decimal_replica')
-            )
-        );
+        $setup->getConnection()->query($sql);
     }
 }
