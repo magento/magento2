@@ -12,6 +12,8 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\SourceStockLinkInterface;
 
 /**
  * @codeCoverageIgnore
@@ -27,6 +29,16 @@ class InstallSchema implements InstallSchemaInterface
      * Constant for table name of \Magento\Inventory\Model\SourceCarrierLink
      */
     const TABLE_NAME_SOURCE_CARRIER_LINK = 'inventory_source_carrier_link';
+
+    /**
+     * Constant for table names of the model \Magento\Inventory\Model\Stock
+     */
+    const TABLE_NAME_STOCK = 'inventory_stock';
+
+    /**
+     * Constant for table name of \Magento\Inventory\Model\SourceStockLink
+     */
+    const TABLE_NAME_SOURCE_STOCK_LINK = 'inventory_source_stock_link';
 
     /**
      * Constant for decimal precision for latitude and longitude
@@ -62,6 +74,10 @@ class InstallSchema implements InstallSchemaInterface
         $setup->getConnection()->createTable($sourceTable);
 
         $setup->getConnection()->createTable($this->createSourceCarrierLinkTable($setup));
+
+        $setup->getConnection()->createTable($this->createStockTable($setup));
+        $setup->getConnection()->createTable($this->createSourceStockLinkTable($setup));
+
         $setup->endSetup();
     }
 
@@ -330,6 +346,78 @@ class InstallSchema implements InstallSchemaInterface
             $sourceTable,
             SourceInterface::SOURCE_ID,
             AdapterInterface::FK_ACTION_CASCADE
+        );
+    }
+
+    private function createStockTable($setup) {
+        /**
+         * Create table 'inventory_stock'
+         */
+        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_STOCK);
+
+        return $setup->getConnection()->newTable(
+            $sourceTable
+        )->setComment(
+            'Inventory Stock Table'
+        )->addColumn(
+            StockInterface::STOCK_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                InstallSchema::OPTION_IDENTITY => true,
+                InstallSchema::OPTION_UNSIGNED => true,
+                InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_PRIMARY => true,
+            ],
+            'Stock ID'
+        )->addColumn(
+            StockInterface::NAME,
+            Table::TYPE_TEXT,
+            255,
+            [
+                InstallSchema::OPTION_NULLABLE => false,
+            ],
+            'Stock Name'
+        );
+    }
+
+    private function createSourceStockLinkTable($setup) {
+        /**
+         * Create table 'inventory_source_stock_link'
+         */
+        $sourceTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE_STOCK_LINK);
+
+        return $setup->getConnection()->newTable(
+            $sourceTable
+        )->setComment(
+            'Inventory Source Stock Link Table'
+        )->addColumn(
+            SourceStockLinkInterface::LINK_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                InstallSchema::OPTION_IDENTITY => true,
+                InstallSchema::OPTION_UNSIGNED => true,
+                InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_PRIMARY => true,
+            ],
+            'Link ID'
+        )->addColumn(
+            SourceStockLinkInterface::STOCK_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                InstallSchema::OPTION_NULLABLE => false,
+            ],
+            'Stock Id'
+        )->addColumn(
+            SourceStockLinkInterface::SOURCE_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                InstallSchema::OPTION_NULLABLE => false,
+            ],
+            'Source Id'
         );
     }
 }
