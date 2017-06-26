@@ -7,6 +7,8 @@ namespace Magento\Msrp\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface;
@@ -39,6 +41,11 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
     private $msrpPriceInfoFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $adjustmentCalculator;
+
+    /**
      * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $priceInfoExtensionFactory;
@@ -64,7 +71,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-
+        $this->adjustmentCalculator = $this->getMock(CalculatorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice::class,
@@ -74,6 +81,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
                 'config' => $this->configMock,
                 'msrpPriceInfoFactory' => $this->msrpPriceInfoFactory,
                 'priceInfoExtensionFactory' => $this->priceInfoExtensionFactory,
+                'adjustmentCalculator' => $this->adjustmentCalculator
             ]
         );
     }
@@ -98,7 +106,13 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
             ->setMethods(['getPrice', 'getExtensionAttributes'])
             ->getMockForAbstractClass();
-
+        $amountInterface = $this->getMock(AmountInterface::class);
+        $amountInterface->expects($this->once())
+            ->method('getValue')
+            ->willReturn(20);
+        $this->adjustmentCalculator->expects($this->once())
+            ->method('getAmount')
+            ->willReturn($amountInterface);
         $extensionAttirbutes->expects($this->once())
             ->method('setMsrp');
         $this->msrpPriceInfoFactory->expects($this->once())
