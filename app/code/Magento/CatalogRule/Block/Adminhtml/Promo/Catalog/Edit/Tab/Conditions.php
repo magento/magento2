@@ -147,14 +147,16 @@ class Conditions extends Generic implements TabInterface
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
+        $conditionsFieldSetId = $model->getConditionsFieldSetId($formName);
+
         $newChildUrl = $this->getUrl(
-            'catalog_rule/promo_catalog/newConditionHtml/form/' . $model->getConditionsFieldSetId($formName),
+            'catalog_rule/promo_catalog/newConditionHtml/form/' . $conditionsFieldSetId,
             ['form_namespace' => $formName]
         );
 
         $renderer = $this->_rendererFieldset->setTemplate('Magento_CatalogRule::promo/fieldset.phtml')
             ->setNewChildUrl($newChildUrl)
-            ->setFieldSetId($model->getConditionsFieldSetId($formName));
+            ->setFieldSetId($conditionsFieldSetId);
 
         $fieldset = $form->addFieldset(
             $fieldsetId,
@@ -176,7 +178,7 @@ class Conditions extends Generic implements TabInterface
             ->setRenderer($this->_conditions);
 
         $form->setValues($model->getData());
-        $this->setConditionFormName($model->getConditions(), $formName, $model->getConditionsFieldSetId($formName));
+        $this->setConditionFormName($model->getConditions(), $formName, $conditionsFieldSetId);
         return $form;
     }
 
