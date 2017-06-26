@@ -125,7 +125,7 @@ class StockRepository implements StockRepositoryInterface
             $this->collectionProcessor->process($searchCriteria, $collection);
         }
 
-        $searchResult = $this->stockCollectionFactory->create();
+        $searchResult = $this->stockSearchResultsFactory->create();
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
         $searchResult->setSearchCriteria($searchCriteria);

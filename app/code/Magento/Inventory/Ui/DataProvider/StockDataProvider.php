@@ -5,14 +5,14 @@
  */
 namespace Magento\Inventory\Ui\DataProvider;
 
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\Ui\DataProvider\SearchResultFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
  * Class SourceDataProvider
@@ -21,9 +21,9 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 class StockDataProvider extends DataProvider
 {
     /**
-     * @var SourceRepositoryInterface
+     * @var StockRepositoryInterface
      */
-    private $sourceRepository;
+    private $stockRepository;
 
     /**
      * @var SearchResultFactory
@@ -38,7 +38,7 @@ class StockDataProvider extends DataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
-     * @param SourceRepositoryInterface $sourceRepository
+     * @param StockRepositoryInterface $stockRepository
      * @param SearchResultFactory $searchResultFactory
      * @param array $meta
      * @param array $data
@@ -52,7 +52,7 @@ class StockDataProvider extends DataProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        StockRepositoryInterface $sourceRepository,
+        StockRepositoryInterface $stockRepository,
         SearchResultFactory $searchResultFactory,
         array $meta = [],
         array $data = []
@@ -68,32 +68,8 @@ class StockDataProvider extends DataProvider
             $meta,
             $data
         );
-        $this->sourceRepository = $sourceRepository;
+        $this->stockRepository = $stockRepository;
         $this->searchResultFactory = $searchResultFactory;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData()
-    {
-        $data = parent::getData();
-        if ('inventory_source_form_data_source' === $this->name) {
-            // It is need for support of several fieldsets.
-            // For details see \Magento\Ui\Component\Form::getDataSourceData
-            if ($data['totalRecords'] > 0) {
-                $sourceId = $data['items'][0][SourceInterface::SOURCE_ID];
-                $sourceGeneralData = $data['items'][0];
-                $sourceGeneralData['carrier_codes'] =  $this->getAssignedCarrierCodes($sourceId);
-                $dataForSingle[$sourceId] = [
-                    'general' => $sourceGeneralData,
-                ];
-                $data = $dataForSingle;
-            } else {
-                $data = [];
-            }
-        }
-        return $data;
     }
 
     /**
@@ -102,29 +78,14 @@ class StockDataProvider extends DataProvider
     public function getSearchResult()
     {
         $searchCriteria = $this->getSearchCriteria();
-        $result = $this->sourceRepository->getList($searchCriteria);
+        $result = $this->stockRepository->getList($searchCriteria);
 
         $searchResult = $this->searchResultFactory->create(
             $result->getItems(),
             $result->getTotalCount(),
             $searchCriteria,
-            SourceInterface::SOURCE_ID
+            StockInterface::STOCK_ID
         );
         return $searchResult;
-    }
-
-    /**
-     * @param int $sourceId
-     * @return array
-     */
-    private function getAssignedCarrierCodes($sourceId)
-    {
-        $source = $this->sourceRepository->get($sourceId);
-
-        $carrierCodes = [];
-        foreach ($source->getCarrierLinks() as $carrierLink) {
-            $carrierCodes[] = $carrierLink->getCarrierCode();
-        }
-        return $carrierCodes;
     }
 }
