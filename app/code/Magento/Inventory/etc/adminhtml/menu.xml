@@ -16,7 +16,7 @@
              action="inventory/source/index"
              resource="Magento_Inventory::source"/>
         <add id="Magento_Inventory::stock"
-             title="Manage Stock"
+             title="Manage Stocks"
              translate="title"
              module="Magento_Inventory"
              sortOrder="60"

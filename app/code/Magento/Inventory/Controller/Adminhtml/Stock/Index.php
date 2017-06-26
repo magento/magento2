@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Controller\Adminhtml\Source;
+namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
@@ -12,7 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Class Index
  */
-class Stock extends Action
+class Index extends Action
 {
     /**
      * @see _isAllowed()
