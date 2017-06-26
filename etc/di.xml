@@ -32,11 +32,5 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\AdvancedSearch\Model\ResourceModel\Index">
-        <arguments>
-            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
-            <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
-        </arguments>
-    </type>
     <preference for="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider" />
 </config>
