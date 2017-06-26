@@ -38,6 +38,11 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Session\SessionManager
+     */
+    private $sessionManager;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -45,6 +50,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->sessionManager = $this->objectManager->create(\Magento\Framework\Session\SessionManager::class);
         $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
