@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -39,6 +40,14 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchEngine = EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
 
+    /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -60,6 +69,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adapter = $this->createAdapter();
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
     }
 
     /**
@@ -114,14 +124,27 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private function assertProductIds($queryResponse, $expectedIds)
     {
+        $actualIds = $this->getProductIds($queryResponse);
+        sort($actualIds);
+        sort($expectedIds);
+        $this->assertEquals($expectedIds, $actualIds);
+    }
+
+    /**
+     * Returns document ids from query response.
+     *
+     * @param \Magento\Framework\Search\Response\QueryResponse $queryResponse
+     * @return array
+     */
+    protected function getProductIds(\Magento\Framework\Search\Response\QueryResponse $queryResponse)
+    {
         $actualIds = [];
         foreach ($queryResponse as $document) {
             /** @var \Magento\Framework\Api\Search\Document $document */
             $actualIds[] = $document->getId();
         }
-        sort($actualIds);
-        sort($expectedIds);
-        $this->assertEquals($expectedIds, $actualIds);
+
+        return $actualIds;
     }
 
     /**
@@ -523,5 +546,52 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             [['from' => '19.0000', 'to' => '19.8900'], 1],
             [['from' => '', 'to' => '19.8900'], 1],
         ];
+    }
+
+    /**
+     * Search grouped product.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/grouped_product.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     *
+     * @return void
+     */
+    public function testSearchGroupedProduct()
+    {
+        $this->requestBuilder->bind('search_term', 'Grouped Product');
+        $this->requestBuilder->setRequestName('quick_search_container');
+
+        $queryResponse = $this->executeQuery();
+        $result = $this->getProductIds($queryResponse);
+
+        self::assertCount(3, $result);
+
+        $groupedProduct = $this->productRepository->get('grouped-product');
+        self::assertContains($groupedProduct->getId(), $result, 'Grouped product not found by name.');
+    }
+
+    /**
+     * Filter by tax class.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/grouped_product.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     *
+     * @return void
+     */
+    public function testFilterByTaxClass()
+    {
+        $groupedProduct = $this->productRepository->get('grouped-product');
+        $simpleProduct = $this->productRepository->get('grouped-association-2');
+
+        $this->requestBuilder->bind('term', $simpleProduct->getTaxClassId());
+        $this->requestBuilder->setRequestName('tax_class_id_filter_query');
+
+        $queryResponse = $this->executeQuery();
+        $result = $this->getProductIds($queryResponse);
+
+        self::assertCount(2, $result);
+
+        self::assertContains($groupedProduct->getId(), $result, 'Grouped product not found by tax class.');
+        self::assertContains($simpleProduct->getId(), $result, 'Simple product not found by tax class.');
     }
 }
