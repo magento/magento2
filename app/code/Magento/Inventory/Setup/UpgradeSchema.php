@@ -10,6 +10,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\SourceStockLinkInterface;
 
 /**
  * Class for integration tables schema upgrades
@@ -43,7 +44,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.0', '>')) {
             $stockTable = $this->createStockTable($setup);
             $setup->getConnection()->createTable($stockTable);
-//            $this->createSourceStockLinkTable($setup);
+            $stockLinkTable = $this->createSourceStockLinkTable($setup);
+            $setup->getConnection()->createTable($stockLinkTable);
         }
 
         $setup->endSetup();
@@ -81,43 +83,43 @@ class UpgradeSchema implements UpgradeSchemaInterface
         );
     }
 
-//    private function createSourceStockLinkTable($setup) {
-//        /**
-//         * Create table 'inventory_source_stock_link'
-//         */
-//        $sourceTable = $setup->getTable(UpgradeSchema::TABLE_NAME_SOURCE_STOCK_LINK);
-//
-//        return $setup->getConnection()->newTable(
-//            $sourceTable
-//        )->setComment(
-//            'Inventory Source Stock Link Table'
-//        )->addColumn(
-//            SourceStockLinkInterface::LINK_ID,
-//            Table::TYPE_INTEGER,
-//            null,
-//            [
-//                UpgradeSchema::OPTION_IDENTITY => true,
-//                UpgradeSchema::OPTION_UNSIGNED => true,
-//                UpgradeSchema::OPTION_NULLABLE => false,
-//                UpgradeSchema::OPTION_PRIMARY => true,
-//            ],
-//            'Link ID'
-//        )->addColumn(
-//            SourceStockLinkInterface::STOCK_ID,
-//            Table::TYPE_INTEGER,
-//            null,
-//            [
-//                UpgradeSchema::OPTION_NULLABLE => false,
-//            ],
-//            'Stock Id'
-//        )->addColumn(
-//            SourceStockLinkInterface::SOURCE_ID,
-//            Table::TYPE_INTEGER,
-//            null,
-//            [
-//                UpgradeSchema::OPTION_NULLABLE => false,
-//            ],
-//            'Source Id'
-//        );
-//    }
+    private function createSourceStockLinkTable($setup) {
+        /**
+         * Create table 'inventory_source_stock_link'
+         */
+        $sourceTable = $setup->getTable(UpgradeSchema::TABLE_NAME_SOURCE_STOCK_LINK);
+
+        return $setup->getConnection()->newTable(
+            $sourceTable
+        )->setComment(
+            'Inventory Source Stock Link Table'
+        )->addColumn(
+            SourceStockLinkInterface::LINK_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                UpgradeSchema::OPTION_IDENTITY => true,
+                UpgradeSchema::OPTION_UNSIGNED => true,
+                UpgradeSchema::OPTION_NULLABLE => false,
+                UpgradeSchema::OPTION_PRIMARY => true,
+            ],
+            'Link ID'
+        )->addColumn(
+            SourceStockLinkInterface::STOCK_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                UpgradeSchema::OPTION_NULLABLE => false,
+            ],
+            'Stock Id'
+        )->addColumn(
+            SourceStockLinkInterface::SOURCE_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                UpgradeSchema::OPTION_NULLABLE => false,
+            ],
+            'Source Id'
+        );
+    }
 }
