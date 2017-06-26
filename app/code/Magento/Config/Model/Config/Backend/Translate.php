@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Translate extends \Magento\Framework\App\Config\Value
 {
     /**

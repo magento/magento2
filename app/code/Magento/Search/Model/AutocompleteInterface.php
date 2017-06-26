@@ -8,6 +8,9 @@ namespace Magento\Search\Model;
 
 use Magento\Search\Model\Autocomplete\ItemInterface;
 
+/**
+ * @api
+ */
 interface AutocompleteInterface
 {
     /**
