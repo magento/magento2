@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
@@ -19,15 +19,15 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 class StockStatusFilter
 {
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * Defines strategies of how filter should be applied
      */
     const FILTER_JUST_ENTITY = 'general_filter';
     const FILTER_ENTITY_AND_SUB_PRODUCTS = 'filter_with_sub_products';
-
-    /**
-     * @var FrontendResource
-     */
-    private $indexerStockFrontendResource;
 
     /**
      * @var ConditionManager
@@ -45,18 +45,18 @@ class StockStatusFilter
     private $stockRegistry;
 
     /**
-     * @param FrontendResource $indexerStockFrontendResource
+     * @param ResourceConnection $resourceConnection
      * @param ConditionManager $conditionManager
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
-        FrontendResource $indexerStockFrontendResource,
+        ResourceConnection $resourceConnection,
         ConditionManager $conditionManager,
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry
     ) {
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource;
+        $this->resourceConnection = $resourceConnection;
         $this->conditionManager = $conditionManager;
         $this->stockConfiguration = $stockConfiguration;
         $this->stockRegistry = $stockRegistry;
@@ -102,8 +102,9 @@ class StockStatusFilter
      */
     private function addMainStockStatusJoin(Select $select, $stockValues, $mainTableAlias, $showOutOfStockFlag)
     {
+        $catalogInventoryTable = $this->resourceConnection->getTableName('cataloginventory_stock_status');
         $select->joinInner(
-            ['stock_index' => $this->indexerStockFrontendResource->getMainTable()],
+            ['stock_index' => $catalogInventoryTable],
             $this->conditionManager->combineQueries(
                 [
                     sprintf('stock_index.product_id = %s.entity_id', $mainTableAlias),
@@ -143,8 +144,9 @@ class StockStatusFilter
      */
     private function addSubProductsStockStatusJoin(Select $select, $stockValues, $mainTableAlias, $showOutOfStockFlag)
     {
+        $catalogInventoryTable = $this->resourceConnection->getTableName('cataloginventory_stock_status');
         $select->joinInner(
-            ['sub_products_stock_index' => $this->indexerStockFrontendResource->getMainTable()],
+            ['sub_products_stock_index' => $catalogInventoryTable],
             $this->conditionManager->combineQueries(
                 [
                     sprintf('sub_products_stock_index.product_id = %s.source_id', $mainTableAlias),

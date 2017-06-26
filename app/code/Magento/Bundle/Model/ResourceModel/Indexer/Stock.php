@@ -16,9 +16,9 @@ use Magento\Framework\App\ObjectManager;
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
      */
-    private $indexerStockFrontendResource;
+    private $activeTableSwitcher;
 
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Indexer\StockStatusSelectBuilder
@@ -37,11 +37,10 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param string $connectionName
-     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
-     * @param null|StockStatusSelectBuilder $stockStatusSelectBuilder
-     * @param null|BundleOptionStockDataSelectBuilder $bundleOptionStockDataSelectBuilder
+     * @param null $connectionName
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param StockStatusSelectBuilder|null $stockStatusSelectBuilder
+     * @param BundleOptionStockDataSelectBuilder|null $bundleOptionStockDataSelectBuilder
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -49,15 +48,14 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null,
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
         StockStatusSelectBuilder $stockStatusSelectBuilder = null,
         BundleOptionStockDataSelectBuilder $bundleOptionStockDataSelectBuilder = null
     ) {
-        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
 
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class);
 
         $this->stockStatusSelectBuilder = $stockStatusSelectBuilder ?: ObjectManager::getInstance()
             ->get(StockStatusSelectBuilder::class);
@@ -88,8 +86,8 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         $this->_cleanBundleOptionStockData();
         $connection = $this->getConnection();
         $table = $this->getActionType() === Full::ACTION_TYPE
-            ? $this->getMainTable()
-            : $this->indexerStockFrontendResource->getMainTable();
+            ? $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable())
+            : $this->getMainTable();
         $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $select = $this->bundleOptionStockDataSelectBuilder->buildSelect($idxTable);
 

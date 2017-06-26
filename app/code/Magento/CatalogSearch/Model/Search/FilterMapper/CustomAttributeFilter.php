@@ -6,11 +6,11 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\DB\Select;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Catalog\Model\Product;
@@ -21,6 +21,11 @@ use Magento\Catalog\Model\Product;
  */
 class CustomAttributeFilter
 {
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
     /**
      * @var ConditionManager
      */
@@ -37,32 +42,27 @@ class CustomAttributeFilter
     private $storeManager;
 
     /**
-     * @var FrontendResource
-     */
-    private $indexerEavFrontendResource;
-
-    /**
      * @var AliasResolver
      */
     private $aliasResolver;
 
     /**
+     * @param ResourceConnection $resourceConnection
      * @param ConditionManager $conditionManager
      * @param EavConfig $eavConfig
-     * @param FrontendResource $indexerEavFrontendResource
      * @param StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
      */
     public function __construct(
+        ResourceConnection $resourceConnection,
         ConditionManager $conditionManager,
         EavConfig $eavConfig,
-        FrontendResource $indexerEavFrontendResource,
         StoreManagerInterface $storeManager,
         AliasResolver $aliasResolver
     ) {
+        $this->resourceConnection = $resourceConnection;
         $this->conditionManager = $conditionManager;
         $this->eavConfig = $eavConfig;
-        $this->indexerEavFrontendResource = $indexerEavFrontendResource;
         $this->storeManager = $storeManager;
         $this->aliasResolver = $aliasResolver;
     }
@@ -105,7 +105,7 @@ class CustomAttributeFilter
             );
 
             $select->joinInner(
-                [$filterJoinAlias => $this->indexerEavFrontendResource->getMainTable()],
+                [$filterJoinAlias => $this->resourceConnection->getTableName('catalog_product_index_eav')],
                 $this->conditionManager->combineQueries($joinConditions, Select::SQL_AND),
                 []
             );
@@ -171,6 +171,7 @@ class CustomAttributeFilter
      *
      * @param Select $select
      * @return string|null
+     * @throws \Zend_Db_Select_Exception
      */
     private function extractTableAliasFromSelect(Select $select)
     {

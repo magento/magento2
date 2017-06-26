@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Search\BaseSelectStrategy;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 
@@ -32,11 +31,6 @@ class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
     private $storeManager;
 
     /**
-     * @var FrontendResource
-     */
-    private $indexerEavFrontendResource;
-
-    /**
      * @var IndexScopeResolver
      */
     private $scopeResolver;
@@ -44,18 +38,15 @@ class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
     /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
-     * @param FrontendResource $indexerEavFrontendResource
      * @param IndexScopeResolver $scopeResolver
      */
     public function __construct(
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
-        FrontendResource $indexerEavFrontendResource,
         IndexScopeResolver $scopeResolver
     ) {
         $this->resource = $resource;
         $this->storeManager = $storeManager;
-        $this->indexerEavFrontendResource = $indexerEavFrontendResource;
         $this->scopeResolver = $scopeResolver;
     }
 
@@ -73,7 +64,7 @@ class BaseSelectAttributesSearchStrategy implements BaseSelectStrategyInterface
 
         $select->distinct()
             ->from(
-                [$mainTableAlias => $this->indexerEavFrontendResource->getMainTable()],
+                [$mainTableAlias => $this->resource->getTableName('catalog_product_index_eav')],
                 ['entity_id' => 'entity_id']
             )->where(
                 $this->resource->getConnection()->quoteInto(

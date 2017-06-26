@@ -305,9 +305,26 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 $data = [];
             }
         }
+
+        $this->deleteOldRecords($entityIds);
         $this->_updateIndexTable($data);
 
         return $this;
+    }
+
+    /**
+     * Delete records by their ids from index table
+     * Used to clean table before re-indexation
+     *
+     * @param array $ids
+     * @return void
+     * @throws LocalizedException
+     */
+    private function deleteOldRecords(array $ids)
+    {
+        if (count($ids) !== 0) {
+            $this->getConnection()->delete($this->getMainTable(), ['product_id in (?)' => $ids]);
+        }
     }
 
     /**

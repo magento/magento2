@@ -7,8 +7,6 @@
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\Framework\App\ObjectManager;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Strategy which processes exclusions from general rules
@@ -31,16 +29,6 @@ class ExclusionStrategy implements FilterStrategyInterface
     private $storeManager;
 
     /**
-     * @var FrontendResource
-     */
-    private $indexerFrontendResource;
-
-    /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
-     */
-    private $categoryProductIndexerFrontend;
-
-    /**
      * List of fields that can be processed by exclusion strategy
      * @var array
      */
@@ -50,26 +38,15 @@ class ExclusionStrategy implements FilterStrategyInterface
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
-     * @param FrontendResource $indexerFrontendResource
-     * @param FrontendResource $categoryProductIndexerFrontend
-     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        AliasResolver $aliasResolver,
-        FrontendResource $indexerFrontendResource = null,
-        FrontendResource $categoryProductIndexerFrontend = null
+        AliasResolver $aliasResolver
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
         $this->aliasResolver = $aliasResolver;
-        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
-        );
-        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource::class
-        );
     }
 
     /**
@@ -102,7 +79,7 @@ class ExclusionStrategy implements FilterStrategyInterface
         \Magento\Framework\DB\Select $select
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
-        $tableName = $this->indexerFrontendResource->getMainTable();
+        $tableName = $this->resourceConnection->getTableName('catalog_product_index_price');
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
         $select->joinInner(
@@ -131,7 +108,7 @@ class ExclusionStrategy implements FilterStrategyInterface
         \Magento\Framework\DB\Select $select
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
-        $tableName = $this->categoryProductIndexerFrontend->getMainTable();
+        $tableName = $this->resourceConnection->getTableName('catalog_category_product_index');;
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
         $select->joinInner(

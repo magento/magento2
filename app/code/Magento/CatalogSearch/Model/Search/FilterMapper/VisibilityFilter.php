@@ -6,12 +6,12 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Eav\Model\Config as EavConfig;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Class VisibilityFilter
@@ -24,6 +24,11 @@ class VisibilityFilter
      */
     const FILTER_BY_JOIN = 'join_filter';
     const FILTER_BY_WHERE = 'where_filter';
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
 
     /**
      * @var ConditionManager
@@ -41,26 +46,21 @@ class VisibilityFilter
     private $eavConfig;
 
     /**
-     * @var FrontendResource
-     */
-    private $indexerEavFrontendResource;
-
-    /**
+     * @param ResourceConnection $resourceConnection
      * @param ConditionManager $conditionManager
      * @param StoreManagerInterface $storeManager
      * @param EavConfig $eavConfig
-     * @param FrontendResource $indexerEavFrontendResource
      */
     public function __construct(
+        ResourceConnection $resourceConnection,
         ConditionManager $conditionManager,
         StoreManagerInterface $storeManager,
-        EavConfig $eavConfig,
-        FrontendResource $indexerEavFrontendResource
+        EavConfig $eavConfig
     ) {
+        $this->resourceConnection = $resourceConnection;
         $this->conditionManager = $conditionManager;
         $this->storeManager = $storeManager;
         $this->eavConfig = $eavConfig;
-        $this->indexerEavFrontendResource = $indexerEavFrontendResource;
     }
 
     /**
@@ -102,7 +102,7 @@ class VisibilityFilter
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
         $select->joinInner(
-            ['visibility_filter' => $this->indexerEavFrontendResource->getMainTable()],
+            ['visibility_filter' => $this->resourceConnection->getTableName('catalog_product_index_eav')],
             $this->conditionManager->combineQueries(
                 [
                     sprintf('%s.entity_id = visibility_filter.entity_id', $mainTableAlias),
