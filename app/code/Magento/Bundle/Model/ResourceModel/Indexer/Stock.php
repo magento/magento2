@@ -40,7 +40,8 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
      * @param string $connectionName
      * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
      * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
-     * @param null|\Magento\Bundle\Model\ResourceModel\Indexer\StockStatusSelectBuilder $stockStatusSelectBuilder
+     * @param null|StockStatusSelectBuilder $stockStatusSelectBuilder
+     * @param null|BundleOptionStockDataSelectBuilder $bundleOptionStockDataSelectBuilder
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,

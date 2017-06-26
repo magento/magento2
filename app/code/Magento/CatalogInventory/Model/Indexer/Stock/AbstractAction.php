@@ -230,29 +230,24 @@ abstract class AbstractAction
 
     /**
      * Delete records by their ids from index table
-     * Is used to clean table before re-indexation
+     * Used to clean table before re-indexation
      *
      * @param array $ids
-     *
-     * @return bool
+     * @return void
      */
     protected function _deleteOldRecords(array $ids)
     {
-        if (count($ids) === 0) {
-            return false;
+        if (count($ids) !== 0) {
+            $this->_getConnection()->delete(
+                $this->indexerStockFrontendResource->getMainTable(),
+                ['product_id in (?)' => $ids]
+            );
         }
-
-        $result = $this->_getConnection()->delete(
-            $this->indexerStockFrontendResource->getMainTable(),
-            ['product_id in (?)' => $ids]
-        );
-
-        return (bool) $result;
     }
 
     /**
      * Delete all records from index table
-     * Is used to clean table before re-indexation
+     * Used to clean table before re-indexation
      *
      * @return void
      */

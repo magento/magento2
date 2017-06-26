@@ -31,6 +31,7 @@ class StockStatusSelectBuilder
     /**
      * @param Select $select
      * @return Select
+     * @throws \Exception
      */
     public function buildSelect(Select $select)
     {
@@ -39,7 +40,7 @@ class StockStatusSelectBuilder
         $linkField = $metadata->getLinkField();
 
         $select->reset(
-            \Magento\Framework\DB\Select::COLUMNS
+            Select::COLUMNS
         )->columns(
             ['e.entity_id', 'cis.website_id', 'cis.stock_id']
         )->joinLeft(

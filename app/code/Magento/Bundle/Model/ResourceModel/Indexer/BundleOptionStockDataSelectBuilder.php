@@ -57,7 +57,7 @@ class BundleOptionStockDataSelectBuilder
             []
         )->group(
             ['product.entity_id', 'cis.website_id', 'cis.stock_id', 'bo.option_id']
-        )->columns(['option_id' => 'bo.option_id','status' => new \Zend_Db_Expr('MAX('. $statusExpression. ')')]);
+        )->columns(['option_id' => 'bo.option_id']);
 
         return $select;
     }

@@ -84,7 +84,7 @@ class CacheCleaner
         $productStatusesBefore = $this->getProductStockStatuses($productIds);
         $reindex();
         $productStatusesAfter = $this->getProductStockStatuses($productIds);
-        $productIds = $this->getProductIds($productStatusesBefore, $productStatusesAfter);
+        $productIds = $this->getProductIdsForCacheClean($productStatusesBefore, $productStatusesAfter);
         if ($productIds) {
             $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
             $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
@@ -113,11 +113,13 @@ class CacheCleaner
     }
 
     /**
+     * Return list of product ids that need to be flushed from cache
+     *
      * @param array $productStatusesBefore
      * @param array $productStatusesAfter
      * @return array
      */
-    private function getProductIds(array $productStatusesBefore, array $productStatusesAfter)
+    private function getProductIdsForCacheClean(array $productStatusesBefore, array $productStatusesAfter)
     {
         $disabledProductsIds = array_diff(array_keys($productStatusesBefore), array_keys($productStatusesAfter));
         $enabledProductsIds = array_diff(array_keys($productStatusesAfter), array_keys($productStatusesBefore));
