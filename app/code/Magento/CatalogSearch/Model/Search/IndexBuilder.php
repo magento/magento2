@@ -70,11 +70,6 @@ class IndexBuilder implements IndexBuilderInterface
     private $stockConfiguration;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
-     */
-    private $indexerStockFrontendResource;
-
-    /**
      * @var FullTextSearchCheck
      */
     private $fullTextSearchCheck;
@@ -87,7 +82,6 @@ class IndexBuilder implements IndexBuilderInterface
      * @param IndexScopeResolver $scopeResolver
      * @param TableMapper $tableMapper
      * @param ScopeResolverInterface $dimensionScopeResolver
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      * @param FullTextSearchCheck $fullTextSearchCheck
      */
     public function __construct(
@@ -98,7 +92,6 @@ class IndexBuilder implements IndexBuilderInterface
         IndexScopeResolver $scopeResolver,
         TableMapper $tableMapper,
         ScopeResolverInterface $dimensionScopeResolver,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null,
         FullTextSearchCheck $fullTextSearchCheck = null
     ) {
         $this->resource = $resource;
@@ -108,8 +101,6 @@ class IndexBuilder implements IndexBuilderInterface
         $this->scopeResolver = $scopeResolver;
         $this->tableMapper = $tableMapper;
         $this->dimensionScopeResolver = $dimensionScopeResolver;
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
         $this->fullTextSearchCheck = $fullTextSearchCheck ?: ObjectManager::getInstance()
             ->get(FullTextSearchCheck::class);
     }
@@ -150,7 +141,7 @@ class IndexBuilder implements IndexBuilderInterface
         );
         if ($isShowOutOfStock === false) {
             $select->joinInner(
-                ['stock_index' => $this->indexerStockFrontendResource->getMainTable()],
+                ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                 'search_index.entity_id = stock_index.product_id'
                 . $this->resource->getConnection()->quoteInto(
                     ' AND stock_index.website_id = ?',

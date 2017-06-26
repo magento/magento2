@@ -2067,6 +2067,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     private function isServiceAvailable(\SimpleXMLElement $service)
     {
+        // Allow services which which don't provide any ExtraServices
+        if(empty($service->ExtraServices->children()->count())) {
+            return true;
+        }
+
         foreach ($service->ExtraServices->children() as $child) {
             if (filter_var($child->Available, FILTER_VALIDATE_BOOLEAN)) {
                 return true;

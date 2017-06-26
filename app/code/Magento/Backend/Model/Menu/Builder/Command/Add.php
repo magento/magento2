@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Menu\Builder\Command;
 
 /**
  * Builder command to add menu items
+ * @api
  */
 class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
 {
