@@ -4,20 +4,22 @@
  * See COPYING.txt for license details.
  */
 -->
-<span class="price-container"
-      css="getAdjustmentCssClasses($row())">
-    <span if="label"
-          class="price-label"
-          text="label"/>
+<if args="getMinimalPriceAmount($row()) < getMaximumPriceAmount($row())">
+    <span class="price-container"
+          css="getAdjustmentCssClasses($row())">
+        <span if="label"
+              class="price-label"
+              text="label"/>
 
-    <span class="price-wrapper"
-          css="priceWrapperCssClasses"
-          attr="priceWrapperAttr"
-          data-price-amount=""
-          data-price-type=""
-          html="getMinimalPrice($row())"/>
+        <span class="price-wrapper"
+              css="priceWrapperCssClasses"
+              attr="priceWrapperAttr"
+              data-price-amount=""
+              data-price-type=""
+              html="getMinimalPrice($row())"/>
 
-    <each args="data: getAdjustments(), as: '$adj'">
-            <render args="$adj.getBody()"/>
-    </each>
-</span>
+        <each args="data: getAdjustments(), as: '$adj'">
+                <render args="$adj.getBody()"/>
+        </each>
+    </span>
+</if>

@@ -19,10 +19,18 @@
                                         <item name="label" xsi:type="string" translate="true">From</item>
                                         <item name="component" xsi:type="string">Magento_Catalog/js/product/list/columns/final-price</item>
                                         <item name="bodyTmpl" xsi:type="string">Magento_Bundle/product/price/minimal_price</item>
+                                        <item name="sortOrder" xsi:type="number">1</item>
+                                    </item>
+                                    <item name="special_price" xsi:type="array">
+                                        <item name="label" xsi:type="string" translate="true">Special Price</item>
+                                        <item name="component" xsi:type="string">Magento_Catalog/js/product/list/columns/final-price</item>
+                                        <item name="bodyTmpl" xsi:type="string">Magento_Catalog/product/price/special_price</item>
+                                        <item name="sortOrder" xsi:type="number">2</item>
                                     </item>
                                     <item name="max_price" xsi:type="array">
                                         <item name="label" xsi:type="string" translate="true">To</item>
                                         <item name="showMaximumPrice" xsi:type="string">true</item>
+                                        <item name="sortOrder" xsi:type="number">3</item>
                                     </item>
                                 </item>
                             </item>

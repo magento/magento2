@@ -238,7 +238,7 @@ define([
                 expect(obj.getMinimalRegularPriceAmount(row)).toBe(price);
             });
         });
-        describe('"getMaximunPriceAmount" method', function () {
+        describe('"getMaximumPriceAmount" method', function () {
             it('Check returned value', function () {
                 var price = 100,
                     row = {
@@ -247,10 +247,10 @@ define([
                         }
                     };
 
-                expect(obj.getMaximunPriceAmount(row)).toBe(price);
+                expect(obj.getMaximumPriceAmount(row)).toBe(price);
             });
         });
-        describe('"getMaximunRegularPriceAmount" method', function () {
+        describe('"getMaximumRegularPriceAmount" method', function () {
             it('Check returned value', function () {
                 var price = 100,
                     row = {
@@ -259,7 +259,7 @@ define([
                         }
                     };
 
-                expect(obj.getMaximunRegularPriceAmount(row)).toBe(price);
+                expect(obj.getMaximumRegularPriceAmount(row)).toBe(price);
             });
         });
         describe('"showMinRegularPrice" method', function () {
@@ -289,27 +289,27 @@ define([
             });
         });
         describe('"showMaxRegularPrice" method', function () {
-            it('Check call "getMaximunPriceAmount" and "getMaximunRegularPriceAmount" methods', function () {
+            it('Check call "getMaximumPriceAmount" and "getMaximumRegularPriceAmount" methods', function () {
                 var row = {};
 
-                obj.getMaximunPriceAmount = jasmine.createSpy();
-                obj.getMaximunRegularPriceAmount = jasmine.createSpy();
+                obj.getMaximumPriceAmount = jasmine.createSpy();
+                obj.getMaximumRegularPriceAmount = jasmine.createSpy();
                 obj.showMaxRegularPrice(row);
 
-                expect(obj.getMaximunPriceAmount).toHaveBeenCalledWith(row);
-                expect(obj.getMaximunRegularPriceAmount).toHaveBeenCalledWith(row);
+                expect(obj.getMaximumPriceAmount).toHaveBeenCalledWith(row);
+                expect(obj.getMaximumRegularPriceAmount).toHaveBeenCalledWith(row);
             });
 
             it('Check returned value when maximal price amount is less than regular price amount', function () {
-                obj.getMaximunPriceAmount = jasmine.createSpy().and.returnValue(1);
-                obj.getMaximunRegularPriceAmount = jasmine.createSpy().and.returnValue(2);
+                obj.getMaximumPriceAmount = jasmine.createSpy().and.returnValue(1);
+                obj.getMaximumRegularPriceAmount = jasmine.createSpy().and.returnValue(2);
 
                 expect(obj.showMaxRegularPrice()).toBe(true);
             });
 
             it('Check returned value when maximal price amount is more than regular price amount', function () {
-                obj.getMaximunPriceAmount = jasmine.createSpy().and.returnValue(2);
-                obj.getMaximunRegularPriceAmount = jasmine.createSpy().and.returnValue(1);
+                obj.getMaximumPriceAmount = jasmine.createSpy().and.returnValue(2);
+                obj.getMaximumRegularPriceAmount = jasmine.createSpy().and.returnValue(1);
 
                 expect(obj.showMaxRegularPrice()).toBe(false);
             });

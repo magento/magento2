@@ -157,7 +157,7 @@ define([
          * @param {Object} row
          * @return {Number} maximum price amount
          */
-        getMaximunPriceAmount: function (row) {
+        getMaximumPriceAmount: function (row) {
             return row['price_info']['max_price'];
         },
 
@@ -167,7 +167,7 @@ define([
          * @param {Object} row
          * @return {Number} maximum regular price amount
          */
-        getMaximunRegularPriceAmount: function (row) {
+        getMaximumRegularPriceAmount: function (row) {
             return row['price_info']['max_regular_price'];
         },
 
@@ -188,7 +188,7 @@ define([
          * @return {Boolean}
          */
         showMaxRegularPrice: function (row) {
-            return this.getMaximunPriceAmount(row) < this.getMaximunRegularPriceAmount(row);
+            return this.getMaximumPriceAmount(row) < this.getMaximumRegularPriceAmount(row);
         },
 
         /**
