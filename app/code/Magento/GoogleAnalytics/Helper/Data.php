@@ -11,6 +11,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * GoogleAnalytics data helper
  *
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

@@ -10,6 +10,7 @@ use \Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Form fieldset renderer
+ * @api
  */
 class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface
 {
