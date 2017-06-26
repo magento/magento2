@@ -24,7 +24,7 @@ class BundleOptionStockDataSelectBuilder
     }
 
     /**
-     * @param $idxTable
+     * @param string $idxTable
      * @return Select
      */
     public function buildSelect($idxTable)

@@ -108,7 +108,7 @@ class ExclusionStrategy implements FilterStrategyInterface
         \Magento\Framework\DB\Select $select
     ) {
         $alias = $this->aliasResolver->getAlias($filter);
-        $tableName = $this->resourceConnection->getTableName('catalog_category_product_index');;
+        $tableName = $this->resourceConnection->getTableName('catalog_category_product_index');
         $mainTableAlias = $this->extractTableAliasFromSelect($select);
 
         $select->joinInner(

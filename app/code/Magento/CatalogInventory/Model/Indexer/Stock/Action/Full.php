@@ -169,12 +169,13 @@ class Full extends AbstractAction
      * Delete all records from index table
      * Used to clean table before re-indexation
      *
+     * @param array $indexers
      * @return void
      */
     private function cleanIndexersTables(array $indexers)
     {
         $tables = array_map(
-            function(StockInterface $indexer) {
+            function (StockInterface $indexer) {
                 return $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
             },
             $indexers

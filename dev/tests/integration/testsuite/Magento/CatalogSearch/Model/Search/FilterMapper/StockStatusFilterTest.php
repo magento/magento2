@@ -170,7 +170,7 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
             ['some_index' => 'some_table'],
             ['entity_id' => 'entity_id']
         )->joinInner(
-            ['stock_index' => $this->resource->getTableName('catalog_product_index_eav')],
+            ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
             $this->conditionManager->combineQueries(
                 [
                     'stock_index.product_id = some_index.entity_id',
@@ -208,7 +208,7 @@ class StockStatusFilterTest extends \PHPUnit_Framework_TestCase
     {
         $select = $this->getExpectedSelectForGeneralFilter($withOutOfStock);
         $select->joinInner(
-            ['sub_products_stock_index' => $this->resource->getTableName('catalog_product_index_eav')],
+            ['sub_products_stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
             $this->conditionManager->combineQueries(
                 [
                     'sub_products_stock_index.product_id = some_index.source_id',
