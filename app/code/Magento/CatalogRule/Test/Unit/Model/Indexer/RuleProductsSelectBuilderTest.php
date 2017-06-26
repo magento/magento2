@@ -14,6 +14,9 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleProductsSelectBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
