@@ -55,7 +55,6 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ['DELETE'],
             ['CREATE'],
             ['DROP'],
-            ['REFERENCES'],
             ['INDEX'],
             ['ALTER'],
             ['CREATE TEMPORARY TABLES'],
@@ -65,7 +64,6 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ['SHOW VIEW'],
             ['CREATE ROUTINE'],
             ['ALTER ROUTINE'],
-            ['EVENT'],
             ['TRIGGER'],
         ];
         $accessibleDbs = ['some_db', 'name', 'another_db'];
