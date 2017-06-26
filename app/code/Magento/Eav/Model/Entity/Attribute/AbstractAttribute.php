@@ -661,7 +661,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function isAllowedEmptyTextValue($value)
     {
-        return $this->isInEmptyStringTypes() && $value === self::EMPTY_STRING;
+        return $this->isInEmptyStringTypes() && ($value === self::EMPTY_STRING || $value === null);
     }
 
     /**

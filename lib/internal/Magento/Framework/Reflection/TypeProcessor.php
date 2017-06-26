@@ -505,15 +505,13 @@ class TypeProcessor
         } elseif ($isArrayType && $value === null) {
             return null;
         } elseif (!$isArrayType && !is_array($value)) {
-            if ($value !== null && $value !== '' && !$this->isTypeAny($type) && !$this->setType($value, $type)) {
+            if ($value !== null && !$this->isTypeAny($type) && !$this->setType($value, $type)) {
                 throw new SerializationException(
                     new Phrase(
                         'Invalid type for value: "%value". Expected Type: "%type".',
                         ['value' => (string)$value, 'type' => $type]
                     )
                 );
-            } elseif ($value === null) {
-                $value = '';
             }
         } elseif (!$this->isTypeAny($type)) {
             throw new SerializationException(
