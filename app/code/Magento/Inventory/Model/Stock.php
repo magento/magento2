@@ -15,10 +15,6 @@ use Magento\InventoryApi\Api\Data\StockInterface;
  */
 class Stock extends AbstractExtensibleModel implements StockInterface
 {
-    const STOCK_ID = 'stock_id';
-    const NAME = 'name';
-
-
     /**
      * @inheritdoc
      */
