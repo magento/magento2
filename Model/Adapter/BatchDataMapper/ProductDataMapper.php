@@ -238,8 +238,8 @@ class ProductDataMapper implements BatchDataMapperInterface
      * Process attributes options for search by attribute text values.
      *
      * @param array $attributeData
-     * @param string $value
      * @param array $productAttributes
+     * @param string $value
      * @return array
      */
     private function processAttributeOptions(
@@ -249,45 +249,22 @@ class ProductDataMapper implements BatchDataMapperInterface
     ) {
         $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
         if ($attributeData[AttributeInterface::FRONTEND_INPUT] === 'multiselect') {
-            list($attributeData, $productAttributes) = $this->processMultiselectOptions(
-                $value,
-                $attributeData,
-                $productAttributes
-            );
+            $multiselectValues = explode(',', $value);
+            $multiselectOptionValues = '';
+            foreach ($multiselectValues as $multiselectValue) {
+                if (isset($attributeData[AttributeInterface::OPTIONS][$multiselectValue])) {
+                    $multiselectOptionValues
+                        .= $attributeData[AttributeInterface::OPTIONS][$multiselectValue] . ' ';
+                }
+            }
+            if ($multiselectOptionValues) {
+                $productAttributes[$attributeCode . '_value'] = rtrim($multiselectOptionValues);
+            }
         } else {
             if (isset($attributeData[AttributeInterface::OPTIONS][$value])) {
                 $productAttributes[$attributeCode . '_value'] =
                     $attributeData[AttributeInterface::OPTIONS][$value];
             }
-        }
-
-        return [$attributeData, $productAttributes];
-    }
-
-    /**
-     * Process multiselect options for search by attribute text values.
-     *
-     * @param string $value
-     * @param array $attributeData
-     * @param array $productAttributes
-     * @return array
-     */
-    private function processMultiselectOptions(
-        string $value,
-        array $attributeData,
-        array $productAttributes
-    ) {
-        $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
-        $multiselectValues = explode(',', $value);
-        $multiselectOptionValues = '';
-        foreach ($multiselectValues as $multiselectValue) {
-            if (isset($attributeData[AttributeInterface::OPTIONS][$multiselectValue])) {
-                $multiselectOptionValues
-                    .= $attributeData[AttributeInterface::OPTIONS][$multiselectValue] . ' ';
-            }
-        }
-        if ($multiselectOptionValues) {
-            $productAttributes[$attributeCode . '_value'] = rtrim($multiselectOptionValues);
         }
 
         return [$attributeData, $productAttributes];
