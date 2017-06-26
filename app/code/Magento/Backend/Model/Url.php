@@ -155,7 +155,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     }
 
     /**
-     * Retrieve is secure mode for ULR logic
+     * Retrieve is secure mode for URL logic
      *
      * @return bool
      */
