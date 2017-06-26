@@ -69,7 +69,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $appFactory = $this->getMockBuilder(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $application = $this->getMock(\Magento\Composer\MagentoComposerApplication::class, [], [], '', false);
+        $application = $this->getMock('Magento\Composer\MagentoComposerApplication', [], [], '', false);
         $application->expects($this->any())
             ->method('runComposerCommand')
             ->willReturnMap([
