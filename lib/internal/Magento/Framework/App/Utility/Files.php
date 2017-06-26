@@ -1391,7 +1391,8 @@ class Files
             $fileContent = file_get_contents($fullPath);
             if (strpos($fileContent, 'namespace ' . $namespace) !== false
                 && (strpos($fileContent, 'class ' . $className) !== false
-                    || strpos($fileContent, 'interface ' . $className) !== false)
+                    || strpos($fileContent, 'interface ' . $className) !== false
+                    || strpos($fileContent, 'trait ' . $className) !== false)
             ) {
                 return true;
             }

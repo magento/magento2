@@ -18,19 +18,23 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $idxFrontendResourceMock;
+    private $resourceMock;
 
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->idxFrontendResourceMock =
-            $this->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+
+        $contextMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->model = $objectManagerHelper->getObject(
             \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price::class,
             [
-                'indexerFrontendResource' => $this->idxFrontendResourceMock
+                'context' => $contextMock
             ]
         );
     }
@@ -38,7 +42,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testGetMainTable()
     {
         $expectedTableName = 'expectedTableName';
-        $this->idxFrontendResourceMock->expects($this->once())->method('getMainTable')->willReturn($expectedTableName);
+        $this->resourceMock->expects($this->once())->method('getTableName')->willReturn($expectedTableName);
         $this->assertEquals($expectedTableName, $this->model->getMainTable());
     }
 }

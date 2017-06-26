@@ -14,7 +14,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Interface StockItemCriteriaMapper
@@ -35,18 +34,12 @@ class StockItemCriteriaMapper extends GenericMapper
     private $storeManager;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
-     */
-    private $indexerStockFrontendResource;
-
-    /**
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ObjectFactory $objectFactory
      * @param StoreManagerInterface $storeManager
      * @param MapperFactory $mapperFactory
      * @param Select $select
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      */
     public function __construct(
         Logger $logger,
@@ -54,12 +47,9 @@ class StockItemCriteriaMapper extends GenericMapper
         ObjectFactory $objectFactory,
         MapperFactory $mapperFactory,
         StoreManagerInterface $storeManager,
-        Select $select = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+        Select $select = null
     ) {
         $this->storeManager = $storeManager;
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
         parent::__construct($logger, $fetchStrategy, $objectFactory, $mapperFactory, $select);
     }
 
@@ -136,7 +126,7 @@ class StockItemCriteriaMapper extends GenericMapper
     {
         $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
         $this->getSelect()->joinLeft(
-            ['status_table' => $this->indexerStockFrontendResource->getMainTable()],
+            ['status_table' => $this->getTable('cataloginventory_stock_status')],
             'main_table.product_id=status_table.product_id' .
             ' AND main_table.stock_id=status_table.stock_id' .
             $this->connection->quoteInto(

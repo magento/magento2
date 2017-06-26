@@ -18,11 +18,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $attributeMock;
 
     protected function setUp()
@@ -36,25 +31,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $eavConfig->expects($this->once())->method('getAttribute')->willReturn($this->attributeMock);
+        $eavConfig->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
         $ruleMock = $this->getMock(\Magento\SalesRule\Model\Rule::class, [], [], '', false);
         $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
-        $storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $this->resourceMock = $this->getMock(
-            \Magento\Indexer\Model\ResourceModel\FrontendResource::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         $productResource = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
-        $productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
-        $productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
+        $productResource->expects($this->any())->method('loadAllAttributes')->willReturnSelf();
+        $productResource->expects($this->any())->method('getAttributesByCode')->willReturn([]);
         $this->model = $objectManagerHelper->getObject(
             \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
             [
-                'frontendResource' => $this->resourceMock,
                 'config' => $eavConfig,
                 'storeManager' => $storeManager,
                 'productResource' => $productResource,
@@ -84,8 +71,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('getBackendType')->willReturn('multiselect');
-        // verify that frontend indexer table is used
-        $this->resourceMock->expects($this->once())->method('getMainTable')->willReturn('catalog_product_index_eav');
         $this->model->addToCollection($collectionMock);
+    }
+
+    public function testGetMappedSqlFieldSku()
+    {
+        $this->model->setAttribute('sku');
+        $this->assertEquals('e.sku', $this->model->getMappedSqlField());
     }
 }

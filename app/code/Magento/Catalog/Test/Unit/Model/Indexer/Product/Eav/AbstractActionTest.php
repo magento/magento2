@@ -22,11 +22,6 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_eavSourceFactoryMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $frontendResourceMock;
-
     protected function setUp()
     {
         $this->_eavDecimalFactoryMock = $this->getMock(
@@ -43,13 +38,9 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->frontendResourceMock =
-            $this->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction::class,
-            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock, ['default' => $this->frontendResourceMock]]
+            [$this->_eavDecimalFactoryMock, $this->_eavSourceFactoryMock, []]
         );
     }
 
@@ -150,10 +141,6 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
 
         $eavSource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $eavDecimal->expects($this->once())->method('getConnection')->willReturn($connectionMock);
-        $this->frontendResourceMock
-            ->expects($this->any())
-            ->method('getMainTable')
-            ->willReturn('indexer_table');
         $eavDecimal->expects($this->once())
             ->method('reindexEntities')
             ->with($ids);
