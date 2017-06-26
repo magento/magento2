@@ -80,11 +80,6 @@ class Preprocessor implements PreprocessorInterface
     private $customerSession;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\StateFactory
-     */
-    private $indexerStateFactory;
-
-    /**
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
@@ -93,7 +88,6 @@ class Preprocessor implements PreprocessorInterface
      * @param string $attributePrefix
      * @param ScopeConfigInterface|null $scopeConfig
      * @param AliasResolver|null $aliasResolver
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      * @param Session $customerSession
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -108,7 +102,6 @@ class Preprocessor implements PreprocessorInterface
         $attributePrefix,
         ScopeConfigInterface $scopeConfig = null,
         AliasResolver $aliasResolver = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
         Session $customerSession = null
     ) {
         $this->conditionManager = $conditionManager;
@@ -131,8 +124,6 @@ class Preprocessor implements PreprocessorInterface
         $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
         $this->customerSession = $customerSession;
-        $this->indexerStateFactory = $stateFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
     }
 
     /**
@@ -226,10 +217,7 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processRangeNumeric(FilterInterface $filter, $query, $attribute)
     {
-        $indexerSuffix = $this->indexerStateFactory->create()->loadByIndexer(
-            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID
-        )->getTableSuffix();
-        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' . $indexerSuffix : '' . $indexerSuffix;
+        $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
         $entityField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();

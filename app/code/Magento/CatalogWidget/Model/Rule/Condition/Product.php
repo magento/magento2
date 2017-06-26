@@ -9,8 +9,6 @@
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
-use Magento\Framework\App\ObjectManager;
-
 /**
  * Class Product
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -35,11 +33,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $storeManager;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
-     */
-    private $frontendResource;
-
-    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
@@ -49,7 +42,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -63,12 +55,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager;
-        $this->frontendResource = $frontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource::class);
         parent::__construct(
             $context,
             $backendData,
@@ -168,7 +157,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             default:
                 $alias = 'at_' . md5($this->getId()) . $attribute->getAttributeCode();
                 $collection->getSelect()->join(
-                    [$alias => $this->frontendResource->getMainTable()],
+                    [$alias => $collection->getTable('catalog_product_index_eav')],
                     "($alias.entity_id = e.entity_id) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
                     []
