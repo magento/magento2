@@ -77,6 +77,7 @@ define([
         getPrices: function (row) {
             var elems = this.elems() ? this.elems() : ko.getObservable(this, 'elems'),
                 result;
+
             //we cant take type of product from row
             this.initPrices(row);
             result = _.filter(elems, function (elem) {

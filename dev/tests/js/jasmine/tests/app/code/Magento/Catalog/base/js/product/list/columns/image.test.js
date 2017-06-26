@@ -73,12 +73,6 @@ define([
                 expect(obj.getImage(row.images)).toBe(row.images[1]);
             });
         });
-        describe('"initializeColumnConfig" method', function () {
-            it('Check "imageCode" property', function () {
-                obj.initializeColumnConfig();
-                expect(obj.imageCode).toBe('code');
-            });
-        });
         describe('"getImageUrl" method', function () {
             it('Check call "getImage" method', function () {
                 obj.getImage = jasmine.createSpy().and.returnValue(image);

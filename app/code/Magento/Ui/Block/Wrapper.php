@@ -58,6 +58,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
      *
      * @param UiComponentInterface $uiComponent
      * @param array $data
+     * @return void
      */
     private function addDataToChildComponents(UiComponentInterface $uiComponent, array $data)
     {
