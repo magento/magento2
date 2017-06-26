@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-require 'order.php';
+require __DIR__ . '/order.php';
 /** @var \Magento\Catalog\Model\Product $product */
 /** @var \Magento\Sales\Model\Order $order */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
