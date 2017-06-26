@@ -106,7 +106,7 @@
                 </editor>
             </settings>
         </column>
-        <column name="contact_name" sortOrder="40">
+        <!--<column name="contact_name" sortOrder="40">
             <settings>
                 <filter>text</filter>
                 <editor>
@@ -267,7 +267,7 @@
                 </editor>
                 <label translate="true">Priority</label>
             </settings>
-        </column>
+        </column>-->
         <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
