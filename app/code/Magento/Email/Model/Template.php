@@ -386,7 +386,8 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function getSubject()
     {
-        return $this->getProcessedTemplateSubject($this->_getVars());
+        $subject = $this->getProcessedTemplateSubject($this->_getVars());
+        return htmlspecialchars_decode((string)$subject, ENT_QUOTES);
     }
 
     /**
