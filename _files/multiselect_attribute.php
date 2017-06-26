@@ -47,7 +47,7 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setName(
-    'Simple Product With Multiselect Atrribute '
+    'Simple Product With Multiselect Atrribute'
 )->setSku(
     'simple_product_with_multiselect_attribute'
 )->setPrice(
