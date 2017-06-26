@@ -285,26 +285,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Search\BaseSelectStrategy\BaseSelectAttributesSearchStrategy">
-        <arguments>
-            <argument name="indexerEavFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter">
-        <arguments>
-            <argument name="indexerEavFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\CustomAttributeFilter">
-        <arguments>
-            <argument name="indexerEavFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite">
         <arguments>
             <argument name="queryCheckers" xsi:type="array">
