@@ -15,7 +15,7 @@ interface StockInterface extends ExtensibleDataInterface
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const STOCK_ID = 'source_id';
+    const STOCK_ID = 'stock_id';
     const NAME = 'name';
     /**#@-*/
 
