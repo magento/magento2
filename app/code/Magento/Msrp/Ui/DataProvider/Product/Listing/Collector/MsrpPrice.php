@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory;
@@ -49,6 +50,10 @@ class MsrpPrice implements ProductRenderCollectorInterface
      * @var MsrpPriceInfoInterfaceFactory
      */
     private $msrpPriceInfoFactory;
+    /**
+     * @var CalculatorInterface
+     */
+    private $adjustmentCalculator;
 
     /**
      * @param PriceCurrencyInterface $priceCurrency
@@ -56,19 +61,22 @@ class MsrpPrice implements ProductRenderCollectorInterface
      * @param Config $config
      * @param PriceInfoExtensionFactory $priceInfoExtensionFactory
      * @param MsrpPriceInfoInterfaceFactory $msrpPriceInfoFactory
+     * @param CalculatorInterface $adjustmentCalculator
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
         Data $msrpHelper,
         Config $config,
         PriceInfoExtensionFactory $priceInfoExtensionFactory,
-        MsrpPriceInfoInterfaceFactory $msrpPriceInfoFactory
+        MsrpPriceInfoInterfaceFactory $msrpPriceInfoFactory,
+        CalculatorInterface $adjustmentCalculator
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->msrpHelper = $msrpHelper;
         $this->config = $config;
         $this->priceInfoExtensionFactory = $priceInfoExtensionFactory;
         $this->msrpPriceInfoFactory = $msrpPriceInfoFactory;
+        $this->adjustmentCalculator = $adjustmentCalculator;
     }
 
     /**
@@ -94,7 +102,7 @@ class MsrpPrice implements ProductRenderCollectorInterface
         );
         $msrpPriceInfo->setMsrpPrice(
             $this->priceCurrency->format(
-                $product->getMsrp(),
+                $this->adjustmentCalculator->getAmount($product->getMsrp(), $product)->getValue(),
                 true,
                 PriceCurrencyInterface::DEFAULT_PRECISION,
                 $productRender->getStoreId(),

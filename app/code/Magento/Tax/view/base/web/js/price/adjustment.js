@@ -19,6 +19,9 @@ define([
             exclTax: 1,
             modules: {
                 price: '${ $.parentName }'
+            },
+            listens: {
+                price: 'initializePriceAttributes'
             }
         },
 
@@ -27,7 +30,7 @@ define([
          */
         initialize: function () {
             this._super()
-                .setPriceAttributes();
+                .initializePriceAttributes();
 
             return this;
         },
@@ -37,8 +40,8 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        setPriceAttributes: function () {
-            if (this.displayBothPrices) {
+        initializePriceAttributes: function () {
+            if (this.displayBothPrices && this.price()) {
                 this.price().priceWrapperCssClasses = this.taxPriceCssClass;
                 this.price().priceWrapperAttr = {
                     'data-label': $t('Incl. Tax')
