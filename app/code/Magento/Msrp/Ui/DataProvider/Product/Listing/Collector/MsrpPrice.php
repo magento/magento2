@@ -50,6 +50,7 @@ class MsrpPrice implements ProductRenderCollectorInterface
      * @var MsrpPriceInfoInterfaceFactory
      */
     private $msrpPriceInfoFactory;
+
     /**
      * @var CalculatorInterface
      */
