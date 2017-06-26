@@ -10,8 +10,6 @@
  */
 namespace Magento\Test\Legacy;
 
-use Psr\Log\LoggerInterface;
-
 class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
 {
     /**
