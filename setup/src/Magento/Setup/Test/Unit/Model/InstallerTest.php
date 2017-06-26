@@ -8,12 +8,20 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\ObjectManager\ContextInterface;
+use Magento\Framework\Setup\SetupInterface;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Setup\Model\Installer\Event\AfterDataWasInstalled;
+use Magento\Setup\Model\Installer\Event\AfterSchemaWasInstalled;
+use Magento\Setup\Model\Installer\Event\BeforeModuleIsProcessed;
+use Magento\Setup\Module\DataSetup;
+use Magento\Setup\Module\Setup;
 use Magento\Setup\Validator\DbValidator;
+use Zend\EventManager\EventManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -137,6 +145,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $phpReadinessCheck;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|EventManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -188,6 +201,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->componentRegistrar =
             $this->getMock(\Magento\Framework\Component\ComponentRegistrar::class, [], [], '', false);
         $this->phpReadinessCheck = $this->getMock(\Magento\Setup\Model\PhpReadinessCheck::class, [], [], '', false);
+        $this->eventManager = $this->getMock(EventManagerInterface::class);
         $this->object = $this->createObject();
     }
 
@@ -231,10 +245,15 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->dataSetupFactory,
             $this->sampleDataState,
             $this->componentRegistrar,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->eventManager
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     public function testInstall()
     {
         $request = [
@@ -305,6 +324,47 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->method('getMissingWritableDirectoriesForDbUpgrade')
             ->willReturn([]);
         $this->setupLoggerExpectsForInstall();
+
+        // expectations for triggered events
+        $this->callback(function ($eventPayload) {
+            if (!isset($eventPayload['setup'], $eventPayload['context'])) {
+                return false;
+            }
+            $data = $eventPayload['setup'];
+            $context = $eventPayload['context'];
+
+            return $data instanceof SetupInterface && $context instanceof ContextInterface;
+        });
+
+        // test events are fired during schema and data install
+        $schemaConstraint = $this->buildBeforeModuleIsProcessedConstraintForType('schema');
+        // there are 2 modules mocked in this test
+        $this->expectBeforeModuleIsProcessedEvent(0, $schemaConstraint);
+        $this->expectBeforeModuleIsProcessedEvent(1, $schemaConstraint);
+        // test for the after- event for the schema install
+        $this->eventManager->expects($this->at(2))->method('trigger')->with(
+            $this->callback(function ($event) {
+                if (!$event instanceof AfterSchemaWasInstalled) {
+                    return false;
+                }
+
+                return $event->getSetup() instanceof Setup;
+            })
+        );
+        // test for events fired during the data install phase
+        $dataConstraint = $this->buildBeforeModuleIsProcessedConstraintForType('data');
+        $this->expectBeforeModuleIsProcessedEvent(3, $dataConstraint);
+        $this->expectBeforeModuleIsProcessedEvent(4, $dataConstraint);
+        // test for the after- event for the data install
+        $this->eventManager->expects($this->at(5))->method('trigger')->with(
+            $this->callback(function ($event) {
+                if (!$event instanceof AfterDataWasInstalled) {
+                    return false;
+                }
+
+                return $event->getSetup() instanceof DataSetup;
+            })
+        );
 
         $this->object->install($request);
     }
@@ -517,6 +577,34 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
 
         return $newObject;
+    }
+
+    /**
+     * expectBeforeModuleIsProcessedEvent
+     * @param $atIndex
+     * @param \PHPUnit_Framework_Constraint $constraint
+     */
+    private function expectBeforeModuleIsProcessedEvent($atIndex, \PHPUnit_Framework_Constraint $constraint)
+    {
+        $this->eventManager->expects($this->at($atIndex))->method('trigger')->with($constraint);
+    }
+
+    /**
+     * Returns a PHP Unit constraint that expects an instance of the BeforeModuleIsProcessed class whose installType
+     * property is set to the value of the $installType parameter
+     *
+     * @param $installType
+     * @return \PHPUnit_Framework_Constraint_Callback
+     */
+    private function buildBeforeModuleIsProcessedConstraintForType($installType)
+    {
+        return $this->callback(function ($event) use ($installType) {
+            if (!$event instanceof BeforeModuleIsProcessed) {
+                return false;
+            }
+
+            return $event->getInstallType() === $installType;
+        });
     }
 
     /**
