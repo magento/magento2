@@ -82,20 +82,6 @@ class EavAttribute
     }
 
     /**
-     * @param Attribute $attribute
-     * @param bool $result
-     * @return bool
-     */
-    public function afterUsesSource(Attribute $attribute, $result)
-    {
-        if ($this->swatchHelper->isSwatchAttribute($attribute)) {
-            return true;
-        }
-
-        return $result;
-    }
-
-    /**
      * Swatch save operations
      *
      * @param Attribute $attribute
