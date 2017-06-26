@@ -8,29 +8,29 @@ namespace Magento\InventoryApi\Api;
 /**
  * @api
  */
-interface SourceRepositoryInterface
+interface StockRepositoryInterface
 {
     /**
-     * Save Source data. If you want to create plugin on get method, also you need to create separate plugin
+     * Save Stock data. If you want to create plugin on get method, also you need to create separate plugin
      * on getList method, because entity loading way is different for these methods
      *
-     * @param \Magento\InventoryApi\Api\Data\SourceInterface $source
+     * @param \Magento\InventoryApi\Api\Data\StockInterface $stock
      * @return int
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Magento\InventoryApi\Api\Data\SourceInterface $source);
+    public function save(\Magento\InventoryApi\Api\Data\StockInterface $stock);
 
     /**
-     * Get Source data by given sourceId.
+     * Get Stock data by given stockId.
      *
-     * @param int $sourceId
-     * @return \Magento\InventoryApi\Api\Data\SourceInterface
+     * @param int $stockId
+     * @return \Magento\InventoryApi\Api\Data\StockInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($sourceId);
+    public function get($stockId);
 
     /**
-     * Load Source data collection by given search criteria.
+     * Load Stock data collection by given search criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSearchResultsInterface
