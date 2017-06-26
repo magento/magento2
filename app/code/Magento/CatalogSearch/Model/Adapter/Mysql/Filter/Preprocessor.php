@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -20,9 +19,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Session;
+use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -166,7 +165,7 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
-        } elseif ($filter->getField() === 'visibility') {
+        } elseif ($filter->getField() === VisibilityFilter::VISIBILITY_FILTER_FIELD) {
             return '';
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
             in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)

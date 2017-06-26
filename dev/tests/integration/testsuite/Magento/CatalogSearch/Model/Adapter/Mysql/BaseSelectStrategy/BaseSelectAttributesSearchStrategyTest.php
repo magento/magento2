@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogSearch\Model\Search\BaseSelectStrategy;
+namespace Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
 
@@ -30,11 +29,6 @@ class BaseSelectAttributesSearchStrategyTest extends \PHPUnit_Framework_TestCase
     private $resource;
 
     /**
-     * @var FrontendResource
-     */
-    private $indexerEavFrontendResource;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -54,9 +48,6 @@ class BaseSelectAttributesSearchStrategyTest extends \PHPUnit_Framework_TestCase
 
         $this->resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(ResourceConnection::class);
-
-        $this->indexerEavFrontendResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(FrontendResource::class);
 
         $this->storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(StoreManagerInterface::class);
@@ -90,7 +81,7 @@ class BaseSelectAttributesSearchStrategyTest extends \PHPUnit_Framework_TestCase
         $select = $this->resource->getConnection()->select();
         $select->distinct()
             ->from(
-                ['search_index' => $this->indexerEavFrontendResource->getMainTable()],
+                ['search_index' => $this->resource->getTableName('catalog_product_index_eav')],
                 ['entity_id' => 'entity_id']
             )->where(
                 $this->resource->getConnection()->quoteInto(
@@ -107,7 +98,7 @@ class BaseSelectAttributesSearchStrategyTest extends \PHPUnit_Framework_TestCase
         $select = $this->resource->getConnection()->select();
         $select->distinct()
             ->from(
-                ['eav_index' => $this->indexerEavFrontendResource->getMainTable()],
+                ['eav_index' => $this->resource->getTableName('catalog_product_index_eav')],
                 ['entity_id' => 'entity_id']
             )->where(
                 $this->resource->getConnection()->quoteInto(

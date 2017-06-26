@@ -5,20 +5,13 @@
  */
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Eav\Model\Config as EavConfig;
-use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\DB\Select;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource;
-use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Stock;
 
 class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,9 +23,6 @@ class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
 
     /** @var ConditionManager */
     private $conditionManager;
-
-    /** @var FrontendResource */
-    private $indexerEavFrontendResource;
 
     /** @var StoreManagerInterface */
     private $storeManager;
@@ -51,7 +41,6 @@ class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->create(ResourceConnection::class);
         $this->conditionManager = $this->objectManager->create(ConditionManager::class);
-        $this->indexerEavFrontendResource = $this->objectManager->create(FrontendResource::class);
         $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
 
         $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
@@ -185,7 +174,7 @@ class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
             ['some_index' => 'some_table'],
             ['entity_id' => 'entity_id']
         )->joinInner(
-            ['visibility_filter' => $this->indexerEavFrontendResource->getMainTable()],
+            ['visibility_filter' => $this->resource->getTableName('catalog_product_index_eav')],
             $this->conditionManager->combineQueries(
                 [
                     'some_index.entity_id = visibility_filter.entity_id',

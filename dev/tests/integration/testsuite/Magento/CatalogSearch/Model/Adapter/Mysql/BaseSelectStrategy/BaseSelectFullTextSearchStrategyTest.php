@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogSearch\Model\Search\BaseSelectStrategy;
+namespace Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
 

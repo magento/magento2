@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\ScopeInterface;
+use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 
 /**
  * Class SelectContainerBuilder
@@ -90,7 +91,7 @@ class SelectContainerBuilder
 
         foreach ($this->filtersExtractor->extractFiltersFromQuery($request->getQuery()) as $filter) {
             if ($this->customAttributeFilterCheck->isCustom($filter)) {
-                if ($filter->getField() === 'visibility') {
+                if ($filter->getField() === VisibilityFilter::VISIBILITY_FILTER_FIELD) {
                     $visibilityFilter = $filter;
                 } else {
                     $customAttributesFilters[] = $filter;

@@ -30,48 +30,6 @@ use Magento\CatalogSearch\Model\Search\FilterMapper\FilterMapper;
 class IndexBuilder implements IndexBuilderInterface
 {
     /**
-     * @var Resource
-     * @deprecated
-     */
-    private $resource;
-
-    /**
-     * @var ScopeConfigInterface
-     * @deprecated
-     */
-    private $config;
-
-    /**
-     * @var StoreManagerInterface
-     * @deprecated
-     */
-    private $storeManager;
-
-    /**
-     * @var IndexScopeResolver
-     * @deprecated
-     */
-    private $scopeResolver;
-
-    /**
-     * @var ConditionManager
-     * @deprecated
-     */
-    private $conditionManager;
-
-    /**
-     * @var ScopeResolverInterface
-     * @deprecated
-     */
-    private $dimensionScopeResolver;
-
-    /**
-     * @var TableMapper
-     * @deprecated
-     */
-    private $tableMapper;
-
-    /**
      * @var DimensionsProcessor
      */
     private $dimensionsProcessor;
@@ -104,6 +62,7 @@ class IndexBuilder implements IndexBuilderInterface
      * @param BaseSelectStrategyMapper|null $baseSelectStrategyMapper
      * @param FilterMapper|null $filterMapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resource,
@@ -118,14 +77,6 @@ class IndexBuilder implements IndexBuilderInterface
         BaseSelectStrategyMapper $baseSelectStrategyMapper = null,
         FilterMapper $filterMapper = null
     ) {
-        $this->resource = $resource;
-        $this->config = $config;
-        $this->storeManager = $storeManager;
-        $this->conditionManager = $conditionManager;
-        $this->scopeResolver = $scopeResolver;
-        $this->dimensionScopeResolver = $dimensionScopeResolver;
-        $this->tableMapper = $tableMapper;
-
         $this->dimensionsProcessor = $dimensionsProcessor ?: ObjectManager::getInstance()
             ->get(DimensionsProcessor::class);
 

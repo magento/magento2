@@ -28,21 +28,9 @@ class FilterContext implements FilterStrategyInterface
     private $eavConfig;
 
     /**
-     * @var TermDropdownStrategy
-     * @deprecated
-     */
-    private $termDropdownStrategy;
-
-    /**
      * @var StaticAttributeStrategy
      */
     private $staticAttributeStrategy;
-
-    /**
-     * @var AliasResolver
-     * @deprecated
-     */
-    private $aliasResolver;
 
     /**
      * @param EavConfig $eavConfig
@@ -50,6 +38,7 @@ class FilterContext implements FilterStrategyInterface
      * @param ExclusionStrategy $exclusionStrategy
      * @param TermDropdownStrategy $termDropdownStrategy
      * @param StaticAttributeStrategy $staticAttributeStrategy
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         EavConfig $eavConfig,
@@ -59,9 +48,7 @@ class FilterContext implements FilterStrategyInterface
         StaticAttributeStrategy $staticAttributeStrategy
     ) {
         $this->eavConfig = $eavConfig;
-        $this->aliasResolver = $aliasResolver;
         $this->exclusionStrategy = $exclusionStrategy;
-        $this->termDropdownStrategy = $termDropdownStrategy;
         $this->staticAttributeStrategy = $staticAttributeStrategy;
     }
 

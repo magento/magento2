@@ -11,7 +11,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\DB\Select;
 
@@ -29,9 +28,6 @@ class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
     /** @var EavConfig|\PHPUnit_Framework_MockObject_MockObject */
     private $eavConfigMock;
 
-    /** @var FrontendResource */
-    private $indexerEavFrontendResource;
-
     /** @var StoreManagerInterface */
     private $storeManager;
 
@@ -42,7 +38,6 @@ class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->create(ResourceConnection::class);
-        $this->indexerEavFrontendResource = $this->objectManager->create(FrontendResource::class);
         $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
         $this->conditionManager = $this->objectManager->create(ConditionManager::class);
 
@@ -170,7 +165,7 @@ class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
             ['some_index' => 'some_table'],
             ['entity_id' => 'entity_id']
         )->joinInner(
-            ['field1_filter' => $this->indexerEavFrontendResource->getMainTable()],
+            ['field1_filter' => $this->resource->getTableName('catalog_product_index_eav')],
             $this->conditionManager->combineQueries($joinConditions, Select::SQL_AND),
             []
         )->where(sprintf('`some_index`.`attribute_id` = %s', $firstAttribute->getId()))
@@ -204,11 +199,11 @@ class CustomAttributeFilterTest extends \PHPUnit_Framework_TestCase
             ['some_index' => 'some_table'],
             ['entity_id' => 'entity_id']
         )->joinInner(
-            ['field1_filter' => $this->indexerEavFrontendResource->getMainTable()],
+            ['field1_filter' => $this->resource->getTableName('catalog_product_index_eav')],
             $this->conditionManager->combineQueries($joinConditions1, Select::SQL_AND),
             []
         )->joinInner(
-            ['field2_filter' => $this->indexerEavFrontendResource->getMainTable()],
+            ['field2_filter' => $this->resource->getTableName('catalog_product_index_eav')],
             $this->conditionManager->combineQueries($joinConditions2, Select::SQL_AND),
             []
         );

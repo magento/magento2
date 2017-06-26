@@ -20,6 +20,11 @@ use Magento\Eav\Model\Config as EavConfig;
 class VisibilityFilter
 {
     /**
+     * Name of the field that is used for visibility filtering
+     */
+    const VISIBILITY_FILTER_FIELD = 'visibility';
+
+    /**
      * Defines strategies of how filter should be applied
      */
     const FILTER_BY_JOIN = 'join_filter';
@@ -172,7 +177,10 @@ class VisibilityFilter
      */
     private function getVisibilityAttributeId()
     {
-        $attr = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'visibility');
+        $attr = $this->eavConfig->getAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            self::VISIBILITY_FILTER_FIELD
+        );
 
         if ($attr === null) {
             throw new \InvalidArgumentException('Wrong id for visibility attribute');
