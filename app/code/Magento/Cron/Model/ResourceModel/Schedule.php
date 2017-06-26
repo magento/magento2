@@ -23,9 +23,10 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * If job is currently in $currentStatus, set it to $newStatus
-     * and return true. Otherwise, return false and do not change the job.
-     * This method is used to implement locking for cron jobs.
+     * Sets new schedule status only if it's in the expected current status.
+     *
+     * If schedule is currently in $currentStatus, set it to $newStatus and
+     * return true. Otherwise, return false.
      *
      * @param string $scheduleId
      * @param string $newStatus
@@ -40,6 +41,43 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['status' => $newStatus],
             ['schedule_id = ?' => $scheduleId, 'status = ?' => $currentStatus]
         );
+        if ($result == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Sets schedule status only if no existing schedules with the same job code
+     * have that status.  This is used to implement locking for cron jobs.
+     *
+     * If the schedule is currently in $currentStatus and there are no existing
+     * schedules with the same job code and $newStatus, set the schedule to
+     * $newStatus and return true. Otherwise, return false.
+     *
+     * @param string $scheduleId
+     * @param string $newStatus
+     * @param string $currentStatus
+     * @return bool
+     */
+    public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
+    {
+        $connection = $this->getConnection();
+
+        $match = $connection->quoteInto('existing.job_code = current.job_code AND existing.status = ?', $newStatus);
+        $selectIfUnlocked = $connection->select()
+            ->joinLeft(
+                ['existing' => $this->getTable('cron_schedule')],
+                $match,
+                ['status' => new \Zend_Db_Expr($connection->quote($newStatus))]
+            )
+            ->where('current.schedule_id = ?', $scheduleId)
+            ->where('current.status = ?', $currentStatus)
+            ->where('existing.schedule_id IS NULL');
+
+        $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
+        $result = $connection->query($update)->rowCount();
+
         if ($result == 1) {
             return true;
         }

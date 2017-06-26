@@ -81,11 +81,6 @@ class Product extends AbstractResource
     private $productCategoryLink;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
-     */
-    private $categoryProductIndexerFrontend;
-
-    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -96,7 +91,6 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -110,8 +104,7 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        $data = [],
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
+        $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -126,10 +119,6 @@ class Product extends AbstractResource
             $data
         );
         $this->connectionName  = 'catalog';
-        //virtual type have to be injected here. If not, we'll do it :)
-        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource::class
-        );
     }
 
     /**
@@ -376,7 +365,7 @@ class Product extends AbstractResource
         if (!isset($this->availableCategoryIdsCache[$entityId])) {
             $this->availableCategoryIdsCache[$entityId] = $this->getConnection()->fetchCol(
                 $this->getConnection()->select()->distinct()->from(
-                    $this->categoryProductIndexerFrontend->getMainTable(),
+                    $this->getTable('catalog_category_product_index'),
                     ['category_id']
                 )->where(
                     'product_id = ? AND is_parent = 1',
@@ -410,7 +399,7 @@ class Product extends AbstractResource
     public function canBeShowInCategory($product, $categoryId)
     {
         $select = $this->getConnection()->select()->from(
-            $this->categoryProductIndexerFrontend->getMainTable(),
+            $this->getTable('catalog_category_product_index'),
             'product_id'
         )->where(
             'product_id = ?',
