@@ -10,6 +10,8 @@
  */
 namespace Magento\Test\Legacy;
 
+use Psr\Log\LoggerInterface;
+
 class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -67,6 +69,9 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
     {
         if (!self::$actualBranch) {
             preg_match_all('|etc/module\.xml$|mi', self::$changedFileList, $matches);
+            $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+            $logger = $objectManager->get(LoggerInterface::class);
+            $logger->debug('----->LOGGER:', $matches);
             $this->assertEmpty(
                 reset($matches),
                 'module.xml changes for patch releases in non-actual branches are not allowed:' . PHP_EOL .
@@ -82,6 +87,9 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
     {
         if (!self::$actualBranch) {
             preg_match_all('|app/code/Magento/[^/]+/Setup/[^/]+$|mi', self::$changedFileList, $matches);
+            $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+            $logger = $objectManager->get(LoggerInterface::class);
+            $logger->debug('----->LOGGER:', $matches);
             $this->assertEmpty(
                 reset($matches),
                 'Code with changes for DB schema or data in non-actual branches are not allowed:' . PHP_EOL .
