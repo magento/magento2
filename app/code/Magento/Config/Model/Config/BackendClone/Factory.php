@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\BackendClone;
 
+/**
+ * @api
+ */
 class Factory
 {
     /**

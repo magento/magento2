@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
  * Sitemap resource product collection model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

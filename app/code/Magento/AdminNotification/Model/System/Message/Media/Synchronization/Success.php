@@ -5,6 +5,9 @@
  */
 namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
+/**
+ * @api
+ */
 class Success extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
 {
     /**
