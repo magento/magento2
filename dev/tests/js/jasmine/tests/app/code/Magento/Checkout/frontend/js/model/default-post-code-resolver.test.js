@@ -10,13 +10,20 @@ define([
 
     describe('checkout/js/model/default-post-code-resolver', function () {
         var defaultPostCodeResolver;
-
         beforeEach(function () {
             defaultPostCodeResolver = DefaultPostCodeResolver;
+            window.checkoutConfig = {
+                defaultPostcode: '19800'
+            };
         });
 
         it('resolve', function () {
-            expect(defaultPostCodeResolver.resolve()).toBe(undefined);
+            expect(defaultPostCodeResolver.resolve()).toBeUndefined();
+        });
+        it('resolve with using default code', function () {
+            defaultPostCodeResolver.setUseDefaultPostCode(true);
+            expect(defaultPostCodeResolver.resolve()).toEqual('19800');
         });
     });
+
 });
