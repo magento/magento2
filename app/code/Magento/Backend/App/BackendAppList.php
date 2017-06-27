@@ -8,6 +8,7 @@ namespace Magento\Backend\App;
 
 /**
  * List of Backend Applications to allow injection of them through the DI
+ * @api
  */
 class BackendAppList
 {

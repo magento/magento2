@@ -20,6 +20,7 @@ use Magento\Framework\Exception\RuntimeException;
  * Creates a prepared instance of Value.
  *
  * @see ValueInterface
+ * @api
  */
 class PreparedValueFactory
 {
