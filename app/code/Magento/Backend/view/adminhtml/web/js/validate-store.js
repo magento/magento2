@@ -12,10 +12,6 @@ define([
     'use strict';
 
     $.widget('mage.storeValidation', {
-        options: {
-            title: $.mage.__('Warning message'),
-            content: $.mage.__('This operation can take a long time')
-        },
 
         /**
          * Validation creation
@@ -60,10 +56,10 @@ define([
                     data: formData
                 };
 
-                if (options.confirmCallback.call(options)) {
+                if (options.confirmCallback.call(this)) {
                     modalConfirm({
-                        title: options.title,
-                        content: options.content,
+                        title: $.mage.__('Warning message'),
+                        content: $.mage.__('This operation can take a long time'),
                         actions: {
                             /**
                              * 'Confirm' action handler.

@@ -11,13 +11,6 @@ define([
 
     $.widget('mage.saveWithConfirm', validateStore, {
 
-        options: {
-            loadedGroupId: $('[name="store[group_id]"]').val(),
-            loadedRootCategoryId: $('[name="group[root_category_id]"]').val(),
-            loadedDefaultStoreView: $('[name="group[default_store_id]"]').val(),
-            loadedDefaultStore: $('[name="website[default_group_id]"]').val()
-        },
-
         /**
          * Check is it need to show confirmation popup
          *
@@ -25,8 +18,10 @@ define([
          */
         _needConfirm: function () {
 
+            var storeData = this.settings.store_data,
+
             /* edit store view*/
-            var storeViewEdit = $('[name="store[store_id]"]').length,
+                storeViewEdit = $('[name="store[store_id]"]').length,
                 groupId = $('[name="store[group_id]"]').val(),
                 isNewStoreView = !$('[name="store[store_id]"]').val(),
 
@@ -41,12 +36,13 @@ define([
                 defaultStore = $('[name="website[default_group_id]"]').val(),
 
             /* conditions */
-                storeViewUpdated = storeViewEdit && isNewStoreView || this.loadedGroupId !== groupId,
+                storeViewUpdated = storeViewEdit && (isNewStoreView || storeData.group_id !== groupId),
                 storeUpdated = storeEdit && storeId &&
-                    (this.loadedRootCategoryId !== rootCategoryId || this.loadedDefaultStoreView !== defaultStoreView),
-                websiteUpdted = websiteEdit && this.loadedDefaultStore !== defaultStore;
+                    (storeData.root_category_id !== rootCategoryId
+                    || storeData.default_store_id !== defaultStoreView),
+                websiteUpdated = websiteEdit && storeData.default_group_id !== defaultStore;
 
-            return storeViewUpdated || storeUpdated || websiteUpdted;
+            return storeViewUpdated || storeUpdated || websiteUpdated;
         }
     });
 

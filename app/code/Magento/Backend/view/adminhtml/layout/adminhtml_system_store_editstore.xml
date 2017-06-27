@@ -9,7 +9,7 @@
     <update handle="formkey"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Backend\Block\Widget\Container" name="adminhtml_admin_save_confirm" template="Magento_Backend::admin/save_confirm.phtml"/>
+            <block class="Magento\Backend\Block\System\Store\Edit" name="adminhtml_admin_save_confirm" template="Magento_Backend::admin/save_confirm.phtml"/>
         </referenceContainer>
     </body>
 </page>

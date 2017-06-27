@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Backend\Block\System\Store\Edit $block */
+
 ?>
 <script type="text/x-magento-init">
 {
     "#edit_form": {
-        "Magento_Backend/js/save-with-confirm": {}
+        "Magento_Backend/js/save-with-confirm": {
+            "store_data": <?php echo $block->getStoreData() ?>
+        }
     }
 }
 </script>
