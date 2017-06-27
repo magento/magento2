@@ -133,10 +133,10 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
     {
         $this->_block->setUseSelectAll(true);
         
-        if($this->_block->getMassactionIdField()) {
+        if ($this->_block->getMassactionIdField()) {
             $massActionIdField = $this->_block->getMassactionIdField();
         } else {
-            $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();    
+            $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
         }
         
         $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
