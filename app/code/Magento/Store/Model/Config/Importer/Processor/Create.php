@@ -92,6 +92,10 @@ class Create implements ProcessorInterface
             ];
 
             foreach ($entities as $scope) {
+                if (!isset($data[$scope])) {
+                    continue;
+                }
+
                 $items = $this->dataDifferenceCalculator->getItemsToCreate($scope, $data[$scope]);
 
                 if (!$items) {
@@ -125,15 +129,20 @@ class Create implements ProcessorInterface
     private function createWebsites(array $items, array $data)
     {
         foreach ($items as $websiteData) {
-            unset($websiteData['website_id']);
+            $groupId = $websiteData['default_group_id'];
+
+            unset(
+                $websiteData['website_id'],
+                $websiteData['default_group_id']
+            );
 
             $website = $this->websiteFactory->create();
             $website->setData($websiteData);
             $website->getResource()->save($website);
 
-            $website->getResource()->addCommitCallback(function () use ($website, $data) {
+            $website->getResource()->addCommitCallback(function () use ($website, $data, $groupId) {
                 $website->setDefaultGroupId(
-                    $this->detectGroupById($data, $website->getDefaultGroupId())->getId()
+                    $this->detectGroupById($data, $groupId)->getId()
                 );
                 $website->getResource()->save($website);
             });

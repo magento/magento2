@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+/**
+ * @api
+ */
 abstract class Review extends \Magento\Backend\App\Action
 {
     /**
