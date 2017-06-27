@@ -11,72 +11,77 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Dynamic;
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Elasticsearch\SearchAdapter\QueryContainer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $queryContainer;
+
+    /**
      * @var \Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider
      */
     protected $model;
 
     /**
-     * @var Magento\Elasticsearch\SearchAdapter\ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connectionManager;
 
     /**
-     * @var Magento\Elasticsearch\Model\Adapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var Magento\Catalog\Model\Layer\Filter\Price\Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Filter\Price\Range|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $range;
 
     /**
-     * @var Magento\Framework\Search\Dynamic\IntervalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\IntervalFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $intervalFactory;
 
     /**
-     * @var Magento\Elasticsearch\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $clientConfig;
 
     /**
-     * @var Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
     /**
-     * @var Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerSession;
 
     /**
-     * @var Magento\Framework\Search\Dynamic\EntityStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\EntityStorage|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityStorage;
 
     /**
-     * @var Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeMock;
 
     /**
-     * @var Magento\Elasticsearch\Model\Client\Elasticsearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $clientMock;
 
     /**
-     * @var Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchIndexNameResolver;
 
     /**
-     * @var Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeResolver;
 
     /**
-     * @var Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeInterface;
 
@@ -170,6 +175,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->queryContainer = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\QueryContainer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getQuery'])
+            ->getMock();
     }
 
     /**
@@ -193,7 +203,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSession,
                 'searchIndexNameResolver' => $this->searchIndexNameResolver,
                 'indexerId' => 'catalogsearch_fulltext',
-                'scopeResolver' => $this->scopeResolver
+                'scopeResolver' => $this->scopeResolver,
+                'queryContainer' => $this->queryContainer,
             ]
         );
     }
@@ -235,6 +246,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ]);
+
+        $this->queryContainer->expects($this->once())
+            ->method('getQuery')
+            ->willReturn([]);
+
         $this->assertEquals(
             $expectedResult,
             $this->model->getAggregations($this->entityStorage)
@@ -285,7 +301,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAggregation()
     {
-        $dimensionValue = 1;
         $expectedResult = [
             1 => 1,
         ];
@@ -296,15 +311,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
-        $dimension->expects($this->once())
-            ->method('getValue')
-            ->willReturn($dimensionValue);
-        $this->scopeResolver->expects($this->once())
-            ->method('getScope')
-            ->willReturn($this->scopeInterface);
-        $this->scopeInterface->expects($this->once())
-            ->method('getId')
-            ->willReturn($dimensionValue);
+        $dimension->expects($this->never())
+            ->method('getValue');
+        $this->scopeResolver->expects($this->never())
+            ->method('getScope');
+        $this->scopeInterface->expects($this->never())
+            ->method('getId');
 
         $this->clientMock->expects($this->once())
             ->method('query')
@@ -320,6 +332,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ]);
+
+        $this->queryContainer->expects($this->once())
+            ->method('getQuery')
+            ->willReturn([]);
 
         $this->assertEquals(
             $expectedResult,
