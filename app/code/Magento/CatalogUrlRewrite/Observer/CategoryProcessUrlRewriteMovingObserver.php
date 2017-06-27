@@ -19,29 +19,25 @@ use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 
 /**
  * Generates Category Url Rewrites after move/save and Products Url Rewrites assigned to the category that's being saved
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
 {
-    /** @var CategoryUrlRewriteGenerator */
+    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
     protected $categoryUrlRewriteGenerator;
 
-    /** @var UrlPersistInterface */
+    /** @var \Magento\UrlRewrite\Model\UrlPersistInterface */
     protected $urlPersist;
 
-    /** @var ScopeConfigInterface */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $scopeConfig;
 
-    /** @var UrlRewriteHandler */
+    /** @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler */
     protected $urlRewriteHandler;
 
-    /**
-     * @var UrlRewriteBunchReplacer
-     */
+    /** @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer */
     private $urlRewriteBunchReplacer;
 
-    /** @var DatabaseMapPool */
+    /** @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool */
     private $databaseMapPool;
 
     /** @var string[] */
@@ -53,7 +49,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlRewriteHandler $urlRewriteHandler
      * @param UrlRewriteBunchReplacer $urlRewriteBunchReplacer
-     * @param DatabaseMapPool $databaseMapPool
+     * @param \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool $databaseMapPool
      * @param string[] $dataUrlRewriteClassNames
      */
     public function __construct(

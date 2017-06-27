@@ -18,16 +18,16 @@ use Magento\Framework\Event\ObserverInterface;
  */
 class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 {
-    /** @var CategoryUrlRewriteGenerator */
+    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
     private $categoryUrlRewriteGenerator;
 
-    /** @var UrlRewriteBunchReplacer */
+    /** @var \Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer */
     private $urlRewriteBunchReplacer;
 
-    /** @var UrlRewriteHandler */
+    /** @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler */
     private $urlRewriteHandler;
 
-    /** @var DatabaseMapPool */
+    /** @var \Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool */
     private $databaseMapPool;
 
     /** @var string[] */
@@ -71,15 +71,23 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         if ($category->getParentId() == Category::TREE_ROOT_ID) {
             return;
         }
+
+        $mapsGenerated = false;
         if ($category->dataHasChangedFor('url_key')
             || $category->dataHasChangedFor('is_anchor')
             || $category->getIsChangedProductList()
         ) {
-            $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
+            if ($category->dataHasChangedFor('url_key')) {
+                $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
+            }
             $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
-            //frees memory for maps that are self-initialized in multiple classes that were called by the generators
+            $mapsGenerated = true;
+        }
+
+        //frees memory for maps that are self-initialized in multiple classes that were called by the generators
+        if ($mapsGenerated) {
             $this->resetUrlRewritesDataMaps($category);
         }
     }

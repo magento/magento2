@@ -14,7 +14,7 @@ use Magento\Framework\Exception\RuntimeException;
 
 class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {
-    const URL_DUPLICATE_MESSAGE = 'urlDuplicateMessage';
+    const URL_DUPLICATE_MESSAGE_MAP_ID = 'urlDuplicateMessageMapId';
 
     /** @var Factory */
     private $messageFactory;
@@ -52,7 +52,7 @@ class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterf
                 }
             }
             return $this->messageFactory->create($type)
-                ->setIdentifier(self::URL_DUPLICATE_MESSAGE)
+                ->setIdentifier(self::URL_DUPLICATE_MESSAGE_MAP_ID)
                 ->setText($exception->getMessage())
                 ->setData(['urls' => $generatedUrls]);
         }
