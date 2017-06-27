@@ -8,6 +8,7 @@ namespace Magento\Customer\Model;
 /**
  * Customer group model
  *
+ * @api
  * @method \Magento\Customer\Model\ResourceModel\Group _getResource()
  * @method \Magento\Customer\Model\ResourceModel\Group getResource()
  * @method string getCustomerGroupCode()

@@ -3,17 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * EAV attribute resource model (Using Forms)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * EAV attribute resource model (Using Forms)
+ *
+ * @api
+ */
 abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 {
     /**

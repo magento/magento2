@@ -39,7 +39,10 @@
                 </label>
                 <div class="control">
                     <input class="input-text"
-                           placeholder="optional"
+                           data-bind="
+                                attr: {
+                                    placeholder: $t('optional'),
+                                }"
                            type="password"
                            name="password"
                            id="customer-password"

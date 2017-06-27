@@ -11,6 +11,7 @@ use Magento\Framework\App\DocRootLocator;
 
 /**
  * Plugin class to remove web setup wizard from menu if application root is pub/ and no setup url variable is specified.
+ * @api
  */
 class MenuBuilder
 {

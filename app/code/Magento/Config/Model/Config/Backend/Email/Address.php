@@ -11,6 +11,9 @@ namespace Magento\Config\Model\Config\Backend\Email;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @api
+ */
 class Address extends \Magento\Framework\App\Config\Value
 {
     /**
