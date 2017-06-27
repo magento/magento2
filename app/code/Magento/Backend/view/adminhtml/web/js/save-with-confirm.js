@@ -38,8 +38,8 @@ define([
             /* conditions */
                 storeViewUpdated = storeViewEdit && (isNewStoreView || storeData.group_id !== groupId),
                 storeUpdated = storeEdit && storeId &&
-                    (storeData.root_category_id !== rootCategoryId
-                    || storeData.default_store_id !== defaultStoreView),
+                    (storeData.root_category_id !== rootCategoryId ||
+                    storeData.default_store_id !== defaultStoreView),
                 websiteUpdated = websiteEdit && storeData.default_group_id !== defaultStore;
 
             return storeViewUpdated || storeUpdated || websiteUpdated;
