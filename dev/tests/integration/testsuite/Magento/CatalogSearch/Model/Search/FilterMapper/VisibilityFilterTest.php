@@ -67,22 +67,6 @@ class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
         $this->visibilityFilter->apply($select, $filter, 'Luke, I am your father!');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Wrong code for visibility attribute
-     */
-    public function testApplyWithWrongAttributeCode()
-    {
-        $select = $this->resource->getConnection()->select();
-        $filter = $this->mockFilter();
-
-        $this->eavConfigMock
-            ->method('getAttribute')
-            ->willReturn(null);
-
-        $this->visibilityFilter->apply($select, $filter, VisibilityFilter::FILTER_BY_WHERE);
-    }
-
     public function testApplyFilterAsWhere()
     {
         $select = $this->resource->getConnection()->select();

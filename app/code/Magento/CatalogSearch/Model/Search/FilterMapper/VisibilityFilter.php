@@ -185,7 +185,6 @@ class VisibilityFilter
      *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \InvalidArgumentException
      */
     private function getVisibilityAttributeId()
     {
@@ -193,10 +192,6 @@ class VisibilityFilter
             \Magento\Catalog\Model\Product::ENTITY,
             self::VISIBILITY_FILTER_FIELD
         );
-
-        if ($attr === null) {
-            throw new \InvalidArgumentException('Wrong code for visibility attribute');
-        }
 
         return (int) $attr->getId();
     }
