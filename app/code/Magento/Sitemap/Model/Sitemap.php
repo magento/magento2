@@ -29,6 +29,7 @@ use Magento\Framework\DataObject;
  * @method \Magento\Sitemap\Model\Sitemap setStoreId(int $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel
 {

@@ -7,6 +7,9 @@ namespace Magento\CatalogSearch\Model\Advanced\Request;
 
 use Magento\Framework\Search\Request\Builder as RequestBuilder;
 
+/**
+ * @api
+ */
 class Builder extends RequestBuilder
 {
     /**

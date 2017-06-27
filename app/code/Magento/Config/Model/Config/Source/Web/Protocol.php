@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Web;
 
+/**
+ * @api
+ */
 class Protocol implements \Magento\Framework\Option\ArrayInterface
 {
     /**

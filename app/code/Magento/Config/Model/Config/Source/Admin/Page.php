@@ -7,6 +7,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Admin;
 
+/**
+ * @api
+ */
 class Page implements \Magento\Framework\Option\ArrayInterface
 {
     /**
