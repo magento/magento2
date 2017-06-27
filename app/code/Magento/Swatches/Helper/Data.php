@@ -346,8 +346,14 @@ class Data
      */
     private function getSwatchAttributes(Product $product)
     {
-        $swatchAttributes = $this->swatchAttributesProvider->provide($product);
-        return $swatchAttributes;
+        $attributes = $this->swatchAttributesProvider->provide($product) ?: [];
+        foreach ($attributes as $attribute) {
+            if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
+                $this->populateAdditionalDataEavAttribute($attribute);
+            }
+        }
+
+        return $attributes;
     }
 
     /**
