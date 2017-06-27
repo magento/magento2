@@ -49,7 +49,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Checkout\Block\Cart */
         $block = $layout->createBlock(\Magento\Checkout\Block\Cart::class);

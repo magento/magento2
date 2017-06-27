@@ -148,6 +148,7 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
         $order = $this->objectManager->get(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $this->registry->register('current_order', $order);
+        
         return $order;
     }
 }

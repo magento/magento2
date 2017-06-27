@@ -154,7 +154,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
             $this->orders[$orderId] = $this->orderFactory->create()->load($orderId);
         }
 
-        /** @var \Magento\Sales\Api\Data\OrderInterface $item */
+        /** @var \Magento\Sales\Api\Data\OrderInterface $order */
         $order = $this->orders[$orderId];
         /** @var \Magento\Sales\Api\Data\OrderItemInterface $item */
         $item = $order->getItemById($orderItemId);

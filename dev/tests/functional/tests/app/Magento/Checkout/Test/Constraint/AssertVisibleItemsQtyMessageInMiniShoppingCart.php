@@ -50,7 +50,7 @@ class AssertVisibleItemsQtyMessageInMiniShoppingCart extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $counterMessage,
             $sidebar->getVisibleItemsCounter(),
-            'Wrong counter text of visible Cart items in mini shopping cart'
+            'Wrong quantity value of visible Cart items in mini shopping cart'
         );
     }
 

@@ -34,7 +34,7 @@ class AssertVisibleItemsQtyInMiniShoppingCart extends AbstractConstraint
         $products = $sourceProducts->getProducts();
 
         $presentItems = 0;
-        /** @var Item $item */
+        
         foreach (array_keys($cart->getItems()) as $key) {
             /** @var CatalogProductSimple $product */
             $product = $products[$key];

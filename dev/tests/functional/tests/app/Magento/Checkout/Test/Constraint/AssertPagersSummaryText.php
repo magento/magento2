@@ -24,6 +24,7 @@ class AssertPagersSummaryText extends AbstractConstraint
      * @param CheckoutCart $checkoutCart
      * @param \Magento\Checkout\Test\Fixture\Cart $cart
      * @param ConfigData $config
+     * @return void
      */
     public function processAssert(CheckoutCart $checkoutCart, Cart $cart, ConfigData $config)
     {

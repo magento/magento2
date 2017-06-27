@@ -87,45 +87,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
-        <variation name="VariationWithCartItemsDisplayDefaultLimitation" summary="Minicart products list is trimmed if qty of products exceeds display limit" ticketId="MAGETWO-70089">
-            <data name="tag" xsi:type="string">severity:S2</data>
-            <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/2" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/3" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/4" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/5" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/6" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/10" xsi:type="string">catalogProductSimple::default</data>
-            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
-            <data name="totalItemsCountInShoppingCart" xsi:type="number">11</data>
-            <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
-        </variation>
-        <variation name="VariationWithCartItemsDisplayDefaultLimitationAndDefaultTotalQty" summary="Products in minicart are NOT trimmed if qty of products less than default display limit" ticketId="MAGETWO-70090">
-            <data name="tag" xsi:type="string">severity:S2</data>
-            <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/2" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/3" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/4" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/5" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/6" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
-            <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
-            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
-            <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
-            <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
-        </variation>
         <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckoutAndDefaultTotalQty" summary="Products list in checkout order summary block is NOT trimmed if qty less than display limit" ticketId="MAGETWO-70091">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
@@ -138,10 +99,13 @@
             <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartNotPresentInSummaryBlock" />
@@ -159,10 +123,13 @@
             <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/10" xsi:type="string">catalogProductSimple::default</data>
+            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="totalItemsCountInShoppingCart" xsi:type="number">11</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartPresentInSummaryBlock" />
