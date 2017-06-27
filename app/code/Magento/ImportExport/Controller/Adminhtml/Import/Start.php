@@ -26,7 +26,7 @@ class Start extends ImportResultController
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\ImportExport\Model\Import $importModel
-     * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface|null $exceptionMessageFactory
+     * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
