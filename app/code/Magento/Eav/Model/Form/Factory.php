@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\Form;
 
 /**
  * EAV form object factory
+ * @api
  */
 class Factory
 {

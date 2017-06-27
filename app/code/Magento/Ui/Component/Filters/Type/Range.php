@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Filters\Type;
 
 /**
- * Class Range
+ * @api
  */
 class Range extends AbstractFilter
 {

@@ -20,13 +20,21 @@ define([
          * @returns {Boolean}
          */
         validate: function () {
+            var isValid = true;
+
             if (!agreementsConfig.isEnabled || $(agreementsInputPath).length === 0) {
                 return true;
             }
 
-            return $.validator.validateSingleElement(agreementsInputPath, {
-                errorElement: 'div'
+            $(agreementsInputPath).each(function (index, element) {
+                if (!$.validator.validateSingleElement(element, {
+                    errorElement: 'div'
+                })) {
+                    isValid = false;
+                }
             });
+
+            return isValid;
         }
     };
 });
