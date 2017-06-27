@@ -22,7 +22,7 @@
             <data name="deletedProductIndex" xsi:type="string">0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
-        <variation name="DeleteProductFromMiniShoppingCartTestVariationWithCartItemsDisplayDefaultLimitation" summary="Mini-cart products list is not trimmed if qty of items become less then display limit" ticketId="MAGETWO-70093">
+        <variation name="DeleteProductsFromMiniShoppingCartTestVariatrion3" summary="Mini-cart products list is not trimmed if qty of items become less then display limit" ticketId="MAGETWO-70093">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/1" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/2" xsi:type="string">catalogProductSimple::default</data>
