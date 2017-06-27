@@ -357,7 +357,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $urlRewriteRowInDb = [
             UrlRewrite::REQUEST_PATH  => $origRequestPath . '/',
-            UrlRewrite::TARGET_PATH  => 'page-A/',
+            UrlRewrite::TARGET_PATH   => 'page-A/',
             UrlRewrite::REDIRECT_TYPE => 301,
             UrlRewrite::STORE_ID      => 1,
         ];
@@ -370,6 +370,65 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
             ->with(['urlRewrite1'], $urlRewriteRowInDb, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
+            ->will($this->returnSelf());
+
+        $this->urlRewriteFactory->expects($this->at(0))
+            ->method('create')
+            ->will($this->returnValue(['urlRewrite1']));
+
+        $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
+    }
+
+    public function testFindOneByDataWithRequestPathTwoResults()
+    {
+        $origRequestPath = 'page-one';
+        $data = [
+            'col1'                   => 'val1',
+            'col2'                   => 'val2',
+            UrlRewrite::REQUEST_PATH => $origRequestPath,
+        ];
+
+        $this->select->expects($this->at(1))
+            ->method('where')
+            ->with('col1 IN (?)', 'val1');
+
+        $this->select->expects($this->at(2))
+            ->method('where')
+            ->with('col2 IN (?)', 'val2');
+
+        $this->select->expects($this->at(3))
+            ->method('where')
+            ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
+
+        $this->connectionMock->expects($this->any())
+            ->method('quoteIdentifier')
+            ->will($this->returnArgument(0));
+
+        $this->connectionMock->expects($this->never())
+            ->method('fetchRow');
+
+        $urlRewriteRowInDb = [
+            UrlRewrite::REQUEST_PATH  => $origRequestPath . '/',
+            UrlRewrite::TARGET_PATH  => 'page-A/',
+            UrlRewrite::REDIRECT_TYPE => 301,
+            UrlRewrite::STORE_ID      => 1,
+        ];
+
+        $urlRewriteRowInDb2 = [
+            UrlRewrite::REQUEST_PATH  => $origRequestPath,
+            UrlRewrite::TARGET_PATH  => 'page-B/',
+            UrlRewrite::REDIRECT_TYPE => 301,
+            UrlRewrite::STORE_ID      => 1,
+        ];
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($this->select)
+            ->will($this->returnValue([$urlRewriteRowInDb, $urlRewriteRowInDb2]));
+
+        $this->dataObjectHelper->expects($this->at(0))
+            ->method('populateWithArray')
+            ->with(['urlRewrite1'], $urlRewriteRowInDb2, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
