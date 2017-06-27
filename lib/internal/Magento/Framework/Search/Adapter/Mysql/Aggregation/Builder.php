@@ -14,6 +14,9 @@ use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\EntityMetadata;
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * @api
+ */
 class Builder
 {
     /**

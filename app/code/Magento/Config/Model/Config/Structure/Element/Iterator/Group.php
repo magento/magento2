@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Element\Iterator;
 
+/**
+ * @api
+ */
 class Group extends \Magento\Config\Model\Config\Structure\Element\Iterator
 {
     /**

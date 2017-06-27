@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Block\System\Config\Form\Field;
 
+/**
+ * @api
+ */
 class Heading extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
