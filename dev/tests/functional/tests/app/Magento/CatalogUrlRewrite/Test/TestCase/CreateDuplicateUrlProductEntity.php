@@ -28,7 +28,7 @@ use Magento\Mtf\TestCase\Injectable;
  * @group Products
  * @ZephyrId MAGETWO-69427
  */
-class CreateDuplicateProductEntityTest extends Injectable
+class CreateDuplicateUrlProductEntity extends Injectable
 {
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
@@ -40,7 +40,7 @@ class CreateDuplicateProductEntityTest extends Injectable
      *
      * @var string
      */
-    protected $configData;
+    private $configData;
 
     /**
      * Should cache be flushed
@@ -92,17 +92,13 @@ class CreateDuplicateProductEntityTest extends Injectable
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
-        // Steps for simple product
-        $productGrid->open();
-        $productGrid->getGridPageActionBlock()->addProduct('simple');
-        $newProductPage->getProductForm()->fill($product, null, $category);
-        $newProductPage->getFormPageActions()->save();
-
-        // Steps for duplicate url product
-        $productGrid->open();
-        $productGrid->getGridPageActionBlock()->addProduct('simple');
-        $newProductPage->getProductForm()->fill($product, null, $category);
-        $newProductPage->getFormPageActions()->save();
+        for ($index = 0; $index < 2; $index++) {
+            // Duplicate product
+            $productGrid->open();
+            $productGrid->getGridPageActionBlock()->addProduct('simple');
+            $newProductPage->getProductForm()->fill($product, null, $category);
+            $newProductPage->getFormPageActions()->save();
+        }
 
         return ['product' => $product];
     }

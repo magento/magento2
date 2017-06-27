@@ -12,9 +12,9 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Class AssertUrlDuplicateErrorMessage
+ * Class AssertProductUrlDuplicateErrorMessage
  */
-class AssertUrlDuplicateErrorMessage extends AbstractConstraint
+class AssertProductUrlDuplicateErrorMessage extends AbstractConstraint
 {
     /**
      * Text title of the error message to be checked.
@@ -25,6 +25,8 @@ class AssertUrlDuplicateErrorMessage extends AbstractConstraint
      * Assert that success message is displayed after product save.
      *
      * @param CatalogProductEdit $productPage
+     * @param CatalogProductSimple $product
+     * @param Category $category
      * @return void
      */
     public function processAssert(

@@ -117,10 +117,10 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->save($page);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__(
-                'Could not save the page: %1',
-                $exception->getMessage()
-            ));
+            throw new CouldNotSaveException(
+                __('Could not save the page: %1', $exception->getMessage()),
+                $exception
+            );
         }
         return $page;
     }
