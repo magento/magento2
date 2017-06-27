@@ -18,11 +18,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $resourceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $attributeMock;
 
     protected function setUp()
@@ -41,20 +36,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
-        $this->resourceMock = $this->getMock(
-            \Magento\Indexer\Model\ResourceModel\FrontendResource::class,
-            [],
-            [],
-            '',
-            false
-        );
         $productResource = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
         $productResource->expects($this->any())->method('loadAllAttributes')->willReturnSelf();
         $productResource->expects($this->any())->method('getAttributesByCode')->willReturn([]);
         $this->model = $objectManagerHelper->getObject(
             \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
             [
-                'frontendResource' => $this->resourceMock,
                 'config' => $eavConfig,
                 'storeManager' => $storeManager,
                 'productResource' => $productResource,
@@ -84,8 +71,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('getBackendType')->willReturn('multiselect');
-        // verify that frontend indexer table is used
-        $this->resourceMock->expects($this->once())->method('getMainTable')->willReturn('catalog_product_index_eav');
         $this->model->addToCollection($collectionMock);
     }
 

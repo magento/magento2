@@ -7,6 +7,9 @@ namespace Magento\Backend\App\Response\Http;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @api
+ */
 class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
 {
     /**

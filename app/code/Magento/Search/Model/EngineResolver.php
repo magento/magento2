@@ -7,6 +7,9 @@ namespace Magento\Search\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * @api
+ */
 class EngineResolver
 {
     /**

@@ -8,6 +8,9 @@
 
 namespace Magento\Config\Model\Config\Source\Dev;
 
+/**
+ * @api
+ */
 class Dbautoup implements \Magento\Framework\Option\ArrayInterface
 {
     /**
