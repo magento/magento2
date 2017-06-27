@@ -9,6 +9,9 @@ use Magento\Analytics\ReportXml\DB\ColumnsResolver;
 use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ColumnsResolverTest
@@ -31,19 +34,44 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
     private $columnsResolver;
 
     /**
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnectionMock;
+
+    /**
+     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connectionMock;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->nameResolverMock = $this->getMockBuilder(NameResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+//        $this->nameResolverMock = $this->getMockBuilder(NameResolver::class)
+//            ->disableOriginalConstructor()
+//            ->getMock();
 
         $this->selectBuilderMock = $this->getMockBuilder(SelectBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->columnsResolver = new ColumnsResolver($this->nameResolverMock);
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManager = new ObjectManagerHelper($this);
+        $this->columnsResolver = $objectManager->getObject(
+            ColumnsResolver::class,
+            [
+                'nameResolver' => new NameResolver(),
+                'resourceConnection' => $this->resourceConnectionMock
+            ]
+        );
     }
 
     public function testGetColumnsWithoutAttributes()
@@ -54,41 +82,32 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getColumnsDataProvider
      */
-    public function testGetColumns($expression, $attributeData)
+    public function testGetColumnsWithFunction($expectedColumns, $expectedGroup, $entityConfig)
     {
-        $columnAlias = 'fn';
-        $expr = new ColumnValueExpression($expression);
-        $expectedResult = [$columnAlias => $expr];
-        $columns = [$columnAlias => 'name'];
-        $entityConfig['attribute'] = ['attribute1' => $attributeData];
+        $this->resourceConnectionMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->connectionMock->expects($this->any())
+            ->method('quoteIdentifier')
+            ->with('cpe.name')
+            ->willReturn('`cpe`.`name`');
+
+//        $expr = new ColumnValueExpression($expression);
         $this->selectBuilderMock->expects($this->once())
             ->method('getColumns')
-            ->willReturn($columns);
-        $this->nameResolverMock->expects($this->at(0))
-            ->method('getAlias')
-            ->with($attributeData)
-            ->willReturn($columnAlias);
-        $this->nameResolverMock->expects($this->at(1))
-            ->method('getAlias')
-            ->with($entityConfig)
-            ->willReturn($columnAlias);
-        $this->nameResolverMock->expects($this->once())
-            ->method('getName')
-            ->with($attributeData)
-            ->willReturn('name');
-        $group = ['g'];
+            ->willReturn([]);
         $this->selectBuilderMock->expects($this->once())
             ->method('getGroup')
-            ->willReturn($group);
+            ->willReturn([]);
         $this->selectBuilderMock->expects($this->once())
             ->method('setGroup')
-            ->with(array_merge($group, $expectedResult));
+            ->with($expectedGroup);
         $this->assertEquals(
+            $expectedColumns,
             $this->columnsResolver->getColumns(
                 $this->selectBuilderMock,
                 $entityConfig
-            ),
-            $expectedResult
+            )
         );
     }
 
@@ -98,14 +117,45 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
     public function getColumnsDataProvider()
     {
         return [
-            'TestWithFunction' => [
-                    'expression' => "SUM( DISTINCT fn.name)",
-                    'attributeData' => ['adata1', 'function' => 'SUM', 'distinct' => true, 'group' => true],
+            'COUNT( DISTINCT `cpe`.`name`) AS name' => [
+                    'expectedColumns' => [
+                        'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
+                    ],
+                    'expectedGroup' => [
+                        'name' => new ColumnValueExpression('COUNT( DISTINCT `cpe`.`name`)')
+                    ],
+                    'entityConfig' =>
+                        [
+                            'name' => 'catalog_product_entity',
+                            'alias' => 'cpe',
+                            'attribute' => [
+                                [
+                                    'name' => 'name',
+                                    'function' => 'COUNT',
+                                    'distinct' => true,
+                                    'group' => true
+                                ]
+                            ],
+                        ],
+                    ],
+            'AVG(`cpe`.`name`) AS avg_name' => [
+                'expectedColumns' => [
+                    'avg_name' => new ColumnValueExpression('AVG(`cpe`.`name`)')
                 ],
-            'TestWithoutFunction' => [
-                'expression' => "fn.name",
-                'attributeData' => ['adata1', 'distinct' => true, 'group' => true],
-            ],
+                'expectedGroup' => [],
+                'entityConfig' =>
+                    [
+                        'name' => 'catalog_product_entity',
+                        'alias' => 'cpe',
+                        'attribute' => [
+                            [
+                                'name' => 'name',
+                                'alias' => 'avg_name',
+                                'function' => 'AVG',
+                            ]
+                        ],
+                    ],
+            ]
         ];
     }
 }
