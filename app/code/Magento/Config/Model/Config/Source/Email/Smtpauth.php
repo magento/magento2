@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Email;
 
+/**
+ * @api
+ */
 class Smtpauth implements \Magento\Framework\Option\ArrayInterface
 {
     /**
