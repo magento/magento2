@@ -18,7 +18,7 @@ define([
          */
         _needConfirm: function () {
 
-            var storeData = this.settings.store_data,
+            var storeData = this.settings.storeData,
 
             /* edit store view*/
                 storeViewEdit = $('[name="store[store_id]"]').length,

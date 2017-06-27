@@ -144,7 +144,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Get data for store edit
      *
-     * @return \Magento\Framework\Model\AbstractExtensibleModel
+     * @return string
      */
     public function getStoreData()
     {
