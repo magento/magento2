@@ -36,12 +36,13 @@ define([
                 defaultStore = $('[name="website[default_group_id]"]').val(),
 
             /* conditions */
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
                 storeViewUpdated = storeViewEdit && (isNewStoreView || storeData.group_id !== groupId),
                 storeUpdated = storeEdit && storeId &&
                     (storeData.root_category_id !== rootCategoryId ||
                     storeData.default_store_id !== defaultStoreView),
                 websiteUpdated = websiteEdit && storeData.default_group_id !== defaultStore;
-
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
             return storeViewUpdated || storeUpdated || websiteUpdated;
         }
     });
