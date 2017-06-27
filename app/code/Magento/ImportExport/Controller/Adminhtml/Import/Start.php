@@ -7,8 +7,6 @@ namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Message\ExceptionMessageLookupFactory;
-use Magento\Framework\App\ObjectManager;
 
 class Start extends ImportResultController
 {
@@ -28,7 +26,7 @@ class Start extends ImportResultController
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\ImportExport\Model\Import $importModel
-     * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface $exceptionMessageFactory
+     * @param \Magento\Framework\Message\ExceptionMessageFactoryInterface|null $exceptionMessageFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -40,8 +38,7 @@ class Start extends ImportResultController
     ) {
         parent::__construct($context, $reportProcessor, $historyModel, $reportHelper);
         $this->importModel = $importModel;
-        $this->exceptionMessageFactory = $exceptionMessageFactory ?: ObjectManager::getInstance()
-            ->get(ExceptionMessageLookupFactory::class);
+        $this->exceptionMessageFactory = $exceptionMessageFactory;
     }
 
     /**
@@ -68,7 +65,6 @@ class Start extends ImportResultController
             try {
                 $this->importModel->importSource();
             } catch (\Exception $e) {
-                /** @var \Magento\Framework\View\Element\Messages $resultMessageBlock */
                 $resultMessageBlock = $resultLayout->getLayout()->getBlock('messages');
                 $message = $this->exceptionMessageFactory->createMessage($e);
                 $html = $resultMessageBlock->addMessage($message)->toHtml();
@@ -94,7 +90,6 @@ class Start extends ImportResultController
             return $resultLayout;
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
