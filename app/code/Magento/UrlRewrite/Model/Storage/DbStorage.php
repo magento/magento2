@@ -96,9 +96,12 @@ class DbStorage extends AbstractStorage
 
             if (count($resultsFromDb) === 1) {
                 $resultFromDb = current($resultsFromDb);
+                $redirectTypes = [OptionProvider::TEMPORARY, OptionProvider::PERMANENT];
 
-                // If request path matches the DB value
-                if ($resultFromDb[UrlRewrite::REQUEST_PATH] === $requestPath) {
+                // If request path matches the DB value or it's redirect
+                if ($resultFromDb[UrlRewrite::REQUEST_PATH] === $requestPath
+                    || in_array((int)$resultFromDb[UrlRewrite::REDIRECT_TYPE], $redirectTypes, true)
+                ) {
                     $result = $resultFromDb;
                 } else {
                     // Otherwise return 301 redirect to request path from DB results
