@@ -5,6 +5,9 @@
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel\Search\Grid;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
 {
     /**

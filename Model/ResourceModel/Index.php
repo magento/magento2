@@ -11,6 +11,9 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
+/**
+ * @api
+ */
 class Index extends AbstractDb
 {
     /**

@@ -8,6 +8,9 @@ namespace Magento\AdvancedSearch\Model\Client;
 use \Magento\Framework\ObjectManagerInterface;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * @api
+ */
 class ClientResolver
 {
     /**
