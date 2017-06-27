@@ -56,6 +56,7 @@ class DataTest extends AbstractController
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
+        self::imageFixtureRollback();
         self::imageFixture();
         self::attributeFixture();
         self::categoryFixture();
