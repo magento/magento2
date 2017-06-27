@@ -16,8 +16,7 @@ define([], function () {
          *
          * @returns {String|undefined}
          */
-        resolve: function ()
-        {
+        resolve: function () {
             return useDefaultPostCode ?  window.checkoutConfig.defaultPostcode : undefined;
         },
 
@@ -27,8 +26,7 @@ define([], function () {
          * @param {Boolean} shouldUseDefaultPostCode
          * @returns {underscore}
          */
-        setUseDefaultPostCode: function (shouldUseDefaultPostCode)
-        {
+        setUseDefaultPostCode: function (shouldUseDefaultPostCode) {
             useDefaultPostCode = shouldUseDefaultPostCode;
 
             return this;

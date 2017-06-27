@@ -10,6 +10,7 @@ define([
 
     describe('checkout/js/model/default-post-code-resolver', function () {
         var defaultPostCodeResolver;
+
         beforeEach(function () {
             defaultPostCodeResolver = DefaultPostCodeResolver;
             window.checkoutConfig = {

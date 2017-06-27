@@ -35,10 +35,10 @@ define([
                 return;
             }
             option = options[value];
-            defaultPostCodeResolver
-                .setUseDefaultPostCode(typeof option.is_zipcode_optional !== 'undefined'&&
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+            defaultPostCodeResolver.setUseDefaultPostCode(typeof option.is_zipcode_optional !== 'undefined' &&
                 option.is_zipcode_optional === true ? false : true);
-
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
             if (this.skipValidation) {
                 this.validation['required-entry'] = false;
                 this.required(false);
