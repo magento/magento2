@@ -91,7 +91,7 @@
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregated</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorComposite</argument>
-            <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
+            <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
         </arguments>
     </type>
     <virtualType name="systemSnapshot" type="Magento\Config\App\Config\Type\System">
