@@ -38,7 +38,7 @@ $results = $block->getTrackingInfo();
                                 'template' => 'Magento_Shipping::tracking/progress.phtml'
                             ]);
                         ?>
-                        <?= /* @noEscape  */ $block->getChildHtml('shipping.tracking.progress.' . $counter) ?>
+                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.progress.' . $counter) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
             <?php else: ?>
