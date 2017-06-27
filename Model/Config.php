@@ -11,6 +11,7 @@ use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 
 /**
  * Elasticsearch config model
+ * @api
  */
 class Config implements ClientOptionsInterface
 {

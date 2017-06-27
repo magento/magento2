@@ -7,6 +7,9 @@ namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
+/**
+ * @api
+ */
 interface QueryInterface
 {
     /**

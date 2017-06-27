@@ -10,6 +10,7 @@ use Magento\Elasticsearch\Model\Config;
 
 /**
  * Alias name resolver
+ * @api
  */
 class SearchIndexNameResolver
 {

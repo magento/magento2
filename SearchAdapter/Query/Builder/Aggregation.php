@@ -9,6 +9,9 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
+/**
+ * @api
+ */
 class Aggregation
 {
     /**

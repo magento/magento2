@@ -10,6 +10,9 @@ use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @api
+ */
 class ConnectionManager
 {
     /**

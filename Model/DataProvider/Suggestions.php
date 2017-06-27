@@ -17,13 +17,23 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 class Suggestions implements SuggestedQueriesInterface
 {
-    /**#@+
-     * Suggestions settings config paths
+    /**
+     * @deprecated
+     * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT
      */
     const CONFIG_SUGGESTION_COUNT = 'catalog/search/search_suggestion_count';
+
+    /**
+     * @deprecated
+     * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT_RESULTS_ENABLED
+     */
     const CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED = 'catalog/search/search_suggestion_count_results_enabled';
+
+    /**
+     * @deprecated
+     * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_ENABLED
+     */
     const CONFIG_SUGGESTION_ENABLED = 'catalog/search/search_suggestion_enabled';
-    /**#@-*/
 
     /**
      * @var Config

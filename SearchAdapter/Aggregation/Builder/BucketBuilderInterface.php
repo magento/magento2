@@ -9,6 +9,9 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * @api
+ */
 interface BucketBuilderInterface
 {
     /**

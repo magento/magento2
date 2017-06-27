@@ -14,6 +14,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
  * Index name resolver
+ * @api
  */
 class IndexNameResolver
 {

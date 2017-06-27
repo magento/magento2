@@ -9,6 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Aggregation Factory
+ * @api
  */
 class AggregationFactory
 {

@@ -14,13 +14,25 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
 
 class Builder implements BuilderInterface
 {
-    /**#@+
-     * Text flags for Elasticsearch filter query condition types
+    /**
+     * Text flag for Elasticsearch filter query condition types
+     *
+     * @deprecated
+     * @see BuilderInterface::FILTER_QUERY_CONDITION_MUST
      */
     const QUERY_CONDITION_MUST = 'must';
+
+    /**
+     * @deprecated
+     * @see BuilderInterface::FILTER_QUERY_CONDITION_SHOULD
+     */
     const QUERY_CONDITION_SHOULD = 'should';
+
+    /**
+     * @deprecated
+     * @see BuilderInterface::FILTER_QUERY_CONDITION_MUST_NOT
+     */
     const QUERY_CONDITION_MUST_NOT = 'must_not';
-    /**#@-*/
 
     /**
      * @var FilterInterface[]

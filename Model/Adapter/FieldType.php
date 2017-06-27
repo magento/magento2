@@ -9,6 +9,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Class FieldType
+ * @api
  */
 class FieldType
 {

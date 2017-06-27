@@ -10,6 +10,9 @@ use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Framework\Module\Dir;
 
+/**
+ * @api
+ */
 class Stopwords implements PreprocessorInterface
 {
     /**

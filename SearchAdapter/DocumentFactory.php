@@ -15,6 +15,7 @@ use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * Document Factory
+ * @api
  */
 class DocumentFactory
 {
