@@ -19,11 +19,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var NameResolver|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $nameResolverMock;
-
-    /**
      * @var SelectBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $selectBuilderMock;
@@ -48,10 +43,6 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-//        $this->nameResolverMock = $this->getMockBuilder(NameResolver::class)
-//            ->disableOriginalConstructor()
-//            ->getMock();
-
         $this->selectBuilderMock = $this->getMockBuilder(SelectBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -91,8 +82,6 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
             ->method('quoteIdentifier')
             ->with('cpe.name')
             ->willReturn('`cpe`.`name`');
-
-//        $expr = new ColumnValueExpression($expression);
         $this->selectBuilderMock->expects($this->once())
             ->method('getColumns')
             ->willReturn([]);
