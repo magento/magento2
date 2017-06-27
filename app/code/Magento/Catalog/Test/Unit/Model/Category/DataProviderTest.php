@@ -336,8 +336,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->never())
             ->method('getParentId');
 
-
-        $model = $this->getModel();
-        $model->getMeta();
+        $this->getModel()->getMeta();
     }
 }
