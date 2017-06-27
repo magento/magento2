@@ -7,8 +7,10 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Sitemap\Model;
+
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 
 /**
  * Sitemap model
@@ -27,6 +29,7 @@ use Magento\Framework\App\ObjectManager;
  * @method \Magento\Sitemap\Model\Sitemap setStoreId(int $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel
 {
@@ -225,55 +228,78 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Initialize sitemap items
+     * Add a sitemap item to the array of sitemap items
+     *
+     * @param DataObject $sitemapItem
+     * @return $this
+     */
+    public function addSitemapItem(DataObject $sitemapItem)
+    {
+        $this->_sitemapItems[] = $sitemapItem;
+
+        return $this;
+    }
+
+    /**
+     * Collect all sitemap items
      *
      * @return void
      */
-    protected function _initSitemapItems()
+    public function collectSitemapItems()
     {
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
+        $this->addSitemapItem(new DataObject(
             [
                 'changefreq' => $helper->getCategoryChangefreq($storeId),
                 'priority' => $helper->getCategoryPriority($storeId),
                 'collection' => $this->_categoryFactory->create()->getCollection($storeId),
             ]
-        );
+        ));
 
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
+        $this->addSitemapItem(new DataObject(
             [
                 'changefreq' => $helper->getProductChangefreq($storeId),
                 'priority' => $helper->getProductPriority($storeId),
                 'collection' => $this->_productFactory->create()->getCollection($storeId),
             ]
-        );
+        ));
 
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
+        $this->addSitemapItem(new DataObject(
             [
                 'changefreq' => $helper->getPageChangefreq($storeId),
                 'priority' => $helper->getPagePriority($storeId),
                 'collection' => $this->_cmsFactory->create()->getCollection($storeId),
             ]
-        );
+        ));
+    }
+
+    /**
+     * Initialize sitemap
+     *
+     * @return void
+     */
+    protected function _initSitemapItems()
+    {
+        $this->collectSitemapItems();
 
         $this->_tags = [
             self::TYPE_INDEX => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
-                PHP_EOL .
-                '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
-                PHP_EOL,
+                    PHP_EOL .
+                    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
+                    PHP_EOL,
                 self::CLOSE_TAG_KEY => '</sitemapindex>',
             ],
             self::TYPE_URL => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
-                PHP_EOL .
-                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
-                ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
-                ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
-                PHP_EOL,
+                    PHP_EOL .
+                    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
+                    ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
+                    ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
+                    PHP_EOL,
                 self::CLOSE_TAG_KEY => '</urlset>',
             ],
         ];
@@ -341,6 +367,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     public function generateXml()
     {
         $this->_initSitemapItems();
+
         /** @var $sitemapItem \Magento\Framework\DataObject */
         foreach ($this->_sitemapItems as $sitemapItem) {
             $changefreq = $sitemapItem->getChangefreq();

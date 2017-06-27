@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Email;
 
+/**
+ * @api
+ */
 class Method implements \Magento\Framework\Option\ArrayInterface
 {
     /**

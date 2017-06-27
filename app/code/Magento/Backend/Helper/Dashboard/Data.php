@@ -10,6 +10,8 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Data helper for dashboard
+ *
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

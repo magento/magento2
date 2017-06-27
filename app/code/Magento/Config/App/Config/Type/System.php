@@ -11,6 +11,7 @@ use Magento\Config\App\Config\Type\System\Reader;
 
 /**
  * System configuration type
+ * @api
  */
 class System implements ConfigTypeInterface
 {
