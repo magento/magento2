@@ -59,24 +59,14 @@
                 <item name="/config/report/source/attribute" xsi:type="string">name</item>
                 <item name="/config/report/source/link-source/attribute" xsi:type="string">name</item>
                 <!-- filter conditions for main source-->
-                <item name="/config/report/source/filter" xsi:type="string">glue</item>
-                <item name="/config/report/source/filter/condition" xsi:type="array">
-                    <item name="attribute" xsi:type="string">attribute</item>
-                    <item name="operator" xsi:type="string">operator</item>
-                </item>
-                <item name="/config/report/source/filter/filter" xsi:type="string">glue</item>
-                <item name="/config/report/source/filter/filter/condition" xsi:type="array">
+                <item name="/config/report/source(/filter)+" xsi:type="string">glue</item>
+                <item name="/config/report/source(/filter)+/condition" xsi:type="array">
                     <item name="attribute" xsi:type="string">attribute</item>
                     <item name="operator" xsi:type="string">operator</item>
                 </item>
                 <!-- filter conditions for joined source-->
-                <item name="/config/report/source/link-source/filter" xsi:type="string">glue</item>
-                <item name="/config/report/source/link-source/filter/condition" xsi:type="array">
-                    <item name="attribute" xsi:type="string">attribute</item>
-                    <item name="operator" xsi:type="string">operator</item>
-                </item>
-                <item name="/config/report/source/link-source/filter/filter" xsi:type="string">glue</item>
-                <item name="/config/report/source/link-source/filter/filter/condition" xsi:type="array">
+                <item name="/config/report/source/link-source(/filter)+" xsi:type="string">glue</item>
+                <item name="/config/report/source/link-source(/filter)+/condition" xsi:type="array">
                     <item name="attribute" xsi:type="string">attribute</item>
                     <item name="operator" xsi:type="string">operator</item>
                 </item>
@@ -86,8 +76,8 @@
                     <item name="attribute" xsi:type="string">attribute</item>
                     <item name="operator" xsi:type="string">operator</item>
                 </item>
-                <item name="/config/report/source/link-source/using/filter" xsi:type="string">glue</item>
-                <item name="/config/report/source/link-source/using/filter/condition" xsi:type="array">
+                <item name="/config/report/source/link-source/using(/filter)+" xsi:type="string">glue</item>
+                <item name="/config/report/source/link-source/using(/filter)+/condition" xsi:type="array">
                     <item name="attribute" xsi:type="string">attribute</item>
                     <item name="operator" xsi:type="string">operator</item>
                 </item>
