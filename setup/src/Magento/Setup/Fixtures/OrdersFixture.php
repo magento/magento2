@@ -355,7 +355,7 @@ class OrdersFixture extends Fixture
                     $this->query('quote_item', $order, $itemData);
                     $this->query('quote_item_option', $order, $itemData, [
                         '%code%' => 'info_buyRequest',
-                        '%value%' => json_encode([
+                        '%value%' => serialize([
                             'product' => $productId($entityId, $i, Type::TYPE_SIMPLE),
                             'qty' => "1",
                             'uenc' => 'aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw'
@@ -555,6 +555,7 @@ class OrdersFixture extends Fixture
      * @param string $typeId
      * @param int $limit
      * @return array
+     * @throws \Exception
      */
     private function getProductIds(\Magento\Store\Api\Data\StoreInterface $store, $typeId, $limit = null)
     {
@@ -572,8 +573,11 @@ class OrdersFixture extends Fixture
             $productCollection->getSelect()->where(" type_id = '$typeId' ");
             $productCollection->getSelect()->where(" sku NOT LIKE 'Big%' ");
         }
-
-        return $productCollection->getAllIds($limit);
+        $ids = $productCollection->getAllIds($limit);
+        if ($limit && count($ids) < $limit) {
+            throw new \Exception('Not enough products of type: ' . $typeId);
+        }
+        return $ids;
     }
 
     /**
@@ -587,12 +591,13 @@ class OrdersFixture extends Fixture
     private function prepareSimpleProducts(array $productIds = [])
     {
         $productsResult = [];
+
         foreach ($productIds as $key => $simpleId) {
             $simpleProduct = $this->productRepository->getById($simpleId);
             $productsResult[$key]['id'] = $simpleId;
             $productsResult[$key]['sku'] = $simpleProduct->getSku();
             $productsResult[$key]['name'] = $simpleProduct->getName();
-            $productsResult[$key]['buyRequest'] = json_encode([
+            $productsResult[$key]['buyRequest'] = serialize([
                 "info_buyRequest" => [
                     "uenc" => "aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,",
                     "product" => $simpleId,
@@ -667,13 +672,13 @@ class OrdersFixture extends Fixture
             $productsResult[$key]['name'] = $configurableProduct->getName();
             $productsResult[$key]['childId'] = $simpleId;
             $productsResult[$key]['buyRequest'] = [
-                'order' => json_encode($configurableBuyRequest),
-                'quote' => json_encode($quoteConfigurableBuyRequest),
-                'super_attribute' => json_encode($superAttribute)
+                'order' => serialize($configurableBuyRequest),
+                'quote' => serialize($quoteConfigurableBuyRequest),
+                'super_attribute' => serialize($superAttribute)
             ];
             $productsResult[$key]['childBuyRequest'] = [
-                'order' => json_encode($simpleBuyRequest),
-                'quote' => json_encode($quoteSimpleBuyRequest),
+                'order' => serialize($simpleBuyRequest),
+                'quote' => serialize($quoteSimpleBuyRequest),
             ];
         }
         return $productsResult;
