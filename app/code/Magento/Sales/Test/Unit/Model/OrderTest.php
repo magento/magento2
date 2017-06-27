@@ -757,7 +757,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareOrderPayment($order, $mockedMethods = [])
     {
-        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)->disableOriginalConstructor()->getMock();
+        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         foreach ($mockedMethods as $method => $value) {
             $payment->expects($this->any())->method($method)->will($this->returnValue($value));
         }
