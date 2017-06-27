@@ -16,6 +16,7 @@ namespace Magento\GoogleOptimizer\Model;
  * @method int getStoreId()
  * @method \Magento\GoogleOptimizer\Model\Code setExperimentScript(int $value)
  * @method string getExperimentScript()
+ * @api
  */
 class Code extends \Magento\Framework\Model\AbstractModel
 {

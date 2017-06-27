@@ -9,6 +9,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
  * Advanced Catalog Search resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
