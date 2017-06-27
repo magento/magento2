@@ -318,7 +318,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @param array $ids
      * @return void
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function deleteOldRecords(array $ids)
     {
