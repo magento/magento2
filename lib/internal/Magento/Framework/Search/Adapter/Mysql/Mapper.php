@@ -23,6 +23,7 @@ use Magento\Framework\Search\RequestInterface;
 /**
  * Mapper class. Maps library request to specific adapter dependent query
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Mapper
 {

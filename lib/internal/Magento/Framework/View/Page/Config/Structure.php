@@ -8,6 +8,8 @@ namespace Magento\Framework\View\Page\Config;
 
 /**
  * Page config structure model
+ *
+ * @api
  */
 class Structure
 {

@@ -139,6 +139,7 @@
             <argument name="instanceName" xsi:type="string">systemConfigSourceAggregated</argument>
         </arguments>
     </virtualType>
+    <!-- @api -->
     <virtualType name="systemConfigPostProcessorComposite" type="Magento\Framework\App\Config\PostProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
@@ -147,6 +148,7 @@
             </argument>
         </arguments>
     </virtualType>
+    <!-- @api -->
     <virtualType name="systemConfigPreProcessorComposite" type="Magento\Framework\App\Config\PreProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
@@ -154,6 +156,7 @@
             </argument>
         </arguments>
     </virtualType>
+    <!-- @api -->
     <virtualType name="systemConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
@@ -188,6 +191,7 @@
             <argument name="configType" xsi:type="const">Magento\Config\App\Config\Type\System::CONFIG_TYPE</argument>
         </arguments>
     </virtualType>
+    <!-- @api -->
     <virtualType name="appDumpSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
@@ -253,6 +257,7 @@
             <argument name="placeholder" xsi:type="object">Magento\Config\Model\Placeholder\Environment</argument>
         </arguments>
     </type>
+    <!-- @api -->
     <virtualType name="configShowSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">

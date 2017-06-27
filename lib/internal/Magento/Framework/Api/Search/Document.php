@@ -7,6 +7,9 @@ namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\AbstractSimpleObject;
 
+/**
+ * @api
+ */
 class Document extends AbstractSimpleObject implements DocumentInterface, \IteratorAggregate
 {
     /**

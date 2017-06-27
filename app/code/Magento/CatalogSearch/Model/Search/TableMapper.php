@@ -23,6 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * and pass them one by one for processing in the FilterContext,
  * which will apply them to the Select
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class TableMapper
 {
