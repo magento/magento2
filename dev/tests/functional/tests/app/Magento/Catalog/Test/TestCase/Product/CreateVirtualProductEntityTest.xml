@@ -79,7 +79,7 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">options_suite</data>
-            <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option,catalogProductSimple::with_all_custom_option</data>
+            <data name="product/data/custom_options/import_products" xsi:type="string">catalogProductSimple::with_two_custom_option_sort_order,catalogProductSimple::with_all_custom_option</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />

@@ -18,6 +18,72 @@
                         <item name="price" xsi:type="string">10</item>
                         <item name="price_type" xsi:type="string">Percent</item>
                         <item name="sku" xsi:type="string">sku_drop_down_row_1</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="title" xsi:type="string">custom option drop down2 %isolation%</item>
+                <item name="is_require" xsi:type="string">Yes</item>
+                <item name="type" xsi:type="string">Select/Drop-down</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">20 percent</item>
+                        <item name="price" xsi:type="string">20</item>
+                        <item name="price_type" xsi:type="string">Percent</item>
+                        <item name="sku" xsi:type="string">sku_drop_down_row_2</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="two_options">
+            <field name="0" xsi:type="array">
+                <item name="title" xsi:type="string">custom option drop down %isolation%</item>
+                <item name="is_require" xsi:type="string">Yes</item>
+                <item name="type" xsi:type="string">Select/Drop-down</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">10 percent</item>
+                        <item name="price" xsi:type="string">10</item>
+                        <item name="price_type" xsi:type="string">Percent</item>
+                        <item name="sku" xsi:type="string">sku_drop_down_row_1</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">20 percent</item>
+                        <item name="price" xsi:type="string">20</item>
+                        <item name="price_type" xsi:type="string">Percent</item>
+                        <item name="sku" xsi:type="string">sku_drop_down_row_2</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="title" xsi:type="string">custom option field %isolation%</item>
+                <item name="is_require" xsi:type="string">Yes</item>
+                <item name="type" xsi:type="string">Text/Field</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="price" xsi:type="string">10</item>
+                        <item name="price_type" xsi:type="string">Fixed</item>
+                        <item name="sku" xsi:type="string">sku_field_option_%isolation%</item>
+                        <item name="max_characters" xsi:type="string">1024</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="default_sort_order">
+            <field name="0" xsi:type="array">
+                <item name="title" xsi:type="string">custom option drop down %isolation%</item>
+                <item name="is_require" xsi:type="string">Yes</item>
+                <item name="type" xsi:type="string">Select/Drop-down</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">10 percent</item>
+                        <item name="price" xsi:type="string">10</item>
+                        <item name="price_type" xsi:type="string">Percent</item>
+                        <item name="sku" xsi:type="string">sku_drop_down_row_1</item>
                         <item name="sort_order" xsi:type="string">1</item>
                     </item>
                 </item>
@@ -37,8 +103,7 @@
                 </item>
             </field>
         </dataset>
-
-        <dataset name="two_options">
+        <dataset name="two_options_sort_order">
             <field name="0" xsi:type="array">
                 <item name="title" xsi:type="string">custom option drop down %isolation%</item>
                 <item name="is_require" xsi:type="string">Yes</item>
@@ -74,7 +139,6 @@
                 </item>
             </field>
         </dataset>
-
         <dataset name="percent_and_fixed_drop_down_options">
             <field name="0" xsi:type="array">
                 <item name="title" xsi:type="string">custom option drop down %isolation%</item>
