@@ -46,6 +46,8 @@ class CustomAttributeFilterCheck
     }
 
     /**
+     * Return attribute by its code
+     *
      * @param string $field
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException

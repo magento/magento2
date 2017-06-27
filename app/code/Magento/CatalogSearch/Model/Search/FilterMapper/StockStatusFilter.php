@@ -24,9 +24,19 @@ class StockStatusFilter
     private $resourceConnection;
 
     /**
-     * Defines strategies of how filter should be applied
+     * Defines strategy of how filter should be applied
+     *
+     * Stock status filter will be applied only on parent products
+     * (e.g. only for configurable products, without options)
      */
     const FILTER_JUST_ENTITY = 'general_filter';
+
+    /**
+     * Defines strategy of how filter should be applied
+     *
+     * Stock status filter will be applied on parent products with its child
+     * (e.g. for configurable products and options)
+     */
     const FILTER_ENTITY_AND_SUB_PRODUCTS = 'filter_with_sub_products';
 
     /**

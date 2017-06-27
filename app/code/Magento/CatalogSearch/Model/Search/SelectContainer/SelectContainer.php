@@ -56,24 +56,24 @@ class SelectContainer
     private $dimensions;
 
     /**
+     * @param Select $select
      * @param array $nonCustomAttributesFilters
      * @param array $customAttributesFilters
-     * @param FilterInterface $visibilityFilter
+     * @param array $dimensions
      * @param bool $isFullTextSearchRequired
      * @param bool $isShowOutOfStockEnabled
-     * @param Select $select
      * @param string $usedIndex
-     * @param array $dimensions
+     * @param FilterInterface|null $visibilityFilter
      */
     public function __construct(
+        Select $select,
         array $nonCustomAttributesFilters,
         array $customAttributesFilters,
-        $visibilityFilter,
+        array $dimensions,
         bool $isFullTextSearchRequired,
         bool $isShowOutOfStockEnabled,
         $usedIndex,
-        array $dimensions,
-        Select $select
+        FilterInterface $visibilityFilter = null
     ) {
         $this->nonCustomAttributesFilters = $nonCustomAttributesFilters;
         $this->customAttributesFilters = $customAttributesFilters;
@@ -180,15 +180,21 @@ class SelectContainer
      */
     public function updateSelect(Select $select)
     {
-        return new self(
+        $data = [
+            clone $select,
             $this->nonCustomAttributesFilters,
             $this->customAttributesFilters,
-            $this->visibilityFilter,
+            $this->dimensions,
             $this->isFullTextSearchRequired,
             $this->isShowOutOfStockEnabled,
-            $this->usedIndex,
-            $this->dimensions,
-            clone $select
-        );
+            $this->usedIndex
+
+        ];
+
+        if ($this->visibilityFilter !== null) {
+            $data[] = clone $this->visibilityFilter;
+        }
+
+        return new self(...$data);
     }
 }

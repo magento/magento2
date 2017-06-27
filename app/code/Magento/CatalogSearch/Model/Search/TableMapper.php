@@ -28,36 +28,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class TableMapper
 {
     /**
-     * @var AppResource
-     * @deprecated
-     */
-    private $resource;
-
-    /**
-     * @var StoreManagerInterface
-     * @deprecated
-     */
-    private $storeManager;
-
-    /**
-     * @var CollectionFactory
-     * @deprecated
-     */
-    private $attributeCollectionFactory;
-
-    /**
-     * @var EavConfig
-     * @deprecated
-     */
-    private $eavConfig;
-
-    /**
-     * @var ScopeConfigInterface
-     * @deprecated
-     */
-    private $scopeConfig;
-
-    /**
      * @var FilterStrategyInterface
      */
     private $filterStrategy;
@@ -82,6 +52,7 @@ class TableMapper
      * @param FilterStrategyInterface $filterStrategy
      * @param AliasResolver $aliasResolver
      * @param FiltersExtractor $filtersExtractor
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         AppResource $resource,
@@ -93,16 +64,6 @@ class TableMapper
         AliasResolver $aliasResolver = null,
         FiltersExtractor $filtersExtractor = null
     ) {
-        $this->resource = $resource;
-        $this->storeManager = $storeManager;
-        $this->attributeCollectionFactory = $attributeCollectionFactory;
-
-        if (null === $eavConfig) {
-            $eavConfig = ObjectManager::getInstance()->get(EavConfig::class);
-        }
-        if (null === $scopeConfig) {
-            $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        }
         if (null === $filterStrategy) {
             $filterStrategy = ObjectManager::getInstance()->get(FilterStrategyInterface::class);
         }
@@ -113,8 +74,6 @@ class TableMapper
             $filtersExtractor = ObjectManager::getInstance()->get(FiltersExtractor::class);
         }
 
-        $this->eavConfig = $eavConfig;
-        $this->scopeConfig = $scopeConfig;
         $this->filterStrategy = $filterStrategy;
         $this->aliasResolver = $aliasResolver;
         $this->filtersExtractor = $filtersExtractor;

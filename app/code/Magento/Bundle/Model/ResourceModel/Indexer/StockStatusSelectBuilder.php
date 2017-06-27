@@ -10,6 +10,12 @@ use Magento\Framework\DB\Select;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
+/**
+ * Class StockStatusSelectBuilder
+ * Is used to create Select object that is used for Bundle product stock status indexation
+ *
+ * @see \Magento\Bundle\Model\ResourceModel\Indexer\Stock::_getStockStatusSelect
+ */
 class StockStatusSelectBuilder
 {
 

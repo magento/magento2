@@ -9,6 +9,12 @@ namespace Magento\Bundle\Model\ResourceModel\Indexer;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Select;
 
+/**
+ * Class BundleOptionStockDataSelectBuilder
+ * Is used to create Select object that is used for Bundle product stock status indexation
+ *
+ * @see \Magento\Bundle\Model\ResourceModel\Indexer\Stock::_prepareBundleOptionStockData
+ */
 class BundleOptionStockDataSelectBuilder
 {
     /**

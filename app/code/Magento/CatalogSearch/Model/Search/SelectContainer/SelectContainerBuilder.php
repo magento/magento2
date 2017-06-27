@@ -93,28 +93,35 @@ class SelectContainerBuilder
         foreach ($this->filtersExtractor->extractFiltersFromQuery($request->getQuery()) as $filter) {
             if ($this->customAttributeFilterCheck->isCustom($filter)) {
                 if ($filter->getField() === VisibilityFilter::VISIBILITY_FILTER_FIELD) {
-                    $visibilityFilter = $filter;
+                    $visibilityFilter = clone $filter;
                 } else {
-                    $customAttributesFilters[] = $filter;
+                    $customAttributesFilters[] = clone $filter;
                 }
             } else {
-                $nonCustomAttributesFilters[] = $filter;
+                $nonCustomAttributesFilters[] = clone $filter;
             }
         }
 
-        return $this->selectContainerFactory->create([
+        $data = [
+            'select' => $this->resource->getConnection()->select(),
             'nonCustomAttributesFilters' => $nonCustomAttributesFilters,
             'customAttributesFilters' => $customAttributesFilters,
-            'visibilityFilter' => $visibilityFilter,
+            'dimensions' => $request->getDimensions(),
             'isFullTextSearchRequired' => $this->fullTextSearchCheck->isRequiredForQuery($request->getQuery()),
             'isShowOutOfStockEnabled' => $this->isSetShowOutOfStockFlag(),
-            'usedIndex' => $request->getIndex(),
-            'dimensions' => $request->getDimensions(),
-            'select' => $this->resource->getConnection()->select()
-        ]);
+            'usedIndex' => $request->getIndex()
+        ];
+
+        if ($visibilityFilter !== null) {
+            $data['visibilityFilter'] = $visibilityFilter;
+        }
+
+        return $this->selectContainerFactory->create($data);
     }
 
     /**
+     * Checks if show_out_of_stock flag is enabled in current configuration
+     *
      * @return bool
      */
     private function isSetShowOutOfStockFlag()

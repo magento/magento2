@@ -64,6 +64,8 @@ class DimensionsProcessor
     }
 
     /**
+     * Prepares where conditions from dimensions
+     *
      * @param Dimension[] $dimensions
      * @return string[]
      */

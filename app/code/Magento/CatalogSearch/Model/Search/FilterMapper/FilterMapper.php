@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\CatalogSearch\Model\Search\FilterMapper\StockStatusFilter;
 use Magento\CatalogInventory\Model\Stock;
 
 /**
@@ -96,7 +95,6 @@ class FilterMapper
         $appliedFilters = [];
 
         if ($selectContainer->hasVisibilityFilter()) {
-
             $filterType = VisibilityFilter::FILTER_BY_WHERE;
             if ($selectContainer->hasCustomAttributesFilters()) {
                 $filterType = VisibilityFilter::FILTER_BY_JOIN;
@@ -119,20 +117,5 @@ class FilterMapper
 
         $selectContainer = $selectContainer->updateSelect($select);
         return $selectContainer;
-    }
-
-    /**
-     * This method is deprecated.
-     * Please use \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver::getAlias() instead.
-     *
-     * @deprecated
-     * @see AliasResolver::getAlias()
-     *
-     * @param \Magento\Framework\Search\Request\FilterInterface $filter
-     * @return string
-     */
-    public function getMappingAlias(\Magento\Framework\Search\Request\FilterInterface $filter)
-    {
-        return $this->aliasResolver->getAlias($filter);
     }
 }

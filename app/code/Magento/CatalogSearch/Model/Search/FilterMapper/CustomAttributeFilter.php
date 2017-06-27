@@ -96,23 +96,19 @@ class CustomAttributeFilter
 
             $attributes[] = $attributeId;
 
-            $joinConditions = $this->createQueryConditions($attributeId, $filterJoinAlias);
-
-            array_unshift(
-                $joinConditions,
-                sprintf('%s.entity_id = %s.entity_id', $mainTableAlias, $filterJoinAlias),
-                sprintf('%s.source_id = %s.source_id', $mainTableAlias, $filterJoinAlias)
-            );
-
             $select->joinInner(
                 [$filterJoinAlias => $this->resourceConnection->getTableName('catalog_product_index_eav')],
-                $this->conditionManager->combineQueries($joinConditions, Select::SQL_AND),
+                $this->conditionManager->combineQueries(
+                    $this->getJoinConditions($attributeId, $mainTableAlias, $filterJoinAlias),
+                    Select::SQL_AND
+                ),
                 []
             );
         }
 
         if (count($attributes) === 1) {
             // forces usage of PRIMARY key in main table
+            // is required to boost performance in case when we have just one filter by custom attribute
             $attribute = reset($attributes);
             $filter = reset($filters);
             $select->where(
@@ -134,20 +130,25 @@ class CustomAttributeFilter
     }
 
     /**
-     * @param int $attributeId
-     * @param string $mainTableAlias
+     * Returns Joins conditions for table catalog_product_index_eav
+     *
+     * @param int $attrId
+     * @param string $mainTable
+     * @param string $joinTable
      * @return array
      */
-    private function createQueryConditions($attributeId, $mainTableAlias)
+    private function getJoinConditions($attrId, $mainTable, $joinTable)
     {
         return [
+            sprintf('`%s`.`entity_id` = `%s`.`entity_id`', $mainTable, $joinTable),
+            sprintf('`%s`.`source_id` = `%s`.`source_id`', $mainTable, $joinTable),
             $this->conditionManager->generateCondition(
-                sprintf('%s.attribute_id', $mainTableAlias),
+                sprintf('%s.attribute_id', $joinTable),
                 '=',
-                $attributeId
+                $attrId
             ),
             $this->conditionManager->generateCondition(
-                sprintf('%s.store_id', $mainTableAlias),
+                sprintf('%s.store_id', $joinTable),
                 '=',
                 (int) $this->storeManager->getStore()->getId()
             )
@@ -155,6 +156,8 @@ class CustomAttributeFilter
     }
 
     /**
+     * Returns attribute id by code
+     *
      * @param string $field
      * @return int|null
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -57,19 +57,19 @@ class VisibilityFilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Invalid filter type: Luke I am your father!
+     * @expectedExceptionMessage Invalid filter type: Luke, I am your father!
      */
     public function testApplyWithWrongType()
     {
         $select = $this->resource->getConnection()->select();
         $filter = $this->mockFilter();
 
-        $this->visibilityFilter->apply($select, $filter, 'Luke I am your father!');
+        $this->visibilityFilter->apply($select, $filter, 'Luke, I am your father!');
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Wrong id for visibility attribute
+     * @expectedExceptionMessage Wrong code for visibility attribute
      */
     public function testApplyWithWrongAttributeCode()
     {

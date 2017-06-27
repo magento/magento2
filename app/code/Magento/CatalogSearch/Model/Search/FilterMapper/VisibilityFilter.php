@@ -26,8 +26,18 @@ class VisibilityFilter
 
     /**
      * Defines strategies of how filter should be applied
+     *
+     * Visibility filter will be applied through the additional inner join condition
+     * This strategy is used when general Select query contains filters by other eav attributes
      */
     const FILTER_BY_JOIN = 'join_filter';
+
+    /**
+     * Defines strategies of how filter should be applied
+     *
+     * Visibility filter will be applied through the additional where condition
+     * This strategy is used when general Select query does not contain any other filters by eav attributes
+     */
     const FILTER_BY_WHERE = 'where_filter';
 
     /**
@@ -171,6 +181,8 @@ class VisibilityFilter
     }
 
     /**
+     * Returns visibility attribute id
+     *
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
@@ -183,7 +195,7 @@ class VisibilityFilter
         );
 
         if ($attr === null) {
-            throw new \InvalidArgumentException('Wrong id for visibility attribute');
+            throw new \InvalidArgumentException('Wrong code for visibility attribute');
         }
 
         return (int) $attr->getId();

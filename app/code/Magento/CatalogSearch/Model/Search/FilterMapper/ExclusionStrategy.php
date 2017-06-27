@@ -56,7 +56,7 @@ class ExclusionStrategy implements FilterStrategyInterface
         \Magento\Framework\Search\Request\FilterInterface $filter,
         \Magento\Framework\DB\Select $select
     ) {
-        if (!in_array($filter->getField(), $this->validFields)) {
+        if (!in_array($filter->getField(), $this->validFields, true)) {
             return false;
         }
 
@@ -68,6 +68,8 @@ class ExclusionStrategy implements FilterStrategyInterface
     }
 
     /**
+     * Applies filter bt price field
+     *
      * @param \Magento\Framework\Search\Request\FilterInterface $filter
      * @param \Magento\Framework\DB\Select $select
      * @return bool
@@ -97,6 +99,8 @@ class ExclusionStrategy implements FilterStrategyInterface
     }
 
     /**
+     * Applies filter by category
+     *
      * @param \Magento\Framework\Search\Request\FilterInterface $filter
      * @param \Magento\Framework\DB\Select $select
      * @return bool
