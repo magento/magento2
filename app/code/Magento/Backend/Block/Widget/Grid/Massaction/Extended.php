@@ -275,9 +275,9 @@ class Extended extends \Magento\Backend\Block\Widget
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
         
-        if($this->getMassactionIdField()) {
+        if ($this->getMassactionIdField()) {
             $massActionIdField = $this->getMassactionIdField();
-        }else {
+        } else {
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
         
