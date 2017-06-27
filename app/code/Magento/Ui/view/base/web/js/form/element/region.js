@@ -11,7 +11,7 @@ define([
     'uiRegistry',
     './select',
     'Magento_Checkout/js/model/default-post-code-resolver'
-], function (_, registry, Select, DefaultPostCodeResolver) {
+], function (_, registry, Select, defaultPostCodeResolver) {
     'use strict';
 
     return Select.extend({
@@ -35,9 +35,10 @@ define([
                 return;
             }
             option = options[value];
-            DefaultPostCodeResolver
-                .setUseDefaultPostCode('undefined' !== typeof option.is_zipcode_optional &&
-                true === option.is_zipcode_optional ? false : true);
+            defaultPostCodeResolver
+                .setUseDefaultPostCode(typeof option.is_zipcode_optional !== 'undefined'&&
+                option.is_zipcode_optional === true ? false : true);
+
             if (this.skipValidation) {
                 this.validation['required-entry'] = false;
                 this.required(false);
