@@ -10,7 +10,7 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
  */
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {
-    protected $collection;
+    protected $searchCollection;
 
     public function __construct(\Magento\CatalogSearch\Model\ResourceModel\Search\Collection $searchCollection)
     {
