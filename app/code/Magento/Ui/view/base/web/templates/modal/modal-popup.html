@@ -5,19 +5,21 @@
  */
 -->
 
-<aside
-    class="modal-<%- data.type %> <%- data.modalClass %>
-           <% if(data.responsive){ %><%- data.responsiveClass %><% } %>
-           <% if(data.innerScroll){ %><%- data.innerScrollClass %><% } %>"
-    data-role="modal"
-    data-type="<%- data.type %>"
-    tabindex="0">
+<aside role="dialog"
+       class="modal-<%- data.type %> <%- data.modalClass %>
+               <% if(data.responsive){ %><%- data.responsiveClass %><% } %>
+               <% if(data.innerScroll){ %><%- data.innerScrollClass %><% } %>"
+       <% if(data.title){ %> aria-labelledby="modal-title-<%- data.id %>"<% } %>
+       aria-describedby="modal-content-<%- data.id %>"
+       data-role="modal"
+       data-type="<%- data.type %>"
+       tabindex="0">
     <div data-role="focusable-start" tabindex="0"></div>
     <div class="modal-inner-wrap"
          data-role="focusable-scope">
         <header class="modal-header">
             <% if(data.title || data.subTitle){ %>
-            <h1 class="modal-title"
+            <h1 id="modal-title-<%- data.id %>" class="modal-title"
                 data-role="title">
                 <% if(data.title){ %>
                     <%= data.title %>
@@ -38,7 +40,7 @@
                 <span><%= data.closeText %></span>
             </button>
         </header>
-        <div
+        <div id="modal-content-<%- data.id %>"
             class="modal-content"
             data-role="content"></div>
         <% if(data.buttons.length > 0){ %>

@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Config\App\Config\Type;
 
 use Magento\Framework\App\Config\ConfigTypeInterface;
-use Magento\Framework\DataObject;
+use Magento\Framework\App\ObjectManager;
+use Magento\Config\App\Config\Type\System\Reader;
 
 /**
- * Class process source, cache them and retrieve value by path
+ * System configuration type
+ * @api
  */
 class System implements ConfigTypeInterface
 {
@@ -24,9 +25,9 @@ class System implements ConfigTypeInterface
     private $source;
 
     /**
-     * @var DataObject
+     * @var array
      */
-    private $data;
+    private $data = [];
 
     /**
      * @var \Magento\Framework\App\Config\Spi\PostProcessorInterface
@@ -66,14 +67,18 @@ class System implements ConfigTypeInterface
     private $configType;
 
     /**
-     * Key name for flag which displays whether configuration is cached or not.
-     *
-     * Once configuration is cached additional flag pushed to cache storage
-     * to be able check cache existence without data load.
-     *
-     * @var string
+     * @var Reader
      */
-    private $cacheExistenceKey;
+    private $reader;
+
+    /**
+     * List of scopes that were retrieved from configuration storage
+     *
+     * Is used to make sure that we don't try to load non-existing configuration scopes.
+     *
+     * @var array
+     */
+    private $availableDataScopes = null;
 
     /**
      * @param \Magento\Framework\App\Config\ConfigSourceInterface $source
@@ -84,6 +89,7 @@ class System implements ConfigTypeInterface
      * @param \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor
      * @param int $cachingNestedLevel
      * @param string $configType
+     * @param Reader $reader
      */
     public function __construct(
         \Magento\Framework\App\Config\ConfigSourceInterface $source,
@@ -93,7 +99,8 @@ class System implements ConfigTypeInterface
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\Framework\App\Config\Spi\PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1,
-        $configType = self::CONFIG_TYPE
+        $configType = self::CONFIG_TYPE,
+        Reader $reader = null
     ) {
         $this->source = $source;
         $this->postProcessor = $postProcessor;
@@ -103,150 +110,174 @@ class System implements ConfigTypeInterface
         $this->fallback = $fallback;
         $this->serializer = $serializer;
         $this->configType = $configType;
-        $this->cacheExistenceKey = $this->configType . '_CACHE_EXISTS';
+        $this->reader = $reader ?: ObjectManager::getInstance()->get(Reader::class);
     }
 
     /**
+     * System configuration is separated by scopes (default, websites, stores). Configuration of a scope is inherited
+     * from its parent scope (store inherits website).
+     *
+     * Because there can be many scopes on single instance of application, the configuration data can be pretty large,
+     * so it does not make sense to load all of it on every application request. That is why we cache configuration
+     * data by scope and only load configuration scope when a value from that scope is requested.
+     *
+     * Possible path values:
+     * '' - will return whole system configuration (default scope + all other scopes)
+     * 'default' - will return all default scope configuration values
+     * '{scopeType}' - will return data from all scopes of a specified {scopeType} (websites, stores)
+     * '{scopeType}/{scopeCode}' - will return data for all values of the scope specified by {scopeCode} and scope type
+     * '{scopeType}/{scopeCode}/some/config/variable' - will return value of the config variable in the specified scope
+     *
      * @inheritdoc
      */
     public function get($path = '')
     {
-        if ($path === null) {
-            $path = '';
+        if ($path === '') {
+            $this->data = array_replace_recursive($this->loadAllData(), $this->data);
+            return $this->data;
         }
-        if ($this->isConfigRead($path)) {
-            return $this->data->getData($path);
+        $pathParts = explode('/', $path);
+        if (count($pathParts) === 1 && $pathParts[0] !== 'default') {
+            if (!isset($this->data[$pathParts[0]])) {
+                $data = $this->reader->read();
+                $this->data = array_replace_recursive($data, $this->data);
+            }
+            return $this->data[$pathParts[0]];
         }
-
-        if (!empty($path) && $this->isCacheExists()) {
-            return $this->readFromCache($path);
+        $scopeType = array_shift($pathParts);
+        if ($scopeType === 'default') {
+            if (!isset($this->data[$scopeType])) {
+                $this->data = array_replace_recursive($this->loadDefaultScopeData($scopeType), $this->data);
+            }
+            return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
         }
-
-        $config = $this->loadConfig();
-        $this->cacheConfig($config);
-        $this->data = new DataObject($config);
-        return $this->data->getData($path);
+        $scopeId = array_shift($pathParts);
+        if (!isset($this->data[$scopeType][$scopeId])) {
+            $this->data = array_replace_recursive($this->loadScopeData($scopeType, $scopeId), $this->data);
+        }
+        return isset($this->data[$scopeType][$scopeId])
+            ? $this->getDataByPathParts($this->data[$scopeType][$scopeId], $pathParts)
+            : null;
     }
 
     /**
-     * Check whether configuration is cached
-     *
-     * In case configuration cache exists method 'load' returns
-     * value equal to $this->cacheExistenceKey
-     *
-     * @return bool
-     */
-    private function isCacheExists()
-    {
-        return $this->cache->load($this->cacheExistenceKey) !== false;
-    }
-
-    /**
-     * Explode path by '/'(forward slash) separator
-     *
-     * In case $path string contains forward slash symbol(/) the $path is exploded and parts array is returned
-     * In other case empty array is returned
-     *
-     * @param string $path
-     * @return array
-     */
-    private function getPathParts($path)
-    {
-        $pathParts = [];
-        if (strpos($path, '/') !== false) {
-            $pathParts = explode('/', $path);
-        }
-        return $pathParts;
-    }
-
-    /**
-     * Check whether requested configuration data is read to memory
-     *
-     * Because of configuration is cached partially each part can be loaded separately
-     * Method performs check if corresponding system configuration part is already loaded to memory
-     * and value can be retrieved directly without cache look up
-     *
-     *
-     * @param string $path
-     * @return bool
-     */
-    private function isConfigRead($path)
-    {
-        $pathParts = $this->getPathParts($path);
-        return !empty($pathParts) && isset($this->data[$pathParts[0]][$pathParts[1]]);
-    }
-
-    /**
-     * Load configuration from all the sources
-     *
-     * System configuration is loaded in 3 steps performing consecutive calls to
-     * Pre Processor, Fallback Processor, Post Processor accordingly
+     * Load configuration data for all scopes
      *
      * @return array
      */
-    private function loadConfig()
+    private function loadAllData()
     {
-        $data = $this->preProcessor->process($this->source->get());
-        $this->data = new DataObject($data);
-        $data = $this->fallback->process($data);
-        $this->data = new DataObject($data);
-
-        return $this->postProcessor->process($data);
+        $cachedData = $this->cache->load($this->configType);
+        if ($cachedData === false) {
+            $data = $this->reader->read();
+        } else {
+            $data = $this->serializer->unserialize($cachedData);
+        }
+        return $data;
     }
 
     /**
+     * Load configuration data for default scope
      *
-     * Load configuration and caching it by parts.
+     * @param string $scopeType
+     * @return array
+     */
+    private function loadDefaultScopeData($scopeType)
+    {
+        $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
+        if ($cachedData === false) {
+            $data = $this->reader->read();
+            $this->cacheData($data);
+        } else {
+            $data = [$scopeType => $this->serializer->unserialize($cachedData)];
+        }
+        return $data;
+    }
+
+    /**
+     * Load configuration data for a specified scope
      *
-     * To be cached configuration is loaded first.
-     * Then it is cached by parts to minimize memory usage on load.
-     * Additional flag cached as well to give possibility check cache existence without data load.
+     * @param string $scopeType
+     * @param string $scopeId
+     * @return array
+     */
+    private function loadScopeData($scopeType, $scopeId)
+    {
+        $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
+        if ($cachedData === false) {
+            if ($this->availableDataScopes === null) {
+                $cachedScopeData = $this->cache->load($this->configType . '_scopes');
+                if ($cachedScopeData !== false) {
+                    $this->availableDataScopes = $this->serializer->unserialize($cachedScopeData);
+                }
+            }
+            if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType][$scopeId])) {
+                return [$scopeType => [$scopeId => []]];
+            }
+            $data = $this->reader->read();
+            $this->cacheData($data);
+        } else {
+            $data = [$scopeType => [$scopeId => $this->serializer->unserialize($cachedData)]];
+        }
+        return $data;
+    }
+
+    /**
+     * Cache configuration data.
+     * Caches data per scope to avoid reading data for all scopes on every request
      *
      * @param array $data
      * @return void
      */
-    private function cacheConfig($data)
+    private function cacheData(array $data)
     {
-        foreach ($data as $scope => $scopeData) {
-            foreach ($scopeData as $key => $config) {
+        $this->cache->save(
+            $this->serializer->serialize($data),
+            $this->configType,
+            [self::CACHE_TAG]
+        );
+        $this->cache->save(
+            $this->serializer->serialize($data['default']),
+            $this->configType . '_default',
+            [self::CACHE_TAG]
+        );
+        $scopes = [];
+        foreach (['websites', 'stores'] as $curScopeType) {
+            foreach ($data[$curScopeType] as $curScopeId => $curScopeData) {
+                $scopes[$curScopeType][$curScopeId] = 1;
                 $this->cache->save(
-                    $this->serializer->serialize($config),
-                    $this->configType . '_' . $scope . $key,
+                    $this->serializer->serialize($curScopeData),
+                    $this->configType . '_' . $curScopeType . '_' . $curScopeId,
                     [self::CACHE_TAG]
                 );
             }
         }
-        $this->cache->save($this->cacheExistenceKey, $this->cacheExistenceKey, [self::CACHE_TAG]);
+        $this->cache->save(
+            $this->serializer->serialize($scopes),
+            $this->configType . "_scopes",
+            [self::CACHE_TAG]
+        );
     }
 
     /**
-     * Read cached configuration
+     * Walk nested hash map by keys from $pathParts
      *
-     * Read section of system configuration corresponding to requested $path from cache
-     * Configuration stored to internal property right after load to prevent additional
-     * requests to cache storage
-     *
-     * @param string $path
+     * @param array $data to walk in
+     * @param array $pathParts keys path
      * @return mixed
      */
-    private function readFromCache($path)
+    private function getDataByPathParts($data, $pathParts)
     {
-        if ($this->data === null) {
-            $this->data = new DataObject();
-        }
-
-        $result = null;
-        $pathParts = $this->getPathParts($path);
-        if (!empty($pathParts)) {
-            $result = $this->cache->load($this->configType . '_' . $pathParts[0] . $pathParts[1]);
-            if ($result !== false) {
-                $readData = $this->data->getData();
-                $readData[$pathParts[0]][$pathParts[1]] = $this->serializer->unserialize($result);
-                $this->data->setData($readData);
+        foreach ($pathParts as $key) {
+            if ((array)$data === $data && isset($data[$key])) {
+                $data = $data[$key];
+            } elseif ($data instanceof \Magento\Framework\DataObject) {
+                $data = $data->getDataByKey($key);
+            } else {
+                return null;
             }
         }
-
-        return $this->data->getData($path);
+        return $data;
     }
 
     /**
@@ -260,7 +291,7 @@ class System implements ConfigTypeInterface
      */
     public function clean()
     {
-        $this->data = null;
+        $this->data = [];
         $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
     }
 }

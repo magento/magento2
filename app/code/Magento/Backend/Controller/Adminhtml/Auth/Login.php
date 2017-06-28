@@ -6,6 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
+/**
+ * @api
+ */
 class Login extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**

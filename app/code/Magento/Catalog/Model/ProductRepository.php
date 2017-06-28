@@ -308,7 +308,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
-            $this->instancesById = array_slice($this->instancesById, $offset);
+            $this->instancesById = array_slice($this->instancesById, $offset, null, true);
             $this->instances = array_slice($this->instances, $offset);
         }
     }
@@ -634,7 +634,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
+            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'), $e);
         }
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
