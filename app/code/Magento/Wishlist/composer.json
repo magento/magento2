@@ -20,8 +20,7 @@
         "magento/module-bundle": "100.2.*",
         "magento/module-cookie": "100.2.*",
         "magento/module-grouped-product": "100.2.*",
-        "magento/module-wishlist-sample-data": "Sample Data version:100.2.*",
-        "magento/module-theme": "100.2.*"
+        "magento/module-wishlist-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
