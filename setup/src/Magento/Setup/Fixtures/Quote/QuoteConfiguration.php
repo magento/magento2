@@ -115,25 +115,24 @@ class QuoteConfiguration extends \Magento\Framework\DataObject
             'fixture_data_filename',
             dirname(__DIR__) . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . $this->fixtureDataFilename
         );
+        $this->accumulateData();
 
-        \Magento\Framework\DataObject\Mapper::accumulateByMap(
-            [$this->fixtureModel, 'getValue'],
-            [$this, 'setNotEmptyData'],
-            $this->_globalMap
-        );
         return $this;
     }
 
     /**
-     * @param string|array $key
-     * @param mixed $value
+     * Accumulate data from fixute model to object values.
+     *
      * @return $this
      */
-    public function setNotEmptyData($key, $value)
+    private function accumulateData()
     {
-        if (null === $value) {
-            return $this;
+        foreach ($this->_globalMap as $getKey => $setKey) {
+            $value = $this->fixtureModel->getValue($getKey);
+            if (null !== $value) {
+                $this->setData($setKey, $value);
+            }
         }
-        return $this->setData($key, $value);
+        return $this;
     }
 }

@@ -113,7 +113,7 @@ class QuoteGenerator
     }
 
     /**
-     * Prepare and save quotes in database
+     * Prepare and save quotes in database.
      *
      * @throws \Exception
      * @return void
@@ -135,13 +135,12 @@ class QuoteGenerator
             $maxItemsPerOrder
         );
         $this->productStubData = $this->prepareProductsForQuote();
-
         $this->prepareQueryTemplates();
 
         $entityId = $this->getMaxEntityId('quote', \Magento\Quote\Model\ResourceModel\Quote::class, 'entity_id');
         $quoteQty = $this->config->getExistsQuoteQuantity();
         $batchNumber = 0;
-        while ($quoteQty <= $this->config->getRequiredQuoteQuantity()) {
+        while ($quoteQty < $this->config->getRequiredQuoteQuantity()) {
             $entityId++;
             $batchNumber++;
             $quoteQty++;
@@ -171,7 +170,7 @@ class QuoteGenerator
     }
 
     /**
-     * Save quote and quote items
+     * Save quote and quote items.
      *
      * @param int $entityId
      * @param \Generator $itemIdSequence
@@ -215,30 +214,18 @@ class QuoteGenerator
             $itemIdSequence->next();
         }
 
-        $type = Configurable::TYPE_CODE;
-        for ($i = 0; $i < $productCount[$type]; $i++) {
-            // Generate parent item
-            $parentItemId = $itemIdSequence->current();
-            $this->saveParentItemConfigurableData($entityId, $i, $parentItemId, Configurable::TYPE_CODE, $quote);
-            $itemIdSequence->next();
+        foreach ([Configurable::TYPE_CODE, QuoteConfiguration::BIG_CONFIGURABLE_TYPE] as $type) {
+            for ($i = 0; $i < $productCount[$type]; $i++) {
+                // Generate parent item
+                $parentItemId = $itemIdSequence->current();
+                $this->saveParentItemConfigurableData($entityId, $i, $parentItemId, $type, $quote);
+                $itemIdSequence->next();
 
-            // Generate child item
-            $itemId = $itemIdSequence->current();
-            $this->saveChildItemConfigurable($entityId, $i, $itemId, $parentItemId, Configurable::TYPE_CODE, $quote);
-            $itemIdSequence->next();
-        }
-
-        $type = QuoteConfiguration::BIG_CONFIGURABLE_TYPE;
-        for ($i = 0; $i < $productCount[$type]; $i++) {
-            // Generate parent item
-            $parentItemId = $itemIdSequence->current();
-            $this->saveParentItemConfigurableData($entityId, $i, $parentItemId, $type, $quote);
-            $itemIdSequence->next();
-
-            // Generate child item
-            $itemId = $itemIdSequence->current();
-            $this->saveChildItemConfigurable($entityId, $i, $itemId, $parentItemId, $type, $quote);
-            $itemIdSequence->next();
+                // Generate child item
+                $itemId = $itemIdSequence->current();
+                $this->saveChildItemConfigurable($entityId, $i, $itemId, $parentItemId, $type, $quote);
+                $itemIdSequence->next();
+            }
         }
     }
 
@@ -351,23 +338,23 @@ class QuoteGenerator
     /**
      * Get store id for quote item by product index.
      *
-     * @param int $index
+     * @param int $entityId
      * @return int
      */
-    private function getStubProductStoreId($index)
+    private function getStubProductStoreId($entityId)
     {
-        return $this->productStubData[$index % count($this->productStubData)][0];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][0];
     }
 
     /**
      * Get store name for quote item by product index.
      *
-     * @param int $index
+     * @param int $entityId
      * @return string
      */
-    private function getStubProductStoreName($index)
+    private function getStubProductStoreName($entityId)
     {
-        return $this->productStubData[$index % count($this->productStubData)][1];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][1];
     }
 
     /**
@@ -380,7 +367,7 @@ class QuoteGenerator
      */
     private function getStubProductId($entityId, $index, $type)
     {
-        return $this->productStubData[$entityId % count($this->productStubData)][2][$type][$index]['id'];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][2][$type][$index]['id'];
     }
 
     /**
@@ -393,7 +380,7 @@ class QuoteGenerator
      */
     private function getStubProductSku($entityId, $index, $type)
     {
-        return $this->productStubData[$entityId % count($this->productStubData)][2][$type][$index]['sku'];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][2][$type][$index]['sku'];
     }
 
     /**
@@ -406,7 +393,7 @@ class QuoteGenerator
      */
     private function getStubProductName($entityId, $index, $type)
     {
-        return $this->productStubData[$entityId % count($this->productStubData)][2][$type][$index]['name'];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][2][$type][$index]['name'];
     }
 
     /**
@@ -419,7 +406,7 @@ class QuoteGenerator
      */
     private function getStubProductBuyRequest($entityId, $index, $type)
     {
-        return $this->productStubData[$entityId % count($this->productStubData)][2][$type][$index]['buyRequest'];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][2][$type][$index]['buyRequest'];
     }
 
     /**
@@ -432,7 +419,7 @@ class QuoteGenerator
      */
     private function getStubProductChildBuyRequest($entityId, $index, $type)
     {
-        return $this->productStubData[$entityId % count($this->productStubData)][2][$type][$index]['childBuyRequest'];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][2][$type][$index]['childBuyRequest'];
     }
 
     /**
@@ -445,7 +432,20 @@ class QuoteGenerator
      */
     private function getStubProductChildId($entityId, $index, $type)
     {
-        return $this->productStubData[$entityId % count($this->productStubData)][2][$type][$index]['childId'];
+        return $this->productStubData[$this->getProductStubIndex($entityId)][2][$type][$index]['childId'];
+    }
+
+    /**
+     * Get index of item in product stub array.
+     *
+     * @param int $entityId
+     * @return int
+     */
+    private function getProductStubIndex($entityId)
+    {
+        $storeCount = count($this->productStubData);
+        $qty = intdiv($this->config->getRequiredQuoteQuantity(), $storeCount);
+        return intdiv($entityId, $qty) % $storeCount;
     }
 
     /**
@@ -476,6 +476,7 @@ class QuoteGenerator
     private function prepareProductsForQuote()
     {
         $result = [];
+
         foreach ($this->storeManager->getStores() as $store) {
             $productsResult = [];
             $this->storeManager->setCurrentStore($store->getId());
@@ -485,23 +486,21 @@ class QuoteGenerator
                     $this->getProductIds($store, Type::TYPE_SIMPLE, $this->config->getSimpleCountTo())
                 );
             }
-            if ($this->config->getConfigurableCountTo() > 0) {
-                $productsResult[Configurable::TYPE_CODE] = $this->prepareConfigurableProducts(
-                    $this->getProductIds(
-                        $store,
-                        Configurable::TYPE_CODE,
-                        $this->config->getConfigurableCountTo()
-                    )
-                );
-            }
-            if ($this->config->getBigConfigurableCountTo() > 0) {
-                $productsResult[QuoteConfiguration::BIG_CONFIGURABLE_TYPE] = $this->prepareConfigurableProducts(
-                    $this->getProductIds(
-                        $store,
-                        QuoteConfiguration::BIG_CONFIGURABLE_TYPE,
-                        $this->config->getBigConfigurableCountTo()
-                    )
-                );
+            $configurables = [
+                Configurable::TYPE_CODE => $this->config->getConfigurableCountTo(),
+                QuoteConfiguration::BIG_CONFIGURABLE_TYPE => $this->config->getBigConfigurableCountTo(),
+            ];
+
+            foreach ($configurables as $type => $qty) {
+                if ($qty > 0) {
+                    $productsResult[$type] = $this->prepareConfigurableProducts(
+                        $this->getProductIds(
+                            $store,
+                            $type,
+                            $qty
+                        )
+                    );
+                }
             }
 
             $result[] = [
@@ -514,6 +513,7 @@ class QuoteGenerator
                 $productsResult
             ];
         }
+
         return $result;
     }
 
