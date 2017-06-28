@@ -10,7 +10,7 @@
 
 ?>
 <div class="block newsletter">
-    <div class="title"><strong><?= /* @escapeNotVerified */ __('Newsletter') ?></strong></div>
+    <div class="title"><strong><?= $block->escapeHtml(__('Newsletter')) ?></strong></div>
     <div class="content">
         <form class="form subscribe"
             novalidate
