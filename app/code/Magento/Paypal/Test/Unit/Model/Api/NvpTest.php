@@ -253,4 +253,30 @@ class NvpTest extends \PHPUnit_Framework_TestCase
         $debugReplacePrivateDataKeys = $this->_invokeNvpProperty($this->model, '_debugReplacePrivateDataKeys');
         $this->assertEquals($debugReplacePrivateDataKeys, $this->model->getDebugReplacePrivateDataKeys());
     }
+
+    /**
+     * Tests case if obtained response with code 10415 'Transaction has already
+     * been completed for this token'. It must does not throws the exception and
+     * must returns response array.
+     */
+    public function testCallTransactionHasBeenCompleted ()
+    {
+        $response =    "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
+            . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.';
+        $processableErrors =[10415];
+        $this->curl->expects($this->once())
+            ->method('read')
+            ->will($this->returnValue($response));
+        $this->model->setProcessableErrors($processableErrors);
+        $this->customLoggerMock->expects($this->once())
+            ->method('debug');
+        $expectedResponse = [
+            'ACK' => 'Failure',
+            'L_ERRORCODE0' => '10415',
+            'L_SHORTMESSAGE0' => 'Message.',
+            'L_LONGMESSAGE0' => 'Long Message.'
+        ];
+
+        $this->assertEquals($expectedResponse, $this->model->call('some method', ['data' => 'some data']));
+    }
 }
