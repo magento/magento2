@@ -21,9 +21,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Fill out fields data according to data set.
  * 5. Save CMS Page.
  * 6. Verify created CMS Page.
+ * 7. Navigate to Content > Elements > Pages.
+ * 8. Start to create new CMS Page.
+ * 9. Fill out the same fields data according to data set.
+ * 10. Save CMS Page.
+ * 11. Verify user friendly url rewrite message is displayed.
  *
  * @group CMS_Content
- * @ZephyrId MAGETWO-25580
+ * @ZephyrId MAGETWO-70306
  */
 class CreateDuplicateUrlCmsPageEntityTest extends Injectable
 {

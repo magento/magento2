@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Cms\Test\TestCase\CreateDuplicateUrlCmsPageEntityTest" summary="Create CMS Page URL Rewrites" ticketId="MAGETWO-24847">
-        <variation name="CreateCmsPageEntityTestVariation1" summary="Create CMS Content Page" ticketId="MAGETWO-12399">
+    <testCase name="Magento\Cms\Test\TestCase\CreateDuplicateUrlCmsPageEntityTest" summary="Create CMS Page URL Rewrites" ticketId="MAGETWO-70306">
+        <variation name="CreateCmsPageEntityTestVariation1" summary="Create Duplicate Url CMS Content Page" >
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>

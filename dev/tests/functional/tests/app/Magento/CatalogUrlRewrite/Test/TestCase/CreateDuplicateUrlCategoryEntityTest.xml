@@ -14,7 +14,7 @@
             <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
             <data name="category/data/name" xsi:type="string">Subcategory%isolation%</data>
             <data name="category/data/url_key" xsi:type="string">subcategory-%isolation%</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1</data>
             <constraint name="Magento\CatalogUrlRewrite\Test\Constraint\AssertCategoryUrlDuplicateErrorMessage" />
         </variation>
     </testCase>
