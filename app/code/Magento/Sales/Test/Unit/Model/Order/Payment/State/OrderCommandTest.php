@@ -8,14 +8,14 @@ namespace Magento\Sales\Test\Unit\Model\Order\Payment\State;
 use Magento\Directory\Model\Currency;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
+use Magento\Sales\Model\Order\Payment\State\OrderCommand;
 use Magento\Sales\Model\Order\StatusResolver;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * @see AuthorizeCommand
+ * @see OrderCommand
  */
-class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
+class OrderCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var float
@@ -28,7 +28,7 @@ class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
     private $newOrderStatus = 'custom_status';
 
     /**
-     * @see AuthorizeCommand::execute
+     * @see OrderCommand::execute
      *
      * @param bool $isTransactionPending
      * @param bool $isFraudDetected
@@ -45,7 +45,7 @@ class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
         $expectedStatus,
         $expectedMessage
     ) {
-        $actualReturn = (new AuthorizeCommand($this->getStatusResolver()))->execute(
+        $actualReturn = (new OrderCommand($this->getStatusResolver()))->execute(
             $this->getPayment($isTransactionPending, $isFraudDetected),
             $this->amount,
             $this->getOrder()
@@ -66,30 +66,28 @@ class AuthorizeCommandTest extends \PHPUnit_Framework_TestCase
                 false,
                 Order::STATE_PROCESSING,
                 $this->newOrderStatus,
-                'Authorized amount of %1.'
+                'Ordered amount of %1'
             ],
             [
                 true,
                 false,
                 Order::STATE_PAYMENT_REVIEW,
                 $this->newOrderStatus,
-                'We will authorize %1 after the payment is approved at the payment gateway.'
+                'The order amount of %1 is pending approval on the payment gateway.'
             ],
             [
                 false,
                 true,
                 Order::STATE_PAYMENT_REVIEW,
                 Order::STATUS_FRAUD,
-                'Authorized amount of %1.' .
-                ' Order is suspended as its authorizing amount %1 is suspected to be fraudulent.'
+                'The order amount of %1 is pending approval on the payment gateway.'
             ],
             [
                 true,
                 true,
                 Order::STATE_PAYMENT_REVIEW,
                 Order::STATUS_FRAUD,
-                'We will authorize %1 after the payment is approved at the payment gateway.' .
-                ' Order is suspended as its authorizing amount %1 is suspected to be fraudulent.'
+                'The order amount of %1 is pending approval on the payment gateway.'
             ],
         ];
     }
