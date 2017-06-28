@@ -21,6 +21,8 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
      * @param Collection $collection
      * @param string $field
      * @param null $condition
+     *
+     * @SuppressWarnings("unused")
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
