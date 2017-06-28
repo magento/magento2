@@ -9,6 +9,7 @@
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\Info;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -209,6 +210,42 @@ class NvpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('testCity', $address->getCity());
         $this->assertEquals('223322', $address->getTelephone());
         $this->assertEquals('testSTATE', $address->getRegion());
+    }
+
+    /**
+     * Tests that callDoReauthorization method is called without errors and
+     * needed data is imported from response.
+     */
+    public function testCallDoReauthorization()
+    {
+        $authorizationId = 555;
+        $paymentStatus = 'Completed';
+        $pendingReason = 'none';
+        $protectionEligibility = 'Eligible';
+        $protectionEligibilityType = 'ItemNotReceivedEligible';
+
+        $this->curl->expects($this->once())
+            ->method('read')
+            ->willReturn(
+                "\r\n" . 'ACK=Success'
+                . '&AUTHORIZATIONID=' . $authorizationId
+                . '&PAYMENTSTATUS=' . $paymentStatus
+                . '&PENDINGREASON=' . $pendingReason
+                . '&PROTECTIONELIGIBILITY=' . $protectionEligibility
+                . '&PROTECTIONELIGIBILITYTYPE=' . $protectionEligibilityType
+            );
+
+        $this->model->callDoReauthorization();
+
+        $expectedImportedData = [
+            'authorization_id' => $authorizationId,
+            'payment_status' => Info::PAYMENTSTATUS_COMPLETED,
+            'pending_reason' => $pendingReason,
+            'protection_eligibility' => $protectionEligibility
+        ];
+
+        $this->assertNotContains($protectionEligibilityType, $this->model->getData());
+        $this->assertEquals($expectedImportedData, $this->model->getData());
     }
 
     public function testGetDebugReplacePrivateDataKeys()

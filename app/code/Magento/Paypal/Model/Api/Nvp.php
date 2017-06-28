@@ -914,15 +914,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * Made additional request to paypal to get autharization id
+     * Made additional request to PayPal to get authorization id
      *
      * @return void
      */
     public function callDoReauthorization()
     {
-        $request = $this->_export($this->_doReauthorizationRequest);
+        $request = $this->_exportToRequest($this->_doReauthorizationRequest);
         $response = $this->call('DoReauthorization', $request);
-        $this->_import($response, $this->_doReauthorizationResponse);
+        $this->_importFromResponse($this->_doReauthorizationResponse, $response);
     }
 
     /**
