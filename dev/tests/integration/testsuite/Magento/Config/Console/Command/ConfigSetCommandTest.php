@@ -513,6 +513,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test scenarios of setting default and allowed currencies
+     *
+     * @magentoDbIsolation enabled
      */
     public function testSetDefaultCurrency()
     {
