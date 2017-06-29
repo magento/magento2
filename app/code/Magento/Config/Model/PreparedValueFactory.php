@@ -84,7 +84,7 @@ class PreparedValueFactory
     /**
      * Returns instance of Value with defined properties.
      *
-     * @param string $path The configuration path in format group/section/field_name
+     * @param string $path The configuration path in format section/group/field_name
      * @param string $value The configuration value
      * @param string $scope The configuration scope (default, website, or store)
      * @param string|int|null $scopeCode The scope code
