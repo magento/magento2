@@ -74,7 +74,7 @@ class InstallData implements InstallDataInterface
                 'label' => 'Tax Class',
                 'input' => 'select',
                 'class' => '',
-                'source' => 'Magento\Tax\Model\TaxClass\Source\Product',
+                'source' => \Magento\Tax\Model\TaxClass\Source\Product::class,
                 'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
                 'visible' => true,
                 'required' => false,
