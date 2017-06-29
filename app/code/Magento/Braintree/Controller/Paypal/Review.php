@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Controller\Paypal;
+namespace Magento\Braintree\Controller\PayPal;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
