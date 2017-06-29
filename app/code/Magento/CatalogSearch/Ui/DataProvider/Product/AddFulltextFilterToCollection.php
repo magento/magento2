@@ -3,6 +3,7 @@
 namespace Magento\CatalogSearch\Ui\DataProvider\Product;
 
 use Magento\Framework\Data\Collection;
+use Magento\CatalogSearch\Model\ResourceModel\Search\Collection as SearchCollection;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
@@ -10,17 +11,25 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
  */
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {
+    /*
+     * Search Collection
+     *
+     * @var SearchCollection
+     */
     protected $searchCollection;
 
-    public function __construct(\Magento\CatalogSearch\Model\ResourceModel\Search\Collection $searchCollection)
+    /*
+     * Construct
+     *
+     * @param SearchCollection $searchCollection
+     */
+    public function __construct(SearchCollection $searchCollection)
     {
         $this->searchCollection = $searchCollection;
     }
 
     /**
-     * @param Collection $collection
-     * @param string $field
-     * @param null $condition
+     * {@inheritdoc}
      *
      * @SuppressWarnings("unused")
      */
