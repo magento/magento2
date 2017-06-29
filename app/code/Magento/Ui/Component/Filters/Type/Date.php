@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Filters\Type;
 
 use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
@@ -79,7 +80,10 @@ class Date extends AbstractFilter
 
             if (is_array($value)) {
                 if (isset($value['from'])) {
-                    $this->applyFilterByType('gteq', $this->wrappedComponent->convertDate($value['from']));
+                    $this->applyFilterByType(
+                        'gteq',
+                        $this->wrappedComponent->convertDate($value['from'], 0, 0, 0, $this->getData('config/skipTime'))
+                    );
                 }
 
                 if (isset($value['to'])) {

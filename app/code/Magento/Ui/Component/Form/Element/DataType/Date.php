@@ -100,9 +100,10 @@ class Date extends AbstractDataType
      * @param int $hour
      * @param int $minute
      * @param int $second
+     * @param bool $skipTime
      * @return \DateTime|null
      */
-    public function convertDate($date, $hour = 0, $minute = 0, $second = 0)
+    public function convertDate($date, $hour = 0, $minute = 0, $second = 0, $skipTime = false)
     {
         try {
             $dateObj = $this->localeDate->date(
@@ -116,6 +117,9 @@ class Date extends AbstractDataType
             $dateObj->setTime($hour, $minute, $second);
             //convert store date to default date in UTC timezone without DST
             $dateObj->setTimezone(new \DateTimeZone('UTC'));
+            if ($skipTime) {
+                $dateObj->setTime(0, 0, 0);
+            }
             return $dateObj;
         } catch (\Exception $e) {
             return null;
