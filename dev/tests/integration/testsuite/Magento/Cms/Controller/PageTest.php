@@ -17,6 +17,16 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('What are Cookies?', $this->getResponse()->getBody());
     }
 
+    public function testViewRedirectWithTrailingSlash()
+    {
+        $this->dispatch('/enable-cookies/');
+        $code = $this->getResponse()->getStatusCode();
+        $location = $this->getResponse()->getHeader('Location')->getFieldValue();
+
+        $this->assertEquals(301, $code, 'Invalid response code');
+        $this->assertStringEndsWith('/enable-cookies', $location, 'Invalid location header');
+    }
+
     /**
      * Test \Magento\Cms\Block\Page::_addBreadcrumbs
      */
