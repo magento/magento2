@@ -22,12 +22,13 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that the TLD validation can be enabled on construction
+     * Test that the TLD validation can be enabled
      */
     public function testCanValidateTLD()
     {
         /** @var EmailAddress $emailAddress */
-        $emailAddress = new EmailAddress(['tld'=>true]);
+        $emailAddress = new EmailAddress();
+        $emailAddress->setValidateTld(true);
         $this->assertFalse($emailAddress->isValid("user@domain.unknown"));
     }
 }
