@@ -12,7 +12,8 @@ use \Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 /**
  * Fieldset element renderer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Element extends \Magento\Backend\Block\Template implements RendererInterface
 {

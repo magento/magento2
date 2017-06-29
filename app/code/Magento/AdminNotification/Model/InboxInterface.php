@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Model;
  * AdminNotification Inbox interface
  *
  * @author Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface InboxInterface
 {

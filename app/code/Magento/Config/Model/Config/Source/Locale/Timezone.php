@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Locale;
 
+/**
+ * @api
+ */
 class Timezone implements \Magento\Framework\Option\ArrayInterface
 {
     /**

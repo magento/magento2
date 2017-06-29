@@ -13,6 +13,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Currency;
 
+/**
+ * @api
+ */
 abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
 {
     /**

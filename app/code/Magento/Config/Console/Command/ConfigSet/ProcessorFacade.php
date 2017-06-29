@@ -21,6 +21,8 @@ use Magento\Framework\App\Config;
  * Processor facade for config:set command.
  *
  * @see ConfigSetCommand
+ *
+ * @api
  */
 class ProcessorFacade
 {
