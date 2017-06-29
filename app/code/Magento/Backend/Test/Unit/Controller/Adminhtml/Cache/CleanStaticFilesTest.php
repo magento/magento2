@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
@@ -60,7 +58,7 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = $objectHelper->getObject(
             \Magento\Backend\Controller\Adminhtml\Cache\CleanStaticFiles::class,
-            ['context' => $context,]
+            ['context' => $context]
         );
     }
 

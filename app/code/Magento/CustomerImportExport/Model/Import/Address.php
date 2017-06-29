@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -8,6 +8,8 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
+ * Customer address import
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -527,7 +529,6 @@ class Address extends AbstractCustomer
                         continue;
                     }
                 } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
-
                 } elseif ('select' == $attributeParams['type']) {
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
@@ -599,7 +600,6 @@ class Address extends AbstractCustomer
                 $fields = array_diff(array_keys($row), ['entity_id', 'parent_id', 'created_at']);
                 $this->_connection->insertOnDuplicate($this->_entityTable, $row, $fields);
             }
-
         }
         return $this;
     }
@@ -645,7 +645,6 @@ class Address extends AbstractCustomer
                 );
                 $this->_connection->insertOnDuplicate($tableName, $data, array_keys($defaultsData));
             }
-
         }
         return $this;
     }
@@ -753,8 +752,7 @@ class Address extends AbstractCustomer
                         }
                     }
 
-                    if (
-                        isset($rowData[self::COLUMN_POSTCODE])
+                    if (isset($rowData[self::COLUMN_POSTCODE])
                         && isset($rowData[self::COLUMN_COUNTRY_ID])
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],

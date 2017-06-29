@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Collection;
@@ -15,6 +15,8 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Base items collection class
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
@@ -900,8 +902,8 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_fetchStrategy = $objectManager->get(Logger::class);
-        $this->_logger = $objectManager->get(FetchStrategyInterface::class);
+        $this->_logger = $objectManager->get(Logger::class);
+        $this->_fetchStrategy = $objectManager->get(FetchStrategyInterface::class);
         $this->_conn = $objectManager->get(ResourceConnection::class)->getConnection();
     }
 }

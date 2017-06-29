@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,9 +15,9 @@
         <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
     </label>
     <div class="control admin__field-control">
-        <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FIELD): ?>
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
             <input type="text" id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text" class="input-text admin__control-text <?php echo $_option->getIsRequire() ? ' required-entry' : '' ?> <?php /* @escapeNotVerified */ echo $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]" value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>" price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_option->getPrice(true)) ?>" />
-        <?php elseif ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA): ?>
+        <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <textarea id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text" class="admin__control-textarea <?php echo $_option->getIsRequire() ? ' required-entry' : '' ?> <?php /* @escapeNotVerified */ echo $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]" rows="5" cols="25" price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_option->getPrice(true)) ?>"><?php echo $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif;?>
 

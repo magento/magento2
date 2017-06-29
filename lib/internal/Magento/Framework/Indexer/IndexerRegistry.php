@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer;
 
+/**
+ * @api Retrieve indexer by id, for example when indexer need to be invalidated
+ */
 class IndexerRegistry
 {
     /**

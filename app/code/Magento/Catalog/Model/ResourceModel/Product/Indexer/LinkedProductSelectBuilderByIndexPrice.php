@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
@@ -39,11 +39,12 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
     private $baseSelectProcessor;
 
     /**
+     * LinkedProductSelectBuilderByIndexPrice constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param BaseSelectProcessorInterface $baseSelectProcessor
+     * @param BaseSelectProcessorInterface|null $baseSelectProcessor
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,

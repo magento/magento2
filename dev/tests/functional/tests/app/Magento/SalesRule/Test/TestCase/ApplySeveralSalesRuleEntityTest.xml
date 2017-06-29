@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\SalesRule\Test\TestCase\ApplySeveralSalesRuleEntityTest" summary="Apply Several Sales Rules" ticketId="MAGETWO-45883">
         <variation name="ApplySeveralSalesRuleEntityTestVariation1" summary="Rules with same priority, both are applied">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="salesRules/rule1" xsi:type="string">active_sales_rule_product_subselection</data>
             <data name="salesRules/rule2" xsi:type="string">active_sales_rule_product_attribute</data>
             <data name="cartPrice/sub_total" xsi:type="string">200.00</data>

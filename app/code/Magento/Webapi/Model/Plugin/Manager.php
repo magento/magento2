@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Plugin;
@@ -10,7 +10,7 @@ use Magento\Integration\Api\AuthorizationServiceInterface as IntegrationAuthoriz
 use Magento\Integration\Model\IntegrationConfig;
 
 /**
- * Plugin for ConfigBasedIntegrationManager model to manage resource permissions of
+ * Plugin for @see \Magento\Integration\Model\ConfigBasedIntegrationManager model to manage resource permissions of
  * integration installed from config file
  */
 class Manager

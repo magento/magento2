@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class SalableResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->product = $this->getMock(
             \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'getCanShowPrice', 'isSalable'],
+            ['__wakeup', 'getCanShowPrice'],
             [],
             '',
             false
@@ -40,8 +40,6 @@ class SalableResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getCanShowPrice')
             ->willReturn(true);
 
-        $this->product->expects($this->any())->method('isSalable')->willReturn(true);
-
         $result = $this->object->isSalable($this->product);
         $this->assertTrue($result);
     }
@@ -50,9 +48,7 @@ class SalableResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->expects($this->any())
             ->method('getCanShowPrice')
-            ->willReturn(true);
-
-        $this->product->expects($this->any())->method('isSalable')->willReturn(false);
+            ->willReturn(false);
 
         $result = $this->object->isSalable($this->product);
         $this->assertFalse($result);

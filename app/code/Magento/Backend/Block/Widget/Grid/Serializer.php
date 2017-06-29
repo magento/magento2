@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
 /**
+ * @api
+ * @deprecated in favour of UI component implementation
  * @method string|array getInputNames()
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Serializer extends \Magento\Framework\View\Element\Template
 {

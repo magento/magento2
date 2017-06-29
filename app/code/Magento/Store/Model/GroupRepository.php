@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -62,18 +62,8 @@ class GroupRepository implements \Magento\Store\Api\GroupRepositoryInterface
             return $this->entities[$id];
         }
 
-        $groupData = [];
-        $groups = $this->getAppConfig()->get('scopes', 'groups', []);
-        if ($groups) {
-            foreach ($groups as $data) {
-                if (isset($data['group_id']) && $data['group_id'] == $id) {
-                    $groupData = $data;
-                    break;
-                }
-            }
-        }
         $group = $this->groupFactory->create([
-            'data' => $groupData
+            'data' => $this->getAppConfig()->get('scopes', "groups/$id", [])
         ]);
 
         if (null === $group->getId()) {

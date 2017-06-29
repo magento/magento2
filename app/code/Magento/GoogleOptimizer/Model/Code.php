@@ -4,7 +4,7 @@ namespace Magento\GoogleOptimizer\Model;
 /**
  * Google Experiment Code Model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  * @method \Magento\GoogleOptimizer\Model\ResourceModel\Code _getResource()
  * @method \Magento\GoogleOptimizer\Model\ResourceModel\Code getResource()
@@ -16,6 +16,7 @@ namespace Magento\GoogleOptimizer\Model;
  * @method int getStoreId()
  * @method \Magento\GoogleOptimizer\Model\Code setExperimentScript(int $value)
  * @method string getExperimentScript()
+ * @api
  */
 class Code extends \Magento\Framework\Model\AbstractModel
 {

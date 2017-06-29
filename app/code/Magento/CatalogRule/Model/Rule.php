@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
@@ -162,6 +162,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param array $data
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -186,7 +187,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         array $relatedCacheTypes = [],
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null
+        AttributeValueFactory $customAttributeFactory = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -210,7 +212,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             $resourceCollection,
             $data,
             $extensionFactory,
-            $customAttributeFactory
+            $customAttributeFactory,
+            $serializer
         );
     }
 
@@ -392,13 +395,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             case 'to_percent':
                 if ($discount < 0 || $discount > 100) {
                     $result[] = __('Percentage discount should be between 0 and 100.');
-                };
+                }
                 break;
             case 'by_fixed':
             case 'to_fixed':
                 if ($discount < 0) {
                     $result[] = __('Discount value should be 0 or greater.');
-                };
+                }
                 break;
             default:
                 $result[] = __('Unknown action.');
@@ -567,14 +570,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $result = [];
         foreach ($array1 as $key => $value) {
             if (array_key_exists($key, $array2)) {
-                if (is_array($value)) {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
-                } else {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
+                if ($value != $array2[$key]) {
+                    $result[$key] = true;
                 }
             } else {
                 $result[$key] = true;
@@ -790,6 +787,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         }
         return $this->ruleConditionConverter;
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

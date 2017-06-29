@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
@@ -72,7 +72,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
             'order' => [
                 'new_option' => 'optionSortOrder',
             ],
-        ];
+            ];
 
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);

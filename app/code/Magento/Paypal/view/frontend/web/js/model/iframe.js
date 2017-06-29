@@ -1,22 +1,22 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(
-    [
-        'ko'
-    ],
-    function (ko) {
-        'use strict';
 
-        var isInAction = ko.observable(false);
+define(['ko'], function (ko) {
+    'use strict';
 
-        return {
-            isInAction: isInAction,
-            stopEventPropagation: function (event) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
-            }
-        };
-    }
-);
+    var isInAction = ko.observable(false);
+
+    return {
+        isInAction: isInAction,
+
+        /**
+         * @param {jQuery.Event} event
+         */
+        stopEventPropagation: function (event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+    };
+});

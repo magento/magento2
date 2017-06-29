@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Product type model
  */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * Product type model
+ *
+ * @api
+ */
 class Type implements OptionSourceInterface
 {
     /**#@+

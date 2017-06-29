@@ -1,14 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Eav\Api\Data\AttributeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -49,11 +49,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
-     */
-    private $optionManagement;
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
@@ -134,10 +129,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 }
                 $attribute->setDefaultFrontendLabel($frontendLabel);
             }
-            if (!$attribute->getIsUserDefined()) {
-                // Unset attribute field for system attributes
-                $attribute->setApplyTo(null);
-            }
         } else {
             $attribute->setAttributeId(null);
 
@@ -181,13 +172,31 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             );
             $attribute->setIsUserDefined(1);
         }
-        $this->attributeResource->save($attribute);
-
         if (!empty($attribute->getData(AttributeInterface::OPTIONS))) {
+            $options = [];
+            $sortOrder = 0;
+            $default = [];
+            $optionIndex = 0;
             foreach ($attribute->getOptions() as $option) {
-                $this->getOptionManagement()->add($attribute->getAttributeCode(), $option);
+                $optionIndex++;
+                $optionId = $option->getValue() ?: 'option_' . $optionIndex;
+                $options['value'][$optionId][0] = $option->getLabel();
+                $options['order'][$optionId] = $option->getSortOrder() ?: $sortOrder++;
+                if (is_array($option->getStoreLabels())) {
+                    foreach ($option->getStoreLabels() as $label) {
+                        $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
+                    }
+                }
+                if ($option->getIsDefault()) {
+                    $default[] = $optionId;
+                }
+            }
+            $attribute->setDefault($default);
+            if (count($options)) {
+                $attribute->setOption($options);
             }
         }
+        $this->attributeResource->save($attribute);
         return $this->get($attribute->getAttributeCode());
     }
 
@@ -265,17 +274,5 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         if (!$validator->isValid($frontendInput)) {
             throw InputException::invalidFieldValue('frontend_input', $frontendInput);
         }
-    }
-
-    /**
-     * @return \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
-     */
-    private function getOptionManagement()
-    {
-        if (null === $this->optionManagement) {
-            $this->optionManagement = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class);
-        }
-        return $this->optionManagement;
     }
 }

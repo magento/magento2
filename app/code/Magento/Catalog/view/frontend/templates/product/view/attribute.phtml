@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ $_attributeType = $block->getAtType();
 $_attributeAddAttribute = $block->getAddAttribute();
 
 if ($_attributeLabel && $_attributeLabel == 'default') {
-    $_attributeLabel = $_product->getResource()->getAttribute($_code)->getFrontendLabel();
+    $_attributeLabel = $_product->getResource()->getAttribute($_code)->getStoreLabel();
 }
 if ($_attributeType && $_attributeType == 'text') {
     $_attributeValue = ($_helper->productAttribute($_product, $_product->$_call(), $_code)) ? $_product->getAttributeText($_code) : '';

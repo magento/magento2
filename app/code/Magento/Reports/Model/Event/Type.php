@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Event;
@@ -15,7 +15,7 @@ namespace Magento\Reports\Model\Event;
  * @method int getCustomerLogin()
  * @method \Magento\Reports\Model\Event\Type setCustomerLogin(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Type extends \Magento\Framework\Model\AbstractModel
 {

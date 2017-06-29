@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\ObjectManager\DefinitionFactory;
-use Magento\Framework\Setup\ConfigOptionsListInterface;
-use Magento\Framework\Setup\Option\SelectConfigOption;
-use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
+use Magento\Framework\Setup\Option\FlagConfigOption;
+use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\DbValidator;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -335,7 +333,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
         ) {
             try {
-
                 $options = $this->getDbSettings($options, $deploymentConfig);
 
                 $this->dbValidator->checkDatabaseConnection(

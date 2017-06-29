@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Api;
@@ -52,7 +52,9 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     /**
      * @var array
      */
-    protected $_lineItemExportItemsFilters = [];
+    protected $_lineItemExportItemsFilters = [
+        'name' => 'strval'
+    ];
 
     /**
      * @var array
@@ -440,14 +442,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
             foreach ($this->_lineItemExportItemsFormat as $publicKey => $privateFormat) {
                 $result = true;
                 $value = $item->getDataUsingMethod($publicKey);
-                if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
-                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
-                    $value = call_user_func([$this, $callback], $value);
-                }
-                if (is_float($value)) {
-                    $value = $this->formatPrice($value);
-                }
-                $request[sprintf($privateFormat, $i)] = $value;
+                $request[sprintf($privateFormat, $i)] = $this->formatValue($value, $publicKey);
             }
             $i++;
         }
@@ -634,5 +629,26 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     public function getDebugReplacePrivateDataKeys()
     {
         return $this->_debugReplacePrivateDataKeys;
+    }
+
+    /**
+     * Formats value according to configured filters or converts to 0.00 format if value is float.
+     *
+     * @param string|int|float|\Magento\Framework\Phrase $value
+     * @param string $publicKey
+     * @return string
+     */
+    private function formatValue($value, $publicKey)
+    {
+        if (!empty($this->_lineItemExportItemsFilters[$publicKey])) {
+            $callback = $this->_lineItemExportItemsFilters[$publicKey];
+            $value = method_exists($this, $callback) ? $this->{$callback}($value) : $callback($value);
+        }
+
+        if (is_float($value)) {
+            $value = $this->formatPrice($value);
+        }
+
+        return $value;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -348,7 +348,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
             ],
-            'subscription' => 'false'
+            'subscription' => '0'
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
@@ -757,7 +757,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender, $customerId, $newEmail = null)
     {
-
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();

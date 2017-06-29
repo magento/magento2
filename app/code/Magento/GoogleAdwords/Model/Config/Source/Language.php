@@ -2,13 +2,14 @@
 /**
  * Google AdWords language source
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleAdwords\Model\Config\Source;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @api
  */
 class Language implements \Magento\Framework\Option\ArrayInterface
 {

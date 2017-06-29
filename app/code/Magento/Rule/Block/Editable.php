@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Block;
@@ -8,6 +8,9 @@ namespace Magento\Rule\Block;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 
+/**
+ * @api
+ */
 class Editable extends AbstractBlock implements RendererInterface
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -12,46 +12,30 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable
      */
-    protected $downloadablePlugin;
+    private $downloadablePlugin;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productMock;
+    private $productMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $subjectMock;
+    private $subjectMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\Data\ProductExtensionInterface
      */
-    protected $extensionAttributesMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\SampleFactory
-     */
-    protected $sampleFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\Data
-     */
-    protected $jsonHelperMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\linkFactory
-     */
-    protected $linkFactory;
+    private $extensionAttributesMock;
 
     protected function setUp()
     {
-        $this->jsonHelperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->productMock = $this->getMock(
             \Magento\Catalog\Model\Product::class,
@@ -71,26 +55,33 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
             ->getMockForAbstractClass();
-        $this->sampleFactoryMock = $this->getMockBuilder(\Magento\Downloadable\Api\Data\SampleInterfaceFactory::class)
+        $sampleFactoryMock = $this->getMockBuilder(\Magento\Downloadable\Api\Data\SampleInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->linkFactoryMock = $this->getMockBuilder(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class)
+        $linkFactoryMock = $this->getMockBuilder(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
+            ->getMock();
+        $linkBuilderMock = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Builder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sampleBuilderMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample\Builder::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->downloadablePlugin =
             new \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable(
                 $this->requestMock,
-                $this->sampleFactoryMock,
-                $this->linkFactoryMock,
-                $this->jsonHelperMock
+                $linkBuilderMock,
+                $sampleBuilderMock,
+                $sampleFactoryMock,
+                $linkFactoryMock
             );
     }
 
     /**
-     * @dataProvider afterInitializeWithEmptyDataDataProvider
      * @param array $downloadable
+     * @dataProvider afterInitializeWithEmptyDataDataProvider
      */
     public function testAfterInitializeWithNoDataToSave($downloadable)
     {
@@ -137,8 +128,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider afterInitializeIfDownloadableNotExistDataProvider
      * @param mixed $downloadable
+     * @dataProvider afterInitializeIfDownloadableNotExistDataProvider
      */
     public function testAfterInitializeIfDownloadableNotExist($downloadable)
     {

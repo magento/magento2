@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Stock Status Indexer Resource Model
@@ -15,16 +17,31 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return $this
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
      */
-    public function reindexEntity($entityIds)
-    {
-        $this->_updateIndex($entityIds);
+    private $activeTableSwitcher;
 
-        return $this;
+    /**
+     * Stock constructor.
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param null $connectionName
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $connectionName = null,
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+    ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        );
     }
 
     /**
@@ -48,7 +65,10 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     {
         $this->_cleanBundleOptionStockData();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
+        $table = $this->getActionType() === Full::ACTION_TYPE
+            ? $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable())
+            : $this->getMainTable();
+        $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['product' => $this->getTable('catalog_product_entity')],

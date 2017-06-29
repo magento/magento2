@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,7 +17,7 @@
             <container name="product.info.configurable.extra" after="product.info.configurable" as="product_type_data_extra" label="Product Extra Info"/>
         </referenceContainer>
         <referenceBlock name="product.info.options.wrapper">
-            <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.options.configurable" as="options_configurable" before="-" template="product/view/type/options/configurable.phtml"/>
+            <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.options.configurable" as="options_configurable" before="-" template="Magento_ConfigurableProduct::product/view/type/options/configurable.phtml"/>
         </referenceBlock>
     </body>
 </page>

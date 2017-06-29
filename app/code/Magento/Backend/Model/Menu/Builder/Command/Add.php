@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Builder\Command;
 
 /**
  * Builder command to add menu items
+ * @api
  */
 class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
 {

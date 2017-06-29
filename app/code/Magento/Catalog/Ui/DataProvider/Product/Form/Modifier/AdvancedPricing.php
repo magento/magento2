@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -27,6 +27,8 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class AdvancedPricing
+ * 
+ * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -407,6 +409,7 @@ class AdvancedPricing extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'dynamicRows',
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-tier-price',
                         'label' => __('Customer Group Price'),
                         'renderDefaultRecord' => false,
                         'recordTemplate' => 'record',

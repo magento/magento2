@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout\Address;
@@ -12,6 +12,8 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 /**
  * Class Select
  * Multishipping checkout select billing address
+ *
+ * @api
  */
 class Select extends \Magento\Multishipping\Block\Checkout\AbstractMultishipping
 {

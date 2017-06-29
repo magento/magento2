@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Bootstrap;
@@ -40,6 +40,7 @@ class DocBlock
      *
      * Note: order of registering (and applying) annotations is important.
      * To allow config fixtures to deal with fixture stores, data fixtures should be processed first.
+     * ConfigFixture applied twice because data fixtures could clean config and clean custom settings
      *
      * @param \Magento\TestFramework\Application $application
      * @return array
@@ -68,6 +69,7 @@ class DocBlock
             new \Magento\TestFramework\Annotation\AppArea($application),
             new \Magento\TestFramework\Annotation\Cache($application),
             new \Magento\TestFramework\Annotation\AdminConfigFixture(),
+            new \Magento\TestFramework\Annotation\ConfigFixture(),
         ];
     }
 }

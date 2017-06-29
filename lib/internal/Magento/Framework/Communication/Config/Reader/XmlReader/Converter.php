@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication\Config\Reader\XmlReader;
 
-use Magento\Framework\Communication\ConfigInterface as Config;
-use Magento\Framework\Phrase;
-use Magento\Framework\Communication\Config\ReflectionGenerator;
-use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Communication\Config\ConfigParser;
-use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
+use Magento\Framework\Communication\Config\ReflectionGenerator;
+use Magento\Framework\Communication\ConfigInterface as Config;
+use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Converts Communication config from \DOMDocument to array
@@ -19,7 +17,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @deprecated
-     * @see ConfigParser::SERVICE_METHOD_NAME_PATTERN
+     * @see ConfigParser::parseServiceMethod
      */
     const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
 
@@ -133,7 +131,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $serviceMethod[ConfigParser::METHOD_NAME],
                     $handlers
                 );
-            } else if ($requestSchema && $responseSchema) {
+            } elseif ($requestSchema && $responseSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
                     Config::TOPIC_IS_SYNCHRONOUS => true,
@@ -142,7 +140,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     Config::TOPIC_RESPONSE => $responseSchema,
                     Config::TOPIC_HANDLERS => $handlers
                 ];
-            } else if ($requestSchema) {
+            } elseif ($requestSchema) {
                 $output[$topicName] = [
                     Config::TOPIC_NAME => $topicName,
                     Config::TOPIC_IS_SYNCHRONOUS => false,

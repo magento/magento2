@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,6 +26,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * and pass them one by one for processing in the FilterContext,
  * which will apply them to the Select
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class TableMapper
 {

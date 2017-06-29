@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
@@ -26,11 +26,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $items = array_values($collection->setValidationFilter(1, 0, $couponCode)->getItems());
 
         $ids = [];
+
+        $this->assertEquals(
+            count($expectedItems),
+            count($items),
+            'Invalid number of items in the result collection'
+        );
+
         foreach ($items as $key => $item) {
             $this->assertEquals($expectedItems[$key], $item->getName());
-            if (in_array($item->getId(), $ids)) {
-                $this->fail('Item should be unique in result collection');
-            }
+            $this->assertFalse(
+                in_array($item->getId(), $ids),
+                'Item should be unique in result collection'
+            );
             $ids[] = $item->getId();
         }
     }
@@ -219,6 +227,39 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->create()
             ->addData($localeData)
             ->save();
+    }
+
+    /**
+     * Check that it's possible to find previously created rule by attribute.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/rule_custom_product_attribute.php
+     */
+    public function testAddAttributeInConditionFilterPositive()
+    {
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
+        );
+        $collection->addAttributeInConditionFilter('attribute_for_sales_rule_1');
+        $item = $collection->getFirstItem();
+        $this->assertEquals('50% Off on some attribute', $item->getName());
+    }
+
+    /**
+     * Check that it's not possible to find previously created rule by wrong attribute.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/rule_custom_product_attribute.php
+     */
+    public function testAddAttributeInConditionFilterNegative()
+    {
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
+        );
+        $collection->addAttributeInConditionFilter('attribute_for_sales_rule_2');
+        $this->assertEquals(0, $collection->count());
     }
 
     public function tearDown()

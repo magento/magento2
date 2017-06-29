@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
@@ -14,6 +14,7 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
 /**
  * Core Email Template Filter Model
  *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -1018,7 +1019,7 @@ class Filter extends \Magento\Framework\Filter\Template
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
-                $value = __("We're sorry, an error has occurred while generating this email.");
+                $value = __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
         }

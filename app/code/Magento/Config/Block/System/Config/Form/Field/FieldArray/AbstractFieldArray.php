@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
  * Backend system config array field renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -278,5 +279,13 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function getColumns()
     {
         return $this->_columns;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddButtonLabel()
+    {
+        return $this->_addButtonLabel;
     }
 }

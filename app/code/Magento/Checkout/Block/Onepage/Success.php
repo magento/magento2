@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Onepage;
@@ -10,6 +10,8 @@ use Magento\Sales\Model\Order;
 
 /**
  * One page checkout success page
+ *
+ * @api
  */
 class Success extends \Magento\Framework\View\Element\Template
 {
@@ -121,5 +123,13 @@ class Success extends \Magento\Framework\View\Element\Template
     {
         return $this->httpContext->getValue(Context::CONTEXT_AUTH)
             && $this->isVisible($order);
+    }
+
+    /**
+     * @return string
+     */
+    public function getContinueUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
     }
 }

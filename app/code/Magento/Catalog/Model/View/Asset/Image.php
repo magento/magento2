@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,7 +95,7 @@ class Image implements LocalInterface
      */
     public function getPath()
     {
-        return $this->getRelativePath($this->context->getPath());
+        return $this->getAbsolutePath($this->context->getPath());
     }
 
     /**
@@ -173,6 +173,21 @@ class Image implements LocalInterface
     private function getMiscPath()
     {
         return $this->encryptor->hash(implode('_', $this->miscParams), Encryptor::HASH_VERSION_MD5);
+    }
+
+    /**
+     * Generate absolute path
+     *
+     * @param string $result
+     * @return string
+     */
+    private function getAbsolutePath($result)
+    {
+        $prefix = (substr($result, 0, 1) == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
+        $result = $this->join($result, $this->getModule());
+        $result = $this->join($result, $this->getMiscPath());
+        $result = $this->join($result, $this->getFilePath());
+        return $prefix . $result;
     }
 
     /**

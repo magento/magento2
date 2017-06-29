@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
 
 /**
  * Quantity and Stock Status attribute processing
+ *
+ * @deprecated as this attribute should be removed
+ * @see StockItemInterface when you want to change the stock data
+ * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
+ * @see StockItemRepositoryInterface::save as extension point for customization of saving process
  */
 class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -45,25 +49,6 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             ['is_in_stock' => $stockItem->getIsInStock(), 'qty' => $stockItem->getQty()]
         );
         return parent::afterLoad($object);
-    }
-
-    /**
-     * Prepare inventory data from custom attribute
-     *
-     * @param Product $object
-     * @return void
-     */
-    public function beforeSave($object)
-    {
-        $stockData = $object->getData($this->getAttribute()->getAttributeCode());
-        if (isset($stockData['qty']) && $stockData['qty'] === '') {
-            $stockData['qty'] = null;
-        }
-        if ($object->getStockData() !== null && $stockData !== null) {
-            $object->setStockData(array_replace((array)$object->getStockData(), (array)$stockData));
-        }
-        $object->unsetData($this->getAttribute()->getAttributeCode());
-        parent::beforeSave($object);
     }
 
     /**

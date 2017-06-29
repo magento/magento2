@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class AdminAccountFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->getMockForAbstractClass(\Magento\Framework\Encryption\EncryptorInterface::class));
         $adminAccountFactory = new AdminAccountFactory($serviceLocatorMock);
         $adminAccount = $adminAccountFactory->create(
-            $this->getMock(\Magento\Setup\Module\Setup::class, [], [], '', false),
+            $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false),
             []
         );
         $this->assertInstanceOf(\Magento\Setup\Model\AdminAccount::class, $adminAccount);

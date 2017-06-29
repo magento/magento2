@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,12 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
@@ -47,6 +49,13 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @var StockConfigurationInterface
      */
     protected $stockConfiguration;
+
+    /**
+     * Param for switching logic which depends on action type (full reindex or partial)
+     *
+     * @var string
+     */
+    private $actionType;
 
     /**
      * Class constructor
@@ -106,7 +115,35 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     public function reindexEntity($entityIds)
     {
+        if ($this->getActionType() === Full::ACTION_TYPE) {
+            $this->tableStrategy->setUseIdxTable(false);
+            $this->_prepareIndexTable($entityIds);
+            return $this;
+        }
+
         $this->_updateIndex($entityIds);
+        return $this;
+    }
+
+    /**
+     * Returns action run type
+     *
+     * @return string
+     */
+    public function getActionType()
+    {
+        return $this->actionType;
+    }
+
+    /**
+     * Set action run type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setActionType($type)
+    {
+        $this->actionType = $type;
         return $this;
     }
 
@@ -221,7 +258,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected function _prepareIndexTable($entityIds = null)
     {
         $connection = $this->getConnection();
-        $select = $this->_getStockStatusSelect($entityIds);
+        $select = $this->_getStockStatusSelect($entityIds, true);
         $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);

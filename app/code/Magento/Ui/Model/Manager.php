@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model;
@@ -17,10 +17,12 @@ use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
 use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
 use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Manager
- *
+ * @deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -95,6 +97,11 @@ class Manager implements ManagerInterface
     protected $uiReader;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param ComponentDefinition $componentConfigProvider
      * @param DomMergerInterface $domMerger
      * @param ReaderFactory $readerFactory
@@ -102,6 +109,7 @@ class Manager implements ManagerInterface
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
      * @param CacheInterface $cache
      * @param InterpreterInterface $argumentInterpreter
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -110,7 +118,8 @@ class Manager implements ManagerInterface
         ArrayObjectFactory $arrayObjectFactory,
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
         CacheInterface $cache,
-        InterpreterInterface $argumentInterpreter
+        InterpreterInterface $argumentInterpreter,
+        SerializerInterface $serializer = null
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
         $this->domMerger = $domMerger;
@@ -120,6 +129,7 @@ class Manager implements ManagerInterface
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
         $this->cache = $cache;
         $this->argumentInterpreter = $argumentInterpreter;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -164,9 +174,14 @@ class Manager implements ManagerInterface
         $cachedPool = $this->cache->load($cacheID);
         if ($cachedPool === false) {
             $this->prepare($name);
-            $this->cache->save($this->componentsPool->serialize(), $cacheID);
+            $this->cache->save(
+                $this->serializer->serialize($this->componentsPool->getArrayCopy()),
+                $cacheID
+            );
         } else {
-            $this->componentsPool->unserialize($cachedPool);
+            $this->componentsPool->exchangeArray(
+                $this->serializer->unserialize($cachedPool)
+            );
         }
         $this->componentsData->offsetSet($name, $this->componentsPool);
         $this->componentsData->offsetSet($name, $this->evaluateComponentArguments($this->getData($name)));
@@ -293,10 +308,12 @@ class Manager implements ManagerInterface
 
             // Create inner components
             foreach ($component as $subComponentName => $subComponent) {
-                $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
-                    $resultConfiguration[ManagerInterface::CHILDREN_KEY],
-                    $this->createDataForComponent($subComponentName, $subComponent)
-                );
+                if (is_array($subComponent)) {
+                    $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
+                        $resultConfiguration[ManagerInterface::CHILDREN_KEY],
+                        $this->createDataForComponent($subComponentName, $subComponent)
+                    );
+                }
             }
             $createdComponents[$instanceName] = $resultConfiguration;
         }

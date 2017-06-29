@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 ?>
 <div id="authenticationPopup" data-bind="scope:'authenticationPopup'" style="display: none;">
     <script>
-        window.authenticationPopup = <?php /* @noEscape */ echo \Zend_Json::encode($block->getConfig()); ?>;
+        window.authenticationPopup = <?php /* @noEscape */ echo $block->getSerializedConfig(); ?>;
     </script>
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">

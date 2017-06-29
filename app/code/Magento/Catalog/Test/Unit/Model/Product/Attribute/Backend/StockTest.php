@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
@@ -73,69 +73,5 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $data = $object->getData();
         $this->assertEquals(1, $data[self::ATTRIBUTE_NAME]['is_in_stock']);
         $this->assertEquals(5, $data[self::ATTRIBUTE_NAME]['qty']);
-    }
-
-    public function testBeforeSave()
-    {
-        $object = new \Magento\Framework\DataObject(
-            [
-                self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => 5],
-                'stock_data' => ['is_in_stock' => 2, 'qty' => 2],
-            ]
-        );
-        $stockData = $object->getStockData();
-        $this->assertEquals(2, $stockData['is_in_stock']);
-        $this->assertEquals(2, $stockData['qty']);
-        $this->assertNotEmpty($object->getData(self::ATTRIBUTE_NAME));
-
-        $this->model->beforeSave($object);
-
-        $stockData = $object->getStockData();
-        $this->assertEquals(1, $stockData['is_in_stock']);
-        $this->assertEquals(5, $stockData['qty']);
-        $this->assertNull($object->getData(self::ATTRIBUTE_NAME));
-    }
-
-    public function testBeforeSaveQtyIsEmpty()
-    {
-        $object = new \Magento\Framework\DataObject(
-            [
-                self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => ''],
-                'stock_data' => ['is_in_stock' => 2, 'qty' => ''],
-            ]
-        );
-
-        $this->model->beforeSave($object);
-
-        $stockData = $object->getStockData();
-        $this->assertNull($stockData['qty']);
-    }
-
-    public function testBeforeSaveQtyIsZero()
-    {
-        $object = new \Magento\Framework\DataObject(
-            [
-                self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => 0],
-                'stock_data' => ['is_in_stock' => 2, 'qty' => 0],
-            ]
-        );
-
-        $this->model->beforeSave($object);
-
-        $stockData = $object->getStockData();
-        $this->assertEquals(0, $stockData['qty']);
-    }
-
-    public function testBeforeSaveNoStockData()
-    {
-        $object = new \Magento\Framework\DataObject(
-            [
-                self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => 0]
-            ]
-        );
-
-        $this->model->beforeSave($object);
-        $this->assertNull($object->getStockData());
-        $this->assertNull($object->getData(self::ATTRIBUTE_NAME));
     }
 }

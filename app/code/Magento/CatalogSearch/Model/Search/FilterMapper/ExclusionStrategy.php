@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,6 +52,7 @@ class ExclusionStrategy implements FilterStrategyInterface
     ) {
         $isApplied = false;
         $field = $filter->getField();
+
         if ('price' === $field) {
             $alias = $this->aliasResolver->getAlias($filter);
             $tableName = $this->resourceConnection->getTableName('catalog_product_index_price');
@@ -73,7 +74,10 @@ class ExclusionStrategy implements FilterStrategyInterface
                 [
                     $alias => $tableName
                 ],
-                'search_index.entity_id = category_ids_index.product_id',
+                $this->resourceConnection->getConnection()->quoteInto(
+                    'search_index.entity_id = category_ids_index.product_id AND category_ids_index.store_id = ?',
+                    $this->storeManager->getStore()->getId()
+                ),
                 []
             );
             $isApplied = true;

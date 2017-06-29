@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -78,6 +78,19 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
      */
     private $metadataPoolMock;
 
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSessionMock;
+
+    /**
+     * @var int
+     */
+    private $customerGroupId = 42;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -101,9 +114,12 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute'])
             ->getMock();
+        $methods = ['getBackendTable', 'isStatic', 'getAttributeId',
+            'getAttributeCode', 'getFrontendInput', 'getBackendType'
+        ];
         $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBackendTable', 'isStatic', 'getAttributeId', 'getAttributeCode', 'getFrontendInput'])
+            ->setMethods($methods)
             ->getMockForAbstractClass();
         $this->resource = $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -156,6 +172,15 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCustomerGroupId'])
+            ->getMock();
+
+        $this->customerSessionMock->expects($this->any())
+            ->method('getCustomerGroupId')
+            ->willReturn($this->customerGroupId);
+
         $this->target = $objectManagerHelper->getObject(
             \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor::class,
             [
@@ -166,13 +191,14 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 'attributePrefix' => 'attr_',
                 'metadataPool' => $this->metadataPoolMock,
                 'aliasResolver' => $this->aliasResolver,
+                'customerSession' => $this->customerSessionMock
             ]
         );
     }
 
     public function testProcessPrice()
     {
-        $expectedResult = 'price_index.min_price = 23';
+        $expectedResult = 'price_index.min_price = 23 AND price_index.customer_group_id = ' . $this->customerGroupId;
         $isNegation = false;
         $query = 'price = 23';
 
@@ -406,5 +432,38 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     private function removeWhitespaces($actualResult)
     {
         return preg_replace(['/(\s)+/', '/(\() /', '/ (\))/'], '${1}', $actualResult);
+    }
+
+    public function testProcessRangeFilter()
+    {
+        $query = 'static_attribute LIKE %name%';
+        $expected = 'search_index.entity_id IN (select entity_id from () as filter)';
+        $this->filter->expects($this->any())
+            ->method('getField')
+            ->willReturn('termField');
+        $this->config->expects($this->exactly(1))
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'termField')
+            ->will($this->returnValue($this->attribute));
+
+        $this->attribute->expects($this->once())
+            ->method('isStatic')
+            ->will($this->returnValue(false));
+
+        $this->filter->expects($this->any())
+            ->method('getType')
+            ->willReturn(FilterInterface::TYPE_RANGE);
+        $this->attribute->expects($this->any())
+            ->method('getBackendType')
+            ->willReturn('decimal');
+
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('join')->willReturnSelf();
+        $this->select->expects($this->any())->method('columns')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->any())->method('having')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $actualResult = $this->target->process($this->filter, false, $query);
+        $this->assertSame($expected, $this->removeWhitespaces($actualResult));
     }
 }

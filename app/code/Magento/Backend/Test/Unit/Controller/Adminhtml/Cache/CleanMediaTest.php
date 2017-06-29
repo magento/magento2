@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
@@ -78,8 +76,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
 
         $messageManager->expects($this->once())
             ->method('addSuccess')
-            ->with('The JavaScript/CSS cache has been cleaned.'
-        );
+            ->with('The JavaScript/CSS cache has been cleaned.');
 
         $valueMap = [
             [\Magento\Framework\View\Asset\MergeService::class, $mergeService],

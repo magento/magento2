@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
@@ -87,6 +87,23 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('test_option_code_2', $exportData);
         $this->assertContains('max_characters=10', $exportData);
         $this->assertContains('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
+        $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
+        $this->assertEquals(1, $occurrencesCount);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
+     * @magentoDbIsolationEnabled
+     */
+    public function testExportSpecialChars()
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertContains('simple ""1""', $exportData);
     }
 
     /**
@@ -105,7 +122,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
-     * 
+     *
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export

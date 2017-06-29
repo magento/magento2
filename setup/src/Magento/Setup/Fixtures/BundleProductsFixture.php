@@ -1,411 +1,245 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\Setup\Model\Complex\Generator;
-use Magento\Setup\Model\Complex\Pattern;
+use Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
 
 /**
- * Class BundleProductsFixture
+ * Generate bundle products based on profile configuration
+ * Generated bundle selections are not displayed individually in catalog
+ * Support the following format:
+ * <bundle_products>{products amount}</bundle_products>
+ * <bundle_products_options>{bundle product options amount}</bundle_products_options>
+ * <bundle_products_variation>{amount of simple products per each option}</bundle_products_variation>
+ *
+ * Products will be uniformly distributed per categories and websites
+ * If node "assign_entities_to_all_websites" from profile is set to "1" then products will be assigned to all websites
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BundleProductsFixture extends Fixture
 {
+    /**
+     * Bundle sku pattern with entity number and suffix. Suffix equals "{options}-{variations_per_option}"
+     */
+    const SKU_PATTERN = 'Bundle Product %s - %s';
+
     /**
      * @var int
      */
     protected $priority = 42;
 
-    //@codingStandardsIgnoreStart
     /**
-     * Get CSV template headers
-     * @SuppressWarnings(PHPMD)
-     * @return array
+     * @var \Magento\Setup\Model\FixtureGenerator\ProductGenerator
      */
-    protected function getHeaders()
-    {
-        return [
-            'sku',
-            'store_view_code',
-            'attribute_set_code',
-            'product_type',
-            'categories',
-            'product_websites',
-            'color',
-            'bundle_variation',
-            'cost',
-            'country_of_manufacture',
-            'created_at',
-            'custom_design',
-            'custom_design_from',
-            'custom_design_to',
-            'custom_layout_update',
-            'description',
-            'enable_googlecheckout',
-            'gallery',
-            'gift_message_available',
-            'gift_wrapping_available',
-            'gift_wrapping_price',
-            'has_options',
-            'image',
-            'image_label',
-            'is_returnable',
-            'manufacturer',
-            'meta_description',
-            'meta_keyword',
-            'meta_title',
-            'minimal_price',
-            'msrp',
-            'msrp_display_actual_price_type',
-            'name',
-            'news_from_date',
-            'news_to_date',
-            'options_container',
-            'page_layout',
-            'price',
-            'quantity_and_stock_status',
-            'related_tgtr_position_behavior',
-            'related_tgtr_position_limit',
-            'required_options',
-            'short_description',
-            'small_image',
-            'small_image_label',
-            'special_from_date',
-            'special_price',
-            'special_to_date',
-            'product_online',
-            'tax_class_name',
-            'thumbnail',
-            'thumbnail_label',
-            'updated_at',
-            'upsell_tgtr_position_behavior',
-            'upsell_tgtr_position_limit',
-            'url_key',
-            'url_path',
-            'variations',
-            'visibility',
-            'weight',
-            'qty',
-            'min_qty',
-            'use_config_min_qty',
-            'is_qty_decimal',
-            'backorders',
-            'use_config_backorders',
-            'min_sale_qty',
-            'use_config_min_sale_qty',
-            'max_sale_qty',
-            'use_config_max_sale_qty',
-            'is_in_stock',
-            'notify_stock_qty',
-            'use_config_notify_stock_qty',
-            'manage_stock',
-            'use_config_manage_stock',
-            'use_config_qty_increments',
-            'qty_increments',
-            'use_config_enable_qty_inc',
-            'enable_qty_increments',
-            'is_decimal_divided',
-            'bundle_values',
-        ];
-    }
-
-    private function generateBundleProduct($productCategory, $productWebsite, $variation, $suffix)
-    {
-        return [
-            'sku' => 'Bundle Product %s' . $suffix,
-            'store_view_code' => '',
-            'attribute_set_code' => 'Default',
-            'product_type' => 'bundle',
-            'categories' => $productCategory,
-            'product_websites' => $productWebsite,
-            'color' => '',
-            'bundle_variation' => '',
-            'cost' => '',
-            'country_of_manufacture' => '',
-            'created_at' => '2013-10-25 15:12:39',
-            'custom_design' => '',
-            'custom_design_from' => '',
-            'custom_design_to' => '',
-            'custom_layout_update' => '',
-            'description' => '<p>Bundle product description %s</p>',
-            'enable_googlecheckout' => '1',
-            'gallery' => '',
-            'gift_message_available' => '',
-            'gift_wrapping_available' => '',
-            'gift_wrapping_price' => '',
-            'has_options' => '1',
-            'image' => '',
-            'image_label' => '',
-            'is_returnable' => 'Use config',
-            'manufacturer' => '',
-            'meta_description' => 'Bundle Product %s <p>Bundle product description %s</p>',
-            'meta_keyword' => 'Bundle Product %s',
-            'meta_title' => 'Bundle Product %s',
-            'minimal_price' => '',
-            'msrp' => '',
-            'msrp_display_actual_price_type' => 'Use config',
-            'name' => 'Bundle Product %s' . $suffix,
-            'news_from_date' => '',
-            'news_to_date' => '',
-            'options_container' => 'Block after Info Column',
-            'page_layout' => '',
-            'price' => '10',
-            'quantity_and_stock_status' => 'In Stock',
-            'related_tgtr_position_behavior' => '',
-            'related_tgtr_position_limit' => '',
-            'required_options' => '1',
-            'short_description' => '',
-            'small_image' => '',
-            'small_image_label' => '',
-            'special_from_date' => '',
-            'special_price' => '',
-            'special_to_date' => '',
-            'product_online' => '1',
-            'tax_class_name' => 'Taxable Goods',
-            'thumbnail' => '',
-            'thumbnail_label' => '',
-            'updated_at' => '2013-10-25 15:12:39',
-            'upsell_tgtr_position_behavior' => '',
-            'upsell_tgtr_position_limit' => '',
-            'url_key' => "bundle-product-%s{$suffix}",
-            'url_path' => "bundle-product-%s{$suffix}",
-            'visibility' => 'Catalog, Search',
-            'weight' => '',
-            'qty' => 333,
-            'min_qty' => '0.0000',
-            'use_config_min_qty' => '1',
-            'is_qty_decimal' => '0',
-            'backorders' => '0',
-            'use_config_backorders' => '1',
-            'min_sale_qty' => '1.0000',
-            'use_config_min_sale_qty' => '1',
-            'max_sale_qty' => '0.0000',
-            'use_config_max_sale_qty' => '1',
-            'is_in_stock' => '1',
-            'notify_stock_qty' => '',
-            'use_config_notify_stock_qty' => '1',
-            'manage_stock' => '1',
-            'use_config_manage_stock' => '1',
-            'use_config_qty_increments' => '1',
-            'qty_increments' => '0.0000',
-            'use_config_enable_qty_inc' => '1',
-            'enable_qty_increments' => '0',
-            'is_decimal_divided' => '0',
-            'bundle_price_type' => 'dynamic',
-            'bundle_sku_type' => 'dynamic',
-            'bundle_price_view' => 'Price range',
-            'bundle_weight_type' => 'dynamic',
-            'bundle_values'     => $variation,
-            'bundle_shipment_type' => 'separately',
-        ];
-    }
+    private $productGenerator;
 
     /**
-     * Get CSV template rows
-     *
-     * @param Closure|mixed $productCategory
-     * @param Closure|mixed $productWebsite
-     *
-     * @SuppressWarnings(PHPMD)
-     *
-     * @return array
+     * @var \Magento\Setup\Model\FixtureGenerator\BundleProductGenerator
      */
-    protected function getRows($productCategory, $productWebsite, $optionsNumber, $suffix = '')
-    {
-        $data = [];
-        $variation = [];
-        for ($i = 1; $i <= $optionsNumber; $i++) {
-            $productData = [
-                'sku' => "Bundle Product %s-option {$i}{$suffix}",
-                'store_view_code' => '',
-                'attribute_set_code' => 'Default',
-                'product_type' => 'simple',
-                'categories' => $productCategory,
-                'product_websites' => $productWebsite,
-                'cost' => '',
-                'country_of_manufacture' => '',
-                'created_at' => '2013-10-25 15:12:32',
-                'custom_design' => '',
-                'custom_design_from' => '',
-                'custom_design_to' => '',
-                'custom_layout_update' => '',
-                'description' => '<p>Bundle product option description %s</p>',
-                'enable_googlecheckout' => '1',
-                'gallery' => '',
-                'gift_message_available' => '',
-                'gift_wrapping_available' => '',
-                'gift_wrapping_price' => '',
-                'has_options' => '0',
-                'image' => '',
-                'image_label' => '',
-                'is_returnable' => 'Use config',
-                'manufacturer' => '',
-                'meta_description' => 'Bundle Product Option %s <p>Bundle product description 1</p>',
-                'meta_keyword' => 'Bundle Product 1',
-                'meta_title' => 'Bundle Product %s',
-                'minimal_price' => '',
-                'msrp' => '',
-                'msrp_display_actual_price_type' => 'Use config',
-                'name' => "Bundle Product {$suffix} -  %s-option {$i}",
-                'news_from_date' => '',
-                'news_to_date' => '',
-                'options_container' => 'Block after Info Column',
-                'page_layout' => '',
-                'price' => function () { return mt_rand(1, 1000) / 10; },
-                'quantity_and_stock_status' => 'In Stock',
-                'related_tgtr_position_behavior' => '',
-                'related_tgtr_position_limit' => '',
-                'required_options' => '0',
-                'short_description' => '',
-                'small_image' => '',
-                'small_image_label' => '',
-                'special_from_date' => '',
-                'special_price' => '',
-                'special_to_date' => '',
-                'product_online' => '1',
-                'tax_class_name' => 'Taxable Goods',
-                'thumbnail' => '',
-                'thumbnail_label' => '',
-                'updated_at' => '2013-10-25 15:12:32',
-                'upsell_tgtr_position_behavior' => '',
-                'upsell_tgtr_position_limit' => '',
-                'url_key' => "simple-of-bundle-product-{$suffix}-%s-option-{$i}",
-                'url_path' => "simple-of-bundle-product-{$suffix}-%s-option-{$i}",
-                'visibility' => 'Not Visible Individually',
-                'weight' => '1',
-                'qty' => '111.0000',
-                'min_qty' => '0.0000',
-                'use_config_min_qty' => '1',
-                'use_config_backorders' => '1',
-                'use_config_min_sale_qty' => '1',
-                'use_config_max_sale_qty' => '1',
-                'is_in_stock' => '1',
-                'use_config_notify_stock_qty' => '1',
-                'use_config_manage_stock' => '1',
-                'use_config_qty_increments' => '1',
-                'use_config_enable_qty_inc' => '1',
-                'enable_qty_increments' => '0',
-                'is_decimal_divided' => '0',
-            ];
-            $variation[] = implode(
-                ',',
-                [
-                    'name=Bundle Option 1',
-                    'type=select',
-                    'required=1',
-                    'sku=' . $productData['sku'],
-                    'price=' . mt_rand(1, 1000) / 10,
-                    'default=0',
-                    'default_qty=1',
-                ]
-            );
-            $data[] = $productData;
-        }
+    private $bundleProductGenerator;
 
-        $data[] = $this->generateBundleProduct($productCategory, $productWebsite, implode('|', $variation), $suffix);
-        return $data;
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
+    private $productCollectionFactory;
+
+    /**
+     * @var int
+     */
+    private $productStartIndex;
+
+    /**
+     * @var ProductsAmountProvider
+     */
+    private $productsAmountProvider;
+
+    /**
+     * @var WebsiteCategoryProvider
+     */
+    private $websiteCategoryProvider;
+
+    /**
+     * @var PriceProvider
+     */
+    private $priceProvider;
+
+    /**
+     * @param FixtureModel $fixtureModel
+     * @param \Magento\Setup\Model\FixtureGenerator\ProductGenerator $productGenerator
+     * @param \Magento\Setup\Model\FixtureGenerator\BundleProductGenerator $bundleProductGenerator
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param ProductsAmountProvider $productsAmountProvider
+     * @param WebsiteCategoryProvider $websiteCategoryProvider
+     * @param PriceProvider $priceProvider
+     */
+    public function __construct(
+        FixtureModel $fixtureModel,
+        \Magento\Setup\Model\FixtureGenerator\ProductGenerator $productGenerator,
+        \Magento\Setup\Model\FixtureGenerator\BundleProductGenerator $bundleProductGenerator,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        ProductsAmountProvider $productsAmountProvider,
+        WebsiteCategoryProvider $websiteCategoryProvider,
+        PriceProvider $priceProvider
+    ) {
+        parent::__construct($fixtureModel);
+        $this->productGenerator = $productGenerator;
+        $this->bundleProductGenerator = $bundleProductGenerator;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->productsAmountProvider = $productsAmountProvider;
+        $this->websiteCategoryProvider = $websiteCategoryProvider;
+        $this->priceProvider = $priceProvider;
     }
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
     {
-        $bundlesCount = $this->fixtureModel->getValue('bundle_products', 0);
-        if (!$bundlesCount) {
+        $bundlesAmount = $this->fixtureModel->getValue('bundle_products', 0);
+        $bundleOptions = $this->fixtureModel->getValue('bundle_products_options', 1);
+        $bundleProductsPerOption = $this->fixtureModel->getValue('bundle_products_variation', 10);
+        $bundleOptionSuffix = $bundleOptions . '-' . $bundleProductsPerOption;
+        $variationCount = $bundleOptions * $bundleProductsPerOption;
+        $bundlesAmount = $this->productsAmountProvider->getAmount(
+            $bundlesAmount,
+            $this->getBundleSkuPattern($bundleOptionSuffix)
+        );
+
+        if (!$bundlesAmount) {
             return;
         }
-        $this->fixtureModel->resetObjectManager();
+        $variationSkuClosure = function ($productId, $entityNumber) use ($bundleOptionSuffix, $variationCount) {
+            $productIndex = $this->getBundleProductIndex($entityNumber, $variationCount);
+            $variationIndex = $this->getBundleVariationIndex($entityNumber, $variationCount);
 
-        /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
-        /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
-
-        $result = [];
-        //Get all websites
-        $websites = $storeManager->getWebsites();
-        foreach ($websites as $website) {
-            $websiteCode = $website->getCode();
-            //Get all groups
-            $websiteGroups = $website->getGroups();
-            foreach ($websiteGroups as $websiteGroup) {
-                $websiteGroupRootCategory = $websiteGroup->getRootCategoryId();
-                $category->load($websiteGroupRootCategory);
-                $categoryResource = $category->getResource();
-                $rootCategoryName = $category->getName();
-                //Get all categories
-                $resultsCategories = $categoryResource->getAllChildren($category);
-                foreach ($resultsCategories as $resultsCategory) {
-                    $category->load($resultsCategory);
-                    $structure = explode('/', $category->getPath());
-                    $pathSize  = count($structure);
-                    if ($pathSize > 1) {
-                        $path = [];
-                        for ($i = 1; $i < $pathSize; $i++) {
-                            $path[] = $category->load($structure[$i])->getName();
-                        }
-                        array_shift($path);
-                        $resultsCategoryName = implode('/', $path);
-                    } else {
-                        $resultsCategoryName = $category->getName();
-                    }
-                    //Deleted root categories
-                    if (trim($resultsCategoryName) != '') {
-                        $result[$resultsCategory] = [$websiteCode, $resultsCategoryName, $rootCategoryName];
-                    }
-                }
-            }
-        }
-        $result = array_values($result);
-
-        $productWebsite = function ($index) use ($result) {
-            return $result[$index % count($result)][0];
+            return sprintf($this->getBundleOptionItemSkuPattern($bundleOptionSuffix), $productIndex, $variationIndex);
         };
-        $productCategory = function ($index) use ($result) {
-            return $result[$index % count($result)][2] . '/' . $result[$index % count($result)][1];
+        $fixtureMap = [
+            'name' => $variationSkuClosure,
+            'sku' => $variationSkuClosure,
+            'price' => function ($index, $entityNumber) {
+                return $this->priceProvider->getPrice($entityNumber);
+            },
+            'website_ids' => function ($index, $entityNumber) use ($variationCount) {
+                $configurableIndex = $this->getBundleProductIndex($entityNumber, $variationCount);
+
+                return $this->websiteCategoryProvider->getWebsiteIds($configurableIndex);
+            },
+            'visibility' => Visibility::VISIBILITY_NOT_VISIBLE,
+        ];
+        $this->productGenerator->generate($bundlesAmount * $bundleOptions * $bundleProductsPerOption, $fixtureMap);
+
+        $optionPriceType = [
+            LinkInterface::PRICE_TYPE_FIXED,
+            LinkInterface::PRICE_TYPE_PERCENT,
+        ];
+        $priceTypeClosure = function ($index) use ($optionPriceType) {
+            return $optionPriceType[$index % count($optionPriceType)];
         };
-
-        /**
-         * Create bundle products
-         */
-        $pattern = new Pattern();
-        $pattern->setHeaders($this->getHeaders());
-        $pattern->setRowsSet(
-            $this->getRows(
-                $productCategory,
-                $productWebsite,
-                $this->fixtureModel->getValue('bundle_products_variation', 5000)
-            )
-        );
-
-        /** @var \Magento\ImportExport\Model\Import $import */
-        $import = $this->fixtureModel->getObjectManager()->create(
-            'Magento\ImportExport\Model\Import',
-            [
-                'data' => [
-                    'entity' => 'catalog_product',
-                    'behavior' => 'append',
-                    'validation_strategy' => 'validation-stop-on-errors',
-                ],
-            ]
-        );
-
-        $source = new Generator($pattern, $bundlesCount);
-        // it is not obvious, but the validateSource() will actually save import queue data to DB
-        if (!$import->validateSource($source)) {
-            throw new \Exception($import->getFormatedLogTrace());
-        }
-        // this converts import queue into actual entities
-        if (!$import->importSource()) {
-            throw new \Exception($import->getFormatedLogTrace());
-        }
+        $skuClosure = function ($index, $entityNumber) use ($bundleOptionSuffix) {
+            return sprintf(
+                $this->getBundleSkuPattern($bundleOptionSuffix),
+                $entityNumber + $this->getNewProductStartIndex()
+            );
+        };
+        $fixtureMap = [
+            '_bundle_options' => $bundleOptions,
+            '_bundle_products_per_option' => $bundleProductsPerOption,
+            '_bundle_variation_sku_pattern' => sprintf(
+                $this->getBundleOptionItemSkuPattern($bundleOptionSuffix),
+                $this->getNewProductStartIndex(),
+                '%s'
+            ),
+            'type_id' => Type::TYPE_CODE,
+            'name' => $skuClosure,
+            'sku' => $skuClosure,
+            'meta_title' => $skuClosure,
+            'price' => function ($index) use ($priceTypeClosure) {
+                return $priceTypeClosure($index) === LinkInterface::PRICE_TYPE_PERCENT
+                    ? mt_rand(10, 90)
+                    : $this->priceProvider->getPrice($index);
+            },
+            'priceType' => $priceTypeClosure,
+            'website_ids' => function ($index, $entityNumber) {
+                return $this->websiteCategoryProvider->getWebsiteIds($entityNumber + $this->getNewProductStartIndex());
+            },
+            'category_ids' => function ($index, $entityNumber) {
+                return $this->websiteCategoryProvider->getCategoryId($entityNumber + $this->getNewProductStartIndex());
+            },
+        ];
+        $this->bundleProductGenerator->generate($bundlesAmount, $fixtureMap);
     }
-    // @codingStandardsIgnoreEnd
+
+    /**
+     * Get sku pattern for bundle product option item
+     *
+     * @param string $bundleOptionSuffix
+     * @return string
+     */
+    private function getBundleOptionItemSkuPattern($bundleOptionSuffix)
+    {
+        return $this->getBundleSkuPattern($bundleOptionSuffix) . ' - option %s';
+    }
+
+    /**
+     * Get sku pattern for bundle product. Replace suffix pattern with passed value
+     *
+     * @param string $bundleOptionSuffix
+     * @return string
+     */
+    private function getBundleSkuPattern($bundleOptionSuffix)
+    {
+        return sprintf(self::SKU_PATTERN, '%s', $bundleOptionSuffix);
+    }
+
+    /**
+     * Get start index for product number generation
+     *
+     * @return int
+     */
+    private function getNewProductStartIndex()
+    {
+        if (null === $this->productStartIndex) {
+            $this->productStartIndex = $this->productCollectionFactory->create()
+                    ->addFieldToFilter('type_id', Type::TYPE_CODE)
+                    ->getSize() + 1;
+        }
+
+        return $this->productStartIndex;
+    }
+
+    /**
+     * Get bundle product index number
+     *
+     * @param int $entityNumber
+     * @param int $variationCount
+     * @return float
+     */
+    private function getBundleProductIndex($entityNumber, $variationCount)
+    {
+        return floor($entityNumber / $variationCount) + $this->getNewProductStartIndex();
+    }
+
+    /**
+     * Get bundle variation index number
+     *
+     * @param int $entityNumber
+     * @param int $variationCount
+     * @return float
+     */
+    private function getBundleVariationIndex($entityNumber, $variationCount)
+    {
+        return $entityNumber % $variationCount + 1;
+    }
 
     /**
      * {@inheritdoc}

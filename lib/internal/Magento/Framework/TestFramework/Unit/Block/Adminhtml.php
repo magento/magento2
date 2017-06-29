@@ -2,7 +2,7 @@
 /**
  * Framework for testing Block_Adminhtml code
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * Number of fields is necessary because of the number of fields used by multiple layers

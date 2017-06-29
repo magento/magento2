@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
@@ -25,9 +25,13 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method int getCountryId()
  * @method string getCity()
  * @method string getTelephone()
+ * @method string getCompany()
+ * @method string getFax()
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
 {
@@ -554,6 +558,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * Validate address attribute values
      *
+     *
+     *
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -562,23 +568,37 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     {
         $errors = [];
         if (!\Zend_Validate::is($this->getFirstname(), 'NotEmpty')) {
-            $errors[] = __('Please enter the first name.');
+            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'firstname']);
         }
 
         if (!\Zend_Validate::is($this->getLastname(), 'NotEmpty')) {
-            $errors[] = __('Please enter the last name.');
+            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'lastname']);
         }
 
         if (!\Zend_Validate::is($this->getStreetLine(1), 'NotEmpty')) {
-            $errors[] = __('Please enter the street.');
+            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'street']);
         }
 
         if (!\Zend_Validate::is($this->getCity(), 'NotEmpty')) {
-            $errors[] = __('Please enter the city.');
+            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'city']);
         }
 
-        if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
-            $errors[] = __('Please enter the phone number.');
+        if ($this->isTelephoneRequired()) {
+            if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
+                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
+            }
+        }
+
+        if ($this->isFaxRequired()) {
+            if (!\Zend_Validate::is($this->getFax(), 'NotEmpty')) {
+                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'fax']);
+            }
+        }
+
+        if ($this->isCompanyRequired()) {
+            if (!\Zend_Validate::is($this->getCompany(), 'NotEmpty')) {
+                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'company']);
+            }
         }
 
         $_havingOptionalZip = $this->_directoryData->getCountriesWithOptionalZip();
@@ -590,11 +610,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             'NotEmpty'
         )
         ) {
-            $errors[] = __('Please enter the zip/postal code.');
+            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'postcode']);
         }
 
         if (!\Zend_Validate::is($this->getCountryId(), 'NotEmpty')) {
-            $errors[] = __('Please enter the country.');
+            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'countryId']);
         }
 
         if ($this->getCountryModel()->getRegionCollection()->getSize() && !\Zend_Validate::is(
@@ -604,7 +624,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $this->getCountryId()
         )
         ) {
-            $errors[] = __('Please enter the state/province.');
+            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'regionId']);
         }
 
         if (empty($errors) || $this->getShouldIgnoreValidation()) {
@@ -636,5 +656,29 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function unsRegion()
     {
         return $this->unsetData("region");
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isCompanyRequired()
+    {
+        return ($this->_eavConfig->getAttribute('customer_address', 'company')->getIsRequired());
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTelephoneRequired()
+    {
+        return ($this->_eavConfig->getAttribute('customer_address', 'telephone')->getIsRequired());
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isFaxRequired()
+    {
+        return ($this->_eavConfig->getAttribute('customer_address', 'fax')->getIsRequired());
     }
 }

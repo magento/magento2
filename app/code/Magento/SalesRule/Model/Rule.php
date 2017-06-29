@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Shopping Cart Rule data model
  *
+ * @api
  * @method \Magento\SalesRule\Model\ResourceModel\Rule _getResource()
  * @method \Magento\SalesRule\Model\ResourceModel\Rule getResource()
  * @method string getName()
@@ -190,6 +191,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param array $data
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -208,7 +210,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null
+        AttributeValueFactory $customAttributeFactory = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
@@ -225,7 +228,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $resourceCollection,
             $data,
             $extensionFactory,
-            $customAttributeFactory
+            $customAttributeFactory,
+            $serializer
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Block\Cart;
@@ -51,6 +51,11 @@ class Sidebar extends Block
     protected $productCounter = './/*[@class="counter-number"]';
 
     /**
+     * @var string
+     */
+    protected $visibleProductCounter = './/*[@class="items-total"]';
+
+    /**
      * Empty minicart message
      *
      * @var string
@@ -93,7 +98,7 @@ class Sidebar extends Block
     protected $counterNumberWrapper = '.minicart-wrapper';
 
     /**
-     * Loading masc.
+     * Loading mask.
      *
      * @var string
      */
@@ -151,7 +156,7 @@ class Sidebar extends Block
     }
 
     /**
-     * Get empty minicart message
+     * Get empty minicart message.
      *
      * @return string
      */
@@ -162,13 +167,33 @@ class Sidebar extends Block
     }
 
     /**
-     * Is minicart items quantity block visible
+     * Is minicart items quantity block visible.
      *
      * @return bool
      */
     public function isItemsQtyVisible()
     {
         return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Get qty of items in minicart.
+     *
+     * @return int
+     */
+    public function getItemsQty()
+    {
+        return (int)$this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * Returns message with count of visible items
+     *
+     * @return string
+     */
+    public function getVisibleItemsCounter()
+    {
+        return $this->_rootElement->find($this->visibleProductCounter, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

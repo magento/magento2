@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 {{depend street4}}{{var street4}}{{/depend}}
 {{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}
 {{var country}}
-T: {{var telephone}}
+{{depend telephone}}T: {{var telephone}}{{/depend}}
 {{depend fax}}F: {{var fax}}{{/depend}}
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}
 TEMPLATE;
@@ -149,9 +149,7 @@ EXPECTED_RESULT;
 
         $stub->expects($this->once())
             ->method('bar')
-            ->will($this->returnCallback(function ($arg) {
-                return serialize($arg);
-            }));
+            ->willReturn('Mocked Method Return');
 
         return [
             'no variables' => [
@@ -177,14 +175,7 @@ EXPECTED_RESULT;
                     'b' => 'bee',
                     'd' => 'dee',
                 ],
-                serialize([
-                    'param_1' => 'value_1',
-                    'param_2' => 'lorem',
-                    'param_3' => [
-                        'a' => 'bee',
-                        'c' => 'dee',
-                    ],
-                ]),
+                'Mocked Method Return'
             ],
         ];
     }

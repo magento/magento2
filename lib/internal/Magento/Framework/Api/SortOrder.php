@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,6 @@ class SortOrder extends AbstractSimpleObject
             $this->validateDirection($this->getDirection());
         }
     }
-
 
     /**
      * Get sorting field.
@@ -78,7 +77,7 @@ class SortOrder extends AbstractSimpleObject
 
     /**
      * Validate direction argument ASC or DESC
-     * 
+     *
      * @param mixed $direction
      * @return null
      * @throws InputException

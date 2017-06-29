@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Directory data processor.
@@ -37,9 +39,9 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     private $countryCollectionFactory;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var DirectoryHelper
@@ -49,19 +51,22 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection
-     * @param StoreResolverInterface $storeResolver
+     * @param StoreResolverInterface $storeResolver @deprecated
      * @param DirectoryHelper $directoryHelper
+     * @param StoreManagerInterface $storeManager
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollection,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection,
         StoreResolverInterface $storeResolver,
-        DirectoryHelper $directoryHelper
+        DirectoryHelper $directoryHelper,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->countryCollectionFactory = $countryCollection;
         $this->regionCollectionFactory = $regionCollection;
-        $this->storeResolver = $storeResolver;
         $this->directoryHelper = $directoryHelper;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -91,7 +96,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     {
         if (!isset($this->countryOptions)) {
             $this->countryOptions = $this->countryCollectionFactory->create()->loadByStore(
-                $this->storeResolver->getCurrentStoreId()
+                $this->storeManager->getStore()->getId()
             )->toOptionArray();
             $this->countryOptions = $this->orderCountryOptions($this->countryOptions);
         }
@@ -108,7 +113,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
     {
         if (!isset($this->regionOptions)) {
             $this->regionOptions = $this->regionCollectionFactory->create()->addAllowedCountriesFilter(
-                $this->storeResolver->getCurrentStoreId()
+                $this->storeManager->getStore()->getId()
             )->toOptionArray();
         }
 

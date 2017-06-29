@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Address;
 /**
  * Order history block
  * Class Info
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
@@ -301,5 +302,27 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function getFormattedAddress(Address $address)
     {
         return $this->addressRenderer->format($address, 'html');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getChildHtml($alias = '', $useCache = true)
+    {
+        $layout = $this->getLayout();
+
+        if ($alias || !$layout) {
+            return parent::getChildHtml($alias, $useCache);
+        }
+
+        $childNames = $layout->getChildNames($this->getNameInLayout());
+        $outputChildNames = array_diff($childNames, ['extra_customer_info']);
+
+        $out = '';
+        foreach ($outputChildNames as $childName) {
+            $out .= $layout->renderElement($childName, $useCache);
+        }
+
+        return $out;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
@@ -72,7 +72,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap(
                 [
                     [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirectoryMock],
-                    [DirectoryList::TEMPLATE_MINIFICATION_DIR, DriverPool::FILE, $this->compiledDirectoryMock],
+                    [DirectoryList::TMP_MATERIALIZATION_DIR, DriverPool::FILE, $this->compiledDirectoryMock],
                 ]
             ));
 

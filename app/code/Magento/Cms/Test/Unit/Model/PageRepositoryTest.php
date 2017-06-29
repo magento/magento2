@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model;
@@ -261,22 +261,8 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->pageSearchResult->expects($this->once())
             ->method('setItems')
-            ->with(['someData'])
+            ->with([$this->page])
             ->willReturnSelf();
-
-        $this->page->expects($this->once())
-            ->method('getData')
-            ->willReturn(['data']);
-
-        $this->dataHelper->expects($this->once())
-            ->method('populateWithArray')
-            ->with($this->pageData, ['data'], \Magento\Cms\Api\Data\PageInterface::class);
-
-        $this->dataObjectProcessor->expects($this->once())
-            ->method('buildOutputDataArray')
-            ->with($this->pageData, \Magento\Cms\Api\Data\PageInterface::class)
-            ->willReturn('someData');
-
         $this->assertEquals($this->pageSearchResult, $this->repository->getList($criteria));
     }
 }

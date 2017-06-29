@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ namespace Magento\Framework\View\Asset;
  * A locally available static view file asset that can be referred with a file path
  *
  * This class is a value object with lazy loading of some of its data (content, physical file path)
+ *
+ * @api
  */
 class File implements MergeableInterface
 {

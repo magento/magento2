@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Data\Test\Unit\Collection;
 
@@ -44,10 +42,18 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->fetchStrategyMock = $this->getMock(
-            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class, ['fetchAll'], [], '', false
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
+            ['fetchAll'],
+            [],
+            '',
+            false
         );
         $this->entityFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Collection\EntityFactory::class, ['create'], [], '', false
+            \Magento\Framework\Data\Collection\EntityFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->collection = new \Magento\Framework\Data\Test\Unit\Collection\DbCollection(
@@ -375,7 +381,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
         $adapterMock = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'query'], [], '', false);
+            ['select', 'query'],
+            [],
+            '',
+            false
+        );
         $selectMock = $this->getMock(
             \Magento\Framework\DB\Select::class,
             [],
@@ -430,9 +440,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $adapterMock->expects($this->exactly(2))
             ->method('quoteInto')
             ->will($this->returnValueMap([
-                        ['testField1=?', 'testValue1', null, null, 'testField1=testValue1'],
-                        ['testField4=?', 'testValue4', null, null, 'testField4=testValue4'],
-                    ]));
+                ['testField1=?', 'testValue1', null, null, 'testField1=testValue1'],
+                ['testField4=?', 'testValue4', null, null, 'testField4=testValue4'],
+            ]));
         $selectMock->expects($this->once())
             ->method('orWhere')
             ->with('testField1=testValue1');
@@ -558,7 +568,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $data = [10 => 'test'];
         $adapterMock = $this->getMock(
             \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['select', 'query'], [], '', false);
+            ['select', 'query'],
+            [],
+            '',
+            false
+        );
         $selectMock = $this->getMock(
             \Magento\Framework\DB\Select::class,
             [],

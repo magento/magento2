@@ -1,15 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
-/**
- * Class TableBuilder
- */
 class TableBuilder
 {
     /**
@@ -45,16 +42,22 @@ class TableBuilder
     protected $_isExecuted = false;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param BuilderInterfaceFactory|null $tableBuilderFactory
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        BuilderInterfaceFactory $tableBuilderFactory = null
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->resource = $resource;
         $this->_connection = $resource->getConnection();
+        $this->tableBuilderFactory = $tableBuilderFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(BuilderInterfaceFactory::class);
     }
 
     /**
@@ -74,6 +77,9 @@ class TableBuilder
         $attributes = $this->_productIndexerHelper->getAttributes();
         $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
         $entityTableColumns = $eavAttributes[$entityTableName];
+        $linkField = $this->getMetadataPool()
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
 
         $temporaryEavAttributes = $eavAttributes;
 
@@ -101,11 +107,11 @@ class TableBuilder
             $temporaryTableName = $this->_getTemporaryTableName($tableName);
 
             //Add primary key to temporary table for increase speed of joins in future
-            $this->_addPrimaryKeyToTable($temporaryTableName);
+            $this->_addPrimaryKeyToTable($temporaryTableName, $linkField);
 
             //Create temporary table for composite attributes
             if (isset($valueTables[$temporaryTableName . $valueFieldSuffix])) {
-                $this->_addPrimaryKeyToTable($temporaryTableName . $valueFieldSuffix);
+                $this->_addPrimaryKeyToTable($temporaryTableName . $valueFieldSuffix, $linkField);
             }
 
             //Fill temporary tables with attributes grouped by it type
@@ -128,13 +134,13 @@ class TableBuilder
         $valueTables = [];
         if (!empty($columns)) {
             $valueTableName = $tableName . $valueFieldSuffix;
-            $temporaryTableBuilder = $this->getTableBuilderFactory()->create(
+            $temporaryTableBuilder = $this->tableBuilderFactory->create(
                 [
                     'connection' => $this->_connection,
                     'tableName' => $tableName
                 ]
             );
-            $valueTemporaryTableBuilder = $this->getTableBuilderFactory()->create(
+            $valueTemporaryTableBuilder = $this->tableBuilderFactory->create(
                 [
                     'connection' => $this->_connection,
                     'tableName' => $valueTableName
@@ -350,20 +356,8 @@ class TableBuilder
     }
 
     /**
-     * @return BuilderInterfaceFactory
-     */
-    private function getTableBuilderFactory()
-    {
-        if (null === $this->tableBuilderFactory) {
-            $this->tableBuilderFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(BuilderInterfaceFactory::class);
-        }
-
-        return $this->tableBuilderFactory;
-    }
-
-    /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @deprecated
      */
     private function getMetadataPool()
     {

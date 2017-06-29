@@ -1,25 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Rest\Swagger;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Controller\Rest;
 use Magento\Webapi\Model\AbstractSchemaGenerator;
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\Rest\Swagger;
 use Magento\Webapi\Model\Rest\SwaggerFactory;
-use Magento\Framework\Webapi\Authorization;
-use Magento\Framework\Webapi\Exception as WebapiException;
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Phrase;
-use Magento\Framework\App\ProductMetadataInterface;
-use \Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Webapi\Model\ServiceMetadata;
 
 /**
  * REST Swagger schema generator.
@@ -28,6 +24,7 @@ use \Magento\Framework\Api\SimpleDataObjectConverter;
  * compliant with {@link https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md Swagger specification}
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Generator extends AbstractSchemaGenerator
 {
@@ -279,8 +276,7 @@ class Generator extends AbstractSchemaGenerator
 
         $phpMethodData = $httpMethodData[Converter::KEY_METHOD];
         /** Return nothing if necessary fields are not set */
-        if (
-            !isset($phpMethodData['interface']['in']['parameters'])
+        if (!isset($phpMethodData['interface']['in']['parameters'])
             || !isset($httpMethodData['uri'])
             || !isset($httpMethodData['httpOperation'])
         ) {
@@ -289,8 +285,7 @@ class Generator extends AbstractSchemaGenerator
 
         foreach ($phpMethodData['interface']['in']['parameters'] as $parameterName => $parameterInfo) {
             /** Omit forced parameters */
-            if (
-                isset($httpMethodData['parameters'][$parameterName]['force'])
+            if (isset($httpMethodData['parameters'][$parameterName]['force'])
                 && $httpMethodData['parameters'][$parameterName]['force']
             ) {
                 continue;
@@ -318,7 +313,6 @@ class Generator extends AbstractSchemaGenerator
                     $description,
                     $bodySchema
                 );
-
             }
         }
 
@@ -903,5 +897,24 @@ class Generator extends AbstractSchemaGenerator
         $responses[$httpCode]['schema']['$ref'] = self::ERROR_SCHEMA;
 
         return $responses;
+    }
+
+    /**
+     * Retrieve a list of services visible to current user.
+     *
+     * @return string[]
+     */
+    public function getListOfServices()
+    {
+        $listOfAllowedServices = [];
+        foreach ($this->serviceMetadata->getServicesConfig() as $serviceName => $service) {
+            foreach ($service[ServiceMetadata::KEY_SERVICE_METHODS] as $method) {
+                if ($this->authorization->isAllowed($method[ServiceMetadata::KEY_ACL_RESOURCES])) {
+                    $listOfAllowedServices[] = $serviceName;
+                    break;
+                }
+            }
+        }
+        return $listOfAllowedServices;
     }
 }
