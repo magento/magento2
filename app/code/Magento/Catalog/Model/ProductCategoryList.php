@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Provides info about product categories.
@@ -30,23 +30,15 @@ class ProductCategoryList
     private $category;
 
     /**
-     * @var FrontendResource
-     */
-    private $categoryProductIndexerFrontend;
-
-    /**
      * @param ResourceModel\Product $productResource
      * @param ResourceModel\Category $category
-     * @param FrontendResource $categoryProductIndexerFrontend
      */
     public function __construct(
         ResourceModel\Product $productResource,
-        ResourceModel\Category $category,
-        FrontendResource $categoryProductIndexerFrontend
+        ResourceModel\Category $category
     ) {
         $this->productResource = $productResource;
         $this->category = $category;
-        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend;
     }
 
     /**
@@ -61,7 +53,10 @@ class ProductCategoryList
             $unionSelect = new UnionExpression(
                 [
                     $this->getCategorySelect($productId, $this->category->getCategoryProductTable()),
-                    $this->getCategorySelect($productId, $this->categoryProductIndexerFrontend->getMainTable())
+                    $this->getCategorySelect(
+                        $productId,
+                        $this->productResource->getTable(AbstractAction::MAIN_INDEX_TABLE)
+                    )
                 ],
                 Select::SQL_UNION_ALL
             );
