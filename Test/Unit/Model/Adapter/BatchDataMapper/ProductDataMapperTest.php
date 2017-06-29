@@ -314,7 +314,7 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
                 ],
                 ['attribute_array' => 'one two three'],
             ],
-             'multiselect value attribute' => [
+            'multiselect value attribute' => [
                 12,
                 [
                     'attributeCode' => 'multiselect',
