@@ -27,6 +27,20 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
     protected $_website;
 
     /**
+     * Columns in main table
+     *
+     * @var array
+     */
+    protected $mainColumns;
+
+    /**
+     * Columns in additional attribute table
+     *
+     * @var array
+     */
+    protected $extraColumns;
+
+    /**
      * Attribute Entity Type Filter
      *
      * @var \Magento\Eav\Model\Entity\Type
@@ -131,80 +145,121 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
     }
 
     /**
+     *  Returns array with columns in main table
+     *
+     * @return array
+     */
+    public function getMainColumns()
+    {
+        if (!$this->mainColumns) {
+            $this->mainColumns = [];
+            $mainDescribe = $this->getConnection()
+                ->describeTable($this->getResource()->getMainTable());
+
+            foreach (array_keys($mainDescribe) as $columnName) {
+                $this->mainColumns[$columnName] = $columnName;
+            }
+        }
+
+        return $this->mainColumns;
+    }
+
+    /**
+     *  Returns array with columns from additional table
+     *
+     * @return array
+     */
+    public function getExtraColumns()
+    {
+        if (!$this->extraColumns) {
+            $extraTable = $this->getEntityType()->getAdditionalAttributeTable();
+            $mainColumns = $this->getMainColumns();
+
+            $this->extraColumns = [];
+            $extraDescribe = $this->getConnection()
+                ->describeTable($this->getTable($extraTable));
+
+            foreach (array_keys($extraDescribe) as $columnName) {
+                if (isset($mainColumns[$columnName])) {
+                    continue;
+                }
+                $this->extraColumns[$columnName] = $columnName;
+            }
+        }
+
+        return $this->extraColumns;
+    }
+
+    /**
      * Initialize collection select
      *
      * @return $this
+     *
      */
     protected function _initSelect()
     {
         $select = $this->getSelect();
-        $connection = $this->getConnection();
         $entityType = $this->getEntityType();
-        $extraTable = $entityType->getAdditionalAttributeTable();
-        $mainDescribe = $this->getConnection()->describeTable($this->getResource()->getMainTable());
-        $mainColumns = [];
-
-        foreach (array_keys($mainDescribe) as $columnName) {
-            $mainColumns[$columnName] = $columnName;
-        }
+        $mainColumns = $this->getMainColumns();
 
         $select->from(['main_table' => $this->getResource()->getMainTable()], $mainColumns);
 
-        // additional attribute data table
-        $extraDescribe = $connection->describeTable($this->getTable($extraTable));
-        $extraColumns = [];
-        foreach (array_keys($extraDescribe) as $columnName) {
-            if (isset($mainColumns[$columnName])) {
-                continue;
-            }
-            $extraColumns[$columnName] = $columnName;
-        }
-
         $this->addBindParam('mt_entity_type_id', (int)$entityType->getId());
         $select->join(
-            ['additional_table' => $this->getTable($extraTable)],
+            ['additional_table' => $this->getTable($entityType->getAdditionalAttributeTable())],
             'additional_table.attribute_id = main_table.attribute_id',
-            $extraColumns
+            $this->getExtraColumns()
         )->where(
             'main_table.entity_type_id = :mt_entity_type_id'
         );
 
         // scope values
+        if ($this->_getEavWebsiteTable()) {
+            $this->applyScopeValues();
+        }
 
-        $scopeDescribe = $connection->describeTable($this->_getEavWebsiteTable());
-        unset($scopeDescribe['attribute_id']);
-        $scopeColumns = [];
-        foreach (array_keys($scopeDescribe) as $columnName) {
-            if ($columnName == 'website_id') {
-                $scopeColumns['scope_website_id'] = $columnName;
-            } else {
-                if (isset($mainColumns[$columnName])) {
+        return $this;
+    }
+
+    /**
+     * Apply scope values from website tables if implemented
+     *
+     * @return $this
+     */
+    public function applyScopeValues()
+    {
+        $scopeTable = $this->_getEavWebsiteTable();
+        $connection = $this->getConnection();
+
+        if ($scopeTable) {
+            $mainColumns = $this->getMainColumns();
+            $extraColumns = $this->getExtraColumns();
+            $scopeDescribe = $connection->describeTable($scopeTable);
+            unset($scopeDescribe['attribute_id']);
+            $scopeColumns = [];
+            foreach (array_keys($scopeDescribe) as $columnName) {
+                if ($columnName == 'website_id') {
+                    $scopeColumns['scope_website_id'] = $columnName;
+                } elseif (isset($mainColumns[$columnName]) || isset($extraColumns[$columnName])) {
+                    $tableName = isset($mainColumns[$columnName])? 'main_table' : 'additional_table';
                     $alias = 'scope_' . $columnName;
-                    $condition = 'main_table.' . $columnName . ' IS NULL';
+                    $condition = $tableName . '.' . $columnName . ' IS NULL';
                     $true = 'scope_table.' . $columnName;
-                    $false = 'main_table.' . $columnName;
-                    $expression = $connection->getCheckSql($condition, $true, $false);
-                    $this->addFilterToMap($columnName, $expression);
-                    $scopeColumns[$alias] = $columnName;
-                } elseif (isset($extraColumns[$columnName])) {
-                    $alias = 'scope_' . $columnName;
-                    $condition = 'additional_table.' . $columnName . ' IS NULL';
-                    $true = 'scope_table.' . $columnName;
-                    $false = 'additional_table.' . $columnName;
+                    $false = $tableName . '.' . $columnName;
                     $expression = $connection->getCheckSql($condition, $true, $false);
                     $this->addFilterToMap($columnName, $expression);
                     $scopeColumns[$alias] = $columnName;
                 }
             }
-        }
 
-        $select->joinLeft(
-            ['scope_table' => $this->_getEavWebsiteTable()],
-            'scope_table.attribute_id = main_table.attribute_id AND scope_table.website_id = :scope_website_id',
-            $scopeColumns
-        );
-        $websiteId = $this->getWebsite() ? (int)$this->getWebsite()->getId() : 0;
-        $this->addBindParam('scope_website_id', $websiteId);
+            $this->getSelect()->joinLeft(
+                ['scope_table' => $scopeTable],
+                'scope_table.attribute_id = main_table.attribute_id AND scope_table.website_id = :scope_website_id',
+                $scopeColumns
+            );
+            $websiteId = $this->getWebsite() ? (int)$this->getWebsite()->getId() : 0;
+            $this->addBindParam('scope_website_id', $websiteId);
+        }
 
         return $this;
     }

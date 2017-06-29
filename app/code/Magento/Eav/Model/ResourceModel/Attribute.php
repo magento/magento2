@@ -65,16 +65,18 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
             $connection = $this->getConnection();
             $columns = [];
             $scopeTable = $this->_getEavWebsiteTable();
-            $describe = $connection->describeTable($scopeTable);
-            unset($describe['attribute_id']);
-            foreach (array_keys($describe) as $columnName) {
-                $columns['scope_' . $columnName] = $columnName;
+            if ($scopeTable) {
+                $describe = $connection->describeTable($scopeTable);
+                unset($describe['attribute_id']);
+                foreach (array_keys($describe) as $columnName) {
+                    $columns['scope_' . $columnName] = $columnName;
+                }
+                $conditionSql = $connection->quoteInto(
+                    $this->getMainTable() . '.attribute_id = scope_table.attribute_id AND scope_table.website_id =?',
+                    $websiteId
+                );
+                $select->joinLeft(['scope_table' => $scopeTable], $conditionSql, $columns);
             }
-            $conditionSql = $connection->quoteInto(
-                $this->getMainTable() . '.attribute_id = scope_table.attribute_id AND scope_table.website_id =?',
-                $websiteId
-            );
-            $select->joinLeft(['scope_table' => $scopeTable], $conditionSql, $columns);
         }
 
         return $select;
@@ -114,8 +116,9 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
 
         // save scope attributes
         $websiteId = (int)$object->getWebsite()->getId();
-        if ($websiteId) {
-            $table = $this->_getEavWebsiteTable();
+        $table = $this->_getEavWebsiteTable();
+
+        if ($websiteId && $table) {
             $describe = $this->getConnection()->describeTable($table);
             $data = [];
             if (!$object->getScopeWebsiteId() || $object->getScopeWebsiteId() != $websiteId) {
@@ -147,6 +150,10 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
      */
     public function getScopeValues(\Magento\Eav\Model\Attribute $object)
     {
+        if (!$this->_getEavWebsiteTable()) {
+            return [];
+        }
+
         $connection = $this->getConnection();
         $bind = ['attribute_id' => (int)$object->getId(), 'website_id' => (int)$object->getWebsite()->getId()];
         $select = $connection->select()->from(
