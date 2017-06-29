@@ -9,6 +9,7 @@ namespace Magento\Framework\Api;
 /**
  * Builder for Filter Service Data Object.
  *
+ * @api
  * @method Filter create()
  */
 class FilterBuilder extends AbstractSimpleObjectBuilder

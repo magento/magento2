@@ -17,6 +17,8 @@ use Magento\Framework\Exception\ValidatorException;
  * Processor facade for config:set command.
  *
  * @see ConfigSetCommand
+ *
+ * @api
  */
 class ProcessorFacade
 {

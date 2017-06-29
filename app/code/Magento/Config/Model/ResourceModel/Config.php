@@ -9,6 +9,7 @@ namespace Magento\Config\Model\ResourceModel;
  * Core Resource Resource Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
     \Magento\Framework\App\Config\ConfigResource\ConfigInterface

@@ -9,6 +9,7 @@ namespace Magento\Reports\Model;
  * Report Flag Model
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Flag extends \Magento\Framework\Flag
 {
