@@ -244,8 +244,8 @@ define([
          * Get dependency element
          *
          * @param {Object} curInstance - current element instance
-         * @param {Object} row
          * @param {Number} position
+         * @param {Object} row
          */
         getDepElement: function (curInstance, position, row) {
             var tableSelector = this.tableClass + ' tr',
