@@ -14,8 +14,7 @@ class ExceptionMessageFactoryPool
      * @var ExceptionMessageFactoryInterface[]
      */
     private $exceptionMessageFactoryMap = [];
-
-
+    
     /**
      * Key of instance is the exception format parameter
      *
