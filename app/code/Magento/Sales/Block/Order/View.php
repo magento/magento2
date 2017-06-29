@@ -27,9 +27,9 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Framework\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
      * @var \Magento\Payment\Helper\Data

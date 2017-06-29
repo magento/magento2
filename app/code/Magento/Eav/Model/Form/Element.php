@@ -10,6 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Eav Form Element Model
  *
+ * @api
  * @method \Magento\Eav\Model\ResourceModel\Form\Element getResource()
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Element setTypeId(int $value)
@@ -19,8 +20,6 @@ use Magento\Framework\Exception\LocalizedException;
  * @method \Magento\Eav\Model\Form\Element setAttributeId(int $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Element setSortOrder(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Element extends \Magento\Framework\Model\AbstractModel
 {

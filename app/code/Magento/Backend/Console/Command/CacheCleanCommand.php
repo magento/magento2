@@ -8,6 +8,8 @@ namespace Magento\Backend\Console\Command;
 
 /**
  * Command for cleaning cache
+ *
+ * @api
  */
 class CacheCleanCommand extends AbstractCacheTypeManageCommand
 {

@@ -11,6 +11,7 @@ namespace Magento\Reports\Block\Adminhtml\Filter;
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

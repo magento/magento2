@@ -62,11 +62,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     private $scopeInterface;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $indexerStockFrontendResource;
-
-    /**
      * @var FullTextSearchCheck|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fullTextSearchCheckMock;
@@ -163,14 +158,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(\Magento\CatalogInventory\Api\StockConfigurationInterface::class)
             ->getMock();
 
-        $this->indexerStockFrontendResource = $this
-            ->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->indexerStockFrontendResource->expects($this->any())
-            ->method('getMainTable')
-            ->willReturn('cataloginventory_stock_status');
-
         $this->fullTextSearchCheckMock = $this->getMockBuilder(
             \Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck::class
         )->disableOriginalConstructor()
@@ -192,7 +179,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'scopeResolver' => $this->scopeResolver,
                 'tableMapper' => $this->tableMapper,
                 'dimensionScopeResolver' => $this->dimensionScopeResolver,
-                'indexerStockFrontendResource' => $this->indexerStockFrontendResource,
                 'fullTextSearchCheck' => $this->fullTextSearchCheckMock
             ]
         );

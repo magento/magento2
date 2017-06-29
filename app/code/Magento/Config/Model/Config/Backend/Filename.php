@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Filename extends \Magento\Framework\App\Config\Value
 {
     /**
