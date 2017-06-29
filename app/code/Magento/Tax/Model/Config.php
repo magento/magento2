@@ -191,7 +191,7 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
             $store
         );
     }
