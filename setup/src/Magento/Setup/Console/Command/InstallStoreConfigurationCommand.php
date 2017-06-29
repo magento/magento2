@@ -142,64 +142,64 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'URL the store is supposed to be available at. '
-                    . 'Deprecated, use config:set with path web/unsecure/base_url'
+                . 'Deprecated, use config:set with path web/unsecure/base_url'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_LANGUAGE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Default language code. '
-                    . 'Deprecated, use config:set with path general/locale/code'
+                . 'Deprecated, use config:set with path general/locale/code'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_TIMEZONE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Default time zone code. '
-                    . 'Deprecated, use config:set with path general/locale/timezone'
+                . 'Deprecated, use config:set with path general/locale/timezone'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_CURRENCY,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Default currency code. '
-                    . 'Deprecated, use config:set with path currency/options/base, currency/options/default'
-                    . ' and currency/options/allow'
+                . 'Deprecated, use config:set with path currency/options/base, currency/options/default'
+                . ' and currency/options/allow'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_USE_SEF_URL,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Use rewrites. '
-                    . 'Deprecated, use config:set with path web/seo/use_rewrites'
+                . 'Deprecated, use config:set with path web/seo/use_rewrites'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_IS_SECURE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Use secure URLs. Enable this option only if SSL is available. '
-                    . 'Deprecated, use config:set with path web/secure/use_in_frontend'
+                . 'Deprecated, use config:set with path web/secure/use_in_frontend'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_BASE_URL_SECURE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Base URL for SSL connection. '
-                    . 'Deprecated, use config:set with path web/secure/base_url'
+                . 'Deprecated, use config:set with path web/secure/base_url'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Run admin interface with SSL. '
-                    . 'Deprecated, use config:set with path web/secure/use_in_adminhtml'
+                . 'Deprecated, use config:set with path web/secure/use_in_adminhtml'
             ),
             new InputOption(
                 StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Whether to use a "security key" feature in Magento Admin URLs and forms. '
-                    . 'Deprecated, use config:set with path admin/security/use_form_key'
+                . 'Deprecated, use config:set with path admin/security/use_form_key'
             ),
         ];
     }
