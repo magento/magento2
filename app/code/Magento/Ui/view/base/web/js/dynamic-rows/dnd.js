@@ -233,40 +233,18 @@ define([
         setPosition: function (depElem, depElementCtx, dragData) {
             var depElemPosition = ~~depElementCtx.position;
 
-            this.cacheElementsPosition();
-
             if (dragData.depElement.insert === 'after') {
                 dragData.instanceCtx.position = depElemPosition + 1;
             } else if (dragData.depElement.insert === 'before') {
                 dragData.instanceCtx.position = depElemPosition;
             }
-
-            this.normalizePositions();
-        },
-
-        /**
-         * Saves elements position from current elements
-         */
-        cacheElementsPosition: function () {
-            this.elemPositions = [];
-            this.parentComponent().elems.each(function (elem) {
-                this.elemPositions.push(elem.position);
-            }, this);
-        },
-
-        /**
-         * Normalize position, uses start elements position
-         */
-        normalizePositions: function () {
-            this.parentComponent().elems.each(function (item, index) {
-                item.position = this.elemPositions[index];
-            }, this);
         },
 
         /**
          * Get dependency element
          *
          * @param {Object} curInstance - current element instance
+         * @param {Object} row
          * @param {Number} position
          */
         getDepElement: function (curInstance, position, row) {
