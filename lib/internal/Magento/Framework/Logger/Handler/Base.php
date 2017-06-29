@@ -56,7 +56,7 @@ class Base extends StreamHandler
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected function sanitizeFileName($fileName)
+    private function sanitizeFileName($fileName)
     {
         if (!is_string($fileName)) {
             throw  new \InvalidArgumentException('Filename expected to be a string');

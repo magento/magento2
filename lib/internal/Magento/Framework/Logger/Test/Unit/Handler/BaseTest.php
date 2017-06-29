@@ -7,37 +7,43 @@ namespace Magento\Framework\Logger\Test\Unit\Handler;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\Logger\Handler\Base */
-    protected $_model;
+    /**
+     * @var \Magento\Framework\Logger\Handler\Base|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $model;
 
-    protected $_sanitizeMethod;
+    /**
+     * @var \ReflectionMethod
+     */
+    private $sanitizeMethod;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_model = new \Magento\Framework\Logger\Handler\Base(
-            $this->getMock('Magento\Framework\Filesystem\DriverInterface')
-        );
+        $driverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model = new \Magento\Framework\Logger\Handler\Base($driverMock);
 
-        $class = new \ReflectionClass($this->_model);
-        $this->_sanitizeMethod = $class->getMethod('sanitizeFileName');
-        $this->_sanitizeMethod->setAccessible(true);
+        $class = new \ReflectionClass($this->model);
+        $this->sanitizeMethod = $class->getMethod('sanitizeFileName');
+        $this->sanitizeMethod->setAccessible(true);
     }
 
     public function testSanitizeEmpty()
     {
-        $this->assertEquals('', $this->_sanitizeMethod->invokeArgs($this->_model, ['']));
+        $this->assertEquals('', $this->sanitizeMethod->invokeArgs($this->model, ['']));
     }
 
     public function testSanitizeSimpleFilename()
     {
-        $this->assertEquals('custom.log', $this->_sanitizeMethod->invokeArgs($this->_model, ['custom.log']));
+        $this->assertEquals('custom.log', $this->sanitizeMethod->invokeArgs($this->model, ['custom.log']));
     }
 
     public function testSanitizeLeadingSlashFilename()
     {
         $this->assertEquals(
             'customfolder/custom.log',
-            $this->_sanitizeMethod->invokeArgs($this->_model, ['/customfolder/custom.log'])
+            $this->sanitizeMethod->invokeArgs($this->model, ['/customfolder/custom.log'])
         );
     }
 
@@ -45,7 +51,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'var/hack/custom.log',
-            $this->_sanitizeMethod->invokeArgs($this->_model, ['../../../var/hack/custom.log'])
+            $this->sanitizeMethod->invokeArgs($this->model, ['../../../var/hack/custom.log'])
         );
     }
 
@@ -55,6 +61,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSanitizeFileException()
     {
-        $this->_sanitizeMethod->invokeArgs($this->_model, [['filename' => 'notValid']]);
+        $this->sanitizeMethod->invokeArgs($this->model, [['filename' => 'notValid']]);
     }
 }
