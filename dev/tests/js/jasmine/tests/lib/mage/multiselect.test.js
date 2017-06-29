@@ -11,7 +11,7 @@ define([
     'use strict';
 
     describe('Test for mage/multiselect jQuery plugin', function () {
-        var element = '<select size="10"><option value="1">1</option></select>',
+        var element = '<select></select>',
             instance,
             options = {
                 'nextPageUrl': '/url',
@@ -32,11 +32,11 @@ define([
         });
 
         it('multiselect2 methods check', function () {
-            expect(instance.data('multiselect2').onScroll).toBeDefined();
-            expect(instance.data('multiselect2').onKeyUp).toBeDefined();
-            expect(instance.data('multiselect2').onCheck).toBeDefined();
-            expect(instance.data('multiselect2').onError).toBeDefined();
-            expect(instance.data('multiselect2').onOptionsChange).toBeDefined();
+            expect(instance.data('mage-multiselect2').onScroll).toBeDefined();
+            expect(instance.data('mage-multiselect2').onKeyUp).toBeDefined();
+            expect(instance.data('mage-multiselect2').onCheck).toBeDefined();
+            expect(instance.data('mage-multiselect2').onError).toBeDefined();
+            expect(instance.data('mage-multiselect2').onOptionsChange).toBeDefined();
         });
 
         it('multiselect2 options check', function () {
@@ -49,7 +49,7 @@ define([
         });
 
         it('multiselect2 loadOptions success case', function () {
-            spyOn(instance.data('multiselect2'), 'appendOptions').and.callFake(function () {
+            spyOn(instance.data('mage-multiselect2'), 'appendOptions').and.callFake(function () {
                 return true;
             });
 
@@ -63,16 +63,16 @@ define([
                 return d.promise();
             });
 
-            instance.data('multiselect2').loadOptions();
+            instance.data('mage-multiselect2').loadOptions();
 
             expect($.get).toHaveBeenCalled();
-            expect(instance.data('multiselect2').appendOptions).toHaveBeenCalled();
+            expect(instance.data('mage-multiselect2').appendOptions).toHaveBeenCalled();
         });
 
         it('multiselect2 loadOptions negative case', function () {
             var errorMessage = 'Something went wrong';
 
-            spyOn(instance.data('multiselect2'), 'onError').and.callFake(function () {
+            spyOn(instance.data('mage-multiselect2'), 'onError').and.callFake(function () {
                 return true;
             });
 
@@ -87,21 +87,21 @@ define([
                 return d.promise();
             });
 
-            instance.data('multiselect2').loadOptions();
+            instance.data('mage-multiselect2').loadOptions();
 
             expect($.get).toHaveBeenCalled();
-            expect(instance.data('multiselect2').onError).toHaveBeenCalledWith(errorMessage);
+            expect(instance.data('mage-multiselect2').onError).toHaveBeenCalledWith(errorMessage);
         });
 
         it('multiselect2 onKeyUp check', function () {
-            spyOn(instance.data('multiselect2'), 'getSearchCriteria').and.returnValue('some_string');
-            spyOn(instance.data('multiselect2'), 'setFilter');
-            spyOn(instance.data('multiselect2'), 'loadOptions');
+            spyOn(instance.data('mage-multiselect2'), 'getSearchCriteria').and.returnValue('some_string');
+            spyOn(instance.data('mage-multiselect2'), 'setFilter');
+            spyOn(instance.data('mage-multiselect2'), 'loadOptions');
 
-            instance.data('multiselect2').onKeyUp();
+            instance.data('mage-multiselect2').onKeyUp();
 
-            expect(instance.data('multiselect2').setFilter).toHaveBeenCalled();
-            expect(instance.data('multiselect2').loadOptions).toHaveBeenCalledWith(1);
+            expect(instance.data('mage-multiselect2').setFilter).toHaveBeenCalled();
+            expect(instance.data('mage-multiselect2').loadOptions).toHaveBeenCalledWith(1);
         });
     });
 });
