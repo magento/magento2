@@ -187,7 +187,6 @@ class Conditions extends Generic implements TabInterface
     private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
     {
         $conditions->setFormName($formName);
-        $conditions->setJsFormObject($formName);
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
                 $this->setConditionFormName($condition, $formName);
