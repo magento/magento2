@@ -41,6 +41,7 @@ define([
          */
         name: 'DataStorage',
         request: {},
+        customerDataProvider: 'product_data_storage',
 
         /**
          * Initialize class
