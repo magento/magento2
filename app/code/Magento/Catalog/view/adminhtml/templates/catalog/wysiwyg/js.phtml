@@ -75,7 +75,7 @@ var catalogWysiwygEditor = {
         ;
 
         if ($firedElement.length) {
-            wysiwygObj = eval('wysiwyg' + firedElementId + '_editor');
+            wysiwygObj = window['wysiwyg' + firedElementId + '_editor'];
             wysiwygObj.turnOff();
             if (tinyMCE.get(wysiwygObj.id)) {
                 $firedElement.val(tinyMCE.get(wysiwygObj.id).getContent()).change();
