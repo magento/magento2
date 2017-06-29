@@ -210,13 +210,15 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTranslatedString()
     {
+        $callback = function ($params) {
+            return json_encode($params);
+        };
+
         $this->configMock->expects($this->any())->method('getData')->withConsecutive(['enabled'])->willReturn(true);
         $this->serializer->expects($this->any())
             ->method('serialize')
-            ->willReturnCallback(function ($params) {
-                return json_encode($params);
-            }
-        );
+            ->willReturnCallback($callback);
+
         $html = $this->model->getElementHtml();
 
         $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
