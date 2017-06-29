@@ -48,6 +48,7 @@ atlassian*
 /pub/media/favicon/*
 /pub/media/import/*
 !/pub/media/import/.htaccess
+/pub/media/logo/*
 /pub/media/theme/*
 /pub/media/theme_customization/*
 !/pub/media/theme_customization/.htaccess
@@ -65,3 +66,4 @@ atlassian*
 !/vendor/.htaccess
 /generated/*
 !/generated/.htaccess
+.DS_Store

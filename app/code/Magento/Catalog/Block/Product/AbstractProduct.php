@@ -7,6 +7,8 @@ namespace Magento\Catalog\Block\Product;
 
 /**
  * Class AbstractProduct
+ * @api
+ * @deprecated
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

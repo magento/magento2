@@ -1229,9 +1229,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
-        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
-    </type>
     <type name="Magento\Framework\EntityManager\CompositeMapper">
         <arguments>
             <argument name="mappers" xsi:type="array">
@@ -1325,6 +1322,11 @@
             <argument name="logAllQueries" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING</argument>
             <argument name="logQueryTime" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD</argument>
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
+        <arguments>
+            <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">

@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
 
 /**
@@ -835,6 +836,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         //mark quote if it has virtual products only
         $this->setIsVirtual($this->getIsVirtual());
+
+        if ($this->hasDataChanges()) {
+            $this->setUpdatedAt(null);
+        }
 
         parent::beforeSave();
     }
@@ -1940,7 +1945,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Get all quote totals (sorted by priority)
      *
-     * @return array
+     * @return AddressTotal[]
      */
     public function getTotals()
     {

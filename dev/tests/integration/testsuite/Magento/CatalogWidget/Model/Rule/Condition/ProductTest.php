@@ -94,4 +94,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->conditionProduct->setAttribute('category_ids');
         $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGetMappedSqlFieldSkuAttribute()
+    {
+        $this->conditionProduct->setAttribute('sku');
+        $this->assertEquals('e.sku', $this->conditionProduct->getMappedSqlField());
+    }
 }

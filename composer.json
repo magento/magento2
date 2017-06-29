@@ -43,7 +43,7 @@
         "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
         "pelago/emogrifier": "0.1.1",
-        "tubalmartin/cssmin": "3.0.0",
+        "tubalmartin/cssmin": "4.1.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "braintree/braintree_php": "3.22.0",
         "symfony/console": "~2.3, !=2.7.0",
@@ -68,6 +68,7 @@
         "ext-openssl": "*",
         "ext-zip": "*",
         "ext-pdo_mysql": "*",
+        "ext-soap": "*",
         "sjparkinson/static-review": "~4.1",
         "ramsey/uuid": "3.6.1"
     },
@@ -98,7 +99,6 @@
         "magento/module-catalog-analytics": "100.2.0-dev",
         "magento/module-catalog-import-export": "100.2.0-dev",
         "magento/module-catalog-inventory": "100.2.0-dev",
-        "magento/module-catalog-inventory-configurable-product": "100.2.0-dev",
         "magento/module-catalog-rule": "100.2.0-dev",
         "magento/module-catalog-rule-configurable": "100.2.0-dev",
         "magento/module-catalog-search": "100.2.0-dev",
@@ -157,6 +157,7 @@
         "magento/module-require-js": "100.2.0-dev",
         "magento/module-review": "100.2.0-dev",
         "magento/module-review-analytics": "100.2.0-dev",
+        "magento/module-robots": "100.2.0-dev",
         "magento/module-rss": "100.2.0-dev",
         "magento/module-rule": "100.2.0-dev",
         "magento/module-sales": "100.2.0-dev",
@@ -236,8 +237,7 @@
         },
         "psr-0": {
             "": [
-                "app/code/",
-                "generated/code"
+                "app/code/"
             ]
         },
         "files": [
@@ -258,6 +258,5 @@
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
         }
     },
-    "minimum-stability": "alpha",
     "prefer-stable": true
 }

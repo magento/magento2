@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides search engine configuration
+ * @api
  */
 class Data extends \Magento\Framework\Config\Data
 {

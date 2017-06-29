@@ -12,6 +12,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
  * Allows to process different flows of config:set command.
  *
  * @see ConfigSetCommand
+ *
+ * @api
  */
 interface ConfigSetProcessorInterface
 {
