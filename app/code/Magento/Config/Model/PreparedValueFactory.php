@@ -6,7 +6,6 @@
 namespace Magento\Config\Model;
 
 use Magento\Config\Model\Config\BackendFactory;
-use Magento\Config\Model\Config\PreparedValue\AdditionalData;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -53,31 +52,21 @@ class PreparedValueFactory
     private $config;
 
     /**
-     * Additional data applier for backend model.
-     *
-     * @var Config\PreparedValue\AdditionalData
-     */
-    private $additionalData;
-
-    /**
      * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
      * @param StructureFactory $structureFactory The manager for system configuration structure
      * @param BackendFactory $valueFactory The factory for configuration value objects
      * @param ScopeConfigInterface $config The scope configuration
-     * @param AdditionalData $additionalData The additional data applier for backend model
      */
     public function __construct(
         ScopeResolverPool $scopeResolverPool,
         StructureFactory $structureFactory,
         BackendFactory $valueFactory,
-        ScopeConfigInterface $config,
-        AdditionalData $additionalData
+        ScopeConfigInterface $config
     ) {
         $this->scopeResolverPool = $scopeResolverPool;
         $this->structureFactory = $structureFactory;
         $this->valueFactory = $valueFactory;
         $this->config = $config;
-        $this->additionalData = $additionalData;
     }
 
     /**
@@ -131,7 +120,6 @@ class PreparedValueFactory
                 $backendModel->setScope($scope);
                 $backendModel->setScopeId($scopeId);
                 $backendModel->setValue($value);
-                $this->additionalData->apply($backendModel);
             }
 
             return $backendModel;

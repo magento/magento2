@@ -73,4 +73,22 @@ class Allow extends AbstractCurrency
 
         return parent::afterSave();
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getAllowedCurrencies()
+    {
+        $value = $this->getValue();
+        $isFormData = $this->getData('groups/options/fields') !== null;
+        if ($isFormData && $this->getData('groups/options/fields/allow/inherit')) {
+            $value = (string)$this->_config->getValue(
+                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW,
+                $this->getScope(),
+                $this->getScopeId()
+            );
+        }
+
+        return explode(',', $value);
+    }
 }
