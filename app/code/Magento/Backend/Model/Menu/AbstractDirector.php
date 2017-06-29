@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Menu;
 
+/**
+ * @api
+ */
 abstract class AbstractDirector
 {
     /**
