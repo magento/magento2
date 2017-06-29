@@ -46,7 +46,7 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test()
+    public function testCreateMessage()
     {
         $exceptionMessage = 'exception message';
         $exception = new \Exception($exceptionMessage);

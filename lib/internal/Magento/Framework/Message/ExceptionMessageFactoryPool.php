@@ -15,6 +15,14 @@ class ExceptionMessageFactoryPool
      */
     private $exceptionMessageFactoryMap = [];
 
+
+    /**
+     * Key of instance is the exception format parameter
+     *
+     * @var ExceptionMessageFactoryInterface
+     */
+    private $defaultExceptionMessageFactory = [];
+
     /**
      * @param ExceptionMessageFactoryInterface $defaultExceptionMessageFactory
      * @param ExceptionMessageFactoryInterface[] $exceptionMessageFactoryMap
@@ -23,7 +31,7 @@ class ExceptionMessageFactoryPool
         ExceptionMessageFactoryInterface $defaultExceptionMessageFactory,
         array $exceptionMessageFactoryMap = []
     ) {
-        $this->defaultConfiguration = $defaultExceptionMessageFactory;
+        $this->defaultExceptionMessageFactory = $defaultExceptionMessageFactory;
         $this->exceptionMessageFactoryMap = $exceptionMessageFactoryMap;
     }
 
@@ -38,6 +46,6 @@ class ExceptionMessageFactoryPool
         if (isset($this->exceptionMessageFactoryMap[get_class($exception)])) {
             return $this->exceptionMessageFactoryMap[get_class($exception)];
         }
-        return $this->defaultConfiguration;
+        return $this->defaultExceptionMessageFactory;
     }
 }
