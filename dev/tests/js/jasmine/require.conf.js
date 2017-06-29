@@ -17,8 +17,7 @@ require.config({
     paths: {
         'dev/tests/js/jasmine': '../../../../../../dev/tests/js/jasmine',
         'tests': '../../../../../../dev/tests/js/jasmine',
-        'squire': '../../../../../../node_modules/squirejs/src/Squire',
-        'Magento_Checkout/js': '../../../../../../app/code/Magento/Checkout/view/frontend/web/js'
+        'squire': '../../../../../../node_modules/squirejs/src/Squire'
     },
     shim: {
         squire: {
