@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -413,7 +411,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($this->_isUSCountry($r->getDestCountryId())) {
             $xml = $this->_xmlElFactory->create(
-
                 ['data' => '<?xml version="1.0" encoding="UTF-8"?><RateV4Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -461,7 +458,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $api = 'RateV4';
         } else {
             $xml = $this->_xmlElFactory->create(
-
                 ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><IntlRateV2Request/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -1946,7 +1942,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
-        if (is_null($params)) {
+        if ($params === null) {
             return $this->_getAllowedContainers();
         }
 
@@ -2068,7 +2064,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private function isServiceAvailable(\SimpleXMLElement $service)
     {
         // Allow services which which don't provide any ExtraServices
-        if(empty($service->ExtraServices->children()->count())) {
+        if (empty($service->ExtraServices->children()->count())) {
             return true;
         }
 
