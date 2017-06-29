@@ -21,7 +21,7 @@ class ExceptionMessageFactoryPool
      *
      * @var ExceptionMessageFactoryInterface
      */
-    private $defaultExceptionMessageFactory = [];
+    private $defaultExceptionMessageFactory;
 
     /**
      * @param ExceptionMessageFactoryInterface $defaultExceptionMessageFactory
