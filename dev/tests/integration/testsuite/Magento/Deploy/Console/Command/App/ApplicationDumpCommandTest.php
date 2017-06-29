@@ -79,6 +79,23 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         // Snapshot of configuration.
         $this->config = $this->loadConfig();
         $this->envConfig = $this->loadEnvConfig();
+
+        $this->writer->saveConfig(
+            [
+                ConfigFilePool::APP_CONFIG => [
+                    'system' => [
+                        'default' => [
+                            'web' => [
+                                'test' => [
+                                    'test_value_3' => 'value from the file'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            true
+        );
     }
 
     /**
@@ -197,6 +214,13 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('test_sensitive_environment5', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_sensitive_environment6', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_environment9', $config['system']['default']['web']['test']);
+
+        $this->assertEquals('value from the file', $config['system']['default']['web']['test']['test_value_3']);
+        $this->assertEquals('GB', $config['system']['default']['general']['country']['default']);
+        $this->assertEquals(
+            'HK,IE,MO,PA,GB',
+            $config['system']['default']['general']['country']['optional_zip_countries']
+        );
     }
 
     /**
