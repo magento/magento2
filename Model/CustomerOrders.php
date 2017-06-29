@@ -81,8 +81,8 @@ class CustomerOrders
      * Returns aggregated customer orders count and total amount in USD.
      *
      * Returned array contains next keys:
-     ** aggregateOrderCount - total count of orders placed by this account since it was created, including the current
-     ** aggregateOrderDollars - total amount spent by this account since it was created, including the current order
+     * aggregateOrderCount - total count of orders placed by this account since it was created, including the current
+     * aggregateOrderDollars - total amount spent by this account since it was created, including the current order
      *
      * @param int $customerId
      * @return array
