@@ -14,6 +14,7 @@ use Magento\Framework\Session\Config;
 
 /**
  * Magento Backend session configuration
+ * @api
  */
 class AdminConfig extends Config
 {
