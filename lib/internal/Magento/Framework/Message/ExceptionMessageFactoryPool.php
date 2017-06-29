@@ -9,14 +9,14 @@ namespace Magento\Framework\Message;
 class ExceptionMessageFactoryPool
 {
     /**
-     * Key of instance is the exception format parameter
+     * Instances of factories that are specific for certain exceptions
      *
      * @var ExceptionMessageFactoryInterface[]
      */
     private $exceptionMessageFactoryMap = [];
 
     /**
-     * Key of instance is the exception format parameter
+     * Default exception factory
      *
      * @var ExceptionMessageFactoryInterface
      */
