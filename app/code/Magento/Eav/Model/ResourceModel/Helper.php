@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\ResourceModel;
 /**
  * Eav Mysql resource helper model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Helper extends \Magento\Framework\DB\Helper
 {

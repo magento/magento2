@@ -7,6 +7,7 @@ namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Bundle Stock Status Indexer Resource Model
@@ -16,20 +17,18 @@ use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
      */
-    private $indexerStockFrontendResource;
+    private $activeTableSwitcher;
 
     /**
-     * Class constructor
-     *
+     * Stock constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param string $connectionName
-     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     * @param null $connectionName
+     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -37,12 +36,12 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
     ) {
-        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        );
     }
 
     /**
@@ -67,8 +66,8 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         $this->_cleanBundleOptionStockData();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $table = $this->getActionType() === Full::ACTION_TYPE
-            ? $this->getMainTable()
-            : $this->indexerStockFrontendResource->getMainTable();
+            ? $this->activeTableSwitcher->getAdditionalTableName($this->getMainTable())
+            : $this->getMainTable();
         $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $connection = $this->getConnection();
         $select = $connection->select()->from(

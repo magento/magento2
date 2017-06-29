@@ -8,6 +8,7 @@ namespace Magento\Framework\Search;
 
 /**
  * Entity metadata
+ * @api
  */
 class EntityMetadata
 {

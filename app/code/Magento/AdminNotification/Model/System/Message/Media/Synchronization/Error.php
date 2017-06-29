@@ -6,6 +6,9 @@
 
 namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
+/**
+ * @api
+ */
 class Error extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
 {
     /**
