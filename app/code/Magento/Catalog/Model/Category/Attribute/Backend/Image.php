@@ -128,11 +128,14 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
 
-        if ($imageName = $this->getUploadedImageName($value)) {
-            try {
-                $this->getImageUploader()->moveFileFromTmp($imageName);
-            } catch (\Exception $e) {
-                $this->_logger->critical($e);
+        if(isset($value[0]['tmp_name'])) {
+            // A file was just uploaded, so process it
+            if ($imageName = $this->getUploadedImageName($value)) {
+                try {
+                    $this->getImageUploader()->moveFileFromTmp($imageName);
+                } catch (\Exception $e) {
+                    $this->_logger->critical($e);
+                }
             }
         }
 
