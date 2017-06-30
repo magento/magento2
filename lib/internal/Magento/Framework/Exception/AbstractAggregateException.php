@@ -39,11 +39,12 @@ abstract class AbstractAggregateException extends LocalizedException
      *
      * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
+     * @param int $code
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null)
+    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
     {
         $this->originalPhrase = $phrase;
-        parent::__construct($phrase, $cause);
+        parent::__construct($phrase, $cause, $code);
     }
 
     /**
