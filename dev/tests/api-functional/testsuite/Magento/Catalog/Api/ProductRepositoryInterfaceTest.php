@@ -1275,6 +1275,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     public function testResetSpecialPrice()
     {
+        $this->_markTestAsRestOnly(
+            'In order to properly run this test for SOAP, XML must be used to specify <value></value> ' .
+            'for the special_price value. Otherwise, the null value gets processed as a string and ' .
+            'cast to a double value of 0.0.'
+        );
         $productData = $this->getSimpleProductData();
         $productData['custom_attributes'] = [
             ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => 5.00]
