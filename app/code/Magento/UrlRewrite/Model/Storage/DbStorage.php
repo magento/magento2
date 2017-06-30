@@ -121,12 +121,16 @@ class DbStorage extends AbstractStorage
                     $urlConflicted[$urlFound[UrlRewriteData::URL_REWRITE_ID]] = $url->toArray();
                 }
             }
-            throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
-                __('URL key for specified store already exists.'),
-                $e,
-                $e->getCode(),
-                $urlConflicted
-            );
+            if ($urlConflicted) {
+                throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
+                    __('URL key for specified store already exists.'),
+                    $e,
+                    $e->getCode(),
+                    $urlConflicted
+                );
+            } else {
+                throw $e->getPrevious() ?: $e;
+            }
         }
 
         return $urls;
@@ -149,7 +153,8 @@ class DbStorage extends AbstractStorage
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {
                 throw new \Magento\Framework\Exception\AlreadyExistsException(
-                    __('URL key for specified store already exists.')
+                    __('URL key for specified store already exists.'),
+                    $e
                 );
             }
             throw $e;
