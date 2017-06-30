@@ -97,6 +97,11 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     protected $stockRegistry;
 
     /**
+     * @var ImageBuilder
+     */
+    protected $imageBuilder;
+
+    /**
      * @param Context $context
      * @param array $data
      */
