@@ -11,6 +11,9 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+/**
+ * @api
+ */
 class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**

@@ -45,13 +45,17 @@ class FullTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $tableSwitcherMock = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        )->disableOriginalConstructor()->getMock();
+
         $model = new \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full(
             $eavDecimalFactory,
             $eavSourceFactory,
             $metadataMock,
             $batchProviderMock,
             $batchManagementMock,
-            []
+            $tableSwitcherMock
         );
 
         $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
@@ -59,6 +63,9 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $model->execute();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecute()
     {
         $eavDecimalFactory = $this->getMock(
@@ -146,13 +153,17 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->atLeastOnce())->method('distinct')->willReturnSelf();
         $selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 
+        $tableSwitcherMock = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
+        )->disableOriginalConstructor()->getMock();
+
         $model = new \Magento\Catalog\Model\Indexer\Product\Eav\Action\Full(
             $eavDecimalFactory,
             $eavSourceFactory,
             $metadataMock,
             $batchProviderMock,
             $batchManagementMock,
-            []
+            $tableSwitcherMock
         );
 
         $model->execute();

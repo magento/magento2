@@ -9,7 +9,20 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
 /**
- * Base html block
+ * Standard Magento block.
+ * Should be used when you declare a block in frontend area layout handle.
+ *
+ * Avoid extending this class.
+ *
+ * If you need custom presentation logic in your blocks, use this class as block, and declare
+ * custom view models in block arguments in layout handle file.
+ *
+ * Example:
+ * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
+ *      <arguments>
+ *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *      </arguments>
+ * </block>
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
