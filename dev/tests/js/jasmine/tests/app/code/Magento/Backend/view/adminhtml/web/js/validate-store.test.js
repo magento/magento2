@@ -6,7 +6,7 @@
 define([
     'jquery',
     'Magento_Backend/js/validate-store'
-], function ($, storeValidation) {
+], function ($, StoreValidation) {
     'use strict';
 
     describe('Magento_Backend/js/validate-store', function () {
@@ -15,7 +15,7 @@ define([
 
         beforeEach(function () {
             form = $('<form />');
-            model = new storeValidation();
+            model = new StoreValidation();
         });
 
         it('widget extends jQuery object', function () {
