@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Locale;
 
+/**
+ * @api
+ */
 class Country implements \Magento\Framework\Option\ArrayInterface
 {
     /**

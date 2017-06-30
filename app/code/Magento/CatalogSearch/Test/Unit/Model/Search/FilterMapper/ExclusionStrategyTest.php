@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 
 use Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Framework\DB\Select;
@@ -31,11 +30,6 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $frontendResourceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $adapterMock;
 
     /**
@@ -48,28 +42,18 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
      */
     private $aliasResolverMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $categoryProductFrontendMock;
-
     protected function setUp()
     {
         $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
-
-        $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
         $this->adapterMock = $this->getMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
         $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
         $this->aliasResolverMock = $this->getMock(AliasResolver::class, [], [], '', false);
-        $this->categoryProductFrontendMock = $this->getMock(FrontendResource::class, [], [], '', false);
 
         $this->model = new ExclusionStrategy(
             $this->resourceConnectionMock,
             $this->storeManagerMock,
-            $this->aliasResolverMock,
-            $this->frontendResourceMock,
-            $this->categoryProductFrontendMock
+            $this->aliasResolverMock
         );
     }
 
@@ -86,9 +70,6 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
         $websiteMock = $this->getMock(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
-
-        // verify that frontend indexer table is used
-        $this->frontendResourceMock->expects($this->once())->method('getMainTable');
 
         $this->assertTrue($this->model->apply($searchFilterMock, $selectMock));
     }
