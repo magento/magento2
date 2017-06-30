@@ -11,6 +11,7 @@ use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
 /**
@@ -22,6 +23,7 @@ class InstallSchema implements InstallSchemaInterface
      * Constant for table names of the model \Magento\Inventory\Model\Source
      */
     const TABLE_NAME_SOURCE = 'inventory_source';
+    const TABLE_NAME_SOURCE_ITEM = 'inventory_source_item';
 
     /**
      * Constant for table name of \Magento\Inventory\Model\SourceCarrierLink
@@ -62,6 +64,7 @@ class InstallSchema implements InstallSchemaInterface
         $setup->getConnection()->createTable($sourceTable);
 
         $setup->getConnection()->createTable($this->createSourceCarrierLinkTable($setup));
+        $setup->getConnection()->createTable($this->createSourceItemTable($setup));
         $setup->endSetup();
     }
 
@@ -330,6 +333,99 @@ class InstallSchema implements InstallSchemaInterface
             $sourceTable,
             SourceInterface::SOURCE_ID,
             AdapterInterface::FK_ACTION_CASCADE
+        );
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return Table
+     */
+    private function createSourceItemTable(SchemaSetupInterface $setup)
+    {
+        $sourceItemTable = $setup->getTable(InstallSchema::TABLE_NAME_SOURCE_ITEM);
+
+        return $setup->getConnection()->newTable(
+            $sourceItemTable
+        )->setComment(
+            'Inventory Source item Table'
+        )->addColumn(
+            SourceItemInterface::SOURCE_ITEM_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                InstallSchema::OPTION_IDENTITY => true,
+                InstallSchema::OPTION_UNSIGNED => true,
+                InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_PRIMARY => true,
+            ],
+            'Source Item ID'
+        )->addColumn(
+            SourceItemInterface::SOURCE_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                InstallSchema::OPTION_UNSIGNED => true,
+                InstallSchema::OPTION_NULLABLE => false,
+            ],
+            'Source ID'
+        )->addColumn(
+            SourceItemInterface::SKU,
+            Table::TYPE_TEXT,
+            64,
+            [
+                InstallSchema::OPTION_UNSIGNED => true,
+                InstallSchema::OPTION_NULLABLE => false,
+            ],
+            'Sku'
+        )->addColumn(
+            SourceItemInterface::QUANTITY,
+            Table::TYPE_DECIMAL,
+            null,
+            [
+                InstallSchema::OPTION_UNSIGNED => false,
+                InstallSchema::OPTION_NULLABLE => false,
+                InstallSchema::OPTION_DEFAULT => 0,
+            ],
+            'Quantity'
+        )->addColumn(
+            SourceItemInterface::STATUS,
+            Table::TYPE_SMALLINT,
+            null,
+            [
+                InstallSchema::OPTION_NULLABLE => true,
+                InstallSchema::OPTION_UNSIGNED => true,
+            ],
+            'Status'
+        )->addForeignKey(
+            $setup->getFkName(
+                $sourceItemTable,
+                SourceItemInterface::SOURCE_ID,
+                InstallSchema::TABLE_NAME_SOURCE,
+                SourceInterface::SOURCE_ID
+            ),
+            SourceItemInterface::SOURCE_ID,
+            InstallSchema::TABLE_NAME_SOURCE,
+            SourceInterface::SOURCE_ID,
+            AdapterInterface::FK_ACTION_CASCADE
+        )->addForeignKey(
+            $setup->getFkName(
+                $sourceItemTable,
+                SourceItemInterface::SKU,
+                'catalog_product_entity',
+                'sku'
+            ),
+            SourceItemInterface::SKU,
+            'catalog_product_entity',
+            'sku',
+            AdapterInterface::FK_ACTION_CASCADE
+        )->addIndex(
+            $setup->getIdxName(
+                $sourceItemTable,
+                [SourceItemInterface::SOURCE_ID, SourceItemInterface::SKU],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            [SourceItemInterface::SOURCE_ID, SourceItemInterface::SKU],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
         );
     }
 }
