@@ -27,6 +27,11 @@ class HeadTest extends \PHPUnit_Framework_TestCase
     protected $pageConfigMock;
 
     /**
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlMock;
+
+    /**
      * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $title;
@@ -39,12 +44,16 @@ class HeadTest extends \PHPUnit_Framework_TestCase
         $this->title = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->headGenerator = $objectManagerHelper->getObject(
             \Magento\Framework\View\Page\Config\Generator\Head::class,
             [
                 'pageConfig' => $this->pageConfigMock,
+                'url' => $this->urlMock,
             ]
         );
     }
@@ -68,18 +77,46 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
         $structureMock->expects($this->once())->method('processRemoveAssets');
         $structureMock->expects($this->once())->method('processRemoveElementAttributes');
+        $this->urlMock->expects($this->once())
+            ->method('getUrl')
+            ->with('customcss/render/css')
+            ->willReturn('http://magento.dev/customcss/render/css');
 
         $assets = [
-            'remoteCss' => ['src' => 'file-url', 'src_type' => 'url', 'media' => "all", 'content_type' => 'css'],
-            'remoteLink' => ['src' => 'file-url', 'src_type' => 'url', 'media' => "all"],
-            'name' => ['src' => 'file-path', 'ie_condition' => 'lt IE 7', 'media' => "print", 'content_type' => 'css'],
+            'remoteCss' => [
+                'src' => 'file-url-css',
+                'src_type' => 'url',
+                'content_type' => 'css',
+                'media' => 'all',
+            ],
+            'remoteLink' => [
+                'src' => 'file-url-link',
+                'src_type' => 'url',
+                'media' => 'all',
+            ],
+            'controllerCss' => [
+                'src' => 'customcss/render/css',
+                'src_type' => 'controller',
+                'content_type' => 'css',
+                'media' => 'all',
+            ],
+            'name' => [
+                'src' => 'file-path',
+                'ie_condition' => 'lt IE 7',
+                'content_type' => 'css',
+                'media' => 'print',
+            ],
         ];
+
         $this->pageConfigMock->expects($this->at(0))
             ->method('addRemotePageAsset')
-            ->with('remoteCss', 'css', ['attributes' => ['media' => 'all']]);
+            ->with('file-url-css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->at(1))
             ->method('addRemotePageAsset')
-            ->with('remoteLink', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+            ->with('file-url-link', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]);
+        $this->pageConfigMock->expects($this->at(2))
+            ->method('addRemotePageAsset')
+            ->with('http://magento.dev/customcss/render/css', 'css', ['attributes' => ['media' => 'all']]);
         $this->pageConfigMock->expects($this->once())
             ->method('addPageAsset')
             ->with('name', ['attributes' => ['media' => 'print'], 'ie_condition' => 'lt IE 7']);

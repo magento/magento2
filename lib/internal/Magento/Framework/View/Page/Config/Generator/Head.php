@@ -58,13 +58,22 @@ class Head implements Layout\GeneratorInterface
     protected $pageConfig;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $url;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\UrlInterface $url
      */
-    public function __construct(\Magento\Framework\View\Page\Config $pageConfig)
-    {
+    public function __construct(
+        \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\UrlInterface $url 
+    ) {
         $this->pageConfig = $pageConfig;
+        $this->url = $url;
     }
 
     /**
@@ -107,10 +116,15 @@ class Head implements Layout\GeneratorInterface
     {
         foreach ($pageStructure->getAssets() as $name => $data) {
             if (isset($data['src_type']) && in_array($data['src_type'], $this->remoteAssetTypes)) {
+                if ($data['src_type'] === self::SRC_TYPE_CONTROLLER) {
+                    $data['src'] = $this->url->getUrl($data['src']);
+                }
+
                 $this->pageConfig->addRemotePageAsset(
-                    $name,
+                    $data['src'],
                     isset($data['content_type']) ? $data['content_type'] : self::VIRTUAL_CONTENT_TYPE_LINK,
-                    $this->getAssetProperties($data)
+                    $this->getAssetProperties($data),
+                    $name
                 );
             } else {
                 $this->pageConfig->addPageAsset($name, $this->getAssetProperties($data));
