@@ -133,7 +133,7 @@ class ProductFieldMapper implements FieldMapperInterface
                 );
             }
 
-            if ($attribute->getFrontendInput() === 'select') {
+            if ($attribute->getFrontendInput() === 'select' || $attribute->getFrontendInput() === 'multiselect') {
                 $allAttributes[$attributeCode . '_value'] = [
                     'type' => FieldType::ES_DATA_TYPE_STRING,
                 ];

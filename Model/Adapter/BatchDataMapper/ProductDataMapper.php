@@ -56,7 +56,7 @@ class ProductDataMapper implements BatchDataMapperInterface
     /**
      * List of attributes which will be skipped during mapping
      *
-     * @var array
+     * @var string[]
      */
     private $defaultExcludedAttributes = [
         'price',
@@ -65,6 +65,15 @@ class ProductDataMapper implements BatchDataMapperInterface
         'quantity_and_stock_status',
         'media_gallery',
         'giftcard_amounts',
+    ];
+
+    /**
+     * @var string[]
+     */
+    private $attributesExcludedFromMerge = [
+        'status',
+        'visibility',
+        'tax_class_id'
     ];
 
     /**
@@ -149,34 +158,86 @@ class ProductDataMapper implements BatchDataMapperInterface
     {
         $productAttributes = [];
         foreach ($indexData as $attributeId => $attributeValue) {
-            if (is_array($attributeValue)) {
-                if (isset($attributeValue[$productId])) {
-                    $value = $attributeValue[$productId];
+            $attributeData = $this->getAttributeData($attributeId);
+            if (!$attributeData) {
+                continue;
+            }
+            $productAttributes = array_merge(
+                $productAttributes,
+                $this->convertAttribute(
+                    $productId,
+                    $attributeId,
+                    $attributeValue,
+                    $attributeData,
+                    $storeId
+                )
+            );
+        }
+        return $productAttributes;
+    }
+
+    /**
+     * Convert data for attribute: 1) add new value {attribute_code}_value for select and multiselect searchable
+     * attributes, that will contain actual value 2) add child products data to composite products
+     *
+     * @param int $productId
+     * @param int $attributeId
+     * @param mixed $attributeValue
+     * @param array $attributeData
+     * @param int $storeId
+     * @return array
+     */
+    private function convertAttribute($productId, $attributeId, $attributeValue, array $attributeData, $storeId)
+    {
+        $productAttributes = [];
+        $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
+        $attributeFrontendInput = $attributeData[AttributeInterface::FRONTEND_INPUT];
+        if (is_array($attributeValue)) {
+            if (!$attributeData['is_searchable']) {
+                $value = $this->getValueForAttribute(
+                    $productId,
+                    $attributeCode,
+                    $attributeValue,
+                    $attributeData['is_searchable']
+                );
+            } else {
+                if (($attributeFrontendInput == 'select' || $attributeFrontendInput == 'multiselect')
+                    && !in_array($attributeCode, $this->excludedAttributes)
+                ) {
+                    $value = $this->getValueForAttribute(
+                        $productId,
+                        $attributeCode,
+                        $attributeValue,
+                        $attributeData['is_searchable']
+                    );
+                    $productAttributes[$attributeCode . '_value'] = $this->getValueForAttributeOptions(
+                        $attributeData,
+                        $attributeValue
+                    );
                 } else {
                     $value = implode(' ', $attributeValue);
                 }
-            } else {
-                $value = $attributeValue;
             }
+        } else {
+            $value = $attributeValue;
+        }
 
-            // cover case with "options"
-            // see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::prepareProductIndex
-            if ($value && $attributeId === 'options') {
+        // cover case with "options"
+        // see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::prepareProductIndex
+        if ($value) {
+            if ($attributeId === 'options') {
                 $productAttributes[$attributeId] = $value;
-            } elseif ($value) {
-                $attributeData = $this->getAttributeData($attributeId);
-                if (!$attributeData) {
-                    continue;
-                }
-                $attributeCode = $attributeData[AttributeInterface::ATTRIBUTE_CODE];
+            } else {
                 if (isset($attributeData[AttributeInterface::OPTIONS][$value])) {
                     $productAttributes[$attributeCode . '_value'] = $attributeData[AttributeInterface::OPTIONS][$value];
                 }
-                $value = $this->formatProductAttributeValue($value, $attributeData, $storeId);
-                $productAttributes[$attributeCode] = $value;
+                $productAttributes[$attributeCode] = $this->formatProductAttributeValue(
+                    $value,
+                    $attributeData,
+                    $storeId
+                );
             }
         }
-
         return $productAttributes;
     }
 
@@ -192,7 +253,7 @@ class ProductDataMapper implements BatchDataMapperInterface
             $attribute = $this->dataProvider->getSearchableAttribute($attributeId);
             if ($attribute) {
                 $options = [];
-                if ($attribute->getFrontendInput() === 'select') {
+                if ($attribute->getFrontendInput() === 'select' || $attribute->getFrontendInput() === 'multiselect') {
                     foreach ($attribute->getOptions() as $option) {
                         $options[$option->getValue()] = $option->getLabel();
                     }
@@ -202,6 +263,7 @@ class ProductDataMapper implements BatchDataMapperInterface
                     AttributeInterface::FRONTEND_INPUT => $attribute->getFrontendInput(),
                     AttributeInterface::BACKEND_TYPE => $attribute->getBackendType(),
                     AttributeInterface::OPTIONS => $options,
+                    'is_searchable' => $attribute->getIsSearchable(),
                 ];
             } else {
                 $this->attributeData[$attributeId] = null;
@@ -229,5 +291,61 @@ class ProductDataMapper implements BatchDataMapperInterface
         } else {
             return $value;
         }
+    }
+
+    /**
+     * Return single value if value exists for the productId in array, otherwise return concatenated array values
+     *
+     * @param int $productId
+     * @param string $attributeCode
+     * @param array $attributeValue
+     * @param bool $isSearchable
+     * @return mixed
+     */
+    private function getValueForAttribute($productId, $attributeCode, array $attributeValue, $isSearchable)
+    {
+        if ((!$isSearchable || in_array($attributeCode, $this->attributesExcludedFromMerge))
+            && isset($attributeValue[$productId])
+        ) {
+            $value = $attributeValue[$productId];
+        } else {
+            $value = implode(' ', $attributeValue);
+        }
+        return $value;
+    }
+
+    /**
+     * Concatenate select and multiselect attribute values
+     *
+     * @param array $attributeData
+     * @param array $attributeValue
+     * @return string
+     */
+    private function getValueForAttributeOptions(array $attributeData, array $attributeValue)
+    {
+        $result = null;
+        $selectedValues = [];
+        if ($attributeData[AttributeInterface::FRONTEND_INPUT] == 'select') {
+            foreach ($attributeValue as $selectedValue) {
+                if (isset($attributeData[AttributeInterface::OPTIONS][$selectedValue])) {
+                    $selectedValues[] = $attributeData[AttributeInterface::OPTIONS][$selectedValue];
+                }
+            }
+        }
+        if ($attributeData[AttributeInterface::FRONTEND_INPUT] == 'multiselect') {
+            foreach ($attributeValue as $selectedAttributeValues) {
+                $selectedAttributeValues = explode(',', $selectedAttributeValues);
+                foreach ($selectedAttributeValues as $selectedValue) {
+                    if (isset($attributeData[AttributeInterface::OPTIONS][$selectedValue])) {
+                        $selectedValues[] = $attributeData[AttributeInterface::OPTIONS][$selectedValue];
+                    }
+                }
+            }
+        }
+        $selectedValues = array_unique($selectedValues);
+        if (!empty($selectedValues)) {
+            $result = implode(' ', $selectedValues);
+        }
+        return $result;
     }
 }
