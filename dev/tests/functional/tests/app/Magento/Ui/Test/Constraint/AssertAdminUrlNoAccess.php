@@ -28,12 +28,9 @@ class AssertAdminUrlNoAccess extends AbstractConstraint
      *
      * @var array
      */
-    private $urls = [
+    protected $urls = [
         'mui/index/render/?namespace=cms_block_listing&search=&filters%5Bplaceholder%5D=true'
         . '&paging%5BpageSize%5D=20&paging%5Bcurrent%5D=1&sorting%5Bfield%5D=block_id'
-        . '&sorting%5Bdirection%5D=asc&isAjax=true',
-        'mui/index/render/handle/bulk_bulk_details_modal/buttons/1/?namespace=support_report_listing'
-        . '&filters%5Bplaceholder%5D=true&paging%5BpageSize%5D=20&paging%5Bcurrent%5D=1&sorting%5Bfield%5D=report_id'
         . '&sorting%5Bdirection%5D=asc&isAjax=true',
         'mui/index/render/?namespace=customer_listing&search=&filters%5Bplaceholder%5D=true'
         . '&paging%5BpageSize%5D=20&paging%5Bcurrent%5D=1&sorting%5Bfield%5D=entity_id&sorting%5Bdirection%5D=asc'
