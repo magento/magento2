@@ -181,6 +181,8 @@ sub vcl_backend_response {
 }
 
 sub vcl_deliver {
+    # set the normalised request url as a http header if magento is in debug mode for easy debugging
+    set resp.http.X-Magento-Cache-Debug-Request-Url = req.url;
     if (resp.http.X-Magento-Debug) {
         if (resp.http.x-varnish ~ " ") {
             set resp.http.X-Magento-Cache-Debug = "HIT";

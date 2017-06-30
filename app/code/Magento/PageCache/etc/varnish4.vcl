@@ -96,7 +96,7 @@ sub vcl_recv {
 
     # second pass to ensure after params have been stripped we're not left with ?!,?,& causing a cache miss
     set req.url = regsub(req.url, "(\?&|\?|&)$", "");
-    
+
     # Static files caching
     if (req.url ~ "^/(pub/)?(media|static)/.*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|html|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|tiff|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)$") {
         # Static files should not be cached by default
@@ -181,6 +181,8 @@ sub vcl_backend_response {
 
 sub vcl_deliver {
     if (resp.http.X-Magento-Debug) {
+      # set the normalised request url as a http header if magento is in debug mode for easy debugging
+      set resp.http.X-Magento-Cache-Debug-Request-Url = req.url;
         if (resp.http.x-varnish ~ " ") {
             set resp.http.X-Magento-Cache-Debug = "HIT";
             set resp.http.Grace = req.http.grace;
