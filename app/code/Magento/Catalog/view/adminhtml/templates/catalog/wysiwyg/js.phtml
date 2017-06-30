@@ -70,22 +70,19 @@ var catalogWysiwygEditor = {
     },
     okDialogWindow : function(dialogWindow) {
         var $firedElement = jQuery('#' + dialogWindow.options.firedElementId),
-            $editorElement = jQuery('#' + dialogWindow.options.firedElementId  + '_editor'),
-            firedElementId = $firedElement.attr('id')
-        ;
+            $editorElement = jQuery('#' + dialogWindow.options.firedElementId + '_editor'),
+            firedElementId = $firedElement.attr('id'),
+            wysiwygObj = window['wysiwyg' + firedElementId + '_editor'];
 
         if ($firedElement.length) {
-            wysiwygObj = window['wysiwyg' + firedElementId + '_editor'];
             wysiwygObj.turnOff();
             if (tinyMCE.get(wysiwygObj.id)) {
                 $firedElement.val(tinyMCE.get(wysiwygObj.id).getContent()).change();
             } else {
-                if ($editorElement.length) {
-                    $firedElement.val($editorElement.val()).change();
-                }
+                $firedElement.val($editorElement.val()).change();
             }
-            if (tinyMCE.editors[firedElementId]) {
-                tinyMCE.editors[firedElementId].load();
+            if (tinyMCE.get(firedElementId)) {
+                tinyMCE.get(firedElementId).load();
             }
             if (typeof varienGlobalEvents != undefined) {
                 varienGlobalEvents.fireEvent('tinymceChange');
