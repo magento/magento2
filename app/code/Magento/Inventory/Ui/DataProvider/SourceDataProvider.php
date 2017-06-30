@@ -87,6 +87,10 @@ class SourceDataProvider extends DataProvider
                 $sourceGeneralData['carrier_codes'] =  $this->getAssignedCarrierCodes($sourceId);
                 $dataForSingle[$sourceId] = [
                     'general' => $sourceGeneralData,
+                    'products' => [
+                        'assigned_products' => [
+                        ],
+                    ],
                 ];
                 $data = $dataForSingle;
             } else {
