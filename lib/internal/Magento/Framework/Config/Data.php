@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
  * Represents loaded and cached configuration data, should be used to gain access to different types
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Data implements \Magento\Framework\Config\DataInterface
 {

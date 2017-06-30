@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Product;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {

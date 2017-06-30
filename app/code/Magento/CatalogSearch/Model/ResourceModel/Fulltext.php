@@ -11,6 +11,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * CatalogSearch Fulltext Index resource model
+ *
+ * @api
  */
 class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

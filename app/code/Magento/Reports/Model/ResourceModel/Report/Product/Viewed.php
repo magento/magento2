@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report\Product;
 
+/**
+ * @api
+ */
 class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
 {
     /**
