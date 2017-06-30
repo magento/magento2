@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
 use Magento\Framework\DB\SelectFactory;
 
 // @codingStandardsIgnoreStart
-class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
+class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
+    ConnectionAdapterInterface
 // @codingStandardsIgnoreEnd
 {
     /**

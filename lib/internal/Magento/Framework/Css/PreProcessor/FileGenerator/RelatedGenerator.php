@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\PreProcessor\FileGenerator;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
 use Magento\Framework\View\Asset\LocalInterface;
 
@@ -15,31 +16,23 @@ use Magento\Framework\View\Asset\LocalInterface;
 class RelatedGenerator
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    protected $tmpDirectory;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     private $assetRepository;
 
     /**
-     * @var \Magento\Framework\Css\PreProcessor\File\Temporary
+     * @var Temporary
      */
     private $temporaryFile;
 
     /**
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\View\Asset\Repository $assetRepository
-     * @param \Magento\Framework\Css\PreProcessor\File\Temporary $temporaryFile
+     * @param Repository $assetRepository
+     * @param Temporary $temporaryFile
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Asset\Repository $assetRepository,
-        \Magento\Framework\Css\PreProcessor\File\Temporary $temporaryFile
+        Repository $assetRepository,
+        Temporary $temporaryFile
     ) {
-        $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->assetRepository = $assetRepository;
         $this->temporaryFile = $temporaryFile;
     }

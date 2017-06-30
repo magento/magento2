@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -13,6 +13,7 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Sales order shipment model
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)

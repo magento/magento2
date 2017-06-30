@@ -1,15 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\View\EntitySpecificHandlesList;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\EntitySpecificHandlesList;
 
 class ProcessLayoutRenderElement implements ObserverInterface
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role\Grid;
@@ -9,6 +9,8 @@ use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
+ *
+ * @api
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {

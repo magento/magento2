@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\Framework\App\ObjectManager;
 
 /**
  * Product entity resource model
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -567,7 +567,16 @@ class Product extends AbstractResource
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->loadAttributesMetadata($attributes);
+        $select = $this->_getLoadRowSelect($object, $entityId);
+        $row = $this->getConnection()->fetchRow($select);
+
+        if (is_array($row)) {
+            $object->addData($row);
+        } else {
+            $object->isObjectNew(true);
+        }
+
+        $this->loadAttributesForObject($attributes, $object);
         $this->getEntityManager()->load($object, $entityId);
         return $this;
     }

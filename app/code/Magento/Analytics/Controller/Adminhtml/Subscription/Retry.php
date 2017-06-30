@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\Controller\Adminhtml\Subscription;
 
-use Magento\Analytics\Model\Subscription;
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Redirect;
@@ -21,19 +21,19 @@ class Retry extends Action
     /**
      * Resource for managing subscription to Magento Analytics.
      *
-     * @var Subscription
+     * @var SubscriptionHandler
      */
-    private $subscription;
+    private $subscriptionHandler;
 
     /**
      * @param Context $context
-     * @param Subscription $subscription
+     * @param SubscriptionHandler $subscriptionHandler
      */
     public function __construct(
         Context $context,
-        Subscription $subscription
+        SubscriptionHandler $subscriptionHandler
     ) {
-        $this->subscription = $subscription;
+        $this->subscriptionHandler = $subscriptionHandler;
         parent::__construct($context);
     }
 
@@ -58,7 +58,7 @@ class Retry extends Action
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
             $resultRedirect->setPath('adminhtml');
-            $this->subscription->retry();
+            $this->subscriptionHandler->processEnabled();
         } catch (LocalizedException $e) {
             $this->getMessageManager()->addExceptionMessage($e, $e->getMessage());
         } catch (\Exception $e) {

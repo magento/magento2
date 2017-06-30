@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Listing;
@@ -45,7 +45,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $this->contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
     }
 
     /**

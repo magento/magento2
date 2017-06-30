@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory for importers.
@@ -44,7 +44,7 @@ class ImporterFactory
 
         if (!$importer instanceof ImporterInterface) {
             throw new \InvalidArgumentException(
-                'Type "' . $className . '" is not instance on ' . ImporterInterface::class
+                'Type "' . $className . '" is not instance of ' . ImporterInterface::class
             );
         }
 

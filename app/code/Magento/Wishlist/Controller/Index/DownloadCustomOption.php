@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex

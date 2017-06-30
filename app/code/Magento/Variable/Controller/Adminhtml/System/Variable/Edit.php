@@ -1,11 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+/**
+ * Display Variables edit form page
+ *
+ * @api
+ */
 class Edit extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**

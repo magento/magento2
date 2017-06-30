@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Block\Adminhtml\Items\Price;
@@ -13,6 +13,8 @@ use Magento\Weee\Block\Item\Price\Renderer as ItemPriceRenderer;
 
 /**
  * Sales Order items price column renderer
+ *
+ * @api
  */
 class Renderer extends \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
 {

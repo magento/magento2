@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
     <fieldset class="fieldset rate" data-bind="visible: (shippingRates().length > 0)">
         <dl class="items methods" data-bind="foreach: shippingRateGroups">
             <dt class="item-title"><span data-bind="text: $data"></span></dt>
-            <dd class="item-options" data-bind="foreach: $parent.getRatesForGroup($data)">
+            <dd class="item-options" data-bind="foreach: { data:$parent.getRatesForGroup($data), as: 'method' }">
                 <div data-bind="css: {'field choice item': available, 'message error': !available} ">
                     <!-- ko ifnot: (available) -->
                     <div data-bind="text: error_message"></div>
@@ -29,7 +29,7 @@
                                 "/>
                     <label class="label" data-bind="attr: {for: 's_method_' + method_code}">
                         <!-- ko text: $data.method_title --><!-- /ko -->
-                        <!-- ko text: $parents[1].getFormattedPrice(amount) --><!-- /ko -->
+                        <each args="element.getRegion('price')" render="" />
                     </label>
                     <!-- /ko -->
                 </div>

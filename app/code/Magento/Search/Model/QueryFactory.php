@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
@@ -11,6 +11,9 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils as StdlibString;
 
+/**
+ * @api
+ */
 class QueryFactory implements QueryFactoryInterface
 {
     /**

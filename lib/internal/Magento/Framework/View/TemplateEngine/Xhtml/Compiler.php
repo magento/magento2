@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\TextInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\AttributeInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CdataInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CommentInterface;
-use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\AttributeInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\TextInterface;
 
 /**
  * Class Compiler

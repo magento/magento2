@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Framework\Config;
 
 /**
  * Deployment configuration options constant storage
+ * @api
  */
 class ConfigOptionsListConstants
 {
@@ -30,6 +31,11 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_DB = 'db';
     const CONFIG_PATH_RESOURCE = 'resource';
     const CONFIG_PATH_CACHE_TYPES = 'cache_types';
+    const CONFIG_PATH_DOCUMENT_ROOT_IS_PUB = 'directories/document_root_is_pub';
+    const CONFIG_PATH_DB_LOGGER_OUTPUT = 'db_logger/output';
+    const CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING = 'db_logger/log_everything';
+    const CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD = 'db_logger/query_time_threshold';
+    const CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE = 'db_logger/include_stacktrace';
     /**#@-*/
 
     /**#@+

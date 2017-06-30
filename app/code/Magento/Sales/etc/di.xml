@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -964,20 +964,6 @@
     </type>
     <type name="Magento\Sales\Model\ResourceModel\Order\Handler\Address">
         <plugin name="addressUpdate" type="Magento\Sales\Model\Order\Invoice\Plugin\AddressUpdate"/>
-    </type>
-    <type name="Magento\Config\Model\Config\Export\ExcludeList">
-        <arguments>
-            <argument name="configs" xsi:type="array">
-                <item name="sales_email/order/copy_to" xsi:type="string">1</item>
-                <item name="sales_email/order_comment/copy_to" xsi:type="string">1</item>
-                <item name="sales_email/invoice/copy_to" xsi:type="string">1</item>
-                <item name="sales_email/invoice_comment/copy_to" xsi:type="string">1</item>
-                <item name="sales_email/shipment/copy_to" xsi:type="string">1</item>
-                <item name="sales_email/shipment_comment/copy_to" xsi:type="string">1</item>
-                <item name="sales_email/creditmemo/copy_to" xsi:type="string">1</item>
-                <item name="sales_email/creditmemo_comment/copy_to" xsi:type="string">1</item>
-            </argument>
-        </arguments>
     </type>
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>

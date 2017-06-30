@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -9,6 +9,8 @@ use Magento\Store\Model\Store;
 
 /**
  * Catalog product media gallery resource model.
+ *
+ * @api
  */
 class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -86,7 +88,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [$mainTableAlias => $this->getTable($tableNameAlias)],
                 $cols
             )->where(
-                $mainTableAlias.'.value_id IN(?)',
+                $mainTableAlias . '.value_id IN(?)',
                 $ids
             );
         if (null !== $storeId) {
@@ -135,7 +137,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select =  $this->createBatchBaseSelect($storeId, $attributeId);
 
         $select = $select->where(
-            'entity.' . $this->metadata->getLinkField() .' = ?',
+            'entity.' . $this->metadata->getLinkField() . ' = ?',
             $entityId
         );
         return $select;

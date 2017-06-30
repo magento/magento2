@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Filters\Type;
@@ -12,7 +12,7 @@ use Magento\Ui\Component\Form\Element\Select as ElementSelect;
 use Magento\Ui\Component\Filters\FilterModifier;
 
 /**
- * Class Select
+ * @api
  */
 class Select extends AbstractFilter
 {

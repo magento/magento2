@@ -2,11 +2,14 @@
 /**
  * Adminhtml block for fieldset of configurable product
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Composite\Fieldset;
 
+/**
+ * @api
+ */
 class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
 {
     /**

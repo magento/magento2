@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogWidget\Block\Product;
 
-use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Widget\Block\BlockInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Widget\Block\BlockInterface;
 
 /**
  * Catalog Products List widget block
@@ -236,6 +236,12 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $conditions = $this->getConditions();
         $conditions->collectValidatedAttributes($collection);
         $this->sqlBuilder->attachConditionToCollection($collection, $conditions);
+
+        /**
+         * Prevent retrieval of duplicate records. This may occur when multiselect product attribute matches
+         * several allowed values from condition simultaneously
+         */
+        $collection->distinct(true);
 
         return $collection;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Product\Index;
@@ -19,6 +19,7 @@ namespace Magento\Reports\Model\Product\Index;
  * @method \Magento\Reports\Model\Product\Index\Compared setAddedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {

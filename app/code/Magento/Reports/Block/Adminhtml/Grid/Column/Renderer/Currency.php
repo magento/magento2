@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
  * Adminhtml grid item renderer currency
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency
 {

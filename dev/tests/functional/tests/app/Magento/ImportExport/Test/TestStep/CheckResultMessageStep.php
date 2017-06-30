@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Test\TestStep;
 
 use Magento\ImportExport\Test\Constraint\AssertImportCheckData;
-use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\ImportExport\Test\Fixture\ImportData;
+use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**

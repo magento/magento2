@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Request;
@@ -9,6 +9,9 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class Cleaner
 {
     /**

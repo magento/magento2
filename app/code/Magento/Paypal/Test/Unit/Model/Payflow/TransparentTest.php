@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
+use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -79,8 +80,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getStore', 'getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
+        $this->storeManagerMock->method('getStore')
             ->willReturnSelf();
         $this->configMock = $this->getMockBuilder(\Magento\Paypal\Model\PayflowConfig::class)
             ->disableOriginalConstructor()
@@ -89,8 +89,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configFactoryMock->expects($this->once())
-            ->method('create')
+        $this->configFactoryMock->method('create')
             ->willReturn($this->configMock);
         $this->responseMock = new \Magento\Framework\DataObject();
         $this->responseValidator = $this->getMockBuilder(
@@ -340,10 +339,10 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'origResult' => Payflowpro::RESPONSE_CODE_APPROVED,
-                'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
+                'resultCode' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER
             ],
             [
-                'origResult' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER,
+                'origResult' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER,
                 'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
             ],
             [
@@ -436,5 +435,13 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->with(Transparent::PNREF);
 
         $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Payflow\Transparent::getInfoBlockType()
+     */
+    public function testGetInfoBlockType()
+    {
+        static::assertEquals(Info::class, $this->object->getInfoBlockType());
     }
 }

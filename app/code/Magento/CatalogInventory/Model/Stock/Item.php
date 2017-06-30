@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
@@ -43,7 +43,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @var string
      */
-    protected $eventObject = 'item';
+    protected $_eventObject = 'item';
 
     /**
      * Store model manager

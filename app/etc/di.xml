@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -102,7 +102,7 @@
     <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
     <preference for="Magento\Framework\App\Rss\UrlBuilderInterface" type="Magento\Framework\App\Rss\UrlBuilder"/>
-    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Quiet"/>
+    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\LoggerProxy"/>
     <preference for="Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface" type="Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
@@ -160,6 +160,16 @@
     <preference for="Magento\Framework\DataObject\IdentityGeneratorInterface" type="Magento\Framework\DataObject\IdentityService" />
     <preference for="Magento\Framework\Serialize\SerializerInterface" type="Magento\Framework\Serialize\Serializer\Json" />
     <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Framework\App\Scope\Validator"/>
+    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Framework\App\ScopeResolver" />
+    <preference for="Magento\Framework\App\ScopeInterface" type="Magento\Framework\App\ScopeDefault" />
+    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Framework\View\Design\Theme\ThemeList" />
+    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Framework\View\Design\Theme\ThemeProvider" />
+    <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Framework\View\Asset\PreProcessor\ChainFactory"/>
+    <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
+    <preference for="Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface" type="Magento\Framework\View\Asset\PreProcessor\Helper\Sort"/>
+    <preference for="Magento\Framework\App\View\Deployment\Version\StorageInterface" type="Magento\Framework\App\View\Deployment\Version\Storage\File"/>
+    <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
+    <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -479,8 +489,12 @@
     </type>
     <type name="Magento\Framework\View\Layout\Reader\UiComponent">
         <arguments>
+            <argument name="readerPool" xsi:type="object">blockRenderPool</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\ConfigCondition">
+        <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -575,11 +589,6 @@
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Layout\Generator\UiComponent">
-        <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Mview\View">
         <arguments>
             <argument name="state" xsi:type="object" shared="false">Magento\Indexer\Model\Mview\View\State</argument>
@@ -597,12 +606,31 @@
         </arguments>
     </type>
     <type name="Magento\Framework\App\View\Asset\Publisher" shared="false" />
+    <type name="Magento\Framework\View\Asset\PreProcessor\FileNameResolver">
+        <arguments>
+            <argument name="alternativeSources" xsi:type="array">
+                <item name="css" xsi:type="object">AlternativeSourceProcessors</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\StaticResource">
         <arguments>
             <argument name="response" xsi:type="object" shared="false">Magento\MediaStorage\Model\File\Storage\Response</argument>
             <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </type>
+    <virtualType name="AlternativeSourceProcessors" type="Magento\Framework\View\Asset\PreProcessor\AlternativeSource">
+        <arguments>
+            <argument name="filenameResolver" xsi:type="object">Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver</argument>
+            <argument name="lockName" xsi:type="string">alternative-source-css</argument>
+            <argument name="lockerProcess" xsi:type="object">Magento\Framework\View\Asset\LockerProcess</argument>
+            <argument name="alternatives" xsi:type="array">
+                <item name="less" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Framework\Css\PreProcessor\Adapter\Less\Processor</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="developerPublisher" type="Magento\Framework\App\View\Asset\Publisher">
         <arguments>
             <argument name="materializationStrategyFactory" xsi:type="object">developerMaterialization</argument>
@@ -637,6 +665,7 @@
             <argument name="fallback" xsi:type="object">viewFileFallbackResolver</argument>
         </arguments>
     </virtualType>
+    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative"/>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\StaticFile">
         <arguments>
             <argument name="resolver" xsi:type="object">viewFileMinifiedFallbackResolver</argument>
@@ -1199,9 +1228,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
-        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
-    </type>
     <type name="Magento\Framework\EntityManager\CompositeMapper">
         <arguments>
             <argument name="mappers" xsi:type="array">
@@ -1223,6 +1249,8 @@
         <arguments>
             <argument name="queryModifiers" xsi:type="array">
                 <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
+                <item name="like" xsi:type="string">Magento\Framework\DB\Select\LikeQueryModifier</item>
+                <item name="composite" xsi:type="string">Magento\Framework\DB\Select\CompositeQueryModifier</item>
             </argument>
         </arguments>
     </type>
@@ -1237,6 +1265,67 @@
                 <item name="MEMORY" xsi:type="string">MEMORY</item>
                 <item name="MYISAM" xsi:type="string">MYISAM</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\FieldDataConverter">
+        <arguments>
+            <argument name="envBatchSize" xsi:type="init_parameter">Magento\Framework\DB\FieldDataConverter::BATCH_SIZE_VARIABLE_NAME</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\PreProcessor\Chain">
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="css" xsi:type="array">
+                    <item name="less" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+        <arguments>
+            <argument name="defaultPreprocessor" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\Passthrough</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\View\Deployment\Version\Storage\File">
+        <arguments>
+            <argument name="directoryCode" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW</argument>
+            <argument name="fileName" xsi:type="string">deployed_version.txt</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Locale\Resolver">
+        <arguments>
+            <argument name="defaultLocalePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="escape_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\EscapeRenderer</item>
+                <item name="block_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\BlockRenderer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="default_message_identifier" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\EscapeRenderer::CODE</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Logger\LoggerProxy">
+        <arguments>
+            <argument name="loggerAlias" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_OUTPUT</argument>
+            <argument name="logAllQueries" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING</argument>
+            <argument name="logQueryTime" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD</argument>
+            <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
+        <arguments>
+            <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
         </arguments>
     </type>
 </config>

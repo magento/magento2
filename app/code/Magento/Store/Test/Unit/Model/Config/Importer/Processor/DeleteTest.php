@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
@@ -10,16 +10,16 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Delete;
 use Magento\Store\Model\Group;
+use Magento\Store\Model\ResourceModel\Group as GroupResource;
+use Magento\Store\Model\ResourceModel\Group\Collection;
+use Magento\Store\Model\ResourceModel\Store as StoreResource;
+use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
-use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
 use Magento\Store\Model\WebsiteRepository;
-use Magento\Store\Model\ResourceModel\Group\Collection;
-use Magento\Store\Model\ResourceModel\Group as GroupResource;
-use Magento\Store\Model\ResourceModel\Store as StoreResource;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
-use Magento\Store\Model\Store;
 
 /**
  * Test for Delete processor.
@@ -120,6 +120,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupCollectionMock = $this->getMockBuilder(Collection::class)
+            ->setMethods(['getIterator', 'addFieldToFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
@@ -135,9 +136,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->groupCollectionMock->expects($this->any())
-            ->method('addFilter')
-            ->willReturnSelf();
         $this->groupMock->expects($this->any())
             ->method('getResource')
             ->willReturn($this->groupResourceMock);
@@ -234,10 +232,11 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->websiteMock);
         $this->groupCollectionMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([
-                $this->groupMock
-            ]);
+            ->method('addFieldToFilter')
+            ->with('code', ['in' => [2]]);
+        $this->groupCollectionMock->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->groupMock]));
         $this->groupResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->groupMock);
@@ -316,7 +315,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     public function testRunWithException()
     {
         $data = [
-            ScopeInterface::SCOPE_GROUPS => [],
             ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []
         ];

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
@@ -53,27 +51,27 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->rendererOne->expects(
             $this->once()
         )->method(
-                'render'
-            )->with(
-                [$text],
-                $arguments
-            )->will(
-                $this->returnValue($resultAfterFirst)
-            );
+            'render'
+        )->with(
+            [$text],
+            $arguments
+        )->will(
+            $this->returnValue($resultAfterFirst)
+        );
 
         $this->rendererTwo->expects(
             $this->once()
         )->method(
-                'render'
-            )->with(
-                [
-                    $text,
-                    $resultAfterFirst,
-                ],
-                $arguments
-            )->will(
-                $this->returnValue($resultAfterSecond)
-            );
+            'render'
+        )->with(
+            [
+                $text,
+                $resultAfterFirst,
+            ],
+            $arguments
+        )->will(
+            $this->returnValue($resultAfterSecond)
+        );
 
         $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));
     }

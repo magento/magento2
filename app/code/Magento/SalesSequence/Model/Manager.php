@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Model;
@@ -9,6 +9,7 @@ use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceSequenceMeta;
 
 /**
  * Class Manager
+ * @api
  */
 class Manager
 {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7,7 +7,7 @@ define([
     'jquery',
     'jquery/ui',
     'catalogGallery',
-    'Magento_ProductVideo/js/load-player'
+    'loadPlayer'
 ], function ($) {
     'use strict';
 
@@ -94,16 +94,24 @@ define([
         options: {
             videoData: '',
             videoSettings: '',
-            optionsVideoData: ''
+            optionsVideoData: '',
+            vimeoJSFrameworkLoaded: false
         },
 
+        /**
+         * @private
+         */
+        onVimeoJSFramework: function () {},
         PV: 'product-video', // [CONST]
         VU: 'video-unplayed',
         PVLOADED: 'fotorama__product-video--loaded', // [CONST]
+        PVLOADING: 'fotorama__product-video--loading', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
         FTVC: 'fotorama__video-close',
         FTAR: 'fotorama__arr',
+        fotoramaSpinner: 'fotorama__spinner',
+        fotoramaSpinnerShow: 'fotorama__spinner--show',
         TI: 'video-thumb-icon',
         isFullscreen: false,
         FTCF: '[data-gallery-role="fotorama__fullscreen-icon"]',
@@ -147,7 +155,6 @@ define([
          * @private
          */
         _setOptions: function (options) {
-
             if (options.videoData && options.videoData.length) {
                 this.options.videoData = options.videoData;
             }
@@ -402,6 +409,14 @@ define([
 
             element.async = true;
             element.src = 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js';
+
+            /**
+             * Vimeo js framework on load callback.
+             */
+            element.onload = function () {
+                this.onVimeoJSFramework();
+                this.vimeoJSFrameworkLoaded = true;
+            }.bind(this);
             scriptTag.parentNode.insertBefore(element, scriptTag);
         },
 
@@ -620,15 +635,42 @@ define([
         },
 
         /**
-         *
+         * @private
+         */
+        _showLoader: function () {
+            var spinner = this.fotoramaItem.find('.' + this.fotoramaSpinner);
+
+            spinner.addClass(this.fotoramaSpinnerShow);
+            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame.addClass(this.PVLOADING);
+        },
+
+        /**
+         * @private
+         */
+        _hideLoader: function () {
+            var spinner = this.fotoramaItem.find('.' + this.fotoramaSpinner);
+
+            spinner.removeClass(this.fotoramaSpinnerShow);
+            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame.removeClass(this.PVLOADING);
+        },
+
+        /**
          * @param {Event} event
          * @private
          */
         _clickHandler: function (event) {
             if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
-
                 $(event.target).removeClass(this.VU);
-                $(event.target).find('.' + this.PV).productVideoLoader();
+
+                if (this.vimeoJSFrameworkLoaded) {
+                    $(event.target).find('.' + this.PV).productVideoLoader();
+                } else {
+                    this._showLoader();
+                    this.onVimeoJSFramework = function () {
+                        $(event.target).find('.' + this.PV).productVideoLoader();
+                        this._hideLoader();
+                    }.bind(this);
+                }
 
                 $('.' + this.FTAR).addClass(this.isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
             }
@@ -686,6 +728,7 @@ define([
             }
 
             $wrapper.find('.' + this.PVLOADED).removeClass(this.PVLOADED);
+            this._hideLoader();
 
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent(),

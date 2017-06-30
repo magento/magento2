@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Api\Data;
 
 /**
- * Bookmark interface.
+ * Bookmark interface
+ *
  * @api
  */
 interface BookmarkInterface extends BookmarkExtensionInterface
@@ -161,14 +162,14 @@ interface BookmarkInterface extends BookmarkExtensionInterface
     public function setCurrent($isCurrent);
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * Retrieve existing extension attributes object or create a new one
      *
      * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
-     * Set an extension attributes object.
+     * Set an extension attributes object
      *
      * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
      * @return $this

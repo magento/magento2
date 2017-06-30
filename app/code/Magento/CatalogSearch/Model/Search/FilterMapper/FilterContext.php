@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,19 +28,9 @@ class FilterContext implements FilterStrategyInterface
     private $eavConfig;
 
     /**
-     * @var TermDropdownStrategy
-     */
-    private $termDropdownStrategy;
-
-    /**
      * @var StaticAttributeStrategy
      */
     private $staticAttributeStrategy;
-
-    /**
-     * @var AliasResolver
-     */
-    private $aliasResolver;
 
     /**
      * @param EavConfig $eavConfig
@@ -48,6 +38,7 @@ class FilterContext implements FilterStrategyInterface
      * @param ExclusionStrategy $exclusionStrategy
      * @param TermDropdownStrategy $termDropdownStrategy
      * @param StaticAttributeStrategy $staticAttributeStrategy
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         EavConfig $eavConfig,
@@ -57,9 +48,7 @@ class FilterContext implements FilterStrategyInterface
         StaticAttributeStrategy $staticAttributeStrategy
     ) {
         $this->eavConfig = $eavConfig;
-        $this->aliasResolver = $aliasResolver;
         $this->exclusionStrategy = $exclusionStrategy;
-        $this->termDropdownStrategy = $termDropdownStrategy;
         $this->staticAttributeStrategy = $staticAttributeStrategy;
     }
 
@@ -78,7 +67,7 @@ class FilterContext implements FilterStrategyInterface
                 if ($filter->getType() === \Magento\Framework\Search\Request\FilterInterface::TYPE_TERM
                     && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
                 ) {
-                    $isApplied = $this->termDropdownStrategy->apply($filter, $select);
+                    $isApplied = false;
                 } elseif ($attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                     $isApplied = $this->staticAttributeStrategy->apply($filter, $select);
                 }

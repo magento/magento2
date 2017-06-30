@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Api;
@@ -69,8 +69,7 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
                         'value' => $attributeOptionValue
                     ]
                 ],
-                'tier_prices' => [],
-                'extension_attributes' => []
+                'tier_prices' => []
             ]
         ];
         ksort($expectedItems);

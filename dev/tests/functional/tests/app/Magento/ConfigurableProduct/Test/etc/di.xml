@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -24,6 +24,11 @@
     <type name="Magento\ConfigurableProduct\Test\Constraint\AssertProductAttributeIsConfigurable">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar\RecentlyComparedProducts">

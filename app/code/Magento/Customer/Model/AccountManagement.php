@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -46,6 +46,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\Customer\CredentialsValidator;
 
 /**
  * Handle various customer account actions
@@ -288,6 +289,11 @@ class AccountManagement implements AccountManagementInterface
     private $eavValidator;
 
     /**
+     * @var CredentialsValidator
+     */
+    private $credentialsValidator;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -311,6 +317,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerModel $customerModel
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param CredentialsValidator|null $credentialsValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -336,7 +343,8 @@ class AccountManagement implements AccountManagementInterface
         DateTime $dateTime,
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
-        ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        CredentialsValidator $credentialsValidator = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -361,6 +369,8 @@ class AccountManagement implements AccountManagementInterface
         $this->customerModel = $customerModel;
         $this->objectFactory = $objectFactory;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->credentialsValidator = $credentialsValidator ?: ObjectManager::getInstance()
+            ->get(CredentialsValidator::class);
     }
 
     /**
@@ -655,6 +665,12 @@ class AccountManagement implements AccountManagementInterface
     {
         if ($password !== null) {
             $this->checkPasswordStrength($password);
+            $customerEmail = $customer->getEmail();
+            try {
+                $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
+            } catch (InputException $e) {
+                throw new LocalizedException(__('Password cannot be the same as email address.'));
+            }
             $hash = $this->createPasswordHash($password);
         } else {
             $hash = null;
@@ -826,6 +842,8 @@ class AccountManagement implements AccountManagementInterface
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
         }
+        $customerEmail = $customer->getEmail();
+        $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $newPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);

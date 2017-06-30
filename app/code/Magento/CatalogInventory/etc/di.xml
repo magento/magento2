@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -84,6 +84,24 @@
             <argument name="baseSelectProcessors" xsi:type="array">
                 <item name="stock_status" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\IndexTableRowSizeEstimator" type="Magento\Framework\Indexer\IndexTableRowSizeEstimator">
+        <arguments>
+            <argument name="rowMemorySize" xsi:type="number">100</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <arguments>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="default" xsi:type="number">200</item>
+            </argument>
+            <argument name="batchSizeManagement" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement</argument>
         </arguments>
     </type>
 </config>

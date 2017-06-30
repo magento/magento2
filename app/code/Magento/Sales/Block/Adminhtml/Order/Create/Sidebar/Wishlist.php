@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 /**
  * Adminhtml sales order create sidebar wishlist block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,7 +60,7 @@ abstract class Fixture
                 : $configValue;
 
             if (!empty($generationCount)) {
-                $output->writeln('<info> |- ' . $label . ': ' . $generationCount .'</info>');
+                $output->writeln('<info> |- ' . $label . ': ' . $generationCount . '</info>');
             }
         }
     }

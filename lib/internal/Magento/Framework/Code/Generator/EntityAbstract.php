@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -215,15 +215,10 @@ abstract class EntityAbstract
      */
     protected function _generateCode()
     {
-        $this->_classGenerator->setName(
-            $this->_getResultClassName()
-        )->addProperties(
-            $this->_getClassProperties()
-        )->addMethods(
-            $this->_getClassMethods()
-        )->setClassDocBlock(
-            $this->_getClassDocBlock()
-        );
+        $this->_classGenerator->setName($this->_getResultClassName())
+            ->addProperties($this->_getClassProperties())
+            ->addMethods($this->_getClassMethods())
+            ->setClassDocBlock($this->_getClassDocBlock());
 
         return $this->_getGeneratedCode();
     }
@@ -318,6 +313,7 @@ abstract class EntityAbstract
         $parameterInfo = [
             'name' => $parameter->getName(),
             'passedByReference' => $parameter->isPassedByReference(),
+            'type' => $parameter->getType()
         ];
 
         if ($parameter->isArray()) {

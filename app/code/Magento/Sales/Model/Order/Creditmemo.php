@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,7 @@ use Magento\Sales\Model\EntityInterface;
 /**
  * Order creditmemo model
  *
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
@@ -438,14 +439,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public static function getStates()
     {
-        if (is_null(self::$_states)) {
-            self::$_states = [
+        if (is_null(static::$_states)) {
+            static::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_REFUNDED => __('Refunded'),
                 self::STATE_CANCELED => __('Canceled'),
             ];
         }
-        return self::$_states;
+        return static::$_states;
     }
 
     /**
@@ -460,11 +461,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             $stateId = $this->getState();
         }
 
-        if (is_null(self::$_states)) {
-            self::getStates();
+        if (is_null(static::$_states)) {
+            static::getStates();
         }
-        if (isset(self::$_states[$stateId])) {
-            return self::$_states[$stateId];
+        if (isset(static::$_states[$stateId])) {
+            return static::$_states[$stateId];
         }
         return __('Unknown State');
     }

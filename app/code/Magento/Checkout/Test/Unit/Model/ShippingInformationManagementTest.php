@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model;
@@ -141,7 +141,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAssignmentFactoryMock =
             $this->getMock(\Magento\Quote\Model\ShippingAssignmentFactory::class, ['create'], [], '', false);
         $this->cartExtensionFactoryMock =
-            $this->getMock(\Magento\Quote\Api\Data\CartExtensionInterfaceFactory::class, ['create'], [], '', false);
+            $this->getMock(\Magento\Quote\Api\Data\CartExtensionFactory::class, ['create'], [], '', false);
         $this->shippingFactoryMock =
             $this->getMock(\Magento\Quote\Model\ShippingFactory::class, ['create'], [], '', false);
 
@@ -152,22 +152,10 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'paymentDetailsFactory' => $this->paymentDetailsFactoryMock,
                 'cartTotalsRepository' => $this->cartTotalsRepositoryMock,
                 'quoteRepository' => $this->quoteRepositoryMock,
+                'shippingAssignmentFactory' => $this->shippingAssignmentFactoryMock,
+                'cartExtensionFactory' => $this->cartExtensionFactoryMock,
+                'shippingFactory' => $this->shippingFactoryMock
             ]
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'shippingAssignmentFactory',
-            $this->shippingAssignmentFactoryMock
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'cartExtensionFactory',
-            $this->cartExtensionFactoryMock
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'shippingFactory',
-            $this->shippingFactoryMock
         );
     }
 

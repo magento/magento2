@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset;
 
+/**
+ * @api
+ */
 class Downloadable extends \Magento\Downloadable\Block\Catalog\Product\Links
 {
 }

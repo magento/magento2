@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Checkout;
@@ -40,7 +40,12 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directoryDataHelperMock;
+    protected $storeManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $directoryDataHelperMock;
 
     protected function setUp()
     {
@@ -75,6 +80,9 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
         $this->storeResolverMock = $this->getMock(
             \Magento\Store\Api\StoreResolverInterface::class
         );
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->directoryDataHelperMock = $this->getMock(
             \Magento\Directory\Helper\Data::class,
             [],
@@ -87,7 +95,8 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
             $this->countryCollectionFactoryMock,
             $this->regionCollectionFactoryMock,
             $this->storeResolverMock,
-            $this->directoryDataHelperMock
+            $this->directoryDataHelperMock,
+            $this->storeManagerMock
         );
     }
 
@@ -97,6 +106,12 @@ class DirectoryDataProcessorTest extends \PHPUnit_Framework_TestCase
             'country_id' => [],
             'region_id' => [],
         ];
+
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(42);
+        $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
 
         $this->countryCollectionFactoryMock->expects($this->once())
             ->method('create')

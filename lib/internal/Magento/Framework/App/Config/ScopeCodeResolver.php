@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -57,5 +57,15 @@ class ScopeCodeResolver
 
         $this->resolvedScopeCodes[$scopeType][$scopeCode] = $resolverScopeCode;
         return $resolverScopeCode;
+    }
+
+    /**
+     * Clean resolvedScopeCodes, store codes may have been renamed
+     *
+     * @return void
+     */
+    public function clean()
+    {
+        $this->resolvedScopeCodes = [];
     }
 }

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
@@ -25,15 +28,25 @@ class SaveHandler implements ExtensionInterface
     protected $productLinkManagement;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param OptionRepository $optionRepository
      * @param ProductLinkManagementInterface $productLinkManagement
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         OptionRepository $optionRepository,
-        ProductLinkManagementInterface $productLinkManagement
+        ProductLinkManagementInterface $productLinkManagement,
+        MetadataPool $metadataPool = null
     ) {
         $this->optionRepository = $optionRepository;
         $this->productLinkManagement = $productLinkManagement;
+
+        $this->metadataPool = $metadataPool
+            ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -44,31 +57,40 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
-        if ($entity->getTypeId() !== 'bundle' || empty($bundleProductOptions)) {
+        /** @var \Magento\Bundle\Api\Data\OptionInterface[] $options */
+        $options = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
+
+        if ($entity->getTypeId() !== 'bundle' || empty($options)) {
             return $entity;
         }
 
         if (!$entity->getCopyFromView()) {
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-            foreach ($this->optionRepository->getList($entity->getSku()) as $option) {
-                $this->removeOptionLinks($entity->getSku(), $option);
-                $this->optionRepository->delete($option);
+            $updatedOptions = [];
+            $oldOptions = $this->optionRepository->getList($entity->getSku());
+
+            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
+            $productId = $entity->getData($metadata->getLinkField());
+
+            foreach ($options as $option) {
+                $updatedOptions[$option->getOptionId()][$productId] = (bool)$option->getOptionId();
             }
 
-            $options = $bundleProductOptions ?: [];
-            foreach ($options as $option) {
-                $option->setOptionId(null);
-                $this->optionRepository->save($entity, $option);
-            }
-        } else {
-            //save only labels and not selections + product links
-            $options = $bundleProductOptions ?: [];
-            foreach ($options as $option) {
-                $this->optionRepository->save($entity, $option);
-                $entity->setCopyFromView(false);
+            foreach ($oldOptions as $option) {
+                if (!isset($updatedOptions[$option->getOptionId()][$productId])) {
+                    $option->setParentId($productId);
+                    $this->removeOptionLinks($entity->getSku(), $option);
+                    $this->optionRepository->delete($option);
+                }
             }
         }
+
+        foreach ($options as $option) {
+            $this->optionRepository->save($entity, $option);
+        }
+
+        $entity->setCopyFromView(false);
+
         return $entity;
     }
 

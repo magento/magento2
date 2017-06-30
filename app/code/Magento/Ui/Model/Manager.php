@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model;
@@ -22,7 +22,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Manager
- *
+ * @deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -308,10 +308,12 @@ class Manager implements ManagerInterface
 
             // Create inner components
             foreach ($component as $subComponentName => $subComponent) {
-                $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
-                    $resultConfiguration[ManagerInterface::CHILDREN_KEY],
-                    $this->createDataForComponent($subComponentName, $subComponent)
-                );
+                if (is_array($subComponent)) {
+                    $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
+                        $resultConfiguration[ManagerInterface::CHILDREN_KEY],
+                        $this->createDataForComponent($subComponentName, $subComponent)
+                    );
+                }
             }
             $createdComponents[$instanceName] = $resultConfiguration;
         }

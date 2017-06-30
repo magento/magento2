@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account;
@@ -10,6 +10,7 @@ use Magento\Customer\Model\Context;
 /**
  * Customer register link
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class RegisterLink extends \Magento\Framework\View\Element\Html\Link

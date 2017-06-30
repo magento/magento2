@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,310 +9,275 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">design_config_form.design_config_form_data_source</item>
-            <item name="deps" xsi:type="string">design_config_form.design_config_form_data_source</item>
-        </item>
-        <item name="config" xsi:type="array">
-            <item name="dataScope" xsi:type="string">data</item>
-            <item name="namespace" xsi:type="string">design_config_form</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Theme Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
-        <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\BackButton</item>
-            <item name="save" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveButton</item>
-            <item name="save_and_continue" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveAndContinueButton</item>
-        </item>
     </argument>
+    <settings>
+        <buttons>
+            <button name="save_and_continue" class="Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveButton"/>
+            <button name="back" class="Magento\Theme\Block\Adminhtml\Design\Config\Edit\BackButton"/>
+        </buttons>
+        <namespace>design_config_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>design_config_form.design_config_form_data_source</dep>
+        </deps>
+    </settings>
     <dataSource name="design_config_form_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Theme\Model\Design\Config\DataProvider</argument>
-            <argument name="name" xsi:type="string">design_config_form_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">scope</argument>
-            <argument name="requestFieldName" xsi:type="string">scope</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="submit_url" xsi:type="url" path="theme/design_config/save"/>
-                    <item name="clientConfig" xsi:type="array">
-                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
-                    </item>
-                </item>
-            </argument>
-        </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
+        <settings>
+            <submitUrl path="theme/design_config/save"/>
+        </settings>
+        <dataProvider class="Magento\Theme\Model\Design\Config\DataProvider" name="design_config_form_data_source">
+            <settings>
+                <clientConfig>
+                    <param name="validateBeforeSave" xsi:type="boolean">false</param>
+                </clientConfig>
+                <requestFieldName>scope</requestFieldName>
+                <primaryFieldName>scope</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
-    <fieldset name="other_settings">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Other Settings</item>
-                <item name="sortOrder" xsi:type="number">30</item>
-            </item>
-        </argument>
+    <fieldset name="other_settings" sortOrder="30">
+        <settings>
+            <label translate="true">Other Settings</label>
+        </settings>
         <fieldset name="head">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">HTML Head</item>
-                    <item name="collapsible" xsi:type="boolean">true</item>
-                    <item name="level" xsi:type="number">1</item>
-                </item>
-            </argument>
-            <field name="head_shortcut_icon">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Favicon Icon</item>
-                        <item name="formElement" xsi:type="string">fileUploader</item>
-                        <item name="componentType" xsi:type="string">fileUploader</item>
-                        <item name="notice" xsi:type="string" translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng, svg. Not all browsers support all these formats!</item>
-                        <item name="maxFileSize" xsi:type="number">2097152</item>
-                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg ico apng</item>
-                        <item name="uploaderConfig" xsi:type="array">
-                            <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
-                        </item>
-                    </item>
-                </argument>
+            <settings>
+                <level>1</level>
+                <collapsible>true</collapsible>
+                <label translate="true">HTML Head</label>
+            </settings>
+            <field name="head_shortcut_icon" formElement="fileUploader">
+                <settings>
+                    <notice translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!</notice>
+                    <label translate="true">Favicon Icon</label>
+                    <componentType>fileUploader</componentType>
+                </settings>
+                <formElements>
+                    <fileUploader>
+                        <settings>
+                            <allowedExtensions>jpg jpeg gif png ico apng</allowedExtensions>
+                            <maxFileSize>2097152</maxFileSize>
+                            <uploaderConfig>
+                                <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
+                            </uploaderConfig>
+                        </settings>
+                    </fileUploader>
+                </formElements>
             </field>
-            <field name="head_default_title">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Default Page Title</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="dataScope" xsi:type="string">head_default_title</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="head_default_title" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Default Page Title</label>
+                    <dataScope>head_default_title</dataScope>
+                </settings>
             </field>
-            <field name="head_title_prefix">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Page Title Prefix</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="dataScope" xsi:type="string">head_title_prefix</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="head_title_prefix" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Page Title Prefix</label>
+                    <dataScope>head_title_prefix</dataScope>
+                </settings>
             </field>
-            <field name="head_title_suffix">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Page Title Suffix</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="dataScope" xsi:type="string">head_title_suffix</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="head_title_suffix" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Page Title Suffix</label>
+                    <dataScope>head_title_suffix</dataScope>
+                </settings>
             </field>
-            <field name="head_default_description">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Default Meta Description</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">textarea</item>
-                        <item name="dataScope" xsi:type="string">head_default_description</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="head_default_description" formElement="textarea">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Default Meta Description</label>
+                    <dataScope>head_default_description</dataScope>
+                </settings>
             </field>
-            <field name="head_default_keywords">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Default Meta Keywords</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">textarea</item>
-                        <item name="dataScope" xsi:type="string">head_default_keywords</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="head_default_keywords" formElement="textarea">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Default Meta Keywords</label>
+                    <dataScope>head_default_keywords</dataScope>
+                </settings>
             </field>
-            <field name="head_includes">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Scripts and Style Sheets</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">textarea</item>
-                        <item name="dataScope" xsi:type="string">head_includes</item>
-                        <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
-                    </item>
-                </argument>
+            <field name="head_includes" formElement="textarea">
+                <settings>
+                    <notice translate="true">This will be included before head closing tag in page HTML.</notice>
+                    <dataType>text</dataType>
+                    <label translate="true">Scripts and Style Sheets</label>
+                    <dataScope>head_includes</dataScope>
+                </settings>
             </field>
-            <field name="head_demonotice">
-                <argument name="data" xsi:type="array">
-                    <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Display Demo Store Notice</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">select</item>
-                        <item name="dataScope" xsi:type="string">head_demonotice</item>
-                    </item>
-                </argument>
+            <field name="head_demonotice" formElement="select">
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Display Demo Store Notice</label>
+                    <dataScope>head_demonotice</dataScope>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                        </settings>
+                    </select>
+                </formElements>
             </field>
         </fieldset>
         <fieldset name="header">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Header</item>
-                    <item name="collapsible" xsi:type="boolean">true</item>
-                    <item name="level" xsi:type="number">1</item>
-                </item>
-            </argument>
-            <field name="header_logo_src">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Image</item>
-                        <item name="formElement" xsi:type="string">fileUploader</item>
-                        <item name="componentType" xsi:type="string">fileUploader</item>
-                        <item name="notice" xsi:type="string" translate="true">Allowed file types: png, gif, jpg, jpeg, svg.</item>
-                        <item name="maxFileSize" xsi:type="number">2097152</item>
-                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
-                        <item name="uploaderConfig" xsi:type="array">
-                            <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
-                        </item>
-                    </item>
-                </argument>
+            <settings>
+                <level>1</level>
+                <collapsible>true</collapsible>
+                <label translate="true">Header</label>
+            </settings>
+            <field name="header_logo_src" formElement="fileUploader">
+                <settings>
+                    <notice translate="true">Allowed file types: png, gif, jpg, jpeg.</notice>
+                    <label translate="true">Logo Image</label>
+                    <componentType>fileUploader</componentType>
+                </settings>
+                <formElements>
+                    <fileUploader>
+                        <settings>
+                            <allowedExtensions>jpg jpeg gif png</allowedExtensions>
+                            <maxFileSize>2097152</maxFileSize>
+                            <uploaderConfig>
+                                <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
+                            </uploaderConfig>
+                        </settings>
+                    </fileUploader>
+                </formElements>
             </field>
-            <field name="header_logo_width">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Attribute Width</item>
-                        <item name="dataType" xsi:type="string">number</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="dataScope" xsi:type="string">header_logo_width</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-digits" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="header_logo_width" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-digits" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>number</dataType>
+                    <label translate="true">Logo Attribute Width</label>
+                    <dataScope>header_logo_width</dataScope>
+                </settings>
             </field>
-            <field name="header_logo_height">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Attribute Height</item>
-                        <item name="dataType" xsi:type="string">number</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="dataScope" xsi:type="string">header_logo_height</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-digits" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="header_logo_height" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-digits" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>number</dataType>
+                    <label translate="true">Logo Attribute Height</label>
+                    <dataScope>header_logo_height</dataScope>
+                </settings>
             </field>
-            <field name="header_welcome">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Welcome Text</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="dataScope" xsi:type="string">header_welcome</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="header_welcome" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Welcome Text</label>
+                    <dataScope>header_welcome</dataScope>
+                </settings>
             </field>
-            <field name="header_logo_alt">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Image Alt</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="dataScope" xsi:type="string">header_logo_alt</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="header_logo_alt" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Logo Image Alt</label>
+                    <dataScope>header_logo_alt</dataScope>
+                </settings>
             </field>
         </fieldset>
         <fieldset name="footer">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Footer</item>
-                    <item name="collapsible" xsi:type="boolean">true</item>
-                    <item name="level" xsi:type="number">1</item>
-                </item>
-            </argument>
-            <field name="footer_absolute_footer">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Miscellaneous HTML</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">textarea</item>
-                        <item name="dataScope" xsi:type="string">footer_absolute_footer</item>
-                        <item name="notice" xsi:type="string" translate="true">This will be displayed just before the body closing tag.</item>
-                    </item>
-                </argument>
+            <settings>
+                <level>1</level>
+                <collapsible>true</collapsible>
+                <label translate="true">Footer</label>
+            </settings>
+            <field name="footer_absolute_footer" formElement="textarea">
+                <settings>
+                    <notice translate="true">This will be displayed just before the body closing tag.</notice>
+                    <dataType>text</dataType>
+                    <label translate="true">Miscellaneous HTML</label>
+                    <dataScope>footer_absolute_footer</dataScope>
+                </settings>
             </field>
-            <field name="footer_copyright">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Copyright</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">textarea</item>
-                        <item name="dataScope" xsi:type="string">footer_copyright</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
+            <field name="footer_copyright" formElement="textarea">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Copyright</label>
+                    <dataScope>footer_copyright</dataScope>
+                </settings>
             </field>
         </fieldset>
-        <fieldset name="search_engine_robots">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Search Engine Robots</item>
-                    <item name="sortOrder" xsi:type="string">120</item>
-                    <item name="collapsible" xsi:type="boolean">true</item>
-                    <item name="level" xsi:type="number">1</item>
-                </item>
-            </argument>
-            <field name="default_robots">
-                <argument name="data" xsi:type="array">
-                    <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Design\Robots</item>
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Default Robots</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">select</item>
-                        <item name="dataScope" xsi:type="string">default_robots</item>
-                        <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
-                    </item>
-                </argument>
+        <fieldset name="search_engine_robots" sortOrder="120">
+            <settings>
+                <level>1</level>
+                <collapsible>true</collapsible>
+                <label>Search Engine Robots</label>
+            </settings>
+            <field name="default_robots" formElement="select">
+                <settings>
+                    <notice translate="true">This will be included before head closing tag in page HTML.</notice>
+                    <dataType>text</dataType>
+                    <label translate="true">Default Robots</label>
+                    <dataScope>default_robots</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Design\Robots"/>
+                        </settings>
+                    </select>
+                </formElements>
             </field>
-            <field name="custom_instructions">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Edit custom instruction of robots.txt File</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">textarea</item>
-                        <item name="dataScope" xsi:type="string">custom_instructions</item>
-                    </item>
-                </argument>
+            <field name="custom_instructions" formElement="textarea">
+                <settings>
+                    <dataType>text</dataType>
+                    <label translate="true">Edit custom instruction of robots.txt File</label>
+                    <dataScope>custom_instructions</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
+                </settings>
             </field>
-            <field name="reset_to_defaults" class="Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="title" xsi:type="string">Reset To Defaults</item>
-                        <item name="formElement" xsi:type="string">button</item>
-                        <item name="dataScope" xsi:type="string">reset_to_defaults</item>
-                        <item name="component" xsi:type="string">Magento_Theme/js/form/component/robots-reset-button</item>
-                        <item name="template" xsi:type="string">Magento_Theme/form/button-field</item>
-                        <item name="notice" xsi:type="string" translate="true">This action will delete your custom instructions and reset robots.txt file to system's default settings.</item>
-                    </item>
-                </argument>
+            <field name="reset_to_defaults" class="Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton" component="Magento_Theme/js/form/component/robots-reset-button" template="Magento_Theme/form/button-field" formElement="button">
+                <settings>
+                    <notice translate="true">This action will delete your custom instructions and reset robots.txt file to system's default settings.</notice>
+                    <dataScope>reset_to_defaults</dataScope>
+                    <scopeLabel>[WEBSITE]</scopeLabel>
+                </settings>
+                <formElements>
+                    <button>
+                        <settings>
+                            <title translate="true">Reset To Defaults</title>
+                        </settings>
+                    </button>
+                </formElements>
             </field>
         </fieldset>
     </fieldset>

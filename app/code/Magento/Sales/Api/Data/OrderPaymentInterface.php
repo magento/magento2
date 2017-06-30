@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -110,7 +110,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Credit card expiration month.
      */
     const CC_EXP_MONTH = 'cc_exp_month';
-    
+
     /**
      * Credit card SS start year.
      *
@@ -157,7 +157,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Credit card debug response serialized.
      */
     const CC_DEBUG_RESPONSE_SERIALIZED = 'cc_debug_response_serialized';
-    
+
     /**
      * Credit card SS start month.
      *
@@ -212,7 +212,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Credit card debug response body.
      */
     const CC_DEBUG_RESPONSE_BODY = 'cc_debug_response_body';
-    
+
     /**
      * Credit card SS issue.
      *

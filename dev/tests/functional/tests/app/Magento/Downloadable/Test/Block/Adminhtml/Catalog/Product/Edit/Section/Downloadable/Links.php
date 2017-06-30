@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable;
@@ -79,7 +79,7 @@ class Links extends Form
             }
 
             if (isset($link['sort_order'])) {
-                $currentSortOrder = (int)$link['sort_order'];
+                $currentSortOrder = (int)$link['sort_order'] - 1;
                 unset($link['sort_order']);
             } else {
                 $currentSortOrder = 0;
@@ -109,7 +109,7 @@ class Links extends Form
             unset($link['sort_order']);
             $processedLink = $this->getRowBlock($index, $element)
                 ->getDataLinkRow($link);
-            $processedLink['sort_order'] = $index;
+            $processedLink['sort_order'] = $index + 1;
             $newFields['downloadable']['link'][$index] = $processedLink;
         }
         return $newFields;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper\Dashboard;
@@ -9,6 +9,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Adminhtml dashboard helper for orders
+ *
+ * @api
  */
 class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
 {

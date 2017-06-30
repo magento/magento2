@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Test\Unit;
@@ -299,6 +299,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
+        $defaultBatchSize = 1000;
+
         $this->stateMock->expects($this->any())
             ->method('getViewId')
             ->will($this->returnValue(1));
@@ -331,7 +333,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $currentVersionId
+            $lastVersionId + $defaultBatchSize
         )->will(
             $this->returnValue($listId)
         );
@@ -361,6 +363,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
+        $defaultBatchSize = 1000;
+
         $this->stateMock->expects($this->any())
             ->method('getViewId')
             ->will($this->returnValue(1));
@@ -392,7 +396,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             'getList'
         )->with(
             $lastVersionId,
-            $currentVersionId
+            $lastVersionId + $defaultBatchSize
         )->will(
             $this->returnValue($listId)
         );

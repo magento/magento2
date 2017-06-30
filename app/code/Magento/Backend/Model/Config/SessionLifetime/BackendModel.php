@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Config\SessionLifetime;
@@ -10,6 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Backend model for the admin/security/session_lifetime configuration field. Validates session lifetime.
+ * @api
  */
 class BackendModel extends Value
 {

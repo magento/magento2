@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,7 +56,7 @@ if ($product->isSaleable()) {
         $data = ['addToCart' => [
             'origin'=> 'msrp',
             'popupId' => '#' . $popupId,
-            'productName' => $product->getName(),
+            'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
             'productId' => $productId,
             'productIdInput' => 'input[type="hidden"][name="product"]',
             'realPrice' => $block->getRealPriceHtml(),
@@ -80,7 +80,7 @@ if ($product->isSaleable()) {
     <a href="javascript:void(0);"
        id="<?php /* @escapeNotVerified */ echo($popupId);?>"
        class="action map-show-info"
-       data-mage-init='<?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)?>'><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
+       data-mage-init='<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($data)?>'><?php /* @escapeNotVerified */ echo __('Click for price'); ?>
     </a>
 <?php else: ?>
     <span class="msrp-message">
@@ -95,7 +95,7 @@ if ($product->isSaleable()) {
        class="action map-show-info"
        data-mage-init='{"addToCart":{"origin": "info",
                                      "helpLinkId": "#<?php /* @escapeNotVerified */ echo $helpLinkId;?>",
-                                     "productName": "<?php /* @escapeNotVerified */ echo $product->getName() ?>",
+                                     "productName": "<?php echo $block->escapeJs($block->escapeHtml($product->getName())) ?>",
                                      "closeButtonId": "#map-popup-close"}}'><span><?php /* @escapeNotVerified */ echo __("What's this?"); ?></span>
     </a>
 <?php endif; ?>

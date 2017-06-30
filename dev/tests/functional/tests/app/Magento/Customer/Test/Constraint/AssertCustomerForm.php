@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,13 +26,14 @@ class AssertCustomerForm extends AbstractConstraint
      *
      * @var array
      */
-    protected $customerSkippedFields = [
+    private $customerSkippedFields = [
         'id',
         'password',
         'password_confirmation',
         'current_password',
         'is_subscribed',
-        'address'
+        'address',
+        'group_id'
     ];
 
     /**
@@ -71,6 +72,7 @@ class AssertCustomerForm extends AbstractConstraint
             'Customer data on edit page(backend) not equals to passed from fixture.'
             . "\nFailed values: " . implode(', ', $dataDiff)
         );
+        $this->assertCustomerGroupName($customer, $dataForm);
     }
 
     /**
@@ -80,7 +82,7 @@ class AssertCustomerForm extends AbstractConstraint
      * @param array $dataForm
      * @return array
      */
-    protected function verify(array $dataFixture, array $dataForm)
+    private function verify(array $dataFixture, array $dataForm)
     {
         $result = [];
 
@@ -108,6 +110,33 @@ class AssertCustomerForm extends AbstractConstraint
         }
 
         return $result;
+    }
+
+    /**
+     * Check is Customer Group name correct.
+     *
+     * @param Customer $customer
+     * @param array $formData
+     * @return void
+     */
+    private function assertCustomerGroupName(Customer $customer, array $formData)
+    {
+        $customerGroupName = $customer->getGroupId();
+
+        if ($customerGroupName) {
+            \PHPUnit_Framework_Assert::assertNotEmpty(
+                $formData['customer']['group_id'],
+                'Customer Group value is empty.'
+            );
+
+            if (!empty($formData['customer']['group_id'])) {
+                \PHPUnit_Framework_Assert::assertContains(
+                    $customerGroupName,
+                    $formData['customer']['group_id'],
+                    'Customer Group name is incorrect.'
+                );
+            }
+        }
     }
 
     /**

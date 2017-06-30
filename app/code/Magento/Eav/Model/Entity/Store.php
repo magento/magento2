@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
 
 /**
+ * @api
  * @method \Magento\Eav\Model\ResourceModel\Entity\Store _getResource()
  * @method \Magento\Eav\Model\ResourceModel\Entity\Store getResource()
  * @method int getEntityTypeId()
@@ -16,8 +17,6 @@ namespace Magento\Eav\Model\Entity;
  * @method \Magento\Eav\Model\Entity\Store setIncrementPrefix(string $value)
  * @method string getIncrementLastId()
  * @method \Magento\Eav\Model\Entity\Store setIncrementLastId(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Store extends \Magento\Framework\Model\AbstractModel
 {

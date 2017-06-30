@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Test\Block\Adminhtml\Export\Edit;
 
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Block\Form as AbstractForm;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class Form
- * Export form
+ * Export form.
  */
 class Form extends AbstractForm
 {

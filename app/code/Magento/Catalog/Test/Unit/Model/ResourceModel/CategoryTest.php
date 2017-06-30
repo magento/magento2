@@ -1,25 +1,25 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
-use Magento\Catalog\Model\ResourceModel\Category;
-use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Eav\Model\Entity\Context;
 use Magento\Catalog\Model\Factory;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Context;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -121,7 +121,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
 
         $this->category = new Category(
