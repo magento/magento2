@@ -10,6 +10,7 @@ use Magento\Framework\Exception\NotFoundException;
 
 /**
  * @deprecated Due of not use.
+ * @see \Magento\Config\Model\Config\Structure\Element\Section::isAllowed()
  */
 class ConfigSectionChecker
 {
