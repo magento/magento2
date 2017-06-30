@@ -61,6 +61,18 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
+    public function testMatchOrderedQuery()
+    {
+        $this->markTestSkipped(
+            'Elasticsearch not expected to order results by default. Test is skipped intentionally.'
+        );
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     */
     public function testAggregationsQuery()
     {
         $this->markTestSkipped('Range query is not supported. Test is skipped intentionally.');
