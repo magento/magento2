@@ -9,8 +9,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor\Custo
 use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
- * Class RateCode
- * @package Magento\Tax\Model\Api\SearchCriteria\JoinProcessor
+ * Provides additional SQL JOIN to ensure search of required
+ * tax rule by tax rate code in Tax Rules grid.
  */
 class RateCode implements CustomJoinInterface
 {

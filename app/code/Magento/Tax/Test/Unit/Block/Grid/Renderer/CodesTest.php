@@ -9,6 +9,11 @@ use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Block\Grid\Renderer\Codes;
 
+/**
+ * Test for Tax Rates codes column of Tax Rules grid.
+ *
+ * Class CodesTest
+ */
 class CodesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,7 +32,7 @@ class CodesTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $ratesCodes
      * @param string $expected
-     * @covers Magento\Tax\Block\Grid\Renderer\Codes::render
+     * @see Magento\Tax\Block\Grid\Renderer\Codes::render
      * @dataProvider ratesCodesDataProvider
      */
     public function testRenderCodes($ratesCodes, $expected)

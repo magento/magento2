@@ -17,6 +17,8 @@ use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\Tax\Model\Rate\Provider as RatesProvider;
 
 /**
+ * Tests for Tax Rules controllers.
+ *
  * @magentoAppArea adminhtml
  */
 class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
@@ -58,6 +60,11 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     private $dataObjectHelper;
 
     /**
+     * @var RatesProvider
+     */
+    private $taxRatesProvider;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -70,6 +77,7 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->taxRateFixtureFactory = new TaxRuleFixtureFactory();
         $this->countryFactory = $this->_objectManager->create(CountryFactory::class);
         $this->regionFactory = $this->_objectManager->create(RegionFactory::class);
+        $this->taxRatesProvider = $this->_objectManager->create(RatesProvider::class);
 
         $this->_generateTaxRates();
     }
@@ -104,7 +112,7 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     private function _generateTaxRates()
     {
-        $ratesCount = RatesProvider::PAGE_SIZE + 1;
+        $ratesCount = $this->taxRatesProvider->getPageSize() + 1;
         for ($i = 0; $i <= $ratesCount; $i++) {
             $taxData = [
                 'tax_country_id' => 'US',
@@ -132,8 +140,10 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function ajaxActionDataProvider()
     {
+        $taxRatesProvider = Bootstrap::getObjectManager()->create(RatesProvider::class);
+
         return [
-            [['p' => 1], RatesProvider::PAGE_SIZE],
+            [['p' => 1], $taxRatesProvider->getPageSize()],
             [['p' => 1, 's' => 'no_such_code'], 0]
         ];
     }

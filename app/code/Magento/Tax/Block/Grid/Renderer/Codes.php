@@ -5,6 +5,9 @@
  */
 namespace Magento\Tax\Block\Grid\Renderer;
 
+/**
+ * Provides tax rates codes for each tax rule in the grid.
+  */
 class Codes extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -16,6 +19,7 @@ class Codes extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     public function render(\Magento\Framework\DataObject $row)
     {
         $ratesCodes = $row->getTaxRatesCodes();
+
         return is_array($ratesCodes) ? implode(', ', $ratesCodes) : '';
     }
 }

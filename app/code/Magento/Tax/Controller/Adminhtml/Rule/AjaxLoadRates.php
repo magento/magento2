@@ -13,18 +13,20 @@ use Magento\Tax\Model\Rate\Provider as RatesProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Tax\Model\Calculation\Rate;
 
+/**
+ * Class AjaxLoadRates is intended to load existing
+ * Tax rates as options for a select element.
+ */
 class AjaxLoadRates extends Action
 {
-    const PAGE_PARAM_NAME = 'p';
-    const FILTER_PARAM_NAME = 's';
-    const SEARCH_CONDITION_TYPE = 'like';
-
     /**
      * @var RatesProvider
      */
     private $ratesProvider;
 
-    /** @var SearchCriteriaBuilder */
+    /**
+     * @var SearchCriteriaBuilder
+     */
     private $searchCriteriaBuilder;
 
     /**
@@ -49,20 +51,20 @@ class AjaxLoadRates extends Action
      */
     public function execute()
     {
-        $ratesPage = (int) $this->getRequest()->getParam(self::PAGE_PARAM_NAME);
-        $ratesFilter = trim($this->getRequest()->getParam(self::FILTER_PARAM_NAME));
+        $ratesPage = (int) $this->getRequest()->getParam('p');
+        $ratesFilter = trim($this->getRequest()->getParam('s'));
 
         try {
             if (!empty($ratesFilter)) {
                 $this->searchCriteriaBuilder->addFilter(
                     Rate::KEY_CODE,
                     '%'.$ratesFilter.'%',
-                    self::SEARCH_CONDITION_TYPE
+                    'like'
                 );
             }
 
             $searchCriteria = $this->searchCriteriaBuilder
-                ->setPageSize(RatesProvider::PAGE_SIZE)
+                ->setPageSize($this->ratesProvider->getPageSize())
                 ->setCurrentPage($ratesPage)
                 ->create();
 
@@ -71,7 +73,7 @@ class AjaxLoadRates extends Action
             $response = [
                 'success' => true,
                 'errorMessage' => '',
-                'result'=>$options,
+                'result'=> $options,
             ];
         } catch (\Exception $e) {
             $response = [

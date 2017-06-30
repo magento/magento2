@@ -58,22 +58,18 @@ class AjaxLoadRatesTest extends \PHPUnit_Framework_TestCase
 
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPageSize', 'setCurrentPage', 'create'])
             ->getMock();
 
         $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
             ->getMock();
 
         $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
             ->getMock();
 
         $this->ratesProvider = $this->getMockBuilder(RatesProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toOptionArray'])
             ->getMock();
     }
 

@@ -18,6 +18,11 @@ use Magento\Tax\Model\TaxClass\Source\Customer;
 use Magento\Tax\Model\TaxClass\Source\Product;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Test for Tax Rule Edit Form
+ *
+ * Class FormTest
+ */
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -126,7 +131,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /**
      * Check tax lazy loading URL.
      *
-     * @covers \Magento\Tax\Block\Adminhtml\Rule\Edit\Form::getTaxRatesPageUrl
+     * @see \Magento\Tax\Block\Adminhtml\Rule\Edit\Form::getTaxRatesPageUrl
      */
     public function testTaxRatesPageUrl()
     {
@@ -143,7 +148,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $formValue
      * @param array $expected
-     * @covers \Magento\Tax\Block\Adminhtml\Rule\Edit\Form::getTaxRatesSelectConfig
+     * @see \Magento\Tax\Block\Adminhtml\Rule\Edit\Form::getTaxRatesSelectConfig
      * @dataProvider formValuesDataProvider
      */
     public function testTaxRatesSelectConfig($formValue, $expected)

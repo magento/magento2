@@ -61,7 +61,7 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
     {
         if (!$this->options) {
             $searchCriteria = $this->searchCriteriaBuilder
-                ->setPageSize(RateProvider::PAGE_SIZE)
+                ->setPageSize($this->rateProvider->getPageSize())
                 ->setCurrentPage(1)
                 ->create();
 
