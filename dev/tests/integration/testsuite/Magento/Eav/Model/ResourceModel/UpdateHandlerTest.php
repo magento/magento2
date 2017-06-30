@@ -205,12 +205,12 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
         return [
             ['description', '', 'not_empty_value', 'not_empty_value'],                  //0
             ['description', '', '', null],                                              //1
-            ['description', '', null, 'Description with <b>html tag</b>'],              //2
+            ['description', '', null, null],                                            //2
             ['description', '', false, 'Description with <b>html tag</b>'],             //3
 
             ['description', 'not_empty_value', 'not_empty_value2', 'not_empty_value2'], //4
             ['description', 'not_empty_value', '', null],                               //5
-            ['description', 'not_empty_value', null, 'Description with <b>html tag</b>'], //6
+            ['description', 'not_empty_value', null, null], //6
             ['description', 'not_empty_value', false, 'Description with <b>html tag</b>'], //7
 
             ['description', null, 'not_empty_value', 'not_empty_value'],                 //8
@@ -219,7 +219,7 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
 
             ['description', false, 'not_empty_value', 'not_empty_value'],                //11
             ['description', false, '', null],                                            //12
-            ['description', false, null, 'Description with <b>html tag</b>'],            //13
+            ['description', false, null, null],                                          //13
         ];
     }
 
@@ -231,12 +231,12 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
         return [
             ['dropdown_attribute', 0, '', 1, 1],        //0
             ['dropdown_attribute', 0, '', '', null],    //1
-            ['dropdown_attribute', 0, '', null, 0],     //2
+            ['dropdown_attribute', 0, '', null, null],     //2
             ['dropdown_attribute', 0, '', false, 0],    //3
 
             ['dropdown_attribute', 0, 1, 2, 2],         //4
             ['dropdown_attribute', 0, 1, '', null],     //5
-            ['dropdown_attribute', 0, 1, null, 0],      //6
+            ['dropdown_attribute', 0, 1, null, null],      //6
             ['dropdown_attribute', 0, 1, false, 0],     //7
 
             ['dropdown_attribute', 0, null, 1, 1],      //8
@@ -245,11 +245,11 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
 
             ['dropdown_attribute', 0, false, 1, 1],     //11
             ['dropdown_attribute', 0, false, '', null], //12
-            ['dropdown_attribute', 0, false, null, 0],  //13
+            ['dropdown_attribute', 0, false, null, null],  //13
 
             ['dropdown_attribute', 0, '-', 1, 1],       //14
             ['dropdown_attribute', 0, '-', '', null],   //15
-            ['dropdown_attribute', 0, '-', null, 0],    //16
+            ['dropdown_attribute', 0, '-', null, null],    //16
             ['dropdown_attribute', 0, '-', false, 0],   //17
         ];
     }

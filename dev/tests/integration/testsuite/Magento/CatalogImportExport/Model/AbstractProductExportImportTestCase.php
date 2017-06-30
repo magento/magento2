@@ -155,7 +155,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
 
             $this->assertEquals(
                 $value,
-                $actual[$key],
+                isset($actual[$key]) ? $actual[$key] : null,
                 'Assert value at key - ' . $key . ' failed'
             );
         }
