@@ -39,9 +39,9 @@ define([
             // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
                 storeViewUpdated = storeViewEdit && (isNewStoreView || storeData.group_id !== groupId),
                 storeUpdated = storeEdit && storeId &&
-                    (storeData.root_category_id !== rootCategoryId ||
-                    storeData.default_store_id !== defaultStoreView),
-                websiteUpdated = websiteEdit && storeData.default_group_id !== defaultStore;
+                    (rootCategoryId !== null  && storeData.root_category_id !== rootCategoryId ||
+                    defaultStoreView !== null && storeData.default_store_id !== defaultStoreView),
+                websiteUpdated = websiteEdit && defaultStore !== null && storeData.default_group_id !== defaultStore;
             // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
             return storeViewUpdated || storeUpdated || websiteUpdated;
         }
