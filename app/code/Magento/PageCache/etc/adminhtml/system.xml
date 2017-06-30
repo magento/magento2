@@ -49,6 +49,14 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
+                    <field id="normalize_params" type="textarea" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Normalize Parameters</label>
+                        <comment>Comma separated list of query string parameters that Varnish should cleanse from the request URL.</comment>
+                        <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
                     <field id="export_button_version4" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Export Configuration</label>
                         <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>

@@ -17,3 +17,5 @@
 "Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. ","Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. "
 "Page Cache","Page Cache"
 "Full page caching","Full page caching"
+"Normalize Parameters","Normalize Parameters"
+"Comma separated list of query string parameters that Varnish should cleanse from the request URL.","Comma separated list of query string parameters that Varnish should cleanse from the request URL."

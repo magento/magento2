@@ -91,11 +91,12 @@ sub vcl_recv {
         }
     }
 
-    # Remove Google gclid parameters to minimize the cache objects
-    set req.url = regsuball(req.url,"\?gclid=[^&]+$",""); # strips when QS = "?gclid=AAA"
-    set req.url = regsuball(req.url,"\?gclid=[^&]+&","?"); # strips when QS = "?gclid=AAA&foo=bar"
-    set req.url = regsuball(req.url,"&gclid=[^&]+",""); # strips when QS = "?foo=bar&gclid=AAA" or QS = "?foo=bar&gclid=AAA&bar=baz"
+    # normalize query string parameters that Varnish should not vary cache for
+    set req.url = regsuball(req.url, "((\?)|&)(/* {{ normalize_params }} */)=[^&]*", "\2");
 
+    # second pass to ensure after params have been stripped we're not left with ?!,?,& causing a cache miss
+    set req.url = regsub(req.url, "(\?&|\?|&)$", "");
+    
     # Static files caching
     if (req.url ~ "^/(pub/)?(media|static)/.*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|html|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|tiff|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)$") {
         # Static files should not be cached by default

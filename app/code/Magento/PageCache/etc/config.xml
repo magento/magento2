@@ -28,6 +28,7 @@
                     <backend_port>8080</backend_port>
                     <ttl>86400</ttl>
                     <grace_period>300</grace_period>
+                    <normalize_params>gclid,gclsrc,utm_content,utm_term,utm_campaign,utm_medium,utm_source,_ga</normalize_params>
                 </default>
             </full_page_cache>
         </system>

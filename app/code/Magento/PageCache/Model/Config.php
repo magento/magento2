@@ -43,6 +43,8 @@ class Config
 
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
+    const XML_VARNISH_PAGECACHE_NORMALIZE_PARAMS = 'system/full_page_cache/varnish/normalize_params';
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -183,7 +185,8 @@ class Config
                 '-',
                 $this->_scopeConfig->getValue(\Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER)
             ),
-            '/* {{ grace_period }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
+            '/* {{ grace_period }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD),
+            '/* {{ normalize_params }} */' => $this->_getNormaliseParams()
         ];
     }
 
@@ -248,6 +251,30 @@ class Config
         }
         return $result;
     }
+
+   /**
+   * Get a pipe separated list of query string parameters that Varnish should strip off incoming requests
+   * when determining a match for the page. This can be used to strip tracking parameters off urls
+   * e.g. gclid, gtm_source, gtm_medium etc.
+   *
+   * @return string|null
+   */
+  protected function _getNormaliseParams()
+  {
+      $normaliseParams = $this->_scopeConfig->getValue(
+          self::XML_VARNISH_PAGECACHE_NORMALIZE_PARAMS,
+          \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+      );
+
+      if (empty($normaliseParams)) {
+          return $normaliseParams;
+      }
+
+      # strip carriage returns and trailing comma if present and swap out for pipes.
+      $normaliseParams = preg_replace("/(\r|\n)*|\|$/","",str_replace(",","|",$normaliseParams));
+
+      return $normaliseParams;
+  }
 
     /**
      * Whether a cache type is enabled in Cache Management Grid
