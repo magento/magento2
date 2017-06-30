@@ -36,13 +36,11 @@ define([
                 defaultStore = $('[name="website[default_group_id]"]').val(),
 
             /* conditions */
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-                storeViewUpdated = storeViewEdit && (isNewStoreView || storeData.group_id !== groupId),
+                storeViewUpdated = storeViewEdit && (isNewStoreView || storeData['group_id'] !== groupId),
                 storeUpdated = storeEdit && storeId &&
-                    (rootCategoryId !== null  && storeData.root_category_id !== rootCategoryId ||
-                    defaultStoreView !== null && storeData.default_store_id !== defaultStoreView),
-                websiteUpdated = websiteEdit && defaultStore !== null && storeData.default_group_id !== defaultStore;
-            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+                    (rootCategoryId !== null  && storeData['root_category_id'] !== rootCategoryId ||
+                    defaultStoreView !== null && storeData['default_store_id'] !== defaultStoreView),
+                websiteUpdated = websiteEdit && defaultStore !== null && storeData['default_group_id'] !== defaultStore;
             return storeViewUpdated || storeUpdated || websiteUpdated;
         }
     });

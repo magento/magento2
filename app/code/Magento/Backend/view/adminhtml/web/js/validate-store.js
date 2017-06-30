@@ -21,10 +21,12 @@ define([
             var form = this.element[0],
                 validator = $.data(form, 'validator');
 
-            validator.settings.submitHandler = this._saveHandler;
-            validator.settings.confirmCallback = this._needConfirm;
-            $.extend(validator.settings, this.options);
-            $.data(form, 'validator', validator);
+            if (validator && validator.settings) {
+                validator.settings.submitHandler = this._saveHandler;
+                validator.settings.confirmCallback = this._needConfirm;
+                $.extend(validator.settings, this.options);
+                $.data(form, 'validator', validator);
+            }
         },
 
         /**
