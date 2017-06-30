@@ -351,7 +351,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * 'section/group/field' => [
      *      'section_id/group_id/field_two_id'
      * ]
-     *```
+     * ```
      *
      * @return array An array of config path to config structure path map
      */

@@ -5,13 +5,13 @@
  */
 namespace Magento\Sniffs\LiteralNamespaces;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Custom phpcs sniff to detect usages of literal class and interface names.
  */
-class LiteralNamespacesSniff implements PHP_CodeSniffer_Sniff
+class LiteralNamespacesSniff implements Sniff
 {
     /**
      * @var string
@@ -37,7 +37,7 @@ class LiteralNamespacesSniff implements PHP_CodeSniffer_Sniff
     /**
      * @inheritdoc
      */
-    public function process(PHP_CodeSniffer_File $sourceFile, $stackPtr)
+    public function process(File $sourceFile, $stackPtr)
     {
         $tokens = $sourceFile->getTokens();
         if ($sourceFile->findPrevious(T_STRING_CONCAT, $stackPtr, $stackPtr - 3) ||
@@ -48,7 +48,11 @@ class LiteralNamespacesSniff implements PHP_CodeSniffer_Sniff
 
         $content = trim($tokens[$stackPtr]['content'], "\"'");
         if (preg_match($this->literalNamespacePattern, $content) === 1 && $this->classExists($content)) {
-            $sourceFile->addError("Use ::class notation instead.", $stackPtr);
+            $sourceFile->addError(
+                "Use ::class notation instead.",
+                $stackPtr,
+                'LiteralClassUsage'
+            );
         }
     }
 

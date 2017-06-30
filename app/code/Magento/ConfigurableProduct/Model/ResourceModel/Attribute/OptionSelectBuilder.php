@@ -17,14 +17,14 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
 {
     /**
      * Configurable Attribute Resource Model.
-     * 
+     *
      * @var Attribute
      */
     private $attributeResource;
 
     /**
      * Option Provider.
-     * 
+     *
      * @var OptionProvider
      */
     private $attributeOptionProvider;
