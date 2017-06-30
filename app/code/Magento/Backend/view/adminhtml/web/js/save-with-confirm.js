@@ -41,6 +41,7 @@ define([
                     (rootCategoryId !== null  && storeData['root_category_id'] !== rootCategoryId ||
                     defaultStoreView !== null && storeData['default_store_id'] !== defaultStoreView),
                 websiteUpdated = websiteEdit && defaultStore !== null && storeData['default_group_id'] !== defaultStore;
+
             return storeViewUpdated || storeUpdated || websiteUpdated;
         }
     });
