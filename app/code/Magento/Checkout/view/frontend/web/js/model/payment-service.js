@@ -21,17 +21,18 @@ define([
          * @param {Array} methods
          */
         setPaymentMethods: function (methods) {
-            var self = this,
-                freeMethod,
+
+            var freeMethod,
                 filteredMethods,
-                methodIsAvailable;
+                methodIsAvailable,
+                methodNames;
 
             freeMethod = _.find(methods, function (method) {
                 return method.method === freeMethodCode;
             });
             this.isFreeAvailable = !!freeMethod;
 
-            if (self.isFreeAvailable && freeMethod && quote.totals()['grand_total'] <= 0) {
+            if (freeMethod && quote.totals().grand_total <= 0) {
                 methods.splice(0, methods.length, freeMethod);
                 selectPaymentMethod(freeMethod);
             }
@@ -48,6 +49,20 @@ define([
                     selectPaymentMethod(null);
                 }
             }
+
+            /**
+             * Overwrite methods with existing methods to preserve ko array references.
+             * This prevent ko from re-rendering those methods.
+             */
+            methodNames = _.pluck(methods, 'method');
+            _.map(methodList(), function (existingMethod) {
+                var existingMethodIndex = methodNames.indexOf(existingMethod.method);
+
+                if (existingMethodIndex !== -1) {
+                    methods[existingMethodIndex] = existingMethod;
+                }
+            });
+
             methodList(methods);
         },
 
@@ -56,20 +71,20 @@ define([
          * @returns {Array}
          */
         getAvailablePaymentMethods: function () {
-            var methods = [],
-                self = this;
+            var allMethods = methodList(),
+                isFreeMethod = function (method) {
+                    return method.method === freeMethodCode;
+                },
+                grandTotalOverZero = quote.totals().grand_total > 0;
 
-            _.each(methodList(), function (method) {
-                if (self.isFreeAvailable && (
-                    quote.totals()['grand_total'] <= 0 && method.method === freeMethodCode ||
-                    quote.totals()['grand_total'] > 0 && method.method !== freeMethodCode
-                    ) || !self.isFreeAvailable
-                ) {
-                    methods.push(method);
-                }
-            });
+            if (!self.isFreeAvailable) {
+                return allMethods;
+            } else if (grandTotalOverZero) {
+                return _.filter(allMethods, _.negate(isFreeMethod));
+            } else {
+                return _.filter(allMethods, isFreeMethod);
+            }
 
-            return methods;
         }
     };
 });
