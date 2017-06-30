@@ -26,7 +26,9 @@ define([
             form.storeValidation();
             expect(form.storeValidation('option', 'storeData')).toBe(null);
 
-            form.storeValidation({'storeData' : 'test1'});
+            form.storeValidation({
+                'storeData': 'test1'
+            });
             expect(form.storeValidation('option', 'storeData')).toBe('test1');
         });
 
