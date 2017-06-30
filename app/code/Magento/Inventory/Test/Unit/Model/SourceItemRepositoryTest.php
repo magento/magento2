@@ -1,17 +1,17 @@
 <?php
 namespace Magento\Inventory\Test\Unit\Model;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterfaceFactory;
-use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
-use Magento\Inventory\Model\SourceItem;
-use Magento\Inventory\Model\ResourceModel\SourceItem as SourceResource;
-use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory as SourceItemCollectionFactory;
-use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceResource;
+use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
+use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory as SourceItemCollectionFactory;
+use Magento\Inventory\Model\SourceItem;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
+use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -187,5 +187,171 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->model->get($sourceItemId);
+    }
+
+    public function testGetListWithSearchCriteria()
+    {
+        $items = [
+            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock()
+        ];
+        $totalCount = 2;
+        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $sourceItemCollection = $this->getMockBuilder(SourceItemCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sourceItemCollection
+            ->expects($this->once())
+            ->method('getItems')
+            ->willReturn($items);
+        $sourceItemCollection
+            ->expects($this->once())
+            ->method('getSize')
+            ->willReturn($totalCount);
+        $this->sourceItemCollectionFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($sourceItemCollection);
+
+        $searchResults = $this->getMockBuilder(SourceItemSearchResultsInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchResults
+            ->expects($this->once())
+            ->method('setItems')
+            ->with($items);
+        $searchResults
+            ->expects($this->once())
+            ->method('setTotalCount')
+            ->with($totalCount);
+        $searchResults
+            ->expects($this->once())
+            ->method('setSearchCriteria')
+            ->with($searchCriteria);
+        $this->sourceItemSearchResultsFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($searchResults);
+
+        $this->collectionProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $sourceItemCollection);
+
+        self::assertSame($searchResults, $this->model->getList($searchCriteria));
+    }
+
+    public function testGetListWithoutSearchCriteria()
+    {
+        $items = [
+            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock()
+        ];
+        $totalCount = 3;
+
+        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchCriteriaBuilder
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($searchCriteria);
+
+        $sourceItemCollection = $this->getMockBuilder(SourceItemCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sourceItemCollection
+            ->expects($this->once())
+            ->method('getItems')
+            ->willReturn($items);
+        $sourceItemCollection
+            ->expects($this->once())
+            ->method('getSize')
+            ->willReturn($totalCount);
+        $this->sourceItemCollectionFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($sourceItemCollection);
+
+        $searchResults = $this->getMockBuilder(SourceItemSearchResultsInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchResults
+            ->expects($this->once())
+            ->method('setItems')
+            ->with($items);
+        $searchResults
+            ->expects($this->once())
+            ->method('setTotalCount')
+            ->with($totalCount);
+        $searchResults
+            ->expects($this->once())
+            ->method('setSearchCriteria')
+            ->with($searchCriteria);
+        $this->sourceItemSearchResultsFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($searchResults);
+
+        $this->collectionProcessor
+            ->expects($this->never())
+            ->method('process');
+
+        self::assertSame($searchResults, $this->model->getList());
+    }
+
+    public function testDelete()
+    {
+        $sourceItemId = 345;
+
+        $this->sourceItem
+            ->expects($this->once())
+            ->method('getSourceItemId')
+            ->willReturn($sourceItemId);
+        $this->sourceItemFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->sourceItem);
+        $this->resourceSource
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->sourceItem, $sourceItemId, SourceItemInterface::SOURCE_ITEM_ID);
+
+        $this->resourceSource
+            ->expects($this->once())
+            ->method('delete')
+            ->with($this->sourceItem);
+
+        $this->model->delete($sourceItemId);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testDeleteErrorExpectsException()
+    {
+        $sourceItemId = 0;
+
+        $this->sourceItem
+            ->expects($this->once())
+            ->method('getSourceItemId')
+            ->willReturn(null);
+        $this->sourceItemFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->sourceItem);
+        $this->resourceSource->expects($this->once())
+            ->method('load')
+            ->with(
+                $this->sourceItem,
+                $sourceItemId,
+                SourceItemInterface::SOURCE_ITEM_ID
+            );
+
+        $this->model->delete($sourceItemId);
     }
 }

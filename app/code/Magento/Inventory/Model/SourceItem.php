@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -8,7 +11,7 @@ use \Magento\InventoryApi\Api\Data\SourceItemInterface;
 class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
 {
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getSku()
     {
@@ -16,8 +19,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @param $sku
-     * @return int
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -25,7 +27,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getSourceId()
     {
@@ -33,7 +35,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getSourceItemId()
     {
@@ -41,7 +43,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @return float
+     * @inheritdoc
      */
     public function getQuantity()
     {
@@ -49,8 +51,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @param $quantity
-     * @return float
+     * @inheritdoc
      */
     public function setQuantity($quantity)
     {
@@ -58,13 +59,16 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getStatus()
     {
         return $this->getData(SourceItemInterface::STATUS);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setStatus($status)
     {
         $this->setData(SourceItemInterface::STATUS, $status);

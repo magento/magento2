@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\InventoryApi\Api;
 
 interface SourceItemRepositoryInterface
@@ -29,16 +32,14 @@ interface SourceItemRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
      */
-    public function getList(
-        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null
-    );
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null);
 
     /**
      * Delete Source Item data by given sourceItemId.
      *
      * @param int $sourceItemId
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException |\Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete($sourceItemId);
 }
