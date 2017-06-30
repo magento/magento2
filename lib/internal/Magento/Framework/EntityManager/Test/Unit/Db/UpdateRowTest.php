@@ -71,6 +71,7 @@ class UpdateRowTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute(array $data, array $columns, array $preparedColumns)
     {
+        $primaryKeyName = 'entity_id';
         $this->metadataPoolMock->expects($this->once())
             ->method('getMetadata')
             ->with('test')
@@ -81,15 +82,16 @@ class UpdateRowTest extends \PHPUnit_Framework_TestCase
         $this->metadataMock->expects($this->once())
             ->method('getEntityConnectionName')
             ->willReturn('test_connection_name');
-        $this->metadataMock->expects($this->exactly(2))
+        $this->metadataMock->expects($this->atLeastOnce())
             ->method('getEntityTable')
             ->willReturn('test_entity_table');
         $this->connectionMock->expects($this->once())
             ->method('update')
             ->with('test_entity_table', $preparedColumns, ['test_link_field' . ' = ?' => $data['test_link_field']]);
-        $this->metadataMock->expects($this->exactly(2))
-            ->method('getLinkField')
-            ->willReturn('test_link_field');
+        $this->connectionMock->expects($this->once())->method('getIndexList')
+            ->willReturn([$primaryKeyName => ['COLUMNS_LIST' => ['test_link_field']]]);
+        $this->connectionMock->expects($this->once())->method('getPrimaryKeyName')
+            ->willReturn($primaryKeyName);
         $this->connectionMock->expects($this->once())
             ->method('describeTable')
             ->willReturn($columns);
