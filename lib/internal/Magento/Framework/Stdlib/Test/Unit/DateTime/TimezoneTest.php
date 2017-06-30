@@ -17,7 +17,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string|null
      */
-    private static $defaultTimeZone;
+    private $defaultTimeZone;
 
     /**
      * @var ObjectManager
@@ -39,22 +39,35 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeConfig;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
+        $this->defaultTimeZone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+
         $this->objectManager = new ObjectManager($this);
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMock();
         $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
     }
 
-    public static function tearDownAfterClass()
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
     {
-        date_default_timezone_set(static::$defaultTimeZone);
+        date_default_timezone_set($this->defaultTimeZone);
     }
 
     /**
      * Test date parsing with different includeTime options
      *
+     * @param string $date
+     * @param string $locale
+     * @param bool $includeTime
+     * @param int $expectedTimestamp
      * @dataProvider dateIncludeTimeDataProvider
      */
     public function testDateIncludeTime($date, $locale, $includeTime, $expectedTimestamp)
@@ -68,6 +81,10 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
     }
 
+    /**
+     * DataProvider for testDateIncludeTime
+     * @return array
+     */
     public function dateIncludeTimeDataProvider()
     {
         return [
@@ -87,6 +104,9 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $date
+     * @param string $configuredTimezone
+     * @param string $expectedResult
      * @dataProvider getConvertConfigTimeToUtcFixtures
      */
     public function testConvertConfigTimeToUtc($date, $configuredTimezone, $expectedResult)
@@ -96,6 +116,10 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->getTimezone()->convertConfigTimeToUtc($date));
     }
 
+    /**
+     * Data provider for testConvertConfigTimeToUtc
+     * @return array
+     */
     public function getConvertConfigTimeToUtcFixtures()
     {
         return [
@@ -118,37 +142,41 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getDateFixtures
+     * Test configuration of the different timezones.
      */
-    public function testDate(callable $expectedResult, $timezone = 'UTC', $date = null)
+    public function testDate()
     {
-        $this->localeResolver
-            ->method('getLocale')
-            ->willReturn('en_GB')
-        ;
+        $dateFixtures = $this->getDateFixtures();
+        foreach ($dateFixtures as $dateFixture) {
+            $expectedResult = $dateFixture[0];
+            $timezone = $dateFixture[1];
+            $date = $dateFixture[2];
 
-        $this->scopeConfigWillReturnConfiguredTimezone($timezone);
+            $this->localeResolver->method('getLocale')->willReturn('en_GB');
+            $this->scopeConfigWillReturnConfiguredTimezone($timezone);
 
-        $this->assertEquals(
-            $expectedResult(),
-            $this->getTimezone()->date($date, null, true),
-            '',
-            1
-        );
+            $this->assertEquals(
+                $expectedResult(),
+                $this->getTimezone()->date($date, null, true),
+                '',
+                1
+            );
+        }
     }
 
-    public function getDateFixtures()
+    /**
+     * DataProvider for testDate
+     * @return array
+     */
+    private function getDateFixtures()
     {
-        static::$defaultTimeZone = date_default_timezone_get();
-
-        date_default_timezone_set('UTC');
-
         return [
             'now_datetime_utc' => [
                 function () {
                     return new \DateTime('now', new \DateTimeZone('UTC'));
                 },
-                'UTC'
+                'UTC',
+                null
             ],
             'fixed_datetime_utc' => [
                 function () {
@@ -161,13 +189,15 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
                 function () {
                     return new \DateTime('now', new \DateTimeZone('America/Vancouver'));
                 },
-                'America/Vancouver'
+                'America/Vancouver',
+                null
             ],
             'now_datetimeimmutable_utc' => [
                 function () {
                     return new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
                 },
-                'UTC'
+                'UTC',
+                null
             ],
             'fixed_datetimeimmutable_utc' => [
                 function () {
@@ -180,11 +210,15 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
                 function () {
                     return new \DateTimeImmutable('now', new \DateTimeZone('America/Vancouver'));
                 },
-                'America/Vancouver'
+                'America/Vancouver',
+                null
             ],
         ];
     }
 
+    /**
+     * @return Timezone
+     */
     private function getTimezone()
     {
         return new Timezone(
@@ -197,11 +231,11 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param string $configuredTimezone
+     */
     private function scopeConfigWillReturnConfiguredTimezone($configuredTimezone)
     {
-        $this->scopeConfig
-            ->method('getValue')
-            ->with('', '', null)
-            ->willReturn($configuredTimezone);
+        $this->scopeConfig->method('getValue')->with('', '', null)->willReturn($configuredTimezone);
     }
 }

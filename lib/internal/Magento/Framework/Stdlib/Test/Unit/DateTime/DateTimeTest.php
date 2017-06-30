@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
-use \Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -13,15 +13,19 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  */
 class DateTimeTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
     private $testDate = '2015-04-02 21:03:00';
 
     /**
+     * @param int|string|\DateTimeInterface $input
      * @dataProvider dateTimeInputDataProvider
      */
     public function testGmtTimestamp($input)
     {
         /** @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject $timezone */
-        $timezone = $this->getMock(TimezoneInterface::class);
+        $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 
         $expected = gmdate('U', strtotime($this->testDate));
@@ -29,24 +33,28 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int|string|\DateTimeInterface $input
      * @dataProvider dateTimeInputDataProvider
      */
     public function testTimestamp($input)
     {
         /** @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject $timezone */
-        $timezone = $this->getMock(TimezoneInterface::class);
+        $timezone = $this->getMockBuilder(TimezoneInterface::class)->getMock();
         $timezone->method('date')->willReturn(new \DateTime($this->testDate));
 
         $expected = gmdate('U', strtotime($this->testDate));
         $this->assertEquals($expected, (new DateTime($timezone))->timestamp($input));
     }
 
+    /**
+     * @return array
+     */
     public function dateTimeInputDataProvider()
     {
         return [
             'string' => [$this->testDate],
             'int' => [strtotime($this->testDate)],
-            '\\DateTimeInterface' => [new \DateTimeImmutable($this->testDate)],
+            \DateTimeInterface::class => [new \DateTimeImmutable($this->testDate)],
         ];
     }
 }
