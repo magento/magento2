@@ -1,23 +1,27 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
-use \Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView;
+use Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Store\Model\ResourceModel\Group;
+use Magento\Store\Model\Store;
 
 class StoreViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var Store|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerMock;
+    private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|
+     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
      */
-    protected $pluginMock;
+    protected $indexerMock;
 
     /**
      * @var StoreView
@@ -25,7 +29,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -37,7 +41,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
@@ -45,10 +49,17 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->subject = $this->getMock(\Magento\Store\Model\ResourceModel\Group::class, [], [], '', false);
+        $this->subject = $this->getMock(Group::class, [], [], '', false);
         $this->indexerRegistryMock = $this->getMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get'],
+            [],
+            '',
+            false
+        );
+        $this->storeMock = $this->getMock(
+            Store::class,
+            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
             [],
             '',
             false
@@ -60,94 +71,38 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveNewObject()
     {
         $this->mockIndexerMethods();
-        $storeMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $storeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
-        $proceed = $this->mockPluginProceed();
-        $this->assertFalse($this->model->aroundSave($this->subject, $proceed, $storeMock));
+        $this->storeMock->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->model->beforeSave($this->subject, $this->storeMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
     }
 
     public function testAroundSaveHasChanged()
     {
         $this->mockIndexerMethods();
-        $storeMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $storeMock->expects(
-            $this->once()
-        )->method(
-            'dataHasChangedFor'
-        )->with(
-            'group_id'
-        )->will(
-            $this->returnValue(true)
-        );
-        $proceed = $this->mockPluginProceed();
-        $this->assertFalse($this->model->aroundSave($this->subject, $proceed, $storeMock));
+        $this->storeMock->expects($this->once())
+            ->method('dataHasChangedFor')
+            ->with('group_id')
+            ->willReturn(true);
+        $this->model->beforeSave($this->subject, $this->storeMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
     }
 
     public function testAroundSaveNoNeed()
     {
-        $storeMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $storeMock->expects(
-            $this->once()
-        )->method(
-            'dataHasChangedFor'
-        )->with(
-            'group_id'
-        )->will(
-            $this->returnValue(false)
-        );
-        $proceed = $this->mockPluginProceed();
-        $this->assertFalse($this->model->aroundSave($this->subject, $proceed, $storeMock));
+        $this->storeMock->expects($this->once())
+            ->method('dataHasChangedFor')
+            ->with('group_id')
+            ->willReturn(false);
+        $this->model->beforeSave($this->subject, $this->storeMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\Indexer\State
-     */
-    protected function getStateMock()
-    {
-        $stateMock = $this->getMock(
-            \Magento\Indexer\Model\Indexer\State::class,
-            ['setStatus', 'save', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $stateMock->expects($this->once())->method('setStatus')->with('invalid')->will($this->returnSelf());
-        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
-
-        return $stateMock;
-    }
-
-    protected function mockIndexerMethods()
+    private function mockIndexerMethods()
     {
         $this->indexerMock->expects($this->once())->method('invalidate');
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
-    }
-
-    protected function mockPluginProceed($returnValue = false)
-    {
-        return function () use ($returnValue) {
-            return $returnValue;
-        };
+            ->willReturn($this->indexerMock);
     }
 }

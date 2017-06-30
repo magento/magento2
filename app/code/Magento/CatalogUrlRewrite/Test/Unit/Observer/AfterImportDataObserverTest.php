@@ -1,16 +1,18 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
-use Magento\Store\Model\Store;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
 
 /**
  * Class AfterImportDataObserverTest
@@ -23,12 +25,12 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $categoryId = 10;
+    private $categoryId = 10;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlPersist;
+    private $urlPersist;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -38,12 +40,12 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productUrlRewriteGenerator;
+    private $productUrlRewriteGenerator;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
@@ -53,67 +55,72 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $observer;
+    private $observer;
 
     /**
      * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $event;
+    private $event;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $catalogProductFactory;
+    private $catalogProductFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectRegistryFactory;
+    private $objectRegistryFactory;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productUrlPathGenerator;
+    private $productUrlPathGenerator;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeViewService;
+    private $storeViewService;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlRewriteFactory;
+    private $urlRewriteFactory;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlRewrite;
+    private $urlRewrite;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectRegistry;
-
-    /**
-     * @var \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $importMock;
+    private $objectRegistry;
 
     /**
      * @var \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver
      */
-    protected $import;
+    private $import;
 
     /**
      * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $product;
+    private $product;
+
+    /**
+     * @var \Magento\UrlRewrite\Model\MergeDataProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mergeDataProvider;
+
+    /**
+     * @var CategoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryCollectionFactory;
 
     /**
      * Test products returned by getBunch method of event object.
@@ -247,37 +254,20 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $categoryProcessor = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor::class,
-            [
-                'getCategoryById',
-            ],
+        $mergeDataProviderFactory = $this->getMock(
+            \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
+            ['create'],
             [],
             '',
             false
         );
-        $category = $this->getMock(
-            \Magento\Catalog\Model\Category::class,
-            [
-                'getId',
-            ],
-            [],
-            '',
-            false
-        );
-        $category
-            ->expects($this->any())
-            ->method('getId')
-            ->willReturn($this->categoryId);
-        $categoryProcessor
-            ->expects($this->any())
-            ->method('getCategoryById')
-            ->with($this->categoryId)
-            ->willReturn($category);
-        $this->importProduct
-            ->expects($this->any())
-            ->method('getCategoryProcessor')
-            ->willReturn($categoryProcessor);
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
+
+        $this->categoryCollectionFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->import = $this->objectManager->getObject(
@@ -291,6 +281,8 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
                 'urlPersist' => $this->urlPersist,
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'urlFinder' => $this->urlFinder,
+                'mergeDataProviderFactory' => $mergeDataProviderFactory,
+                'categoryCollectionFactory' => $this->categoryCollectionFactory
             ]
         );
     }
@@ -433,14 +425,15 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('getTargetPath')->willReturn('targetPath');
+        $this->urlRewrite->expects($this->any())->method('getRequestPath')->willReturn('requestPath');
         $this->urlRewrite->expects($this->any())->method('getStoreId')
             ->willReturnOnConsecutiveCalls(0, 'not global');
 
         $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
 
         $productUrls = [
-            'targetPath-0' => $this->urlRewrite,
-            'targetPath-not global' => $this->urlRewrite
+            'requestPath_0' => $this->urlRewrite,
+            'requestPath_not global' => $this->urlRewrite
         ];
 
         $this->urlPersist
@@ -554,6 +547,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Cover categoriesUrlRewriteGenerate().
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCategoriesUrlRewriteGenerate()
     {
@@ -592,6 +586,33 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($this->categoryId));
+
+        $categoryCollection = $this->getMockBuilder(CategoryCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categoryCollection->expects($this->once())
+            ->method('addIdFilter')
+            ->with([$this->categoryId])
+            ->willReturnSelf();
+        $categoryCollection->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId)
+            ->willReturnSelf();
+        $categoryCollection->expects($this->exactly(3))
+            ->method('addAttributeToSelect')
+            ->withConsecutive(
+                ['name'],
+                ['url_key'],
+                ['url_path']
+            )->willReturnSelf();
+        $categoryCollection->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($category);
+
+        $this->categoryCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($categoryCollection);
+
         $this->urlRewrite
             ->expects($this->any())
             ->method('setStoreId')

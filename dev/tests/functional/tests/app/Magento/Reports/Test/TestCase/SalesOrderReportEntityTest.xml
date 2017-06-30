@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Reports\Test\TestCase\SalesOrderReportEntityTest" summary="Sales Order Report" ticketId="MAGETWO-29136">
-        <variation name="SalesOrderReportEntityTestVariation1">
+        <variation name="SalesOrderReportEntityTestVariation1" summary="Create sales order report, check report data and date" ticketId="MAGETWO-45399">
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Created</data>
@@ -19,8 +19,10 @@
             <data name="salesReport/show_actual_columns" xsi:type="string">Yes</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult" />
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertReportStatisticsNoticeMessage" />
         </variation>
         <variation name="SalesOrderReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Created</data>
@@ -34,6 +36,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
         </variation>
         <variation name="SalesOrderReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="salesReport/report_type" xsi:type="string">Order Updated</data>

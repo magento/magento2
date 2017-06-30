@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\UpdateShoppingCartTest" summary="Update Shopping Cart" ticketId="MAGETWO-25081">
         <variation name="UpdateShoppingCartTestVariation1">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="product/dataset" xsi:type="string">default</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
             <data name="product/data/checkout_data/qty" xsi:type="string">3</data>
@@ -15,10 +16,11 @@
             <data name="product/data/checkout_data/cartItem/subtotal" xsi:type="string">300</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
         </variation>
         <variation name="UpdateShoppingCartTestVariation2">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="product/dataset" xsi:type="string">with_two_custom_option</data>
             <data name="product/data/price/value" xsi:type="string">50</data>
             <data name="product/data/checkout_data/qty" xsi:type="string">11</data>
@@ -26,7 +28,7 @@
             <data name="product/data/checkout_data/cartItem/subtotal" xsi:type="string">715</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
         </variation>
     </testCase>

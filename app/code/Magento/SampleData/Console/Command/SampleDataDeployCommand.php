@@ -1,22 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\SampleData\Console\Command;
 
+use Composer\Console\Application;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Setup\Model\PackagesAuth;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\SampleData\Model\Dependency;
-use Magento\Framework\App\State;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\ArrayInputFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Composer\Console\Application;
-use Composer\Console\ApplicationFactory;
 
 /**
  * Command for deployment of Sample Data
@@ -24,37 +20,37 @@ use Composer\Console\ApplicationFactory;
 class SampleDataDeployCommand extends Command
 {
     /**
-     * @var Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var Dependency
+     * @var \Magento\SampleData\Model\Dependency
      */
     private $sampleDataDependency;
 
     /**
-     * @var ArrayInputFactory
+     * @var \Symfony\Component\Console\Input\ArrayInputFactory
      * @deprecated
      */
     private $arrayInputFactory;
 
     /**
-     * @var ApplicationFactory
+     * @var \Composer\Console\ApplicationFactory
      */
     private $applicationFactory;
 
     /**
-     * @param Filesystem $filesystem
-     * @param Dependency $sampleDataDependency
-     * @param ArrayInputFactory $arrayInputFactory
-     * @param ApplicationFactory $applicationFactory
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\SampleData\Model\Dependency $sampleDataDependency
+     * @param \Symfony\Component\Console\Input\ArrayInputFactory $arrayInputFactory
+     * @param \Composer\Console\ApplicationFactory $applicationFactory
      */
     public function __construct(
-        Filesystem $filesystem,
-        Dependency $sampleDataDependency,
-        ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\SampleData\Model\Dependency $sampleDataDependency,
+        \Symfony\Component\Console\Input\ArrayInputFactory $arrayInputFactory,
+        \Composer\Console\ApplicationFactory $applicationFactory
     ) {
         $this->filesystem = $filesystem;
         $this->sampleDataDependency = $sampleDataDependency;
@@ -79,6 +75,7 @@ class SampleDataDeployCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->updateMemoryLimit();
+        $this->createAuthFile();
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
@@ -108,6 +105,30 @@ class SampleDataDeployCommand extends Command
     }
 
     /**
+     * Create new auth.json file if it doesn't exist.
+     *
+     * We create auth.json with correct permissions instead of relying on Composer.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function createAuthFile()
+    {
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::COMPOSER_HOME);
+
+        if (!$directory->isExist(PackagesAuth::PATH_TO_AUTH_FILE)) {
+            try {
+                $directory->writeFile(PackagesAuth::PATH_TO_AUTH_FILE, '{}');
+            } catch (\Exception $e) {
+                $message = 'Error in writing Auth file '
+                    . $directory->getAbsolutePath(PackagesAuth::PATH_TO_AUTH_FILE)
+                    . '. Please check permissions for writing.';
+                throw new \Exception($message);
+            }
+        }
+    }
+
+    /**
      * @return void
      */
     private function updateMemoryLimit()
@@ -129,7 +150,7 @@ class SampleDataDeployCommand extends Command
     {
         $unit = strtolower(substr($value, -1, 1));
         $value = (int) $value;
-        switch($unit) {
+        switch ($unit) {
             case 'g':
                 $value *= 1024 * 1024 * 1024;
                 break;

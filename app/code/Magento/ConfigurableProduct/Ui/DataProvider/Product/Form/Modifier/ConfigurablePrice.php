@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
@@ -49,9 +49,10 @@ class ConfigurablePrice extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_PRICE)
-            ?: $this->getGroupCodeByField($meta, self::CODE_GROUP_PRICE)
-        ) {
+        $groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_PRICE)
+            ?: $this->getGroupCodeByField($meta, self::CODE_GROUP_PRICE);
+
+        if ($groupCode && !empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
             if (!empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
                 $meta[$groupCode]['children'][self::CODE_GROUP_PRICE] = array_replace_recursive(
                     $meta[$groupCode]['children'][self::CODE_GROUP_PRICE],
@@ -61,10 +62,8 @@ class ConfigurablePrice extends AbstractModifier
                                 'arguments' => [
                                     'data' => [
                                         'config' => [
-                                            'imports' => [
-                                                'disabled' => '!ns = ${ $.ns }, index = '
-                                                    . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                            ],
+                                            'component' => 'Magento_ConfigurableProduct/js/' .
+                                                'components/price-configurable'
                                         ],
                                     ],
                                 ],
@@ -73,18 +72,20 @@ class ConfigurablePrice extends AbstractModifier
                     ]
                 );
             }
-            if (!empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
+            if (
+                !empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE]['children'][self::$advancedPricingButton])
+            ) {
                 $productTypeId = $this->locator->getProduct()->getTypeId();
                 $visibilityConfig = ($productTypeId === ConfigurableType::TYPE_CODE)
                     ? ['visible' => 0, 'disabled' => 1]
                     : [
                         'imports' => [
-                            'disabled' => '!ns = ${ $.ns }, index = '
-                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                             'visible' => 'ns = ${ $.ns }, index = '
                                 . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                         ]
                     ];
+                $config = $visibilityConfig;
+                $config['componentType'] = 'container';
                 $meta[$groupCode]['children'][self::CODE_GROUP_PRICE] = array_replace_recursive(
                     $meta[$groupCode]['children'][self::CODE_GROUP_PRICE],
                     [
@@ -92,7 +93,7 @@ class ConfigurablePrice extends AbstractModifier
                             self::$advancedPricingButton => [
                                 'arguments' => [
                                     'data' => [
-                                        'config' => $visibilityConfig,
+                                        'config' => $config,
                                     ],
                                 ],
                             ],

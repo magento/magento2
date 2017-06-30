@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Model\Ui\Adminhtml;
@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Payment\Helper\Data;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -29,7 +30,6 @@ use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class TokensConfigProviderTest
@@ -105,9 +105,19 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $orderRepository;
 
     /**
+     * @var TokenUiComponentProviderInterface|MockObject
+     */
+    private $tokenComponentProvider;
+
+    /**
      * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * @var TokensConfigProvider
+     */
+    private $configProvider;
 
     protected function setUp()
     {
@@ -138,6 +148,38 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
         
         $this->objectManager = new ObjectManager($this);
+
+        $this->initStoreMock();
+
+        $this->tokenComponentProvider = $this->getMock(TokenUiComponentProviderInterface::class);
+
+        $this->configProvider = new TokensConfigProvider(
+            $this->session,
+            $this->paymentTokenRepository,
+            $this->filterBuilder,
+            $this->searchCriteriaBuilder,
+            $this->storeManager,
+            $this->dateTimeFactory,
+            [
+                self::VAULT_PROVIDER_CODE => $this->tokenComponentProvider
+            ]
+        );
+
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->configProvider,
+            'paymentDataHelper',
+            $this->paymentDataHelper
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->configProvider,
+            'paymentTokenManagement',
+            $this->paymentTokenManagement
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->configProvider,
+            'orderRepository',
+            $this->orderRepository
+        );
     }
 
     /**
@@ -146,8 +188,6 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetTokensComponentsRegisteredCustomer()
     {
         $customerId = 1;
-
-        $this->initStoreMock();
 
         $this->session->expects(static::once())
             ->method('getCustomerId')
@@ -170,7 +210,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $token = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
 
-        list($tokenUiComponent, $tokenUiComponentProvider) = $this->getTokenUiComponentProvider($token);
+        $tokenUiComponent = $this->getTokenUiComponentProvider($token);
 
         $searchCriteria = $this->getSearchCriteria($customerId, self::ENTITY_ID, self::VAULT_PROVIDER_CODE);
 
@@ -197,25 +237,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([$token]);
 
-        $configProvider = new TokensConfigProvider(
-            $this->session,
-            $this->paymentTokenRepository,
-            $this->filterBuilder,
-            $this->searchCriteriaBuilder,
-            $this->storeManager,
-            $this->dateTimeFactory,
-            [
-                self::VAULT_PROVIDER_CODE => $tokenUiComponentProvider
-            ]
-        );
-
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'paymentDataHelper',
-            $this->paymentDataHelper
-        );
-
-        static::assertEquals([$tokenUiComponent], $configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        static::assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -263,7 +285,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId')
             ->willReturn(self::ENTITY_ID);
 
-        list($tokenUiComponent, $tokenUiComponentProvider) = $this->getTokenUiComponentProvider($token);
+        $tokenUiComponent = $this->getTokenUiComponentProvider($token);
 
         $searchCriteria = $this->getSearchCriteria($customerId, self::ENTITY_ID, self::VAULT_PROVIDER_CODE);
 
@@ -290,35 +312,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([$token]);
 
-        $configProvider = new TokensConfigProvider(
-            $this->session,
-            $this->paymentTokenRepository,
-            $this->filterBuilder,
-            $this->searchCriteriaBuilder,
-            $this->storeManager,
-            $this->dateTimeFactory,
-            [
-                self::VAULT_PROVIDER_CODE => $tokenUiComponentProvider
-            ]
-        );
-
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'paymentDataHelper',
-            $this->paymentDataHelper
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'paymentTokenManagement',
-            $this->paymentTokenManagement
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'orderRepository',
-            $this->orderRepository
-        );
-
-        static::assertEquals([$tokenUiComponent], $configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        static::assertEquals([$tokenUiComponent], $this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -329,8 +323,6 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetTokensComponentsGuestCustomerOrderNotFound($exception)
     {
         $customerId = null;
-
-        $this->initStoreMock();
 
         $this->session->expects(static::once())
             ->method('getCustomerId')
@@ -366,35 +358,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->searchCriteriaBuilder->expects(self::never())
             ->method('addFilters');
 
-        $configProvider = new TokensConfigProvider(
-            $this->session,
-            $this->paymentTokenRepository,
-            $this->filterBuilder,
-            $this->searchCriteriaBuilder,
-            $this->storeManager,
-            $this->dateTimeFactory,
-            [
-                self::VAULT_PROVIDER_CODE => $this->getMock(TokenUiComponentProviderInterface::class)
-            ]
-        );
-
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'paymentDataHelper',
-            $this->paymentDataHelper
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'paymentTokenManagement',
-            $this->paymentTokenManagement
-        );
-        $this->objectManager->setBackwardCompatibleProperty(
-            $configProvider,
-            'orderRepository',
-            $this->orderRepository
-        );
-
-        static::assertEmpty($configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+        static::assertEmpty($this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
     }
 
     /**
@@ -454,17 +418,65 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider::getTokensComponents
+     */
+    public function testGetTokensComponentsForGuestCustomerWithoutStoredTokens()
+    {
+        $this->session->expects(static::once())
+            ->method('getCustomerId')
+            ->willReturn(null);
+
+        $this->paymentDataHelper->expects(static::once())
+            ->method('getMethodInstance')
+            ->with(self::VAULT_PAYMENT_CODE)
+            ->willReturn($this->vaultPayment);
+
+        $this->vaultPayment->expects(static::once())
+            ->method('isActive')
+            ->with(self::STORE_ID)
+            ->willReturn(true);
+        $this->vaultPayment->expects(static::once())
+            ->method('getProviderCode')
+            ->willReturn(self::VAULT_PROVIDER_CODE);
+
+        $this->session->expects(static::once())
+            ->method('getReordered')
+            ->willReturn(self::ORDER_ID);
+        $this->orderRepository->expects(static::once())
+            ->method('get')
+            ->with(self::ORDER_ID)
+            ->willReturn($this->getOrderMock());
+
+        $this->paymentTokenManagement->expects(static::once())
+            ->method('getByPaymentId')
+            ->with(self::ORDER_PAYMENT_ENTITY_ID)
+            ->willReturn(null);
+
+        $this->filterBuilder->expects(static::once())
+            ->method('setField')
+            ->with(PaymentTokenInterface::ENTITY_ID)
+            ->willReturnSelf();
+        $this->filterBuilder->expects(static::never())
+            ->method('setValue');
+
+        $this->searchCriteriaBuilder->expects(static::never())
+            ->method('addFilters');
+
+        static::assertEmpty($this->configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+    }
+
+    /**
      * Create mock object for store
      */
     private function initStoreMock()
     {
         $this->store = $this->getMock(StoreInterface::class);
-        $this->store->expects(static::once())
+        $this->store->expects(static::any())
             ->method('getId')
             ->willReturn(self::STORE_ID);
 
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
-        $this->storeManager->expects(static::once())
+        $this->storeManager->expects(static::any())
             ->method('getStore')
             ->with(null)
             ->willReturn($this->store);
@@ -476,39 +488,37 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     private function getOrderMock()
     {
-        /** @var OrderInterface|MockObject $orderMock */
-        $orderMock = $this->getMockBuilder(OrderInterface::class)
+        /** @var OrderInterface|MockObject $order */
+        $order = $this->getMockBuilder(OrderInterface::class)
             ->getMockForAbstractClass();
-        /** @var OrderPaymentInterface|MockObject $orderPaymentMock */
-        $orderPaymentMock = $this->getMockBuilder(OrderPaymentInterface::class)
+        /** @var OrderPaymentInterface|MockObject $orderPayment */
+        $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->getMockForAbstractClass();
 
-        $orderMock->expects(static::once())
+        $order->expects(static::once())
             ->method('getPayment')
-            ->willReturn($orderPaymentMock);
-        $orderPaymentMock->expects(static::once())
+            ->willReturn($orderPayment);
+        $orderPayment->expects(static::once())
             ->method('getEntityId')
             ->willReturn(self::ORDER_PAYMENT_ENTITY_ID);
 
-        return $orderMock;
+        return $order;
     }
 
     /**
      * Get mock for token ui component provider
      * @param PaymentTokenInterface $token
-     * @return array
+     * @return TokenUiComponentInterface|MockObject
      */
     private function getTokenUiComponentProvider($token)
     {
         $tokenUiComponent = $this->getMock(TokenUiComponentInterface::class);
-
-        $tokenUiComponentProvider = $this->getMock(TokenUiComponentProviderInterface::class);
-        $tokenUiComponentProvider->expects(static::once())
+        $this->tokenComponentProvider->expects(static::once())
             ->method('getComponentForToken')
             ->with($token)
             ->willReturn($tokenUiComponent);
 
-        return [$tokenUiComponent, $tokenUiComponentProvider];
+        return $tokenUiComponent;
     }
 
     /**
@@ -572,10 +582,16 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::once())
+        $this->searchCriteriaBuilder->expects(self::exactly(4))
             ->method('addFilters')
-            ->with([$customerFilter, $codeFilter, $expiresAtFilter, $isActiveFilter])
-            ->willReturnSelf();
+            ->willReturnMap(
+                [
+                    [$customerFilter, $this->searchCriteriaBuilder],
+                    [$codeFilter, $this->searchCriteriaBuilder],
+                    [$expiresAtFilter, $this->searchCriteriaBuilder],
+                    [$isActiveFilter, $this->searchCriteriaBuilder],
+                ]
+            );
 
         $this->searchCriteriaBuilder->expects(self::once())
             ->method('create')

@@ -2,14 +2,13 @@
 /**
  * @category    Magento
  * @package     Magento_CatalogInventory
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 
 /**
@@ -65,6 +64,11 @@ abstract class AbstractAction
      * @var \Magento\Framework\Event\ManagerInterface
      */
     private $eventManager;
+
+    /**
+     * @var CacheCleaner
+     */
+    private $cacheCleaner;
 
     /**
      * @param ResourceConnection $resource
@@ -186,10 +190,10 @@ abstract class AbstractAction
 
         $this->_deleteOldRelations($tableName);
 
-        $columns = array_keys($this->_connection->describeTable($idxTableName));
-        $select = $this->_connection->select()->from($idxTableName, $columns);
+        $columns = array_keys($this->_getConnection()->describeTable($idxTableName));
+        $select = $this->_getConnection()->select()->from($idxTableName, $columns);
         $query = $select->insertFromSelect($tableName, $columns);
-        $this->_connection->query($query);
+        $this->_getConnection()->query($query);
         return $this;
     }
 
@@ -202,7 +206,7 @@ abstract class AbstractAction
      */
     protected function _deleteOldRelations($tableName)
     {
-        $select = $this->_connection->select()
+        $select = $this->_getConnection()->select()
             ->from(['s' => $tableName])
             ->joinLeft(
                 ['w' => $this->_getTable('catalog_product_website')],
@@ -212,21 +216,38 @@ abstract class AbstractAction
             ->where('w.product_id IS NULL');
 
         $sql = $select->deleteFromSelect('s');
-        $this->_connection->query($sql);
+        $this->_getConnection()->query($sql);
     }
 
     /**
      * Refresh entities index
      *
      * @param array $productIds
-     * @return array Affected ids
+     * @return $this
      */
     protected function _reindexRows($productIds = [])
     {
-        $connection = $this->_getConnection();
         if (!is_array($productIds)) {
             $productIds = [$productIds];
         }
+
+        $this->getCacheCleaner()->clean($productIds, function () use ($productIds) {
+            $this->doReindex($productIds);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Refresh entities index
+     *
+     * @param array $productIds
+     * @return void
+     */
+    private function doReindex($productIds = [])
+    {
+        $connection = $this->_getConnection();
+
         $parentIds = $this->getRelationsByChild($productIds);
         $processIds = $parentIds ? array_merge($parentIds, $productIds) : $productIds;
 
@@ -247,11 +268,17 @@ abstract class AbstractAction
                 $indexer->reindexEntity($byType[$indexer->getTypeId()]);
             }
         }
-        
-        $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
-        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
-        
-        return $this;
+    }
+
+    /**
+     * @return CacheCleaner
+     */
+    private function getCacheCleaner()
+    {
+        if (null === $this->cacheCleaner) {
+            $this->cacheCleaner = ObjectManager::getInstance()->get(CacheCleaner::class);
+        }
+        return $this->cacheCleaner;
     }
 
     /**

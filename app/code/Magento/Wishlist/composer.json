@@ -2,7 +2,7 @@
     "name": "magento/module-wishlist",
     "description": "N/A",
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-store": "100.2.*",
         "magento/module-customer": "100.2.*",
         "magento/module-catalog": "101.1.*",
@@ -12,7 +12,6 @@
         "magento/module-rss": "100.2.*",
         "magento/module-backend": "100.2.*",
         "magento/module-sales": "100.2.*",
-        "magento/module-grouped-product": "100.2.*",
         "magento/framework": "100.2.*",
         "magento/module-ui": "100.2.*"
     },
@@ -21,6 +20,7 @@
         "magento/module-downloadable": "100.2.*",
         "magento/module-bundle": "100.2.*",
         "magento/module-cookie": "100.2.*",
+        "magento/module-grouped-product": "100.2.*",
         "magento/module-wishlist-sample-data": "Sample Data version:100.2.*"
     },
     "type": "magento2-module",

@@ -2,7 +2,7 @@
 /**
  * Compiler test. Check compilation of DI definitions and code generation
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Di;
@@ -69,8 +69,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = str_replace('\\', '/', $basePath);
 
         $directoryList = new DirectoryList($basePath);
-        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATION);
-        $this->_compilationDir = $directoryList->getPath(DirectoryList::DI);
+        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATED_CODE);
+        $this->_compilationDir = $directoryList->getPath(DirectoryList::GENERATED_METADATA);
 
         $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile';
 
@@ -101,7 +101,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         );
         $this->_validator = new \Magento\Framework\Code\Validator();
         $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
-        $this->_validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
         $this->_validator->add(new \Magento\Framework\Code\Validator\TypeDuplication());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ArgumentSequence());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorArgumentTypes());
@@ -384,22 +383,5 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         }
 
         return $plugins;
-    }
-
-    /**
-     * Test DI compiler
-     *
-     * @depends testConfigurationOfInstanceParameters
-     * @depends testConstructorIntegrity
-     * @depends testPluginInterfaces
-     */
-    public function testCompiler()
-    {
-        $this->markTestSkipped('MAGETWO-52570');
-        try {
-            $this->_shell->execute($this->_command);
-        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-            $this->fail($exception->getPrevious()->getMessage());
-        }
     }
 }

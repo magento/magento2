@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Billing;
 
 /**
  * Customer account billing agreements block
+ *
+ * @api
  */
 class Agreements extends \Magento\Framework\View\Element\Template
 {

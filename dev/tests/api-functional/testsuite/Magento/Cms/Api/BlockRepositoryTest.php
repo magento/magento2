@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Api;
 
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -216,24 +220,45 @@ class BlockRepositoryTest extends WebapiAbstract
     {
         $cmsBlocks = $this->prepareCmsBlocks();
 
-        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
-        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
-        $filterIdentifier = $filterBuilder
+            ->create(SearchCriteriaBuilder::class);
+
+        $filter1 = $filterBuilder
             ->setField(BlockInterface::IDENTIFIER)
             ->setValue($cmsBlocks['first']->getIdentifier())
             ->create();
-        $searchCriteriaBuilder->addFilters([$filterIdentifier]);
-        $filterTitle = $filterBuilder
+        $filter2 = $filterBuilder
+            ->setField(BlockInterface::IDENTIFIER)
+            ->setValue($cmsBlocks['third']->getIdentifier())
+            ->create();
+        $filter3 = $filterBuilder
             ->setField(BlockInterface::TITLE)
             ->setValue($cmsBlocks['second']->getTitle())
             ->create();
-        $filterStatus = $filterBuilder
+        $filter4 = $filterBuilder
             ->setField(BlockInterface::IS_ACTIVE)
-            ->setValue($cmsBlocks['first']->isActive())
+            ->setValue(true)
             ->create();
-        $searchCriteriaBuilder->addFilters([$filterTitle, $filterStatus]);
+
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $searchCriteriaBuilder->addFilters([$filter3, $filter4]);
+
+        /** @var SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField(BlockInterface::IDENTIFIER)
+            ->setDirection(SortOrder::SORT_ASC)
+            ->create();
+
+        $searchCriteriaBuilder->setSortOrders([$sortOrder]);
+
+        $searchCriteriaBuilder->setPageSize(1);
+        $searchCriteriaBuilder->setCurrentPage(2);
 
         $searchData = $searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -250,10 +275,11 @@ class BlockRepositoryTest extends WebapiAbstract
         ];
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals(1, $searchResult['total_count']);
+        $this->assertEquals(2, $searchResult['total_count']);
+        $this->assertEquals(1, count($searchResult['items']));
         $this->assertEquals(
             $searchResult['items'][0][BlockInterface::IDENTIFIER],
-            $cmsBlocks['first']->getIdentifier()
+            $cmsBlocks['third']->getIdentifier()
         );
     }
 
@@ -263,12 +289,18 @@ class BlockRepositoryTest extends WebapiAbstract
     private function prepareCmsBlocks()
     {
         $result = [];
+
         $blocksData['first'][BlockInterface::TITLE] = 'Block title 1';
         $blocksData['first'][BlockInterface::IDENTIFIER] = 'block-title-1' . uniqid();
         $blocksData['first'][BlockInterface::IS_ACTIVE] = true;
+
         $blocksData['second'][BlockInterface::TITLE] = 'Block title 2';
         $blocksData['second'][BlockInterface::IDENTIFIER] = 'block-title-2' . uniqid();
         $blocksData['second'][BlockInterface::IS_ACTIVE] = false;
+
+        $blocksData['third'][BlockInterface::TITLE] = 'Block title 3';
+        $blocksData['third'][BlockInterface::IDENTIFIER] = 'block-title-3' . uniqid();
+        $blocksData['third'][BlockInterface::IS_ACTIVE] = true;
 
         foreach ($blocksData as $key => $blockData) {
             /** @var  \Magento\Cms\Api\Data\BlockInterface $blockDataObject */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -171,13 +171,12 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->session->setUsername($login['username']);
                 } catch (UserLockedException $e) {
                     $message = __(
-                        'The account is locked. Please wait and try again or contact %1.',
-                        $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                        'You did not sign in correctly or your account is temporarily disabled.'
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
-                    $message = __('Invalid login or password.');
+                    $message = __('You did not sign in correctly or your account is temporarily disabled.');
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (LocalizedException $e) {

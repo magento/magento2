@@ -1,6 +1,10 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -105,7 +109,7 @@ define([
         apply: function (value) {
             value = value || this.inputValue;
 
-            this.value = this.inputValue = value;
+            this.value = this.inputValue = value.trim();
 
             return this;
         },

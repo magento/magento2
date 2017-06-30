@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,31 +11,31 @@
 <?php if ($block->getProductData()->getId()): ?>
 <div class="product-review">
     <div class="page-title-wrapper">
-        <h1><?php /* @escapeNotVerified */ echo __('Review Details') ?></h1>
+        <h1><?php echo $block->escapeHtml(__('Review Details')) ?></h1>
     </div>
     <div class="product-img-box">
-        <a href="<?php /* @escapeNotVerified */ echo $block->getProductData()->getProductUrl() ?>">
+        <a href="<?php echo $block->escapeUrl($block->getProductData()->getProductUrl()) ?>">
             <?php echo $block->getImage($block->getProductData(), 'product_base_image', ['class' => 'product-image'])->toHtml(); ?>
         </a>
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
-          <p><?php /* @escapeNotVerified */ echo __('Average Customer Rating') ?>:</p>
+          <p><?php echo $block->escapeHtml(__('Average Customer Rating')) ?>:</p>
           <?php echo $block->getReviewsSummaryHtml($block->getProductData()) ?>
         <?php endif; ?>
     </div>
     <div class="details">
         <h3 class="product-name"><?php echo $block->escapeHtml($block->getProductData()->getName()) ?></h3>
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
-            <h4><?php /* @escapeNotVerified */ echo __('Product Rating:') ?></h4>
+            <h4><?php echo $block->escapeHtml(__('Product Rating:')) ?></h4>
             <div class="table-wrapper">
                 <table class="data-table review-summary-table">
-                    <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Product Rating'); ?></caption>
+                    <caption class="table-caption"><?php echo $block->escapeHtml(__('Product Rating')); ?></caption>
                     <?php foreach ($block->getRating() as $_rating): ?>
                         <?php if ($_rating->getPercent()): ?>
                             <tr>
-                                <td class="label"><?php echo __($block->escapeHtml($_rating->getRatingCode())) ?></td>
+                                <td class="label"><?php echo $block->escapeHtml(__($_rating->getRatingCode())) ?></td>
                                 <td class="value">
                                     <div class="rating-box">
-                                        <div class="rating" style="width:<?php /* @escapeNotVerified */ echo ceil($_rating->getPercent()) ?>%;"></div>
+                                        <div class="rating" style="width:<?php /* @noEscape */ echo ceil($_rating->getPercent()) ?>%;"></div>
                                     </div></td>
                             </tr>
                         <?php endif; ?>
@@ -43,13 +43,13 @@
                 </table>
             </div>
         <?php endif; ?>
-        <p class="date"><?php /* @escapeNotVerified */ echo __('Product Review (submitted on %1):', $block->dateFormat($block->getReviewData()->getCreatedAt())) ?></p>
+        <p class="date"><?php echo $block->escapeHtml(__('Product Review (submitted on %1):', $block->dateFormat($block->getReviewData()->getCreatedAt()))) ?></p>
         <p><?php echo nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></p>
     </div>
     <div class="actions">
         <div class="secondary">
-            <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>">
-                <span><?php /* @escapeNotVerified */ echo __('Back to Product Reviews') ?></a></span>
+            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>">
+                <span><?php echo $block->escapeHtml(__('Back to Product Reviews')) ?></a></span>
             </a>
         </div>
     </div>

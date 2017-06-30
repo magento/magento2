@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api\Data;
@@ -12,7 +12,6 @@ namespace Magento\Catalog\Api\Data;
 interface ProductAttributeInterface extends \Magento\Catalog\Api\Data\EavAttributeInterface
 {
     const ENTITY_TYPE_CODE = 'catalog_product';
-    const CODE_TIER_PRICE_FIELD_PRICE = 'price';
     const CODE_HAS_WEIGHT = 'product_has_weight';
     const CODE_SPECIAL_PRICE = 'special_price';
     const CODE_PRICE = 'price';
@@ -27,6 +26,9 @@ interface ProductAttributeInterface extends \Magento\Catalog\Api\Data\EavAttribu
     const CODE_COST = 'cost';
     const CODE_SEO_FIELD_URL_KEY = 'url_key';
     const CODE_TIER_PRICE = 'tier_price';
+    const CODE_TIER_PRICE_FIELD_PRICE = 'price';
+    const CODE_TIER_PRICE_FIELD_PERCENTAGE_VALUE = 'percentage_value';
+    const CODE_TIER_PRICE_FIELD_VALUE_TYPE = 'value_type';
     const CODE_SEO_FIELD_META_DESCRIPTION = 'meta_description';
     const CODE_WEIGHT = 'weight';
 }

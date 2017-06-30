@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Widget\Block\BlockInterface;
 
 /**
@@ -82,6 +83,18 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     protected $conditionsHelper;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
+     * Json Serializer Instance
+     *
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
@@ -90,6 +103,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @param \Magento\CatalogWidget\Model\Rule $rule
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      * @param array $data
+     * @param Json|null $json
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -99,7 +113,8 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\CatalogWidget\Model\Rule $rule,
         \Magento\Widget\Helper\Conditions $conditionsHelper,
-        array $data = []
+        array $data = [],
+        Json $json = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -107,6 +122,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->sqlBuilder = $sqlBuilder;
         $this->rule = $rule;
         $this->conditionsHelper = $conditionsHelper;
+        $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $context,
             $data
@@ -128,7 +144,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $this->addData([
             'cache_lifetime' => 86400,
             'cache_tags' => [\Magento\Catalog\Model\Product::CACHE_TAG,
-        ], ]);
+            ], ]);
     }
 
     /**
@@ -144,13 +160,14 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
         return [
             'CATALOG_PRODUCTS_LIST_WIDGET',
+            $this->getPriceCurrency()->getCurrencySymbol(),
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
             intval($this->getRequest()->getParam($this->getData('page_var_name'), 1)),
             $this->getProductsPerPage(),
             $conditions,
-            serialize($this->getRequest()->getParams())
+            $this->json->serialize($this->getRequest()->getParams())
         ];
     }
 
@@ -219,6 +236,12 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
         $conditions = $this->getConditions();
         $conditions->collectValidatedAttributes($collection);
         $this->sqlBuilder->attachConditionToCollection($collection, $conditions);
+
+        /**
+         * Prevent retrieval of duplicate records. This may occur when multiselect product attribute matches
+         * several allowed values from condition simultaneously
+         */
+        $collection->distinct(true);
 
         return $collection;
     }
@@ -350,5 +373,19 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     public function getTitle()
     {
         return $this->getData('title');
+    }
+
+    /**
+     * @return PriceCurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getPriceCurrency()
+    {
+        if ($this->priceCurrency === null) {
+            $this->priceCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(PriceCurrencyInterface::class);
+        }
+        return $this->priceCurrency;
     }
 }

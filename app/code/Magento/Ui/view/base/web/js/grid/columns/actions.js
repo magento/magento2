@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'mageUtils',
@@ -171,6 +174,20 @@ define([
             if (this.isHandlerRequired(index, rowIndex)) {
                 return this.applyAction.bind(this, index, rowIndex);
             }
+        },
+
+        /**
+         * Returns target of action if it's been set.
+         *
+         * @param {Object} action - Action object.
+         * @returns {String}
+         */
+        getTarget: function (action) {
+            if (action.target) {
+                return action.target;
+            }
+
+            return '_self';
         },
 
         /**

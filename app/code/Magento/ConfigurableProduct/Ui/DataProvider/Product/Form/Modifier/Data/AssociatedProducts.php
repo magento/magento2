@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -284,7 +284,7 @@ class AssociatedProducts
                         'sku' => $product->getSku(),
                         'name' => $product->getName(),
                         'qty' => $this->getProductStockQty($product),
-                        'price' => $currency->toCurrency(sprintf("%f", $price), ['display' => false]),
+                        'price' => $price,
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),
                         'price_currency' => $this->locator->getStore()->getBaseCurrency()->getCurrencySymbol(),
                         'configurable_attribute' => $this->getJsonConfigurableAttributes($variationOptions),
@@ -359,7 +359,6 @@ class AssociatedProducts
         asort($result);
 
         return implode('-', $result);
-
     }
 
     /**

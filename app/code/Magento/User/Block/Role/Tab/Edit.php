@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Block\Role\Tab;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
 
 /**
  * Rolesedit Tab Display Block.
  *
+ * @api
  */
 class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -93,7 +93,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     public function setCoreRegistry(\Magento\Framework\Registry $coreRegistry)
     {
-
         $this->coreRegistry = $coreRegistry;
     }
 
@@ -105,7 +104,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     public function getCoreRegistry()
     {
-
         if (!($this->coreRegistry instanceof \Magento\Framework\Registry)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
         } else {
@@ -198,10 +196,24 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     public function getTree()
     {
+        return $this->_integrationData->mapResources($this->getAclResources());
+    }
+
+    /**
+     * Get lit of all ACL resources declared in the system.
+     *
+     * @return array
+     */
+    private function getAclResources()
+    {
         $resources = $this->_aclResourceProvider->getAclResources();
-        $rootArray = $this->_integrationData->mapResources(
-            isset($resources[1]['children']) ? $resources[1]['children'] : []
+        $configResource = array_filter(
+            $resources,
+            function ($node) {
+                return $node['id'] == 'Magento_Backend::admin';
+            }
         );
-        return $rootArray;
+        $configResource = reset($configResource);
+        return isset($configResource['children']) ? $configResource['children'] : [];
     }
 }

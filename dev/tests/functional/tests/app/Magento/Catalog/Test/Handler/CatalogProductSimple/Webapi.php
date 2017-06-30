@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,11 +65,11 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     ];
 
     /**
-     * Website Ids for current Product.
+     * Temporary media path.
      *
-     * @var array
+     * @var string
      */
-    private $websiteIds = [];
+    private $mediaPathTmp = '/pub/media/tmp/catalog/product/';
 
     /**
      * @constructor
@@ -102,8 +102,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->prepareData();
         $this->convertData();
 
-        //TODO: Change create and assign product to website flow using 1 request after MAGETWO-52812 delivery.
-
         /** @var CatalogProductSimple $fixture */
         $url = $_ENV['app_frontend_url'] . 'rest/all/V1/products';
         $this->webapiTransport->write($url, $this->fields, CurlInterface::POST);
@@ -116,106 +114,34 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
             throw new \Exception("Product creation by webapi handler was not successful! Response: {$encodedResponse}");
         }
 
-        $this->assignToWebsites($response);
-
+        $this->updateProduct($fixture);
         return $this->parseResponse($response);
     }
 
     /**
-     * Assign appropriate Websites to Product and unset all other.
+     * Update product info per website.
      *
-     * @param array $product
-     * @return void
-     */
-    private function assignToWebsites($product)
-    {
-        $this->setWebsites($product);
-        $this->unsetWebsites($product);
-    }
-
-    /**
-     * Get all Websites.
-     *
-     * @return array
-     * @throws \Exception
-     */
-    private function getAllWebsites()
-    {
-        $url = $_ENV['app_frontend_url'] . 'rest/V1/store/websites';
-        $this->webapiTransport->write($url, [], CurlInterface::GET);
-        $encodedResponse = $this->webapiTransport->read();
-        $response = json_decode($encodedResponse, true);
-        $this->webapiTransport->close();
-
-        if (!isset($response[0]['id'])) {
-            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception(
-                "Attempt to get all Websites by webapi handler was not successful! Response: {$encodedResponse}"
-            );
-        }
-
-        return $response;
-    }
-
-    /**
-     * Set appropriate Websites to Product.
-     *
-     * @param array $product
+     * @param FixtureInterface $fixture
      * @return void
      * @throws \Exception
      */
-    private function setWebsites($product)
+    private function updateProduct(FixtureInterface $fixture)
     {
-        foreach ($this->websiteIds as $id) {
-            $url = $_ENV['app_frontend_url'] . 'rest/V1/products/' . $product['sku'] . '/websites';
-            $productWebsiteLink = ['productWebsiteLink' => ['website_id' => $id, 'sku' => $product['sku']]];
-            $this->webapiTransport->write($url, $productWebsiteLink, CurlInterface::POST);
-            $encodedResponse = $this->webapiTransport->read();
-            $response = json_decode($encodedResponse, true);
-            $this->webapiTransport->close();
+        if (isset($fixture->getData()['website_data'])) {
+            $websiteData = $fixture->getData()['website_data'];
+            foreach ($fixture->getDataFieldConfig('website_ids')['source']->getStores() as $key => $store) {
+                $url = $_ENV['app_frontend_url'] . 'rest/' . $store->getCode() . '/V1/products/' . $fixture->getSku();
+                $this->webapiTransport->write($url, ['product' => $websiteData[$key]], CurlInterface::PUT);
+                $encodedResponse = $this->webapiTransport->read();
+                $response = json_decode($encodedResponse, true);
+                $this->webapiTransport->close();
 
-            if ($response !== true) {
-                $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-                throw new \Exception(
-                    "Product addition to Website by webapi handler was not successful! Response: {$encodedResponse}"
-                );
-            }
-        }
-    }
-
-    /**
-     * Unset all Websites from Product except appropriate.
-     *
-     * @param array $product
-     * @return void
-     * @throws \Exception
-     */
-    private function unsetWebsites($product)
-    {
-        $allWebsites = $this->getAllWebsites();
-        $websiteIds = [];
-
-        foreach ($allWebsites as $website) {
-            if ($website['code'] == 'admin') {
-                continue;
-            }
-            $websiteIds[] = $website['id'];
-        }
-
-        $websiteIds = array_diff($websiteIds, $this->websiteIds);
-
-        foreach ($websiteIds as $id) {
-            $url = $_ENV['app_frontend_url'] . 'rest/V1/products/' . $product['sku'] . '/websites/' . $id;
-            $this->webapiTransport->write($url, [], CurlInterface::DELETE);
-            $encodedResponse = $this->webapiTransport->read();
-            $response = json_decode($encodedResponse, true);
-            $this->webapiTransport->close();
-
-            if ($response !== true) {
-                $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-                throw new \Exception(
-                    "Product deduction from Website by webapi handler was not successful! Response: {$encodedResponse}"
-                );
+                if (!isset($response['id'])) {
+                    $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
+                    throw new \Exception(
+                        "Product update by webapi handler was not successful! Response: {$encodedResponse}"
+                    );
+                }
             }
         }
     }
@@ -234,6 +160,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->prepareAdvancedInventory();
         $this->prepareTierPrice();
         $this->prepareCustomOptions();
+        $this->prepareMediaGallery();
+        $this->prepareSpecialPrice();
     }
 
     /**
@@ -244,7 +172,6 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     protected function convertData()
     {
         $fields = [];
-        $this->websiteIds = $this->fields['product']['website_ids'];
 
         unset($this->fields['product']['website_ids']);
         unset($this->fields['product']['checkout_data']);
@@ -347,8 +274,16 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $priceInfo['customer_group_id'] = $priceInfo['cust_group'];
                 unset($priceInfo['cust_group']);
 
-                $priceInfo['value'] = $priceInfo['price'];
-                unset($priceInfo['price']);
+                if (isset($priceInfo['price'])) {
+                    $priceInfo['value'] = $priceInfo['price'];
+                    unset($priceInfo['price']);
+                }
+                unset($priceInfo['value_type']);
+
+                if (isset($priceInfo['percentage_value'])) {
+                    $priceInfo['extension_attributes']['percentage_value'] = $priceInfo['percentage_value'];
+                    unset($priceInfo['percentage_value']);
+                }
 
                 $priceInfo['qty'] = $priceInfo['price_qty'];
                 unset($priceInfo['price_qty']);
@@ -358,6 +293,27 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
 
                 $this->fields['product']['tier_prices'][$key] = $priceInfo;
             }
+        }
+    }
+
+    /**
+     * Preparation of product special price data.
+     *
+     * @return void
+     */
+    protected function prepareSpecialPrice()
+    {
+        if (isset($this->fields['product']['special_from_date'])) {
+            $this->fields['product']['special_from_date'] = date(
+                'n/j/Y',
+                strtotime($this->fields['product']['special_from_date'])
+            );
+        }
+        if (isset($this->fields['product']['special_to_date'])) {
+            $this->fields['product']['special_to_date'] = date(
+                'n/j/Y',
+                strtotime($this->fields['product']['special_to_date'])
+            );
         }
     }
 
@@ -385,5 +341,44 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $this->fields['product']['options'][$ko] = $option;
             }
         }
+    }
+
+    /**
+     * Create test image file.
+     *
+     * @return void
+     */
+    protected function prepareMediaGallery()
+    {
+        if (isset($this->fields['product']['media_gallery'])) {
+            foreach ($this->fields['product']['media_gallery']['images'] as $galleryItem) {
+                $filename = $galleryItem['file'];
+                $this->fields['product']['media_gallery_entries'][] = $this->getImageData($filename);
+            }
+            unset($this->fields['product']['media_gallery']);
+        }
+    }
+
+    /**
+     * Get media gallery data.
+     *
+     * @param $filename
+     * @return array
+     */
+    private function getImageData($filename)
+    {
+        return
+            [
+                'position' => 1,
+                'media_type' => 'image',
+                'disabled' => false,
+                'label' => $filename,
+                'types' => [],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename,
+                    'base64_encoded_data' => base64_encode(file_get_contents(BP . $this->mediaPathTmp . $filename)),
+                ]
+            ];
     }
 }

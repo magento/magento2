@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class StockItemRepositoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -20,77 +20,77 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var StockItemRepository
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemMock;
+    private $stockItemMock;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockConfigurationMock;
+    private $stockConfigurationMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productMock;
+    private $productMock;
 
     /**
      * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockStateProviderMock;
+    private $stockStateProviderMock;
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemResourceMock;
+    private $stockItemResourceMock;
 
     /**
      * @var InventoryApiData\StockItemInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemFactoryMock;
+    private $stockItemFactoryMock;
 
     /**
      * @var InventoryApiData\StockItemCollectionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemCollectionMock;
+    private $stockItemCollectionMock;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productFactoryMock;
+    private $productFactoryMock;
 
     /**
      * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $queryBuilderFactoryMock;
+    private $queryBuilderFactoryMock;
 
     /**
      * @var \Magento\Framework\DB\MapperFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mapperMock;
+    private $mapperMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeDateMock;
+    private $localeDateMock;
 
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexProcessorMock;
+    private $indexProcessorMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dateTime;
+    private $dateTime;
 
     /**
      * @var StockRegistryStorage|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockRegistryStorage;
+    private $stockRegistryStorage;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -153,9 +153,8 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', 'getTypeId', '__wakeup'])
             ->getMock();
-        $this->productFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->productMock);
+
+        $this->productFactoryMock->expects($this->any())->method('create')->willReturn($this->productMock);
 
         $this->queryBuilderFactoryMock = $this->getMockBuilder(\Magento\Framework\DB\QueryBuilderFactory::class)
             ->setMethods(['create'])
@@ -185,6 +184,22 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $productCollection = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
+        )->disableOriginalConstructor()->getMock();
+
+        $productCollection->expects($this->any())->method('setFlag')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addFieldToSelect')->willReturnSelf();
+        $productCollection->expects($this->any())->method('getFirstItem')->willReturn($this->productMock);
+
+        $productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productCollectionFactory->expects($this->any())->method('create')->willReturn($productCollection);
+
         $this->model = (new ObjectManager($this))->getObject(
             StockItemRepository::class,
             [
@@ -200,6 +215,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
                 'indexProcessor' => $this->indexProcessorMock,
                 'dateTime' => $this->dateTime,
                 'stockRegistryStorage' => $this->stockRegistryStorage,
+                'productCollectionFactory' => $productCollectionFactory,
             ]
         );
     }
@@ -263,7 +279,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
 
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('load')->with($productId)->willReturnSelf();
         $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('typeId');
         $this->stockConfigurationMock->expects($this->once())->method('isQty')->with('typeId')->willReturn(true);
@@ -309,7 +324,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
 
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('load')->with($productId)->willReturnSelf();
         $this->productMock->expects($this->once())->method('getId')->willReturn(null);
         $this->stockRegistryStorage->expects($this->never())->method('removeStockItem');
         $this->stockRegistryStorage->expects($this->never())->method('removeStockStatus');
@@ -325,7 +339,6 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $productId = 1;
 
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('load')->with($productId)->willReturnSelf();
         $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('typeId');
         $this->stockConfigurationMock->expects($this->once())->method('isQty')->with('typeId')->willReturn(false);

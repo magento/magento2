@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\Paypal\Model\Api;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class ProcessableException extends LocalizedException
 {
     /**#@+
@@ -37,7 +40,7 @@ class ProcessableException extends LocalizedException
      */
     public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
     {
-        parent::__construct($phrase, $cause);
+        parent::__construct($phrase, $cause, $code);
         $this->code = $code;
     }
 

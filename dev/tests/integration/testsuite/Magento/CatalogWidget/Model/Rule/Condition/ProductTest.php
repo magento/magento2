@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogWidget\Model\Rule\Condition;
-
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,5 +93,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->conditionProduct->setAttribute('category_ids');
         $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGetMappedSqlFieldSkuAttribute()
+    {
+        $this->conditionProduct->setAttribute('sku');
+        $this->assertEquals('e.sku', $this->conditionProduct->getMappedSqlField());
     }
 }

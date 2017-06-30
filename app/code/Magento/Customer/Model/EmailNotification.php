@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -43,6 +43,23 @@ class EmailNotification implements EmailNotificationInterface
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
+
+    /**
+     * self::NEW_ACCOUNT_EMAIL_REGISTERED               welcome email, when confirmation is disabled
+     *                                                  and password is set
+     * self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD   welcome email, when confirmation is disabled
+     *                                                  and password is not set
+     * self::NEW_ACCOUNT_EMAIL_CONFIRMED                welcome email, when confirmation is enabled
+     *                                                  and password is set
+     * self::NEW_ACCOUNT_EMAIL_CONFIRMATION             email with confirmation link
+     */
+    const TEMPLATE_TYPES = [
+        self::NEW_ACCOUNT_EMAIL_REGISTERED => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+        self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
+        self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
+        self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+    ];
+
     /**#@-*/
 
     /**
@@ -339,7 +356,7 @@ class EmailNotification implements EmailNotificationInterface
         $storeId = 0,
         $sendemailStoreId = null
     ) {
-        $types = $this->getTemplateTypes();
+        $types = self::TEMPLATE_TYPES;
 
         if (!isset($types[$type])) {
             throw new LocalizedException(__('Please correct the transactional account email type.'));
@@ -360,31 +377,5 @@ class EmailNotification implements EmailNotificationInterface
             ['customer' => $customerEmailData, 'back_url' => $backUrl, 'store' => $store],
             $storeId
         );
-    }
-
-    /**
-     * Get template types
-     *
-     * @return array
-     * @todo: consider eliminating method
-     */
-    private function getTemplateTypes()
-    {
-        /**
-         * self::NEW_ACCOUNT_EMAIL_REGISTERED               welcome email, when confirmation is disabled
-         *                                                  and password is set
-         * self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD   welcome email, when confirmation is disabled
-         *                                                  and password is not set
-         * self::NEW_ACCOUNT_EMAIL_CONFIRMED                welcome email, when confirmation is enabled
-         *                                                  and password is set
-         * self::NEW_ACCOUNT_EMAIL_CONFIRMATION             email with confirmation link
-         */
-        $types = [
-            self::NEW_ACCOUNT_EMAIL_REGISTERED => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
-            self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
-            self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
-            self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
-        ];
-        return $types;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Command;
@@ -374,7 +374,7 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $searchCriteria = new SearchCriteria();
-        $this->searchCriteriaBuilder->expects(static::once())
+        $this->searchCriteriaBuilder->expects(static::exactly(2))
             ->method('addFilters')
             ->willReturnSelf();
         $this->searchCriteriaBuilder->expects(static::once())

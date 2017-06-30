@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Test\Unit;
@@ -101,7 +101,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             [
                 'filesystem' => $this->_filesystemMock,
                 'backupFactory' => $this->_backupFactoryMock,
-                'rollBackFs' => $this->fsMock
+                'rollBackFs' => $this->fsMock,
             ]
         );
         $model->setRootDir($rootDir);

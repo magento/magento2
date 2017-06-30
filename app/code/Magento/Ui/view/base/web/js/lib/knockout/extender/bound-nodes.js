@@ -1,8 +1,9 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/* global WeakMap */
 define([
     'ko',
     'underscore',
@@ -87,6 +88,7 @@ define([
      * Returns node's first sibling of 'element' type within the common component scope
      *
      * @param {HTMLElement} node
+     * @param {*} data
      * @returns {HTMLElement}
      */
     function getElement(node, data) {
@@ -111,6 +113,8 @@ define([
          * to track nodes associated with model.
          *
          * @param {Function} orig - Original 'applyBindings' method.
+         * @param {Object} ctx
+         * @param {HTMLElement} node - Original 'applyBindings' method.
          */
         applyBindings: function (orig, ctx, node) {
             var result = orig(),
@@ -136,6 +140,7 @@ define([
          * to track nodes associated with model.
          *
          * @param {Function} orig - Original 'cleanNode' method.
+         * @param {HTMLElement} node - Original 'cleanNode' method.
          */
         cleanNode: function (orig, node) {
             var result = orig(),

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use \Magento\Sales\Model\Order\CreditmemoRepository;
 
 /**
@@ -29,6 +30,11 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchResultFactoryMock;
 
+    /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessorMock;
+    
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -40,11 +46,14 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
         $this->creditmemo = $objectManager->getObject(
             \Magento\Sales\Model\Order\CreditmemoRepository::class,
             [
                 'metadata' => $this->metadataMock,
-                'searchResultFactory' => $this->searchResultFactoryMock
+                'searchResultFactory' => $this->searchResultFactoryMock,
+                'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
         $this->type = $this->getMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId'], [], '', false);
@@ -120,44 +129,15 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $filterGroup = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroups = [$filterGroup];
-        $field = 'test_field';
-        $fieldValue = 'test_value';
-
-        $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filter->expects($this->any())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $filter->expects($this->any())
-            ->method('getField')
-            ->willReturn($field);
-        $filter->expects($this->any())
-            ->method('getValue')
-            ->willReturn($fieldValue);
-
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-
         $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn($filterGroups);
-
         $collection = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->withAnyParameters();
-
+        $this->collectionProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
         $this->searchResultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collection);

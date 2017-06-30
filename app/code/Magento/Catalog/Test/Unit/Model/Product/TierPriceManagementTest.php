@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,11 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\TierPriceManagement;
+use Magento\Catalog\Model\Product\TierPriceManagement;
 
 use Magento\Customer\Model\GroupManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\TemporaryState\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -394,12 +395,35 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\TemporaryState\CouldNotSaveException
+     */
+    public function testAddRethrowsTemporaryStateExceptionIfRecoverableErrorOccurred()
+    {
+        $group = $this->getMock(\Magento\Customer\Model\Data\Group::class, [], [], '', false);
+        $group->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->productMock
+            ->expects($this->once())
+            ->method('getData')
+            ->with('tier_price')
+            ->will($this->returnValue([]));
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->willReturn($group);
+        $this->repositoryMock->expects($this->once())
+            ->method('save')
+            ->willThrowException(new CouldNotSaveException(__('Lock wait timeout')));
+
+        $this->service->add('product_sku', 1, 100, 2);
+    }
+
+    /**
      * @param string|int $price
      * @param string|float $qty
      * @expectedException \Magento\Framework\Exception\InputException
      * @dataProvider addDataProvider
      */
-
     public function testAddWithInvalidData($price, $qty)
     {
         $this->service->add('product_sku', 1, $price, $qty);

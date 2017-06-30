@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel;
@@ -9,6 +9,8 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Review resource model
+ *
+ * @api
  */
 class Review extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

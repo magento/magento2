@@ -1,11 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\View\Element\AbstractBlock;
@@ -19,6 +16,9 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -204,13 +204,12 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $moduleName = 'Test';
         $this->block->setData('module_name', $moduleName);
 
-        $this->eventManagerMock->expects($this->once())
+        $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
-            ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('advanced/modules_disable_output/' . $moduleName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(true);
+            ->willReturnMap([
+                ['view_block_abstract_to_html_before', ['block' => $this->block]],
+                ['view_block_abstract_to_html_after', ['block' => $this->block]],
+            ]);
 
         $this->assertSame('', $this->block->toHtml());
     }
@@ -219,6 +218,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      * @param string|bool $cacheLifetime
      * @param string|bool $dataFromCache
      * @param string $dataForSaveCache
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsDispatchEvent
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheLoad
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheSave
      * @param string $expectedResult
@@ -229,6 +229,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $cacheLifetime,
         $dataFromCache,
         $dataForSaveCache,
+        $expectsDispatchEvent,
         $expectsCacheLoad,
         $expectsCacheSave,
         $expectedResult
@@ -239,13 +240,8 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->block->setData('module_name', $moduleName);
         $this->block->setData('cache_lifetime', $cacheLifetime);
 
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('advanced/modules_disable_output/' . $moduleName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
+        $this->eventManagerMock->expects($expectsDispatchEvent)
+            ->method('dispatch');
         $this->cacheStateMock->expects($this->any())
             ->method('isEnabled')
             ->with(AbstractBlock::CACHE_GROUP)
@@ -278,6 +274,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 'cacheLifetime' => null,
                 'dataFromCache' => 'dataFromCache',
                 'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
                 'expectsCacheLoad' => $this->never(),
                 'expectsCacheSave' => $this->never(),
                 'expectedResult' => '',
@@ -286,6 +283,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 'cacheLifetime' => false,
                 'dataFromCache' => 'dataFromCache',
                 'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
                 'expectsCacheLoad' => $this->once(),
                 'expectsCacheSave' => $this->never(),
                 'expectedResult' => 'dataFromCache',
@@ -294,6 +292,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 'cacheLifetime' => 120,
                 'dataFromCache' => 'dataFromCache',
                 'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
                 'expectsCacheLoad' => $this->once(),
                 'expectsCacheSave' => $this->never(),
                 'expectedResult' => 'dataFromCache',
@@ -302,6 +301,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 'cacheLifetime' => '120string',
                 'dataFromCache' => 'dataFromCache',
                 'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
                 'expectsCacheLoad' => $this->once(),
                 'expectsCacheSave' => $this->never(),
                 'expectedResult' => 'dataFromCache',
@@ -310,6 +310,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 'cacheLifetime' => 120,
                 'dataFromCache' => false,
                 'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
                 'expectsCacheLoad' => $this->once(),
                 'expectsCacheSave' => $this->once(),
                 'expectedResult' => '',

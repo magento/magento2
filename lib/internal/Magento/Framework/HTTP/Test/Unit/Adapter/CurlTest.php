@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,14 @@ use \Magento\Framework\HTTP\Adapter\Curl;
 
 class CurlTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Curl */
+    /**
+     * @var Curl
+     */
     protected $model;
 
-    /** @var \Closure */
+    /**
+     * @var \Closure
+     */
     public static $curlExectClosure;
 
     protected function setUp()
@@ -42,4 +46,3 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         ];
     }
 }
-

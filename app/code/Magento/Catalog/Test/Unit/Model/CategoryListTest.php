@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model;
@@ -11,10 +11,8 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryList;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\Filter;
-use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
@@ -49,6 +47,11 @@ class CategoryListTest extends \PHPUnit_Framework_TestCase
      */
     private $categoryRepository;
 
+    /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessorMock;
+
     protected function setUp()
     {
         $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -61,6 +64,8 @@ class CategoryListTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->categoryRepository = $this->getMock(CategoryRepositoryInterface::class);
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
             CategoryList::class,
@@ -69,17 +74,13 @@ class CategoryListTest extends \PHPUnit_Framework_TestCase
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessor,
                 'categorySearchResultsFactory' => $this->categorySearchResultsFactory,
                 'categoryRepository' => $this->categoryRepository,
+                'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
     }
 
     public function testGetList()
     {
-        $fieldName = 'field_1';
-        $value = 'value_1';
-        $conditionType = 'eq';
-        $currentPage = 2;
-        $pageSize = 1;
         $totalCount = 2;
         $categoryIdFirst = 1;
         $categoryIdSecond = 2;
@@ -87,34 +88,16 @@ class CategoryListTest extends \PHPUnit_Framework_TestCase
         $categoryFirst = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
         $categorySecond = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
 
-        $filter = $this->getMockBuilder(Filter::class)->disableOriginalConstructor()->getMock();
-        $filter->expects($this->atLeastOnce())->method('getConditionType')->willReturn($conditionType);
-        $filter->expects($this->atLeastOnce())->method('getField')->willReturn($fieldName);
-        $filter->expects($this->once())->method('getValue')->willReturn($value);
-
-        $filterGroup = $this->getMockBuilder(FilterGroup::class)->disableOriginalConstructor()->getMock();
-        $filterGroup->expects($this->once())->method('getFilters')->willReturn([$filter]);
-
-        $sortOrder = $this->getMockBuilder(SortOrder::class)->disableOriginalConstructor()->getMock();
-        $sortOrder->expects($this->once())->method('getField')->willReturn($fieldName);
-        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-
         /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteria */
         $searchCriteria = $this->getMock(SearchCriteriaInterface::class);
-        $searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
-        $searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $searchCriteria->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $searchCriteria->expects($this->once())->method('getSortOrders')->willReturn([$sortOrder]);
 
         $collection = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with([['attribute' => $fieldName, $conditionType => $value]]);
-        $collection->expects($this->once())->method('addOrder')->with($fieldName, SortOrder::SORT_ASC);
-        $collection->expects($this->once())->method('setCurPage')->with($currentPage);
-        $collection->expects($this->once())->method('setPageSize')->with($pageSize);
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
         $collection->expects($this->once())->method('getAllIds')->willReturn([$categoryIdFirst, $categoryIdSecond]);
+
+        $this->collectionProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
 
         $searchResult = $this->getMock(CategorySearchResultsInterface::class);
         $searchResult->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);

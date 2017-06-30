@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Console\Command;
@@ -10,6 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Indexer\Model\IndexerFactory;
 
 /**
  * An Abstract class for all Indexer related commands.
@@ -20,6 +22,25 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * Indexer name option
      */
     const INPUT_KEY_INDEXERS = 'index';
+
+    /**
+     * @var IndexerFactory
+     */
+    private $indexerFactory;
+
+    /**
+     * Constructor
+     *
+     * @param ObjectManagerFactory $objectManagerFactory
+     * @param IndexerFactory|null $indexerFactory
+     */
+    public function __construct(
+        ObjectManagerFactory $objectManagerFactory,
+        IndexerFactory $indexerFactory = null
+    ) {
+        parent::__construct($objectManagerFactory);
+        $this->indexerFactory = $indexerFactory;
+    }
 
     /**
      * Gets list of indexers
@@ -38,11 +59,10 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
         if (empty($requestedTypes)) {
             return $this->getAllIndexers();
         } else {
-            $indexerFactory = $this->getObjectManager()->create(\Magento\Indexer\Model\IndexerFactory::class);
             $indexers = [];
             $unsupportedTypes = [];
             foreach ($requestedTypes as $code) {
-                $indexer = $indexerFactory->create();
+                $indexer = $this->getIndexerFactory()->create();
                 try {
                     $indexer->load($code);
                     $indexers[] = $indexer;
@@ -79,5 +99,19 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
                 'Space-separated list of index types or omit to apply to all indexes.'
             ),
         ];
+    }
+
+    /**
+     * Get indexer factory
+     *
+     * @return IndexerFactory
+     * @deprecated
+     */
+    private function getIndexerFactory()
+    {
+        if (null === $this->indexerFactory) {
+            $this->indexerFactory = $this->getObjectManager()->get(IndexerFactory::class);
+        }
+        return $this->indexerFactory;
     }
 }

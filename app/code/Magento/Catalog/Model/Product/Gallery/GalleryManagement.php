@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -94,10 +94,16 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         }
         $found = false;
         foreach ($existingMediaGalleryEntries as $key => $existingEntry) {
+            $entryTypes = (array)$entry->getTypes();
+            $existingEntryTypes = (array)$existingMediaGalleryEntries[$key]->getTypes();
+            $existingMediaGalleryEntries[$key]->setTypes(array_diff($existingEntryTypes, $entryTypes));
+
             if ($existingEntry->getId() == $entry->getId()) {
                 $found = true;
+                if ($entry->getFile()) {
+                    $entry->setId(null);
+                }
                 $existingMediaGalleryEntries[$key] = $entry;
-                break;
             }
         }
         if (!$found) {

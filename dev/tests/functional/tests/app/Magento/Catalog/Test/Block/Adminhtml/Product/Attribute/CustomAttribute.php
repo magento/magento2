@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\DriverInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
@@ -102,7 +102,7 @@ class CustomAttribute extends SimpleElement
     {
         $element = null;
         foreach (array_keys($this->classReferences) as $key) {
-            if (strpos($class, $key) !== false) {
+            if ($class == $key) {
                 return $this->classReferences[$class];
             }
         }

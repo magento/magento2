@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -40,6 +40,10 @@
     </div>
     <div class="message message-error" ng-show="upgradeProcessError">
             <span class="message-text" ng-bind-html="upgradeProcessErrorMessage"></span>
+    </div>
+    <div class="message" ng-show="upgradeProcessed && !upgradeProcessError && currentVersion">
+        Your Magento version is {{currentVersion}}.
+        <span ng-show="versions">You are about to upgrade to a newer version.</span>
     </div>
     <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
         <div class="col-m-3">
@@ -160,7 +164,7 @@
                     <input id="pageCurrent"
                            class="admin__control-text"
                            type="number"
-                           value="{{currentPage}}"
+                           ng-value="currentPage"
                            ng-model="currentPage"
                     >
                         <label class="admin__control-support-text" for="pageCurrent">

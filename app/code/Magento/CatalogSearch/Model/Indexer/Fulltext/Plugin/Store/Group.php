@@ -1,34 +1,52 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin as AbstractIndexerPlugin;
+use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
+use Magento\Framework\Model\AbstractModel;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
-class Group extends AbstractPlugin
+/**
+ * Plugin for Magento\Store\Model\ResourceModel\Group
+ */
+class Group extends AbstractIndexerPlugin
 {
+    /**
+     * @var bool
+     */
+    private $needInvalidation;
+
+    /**
+     * Check if indexer requires invalidation after store group save
+     *
+     * @param StoreGroupResourceModel $subject
+     * @param AbstractModel $group
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeSave(StoreGroupResourceModel $subject, AbstractModel $group)
+    {
+        $this->needInvalidation = !$group->isObjectNew() && $group->dataHasChangedFor('website_id');
+    }
+
     /**
      * Invalidate indexer on store group save
      *
-     * @param \Magento\Store\Model\ResourceModel\Group $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $group
+     * @param StoreGroupResourceModel $subject
+     * @param StoreGroupResourceModel $result
+     * @return StoreGroupResourceModel
      *
-     * @return \Magento\Store\Model\ResourceModel\Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Store\Model\ResourceModel\Group $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $group
-    ) {
-        $needInvalidation = !$group->isObjectNew() && $group->dataHasChangedFor('website_id');
-        $result = $proceed($group);
-        if ($needInvalidation) {
-            $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
+    public function afterSave(StoreGroupResourceModel $subject, StoreGroupResourceModel $result)
+    {
+        if ($this->needInvalidation) {
+            $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID)->invalidate();
         }
 
         return $result;
@@ -37,17 +55,16 @@ class Group extends AbstractPlugin
     /**
      * Invalidate indexer on store group delete
      *
-     * @param \Magento\Store\Model\ResourceModel\Group $subject
-     * @param \Magento\Store\Model\ResourceModel\Group $result
+     * @param StoreGroupResourceModel $subject
+     * @param StoreGroupResourceModel $result
+     * @return StoreGroupResourceModel
      *
-     * @return \Magento\Store\Model\ResourceModel\Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(
-        \Magento\Store\Model\ResourceModel\Group $subject,
-        \Magento\Store\Model\ResourceModel\Group $result
-    ) {
-        $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
+    public function afterDelete(StoreGroupResourceModel $subject, StoreGroupResourceModel $result)
+    {
+        $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID)->invalidate();
+
         return $result;
     }
 }

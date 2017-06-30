@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\View\Result;
@@ -10,6 +10,9 @@ use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @api
+ */
 class Forward extends \Magento\Framework\Controller\Result\Forward
 {
     /**

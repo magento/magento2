@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 ?>
 <?php /** @var \Magento\Cookie\Block\RequireCookie $block */ ?>
 <script type="text/x-magento-init">
     {
         "body": {
-            "requireCookie": <?php /* @escapeNotVerified */ echo $block->getScriptOptions(); ?>
+            "requireCookie": <?php /* @noEscape */ echo $block->getScriptOptions(); ?>
         }
     }
 </script>

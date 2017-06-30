@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use \Magento\Framework\Controller\Result\Redirect;
 
 class RedirectTest extends \PHPUnit_Framework_TestCase
@@ -22,7 +23,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlInterface;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HttpResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $response;
 
     protected function setUp()
@@ -49,8 +50,8 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->response = $this->getMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse'],
+            HttpResponseInterface::class,
+            [],
             [],
             '',
             false

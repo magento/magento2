@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/** @var $block \Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist */
+/** @var \Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist $block */
 ?>
 <?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()): ?>
     <a href="#"
-       data-post='<?php /* @escapeNotVerified */ echo $block->getMoveFromCartParams(); ?>'
+       data-post='<?php /* @noEscape */ echo $block->getMoveFromCartParams(); ?>'
        class="use-ajax action action-towishlist">
-        <span><?php /* @escapeNotVerified */ echo __('Move to Wishlist'); ?></span>
+        <span><?php echo $block->escapeHtml(__('Move to Wishlist')); ?></span>
     </a>
 <?php endif ?>

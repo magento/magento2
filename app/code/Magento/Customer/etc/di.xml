@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,6 +12,8 @@
                 type="Magento\Customer\Model\ResourceModel\CustomerRepository" />
     <preference for="Magento\Customer\Api\GroupManagementInterface"
                 type="Magento\Customer\Model\GroupManagement" />
+    <preference for="Magento\Customer\Api\CustomerGroupConfigInterface"
+                type="Magento\Customer\Model\CustomerGroupConfig" />
     <preference for="Magento\Customer\Api\GroupRepositoryInterface"
                 type="Magento\Customer\Model\ResourceModel\GroupRepository" />
     <preference for="Magento\Customer\Api\Data\CustomerInterface" type="Magento\Customer\Model\Data\Customer" />
@@ -51,6 +53,12 @@
                 type="Magento\Customer\Helper\View" />
     <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
                 type="Magento\Customer\Model\Address\CustomAttributeList" />
+    <preference for="Magento\Customer\Model\Customer\Source\GroupSourceInterface"
+                type="Magento\Customer\Model\Customer\Source\Group" />
+    <preference for="Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface"
+                type="Magento\Customer\Model\Customer\Attribute\Source\Group"/>
+    <preference for="Magento\Customer\Block\Account\SortLinkInterface"
+                type="Magento\Customer\Block\Account\SortLink"/>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -307,12 +315,91 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
+    <type name="Magento\Directory\Model\AllowedCountries">
+        <plugin name="customerAllowedCountries" type="Magento\Customer\Model\Plugin\AllowedCountries"/>
+    </type>
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
     <type name="Magento\Customer\Model\Customer\NotificationStorage">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <!-- @api -->
+    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="code" xsi:type="string">customer_group_code</item>
+                <item name="id" xsi:type="string">customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">class_name</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- @api -->
+    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="code" xsi:type="string">customer_group_code</item>
+                <item name="id" xsi:type="string">customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">class_name</item>
+            </argument>
+            <argument name="defaultOrders" xsi:type="array">
+                <item name="id" xsi:type="string">ASC</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- @api -->
+    <virtualType name="Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\CollectionProcessor\GroupSortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Model\ResourceModel\GroupRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Customer\Model\Api\SearchCriteria\GroupCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\AddressRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Attribute">
+        <arguments>
+            <argument name="attributeMetadataCache" xsi:type="object">Magento\Customer\Model\Metadata\AttributeMetadataCache\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">customer_entity</item>
+                    <item name="eavEntityType" xsi:type="string">customer</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Ui\Component\MassAction\Group\Options">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="urlPath" xsi:type="string">customer/index/massAssignGroup</item>
+                <item name="paramName" xsi:type="string">group</item>
+                <item name="confirm" xsi:type="array">
+                    <item name="title" xsi:type="string">Assign a Customer Group</item>
+                    <item name="message" xsi:type="string">Are you sure to assign selected customers to new group?</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

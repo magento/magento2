@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,15 +21,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save Product.
  * 6. Perform appropriate assertions.
  *
- * @group Products_(CS)
- * @ZephyrId MAGETWO-23414
+ * @group Products
+ * @ZephyrId MAGETWO-23414, MAGETWO-17475, MAGETWO-43376
  */
 class CreateSimpleProductEntityTest extends Injectable
 {
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

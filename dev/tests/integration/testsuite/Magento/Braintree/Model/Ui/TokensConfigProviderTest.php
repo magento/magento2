@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Ui;
@@ -72,7 +72,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         /** @var PaymentTokenManagement $tokenManagement */
         $tokenManagement = $this->objectManager->get(PaymentTokenManagement::class);
         $paymentToken = $tokenManagement->getByGatewayToken($token, PayPalConfigProvider::PAYPAL_CODE, $customerId);
-        $item = PayPalConfigProvider::PAYPAL_CODE . '_item_' . $paymentToken->getEntityId();
+        $item = PayPalConfigProvider::PAYPAL_VAULT_CODE . '_' . $paymentToken->getEntityId();
 
         /** @var Session $session */
         $session = $this->objectManager->get(Session::class);

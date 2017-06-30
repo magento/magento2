@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Customer;
@@ -10,6 +10,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer Reviews list block
+ *
+ * @api
  */
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -118,6 +120,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * Get review link
      *
      * @return string
+     * @deprecated
      */
     public function getReviewLink()
     {
@@ -125,13 +128,36 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
+     * Get review URL
+     *
+     * @param \Magento\Review\Model\Review $review
+     * @return string
+     */
+    public function getReviewUrl($review)
+    {
+        return $this->getUrl('review/customer/view', ['id' => $review->getReviewId()]);
+    }
+
+    /**
      * Get product link
      *
      * @return string
+     * @deprecated
      */
     public function getProductLink()
     {
         return $this->getUrl('catalog/product/view/');
+    }
+
+    /**
+     * Get product URL
+     *
+     * @param \Magento\Review\Model\Review $review
+     * @return string
+     */
+    public function getProductUrl($review)
+    {
+        return $this->getUrl('catalog/product/view', ['id' => $review->getEntityPkValue()]);
     }
 
     /**

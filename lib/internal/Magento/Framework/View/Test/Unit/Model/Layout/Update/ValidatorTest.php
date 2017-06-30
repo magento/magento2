@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout\Update;
 
 use Magento\Framework\Phrase;
-use \Magento\Framework\View\Model\Layout\Update\Validator;
+use Magento\Framework\View\Model\Layout\Update\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,7 +95,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidNotSecurityCheckDataProvider()
     {
         return [
-            ['test', true, []]
+            ['test', true, []],
         ];
     }
 
@@ -165,17 +165,17 @@ XML;
                 $insecureHelper,
                 false,
                 [
-                    Validator::HELPER_ARGUMENT_TYPE => 'Helper arguments should not be used in custom layout updates.'
+                    Validator::HELPER_ARGUMENT_TYPE => 'Helper arguments should not be used in custom layout updates.',
                 ],
             ],
             [
                 $insecureUpdater,
                 false,
                 [
-                    Validator::UPDATER_MODEL => 'Updater model should not be used in custom layout updates.'
-                ]
+                    Validator::UPDATER_MODEL => 'Updater model should not be used in custom layout updates.',
+                ],
             ],
-            [$secureLayout, true, []]
+            [$secureLayout, true, []],
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -155,7 +155,8 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $this->webapiBlock = $this->getWebapiBlock();
         $resources = [
-            1 => [ 'children' => [1, 2, 3] ]
+            ['id' => 'Magento_Backend::admin', 'children' => ['resource1', 'resource2', 'resource3']],
+            ['id' => 'Invalid_Node', 'children' => ['resource4', 'resource5', 'resource6']]
         ];
         $this->aclResourceProvider->expects($this->once())
             ->method('getAclResources')
@@ -163,7 +164,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $rootArray = "rootArrayValue";
         $this->integrationHelper->expects($this->once())
             ->method('mapResources')
-            ->with([1, 2, 3])
+            ->with(['resource1', 'resource2', 'resource3'])
             ->will($this->returnValue($rootArray));
         $this->assertEquals($rootArray, $this->webapiBlock->getTree());
     }
@@ -197,7 +198,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         return [
             'root resource in array' => [
                 2,
-                ['all_resources' => 0, 'resource'=>[2, 3]],
+                ['all_resources' => 0, 'resource' => [2, 3]],
                 true
             ],
             'root resource not in array' => [

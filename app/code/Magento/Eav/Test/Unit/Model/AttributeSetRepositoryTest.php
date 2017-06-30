@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeSetRepository;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -49,6 +50,11 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     private $extensionAttributesJoinProcessorMock;
 
     /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -89,13 +95,18 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMockForAbstractClass();
+
         $this->model = new \Magento\Eav\Model\AttributeSetRepository(
             $this->resourceMock,
             $this->setFactoryMock,
             $this->collectionFactoryMock,
             $this->eavConfigMock,
             $this->resultFactoryMock,
-            $this->extensionAttributesJoinProcessorMock
+            $this->extensionAttributesJoinProcessorMock,
+            $this->collectionProcessor
         );
     }
 
@@ -207,58 +218,30 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $entityTypeCode = 'entity_type_code_value';
-        $entityTypeId = 41;
+        $attributeSetMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Set::class, [], [], '', false);
+
+        $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getItems',
+                'getSize',
+            ])
+            ->getMock();
+
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$attributeSetMock]);
+        $collectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(1);
+
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
 
-        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
+        $resultMock = $this->getMockBuilder(\Magento\Eav\Api\Data\AttributeSetSearchResultsInterface::class)
+            ->getMockForAbstractClass();
 
-        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
-
-        $filterMock->expects($this->once())->method('getField')->willReturn('entity_type_code');
-        $filterMock->expects($this->once())->method('getValue')->willReturn($entityTypeCode);
-
-        $collectionMock = $this->getMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class,
-            ['setEntityTypeFilter', 'setCurPage', 'setPageSize', 'getItems', 'getSize'],
-            [],
-            '',
-            false
-        );
-
-        $entityTypeMock = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
-        $entityTypeMock->expects($this->once())->method('getId')->willReturn($entityTypeId);
-        $this->eavConfigMock->expects($this->once())
-            ->method('getEntityType')
-            ->with($entityTypeCode)
-            ->willReturn($entityTypeMock);
-
-        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
-        $collectionMock->expects($this->once())
-            ->method('setEntityTypeFilter')
-            ->with($entityTypeId)
-            ->willReturnSelf();
-
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn(1);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(10);
-
-        $collectionMock->expects($this->once())->method('setCurPage')->with(1)->willReturnSelf();
-        $collectionMock->expects($this->once())->method('setPageSize')->with(10)->willReturnSelf();
-
-        $attributeSetMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Set::class, [], [], '', false);
-        $collectionMock->expects($this->once())->method('getItems')->willReturn([$attributeSetMock]);
-        $collectionMock->expects($this->once())->method('getSize')->willReturn(1);
-
-        $resultMock = $this->getMock(
-            \Magento\Eav\Api\Data\AttributeSetSearchResultsInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
         $resultMock->expects($this->once())
             ->method('setSearchCriteria')
             ->with($searchCriteriaMock)
@@ -267,9 +250,19 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setItems')
             ->with([$attributeSetMock])
             ->willReturnSelf();
-        $resultMock->expects($this->once())->method('setTotalCount')->with(1)->willReturnSelf();
+        $resultMock->expects($this->once())
+            ->method('setTotalCount')
+            ->with(1)
+            ->willReturnSelf();
 
-        $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($resultMock);
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultMock);
+
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock)
+            ->willReturnSelf();
 
         $this->model->getList($searchCriteriaMock);
     }
@@ -279,36 +272,32 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListIfEntityTypeCodeIsNull()
     {
-        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([]);
-
-        $collectionMock = $this->getMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class,
-            ['setCurPage', 'setPageSize', 'getItems', 'getSize'],
-            [],
-            '',
-            false
-        );
-
-        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
-
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn(1);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(10);
-
-        $collectionMock->expects($this->once())->method('setCurPage')->with(1)->willReturnSelf();
-        $collectionMock->expects($this->once())->method('setPageSize')->with(10)->willReturnSelf();
-
         $attributeSetMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Set::class, [], [], '', false);
-        $collectionMock->expects($this->once())->method('getItems')->willReturn([$attributeSetMock]);
-        $collectionMock->expects($this->once())->method('getSize')->willReturn(1);
 
-        $resultMock = $this->getMock(
-            \Magento\Eav\Api\Data\AttributeSetSearchResultsInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $collectionMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getItems',
+                'getSize',
+            ])
+            ->getMock();
+
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$attributeSetMock]);
+        $collectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(1);
+
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+
+        $resultMock = $this->getMockBuilder(\Magento\Eav\Api\Data\AttributeSetSearchResultsInterface::class)
+            ->getMockForAbstractClass();
+
         $resultMock->expects($this->once())
             ->method('setSearchCriteria')
             ->with($searchCriteriaMock)
@@ -317,9 +306,19 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setItems')
             ->with([$attributeSetMock])
             ->willReturnSelf();
-        $resultMock->expects($this->once())->method('setTotalCount')->with(1)->willReturnSelf();
+        $resultMock->expects($this->once())
+            ->method('setTotalCount')
+            ->with(1)
+            ->willReturnSelf();
 
-        $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($resultMock);
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultMock);
+
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock)
+            ->willReturnSelf();
 
         $this->model->getList($searchCriteriaMock);
     }

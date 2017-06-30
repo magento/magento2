@@ -1,29 +1,29 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/* @var $block \Magento\Wishlist\Block\Customer\Wishlist */
+/** @var \Magento\Wishlist\Block\Customer\Wishlist $block */
 ?>
 
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
     <?php echo($block->getChildHtml('wishlist.rss.link'));?>
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
-          "addToCartUrl":<?php /* @escapeNotVerified */ echo $block->getItemAddToCartParams("%item%");?>,
-          "addAllToCartUrl":<?php /* @escapeNotVerified */ echo $block->getAddAllToCartParams(); ?>,
+          "addToCartUrl":<?php /* @noEscape */ echo $block->getItemAddToCartParams("%item%");?>,
+          "addAllToCartUrl":<?php /* @noEscape */ echo $block->getAddAllToCartParams(); ?>,
           "commentString":""},
-          "validation": {}}' action="<?php /* @escapeNotVerified */ echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
+          "validation": {}}' action="<?php echo $block->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
         <?php echo $block->getChildHtml('top'); ?>
         <?php if ($block->hasWishlistItems()): ?>
             <?php echo $block->getBlockHtml('formkey');?>
             <?php $block->getChildBlock('items')->setItems($block->getWishlistItems()); ?>
             <?php echo $block->getChildHtml('items');?>
         <?php else: ?>
-            <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no items in your wish list.') ?></span></div>
+            <div class="message info empty"><span><?php echo $block->escapeHtml(__('You have no items in your wish list.')) ?></span></div>
         <?php endif ?>
         <?php echo $block->getChildHtml('bottom'); ?>
         <div class="actions-toolbar">
@@ -32,7 +32,7 @@
             </div>
             <div class="secondary">
                 <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-                    <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
+                    <span><?php echo $block->escapeHtml(__('Back')) ?></span>
                 </a>
             </div>
         </div>

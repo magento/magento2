@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
@@ -123,13 +123,11 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         ];
         $leftJoinTables = [
             0 => [
-                0 =>
-                    [
+                0 => [
                         'store_value' => 'catalog_product_entity_media_gallery_value_video',
                     ],
                 1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                2 =>
-                    [
+                2 => [
                         'video_provider' => 'provider',
                         'video_url' => 'url',
                         'video_title' => 'title',
@@ -214,15 +212,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $storeId = 0;
         $cols = null;
         $leftJoinTables = [
-            0 =>
-                [
-                    0 =>
-                        [
+            0 => [
+                    0 => [
                             'store_value' => 'catalog_product_entity_media_gallery_value_video',
                         ],
                     1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                    2 =>
-                        [
+                    2 => [
                             'video_provider' => 'provider',
                             'video_url' => 'url',
                             'video_title' => 'title',
@@ -317,7 +312,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $attributeId = 6;
         $getTableReturnValue = 'table';
         $quoteInfoReturnValue =
-            'main.value_id = value.value_id AND value.store_id = ' . $storeId . ' AND value.entity_id = ' . $productId;
+            'main.value_id = value.value_id AND value.store_id = ' . $storeId
+            . ' AND value.entity_id = entity.entity_id';
+        $quoteDefaultInfoReturnValue =
+            'main.value_id = default_value.value_id AND default_value.store_id = 0'
+            . ' AND default_value.entity_id = entity.entity_id';
+
         $positionCheckSql = 'testchecksql';
         $resultRow = [
             [
@@ -355,14 +355,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->product->expects($this->at(0))->method('getData')->with('entity_id')->willReturn($productId);
         $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
-        $this->connection->expects($this->exactly(3))->method('quoteInto')->withConsecutive(
-            ['value.store_id = ?', 1],
-            ['value.entity_id = ?', 5],
-            ['default_value.entity_id = ?', 5]
+        $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
+            ['value.store_id = ?'],
+            ['default_value.store_id = ?']
         )->willReturnOnConsecutiveCalls(
             'value.store_id = ' . $storeId,
-            'value.entity_id = ' . $productId,
-            'default_value.entity_id = ' . $productId
+            'default_value.store_id = ' . 0
         );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
             ['value' => $getTableReturnValue],
@@ -375,8 +373,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->select->expects($this->at(3))->method('joinLeft')->with(
             ['default_value' => $getTableReturnValue],
-            'main.value_id = default_value.value_id AND default_value.store_id = 0 AND default_value.entity_id = '
-            . $productId,
+            $quoteDefaultInfoReturnValue,
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->willReturnSelf();
         $this->select->expects($this->at(4))->method('where')->with(
@@ -384,7 +381,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             $attributeId
         )->willReturnSelf();
         $this->select->expects($this->at(5))->method('where')->with('main.disabled = 0')->willReturnSelf();
-        $this->select->expects($this->at(6))->method('where')
+        $this->select->expects($this->at(7))->method('where')
                      ->with('entity.entity_id = ?', $productId)
                      ->willReturnSelf();
         $this->select->expects($this->once())->method('order')
@@ -445,5 +442,34 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
 
         $this->resource->deleteGalleryValueInStore($valueId, $entityId, $storeId);
+    }
+
+    public function testCountImageUses()
+    {
+        $results = [
+            [
+                'value_id' => '1',
+                'attribute_id' => 90,
+                'value' => '/d/o/download_7.jpg',
+                'media_type' => 'image',
+                'disabled' => '0',
+            ],
+        ];
+
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->select->expects($this->at(0))->method('from')->with(
+            [
+                'main' => 'table',
+            ],
+            '*'
+        )->willReturnSelf();
+        $this->select->expects($this->at(1))->method('where')->with(
+            'value = ?',
+            1
+        )->willReturnSelf();
+        $this->connection->expects($this->once())->method('fetchAll')
+            ->with($this->select)
+            ->willReturn($results);
+        $this->assertEquals($this->resource->countImageUses(1), count($results));
     }
 }

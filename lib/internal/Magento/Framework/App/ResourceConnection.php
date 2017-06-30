@@ -1,8 +1,6 @@
 <?php
 /**
- * Resources and connections registry and factory
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -12,6 +10,11 @@ use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigIn
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
+/**
+ * Application provides ability to configure multiple connections to persistent storage.
+ * This class provides access to all these connections.
+ * @api
+ */
 class ResourceConnection
 {
     const AUTO_UPDATE_ONCE = 0;
@@ -93,6 +96,18 @@ class ResourceConnection
     }
 
     /**
+     * @param string $resourceName
+     * @return void
+     */
+    public function closeConnection($resourceName = self::DEFAULT_CONNECTION)
+    {
+        $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
+        if (isset($this->connections[$processConnectionName])) {
+            $this->connections[$processConnectionName] = null;
+        }
+    }
+
+    /**
      * Retrieve connection by $connectionName
      *
      * @param string $connectionName
@@ -101,8 +116,9 @@ class ResourceConnection
      */
     public function getConnectionByName($connectionName)
     {
-        if (isset($this->connections[$connectionName])) {
-            return $this->connections[$connectionName];
+        $processConnectionName = $this->getProcessConnectionName($connectionName);
+        if (isset($this->connections[$processConnectionName])) {
+            return $this->connections[$processConnectionName];
         }
 
         $connectionConfig = $this->deploymentConfig->get(
@@ -115,8 +131,17 @@ class ResourceConnection
             throw new \DomainException('Connection "' . $connectionName . '" is not defined');
         }
 
-        $this->connections[$connectionName] = $connection;
+        $this->connections[$processConnectionName] = $connection;
         return $connection;
+    }
+
+    /**
+     * @param string $connectionName
+     * @return string
+     */
+    private function getProcessConnectionName($connectionName)
+    {
+        return  $connectionName . '_process_' . getmypid();
     }
 
     /**

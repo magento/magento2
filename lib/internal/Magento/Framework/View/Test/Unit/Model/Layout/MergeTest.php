@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
@@ -61,7 +61,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
                 'scope' => $this->scope,
                 'layoutValidator' => $this->layoutValidator,
                 'logger' => $this->logger,
-                'appState' => $this->appState
+                'appState' => $this->appState,
             ]
         );
     }
@@ -73,7 +73,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testValidateMergedLayoutThrowsException()
     {
         $messages = [
-            'Please correct the XSD data and try again.'
+            'Please correct the XSD data and try again.',
         ];
         $this->scope->expects($this->once())->method('getId')->willReturn(1);
         $this->layoutValidator->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,15 @@ defined('MTF_STATES_PATH') || define('MTF_STATES_PATH', MTF_BP . '/lib/Magento/M
 
 require_once __DIR__ . '/../../../app/bootstrap.php';
 restore_error_handler();
-require_once __DIR__ . '/vendor/autoload.php';
+$vendorAutoload = __DIR__ . '/vendor/autoload.php';
+
+if (isset($composerAutoloader)) {
+    /** var $mtfComposerAutoload \Composer\Autoload\ClassLoader */
+    $mtfComposerAutoload = include $vendorAutoload;
+    $composerAutoloader->addClassMap($mtfComposerAutoload->getClassMap());
+} else {
+    $composerAutoloader = include $vendorAutoload;
+}
 
 setCustomErrorHandler();
 

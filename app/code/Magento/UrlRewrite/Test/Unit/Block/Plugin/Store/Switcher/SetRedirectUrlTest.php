@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ class SetRedirectUrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTargetStorePostData()
     {
-        $urlRewrite = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
+        $urlRewrite = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
         $urlRewrite->expects($this->once())->method('getRequestPath')->willReturn('path');
 
         $this->request->expects($this->once())->method('getPathInfo')->willReturn('path');

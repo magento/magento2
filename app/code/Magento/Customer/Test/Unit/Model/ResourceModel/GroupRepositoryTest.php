@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
+
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -67,11 +69,67 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessorMock;
+
+    /**
      * @var \Magento\Customer\Model\ResourceModel\GroupRepository
      */
     protected $model;
     
     protected function setUp()
+    {
+        $this->setupGroupObjects();
+        $this->dataObjectProcessor = $this->getMock(
+            \Magento\Framework\Reflection\DataObjectProcessor::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->searchResultsFactory = $this->getMock(
+            \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->searchResults = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->taxClassRepository = $this->getMockForAbstractClass(
+            \Magento\Tax\Api\TaxClassRepositoryInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
+
+        $this->model = new \Magento\Customer\Model\ResourceModel\GroupRepository(
+            $this->groupRegistry,
+            $this->groupFactory,
+            $this->groupDataFactory,
+            $this->groupResourceModel,
+            $this->dataObjectProcessor,
+            $this->searchResultsFactory,
+            $this->taxClassRepository,
+            $this->extensionAttributesJoinProcessor,
+            $this->collectionProcessorMock
+        );
+    }
+
+    private function setupGroupObjects()
     {
         $this->groupRegistry = $this->getMock(
             \Magento\Customer\Model\GroupRegistry::class,
@@ -126,48 +184,6 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false
-        );
-        $this->dataObjectProcessor = $this->getMock(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->searchResultsFactory = $this->getMock(
-            \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->searchResults = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->taxClassRepository = $this->getMockForAbstractClass(
-            \Magento\Tax\Api\TaxClassRepositoryInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(
-            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->model = new \Magento\Customer\Model\ResourceModel\GroupRepository(
-            $this->groupRegistry,
-            $this->groupFactory,
-            $this->groupDataFactory,
-            $this->groupResourceModel,
-            $this->dataObjectProcessor,
-            $this->searchResultsFactory,
-            $this->taxClassRepository,
-            $this->extensionAttributesJoinProcessor
         );
     }
 
@@ -351,10 +367,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $groupId = 86;
 
         $groupExtension = $this->getMock(\Magento\Customer\Api\Data\GroupExtensionInterface::class, [], [], '', false);
-        $filterGroup = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $collection = $this->getMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class, [], [], '', false);
-        $sortOrder = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
         $searchCriteria = $this->getMockForAbstractClass(
             \Magento\Framework\Api\SearchCriteriaInterface::class,
             [],
@@ -385,48 +398,9 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($collection, \Magento\Customer\Api\Data\GroupInterface::class);
         $collection->expects($this->once())
             ->method('addTaxClass');
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroup]);
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-        $filter->expects($this->once())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $filter->expects($this->once())
-            ->method('getField')
-            ->willReturn('Field');
-        $filter->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturn('Value');
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with(['Field'], [['eq' => 'Value']]);
-        $searchCriteria->expects($this->atLeastOnce())
-            ->method('getSortOrders')
-            ->willReturn([$sortOrder]);
-        $sortOrder->expects($this->once())
-            ->method('getField')
-            ->willReturn('Field');
-        $collection->expects($this->once())
-            ->method('addOrder')
-            ->with('Field', 'ASC');
-        $sortOrder->expects($this->once())
-            ->method('getDirection')
-            ->willReturn(\Magento\Framework\Api\SortOrder::SORT_ASC);
-        $searchCriteria->expects($this->once())
-            ->method('getCurrentPage')
-            ->willReturn(1);
-        $collection->expects($this->once())
-            ->method('setCurPage')
-            ->with(1);
-        $searchCriteria->expects($this->once())
-            ->method('getPageSize')
-            ->willReturn(10);
-        $collection->expects($this->once())
-            ->method('setPageSize')
-            ->with(10);
+        $this->collectionProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
         $collection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->groupModel]));
@@ -485,142 +459,6 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setItems')
             ->with([$this->group])
             ->willReturnSelf();
-
-        $this->assertSame($searchResults, $this->model->getList($searchCriteria));
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testGetListWithoutSortOrder()
-    {
-        $groupId = 86;
-
-        $groupExtension = $this->getMock(\Magento\Customer\Api\Data\GroupExtensionInterface::class, [], [], '', false);
-        $filterGroup = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
-        $collection = $this->getMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class, [], [], '', false);
-        $searchCriteria = $this->getMockForAbstractClass(
-            \Magento\Framework\Api\SearchCriteriaInterface::class,
-            [],
-            '',
-            false
-        );
-        $searchResults = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressSearchResultsInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->searchResultsFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($searchResults);
-        $searchResults->expects($this->once())
-            ->method('setSearchCriteria')
-            ->with($searchCriteria);
-
-        $this->groupFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->groupModel);
-        $this->groupModel->expects($this->once())
-            ->method('getCollection')
-            ->willReturn($collection);
-        $this->extensionAttributesJoinProcessor->expects($this->once())
-            ->method('process')
-            ->with($collection, \Magento\Customer\Api\Data\GroupInterface::class);
-        $collection->expects($this->once())
-            ->method('addTaxClass');
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroup]);
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-        $filter->expects($this->once())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $filter->expects($this->once())
-            ->method('getField')
-            ->willReturn('Field');
-        $filter->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturn('Value');
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with(['Field'], [['eq' => 'Value']]);
-
-        $searchCriteria->expects($this->once())
-            ->method('getCurrentPage')
-            ->willReturn(1);
-        $collection->expects($this->once())
-            ->method('setCurPage')
-            ->with(1);
-        $searchCriteria->expects($this->once())
-            ->method('getPageSize')
-            ->willReturn(10);
-        $collection->expects($this->once())
-            ->method('setPageSize')
-            ->with(10);
-        $collection->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->groupModel]));
-
-        $this->groupDataFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->group);
-
-        $this->group->expects($this->once())
-            ->method('setId')
-            ->with($groupId)
-            ->willReturnSelf();
-        $this->group->expects($this->once())
-            ->method('setCode')
-            ->with('Code')
-            ->willReturnSelf();
-        $this->group->expects($this->once())
-            ->method('setTaxClassId')
-            ->with(234)
-            ->willReturnSelf();
-        $this->group->expects($this->once())
-            ->method('setTaxClassName')
-            ->with('Tax class name')
-            ->willReturnSelf();
-
-        $this->groupModel->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($groupId);
-        $this->groupModel->expects($this->atLeastOnce())
-            ->method('getCode')
-            ->willReturn('Code');
-        $this->groupModel->expects($this->atLeastOnce())
-            ->method('getTaxClassId')
-            ->willReturn(234);
-        $this->groupModel->expects($this->atLeastOnce())
-            ->method('getTaxClassName')
-            ->willReturn('Tax class name');
-        $this->groupModel->expects($this->once())
-            ->method('getData')
-            ->willReturn([]);
-        $this->extensionAttributesJoinProcessor->expects($this->once())
-            ->method('extractExtensionAttributes')
-            ->with(\Magento\Customer\Api\Data\GroupInterface::class, [])
-            ->willReturn(['extension_attributes' => $groupExtension]);
-        $this->group->expects($this->once())
-            ->method('setExtensionAttributes')
-            ->with($groupExtension);
-        $collection->expects($this->once())
-            ->method('getSize')
-            ->willReturn(9);
-        $searchResults->expects($this->once())
-            ->method('setTotalCount')
-            ->with(9);
-        $searchResults->expects($this->once())
-            ->method('setItems')
-            ->with([$this->group])
-            ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('addOrder')
-            ->with('customer_group_id', 'ASC');
 
         $this->assertSame($searchResults, $this->model->getList($searchCriteria));
     }

@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
@@ -10,7 +12,60 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+$categoryLinkManagement = $objectManager->get(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+
+$tierPrices = [];
+/** @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory */
+$tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
+/** @var  $tpExtensionAttributes */
+$tpExtensionAttributesFactory = $objectManager->get(ProductTierPriceExtensionFactory::class);
+
+$adminWebsite = $objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class)->get('admin');
+$tierPriceExtensionAttributes1 = $tpExtensionAttributesFactory->create()
+    ->setWebsiteId($adminWebsite->getId());
+
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+            'qty' => 2,
+            'value' => 8
+        ]
+    ]
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
+
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+            'qty' => 5,
+            'value' => 5
+        ]
+    ]
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
+
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+            'qty' => 3,
+            'value' => 5
+        ]
+    ]
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
+
+$tierPriceExtensionAttributes2 = $tpExtensionAttributesFactory->create()
+    ->setWebsiteId($adminWebsite->getId())
+    ->setPercentageValue(50);
+
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+            'qty' => 10
+        ]
+    ]
+)->setExtensionAttributes($tierPriceExtensionAttributes2);
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
@@ -25,28 +80,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setWeight(1)
     ->setShortDescription("Short description")
     ->setTaxClassId(0)
-    ->setTierPrice(
-        [
-            [
-                'website_id' => 0,
-                'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                'price_qty'  => 2,
-                'price'      => 8,
-            ],
-            [
-                'website_id' => 0,
-                'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                'price_qty'  => 5,
-                'price'      => 5,
-            ],
-            [
-                'website_id' => 0,
-                'cust_group' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
-                'price_qty'  => 3,
-                'price'      => 5,
-            ],
-        ]
-    )
+    ->setTierPrices($tierPrices)
     ->setDescription('Description with <b>html tag</b>')
     ->setMetaTitle('meta title')
     ->setMetaKeyword('meta keyword')
@@ -93,14 +127,14 @@ $oldOptions = [
         'sort_order' => 0,
         'values'    => [
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 1',
                 'price'         => 3,
                 'price_type'    => 'fixed',
                 'sku'           => '3-1-select',
             ],
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 2',
                 'price'         => 3,
                 'price_type'    => 'fixed',
@@ -116,14 +150,14 @@ $oldOptions = [
         'sort_order' => 0,
         'values'    => [
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 1',
                 'price'         => 3,
                 'price_type'    => 'fixed',
                 'sku'           => '4-1-radio',
             ],
             [
-                'option_type_id' => -1,
+                'option_type_id' => null,
                 'title'         => 'Option 2',
                 'price'         => 3,
                 'price_type'    => 'fixed',
@@ -149,8 +183,8 @@ foreach ($oldOptions as $option) {
 $product->setOptions($options);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
-$productRepositoryFactory = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$productRepositoryFactory->save($product);
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository->save($product);
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),

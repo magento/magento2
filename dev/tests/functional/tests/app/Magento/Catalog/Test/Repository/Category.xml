@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,16 +17,36 @@
             </field>
         </dataset>
 
-        <dataset name="default_category">
-            <field name="name" xsi:type="string">Default Category</field>
-            <field name="parent_id" xsi:type="string">1</field>
+        <dataset name="default_with_custom_url">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">custom%isolation%</field>
             <field name="is_active" xsi:type="string">Yes</field>
-            <field name="id" xsi:type="string">2</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+            <field name="use_default_url_key" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="default_category">
+            <field name="id" xsi:type="string">%id%</field>
+            <field name="parent_id" xsi:type="string">%id%</field>
+            <field name="name" xsi:type="string">Default Category</field>
+            <field name="is_active" xsi:type="string">Yes</field>
         </dataset>
 
         <dataset name="default_subcategory">
             <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
             <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="default_subcategory_without_url_key">
+            <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
             <field name="parent_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>
@@ -45,9 +65,20 @@
             <field name="include_in_menu" xsi:type="string">Yes</field>
         </dataset>
 
+        <dataset name="default_anchor_subcategory_with_anchored_parent">
+            <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
+            <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_anchor_subcategory</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="is_anchor" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
         <dataset name="root_category">
+            <field name="parent_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">RootCategory%isolation%</field>
-            <field name="parent_id" xsi:type="string">1</field>
             <field name="is_active" xsi:type="string">Yes</field>
             <field name="include_in_menu" xsi:type="string">Yes</field>
         </dataset>
@@ -66,10 +97,77 @@
             <field name="name" xsi:type="string">Category%isolation%</field>
             <field name="url_key" xsi:type="string">category-%isolation%</field>
             <field name="parent_id" xsi:type="array">
-                <item name="dataset" xsi:type="string">default_subcategory</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="is_active" xsi:type="string">Yes</field>
             <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="three_nested_categories">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_nested_categories</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="four_nested_categories">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">three_nested_categories</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="five_nested_categories">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">four_nested_categories</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="default_subcategory_with_assigned_simple_product">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category%isolation%</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+            <field name="category_products" xsi:type="array">
+                <item name="dataset" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_anchored_category">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category%isolation%</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+            <field name="is_anchor" xsi:type="string">Yes</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_subcategory_with_anchored_parent">
+            <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
+            <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_anchored_category</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+            <field name="category_products" xsi:type="array">
+                <item name="dataset" xsi:type="string">catalogProductSimple::default</item>
+            </field>
         </dataset>
     </repository>
 </config>

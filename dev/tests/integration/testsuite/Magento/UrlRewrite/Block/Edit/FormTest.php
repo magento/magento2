@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Edit;
@@ -146,6 +146,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * Test fields disabled status
      * @dataProvider fieldsStateDataProvider
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store general/single_store_mode/enabled 0
      */
     public function testReadonlyFields($urlRewrite, $fields)
     {

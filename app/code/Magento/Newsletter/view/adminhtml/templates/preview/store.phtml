@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 
 <?php if ($websites = $block->getWebsites()): ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?php /* @escapeNotVerified */ echo __('Choose Store View:') ?></label>
+    <label class="label" for="store_switcher"><?php echo $block->escapeHtml(__('Choose Store View:')) ?></label>
     <div class="control">
         <select
             id="store_switcher"
@@ -23,13 +23,13 @@
                     <?php foreach ($block->getStores($group) as $store): ?>
                         <?php if ($showWebsite == false): ?>
                             <?php $showWebsite = true; ?>
-                            <optgroup label="<?php /* @escapeNotVerified */ echo $website->getName() ?>"></optgroup>
+                            <optgroup label="<?php echo $block->escapeHtmlAttr($website->getName()) ?>"></optgroup>
                         <?php endif; ?>
                         <?php if ($showGroup == false): ?>
                             <?php $showGroup = true; ?>
-                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $group->getName() ?>">
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $block->escapeHtmlAttr($group->getName()) ?>">
                         <?php endif; ?>
-                        <option value="<?php /* @escapeNotVerified */ echo $store->getId() ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $store->getName() ?></option>
+                        <option value="<?php echo $block->escapeHtmlAttr($store->getId()) ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $block->escapeHtml($store->getName()) ?></option>
                     <?php endforeach; ?>
                     <?php if ($showGroup): ?>
                         </optgroup>

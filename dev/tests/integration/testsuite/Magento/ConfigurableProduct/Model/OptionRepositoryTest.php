@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
@@ -12,7 +12,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListWithExtensionAttributes()
     {
-        $this->markTestSkipped('Test skipped due to MAGETWO-45654');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $productSku = 'configurable';
         /** @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository */

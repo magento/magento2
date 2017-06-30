@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,12 +68,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(
                 ['onefile.js'],
                 ['onefile.js'],
-                ['/js/bundle/bundle0.js']
+                ['path-to-theme/js/bundle/bundle0.js']
             )
             ->willReturnOnConsecutiveCalls(
                 'onefile.min.js',
                 'onefile.min.js',
-                '/js/bundle/bundle0.min.js'
+                'path-to-theme/js/bundle/bundle0.min.js'
             );
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
@@ -91,6 +91,10 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getLocale')
             ->willReturn('locale');
+        $contextMock
+            ->expects($this->any())
+            ->method('getPath')
+            ->willReturn('path-to-theme');
 
         $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->setMethods(['getContentType', 'getContext'])
@@ -112,8 +116,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $writeMock
             ->expects($this->once())
+            ->method('delete')
+            ->with('path-to-theme' . DIRECTORY_SEPARATOR . \Magento\Framework\View\Asset\Bundle\Manager::BUNDLE_JS_DIR);
+        $writeMock
+            ->expects($this->once())
             ->method('writeFile')
-            ->with('/js/bundle/bundle0.min.js', $this->stringContains('onefile.min.js'));
+            ->with('path-to-theme/js/bundle/bundle0.min.js', $this->stringContains('onefile.min.js'));
 
         $this->filesystemMock
             ->expects($this->any())

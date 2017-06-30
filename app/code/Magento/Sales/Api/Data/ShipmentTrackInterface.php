@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
+
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Shipment track interface.
@@ -13,7 +15,7 @@ namespace Magento\Sales\Api\Data;
  * shipments.
  * @api
  */
-interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -64,11 +66,19 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     const UPDATED_AT = 'updated_at';
 
     /**
-     * Gets the carrier code for the shipment package.
+     * Sets the order_id for the shipment package.
      *
-     * @return string Carrier code.
+     * @param int $id
+     * @return $this
      */
-    public function getCarrierCode();
+    public function setOrderId($id);
+
+    /**
+     * Gets the order_id for the shipment package.
+     *
+     * @return int
+     */
+    public function getOrderId();
 
     /**
      * Gets the created-at timestamp for the shipment package.
@@ -86,13 +96,6 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function setCreatedAt($createdAt);
 
     /**
-     * Gets the description for the shipment package.
-     *
-     * @return string Description.
-     */
-    public function getDescription();
-
-    /**
      * Gets the ID for the shipment package.
      *
      * @return int|null Shipment package ID.
@@ -108,13 +111,6 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function setEntityId($entityId);
 
     /**
-     * Gets the order_id for the shipment package.
-     *
-     * @return int
-     */
-    public function getOrderId();
-
-    /**
      * Gets the parent ID for the shipment package.
      *
      * @return int Parent ID.
@@ -122,39 +118,11 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function getParentId();
 
     /**
-     * Gets the quantity for the shipment package.
-     *
-     * @return float Quantity.
-     */
-    public function getQty();
-
-    /**
-     * Gets the title for the shipment package.
-     *
-     * @return string Title.
-     */
-    public function getTitle();
-
-    /**
-     * Gets the track number for the shipment package.
-     *
-     * @return string Track number.
-     */
-    public function getTrackNumber();
-
-    /**
      * Gets the updated-at timestamp for the shipment package.
      *
      * @return string|null Updated-at timestamp.
      */
     public function getUpdatedAt();
-
-    /**
-     * Gets the weight for the shipment package.
-     *
-     * @return float Weight.
-     */
-    public function getWeight();
 
     /**
      * Sets the updated-at timestamp for the shipment package.
@@ -181,6 +149,13 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function setWeight($weight);
 
     /**
+     * Gets the weight for the shipment package.
+     *
+     * @return float Weight.
+     */
+    public function getWeight();
+
+    /**
      * Sets the quantity for the shipment package.
      *
      * @param float $qty
@@ -189,20 +164,11 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function setQty($qty);
 
     /**
-     * Sets the order_id for the shipment package.
+     * Gets the quantity for the shipment package.
      *
-     * @param int $id
-     * @return $this
+     * @return float Quantity.
      */
-    public function setOrderId($id);
-
-    /**
-     * Sets the track number for the shipment package.
-     *
-     * @param string $trackNumber
-     * @return $this
-     */
-    public function setTrackNumber($trackNumber);
+    public function getQty();
 
     /**
      * Sets the description for the shipment package.
@@ -213,20 +179,11 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function setDescription($description);
 
     /**
-     * Sets the title for the shipment package.
+     * Gets the description for the shipment package.
      *
-     * @param string $title
-     * @return $this
+     * @return string Description.
      */
-    public function setTitle($title);
-
-    /**
-     * Sets the carrier code for the shipment package.
-     *
-     * @param string $code
-     * @return $this
-     */
-    public function setCarrierCode($code);
+    public function getDescription();
 
     /**
      * Retrieve existing extension attributes object or create a new one.

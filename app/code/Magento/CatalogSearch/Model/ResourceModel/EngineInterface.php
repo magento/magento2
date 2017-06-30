@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,18 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
+/**
+ * @api
+ */
 interface EngineInterface
 {
+    const FIELD_PREFIX = 'attr_';
+
+    /**
+     * Scope identifier
+     */
+    const SCOPE_IDENTIFIER = 'scope';
+
     /**
      * Configuration path by which current indexer handler stored
      */
@@ -38,7 +48,6 @@ interface EngineInterface
      * @return mixed
      */
     public function processAttributeValue($attribute, $value);
-
 
     /**
      * Prepare index array as a string glued by separator

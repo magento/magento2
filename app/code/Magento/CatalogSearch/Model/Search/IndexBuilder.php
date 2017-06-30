@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,14 +11,17 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\CatalogSearch\Model\Search\FilterMapper\DimensionsProcessor;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
+use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper as BaseSelectStrategyMapper;
+use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\BaseSelectStrategyInterface;
+use Magento\CatalogSearch\Model\Search\FilterMapper\FilterMapper;
 
 /**
  * Build base Query for Index
@@ -27,54 +30,39 @@ use Magento\Framework\App\ScopeResolverInterface;
 class IndexBuilder implements IndexBuilderInterface
 {
     /**
-     * @var Resource
+     * @var DimensionsProcessor
      */
-    private $resource;
+    private $dimensionsProcessor;
 
     /**
-     * @var ScopeConfigInterface
+     * @var SelectContainerBuilder
      */
-    private $config;
+    private $selectContainerBuilder;
 
     /**
-     * @var StoreManagerInterface
-     * @deprecated
+     * @var BaseSelectStrategyMapper
      */
-    private $storeManager;
+    private $baseSelectStrategyMapper;
 
     /**
-     * @var IndexScopeResolver
+     * @var FilterMapper
      */
-    private $scopeResolver;
+    private $filterMapper;
 
     /**
-     * @var ConditionManager
-     */
-    private $conditionManager;
-
-    /**
-     * @var TableMapper
-     */
-    private $tableMapper;
-
-    /**
-     * @var ScopeResolverInterface
-     */
-    private $dimensionScopeResolver;
-
-    /**
-     * @var StockConfigurationInterface
-     */
-    private $stockConfiguration;
-
-    /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
      * @param ConditionManager $conditionManager
      * @param IndexScopeResolver $scopeResolver
      * @param TableMapper $tableMapper
      * @param ScopeResolverInterface $dimensionScopeResolver
+     * @param DimensionsProcessor|null $dimensionsProcessor
+     * @param SelectContainerBuilder|null $selectContainerBuilder
+     * @param BaseSelectStrategyMapper|null $baseSelectStrategyMapper
+     * @param FilterMapper|null $filterMapper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resource,
@@ -83,15 +71,23 @@ class IndexBuilder implements IndexBuilderInterface
         ConditionManager $conditionManager,
         IndexScopeResolver $scopeResolver,
         TableMapper $tableMapper,
-        ScopeResolverInterface $dimensionScopeResolver
+        ScopeResolverInterface $dimensionScopeResolver,
+        DimensionsProcessor $dimensionsProcessor = null,
+        SelectContainerBuilder $selectContainerBuilder = null,
+        BaseSelectStrategyMapper $baseSelectStrategyMapper = null,
+        FilterMapper $filterMapper = null
     ) {
-        $this->resource = $resource;
-        $this->config = $config;
-        $this->storeManager = $storeManager;
-        $this->conditionManager = $conditionManager;
-        $this->scopeResolver = $scopeResolver;
-        $this->tableMapper = $tableMapper;
-        $this->dimensionScopeResolver = $dimensionScopeResolver;
+        $this->dimensionsProcessor = $dimensionsProcessor ?: ObjectManager::getInstance()
+            ->get(DimensionsProcessor::class);
+
+        $this->selectContainerBuilder = $selectContainerBuilder ?: ObjectManager::getInstance()
+            ->get(SelectContainerBuilder::class);
+
+        $this->baseSelectStrategyMapper = $baseSelectStrategyMapper ?: ObjectManager::getInstance()
+            ->get(BaseSelectStrategyMapper::class);
+
+        $this->filterMapper = $filterMapper ?: ObjectManager::getInstance()
+            ->get(FilterMapper::class);
     }
 
     /**
@@ -99,96 +95,22 @@ class IndexBuilder implements IndexBuilderInterface
      *
      * @param RequestInterface $request
      * @return Select
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function build(RequestInterface $request)
     {
-        $searchIndexTable = $this->scopeResolver->resolve($request->getIndex(), $request->getDimensions());
-        $select = $this->resource->getConnection()->select()
-            ->from(
-                ['search_index' => $searchIndexTable],
-                ['entity_id' => 'entity_id']
-            )
-            ->joinLeft(
-                ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
-                'search_index.attribute_id = cea.attribute_id',
-                []
-            );
+        /** @var SelectContainer $selectContainer */
+        $selectContainer = $this->selectContainerBuilder->buildByRequest($request);
 
-        $select = $this->tableMapper->addTables($select, $request);
+        /** @var BaseSelectStrategyInterface $baseSelectStrategy */
+        $baseSelectStrategy = $this->baseSelectStrategyMapper->mapSelectContainerToStrategy($selectContainer);
 
-        $select = $this->processDimensions($request, $select);
+        $selectContainer = $baseSelectStrategy->createBaseSelect($selectContainer);
+        $selectContainer = $this->filterMapper->applyFilters($selectContainer);
+        $selectContainer = $this->dimensionsProcessor->processDimensions($selectContainer);
 
-        $isShowOutOfStock = $this->config->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            ScopeInterface::SCOPE_STORE
-        );
-        if ($isShowOutOfStock === false) {
-            $select->joinLeft(
-                ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
-                'search_index.entity_id = stock_index.product_id'
-                . $this->resource->getConnection()->quoteInto(
-                    ' AND stock_index.website_id = ?',
-                    $this->getStockConfiguration()->getDefaultScopeId()
-                ),
-                []
-            );
-            $select->where('stock_index.stock_status = ?', Stock::DEFAULT_STOCK_ID);
-        }
-
-        return $select;
-    }
-
-    /**
-     * @return StockConfigurationInterface
-     *
-     * @deprecated
-     */
-    private function getStockConfiguration()
-    {
-        if ($this->stockConfiguration === null) {
-            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
-        }
-        return $this->stockConfiguration;
-    }
-
-    /**
-     * Add filtering by dimensions
-     *
-     * @param RequestInterface $request
-     * @param Select $select
-     * @return \Magento\Framework\DB\Select
-     */
-    private function processDimensions(RequestInterface $request, Select $select)
-    {
-        $dimensions = $this->prepareDimensions($request->getDimensions());
-
-        $query = $this->conditionManager->combineQueries($dimensions, Select::SQL_OR);
-        if (!empty($query)) {
-            $select->where($this->conditionManager->wrapBrackets($query));
-        }
-
-        return $select;
-    }
-
-    /**
-     * @param Dimension[] $dimensions
-     * @return string[]
-     */
-    private function prepareDimensions(array $dimensions)
-    {
-        $preparedDimensions = [];
-        foreach ($dimensions as $dimension) {
-            if ('scope' === $dimension->getName()) {
-                continue;
-            }
-            $preparedDimensions[] = $this->conditionManager->generateCondition(
-                $dimension->getName(),
-                '=',
-                $this->dimensionScopeResolver->getScope($dimension->getValue())->getId()
-            );
-        }
-
-        return $preparedDimensions;
+        return $selectContainer->getSelect();
     }
 }

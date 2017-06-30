@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
@@ -8,9 +8,12 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Import entity abstract product type model
+ *
+ * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -142,22 +145,27 @@ abstract class AbstractType
     private $productEntityLinkField;
 
     /**
+     * AbstractType constructor
+     *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param array $params
+     * @param MetadataPool|null $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
-        array $params
+        array $params,
+        MetadataPool $metadataPool = null
     ) {
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;
         $this->_resource = $resource;
-        $this->_connection = $resource->getConnection();
+        $this->connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool ?: $this->getMetadataPool();
         if ($this->isSuitable()) {
             if (!isset($params[0])
                 || !isset($params[1])
@@ -246,8 +254,8 @@ abstract class AbstractType
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
         $entityId = $this->_entityModel->getEntityTypeId();
-        $entityAttributes = $this->_connection->fetchAll(
-            $this->_connection->select()->from(
+        $entityAttributes = $this->connection->fetchAll(
+            $this->connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
                 ['attr.attribute_id']
             )->joinLeft(
@@ -255,7 +263,7 @@ abstract class AbstractType
                 'set.attribute_set_id = attr.attribute_set_id',
                 ['set.attribute_set_name']
             )->where(
-                $this->_connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
+                $this->connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
             )
         );
         $absentKeys = [];
@@ -490,23 +498,25 @@ abstract class AbstractType
         $resultAttrs = [];
 
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
-            if (!$attrParams['is_static']) {
-                if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
-                    $resultAttrs[$attrCode] = in_array($attrParams['type'], ['select', 'boolean'])
-                        ? $attrParams['options'][strtolower($rowData[$attrCode])]
-                        : $rowData[$attrCode];
-                    if ('multiselect' == $attrParams['type']) {
-                        $resultAttrs[$attrCode] = [];
-                        foreach (explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]) as $value) {
-                            $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
-                        }
-                        $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
+            if ($attrParams['is_static']) {
+                continue;
+            }
+            if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
+                if (in_array($attrParams['type'], ['select', 'boolean'])) {
+                    $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
+                } elseif ('multiselect' == $attrParams['type']) {
+                    $resultAttrs[$attrCode] = [];
+                    foreach ($this->_entityModel->parseMultiselectValues($rowData[$attrCode]) as $value) {
+                        $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
                     }
-                } elseif (array_key_exists($attrCode, $rowData)) {
+                    $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
+                } else {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
-                } elseif ($withDefaultValue && null !== $attrParams['default_value']) {
-                    $resultAttrs[$attrCode] = $attrParams['default_value'];
                 }
+            } elseif (array_key_exists($attrCode, $rowData)) {
+                $resultAttrs[$attrCode] = $rowData[$attrCode];
+            } elseif ($withDefaultValue && null !== $attrParams['default_value']) {
+                $resultAttrs[$attrCode] = $attrParams['default_value'];
             }
         }
 
@@ -561,10 +571,19 @@ abstract class AbstractType
     protected function getProductEntityLinkField()
     {
         if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
+            $this->productEntityLinkField = $this->metadataPool
                 ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
+    }
+
+    /**
+     * Clean cached values
+     */
+    public function __destruct()
+    {
+        self::$attributeCodeToId = [];
+        self::$commonAttributesCache = [];
     }
 }

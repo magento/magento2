@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Express\InContext\Minicart;
@@ -25,6 +25,8 @@ class Button extends Template implements ShortcutInterface
     const PAYPAL_BUTTON_ID = 'paypal-express-in-context-checkout-main';
 
     const BUTTON_ELEMENT_INDEX = 'button_id';
+
+    const LINK_DATA_ACTION = 'link_data_action';
 
     const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
 
@@ -54,7 +56,6 @@ class Button extends Template implements ShortcutInterface
     private $session;
 
     /**
-     * Constructor
      * @param Context $context
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
@@ -80,6 +81,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Check `in_context` config value
+     *
      * @return bool
      */
     private function isInContext()
@@ -88,13 +91,27 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Check `visible_on_cart` config value
+     *
+     * @return bool
+     */
+    private function isVisibleOnCart()
+    {
+        return (bool)(int) $this->config->getValue('visible_on_cart');
+    }
+
+    /**
+     * Check is Paypal In-Context Express Checkout button
+     * should render in cart/mini-cart
+     *
      * @return bool
      */
     protected function shouldRender()
     {
         return $this->payment->isAvailable($this->session->getQuote())
             && $this->isMiniCart
-            && $this->isInContext();
+            && $this->isInContext()
+            && $this->isVisibleOnCart();
     }
 
     /**
@@ -115,6 +132,14 @@ class Button extends Template implements ShortcutInterface
     public function getContainerId()
     {
         return $this->getData(self::BUTTON_ELEMENT_INDEX);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkAction()
+    {
+        return $this->getData(self::LINK_DATA_ACTION);
     }
 
     /**

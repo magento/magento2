@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Form;
@@ -8,7 +8,8 @@ namespace Magento\Backend\Block\Widget\Form;
 /**
  * Backend form container block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Container extends \Magento\Backend\Block\Widget\Container
@@ -37,6 +38,16 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * @var string
      */
     protected $_blockGroup = 'Magento_Backend';
+    
+    /**
+     *  @var string
+     */
+    const PARAM_BLOCK_GROUP = 'block_group';
+
+    /**
+     *  @var string
+     */
+    const PARAM_MODE = 'mode';
 
     /**
      * @var string
@@ -49,6 +60,12 @@ class Container extends \Magento\Backend\Block\Widget\Container
     protected function _construct()
     {
         parent::_construct();
+        if ($this->hasData(self::PARAM_BLOCK_GROUP)) {
+            $this->_blockGroup = $this->_getData(self::PARAM_BLOCK_GROUP);
+        }
+        if ($this->hasData(self::PARAM_MODE)) {
+            $this->_mode = $this->_getData(self::PARAM_MODE);
+        }
 
         $this->addButton(
             'back',

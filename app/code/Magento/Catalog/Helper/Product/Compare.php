@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 /**
  * Catalog Product Compare Helper
  *
+ * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -228,10 +229,11 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataRemove($product)
     {
-        $listCleanUrl = $this->getEncodedUrl($this->_getUrl('catalog/product_compare'));
         $data = [
-            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $listCleanUrl,
-            'product' => $product->getId()
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
+            'product' => $product->getId(),
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove this item from your Compare Products list?')
         ];
         return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
     }
@@ -253,9 +255,10 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getPostDataClearList()
     {
-        $refererUrl = $this->_getRequest()->getServer('HTTP_REFERER');
         $params = [
-            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => '',
+            'confirmation' => true,
+            'confirmationMessage' => __('Are you sure you want to remove all items from your Compare Products list?'),
         ];
         return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }

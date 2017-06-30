@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,8 @@ namespace Magento\ImportExport\Model;
 /**
  * Export model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
@@ -19,6 +20,11 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     const FILTER_ELEMENT_GROUP = 'export_filter';
 
     const FILTER_ELEMENT_SKIP = 'skip_attr';
+
+    /**
+     * Allow multiple values wrapping in double quotes for additional attributes.
+     */
+    const FIELDS_ENCLOSURE = 'fields_enclosure';
 
     /**
      * Filter fields types.

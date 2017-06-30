@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,9 +30,54 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">{{wordingOfReadinessCheckAction()}}.</span>
+        <span class="message-text" ng-bind-html="wordingOfReadinessCheckAction()"></span>
     </div>
 
+</div>
+
+<div class="extensions-information" ng-if="$state.current.type == 'update' && getObjectSize(getExtensionsList()) > 0">
+    <div class="message message-warning"
+         ng-show="componentDependency.processed && componentDependency.responseType != 'success'"
+    >
+        We found some extensions with available version updates. We recommend that you update to the recommended
+        versions or remove these extensions from the installation process. We found some extensions with available
+        version updates. We recommend that you update to the recommended versions or remove these extensions from
+        the installation process.
+    </div>
+    <div class="extensions-container">
+        <h3>Update these extension(s)</h3>
+        <ul class="list">
+            <li ng-repeat="extension in getExtensionsList()">
+                {{extension.name}} {{getCurrentVersion(extension.name)}} to
+                <select ng-change="versionChanged()"
+                        ng-model="extension.version"
+                        ng-disabled="checkingInProgress()"
+                >
+                    <option ng-repeat="version in getVersionsList(extension.name)"
+                            ng-selected="version == extension.version"
+                            value="{{version}}"
+                    >Version {{version}}</option>
+                </select>
+                <button class="extension-delete"
+                        title="Delete"
+                        ng-click="openDialog(extension.name)"
+                        ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1">
+                    <span>Delete</span>
+                </button>
+            </li>
+        </ul>
+
+        <div ng-show="(needReCheck || hasErrors) && !checkingInProgress()">
+            <button ng-click="$state.forceReload()" class="btn btn-medium btn-secondary">
+                <span>Try Again</span>
+            </button>
+        </div>
+        <div ng-show="!needReCheck && !checkingInProgress() && !hasErrors">
+            <button ng-click="nextState()" class="btn btn-medium btn-prime">
+                <span>Update</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <div id="updater-application" class="readiness-check-item" ng-show="updater.visible">
@@ -347,7 +392,7 @@
 
                 <div class="readiness-check-side">
                     <p class="side-title">Need Help?</p>
-                    <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
+                    <a href="http://devdocs.magento.com/guides/v2.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
                 </div>
 
                 <span class="readiness-check-icon icon-failed-round"></span>
@@ -496,3 +541,42 @@
 <div class="readiness-check-item" id="warning-message" ng-show="true">
     * - In some cases, you might have two PHP configuration files: one for the PHP command line and for the web server. If so, make the change in both php.ini files. For details, see the <a href="http://php.net/manual/en/configuration.file.php">php.ini reference</a>.
 </div>
+
+<script type="text/ng-template" id="removeDialog">
+    <div class="modals-wrapper">
+        <aside class="modal-popup modal-connect-signin _show" data-role="modal">
+            <div class="modal-inner-wrap">
+                <header class="modal-header">
+                    <button ng-click="closeThisDialog()"
+                            title="Close"
+                            class="action-close"
+                            data-role="closeBtn"
+                            type="button">
+                        <span>Close</span>
+                    </button>
+                </header>
+                <div class="modal-content" data-role="content">
+                    <div class="delete-modal-wrap">
+                        <h3>Remove Extension</h3>
+
+                        <p>Are you sure you want to remove “{{extensionToRemove}}” from
+                            the list?</p>
+                        <p>
+                            Please be aware that removing this extension will remove it from the current
+                            update wizard flow. You can update this extension at a later time by selecting
+                            the extension in the update grid.
+                        </p>
+                        <div class="actions">
+                            <button ng-click="removeExtension(extensionToRemove)" class="btn btn-large btn-prime">
+                                <span>Remove</span>
+                            </button>
+                            <button ng-click="closeThisDialog()" class="btn btn-large btn-secondary">
+                                <span>Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</script>

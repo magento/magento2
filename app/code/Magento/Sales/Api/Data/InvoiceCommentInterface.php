@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
+
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Invoice comment interface.
@@ -12,16 +14,11 @@ namespace Magento\Sales\Api\Data;
  * invoice history.
  * @api
  */
-interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface,
-\Magento\Sales\Api\Data\InvoiceCommentCreationInterface
+interface InvoiceCommentInterface extends ExtensibleDataInterface, CommentInterface, EntityInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
      */
-    /*
-     * Entity ID.
-     */
-    const ENTITY_ID = 'entity_id';
     /*
      * Parent ID.
      */
@@ -30,48 +27,6 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Is-customer-notified flag.
      */
     const IS_CUSTOMER_NOTIFIED = 'is_customer_notified';
-    /*
-     * Is-visible-on-storefront flag.
-     */
-    const IS_VISIBLE_ON_FRONT = 'is_visible_on_front';
-    /*
-     * Comment.
-     */
-    const COMMENT = 'comment';
-    /*
-     * Created-at timestamp.
-     */
-    const CREATED_AT = 'created_at';
-
-    /**
-     * Gets the created-at timestamp for the invoice.
-     *
-     * @return string|null Created-at timestamp.
-     */
-    public function getCreatedAt();
-
-    /**
-     * Sets the created-at timestamp for the invoice.
-     *
-     * @param string $createdAt timestamp
-     * @return $this
-     */
-    public function setCreatedAt($createdAt);
-
-    /**
-     * Gets the ID for the invoice.
-     *
-     * @return int|null Invoice ID.
-     */
-    public function getEntityId();
-
-    /**
-     * Sets entity ID.
-     *
-     * @param int $entityId
-     * @return $this
-     */
-    public function setEntityId($entityId);
 
     /**
      * Gets the is-customer-notified flag value for the invoice.

@@ -1,46 +1,70 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
+use Magento\Quote\Model\Quote\Item\ToOrderItem;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\Catalog\Model\Product;
+
 class QuoteItemTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Product
+     */
+    private $productMock;
+
     /** @var \Magento\Bundle\Model\Plugin\QuoteItem */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractItem */
     protected $quoteItemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|OrderItemInterface */
     protected $orderItemMock;
 
     /**
-     * @var /PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ToOrderItem
      */
     protected $subjectMock;
 
-    /**
-     * @var /Closure
-     */
-    protected $closureMock;
-
     protected function setUp()
     {
-        $this->orderItemMock = $this->getMock(\Magento\Sales\Model\Order\Item::class, [], [], '', false);
-        $this->quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
-        $orderItem = $this->orderItemMock;
-        $this->closureMock = function () use ($orderItem) {
-            return $orderItem;
-        };
-        $this->subjectMock = $this->getMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class, [], [], '', false);
+        $this->orderItemMock = $this->getMockForAbstractClass(
+            OrderItemInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getProductOptions', 'setProductOptions']
+        );
+        $this->quoteItemMock = $this->getMockForAbstractClass(
+            AbstractItem::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getProduct']
+        );
+        $this->subjectMock = $this->getMock(ToOrderItem::class, [], [], '', false);
+        $this->productMock = $this->getMock(Product::class, [], [], '', false);
         $this->model = new \Magento\Bundle\Model\Plugin\QuoteItem();
     }
 
     public function testAroundItemToOrderItemPositive()
     {
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $attributeValue = 'test_value';
+        $productOptions = [
+            'option_1' => 'value_1',
+            'option_2' => 'value_2'
+        ];
+        $expectedOptions = $productOptions + ['bundle_selection_attributes' => $attributeValue];
+
         $bundleAttribute = $this->getMock(
             \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
             [],
@@ -48,38 +72,34 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $productMock->expects(
-            $this->once()
-        )->method(
-            'getCustomOption'
-        )->with(
-            'bundle_selection_attributes'
-        )->will(
-            $this->returnValue($bundleAttribute)
-        );
-        $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
-        $this->orderItemMock->expects($this->once())->method('setProductOptions');
+        $bundleAttribute->expects($this->once())
+            ->method('getValue')
+            ->willReturn($attributeValue);
 
-        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, []);
+        $this->productMock->expects($this->once())
+            ->method('getCustomOption')
+            ->with('bundle_selection_attributes')
+            ->willReturn($bundleAttribute);
+        $this->quoteItemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
+
+        $this->orderItemMock->expects($this->once())->method('getProductOptions')->willReturn($productOptions);
+        $this->orderItemMock->expects($this->once())->method('setProductOptions')->with($expectedOptions);
+
+        $orderItem = $this->model->afterConvert($this->subjectMock, $this->orderItemMock, $this->quoteItemMock);
         $this->assertSame($this->orderItemMock, $orderItem);
     }
 
     public function testAroundItemToOrderItemNegative()
     {
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $productMock->expects(
-            $this->once()
-        )->method(
-            'getCustomOption'
-        )->with(
-            'bundle_selection_attributes'
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
+        $this->productMock->expects($this->once())
+            ->method('getCustomOption')
+            ->with('bundle_selection_attributes')->willReturn(false);
+
+        $this->quoteItemMock->expects($this->once())->method('getProduct')
+            ->willReturn($this->productMock);
         $this->orderItemMock->expects($this->never())->method('setProductOptions');
 
-        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, []);
+        $orderItem = $this->model->afterConvert($this->subjectMock, $this->orderItemMock, $this->quoteItemMock);
         $this->assertSame($this->orderItemMock, $orderItem);
     }
 }

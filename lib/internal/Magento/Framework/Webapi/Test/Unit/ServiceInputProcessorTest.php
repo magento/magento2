@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Webapi\Test\Unit;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
@@ -67,7 +66,8 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
         $cache->expects($this->any())->method('load')->willReturn(false);
 
         $this->customAttributeTypeLocator = $this->getMockBuilder(
-            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class)
+            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,6 +97,16 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
+        $serializerMock = $this->getMock(SerializerInterface::class);
+        $serializerMock->method('serialize')
+            ->willReturn('serializedData');
+        $serializerMock->method('unserialize')
+            ->willReturn('unserializedData');
+        $objectManager->setBackwardCompatibleProperty(
+            $this->methodsMap,
+            'serializer',
+            $serializerMock
+        );
 
         $this->serviceInputProcessor = $objectManager->getObject(
             \Magento\Framework\Webapi\ServiceInputProcessor::class,
@@ -111,10 +121,11 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Reflection\NameFinder $nameFinder */
         $nameFinder = $objectManager->getObject(\Magento\Framework\Reflection\NameFinder::class);
-        $serviceInputProcessorReflection = new \ReflectionClass(get_class($this->serviceInputProcessor));
-        $typeResolverReflection = $serviceInputProcessorReflection->getProperty('nameFinder');
-        $typeResolverReflection->setAccessible(true);
-        $typeResolverReflection->setValue($this->serviceInputProcessor, $nameFinder);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->serviceInputProcessor,
+            'nameFinder',
+            $nameFinder
+        );
     }
 
     public function testSimpleProperties()
@@ -460,7 +471,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $customAttributeValue = null;
-        switch($type) {
+        switch ($type) {
             case 'integer':
                 $customAttributeValue = $value;
                 break;

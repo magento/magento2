@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ $passwordWizard = sprintf(
         </div>
     <p>%s</p>',
     'Password Strength:',
-    'Enter a mix of 7 or more numbers and letters. For a stronger password, include at least one small letter, big letter, and symbol (Ex: BuyIt$54).'
+    'Enter a mix of 7 or more numbers and letters. For a stronger password, include at least one small letter, big letter, and symbol.'
 );
 ?>
 
@@ -162,10 +162,14 @@ $passwordWizard = sprintf(
                 ng-class="{'invalid': account.adminPassword.$invalid && account.submitted}"
                 required
                 check-Password
+                check-User-Name-Password
                 >
             <div class="error-container">
                 <span ng-show="account.adminPassword.$error.checkPassword">
                     Please enter a mix of at least 7 alpha-numeric characters.
+                </span>
+                <span ng-show="account.adminPassword.$error.checkUserNamePasswordDifferent">
+                    Password cannot be the same as the user name.
                 </span>
                 <span ng-show="account.adminPassword.$error.required">
                     Please enter your new password.

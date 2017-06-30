@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,9 +15,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated since 2.2.0
+ * @see \Magento\Deploy\Service\Bundle
  */
 class Manager
 {
+    const BUNDLE_JS_DIR = 'js/bundle';
+
     const BUNDLE_PATH = '/js/bundle/bundle';
 
     const ASSET_TYPE_JS = 'js';
@@ -177,7 +181,7 @@ class Manager
      */
     public function addAsset(LocalInterface $asset)
     {
-        if (!($this->isValidAsset($asset))) {
+        if (!$this->isValidAsset($asset)) {
             return false;
         }
 

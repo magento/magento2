@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
 
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -32,7 +34,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $productRepository = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
-        $product = $productRepository->get('virtual-product');
+        $product = $productRepository->get('virtual-product', false, null, true);
         $quote->addProduct($product);
         $quote->collectTotals();
 
@@ -46,9 +48,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
-        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        /** @var CustomerInterfaceFactory $customerFactory */
         $customerFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            CustomerInterfaceFactory::class
         );
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
@@ -73,7 +75,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
         $customerFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            CustomerInterfaceFactory::class
         );
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
@@ -118,9 +120,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerGroupFromCustomer()
     {
         /** Preconditions */
-        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        /** @var CustomerInterfaceFactory $customerFactory */
         $customerFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            CustomerInterfaceFactory::class
         );
         $customerGroupId = 3;
         $customerData = $customerFactory->create()->setId(1)->setGroupId($customerGroupId);
@@ -302,7 +304,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $productRepository = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
-        $product = $productRepository->get('simple-1');
+        $product = $productRepository->get('simple-1', false, null, true);
 
         $quote->addProduct($product, 50);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
@@ -403,5 +405,48 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Model\Data\Customer::TAXVAT => 1,
             \Magento\Customer\Model\Data\Customer::WEBSITE_ID => 1
         ];
+    }
+
+    /**
+     * Test to verify that reserved_order_id will be changed if it already in used
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     * @magentoDataFixture Magento/Quote/_files/empty_quote.php
+     */
+    public function testReserveOrderId()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote->load('reserved_order_id', 'reserved_order_id');
+        $quote->reserveOrderId();
+        $this->assertEquals('reserved_order_id', $quote->getReservedOrderId());
+        $quote->setReservedOrderId('100000001');
+        $quote->reserveOrderId();
+        $this->assertNotEquals('100000001', $quote->getReservedOrderId());
+    }
+
+    /**
+     * Test to verify that disabled product cannot be added to cart
+     * @magentoDataFixture Magento/Quote/_files/is_not_salable_product.php
+     */
+    public function testAddedProductToQuoteIsSalable()
+    {
+        $productId = 99;
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $objectManager->get(ProductRepository::class);
+
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $product = $productRepository->getById($productId, false, null, true);
+
+        $this->setExpectedException(
+            LocalizedException::class,
+            'Product that you are trying to add is not available.'
+        );
+
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote->addProduct($product);
     }
 }

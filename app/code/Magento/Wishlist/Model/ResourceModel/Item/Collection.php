@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model\ResourceModel\Item;
@@ -12,6 +12,8 @@ use Magento\Framework\EntityManager\MetadataPool;
  * Wishlist item collection
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -284,20 +286,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $productCollection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
         }
 
-        $attributesToSelect = [
-            'name',
-            'visibility',
-            'small_image',
-            'thumbnail',
-            'links_purchased_separately',
-            'links_title',
-            'price_type'
-        ];
-
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect($attributesToSelect)
+            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes())
             ->addOptionsToResult()
             ->addUrlRewrite();
 

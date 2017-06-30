@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
-$element = $block->getElement();
-$fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
-$fieldClass = "field admin__field field-{$element->getId()} {$element->getCssClass()}";
-$fieldClass .= ($element->getRequired()) ? ' required' : '';
-$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId('form-field', $element->getId());
-?>
+/** @var \Magento\CatalogWidget\Block\Product\Widget\Conditions $block */
 
-<div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
+$element = $block->getElement();
+$fieldId = $element->getHtmlContainerId() ? ' id="' . $block->escapeHtmlAttr($element->getHtmlContainerId()) . '"' : '';
+$fieldClass = 'field admin__field field-' . $block->escapeHtmlAttr($element->getId()) . ' '
+    . $block->escapeHtmlAttr($element->getCssClass());
+$fieldClass .= $element->getRequired() ? ' required' : '';
+$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
+    . $block->getUiId('form-field', $block->escapeHtmlAttr($element->getId()));
+?>
+<div<?php /* @noEscape */ echo $fieldAttributes ?>>
     <?php echo $element->getLabelHtml() ?>
     <div class="control admin__field-control">
         <div class="rule-tree">
@@ -32,6 +33,6 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
         "Magento_Rule/rules",
         "prototype"
     ], function(VarienRulesForm){
-        window.<?php echo $block->getHtmlId() ?> = new VarienRulesForm('<?php echo $block->getHtmlId() ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
+        window.<?php echo $block->escapeJs($block->getHtmlId()) ?> = new VarienRulesForm('<?php echo $block->escapeJs($block->getHtmlId()) ?>', '<?php echo $block->escapeUrl($block->getNewChildUrl()) ?>');
     });
 </script>

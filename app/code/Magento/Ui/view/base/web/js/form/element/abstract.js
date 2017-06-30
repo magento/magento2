@@ -1,8 +1,11 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'mageUtils',
@@ -24,7 +27,7 @@ define([
             tooltipTpl: 'ui/form/element/helper/tooltip',
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset',
             'input_type': 'input',
-            placeholder: '',
+            placeholder: false,
             description: '',
             labelVisible: true,
             label: '',
@@ -75,6 +78,15 @@ define([
         },
 
         /**
+         * Checks if component has error.
+         *
+         * @returns {Object}
+         */
+        checkInvalid: function () {
+            return this.error() && this.error().length ? this : null;
+        },
+
+        /**
          * Initializes observable properties of instance
          *
          * @returns {Abstract} Chainable.
@@ -84,7 +96,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn isDifferedFromDefault')
+            this.observe('error disabled focused preview visible value warn notice isDifferedFromDefault')
                 .observe('isUseDefault')
                 .observe({
                     'required': !!rules['required-entry']
@@ -114,6 +126,7 @@ define([
             _.extend(this, {
                 uid: uid,
                 noticeId: 'notice-' + uid,
+                errorId: 'error-' + uid,
                 inputName: utils.serializeName(name.join('.')),
                 valueUpdate: valueUpdate
             });
@@ -158,16 +171,20 @@ define([
          * @returns {Abstract} Chainable.
          */
         _setClasses: function () {
-            var additional = this.additionalClasses,
-                classes;
+            var additional = this.additionalClasses;
 
-            if (_.isString(additional) && additional.trim().length) {
-                additional = this.additionalClasses.trim().split(' ');
-                classes = this.additionalClasses = {};
+            if (_.isString(additional)) {
+                this.additionalClasses = {};
 
-                additional.forEach(function (name) {
-                    classes[name] = true;
-                }, this);
+                if (additional.trim().length) {
+                    additional = additional.trim().split(' ');
+
+                    additional.forEach(function (name) {
+                        if (name.length) {
+                            this.additionalClasses[name] = true;
+                        }
+                    }, this);
+                }
             }
 
             _.extend(this.additionalClasses, {
@@ -192,8 +209,10 @@ define([
             values.some(function (v) {
                 if (v !== null && v !== undefined) {
                     value = v;
+
                     return true;
                 }
+
                 return false;
             });
 
@@ -421,6 +440,7 @@ define([
         setDifferedFromDefault: function () {
             var value = typeof this.value() != 'undefined' && this.value() !== null ? this.value() : '',
                 defaultValue = typeof this.default != 'undefined' && this.default !== null ? this.default : '';
+
             this.isDifferedFromDefault(value !== defaultValue);
         },
 
@@ -436,6 +456,23 @@ define([
          */
         userChanges: function () {
             this.valueChangedByUser = true;
+        },
+
+        /**
+         * Returns correct id for 'aria-describedby' accessibility attribute
+         *
+         * @returns {Boolean|String}
+         */
+        getDescriptionId: function () {
+            var id = false;
+
+            if (this.error()) {
+                id = this.errorId;
+            } else if (this.notice()) {
+                id = this.noticeId;
+            }
+
+            return id;
         }
     });
 });

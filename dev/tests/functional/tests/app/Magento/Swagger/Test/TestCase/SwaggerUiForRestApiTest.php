@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,13 @@ use Magento\Swagger\Test\Page\SwaggerUiPage;
  * 5. Click operation name to show operation details
  * 6. Perform all assertions
  *
- * @group Swagger_(PS)
+ * @group Swagger
  * @ZephyrId MAGETWO-41381, MAGETWO-41383
  */
 class SwaggerUiForRestApiTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 

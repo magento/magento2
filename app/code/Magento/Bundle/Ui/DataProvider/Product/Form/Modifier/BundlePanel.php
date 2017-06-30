@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Framework\UrlInterface;
-use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Container;
-use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Modal;
 
@@ -73,6 +74,7 @@ class BundlePanel extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        $meta = $this->removeFixedTierPrice($meta);
         $path = $this->arrayManager->findPath(static::CODE_BUNDLE_DATA, $meta, null, 'children');
 
         $meta = $this->arrayManager->merge(
@@ -179,6 +181,45 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
+     * Remove option with fixed tier price from config.
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function removeFixedTierPrice(array $meta)
+    {
+        $tierPricePath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_TIER_PRICE,
+            $meta,
+            null,
+            'children'
+        );
+        $pricePath =  $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE,
+            $meta,
+            $tierPricePath
+        );
+        $pricePath = $this->arrayManager->slicePath($pricePath, 0, -1) . '/value_type/arguments/data/options';
+
+        $price = $this->arrayManager->get($pricePath, $meta);
+        if ($price) {
+            $meta = $this->arrayManager->remove($pricePath, $meta);
+            foreach ($price as $key => $item) {
+                if ($item['value'] == ProductPriceOptionsInterface::VALUE_FIXED) {
+                    unset($price[$key]);
+                }
+            }
+            $meta = $this->arrayManager->merge(
+                $this->arrayManager->slicePath($pricePath, 0, -1),
+                $meta,
+                ['options' => $price]
+            );
+        }
+
+        return $meta;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function modifyData(array $data)
@@ -268,15 +309,12 @@ class BundlePanel extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'componentType' => 'dynamicRows',
+                        'componentType' => Container::NAME,
+                        'component' => 'Magento_Bundle/js/components/bundle-dynamic-rows',
                         'template' => 'ui/dynamic-rows/templates/collapsible',
-                        'label' => '',
                         'additionalClasses' => 'admin__field-wide',
-                        'collapsibleHeader' => true,
-                        'columnsHeader' => false,
-                        'deleteProperty' => false,
-                        'addButton' => false,
                         'dataScope' => 'data.bundle_options',
+                        'bundleSelectionsName' => 'product_bundle_container.bundle_selections'
                     ],
                 ],
             ],
@@ -318,14 +356,11 @@ class BundlePanel extends AbstractModifier
                                     'arguments' => [
                                         'data' => [
                                             'config' => [
-                                                'componentType' => DynamicRows::NAME,
-                                                'label' => '',
+                                                'componentType' => Container::NAME,
+                                                'component' => 'Magento_Bundle/js/components/bundle-dynamic-rows-grid',
                                                 'sortOrder' => 50,
                                                 'additionalClasses' => 'admin__field-wide',
-                                                'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
                                                 'template' => 'ui/dynamic-rows/templates/default',
-                                                'columnsHeader' => false,
-                                                'columnsHeaderAfterRender' => true,
                                                 'provider' => 'product_form.product_form_data_source',
                                                 'dataProvider' => '${ $.dataScope }' . '.bundle_button_proxy',
                                                 'identificationDRProperty' => 'product_id',
@@ -342,11 +377,8 @@ class BundlePanel extends AbstractModifier
                                                     'selection_price_value' => '',
                                                     'selection_qty' => '',
                                                 ],
-                                                'links' => [
-                                                    'insertData' => '${ $.provider }:${ $.dataProvider }'
-                                                ],
-                                                'source' => 'product',
-                                                'addButton' => false,
+                                                'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                                                'source' => 'product'
                                             ],
                                         ],
                                     ],
@@ -563,7 +595,7 @@ class BundlePanel extends AbstractModifier
                         'componentType' => Container::NAME,
                         'isTemplate' => true,
                         'component' => 'Magento_Ui/js/dynamic-rows/record',
-                        'is_collection' => true,
+                        'is_collection' => true
                     ],
                 ],
             ],
@@ -588,10 +620,7 @@ class BundlePanel extends AbstractModifier
                                 'prefer' => 'radio',
                                 'value' => '0',
                                 'sortOrder' => 50,
-                                'valueMap' => [
-                                    'false' => '0',
-                                    'true' => '1'
-                                ]
+                                'valueMap' => ['false' => '0', 'true' => '1']
                             ],
                         ],
                     ],
@@ -642,7 +671,8 @@ class BundlePanel extends AbstractModifier
                                 'sortOrder' => 100,
                                 'validation' => [
                                     'required-entry' => true,
-                                    'validate-zero-or-greater' => true
+                                    'validate-number' => true,
+                                    'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
                                     'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'

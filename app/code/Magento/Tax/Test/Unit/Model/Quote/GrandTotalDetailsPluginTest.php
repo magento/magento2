@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,11 +39,6 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
     protected $subjectMock;
 
     /**
-     * @var \Closure|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $closureMock;
-
-    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManagerHelper;
@@ -80,6 +75,26 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Tax\Model\Quote\GrandTotalDetailsPlugin::class,
@@ -88,6 +103,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
                 'ratesFactory' => $this->ratesFactoryMock,
                 'detailsFactory' => $this->detailsFactoryMock,
                 'taxConfig' => $this->taxConfigMock,
+                'serializer' => $serializer
             ]
         );
     }
@@ -153,7 +169,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
         return $taxDetailsMock;
     }
 
-    public function testAroundProcess()
+    public function testAfterProcess()
     {
         $taxRate = [
             'percent' => 8.25,
@@ -171,12 +187,12 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
         );
 
         $taxTotalData = [
-            'full_info' => [
+            'full_info' => json_encode([
                 [
                     'amount' => $taxAmount,
                     'rates' => [$taxRate],
                 ],
-            ],
+            ]),
         ];
         $taxTotalMock = $this->setupTaxTotal($taxTotalData);
         $addressTotals = [
@@ -211,11 +227,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
             'tax' => $taxSegmentMock,
         ];
 
-        $this->closureMock = function () use ($totalSegments) {
-            return $totalSegments;
-        };
-
-        $result = $this->model->aroundProcess($this->subjectMock, $this->closureMock, $addressTotals);
+        $result = $this->model->afterProcess($this->subjectMock, $totalSegments, $addressTotals);
         $this->assertEquals($totalSegments, $result);
     }
 }

@@ -1,36 +1,44 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
+use Magento\Backend\Block\Template;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+
 /**
- * Renderer for PayPal banner in System Configuration
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Class Hint adds "Configuration Details" link to payment configuration.
+ * `<comment>` node must be defined in `<group>` node and contain some link.
  */
-class Hint extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Hint extends Template implements RendererInterface
 {
     /**
      * @var string
+     * @deprecated
      */
     protected $_template = 'Magento_Paypal::system/config/fieldset/hint.phtml';
 
     /**
-     * Render fieldset html
-     *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
-        $elementOriginalData = $element->getOriginalData();
-        if (isset($elementOriginalData['help_link'])) {
-            $this->setHelpLink($elementOriginalData['help_link']);
+        $html = '';
+
+        if ($element->getComment()) {
+            $html .= sprintf('<tr id="row_%s">', $element->getHtmlId());
+            $html .= '<td colspan="1"><p class="note"><span>';
+            $html .= sprintf(
+                '<a href="%s" target="_blank">Configuration Details</a>',
+                $element->getComment()
+            );
+            $html .= '</span></p></td></tr>';
         }
-        return $this->toHtml();
+
+        return $html;
     }
 }

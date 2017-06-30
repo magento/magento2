@@ -1,20 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Grid\Module;
-use Magento\Setup\Model\Grid\TypeMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\PackagesData;
 
 /**
@@ -49,16 +48,11 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @var PackageInfo|\PHPUnit_Framework_MockObject_MockObject
      */
     private $packageInfoMock;
-    
+
     /**
      * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManagerProvider;
-
-    /**
-     * @var TypeMapper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $typeMapperMock;
 
     /**
      * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
@@ -71,16 +65,11 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @var Module
      */
     private $model;
-    
-    /**
-     * @var array
-     */
-    private $moduleData = [];
 
     /**
      * @var array
      */
-    private $allComponentData = [];
+    private $moduleData = [];
 
     public function setUp()
     {
@@ -88,20 +77,12 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             'magento/sample-module-one' => [
                 'name' => 'magento/sample-module-one',
                 'type' => 'magento2-module',
-                'version' => '1.0.0'
-            ]
-        ];
-        $this->allComponentData = [
-            'magento/sample-module-one' => [
-                'name' => 'magento/sample-module-one',
-                'type' => 'magento2-module',
-                'version' => '1.0.0'
+                'version' => '1.0.0',
             ],
-            'magento/sample-module-two' => [
-                'name' => 'magento/sample-module-two',
-                'type' => 'magento2-module',
-                'version' => '1.0.0'
-            ]
+        ];
+
+        $fullModuleList = [
+            'Sample_ModuleOne', 'Sample_ModuleTwo',
         ];
 
         $this->composerInformationMock = $this->getMockBuilder(ComposerInformation::class)
@@ -126,13 +107,9 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->fullModuleListMock->expects(static::any())
             ->method('getNames')
-            ->willReturn(array_keys($this->allComponentData));
-        
-        $this->packageInfoMock = $this->getMockBuilder(PackageInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturn($fullModuleList);
 
-        $this->typeMapperMock = $this->getMockBuilder(TypeMapper::class)
+        $this->packageInfoMock = $this->getMockBuilder(PackageInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -145,7 +122,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             $this->fullModuleListMock,
             $this->moduleListMock,
             $this->objectManagerProvider,
-            $this->typeMapperMock,
             $this->packagesDataMock
         );
     }
@@ -165,35 +141,35 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->packageInfoMock);
 
-        $this->packageInfoMock->expects(static::exactly(2))
-            ->method('getModuleName')
-            ->willReturnMap([
-                ['magento/sample-module-one', 'Sample_Module_One'],
-                ['magento/sample-module-two', 'Sample_Module_Two'],
-            ]);
+        $this->packageInfoMock->expects(static::never())
+            ->method('getModuleName');
 
-        $this->typeMapperMock->expects(static::exactly(2))
-            ->method('map')
-            ->willReturnMap([
-                ['magento/sample-module-one', 'magento2-module', 'Module'],
-                ['magento/sample-module-two', 'magento2-module', 'Module'],
-            ]);
-
-        $this->packageInfoMock->expects(static::exactly(2))
+        $this->packageInfoMock->expects(static::once())
             ->method('getRequiredBy')
             ->willReturn([]);
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getPackageName')
             ->willReturnMap([
-                    ['magento/sample-module-one', $this->allComponentData['magento/sample-module-one']['name']],
-                    ['magento/sample-module-two', $this->allComponentData['magento/sample-module-two']['name']],
+                    ['Sample_ModuleOne', 'magento/sample-module-one'],
+                    ['Sample_ModuleTwo', ''],
                 ]);
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getVersion')
             ->willReturnMap([
-                ['magento/sample-module-one', $this->allComponentData['magento/sample-module-one']['version']],
-                ['magento/sample-module-two', $this->allComponentData['magento/sample-module-two']['version']],
+                ['Sample_ModuleOne', '1.0.0'],
+                ['Sample_ModuleTwo', ''],
             ]);
+
+        $this->packagesDataMock->expects(static::exactly(2))
+            ->method('addPackageExtraInfo')
+            ->will(
+                $this->returnCallback(function ($package) {
+                    $package['package_title'] = 'packageTitle';
+                    $package['package_type'] = 'packageType';
+                    return $package;
+                })
+            );
+
         $this->moduleListMock->expects(static::exactly(2))
             ->method('has')
             ->willReturn(true);
@@ -204,22 +180,26 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $expected = [
             [
                 'name' => 'magento/sample-module-one',
-                'type' => 'Module',
+                'type' => 'magento2-module',
                 'version' => '1.0.0',
                 'vendor' => 'Magento',
-                'moduleName' => 'Sample_Module_One',
+                'moduleName' => 'Sample_ModuleOne',
                 'enable' => true,
-                'requiredBy' => []
+                'package_title' => 'packageTitle',
+                'package_type' => 'packageType',
+                'requiredBy' => [],
             ],
             [
-                'name' => 'magento/sample-module-two',
-                'type' => 'Module',
-                'version' => '1.0.0',
-                'vendor' => 'Magento',
-                'moduleName' => 'Sample_Module_Two',
+                'name' => Module::UNKNOWN_PACKAGE_NAME,
+                'type' => 'magento2-module',
+                'version' => Module::UNKNOWN_VERSION,
+                'vendor' => 'Sample',
+                'moduleName' => 'Sample_ModuleTwo',
                 'enable' => true,
-                'requiredBy' => []
-            ]
+                'package_title' => 'packageTitle',
+                'package_type' => 'packageType',
+                'requiredBy' => [],
+            ],
         ];
 
         static::assertEquals($expected, $this->model->getList());

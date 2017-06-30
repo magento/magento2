@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class PaymentDataBuilderTest
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
@@ -133,8 +133,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($additionalData);
 
         $this->configMock->expects(static::once())
-            ->method('getValue')
-            ->with(Config::KEY_MERCHANT_ACCOUNT_ID)
+            ->method('getMerchantAccountId')
             ->willReturn(self::MERCHANT_ACCOUNT_ID);
 
         $this->paymentDO->expects(static::once())

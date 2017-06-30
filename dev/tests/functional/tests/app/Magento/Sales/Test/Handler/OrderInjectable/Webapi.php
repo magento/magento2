@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,6 +50,13 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
     protected $url;
 
     /**
+     * Either customer is a guest or not.
+     *
+     * @var bool
+     */
+    private $isCustomerGuest;
+
+    /**
      * Creating order using quote via web API.
      *
      * @param FixtureInterface|null $fixture [optional]
@@ -57,17 +64,22 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
+        $this->isCustomerGuest = $fixture->getData('customer_id') ? false : true;
+
         /** @var OrderInjectable $fixture */
         $this->createQuote($fixture);
-        $this->url = $_ENV['app_frontend_url'] . 'rest/V1/carts/' . (int)$this->quote;
+        $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote  : 'carts/' . (int)$this->quote;
+        $this->url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($fixture) . '/V1/' . $url;
+
         $this->setProducts($fixture);
         $this->setCoupon($fixture);
         $this->setBillingAddress($fixture);
         $this->setShippingInformation($fixture);
         $this->setPaymentMethod($fixture);
         $orderId = $this->placeOrder();
+        $orderIncrementId = $this->getOrderIncrementId($orderId);
 
-        return ['id' => sprintf("%09d", $orderId)];
+        return ['id' => $orderIncrementId];
     }
 
     /**
@@ -79,16 +91,29 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
      */
     protected function createQuote(OrderInjectable $order)
     {
-        $url = $_ENV['app_frontend_url'] . 'rest/V1/customers/' . $order->getCustomerId()->getId() . '/carts';
-        $data = '{"customerId": "' . $order->getCustomerId()->getId() . '"}';
-        $this->webapiTransport->write($url, $data);
-        $response = json_decode($this->webapiTransport->read(), true);
-        $this->webapiTransport->close();
-        if (!is_numeric($response)) {
-            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception('Could not create a checkout quote using web API.');
+        if ($this->isCustomerGuest) {
+            $url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($order) . '/V1/guest-carts';
+            $this->webapiTransport->write($url);
+            $response = json_decode($this->webapiTransport->read(), true);
+            $this->webapiTransport->close();
+            if (!is_string($response)) {
+                $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
+                throw new \Exception('Could not create a checkout quote using web API.');
+            }
+            $this->quote = $response;
+        } else {
+            $url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($order)
+                . '/V1/customers/' . $order->getCustomerId()->getId() . '/carts';
+            $data = '{"customerId": "' . $order->getCustomerId()->getId() . '"}';
+            $this->webapiTransport->write($url, $data);
+            $response = json_decode($this->webapiTransport->read(), true);
+            $this->webapiTransport->close();
+            if (!is_numeric($response)) {
+                $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
+                throw new \Exception('Could not create a checkout quote using web API.');
+            }
+            $this->quote = $response;
         }
-        $this->quote = $response;
     }
 
     /**
@@ -100,7 +125,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
      */
     protected function setProducts(OrderInjectable $order)
     {
-        $url = $_ENV['app_frontend_url'] . 'rest/V1/carts/' .  $this->quote . '/items';
+        $url = $this->url . '/items';
         $products = $order->getEntityId()['products'];
         foreach ($products as $product) {
             $data = [
@@ -332,5 +357,42 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         }
 
         return ['extension_attributes' => ['downloadable_option' => ['downloadable_links' => $links]]];
+    }
+
+    /**
+     * Prepare url for placing order in custom website.
+     *
+     * @param OrderInjectable $order
+     * @return string
+     */
+    private function prepareWebsiteUrl(OrderInjectable $order)
+    {
+        $url = 'rest';
+        if ($website = $order->getDataFieldConfig('store_id')['source']->getWebsite()) {
+            $store = $order->getDataFieldConfig('store_id')['source']->getStore();
+            $url = 'websites/' . $website->getCode() . '/rest/' . $store->getCode();
+        }
+        return $url;
+    }
+
+    /**
+     * Retrieve order increment id.
+     *
+     * @param int $orderId
+     * @return string
+     * @throws \Exception
+     */
+    private function getOrderIncrementId($orderId)
+    {
+        $url = $_ENV['app_frontend_url'] . 'rest/V1/orders/' . $orderId;
+        $this->webapiTransport->write($url, [], WebapiDecorator::GET);
+        $response = json_decode($this->webapiTransport->read(), true);
+        $this->webapiTransport->close();
+
+        if (!$response['increment_id']) {
+            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
+            throw new \Exception('Could not get order details using web API.');
+        }
+        return $response['increment_id'];
     }
 }

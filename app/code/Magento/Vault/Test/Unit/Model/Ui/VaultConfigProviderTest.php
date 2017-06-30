@@ -1,30 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Model\Ui;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Payment\Helper\Data;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class VaultConfigProviderTest
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Data|MockObject
-     */
-    private $paymentDataHelper;
-
     /**
      * @var VaultPaymentInterface|MockObject
      */
@@ -46,30 +40,31 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $storeManager;
 
     /**
+     * @var PaymentMethodListInterface|MockObject
+     */
+    private $vaultPaymentList;
+
+    /**
      * @var VaultConfigProvider
      */
     private $vaultConfigProvider;
 
     protected function setUp()
     {
-        $this->paymentDataHelper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStoreMethods'])
-            ->getMock();
-
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->store = $this->getMockForAbstractClass(StoreInterface::class);
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->vaultPaymentList = $this->getMock(PaymentMethodListInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);
         $objectManager->setBackwardCompatibleProperty(
             $this->vaultConfigProvider,
-            'paymentDataHelper',
-            $this->paymentDataHelper
+            'vaultPaymentList',
+            $this->vaultPaymentList
         );
     }
 
@@ -94,16 +89,15 @@ class VaultConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->session->expects(static::once())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $this->storeManager->expects(static::exactly(2))
+        $this->storeManager->expects(static::once())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->store->expects(static::exactly(2))
+        $this->store->expects(static::once())
             ->method('getId')
             ->willReturn($storeId);
 
-        $this->paymentDataHelper->expects(static::once())
-            ->method('getStoreMethods')
-            ->with($storeId)
+        $this->vaultPaymentList->expects(static::once())
+            ->method('getActiveList')
             ->willReturn([$this->vaultPayment]);
 
         $this->vaultPayment->expects(static::once())

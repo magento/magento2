@@ -1,0 +1,5 @@
+# "Component Type" "Component Name" "Path Pattern"
+module * /
+library * /
+setup
+pub

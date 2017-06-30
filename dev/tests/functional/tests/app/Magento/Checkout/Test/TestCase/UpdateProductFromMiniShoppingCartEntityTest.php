@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Preconditions:
@@ -25,15 +26,15 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Update.
  * 5. Perform all assertions.
  *
- * @group Mini_Shopping_Cart_(CS)
+ * @group Mini_Shopping_Cart
  * @ZephyrId MAGETWO-29812
  */
 class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'extended_acceptance_test';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**
@@ -77,14 +78,28 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
 
     /**
      * Update product from mini shopping cart.
-     *
      * @param array $originalProduct
      * @param array $checkoutData
+     * @param boolean $useMiniCartToEditQty
+     * @param array $shippingAddress
+     * @param array $shipping
+     * @param array $payment
+     * @param Customer $customer
      * @return array
      */
-    public function test(array $originalProduct, array $checkoutData)
-    {
+    public function test(
+        array $originalProduct,
+        array $checkoutData,
+        $useMiniCartToEditQty = false,
+        $shippingAddress = null,
+        $shipping = null,
+        $payment = null,
+        Customer $customer = null
+    ) {
         // Preconditions:
+        if ($customer !== null) {
+            $customer->persist();
+        }
         $product = $this->createProduct($originalProduct);
         $this->addToCart($product);
 
@@ -94,16 +109,25 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
         $newProduct = $this->createProduct([explode('::', $originalProduct[0])[0]], [$productData]);
         $miniShoppingCart = $this->cmsIndex->getCartSidebarBlock();
         $miniShoppingCart->openMiniCart();
-        $miniShoppingCart->getCartItem($newProduct)->clickEditItem();
-        $this->catalogProductView->getViewBlock()->addToCart($newProduct);
 
+        if ($useMiniCartToEditQty) {
+            $miniShoppingCart->getCartItem($newProduct)->editQty($newProduct->getCheckoutData());
+        } else {
+            $miniShoppingCart->getCartItem($newProduct)->clickEditItem();
+            $this->catalogProductView->getViewBlock()->addToCart($newProduct);
+        }
         // Prepare data for asserts:
         $cart['data']['items'] = ['products' => [$newProduct]];
         $deletedCart['data']['items'] = ['products' => [$product]];
 
         return [
             'deletedCart' => $this->fixtureFactory->createByCode('cart', $deletedCart),
-            'cart' => $this->fixtureFactory->createByCode('cart', $cart)
+            'cart' => $this->fixtureFactory->createByCode('cart', $cart),
+            'checkoutData' => [
+                'shippingAddress' => $shippingAddress,
+                'shipping' => $shipping,
+                'payment' => $payment
+            ]
         ];
     }
 

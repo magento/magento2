@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,296 +9,235 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">braintree_report.braintree_report_data_source</item>
-            <item name="deps" xsi:type="string">braintree_report.braintree_report_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">braintree_report_columns</item>
     </argument>
+    <settings>
+        <spinner>braintree_report_columns</spinner>
+        <deps>
+            <dep>braintree_report.braintree_report_data_source</dep>
+        </deps>
+    </settings>
     <dataSource name="braintree_report_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">BraintreeTransactionsDataProvider</argument>
-            <argument name="name" xsi:type="string">braintree_report_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">page_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                </item>
-            </argument>
-        </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Braintree/js/grid/provider</item>
             </item>
         </argument>
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="BraintreeTransactionsDataProvider" name="braintree_report_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>page_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
-    <container name="listing_top">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/toolbar</item>
-            </item>
-        </argument>
-        <container name="bookmarks">
+    <container name="listing_top" template="ui/grid/toolbar">
+        <container name="bookmarks" component="Magento_Ui/js/grid/controls/bookmarks/bookmarks" displayArea="dataGridActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">localStorage</item>
                     </item>
                 </item>
             </argument>
         </container>
-        <container name="columns_controls">
+        <container name="columns_controls" component="Magento_Ui/js/grid/controls/columns" displayArea="dataGridActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
                         <item name="provider" xsi:type="string">braintree_report.braintree_report.braintree_report_columns</item>
                     </item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
                 </item>
             </argument>
         </container>
-        <exportButton name="export_button" />
-        <filters name="listing_filters">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="dataScope" xsi:type="string">filters</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">braintree_report.braintree_report.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">braintree_report.braintree_report.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">braintree_report.braintree_report.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-            <filterSelect name="status">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Braintree\Ui\Component\Report\Listing\Column\Status</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="dataScope" xsi:type="string">status</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="label" xsi:type="string" translate="true">Status</item>
-                    </item>
-                </argument>
+        <exportButton name="export_button"/>
+        <filters name="listing_filters" displayArea="dataGridFilters">
+            <settings>
+                <dataScope>filters</dataScope>
+                <childDefaults>
+                    <param name="imports" xsi:type="array">
+                        <item name="visible" xsi:type="string">braintree_report.braintree_report.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                    </param>
+                    <param name="provider" xsi:type="string">braintree_report.braintree_report.listing_top.listing_filters</param>
+                </childDefaults>
+                <storageConfig>
+                    <namespace>current.filters</namespace>
+                    <provider>braintree_report.braintree_report.listing_top.bookmarks</provider>
+                </storageConfig>
+            </settings>
+            <filterSelect name="status" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Braintree\Ui\Component\Report\Listing\Column\Status"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Status</label>
+                    <dataScope>status</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
             </filterSelect>
-            <filterSelect name="type">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Braintree\Ui\Component\Report\Listing\Column\TransactionType</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="dataScope" xsi:type="string">type</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="label" xsi:type="string" translate="true">Transaction Type</item>
-                    </item>
-                </argument>
+            <filterSelect name="type" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Braintree\Ui\Component\Report\Listing\Column\TransactionType"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Transaction Type</label>
+                    <dataScope>type</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
             </filterSelect>
-            <filterSelect name="paymentInstrumentType">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Braintree\Ui\Component\Report\Listing\Column\PaymentType</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="dataScope" xsi:type="string">paymentInstrumentType</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="label" xsi:type="string" translate="true">Payment Type</item>
-                    </item>
-                </argument>
+            <filterSelect name="paymentInstrumentType" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Braintree\Ui\Component\Report\Listing\Column\PaymentType"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Payment Type</label>
+                    <dataScope>paymentInstrumentType</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
             </filterSelect>
             <filterInput name="paypalDetails_paymentId">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">paypalDetails_paymentId</item>
-                        <item name="label" xsi:type="string" translate="true">PayPal Payment ID</item>
-                    </item>
-                </argument>
+                <settings>
+                    <label translate="true">PayPal Payment ID</label>
+                    <dataScope>paypalDetails_paymentId</dataScope>
+                </settings>
             </filterInput>
-            <filterRange name="createdAt" class="Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange">
+            <filterRange name="createdAt" class="Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange" provider="${ $.parentName }" component="Magento_Ui/js/grid/filters/range" template="ui/grid/filters/elements/group">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
-                        </item>
                         <item name="parent" xsi:type="string">braintree_report.braintree_report.listing_top.listing_filters</item>
-                        <item name="template" xsi:type="string">ui/grid/filters/elements/group</item>
-                        <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/range</item>
-                        <item name="rangeType" xsi:type="string">date</item>
-                        <item name="dataScope" xsi:type="string">createdAt</item>
-                        <item name="label" xsi:type="string" translate="true">Created At</item>
                     </item>
                 </argument>
+                <settings>
+                    <rangeType>date</rangeType>
+                    <label translate="true">Created At</label>
+                    <dataScope>createdAt</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
             </filterRange>
         </filters>
     </container>
     <columns name="braintree_report_columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
+        <settings>
+            <childDefaults>
+                <param name="storageConfig" xsi:type="array">
                     <item name="provider" xsi:type="string">braintree_report.braintree_report.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
-                <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">braintree_report.braintree_report.braintree_report_columns_editor</item>
-                        <item name="target" xsi:type="string">startEdit</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
-                            <item name="1" xsi:type="boolean">true</item>
-                        </item>
+                    <item name="root" xsi:type="string">columns.${ $.index }</item>
+                    <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                </param>
+                <param name="controlVisibility" xsi:type="boolean">true</param>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">braintree_report.braintree_report.braintree_report_columns_editor</item>
+                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
                     </item>
-                    <item name="controlVisibility" xsi:type="boolean">true</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">braintree_report.braintree_report.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
-                    </item>
-                </item>
-            </item>
-        </argument>
+                </param>
+            </childDefaults>
+            <storageConfig>
+                <namespace>current</namespace>
+                <provider>braintree_report.braintree_report.listing_top.bookmarks</provider>
+            </storageConfig>
+        </settings>
         <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">id</item>
-                </item>
-            </argument>
+            <settings>
+                <indexField>id</indexField>
+            </settings>
         </selectionsColumn>
         <column name="id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Transaction ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">Transaction ID</label>
+            </settings>
         </column>
         <column name="orderId">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Order ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">Order ID</label>
+            </settings>
         </column>
         <column name="paypalDetails_paymentId">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">PayPal Payment ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <dataType>text</dataType>
+                <label translate="true">PayPal Payment ID</label>
+            </settings>
         </column>
         <column name="paymentInstrumentType">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Payment Type</item>
-                </item>
-            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Payment Type</label>
+            </settings>
         </column>
         <column name="type">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Type</item>
-                </item>
-            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Type</label>
+            </settings>
         </column>
-        <column name="createdAt" class="Magento\Ui\Component\Listing\Columns\Date">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sorting" xsi:type="string">desc</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="label" xsi:type="string" translate="true">Created At</item>
-                </item>
-            </argument>
+        <column name="createdAt" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">Created At</label>
+                <sorting>desc</sorting>
+            </settings>
         </column>
         <column name="amount" class="Magento\Sales\Ui\Component\Listing\Column\Price">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
-                    <item name="label" xsi:type="string" translate="true">Amount</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Amount</label>
+            </settings>
         </column>
         <column name="processorSettlementResponseCode">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Settlement Code</item>
-                </item>
-            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Settlement Code</label>
+            </settings>
         </column>
         <column name="status">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Status</item>
-                </item>
-            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Status</label>
+            </settings>
         </column>
         <column name="processorSettlementResponseText">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Settlement Response Text</item>
-                </item>
-            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Settlement Response Text</label>
+            </settings>
         </column>
         <column name="refundIds">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Refund Ids</item>
-                </item>
-            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Refund Ids</label>
+            </settings>
         </column>
         <column name="merchantAccountId">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Merchant Account ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Merchant Account ID</label>
+            </settings>
         </column>
         <column name="settlementBatchId">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Settlement Batch ID</item>
-                </item>
-            </argument>
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Settlement Batch ID</label>
+            </settings>
         </column>
         <column name="currencyIsoCode">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Currency</item>
-                </item>
-            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Currency</label>
+            </settings>
         </column>
     </columns>
 </listing>

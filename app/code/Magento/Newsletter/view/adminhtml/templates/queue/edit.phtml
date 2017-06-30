@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
+
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?php echo $block->getBackButtonHtml() ?>
@@ -20,14 +21,14 @@
     <?php endif ?>
 </div>
 
-<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="queue_edit_form">
+<form action="<?php echo $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
     <?php echo $block->getBlockHtml('formkey')?>
     <?php echo $block->getChildHtml('form') ?>
 </form>
-<form action="<?php /* @escapeNotVerified */ echo $block->getPreviewUrl() ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
+<form action="<?php echo $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
     <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php /* @escapeNotVerified */ echo $block->getIsTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?php /* @noEscape */ echo $block->getIsTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />

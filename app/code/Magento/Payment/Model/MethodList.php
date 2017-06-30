@@ -1,24 +1,42 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Payment\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Model\Method\AbstractMethod;
 
+/**
+ * Methods List service class.
+ *
+ * @api
+ */
 class MethodList
 {
     /**
      * @var \Magento\Payment\Helper\Data
+     * @deprecated Do not use this property in case of inheritance.
      */
     protected $paymentHelper;
 
     /**
      * @var \Magento\Payment\Model\Checks\SpecificationFactory
+     * @deprecated Do not use this property in case of inheritance.
      */
     protected $methodSpecificationFactory;
+
+    /**
+     * @var \Magento\Payment\Api\PaymentMethodListInterface
+     */
+    private $paymentMethodList;
+
+    /**
+     * @var \Magento\Payment\Model\Method\InstanceFactory
+     */
+    private $paymentMethodInstanceFactory;
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentHelper
@@ -35,19 +53,20 @@ class MethodList
     /**
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
-     * @api
      */
     public function getAvailableMethods(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         $store = $quote ? $quote->getStoreId() : null;
-        $methods = [];
-        foreach ($this->paymentHelper->getStoreMethods($store, $quote) as $method) {
-            if ($this->_canUseMethod($method, $quote)) {
-                $method->setInfoInstance($quote->getPayment());
-                $methods[] = $method;
+        $availableMethods = [];
+
+        foreach ($this->getPaymentMethodList()->getActiveList($store) as $method) {
+            $methodInstance = $this->getPaymentMethodInstanceFactory()->create($method);
+            if ($methodInstance->isAvailable($quote) && $this->_canUseMethod($methodInstance, $quote)) {
+                $methodInstance->setInfoInstance($quote->getPayment());
+                $availableMethods[] = $methodInstance;
             }
         }
-        return $methods;
+        return $availableMethods;
     }
 
     /**
@@ -70,5 +89,35 @@ class MethodList
             $method,
             $quote
         );
+    }
+
+    /**
+     * Get payment method list.
+     *
+     * @return \Magento\Payment\Api\PaymentMethodListInterface
+     */
+    private function getPaymentMethodList()
+    {
+        if ($this->paymentMethodList === null) {
+            $this->paymentMethodList = ObjectManager::getInstance()->get(
+                \Magento\Payment\Api\PaymentMethodListInterface::class
+            );
+        }
+        return $this->paymentMethodList;
+    }
+
+    /**
+     * Get payment method instance factory.
+     *
+     * @return \Magento\Payment\Model\Method\InstanceFactory
+     */
+    private function getPaymentMethodInstanceFactory()
+    {
+        if ($this->paymentMethodInstanceFactory === null) {
+            $this->paymentMethodInstanceFactory = ObjectManager::getInstance()->get(
+                \Magento\Payment\Model\Method\InstanceFactory::class
+            );
+        }
+        return $this->paymentMethodInstanceFactory;
     }
 }

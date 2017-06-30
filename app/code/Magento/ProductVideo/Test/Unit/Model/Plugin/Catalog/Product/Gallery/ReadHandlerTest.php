@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
@@ -200,16 +200,12 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             'values' => []
         ];
 
-        $resourceEntryResult = [];
-
         $this->product->expects($this->once())
             ->method('getData')
             ->with('media_gallery')
             ->willReturn($mediaData);
 
-        $this->resourceModel->expects($this->once())
-            ->method('loadDataFromTableByValueId')
-            ->willReturn($resourceEntryResult);
+        $this->resourceModel->expects($this->never())->method('loadDataFromTableByValueId');
 
         $this->mediaGalleryReadHandler->expects($this->any())
             ->method('getAttribute')

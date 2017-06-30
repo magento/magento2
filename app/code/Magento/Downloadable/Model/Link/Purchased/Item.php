@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link\Purchased;
@@ -43,7 +43,7 @@ use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item as Resource;
  * @method string getUpdatedAt()
  * @method Item setUpdatedAt($value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Item extends \Magento\Framework\Model\AbstractModel
 {

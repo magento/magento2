@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Store\Model\Store;
+
 /**
  * Catalog product media gallery resource model.
+ *
+ * @api
  */
 class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -84,7 +88,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [$mainTableAlias => $this->getTable($tableNameAlias)],
                 $cols
             )->where(
-                $mainTableAlias.'.value_id IN(?)',
+                $mainTableAlias . '.value_id IN(?)',
                 $ids
             );
         if (null !== $storeId) {
@@ -130,6 +134,23 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function createBaseLoadSelect($entityId, $storeId, $attributeId)
     {
+        $select =  $this->createBatchBaseSelect($storeId, $attributeId);
+
+        $select = $select->where(
+            'entity.' . $this->metadata->getLinkField() . ' = ?',
+            $entityId
+        );
+        return $select;
+    }
+
+    /**
+     * @param int $storeId
+     * @param int $attributeId
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function createBatchBaseSelect($storeId, $attributeId)
+    {
         $linkField = $this->metadata->getLinkField();
 
         $positionCheckSql = $this->getConnection()->getCheckSql(
@@ -158,7 +179,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [
                     $mainTableAlias . '.value_id = value.value_id',
                     $this->getConnection()->quoteInto('value.store_id = ?', (int)$storeId),
-                    $this->getConnection()->quoteInto('value.' . $linkField . ' = ?', (int)$entityId)
+                    'value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
             ['label', 'position', 'disabled']
@@ -168,8 +189,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     $mainTableAlias . '.value_id = default_value.value_id',
-                    'default_value.store_id = 0',
-                    $this->getConnection()->quoteInto('default_value.' . $linkField . ' = ?', (int)$entityId)
+                    $this->getConnection()->quoteInto('default_value.store_id = ?', Store::DEFAULT_STORE_ID),
+                    'default_value.' . $linkField . ' = entity.' . $linkField,
                 ]
             ),
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
@@ -178,9 +199,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $attributeId
         )->where(
             $mainTableAlias . '.disabled = 0'
-        )->where(
-            'entity.' . $linkField . ' = ?',
-            $entityId
         )->order(
             $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
         );
@@ -434,5 +452,22 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * Counts uses of this image.
+     *
+     * @param string $image
+     * @return int
+     */
+    public function countImageUses($image)
+    {
+        $select = $this->getConnection()->select()
+            ->from([$this->getMainTableAlias() => $this->getMainTable()])
+            ->where(
+                'value = ?',
+                $image
+            );
+        return count($this->getConnection()->fetchAll($select));
     }
 }

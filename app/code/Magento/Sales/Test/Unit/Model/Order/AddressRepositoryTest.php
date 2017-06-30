@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -33,6 +34,11 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchResultFactory;
 
+    /**
+     * @var CollectionProcessorInterface |\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessorMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -53,11 +59,15 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
+
         $this->subject = $objectManager->getObject(
             \Magento\Sales\Model\Order\AddressRepository::class,
             [
                 'metadata' => $this->metadata,
-                'searchResultFactory' => $this->searchResultFactory
+                'searchResultFactory' => $this->searchResultFactory,
+                'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
     }
@@ -136,56 +146,24 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $filter = $this->getMock(
-            \Magento\Framework\Api\Filter::class,
-            ['getConditionType', 'getField', 'getValue'],
-            [],
-            '',
-            false
-        );
-        $filter->expects($this->any())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $filter->expects($this->any())
-            ->method('getField')
-            ->willReturn('test_field');
-        $filter->expects($this->any())
-            ->method('getValue')
-            ->willReturn('test_value');
-
-        $filterGroup = $this->getMock(
-            \Magento\Framework\Api\Search\FilterGroup::class,
-            ['getFilters'],
-            [],
-            '',
-            false
-        );
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-
         $searchCriteria = $this->getMock(
             \Magento\Framework\Api\SearchCriteria::class,
-            ['getFilterGroups'],
+            [],
             [],
             '',
             false
         );
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroup]);
-
         $collection = $this->getMock(
             \Magento\Sales\Model\ResourceModel\Order\Address\Collection::class,
-            ['addFieldToFilter'],
+            [],
             [],
             '',
             false
         );
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->withAnyParameters();
 
+        $this->collectionProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
         $this->searchResultFactory->expects($this->once())
             ->method('create')
             ->willReturn($collection);

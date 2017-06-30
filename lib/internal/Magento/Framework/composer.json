@@ -8,7 +8,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",
@@ -20,7 +20,9 @@
         "ext-openssl": "*",
         "lib-libxml": "*",
         "ext-xsl": "*",
-        "symfony/process": "~2.1"
+        "symfony/process": "~2.1",
+        "zendframework/zend-stdlib": "^2.7.7",
+        "zendframework/zend-http": "^2.6.0"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"

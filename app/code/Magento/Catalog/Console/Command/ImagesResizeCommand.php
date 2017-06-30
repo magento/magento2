@@ -1,30 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Console\Command;
 
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Image\Cache as ImageCache;
-use Magento\Catalog\Model\Product\Image\CacheFactory as ImageCacheFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
-class ImagesResizeCommand extends Command
+class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
-     * @var AppState
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
     /**
-     * @var ProductCollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $productCollectionFactory;
 
@@ -34,21 +23,21 @@ class ImagesResizeCommand extends Command
     protected $productRepository;
 
     /**
-     * @var ImageCacheFactory
+     * @var \Magento\Catalog\Model\Product\Image\CacheFactory
      */
     protected $imageCacheFactory;
 
     /**
-     * @param AppState $appState
-     * @param ProductCollectionFactory $productCollectionFactory
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param ImageCacheFactory $imageCacheFactory
+     * @param \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory
      */
     public function __construct(
-        AppState $appState,
-        ProductCollectionFactory $productCollectionFactory,
+        \Magento\Framework\App\State $appState,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        ImageCacheFactory $imageCacheFactory
+        \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory
     ) {
         $this->appState = $appState;
         $this->productCollectionFactory = $productCollectionFactory;
@@ -69,11 +58,13 @@ class ImagesResizeCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->appState->setAreaCode('catalog');
+    protected function execute(
+        \Symfony\Component\Console\Input\InputInterface $input,
+        \Symfony\Component\Console\Output\OutputInterface $output
+    ) {
+        $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
 
-        /** @var ProductCollection $productCollection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->productCollectionFactory->create();
         $productIds = $productCollection->getAllIds();
         if (!count($productIds)) {
@@ -85,13 +76,13 @@ class ImagesResizeCommand extends Command
         try {
             foreach ($productIds as $productId) {
                 try {
-                    /** @var Product $product */
+                    /** @var \Magento\Catalog\Model\Product $product */
                     $product = $this->productRepository->getById($productId);
-                } catch (NoSuchEntityException $e) {
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                     continue;
                 }
 
-                /** @var ImageCache $imageCache */
+                /** @var \Magento\Catalog\Model\Product\Image\Cache $imageCache */
                 $imageCache = $this->imageCacheFactory->create();
                 $imageCache->generate($product);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -8,7 +8,7 @@ namespace Magento\Cms\Model;
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -64,6 +64,11 @@ class PageRepository implements PageRepositoryInterface
     private $storeManager;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
@@ -72,6 +77,7 @@ class PageRepository implements PageRepositoryInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         ResourcePage $resource,
@@ -81,7 +87,8 @@ class PageRepository implements PageRepositoryInterface
         Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -91,6 +98,7 @@ class PageRepository implements PageRepositoryInterface
         $this->dataPageFactory = $dataPageFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -144,43 +152,16 @@ class PageRepository implements PageRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
-        $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($criteria);
-
         /** @var \Magento\Cms\Model\ResourceModel\Page\Collection $collection */
         $collection = $this->pageCollectionFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
-            $this->addFilterGroupToCollection($filterGroup, $collection);
-        }
 
+        $this->collectionProcessor->process($criteria, $collection);
+
+        /** @var Data\PageSearchResultsInterface $searchResults */
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($criteria);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
-        $sortOrders = $criteria->getSortOrders();
-        if ($sortOrders) {
-            /** @var SortOrder $sortOrder */
-            foreach ($sortOrders as $sortOrder) {
-                $collection->addOrder(
-                    $sortOrder->getField(),
-                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
-        }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
-        $pages = [];
-        /** @var Page $pageModel */
-        foreach ($collection as $pageModel) {
-            $pageData = $this->dataPageFactory->create();
-            $this->dataObjectHelper->populateWithArray(
-                $pageData,
-                $pageModel->getData(),
-                \Magento\Cms\Api\Data\PageInterface::class
-            );
-            $pages[] = $this->dataObjectProcessor->buildOutputDataArray(
-                $pageData,
-                \Magento\Cms\Api\Data\PageInterface::class
-            );
-        }
-        $searchResults->setItems($pages);
         return $searchResults;
     }
 
@@ -218,31 +199,18 @@ class PageRepository implements PageRepositoryInterface
     }
 
     /**
-     * Helper function that adds a FilterGroup to the collection.
+     * Retrieve collection processor
      *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
-     * @param \Magento\Cms\Model\ResourceModel\Page\Collection $collection
-     * @return void
-     * @throws \Magento\Framework\Exception\InputException
+     * @deprecated
+     * @return CollectionProcessorInterface
      */
-    private function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
-        \Magento\Cms\Model\ResourceModel\Page\Collection $collection
-    ) {
-        $fields = [];
-        $conditions = [];
-        foreach ($filterGroup->getFilters() as $filter) {
-            if ($filter->getField() === 'store_id') {
-                $collection->addStoreFilter($filter->getValue(), false);
-                continue;
-            }
-            $condition = $filter->getConditionType() ?: 'eq';
-            $fields[] = $filter->getField();
-            $conditions[] = [$condition => $filter->getValue()];
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor'
+            );
         }
-
-        if ($fields) {
-            $collection->addFieldToFilter($fields, $conditions);
-        }
+        return $this->collectionProcessor;
     }
 }

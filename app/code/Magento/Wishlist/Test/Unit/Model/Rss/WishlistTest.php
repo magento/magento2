@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Wishlist\Test\Unit\Model\Rss;
 
@@ -136,7 +134,6 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         );
         $customerServiceMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $wishlistSharingUrl = 'wishlist/shared/index/1';
-        $locale = 'en_US';
         $productUrl = 'http://product.url/';
         $productName = 'Product name';
 
@@ -160,25 +157,6 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->will($this->returnValue($wishlistSharingUrl));
-        $this->scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->will($this->returnValueMap(
-                    [
-                        [
-                            'advanced/modules_disable_output/Magento_Rss',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                            null,
-                            null,
-                        ],
-                        [
-                            Data::XML_PATH_DEFAULT_LOCALE,
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                            null,
-                            $locale
-                        ],
-                    ]
-                )
-            );
 
         $staticArgs = [
             'productName' => $productName,

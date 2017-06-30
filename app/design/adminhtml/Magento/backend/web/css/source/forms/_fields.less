@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -227,7 +227,7 @@
     ._required > & {
         > span {
             &:after {
-                color: @field-label__required__color;
+                color: @validation__color;
                 content: '*';
                 display: inline-block;
                 font-size: @font-size__l;
@@ -485,6 +485,7 @@
 
 //  Field containing a value
 .admin__field-value {
+    display: inline-block;
     padding-top: @field-option__padding-top;
 }
 
@@ -680,11 +681,11 @@
     &:extend(.abs-field-no-label all);
     clear: both;
 
-    .action-advanced {
+    .action-additional {
         margin-top: @indent__s;
     }
 
-    .action-secondary {
+    .action-basic {
         width: 100%;
     }
 }
@@ -738,6 +739,10 @@
     .admin__field-complex-content {
         max-width: 60%;
         overflow: hidden;
+    }
+
+    .admin__field-complex-text {
+        margin-left: -@indent__s;
     }
 
     //  Field with empty table and no thead

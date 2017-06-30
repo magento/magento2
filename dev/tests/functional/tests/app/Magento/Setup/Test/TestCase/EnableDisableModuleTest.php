@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\TestCase;
@@ -37,7 +37,7 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
  * 16. Check for Success message
  * 17. Return to "Web Setup Wizard".
  *
- * @group Setup_(CS)
+ * @group Setup
  * @ZephyrId MAGETWO-43202
  */
 class EnableDisableModuleTest extends Injectable

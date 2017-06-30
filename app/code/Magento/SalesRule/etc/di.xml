@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -78,7 +78,7 @@
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
-                <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="string">Magento\SalesRule\Api\RuleRepositoryInterface</item>
+                <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="string">Magento\SalesRule\Model\ResourceModel\Rule</item>
             </argument>
         </arguments>
     </type>
@@ -147,7 +147,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\SalesRule\Model\Rule\Customer">
+    <type name="Magento\SalesRule\Model\Rule\Customer">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="form_name" xsi:type="string">sales_rule_form</item>
@@ -177,5 +177,9 @@
                 <item name="Magento\SalesRule\Api\Data\CouponInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
             </argument>
         </arguments>
+    </type>
+
+    <type name="\Magento\Quote\Model\Cart\CartTotalRepository">
+        <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
     </type>
 </config>

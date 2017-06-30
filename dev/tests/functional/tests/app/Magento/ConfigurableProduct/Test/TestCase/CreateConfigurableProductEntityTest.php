@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,10 @@ namespace Magento\ConfigurableProduct\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
+use Magento\Config\Test\TestStep\SetupConfigurationStep;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Test Coverage for CreateConfigurableProductEntity
@@ -33,7 +35,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Save product
  * 7. Perform all assertions
  *
- * @group Configurable_Product_(MX)
+ * @group Configurable_Product
  * @ZephyrId MAGETWO-26041
  */
 class CreateConfigurableProductEntityTest extends Injectable
@@ -41,7 +43,6 @@ class CreateConfigurableProductEntityTest extends Injectable
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -59,30 +60,68 @@ class CreateConfigurableProductEntityTest extends Injectable
     protected $productNew;
 
     /**
+     * Factory for creation SetupConfigurationStep.
+     *
+     * @var TestStepFactory
+     */
+    protected $testStepFactory;
+
+    /**
+     * Configuration data holder.
+     *
+     * @var string
+     */
+    protected $configData = null;
+
+    /**
      * Injection data.
      *
      * @param CatalogProductIndex $productIndex
      * @param CatalogProductNew $productNew
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
-    public function __inject(CatalogProductIndex $productIndex, CatalogProductNew $productNew)
-    {
+    public function __inject(
+        CatalogProductIndex $productIndex,
+        CatalogProductNew $productNew,
+        TestStepFactory $testStepFactory
+    ) {
         $this->productIndex = $productIndex;
         $this->productNew = $productNew;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
      * Test create catalog Configurable product run.
      *
      * @param ConfigurableProduct $product
+     * @param string|null $configData
      * @return void
      */
-    public function test(ConfigurableProduct $product)
+    public function test(ConfigurableProduct $product, $configData = null)
     {
+        //Preconditions
+        $this->configData = $configData;
+        $this->testStepFactory->create(
+            SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'flushCache' => true]
+        )->run();
+
         // Steps
         $this->productIndex->open();
         $this->productIndex->getGridPageActionBlock()->addProduct('configurable');
         $this->productNew->getProductForm()->fill($product);
         $this->productNew->getFormPageActions()->save($product);
+    }
+
+    /**
+     * Revert Display Out Of Stock Products configuration.
+     */
+    public function teatDown()
+    {
+        $this->testStepFactory->create(
+            SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'flushCache' => true]
+        )->cleanUp();
     }
 }

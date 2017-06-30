@@ -2,7 +2,7 @@
     "name": "magento/module-dhl",
     "description": "N/A",
     "require": {
-        "php": "~5.6.0|7.0.2|7.0.4|~7.0.6",
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "magento/module-config": "100.2.*",
         "magento/module-store": "100.2.*",
         "magento/module-shipping": "100.2.*",
@@ -16,8 +16,7 @@
         "lib-libxml": "*"
     },
     "suggest": {
-        "magento/module-checkout": "100.2.*",
-        "magento/module-rma": "100.2.*"
+        "magento/module-checkout": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",

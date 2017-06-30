@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -132,25 +132,21 @@ class DiCompileCommand extends Command
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
-        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
+        $setupPath = $this->directoryList->getPath(DirectoryList::SETUP);
+        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATED_CODE);
 
         $this->objectManager->get(\Magento\Framework\App\Cache::class)->clean();
         $compiledPathsList = [
             'application' => $modulePaths,
             'library' => $libraryPaths,
+            'setup' => $setupPath,
             'generated_helpers' => $generationPath
         ];
-        $excludedModulePaths = [];
-        foreach ($modulePaths as $appCodePath) {
-            $excludedModulePaths[] = '#^' . $appCodePath . '/Test#';
-        }
-        $excludedLibraryPaths = [];
-        foreach ($libraryPaths as $libraryPath) {
-            $excludedLibraryPaths[] = '#^' . $libraryPath . '/([\\w]+/)?Test#';
-        }
+
         $this->excludedPathsList = [
-            'application' => $excludedModulePaths,
-            'framework' => $excludedLibraryPaths
+            'application' => $this->getExcludedModulePaths($modulePaths),
+            'framework' => $this->getExcludedLibraryPaths($libraryPaths),
+            'setup' => $this->getExcludedSetupPaths($setupPath),
         ];
         $this->configureObjectManager($output);
 
@@ -160,7 +156,7 @@ class DiCompileCommand extends Command
             $this->cleanupFilesystem(
                 [
                     DirectoryList::CACHE,
-                    DirectoryList::DI,
+                    DirectoryList::GENERATED_METADATA,
                 ]
             );
             foreach ($operations as $operationCode => $arguments) {
@@ -206,6 +202,69 @@ class DiCompileCommand extends Command
     }
 
     /**
+     * Build list of module path regexps which should be excluded from compilation
+     *
+     * @param string[] $modulePaths
+     * @return string[]
+     */
+    private function getExcludedModulePaths(array $modulePaths)
+    {
+        $modulesByBasePath = [];
+        foreach ($modulePaths as $modulePath) {
+            $moduleDir = basename($modulePath);
+            $vendorPath = dirname($modulePath);
+            $vendorDir = basename($vendorPath);
+            $basePath = dirname($vendorPath);
+            $modulesByBasePath[$basePath][$vendorDir][] = $moduleDir;
+        }
+
+        $basePathsRegExps = [];
+        foreach ($modulesByBasePath as $basePath => $vendorPaths) {
+            $vendorPathsRegExps = [];
+            foreach ($vendorPaths as $vendorDir => $vendorModules) {
+                $vendorPathsRegExps[] = $vendorDir
+                    . '/(?:' . join('|', $vendorModules) . ')';
+            }
+            $basePathsRegExps[] = $basePath
+                . '/(?:' . join('|', $vendorPathsRegExps) . ')';
+        }
+
+        $excludedModulePaths = [
+            '#^(?:' . join('|', $basePathsRegExps) . ')/Test#',
+            '#^(?:' . join('|', $basePathsRegExps) . ')/tests#',
+        ];
+        return $excludedModulePaths;
+    }
+
+    /**
+     * Build list of library path regexps which should be excluded from compilation
+     *
+     * @param string[] $libraryPaths
+     * @return string[]
+     */
+    private function getExcludedLibraryPaths(array $libraryPaths)
+    {
+        $excludedLibraryPaths = [
+            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
+            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?tests#',
+        ];
+        return $excludedLibraryPaths;
+    }
+
+    /**
+     * Get excluded setup application paths
+     *
+     * @param string $setupPath
+     * @return string[]
+     */
+    private function getExcludedSetupPaths($setupPath)
+    {
+        return [
+            '#^(?:' . $setupPath . ')(/[\\w]+)*/Test#'
+        ];
+    }
+
+    /**
      * Delete directories by their code from "var" directory
      *
      * @param array $directoryCodeList
@@ -244,9 +303,6 @@ class DiCompileCommand extends Command
                             'InterceptionPreferencesResolving' =>
                                 ['instance' =>
                                     \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
-                            'ArgumentsSerialization' =>
-                                ['instance' =>
-                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization::class],
                         ]
                     ]
                 ], \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [
@@ -292,6 +348,7 @@ class DiCompileCommand extends Command
                 'paths' => [
                     $compiledPathsList['application'],
                     $compiledPathsList['library'],
+                    $compiledPathsList['setup'],
                     $compiledPathsList['generated_helpers'],
                 ],
                 'filePatterns' => ['php' => '/\.php$/'],

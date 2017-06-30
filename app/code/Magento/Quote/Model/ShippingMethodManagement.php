@@ -1,24 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
 
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Framework\Reflection\DataObjectProcessor;
-use Magento\Framework\App\ObjectManager;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 
 /**
- * Shipping method read service.
+ * Shipping method read service
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingMethodManagement implements
@@ -63,23 +63,27 @@ class ShippingMethodManagement implements
     private $addressFactory;
 
     /**
-     * Constructs a shipping method read service object.
+     * Constructor
      *
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param Cart\ShippingMethodConverter $converter
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param Quote\TotalsCollector $totalsCollector
+     * @param AddressInterfaceFactory|null $addressFactory
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         Cart\ShippingMethodConverter $converter,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        AddressInterfaceFactory $addressFactory = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
         $this->addressRepository = $addressRepository;
         $this->totalsCollector = $totalsCollector;
+        $this->addressFactory = $addressFactory ?: ObjectManager::getInstance()
+            ->get(AddressInterfaceFactory::class);
     }
 
     /**
@@ -269,6 +273,7 @@ class ShippingMethodManagement implements
 
     /**
      * Get list of available shipping methods
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Framework\Api\ExtensibleDataInterface $address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[]
@@ -292,6 +297,7 @@ class ShippingMethodManagement implements
 
     /**
      * Get transform address interface into Array
+     *
      * @param \Magento\Framework\Api\ExtensibleDataInterface  $address
      * @return array
      */
@@ -311,6 +317,7 @@ class ShippingMethodManagement implements
 
     /**
      * Gets the data object processor
+     *
      * @return \Magento\Framework\Reflection\DataObjectProcessor
      * @deprecated
      */
@@ -321,19 +328,5 @@ class ShippingMethodManagement implements
                 ->get(DataObjectProcessor::class);
         }
         return $this->dataProcessor;
-    }
-
-    /**
-     * Gets the address factory
-     * @return AddressInterfaceFactory
-     * @deprecated
-     */
-    private function getAddressFactory()
-    {
-        if ($this->addressFactory === null) {
-            $this->addressFactory = ObjectManager::getInstance()
-                ->get(AddressInterfaceFactory::class);
-        }
-        return $this->addressFactory;
     }
 }

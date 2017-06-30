@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Framework\Notification;
 
 /*
  * List of registered system notifiers
+ * @api
  */
 class NotifierList
 {
@@ -64,7 +65,7 @@ class NotifierList
             }
             $this->isNotifiersVerified = true;
             if ($hasErrors) {
-                throw new \InvalidArgumentException('All notifiers should implements NotifierInterface');
+                throw new \InvalidArgumentException('All notifiers should implement NotifierInterface');
             }
         }
         return $this->notifiers;

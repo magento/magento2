@@ -1,24 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser $block */
 ?>
 
 <?php $_divId = 'tree' . $block->getId() ?>
-<div id="<?php /* @escapeNotVerified */ echo $_divId ?>" class="tree"></div>
+<div id="<?php echo $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
 <script id="ie-deferred-loader" defer="defer" src="//:"></script>
 <script>
 require(['jquery', "prototype", "extjs/ext-tree-checkbox"], function(jQuery){
 
-var tree<?php /* @escapeNotVerified */ echo $block->getId() ?>;
+var tree<?php echo $block->escapeJs($block->getId()) ?>;
 
-var useMassaction = <?php /* @escapeNotVerified */ echo $block->getUseMassaction() ? 1 : 0; ?>;
+var useMassaction = <?php /* @noEscape */ echo $block->getUseMassaction() ? 1 : 0; ?>;
 
-var isAnchorOnly = <?php /* @escapeNotVerified */ echo $block->getIsAnchorOnly() ? 1 : 0; ?>;
+var isAnchorOnly = <?php /* @noEscape */ echo $block->getIsAnchorOnly() ? 1 : 0; ?>;
 
 Ext.tree.TreePanel.Enhanced = function(el, config)
 {
@@ -43,7 +44,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
         if (firstLoad) {
             <?php if ($block->getNodeClickListener()): ?>
-                this.addListener('click', <?php /* @escapeNotVerified */ echo $block->getNodeClickListener() ?>.createDelegate(this));
+                this.addListener('click', <?php /* @noEscape */ echo $block->getNodeClickListener() ?>.createDelegate(this));
             <?php endif; ?>
         }
 
@@ -56,10 +57,10 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
 jQuery(function()
 {
-    var emptyNodeAdded = <?php /* @escapeNotVerified */ echo($block->getWithEmptyNode() ? 'false' : 'true') ?>;
+    var emptyNodeAdded = <?php /* @noEscape */ echo($block->getWithEmptyNode() ? 'false' : 'true') ?>;
 
     var categoryLoader = new Ext.tree.TreeLoader({
-       dataUrl: '<?php /* @escapeNotVerified */ echo $block->getLoadTreeUrl() ?>'
+        dataUrl: '<?php echo $block->escapeUrl($block->getLoadTreeUrl()) ?>'
     });
 
     categoryLoader.buildCategoryTree = function(parent, config)
@@ -78,7 +79,7 @@ jQuery(function()
                 // Add empty node to reset category filter
                 if(!emptyNodeAdded) {
                     var empty = Object.clone(_node);
-                    empty.text = '<?php /* @escapeNotVerified */ echo __('None') ?>';
+                    empty.text = '<?php echo $block->escapeJs($block->escapeHtml(__('None'))); ?>';
                     empty.children = [];
                     empty.id = 'none';
                     empty.path = '1/none';
@@ -149,25 +150,25 @@ jQuery(function()
     };
 
     categoryLoader.on("beforeload", function(treeLoader, node) {
-        $('<?php /* @escapeNotVerified */ echo $_divId; ?>').fire('category:beforeLoad', {treeLoader:treeLoader});
+        $('<?php echo $block->escapeJs($_divId); ?>').fire('category:beforeLoad', {treeLoader:treeLoader});
         treeLoader.baseParams.id = node.attributes.id;
     });
 
-    tree<?php /* @escapeNotVerified */ echo $block->getId() ?> = new Ext.tree.TreePanel.Enhanced('<?php /* @escapeNotVerified */ echo $_divId ?>', {
+    tree<?php echo $block->escapeJs($block->getId()) ?> = new Ext.tree.TreePanel.Enhanced('<?php echo $block->escapeJs($_divId) ?>', {
         animate:          false,
         loader:           categoryLoader,
         enableDD:         false,
         containerScroll:  true,
-        rootVisible:      '<?php /* @escapeNotVerified */ echo $block->getRoot()->getIsVisible() ?>',
+        rootVisible:      '<?php echo (bool) $block->getRoot()->getIsVisible() ?>',
         useAjax:          true,
         currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
         addNodeTo:        false
     });
 
     if (useMassaction) {
-        tree<?php /* @escapeNotVerified */ echo $block->getId() ?>.on('check', function(node) {
-            $('<?php /* @escapeNotVerified */ echo $_divId; ?>').fire('node:changed', {node:node});
-        }, tree<?php /* @escapeNotVerified */ echo $block->getId() ?>);
+        tree<?php echo $block->escapeJs($block->getId()) ?>.on('check', function(node) {
+            $('<?php echo $block->escapeJs($_divId); ?>').fire('node:changed', {node:node});
+        }, tree<?php echo $block->escapeJs($block->getId()) ?>);
     }
 
     // set the root node
@@ -179,7 +180,7 @@ jQuery(function()
         category_id: <?php echo (int) $block->getCategoryId() ?>
     };
 
-    tree<?php /* @escapeNotVerified */ echo $block->getId() ?>.loadTree({parameters:parameters, data:<?php /* @escapeNotVerified */ echo $block->getTreeJson() ?>},true);
+    tree<?php echo $block->escapeJs($block->getId()) ?>.loadTree({parameters:parameters, data:<?php /* @noEscape */ echo $block->getTreeJson() ?>},true);
 
 });
 

@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * Read handler for catalog product gallery.
+ *
+ * @api
  */
 class ReadHandler implements ExtensionInterface
 {
@@ -40,7 +43,7 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
-     * @param object $entity
+     * @param Product $entity
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -50,29 +53,57 @@ class ReadHandler implements ExtensionInterface
         $value = [];
         $value['images'] = [];
 
-        $localAttributes = ['label', 'position', 'disabled'];
-
         $mediaEntries = $this->resourceModel->loadProductGalleryByAttributeId(
             $entity,
             $this->getAttribute()->getAttributeId()
         );
 
-        foreach ($mediaEntries as $mediaEntry) {
-            foreach ($localAttributes as $localAttribute) {
-                if ($mediaEntry[$localAttribute] === null) {
-                    $mediaEntry[$localAttribute] = $this->findDefaultValue($localAttribute, $mediaEntry);
-                }
-            }
+        $this->addMediaDataToProduct(
+            $entity,
+            $mediaEntries
+        );
+        
+        return $entity;
+    }
 
+    /**
+     * @param Product $product
+     * @param array $mediaEntries
+     * @return void
+     */
+    public function addMediaDataToProduct(Product $product, array $mediaEntries)
+    {
+        $attrCode = $this->getAttribute()->getAttributeCode();
+        $value = [];
+        $value['images'] = [];
+        $value['values'] = [];
+
+        foreach ($mediaEntries as $mediaEntry) {
+            $mediaEntry = $this->substituteNullsWithDefaultValues($mediaEntry);
             $value['images'][$mediaEntry['value_id']] = $mediaEntry;
         }
+        $product->setData($attrCode, $value);
+    }
 
-        $entity->setData(
-            $this->getAttribute()->getAttributeCode(),
-            $value
-        );
+    /**
+     * @param array $rawData
+     * @return array
+     */
+    private function substituteNullsWithDefaultValues(array $rawData)
+    {
+        $processedData = [];
+        foreach ($rawData as $key => $rawValue) {
+            if (null !== $rawValue) {
+                $processedValue = $rawValue;
+            } elseif (isset($rawData[$key . '_default'])) {
+                $processedValue = $rawData[$key . '_default'];
+            } else {
+                $processedValue = null;
+            }
+            $processedData[$key] = $processedValue;
+        }
 
-        return $entity;
+        return $processedData;
     }
 
     /**
@@ -91,6 +122,7 @@ class ReadHandler implements ExtensionInterface
      * @param string $key
      * @param string[] &$image
      * @return string
+     * @deprecated
      */
     protected function findDefaultValue($key, &$image)
     {

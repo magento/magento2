@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 /** @var $block \Magento\Framework\View\Element\Html\Links */
 ?>
-<?php /** @var $block \Magento\Customer\Block\Account\Navigation */ ?>
 <div class="block account-nav">
     <div class="title">
-        <strong><?php /* @escapeNotVerified */ echo __('My Account'); ?></strong>
+        <strong><?php echo $block->escapeHtml(__('My Account')); ?></strong>
     </div>
     <div class="content">
         <nav class="account-nav">
             <ul class="nav items">
-                <?php echo $block->getChildHtml();?>
+                <?php echo $block->getChildHtml(); ?>
             </ul>
         </nav>
     </div>

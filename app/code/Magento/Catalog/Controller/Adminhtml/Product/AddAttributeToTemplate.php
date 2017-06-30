@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -16,7 +15,6 @@ use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -54,11 +52,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     protected $searchCriteriaBuilder;
 
     /**
-     * @var SortOrderBuilder
-     */
-    protected $sortOrderBuilder;
-
-    /**
      * @var AttributeGroupInterfaceFactory
      */
     protected $attributeGroupFactory;
@@ -79,18 +72,24 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     protected $extensionAttributesFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory|null $attributeGroupFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Eav\Api\Data\AttributeGroupInterfaceFactory $attributeGroupFactory = null
     ) {
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->attributeGroupFactory = $attributeGroupFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Eav\Api\Data\AttributeGroupInterfaceFactory::class);
     }
 
     /**
@@ -115,7 +114,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
             $attributeGroupSearchCriteria = $this->getSearchCriteriaBuilder()
                 ->addFilter('attribute_set_id', $attributeSet->getAttributeSetId())
                 ->addFilter('attribute_group_code', $groupCode)
-                ->addSortOrder($this->getSortOrderBuilder()->setAscendingDirection()->create())
                 ->setPageSize(1)
                 ->create();
 
@@ -132,7 +130,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                 $attributeGroup = reset($attributeGroupItems);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 /** @var AttributeGroupInterface $attributeGroup */
-                $attributeGroup = $this->getAttributeGroupFactory()->create();
+                $attributeGroup = $this->attributeGroupFactory->create();
             }
 
             $extensionAttributes = $attributeGroup->getExtensionAttributes()
@@ -229,18 +227,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     }
 
     /**
-     * @return AttributeGroupInterfaceFactory
-     */
-    private function getAttributeGroupFactory()
-    {
-        if (null === $this->attributeGroupFactory) {
-            $this->attributeGroupFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Eav\Api\Data\AttributeGroupInterfaceFactory::class);
-        }
-        return $this->attributeGroupFactory;
-    }
-
-    /**
      * @return SearchCriteriaBuilder
      */
     private function getSearchCriteriaBuilder()
@@ -250,18 +236,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                 ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         }
         return $this->searchCriteriaBuilder;
-    }
-
-    /**
-     * @return SortOrderBuilder
-     */
-    private function getSortOrderBuilder()
-    {
-        if (null === $this->sortOrderBuilder) {
-            $this->sortOrderBuilder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\SortOrderBuilder::class);
-        }
-        return $this->sortOrderBuilder;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -24,7 +24,9 @@ class ImagesTest extends AbstractModifierTest
 
     public function testModifyData()
     {
-        $this->assertSame($this->getSampleData(), $this->getModel()->modifyData($this->getSampleData()));
+        $this->productMock->expects($this->once())->method('getId')->willReturn(2051);
+        $actualResult = $this->getModel()->modifyData($this->getSampleData());
+        $this->assertSame("", $actualResult[2051]['product']['media_gallery']['images'][0]['label']);
     }
 
     public function testModifyMeta()
@@ -39,5 +41,25 @@ class ImagesTest extends AbstractModifierTest
         ];
 
         $this->assertSame([], $this->getModel()->modifyMeta($meta));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getSampleData()
+    {
+        return [
+            2051 => [
+                'product' => [
+                    'media_gallery' => [
+                        'images' => [
+                            [
+                                'label' => null
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }

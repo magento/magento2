@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,14 +20,13 @@ use Magento\Mtf\Fixture\InjectableFixture;
  * 3. Verify checkout cart.
  *
  * @ZephyrId MAGETWO-12392
- * @group Related_Products_(MX)
+ * @group Related_Products
  */
 class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 {
     /* tags */
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**

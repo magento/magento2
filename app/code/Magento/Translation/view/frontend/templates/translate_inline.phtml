@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Framework\View\Element\Template $block */
 ?>
-
-<link rel="stylesheet" type="text/css" href="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
-<link rel="stylesheet" type="text/css" href="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('Magento_Theme::prototype/magento.css') ?>"/>
-<link rel="stylesheet" type="text/css" href="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('mage/translate-inline.css') ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $block->escapeUrl($block->getViewFileUrl('prototype/windows/themes/default.css')) ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $block->escapeUrl($block->getViewFileUrl('Magento_Theme::prototype/magento.css')) ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $block->escapeUrl($block->getViewFileUrl('mage/translate-inline.css')) ?>"/>
 
 <script id="translate-inline-icon" type="text/x-magento-template">
     <img src="<%- data.img %>" height="16" width="16" class="translate-edit-icon">
@@ -56,12 +56,12 @@
 </script>
 
 <div data-role="translate-dialog"
-     data-mage-init='{"translateInline":{"ajaxUrl":"<?php /* @escapeNotVerified */ echo $block->getAjaxUrl() ?>"},"loader":{}}'></div>
+     data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>"},"loader":{}}'></div>
 <script type="text/x-magento-init">
     {
         "body": {
             "editTrigger": {
-                "img": "<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('Magento_Theme::fam_book_open.png') ?>",
+                "img": "<?php echo $block->escapeJs($block->escapeUrl($block->getViewFileUrl('Magento_Theme::fam_book_open.png'))) ?>",
                 "alwaysShown":true,
                 "singleElement":false
             },

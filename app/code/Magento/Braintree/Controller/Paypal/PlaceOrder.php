@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Controller\Paypal;
 
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Braintree\Model\Paypal\Helper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class PlaceOrder
@@ -23,21 +25,31 @@ class PlaceOrder extends AbstractAction
     private $orderPlace;
 
     /**
+     * Logger for exception details
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
      * @param Context $context
      * @param Config $config
      * @param Session $checkoutSession
      * @param Helper\OrderPlace $orderPlace
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Context $context,
         Config $config,
         Session $checkoutSession,
-        Helper\OrderPlace $orderPlace
+        Helper\OrderPlace $orderPlace,
+        LoggerInterface $logger = null
     ) {
         parent::__construct($context, $config, $checkoutSession);
         $this->orderPlace = $orderPlace;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -58,6 +70,7 @@ class PlaceOrder extends AbstractAction
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             return $resultRedirect->setPath('checkout/onepage/success', ['_secure' => true]);
         } catch (\Exception $e) {
+            $this->logger->critical($e);
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 

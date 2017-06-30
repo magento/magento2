@@ -1,26 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
-/**
- * @description:
- *
- */
-?>
-<?php
-    $_items = $block->getReviewsCollection()->getItems();
-    $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+/** @var Magento\Review\Block\Product\View\ListView $block */
+
+$_items = $block->getReviewsCollection()->getItems();
+$format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
 <?php if (count($_items)):?>
 <div class="block review-list" id="customer-reviews">
     <div class="block-title">
-        <strong><?php /* @escapeNotVerified */ echo __('Customer Reviews') ?></strong>
+        <strong><?php echo $block->escapeHtml(__('Customer Reviews')) ?></strong>
     </div>
     <div class="block-content">
         <div class="toolbar review-toolbar">
@@ -35,11 +29,11 @@
                     <?php foreach ($_review->getRatingVotes() as $_vote): ?>
                     <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
                         <span class="label rating-label"><span><?php echo $block->escapeHtml($_vote->getRatingCode()) ?></span></span>
-                        <div class="rating-result" title="<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
+                        <div class="rating-result" title="<?php echo $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
 	                        <meta itemprop="worstRating" content = "1"/>
 	                        <meta itemprop="bestRating" content = "100"/>
-                            <span style="width:<?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%">
-                                <span itemprop="ratingValue"><?php /* @escapeNotVerified */ echo $_vote->getPercent() ?>%</span>
+                            <span style="width:<?php echo $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
+                                <span itemprop="ratingValue"><?php echo $block->escapeHtml($_vote->getPercent()) ?>%</span>
                             </span>
                         </div>
                     </div>
@@ -51,12 +45,12 @@
                 </div>
                 <div class="review-details">
                     <p class="review-author">
-                        <span class="review-details-label"><?php /* @escapeNotVerified */ echo __('Review by')?></span>
+                        <span class="review-details-label"><?php echo $block->escapeHtml(__('Review by'))?></span>
                         <strong class="review-details-value" itemprop="author"><?php echo $block->escapeHtml($_review->getNickname()) ?></strong>
                     </p>
                     <p class="review-date">
-                        <span class="review-details-label"><?php /* @escapeNotVerified */ echo __('Posted on') ?></span>
-                        <time class="review-details-value" itemprop="datePublished" datetime="<?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?>"><?php /* @escapeNotVerified */ echo $block->formatDate($_review->getCreatedAt(), $format) ?></time>
+                        <span class="review-details-label"><?php echo $block->escapeHtml(__('Posted on')) ?></span>
+                        <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $block->escapeHtmlAttr($block->formatDate($_review->getCreatedAt(), $format)) ?>"><?php echo $block->escapeHtml($block->formatDate($_review->getCreatedAt(), $format)) ?></time>
                     </p>
                 </div>
             </li>

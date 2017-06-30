@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,10 +38,10 @@ $orderStoreDate = $block->formatDate(
             <div class="admin__page-section-item-title">
                 <span class="title">
                     <?php if ($block->getNoUseOrderLink()): ?>
-                        <?php /* @escapeNotVerified */ echo __('Order # %1', $_order->getRealOrderId()) ?> (<span><?php /* @escapeNotVerified */ echo $_email ?></span>)
+                        <?php /* @escapeNotVerified */ echo __('Order # %1', $_order->getRealOrderId()) ?> (<span><?php echo $block->escapeHtml($_email) ?></span>)
                     <?php else: ?>
                         <a href="<?php /* @escapeNotVerified */ echo $block->getViewUrl($_order->getId()) ?>"><?php /* @escapeNotVerified */ echo __('Order # %1', $_order->getRealOrderId()) ?></a>
-                        <span>(<?php /* @escapeNotVerified */ echo $_email ?>)</span>
+                        <span>(<?php echo $block->escapeHtml($_email) ?>)</span>
                     <?php endif; ?>
                 </span>
             </div>
@@ -49,7 +49,7 @@ $orderStoreDate = $block->formatDate(
                 <table class="admin__table-secondary order-information-table">
                 <tr>
                     <th><?php /* @escapeNotVerified */ echo __('Order Date') ?></th>
-                    <td><?php /* @escapeNotVerified */ echo $orderAdminDate ?></td>
+                    <td><?php echo $block->escapeHtml($orderAdminDate) ?></td>
                 </tr>
                 <?php if ($orderAdminDate != $orderStoreDate):?>
                     <tr>
@@ -57,12 +57,12 @@ $orderStoreDate = $block->formatDate(
                                 'Order Date (%1)',
                                 $block->getTimezoneForStore($_order->getStore())
                             ) ?></th>
-                        <td><?php /* @escapeNotVerified */ echo $orderStoreDate ?></td>
+                        <td><?php echo $block->escapeHtml($orderStoreDate) ?></td>
                     </tr>
                 <?php endif;?>
                 <tr>
                     <th><?php /* @escapeNotVerified */ echo __('Order Status') ?></th>
-                    <td><span id="order_status"><?php /* @escapeNotVerified */ echo $_order->getStatusLabel() ?></span></td>
+                    <td><span id="order_status"><?php echo $block->escapeHtml($_order->getStatusLabel()) ?></span></td>
                 </tr>
                 <?php echo $block->getChildHtml(); ?>
                 <?php if ($block->isSingleStoreMode() == false):?>
@@ -90,7 +90,7 @@ $orderStoreDate = $block->formatDate(
                 <?php if ($_order->getRemoteIp() && $block->shouldDisplayCustomerIp()): ?>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('Placed from IP') ?></th>
-                        <td><?php /* @escapeNotVerified */ echo $_order->getRemoteIp(); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
+                        <td><?php echo $block->escapeHtml($_order->getRemoteIp()); echo($_order->getXForwardedFor()) ? ' (' . $block->escapeHtml($_order->getXForwardedFor()) . ')' : ''; ?></td>
                     </tr>
                 <?php endif; ?>
                 <?php if ($_order->getGlobalCurrencyCode() != $_order->getBaseCurrencyCode()): ?>
@@ -99,10 +99,10 @@ $orderStoreDate = $block->formatDate(
                         <td><?php /* @escapeNotVerified */ echo $_order->getBaseToGlobalRate() ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($_order->getBaseCurrencyCode() != $_order->getOrderCurrencyCode()): ?>
+                <?php if ($_order->getBaseCurrencyCode() != $_order->getOrderCurrencyCode() && $_order->getGlobalCurrencyCode() != $_order->getOrderCurrencyCode()): ?>
                     <tr>
-                        <th><?php /* @escapeNotVerified */ echo __('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode()) ?></th>
-                        <th><?php /* @escapeNotVerified */ echo $_order->getBaseToOrderRate() ?></th>
+                        <th><?php echo $block->escapeHtml(__('%1 / %2 rate:', $_order->getOrderCurrencyCode(), $_order->getBaseCurrencyCode())) ?></th>
+                        <td><?php echo $block->escapeHtml($_order->getBaseToOrderRate()) ?></td>
                     </tr>
                 <?php endif; ?>
             </table>
@@ -136,15 +136,16 @@ $orderStoreDate = $block->formatDate(
                     <?php if ($_groupName = $block->getCustomerGroupName()) : ?>
                         <tr>
                             <th><?php /* @escapeNotVerified */ echo __('Customer Group') ?></th>
-                            <td><?php /* @escapeNotVerified */ echo $_groupName ?></td>
+                            <td><?php echo $block->escapeHtml($_groupName) ?></td>
                         </tr>
                     <?php endif; ?>
                     <?php foreach ($block->getCustomerAccountData() as $data):?>
                         <tr>
-                            <th><?php /* @escapeNotVerified */ echo $data['label'] ?></th>
-                            <td><?php /* @escapeNotVerified */ echo $data['value'] ?></td>
+                            <th><?php echo $block->escapeHtml($data['label']) ?></th>
+                            <td><?php echo $block->escapeHtml($data['value']) ?></td>
                         </tr>
                     <?php endforeach;?>
+                    <?php echo $block->getChildHtml('extra_customer_info') ?>
                 </table>
             </div>
         </div>

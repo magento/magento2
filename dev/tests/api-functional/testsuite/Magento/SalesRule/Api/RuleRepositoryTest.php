@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Api;
@@ -14,6 +14,16 @@ class RuleRepositoryTest extends WebapiAbstract
     const SERVICE_NAME = 'salesRuleRuleRepositoryV1';
     const RESOURCE_PATH = '/V1/salesRules';
     const SERVICE_VERSION = "V1";
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+    }
 
     protected function getSalesRuleData()
     {
@@ -33,7 +43,7 @@ class RuleRepositoryTest extends WebapiAbstract
             'website_ids' => [1],
             'customer_group_ids' => [0, 1, 3],
             'uses_per_customer' => 2,
-            'is_active' => 1,
+            'is_active' => true,
             'condition' => [
                 'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                 'conditions' => [
@@ -89,11 +99,13 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('rule_id', $result);
         $this->assertEquals($ruleId, $result['rule_id']);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test getList
         $result = $this->verifyGetList($ruleId);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test update
@@ -102,11 +114,13 @@ class RuleRepositoryTest extends WebapiAbstract
         $inputData['discount_amount'] = 30;
         $result = $this->updateRule($ruleId, $inputData);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test get
         $result = $this->getRule($ruleId);
         unset($result['rule_id']);
+        unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
 
         //test delete
@@ -159,6 +173,68 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertEquals($ruleId, $response['items'][0]['rule_id']);
 
         return $response['items'][0];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/SalesRule/_files/rules_advanced.php
+     */
+    public function testGetListWithMultipleFiltersAndSorting()
+    {
+        /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->create(
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
+        );
+        /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
+        $filterBuilder = $this->objectManager->create(
+            \Magento\Framework\Api\FilterBuilder::class
+        );
+        /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = $this->objectManager->create(
+            \Magento\Framework\Api\SortOrderBuilder::class
+        );
+
+        $filter1 = $filterBuilder->setField('is_rss')
+            ->setValue(1)
+            ->setConditionType('eq')
+            ->create();
+        $filter2 = $filterBuilder->setField('name')
+            ->setValue('#4')
+            ->setConditionType('eq')
+            ->create();
+        $filter3 = $filterBuilder->setField('uses_per_coupon')
+            ->setValue(1)
+            ->setConditionType('gt')
+            ->create();
+        $sortOrder = $sortOrderBuilder->setField('name')
+            ->setDirection('ASC')
+            ->create();
+
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $searchCriteriaBuilder->addFilters([$filter3]);
+        $searchCriteriaBuilder->addSortOrder($sortOrder);
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+
+        $requestData = ['searchCriteria' => $searchData];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/search?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertArrayHasKey('items', $result);
+        $this->assertArrayHasKey('search_criteria', $result);
+        $this->assertCount(2, $result['items']);
+        $this->assertEquals('#1', $result['items'][0]['name']);
+        $this->assertEquals('#2', $result['items'][1]['name']);
+        $this->assertEquals($searchData, $result['search_criteria']);
     }
 
     /**

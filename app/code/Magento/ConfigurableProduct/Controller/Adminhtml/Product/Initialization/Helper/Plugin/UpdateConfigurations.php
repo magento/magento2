@@ -2,7 +2,7 @@
 /**
  * Product initialzation helper
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -32,7 +32,7 @@ class UpdateConfigurations
         'swatch_image',
         'small_image',
         'thumbnail',
-        'image'
+        'image',
     ];
 
     /**
@@ -65,13 +65,15 @@ class UpdateConfigurations
     ) {
         $configurations = $this->getConfigurations();
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
-        foreach ($configurations as $productId => $productData) {
-            /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->productRepository->getById($productId, false, $this->request->getParam('store', 0));
-            $productData = $this->variationHandler->processMediaGallery($product, $productData);
-            $product->addData($productData);
-            if ($product->hasDataChanges()) {
-                $product->save();
+        if (count($configurations)) {
+            foreach ($configurations as $productId => $productData) {
+                /** @var \Magento\Catalog\Model\Product $product */
+                $product = $this->productRepository->getById($productId, false, $this->request->getParam('store', 0));
+                $productData = $this->variationHandler->processMediaGallery($product, $productData);
+                $product->addData($productData);
+                if ($product->hasDataChanges()) {
+                    $product->save();
+                }
             }
         }
         return $configurableProduct;
@@ -85,8 +87,18 @@ class UpdateConfigurations
     protected function getConfigurations()
     {
         $result = [];
-        $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
+        if ($configurableMatrix != null && !empty($configurableMatrix)) {
+            $configurableMatrix = json_decode($configurableMatrix, true);
+        }
+
         foreach ($configurableMatrix as $item) {
+            if (empty($item['was_changed'])) {
+                continue;
+            } else {
+                unset($item['was_changed']);
+            }
+
             if (!$item['newProduct']) {
                 $result[$item['id']] = $this->mapData($item);
 

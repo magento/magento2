@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Plugin\Block;
@@ -79,11 +79,18 @@ class Topmenu
         $currentCategory = $this->getCurrentCategory();
         $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
         foreach ($collection as $category) {
-            if (!isset($mapping[$category->getParentId()])) {
-                continue;
+            $categoryParentId = $category->getParentId();
+            if (!isset($mapping[$categoryParentId])) {
+                $parentIds = $category->getParentIds();
+                foreach ($parentIds as $parentId) {
+                    if (isset($mapping[$parentId])) {
+                        $categoryParentId = $parentId;
+                    }
+                }
             }
+
             /** @var Node $parentCategoryNode */
-            $parentCategoryNode = $mapping[$category->getParentId()];
+            $parentCategoryNode = $mapping[$categoryParentId];
 
             $categoryNode = new Node(
                 $this->getCategoryAsArray($category, $currentCategory),

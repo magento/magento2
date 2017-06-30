@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Model\Layout;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\View\Model\Layout\Update\Validator;
-use Magento\Framework\Config\Dom\ValidationException;
 
 /**
  * Layout merge model
@@ -535,7 +535,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $layout = $this->getFileLayoutUpdatesXml();
         foreach ($layout->xpath("*[self::handle or self::layout][@id='{$handle}']") as $updateXml) {
             $this->_fetchRecursiveUpdates($updateXml);
-            $this->addUpdate($updateXml->innerXml());
+            $updateInnerXml = $updateXml->innerXml();
+            $this->validateUpdate($handle, $updateInnerXml);
+            $this->addUpdate($updateInnerXml);
         }
         \Magento\Framework\Profiler::stop($_profilerKey);
 
@@ -563,10 +565,29 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $updateStr = $this->_substitutePlaceholders($updateStr);
         $updateXml = $this->_loadXmlString($updateStr);
         $this->_fetchRecursiveUpdates($updateXml);
-        $this->addUpdate($updateXml->innerXml());
+        $updateInnerXml = $updateXml->innerXml();
+        $this->validateUpdate($handle, $updateInnerXml);
+        $this->addUpdate($updateInnerXml);
 
         \Magento\Framework\Profiler::stop($_profilerKey);
         return (bool)$updateStr;
+    }
+
+    /**
+     * Validate layout update content, throw exception on failure.
+     *
+     * This method is used as a hook for plugins.
+     *
+     * @param string $handle
+     * @param string $updateXml
+     * @return void
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
+     */
+    public function validateUpdate($handle, $updateXml)
+    {
+        return;
     }
 
     /**

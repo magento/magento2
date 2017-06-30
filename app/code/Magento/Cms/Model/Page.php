@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -16,6 +16,7 @@ use Magento\Cms\Helper\Page as PageHelper;
 /**
  * Cms Page Model
  *
+ * @api
  * @method ResourceCmsPage _getResource()
  * @method ResourceCmsPage getResource()
  * @method Page setStoreId(array $storeId)
@@ -39,12 +40,12 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     /**
      * CMS page cache tag
      */
-    const CACHE_TAG = 'cms_page';
+    const CACHE_TAG = 'cms_p';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'cms_page';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names

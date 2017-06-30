@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Constraint\Extension;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Setup\Test\Block\Extension\InstallGrid;
+use Magento\Setup\Test\Block\Extension\AbstractGrid;
 use Magento\Setup\Test\Fixture\Extension;
 
 /**
@@ -18,11 +18,11 @@ class AssertSelectSeveralExtensions extends AbstractConstraint
     /**
      * Assert that extensions were selected on the grid.
      *
-     * @param InstallGrid $grid
+     * @param AbstractGrid $grid
      * @param Extension[] $extensions
      * @return void
      */
-    public function processAssert(InstallGrid $grid, array $extensions)
+    public function processAssert(AbstractGrid $grid, array $extensions)
     {
         $extensions = $grid->selectSeveralExtensions($extensions);
         \PHPUnit_Framework_Assert::assertEmpty(

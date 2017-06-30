@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,8 +23,15 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Image::class
         );
-        $model->setDestinationSubdir('image')->setBaseFile('');
-        $this->assertEmpty($model->getBaseFile());
+        /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defualtPlaceholder */
+        $defualtPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\View\Asset\Placeholder::class,
+                ['type' => 'image']
+            );
+
+        $model->setDestinationSubdir('image');
+        $model->setBaseFile('');
+        $this->assertEquals($defualtPlaceholder->getSourceFile(), $model->getBaseFile());
         return $model;
     }
 
@@ -46,7 +53,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlPlaceholder($model)
     {
         $this->assertStringMatchesFormat(
-            'http://localhost/pub/static/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
+            'http://localhost/pub/static/%s/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
             $model->getUrl()
         );
     }

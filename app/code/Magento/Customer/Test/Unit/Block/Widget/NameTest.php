@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,7 +44,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     const INVALID_ATTRIBUTE_CODE = 'invalid attribute code';
 
-    const PREFIX_STORE_LABEL = 'Prefix';
+    const PREFIX_STORE_LABEL = 'Name Prefix';
 
     /**#@-*/
 

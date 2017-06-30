@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
 
+/** @var \Magento\Review\Block\Product\Review $block */
+?>
 <div id="product-review-container" data-role="product-review"></div>
 <?php echo $block->getChildHtml(); ?>
 
@@ -12,7 +13,8 @@
     {
         "*": {
             "Magento_Review/js/process-reviews": {
-                "productReviewUrl": "<?php /* @escapeNotVerified */ echo $block->getProductReviewUrl();?>"
+                "productReviewUrl": "<?php echo $block->escapeJs($block->escapeUrl($block->getProductReviewUrl())); ?>",
+                "reviewsTabSelector": "#tab-label-reviews"
             }
         }
     }

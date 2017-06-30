@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,6 @@ interface ProductCustomOptionRepositoryInterface
         \Magento\Catalog\Api\Data\ProductInterface $product,
         $requiredOnly = false
     );
-
 
     /**
      * Get custom option for a specific product

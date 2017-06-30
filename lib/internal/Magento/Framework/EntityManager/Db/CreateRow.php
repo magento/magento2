@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,11 +50,12 @@ class CreateRow
     {
         $output = [];
         foreach ($connection->describeTable($metadata->getEntityTable()) as $column) {
-
-            if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP') {
+            $columnName = strtolower($column['COLUMN_NAME']);
+            if ($this->canNotSetTimeStamp($columnName, $column, $data)) {
                 continue;
             }
-            if (isset($data[strtolower($column['COLUMN_NAME'])])) {
+
+            if (isset($data[$columnName])) {
                 $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
             } elseif ($column['DEFAULT'] === null) {
                 $output[strtolower($column['COLUMN_NAME'])] = null;
@@ -64,6 +65,18 @@ class CreateRow
             $output[$metadata->getIdentifierField()] = $metadata->generateIdentifier();
         }
         return $output;
+    }
+
+    /**
+     * @param string $columnName
+     * @param string $column
+     * @param array $data
+     * @return bool
+     */
+    private function canNotSetTimeStamp($columnName, $column, array $data)
+    {
+        return $column['DEFAULT'] == 'CURRENT_TIMESTAMP' && !isset($data[$columnName])
+        && empty($column['NULLABLE']);
     }
 
     /**
@@ -78,7 +91,10 @@ class CreateRow
         $entityTable = $metadata->getEntityTable();
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         $connection->insert($entityTable, $this->prepareData($metadata, $connection, $data));
-        $data[$linkField] = $connection->lastInsertId($entityTable);
+
+        if (!isset($data[$linkField]) || !$data[$linkField]) {
+            $data[$linkField] = $connection->lastInsertId($entityTable);
+        }
 
         return $data;
     }

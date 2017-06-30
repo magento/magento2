@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -10,6 +10,7 @@
 @toolbar-mode-icon-font-size: 16px;
 @toolbar-background: transparent;
 @toolbar-element-background: @color-gray94;
+@toolbar-element__color: @color-gray37;
 @pager-action__background: @toolbar-element-background;
 @pager-action__hover__background: darken(@toolbar-element-background, 7%);
 @pager__font-weight: @font-weight__bold;
@@ -115,8 +116,6 @@
     }
 
     .limiter {
-        display: none;
-
         &-options {
             margin: 0 5px 0 7px;
             width: auto;
@@ -185,7 +184,7 @@
     .modes-mode {
         .lib-css(background-color, @toolbar-element-background);
         .lib-css(box-shadow, @button__shadow);
-        .lib-css(color, @text__color__muted);
+        .lib-css(color, @toolbar-element__color);
         border: 1px solid @border-color__base;
         border-right: 0;
         float: left;
@@ -199,7 +198,7 @@
         }
 
         &:hover {
-            .lib-css(color, @text__color__muted);
+            .lib-css(color, @toolbar-element__color);
             background: darken(@toolbar-element-background, 2%);
         }
 

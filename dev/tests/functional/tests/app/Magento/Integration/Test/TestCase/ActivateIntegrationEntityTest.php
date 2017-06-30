@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,14 +20,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 3. Click on the "Activate" link near required integration.
  * 4. Perform all assertions.
  *
- * @group Web_API_Framework_(PS)
+ * @group Web_API_Framework
  * @ZephyrId MAGETWO-26119
  */
 class ActivateIntegrationEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 

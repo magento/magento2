@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,8 +17,8 @@ $columns = $block->getColumns();
     <?php if (count($block->getItems())): ?>
     <ol class="product-items">
         <?php foreach ($block->getItems() as $item): ?>
-        <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li data-row="product-item" class="product-item" id="item_' . $item->getId() . '">' : '</li><li class="product-item" id="item_' . $item->getId() . '">' ?>
-            <div class="product-item-info">
+        <?php /* @noEscape */ echo($iterator++ == 1) ? '<li data-row="product-item" class="product-item" id="item_' . $block->escapeHtmlAttr($item->getId()) . '">' : '</li><li class="product-item" id="item_' . $block->escapeHtmlAttr($item->getId()) . '">' ?>
+            <div class="product-item-info" data-container="product-grid">
                 <?php foreach ($columns as $column): ?>
                     <?php $column->setItem($item); echo $column->toHtml($item);?>
                 <?php endforeach; ?>
@@ -28,7 +28,7 @@ $columns = $block->getColumns();
     </ol>
     <?php else: ?>
         <div class="message info empty">
-            <span><?php /* @escapeNotVerified */ echo __('This Wish List has no Items');?></span>
+            <span><?php echo $block->escapeHtml(__('This Wish List has no Items'));?></span>
         </div>
     <?php endif; ?>
 </div>

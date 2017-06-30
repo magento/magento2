@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Cookie\Block;
 
+/**
+ * @api
+ */
 class RequireCookie extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -18,7 +21,10 @@ class RequireCookie extends \Magento\Framework\View\Element\Template
      */
     public function getScriptOptions()
     {
-        $params = ['noCookieUrl' => $this->getUrl('cookie/index/noCookies/'), 'triggers' => $this->getTriggers()];
+        $params = [
+            'noCookieUrl' => $this->escapeUrl($this->getUrl('cookie/index/noCookies/')),
+            'triggers' => $this->escapeHtml($this->getTriggers())
+        ];
         return json_encode($params);
     }
 }

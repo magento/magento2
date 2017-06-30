@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -109,8 +109,8 @@
                     <input type="checkbox"
                            name="vault[is_enabled]"
                            class="checkbox"
-                           data-bind="attr: {'id': getCode() + '_vault_enabler'}, checked: vaultEnabler.isActivePaymentTokenEnabler"/>
-                    <label class="label" data-bind="attr: {'for': getCode() + '_vault_enabler'}">
+                           data-bind="attr: {'id': getCode() + '_enable_vault'}, checked: vaultEnabler.isActivePaymentTokenEnabler"/>
+                    <label class="label" data-bind="attr: {'for': getCode() + '_enable_vault'}">
                         <span><!-- ko i18n: 'Save for later use.'--><!-- /ko --></span>
                     </label>
                     <div class="field-tooltip toggle">
@@ -139,9 +139,12 @@
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="
-                        click: placeOrderClick,
-                        attr: {title: $t('Place Order')}
-                ">
+                            click: placeOrderClick,
+                            attr: {title: $t('Place Order')},
+                            css: {disabled: !isPlaceOrderActionAllowed()},
+                            enable: isActive()
+                        "
+                        disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>

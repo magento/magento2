@@ -4,6 +4,7 @@
 #    # server  127.0.0.1:9000;
 #    # or socket
 #    server   unix:/var/run/php5-fpm.sock;
+#    server   unix:/var/run/php/php7.0-fpm.sock;
 # }
 # server {
 #    listen 80;
@@ -82,7 +83,7 @@ location ~* ^/update($|/) {
 }
 
 location / {
-    try_files $uri $uri/ /index.php?$args;
+    try_files $uri $uri/ /index.php$is_args$args;
 }
 
 location /pub/ {
@@ -108,7 +109,7 @@ location /static/ {
         expires +1y;
 
         if (!-f $request_filename) {
-            rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
         }
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
@@ -117,17 +118,17 @@ location /static/ {
         expires    off;
 
         if (!-f $request_filename) {
-           rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+           rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
         }
     }
     if (!-f $request_filename) {
-        rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+        rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /media/ {
-    try_files $uri $uri/ /get.php?$args;
+    try_files $uri $uri/ /get.php$is_args$args;
 
     location ~ ^/media/theme_customization/.*\.xml {
         deny all;
@@ -137,13 +138,13 @@ location /media/ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
-        try_files $uri $uri/ /get.php?$args;
+        try_files $uri $uri/ /get.php$is_args$args;
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
         add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
-        try_files $uri $uri/ /get.php?$args;
+        try_files $uri $uri/ /get.php$is_args$args;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }

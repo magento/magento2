@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,11 +27,6 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Http\Context $httpContext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $httpContextMock;
-
-    /**
-     * @var \Closure
-     */
-    protected $closureMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -62,9 +57,6 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->closureMock = function () {
-            return 'ExpectedValue';
-        };
         $this->subjectMock = $this->getMock(\Magento\Framework\App\Action\Action::class, [], [], '', false);
         $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->plugin = new \Magento\Customer\Model\App\Action\ContextPlugin(
@@ -76,7 +68,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * Test aroundDispatch
      */
-    public function testAroundDispatch()
+    public function testBeforeDispatch()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
@@ -94,9 +86,6 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,8 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
-use Magento\Framework\App\ResourceConnection\Config;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -25,6 +26,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Entity/Attribute/Model - entity abstract
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -393,7 +395,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function getAttribute($attribute)
     {
-
         /** @var $config \Magento\Eav\Model\Config */
         $config = $this->_getConfig();
         if (is_numeric($attribute)) {
@@ -950,22 +951,23 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         /**
          * Load object base row data
          */
+        $object->beforeLoad($entityId);
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 
         if (is_array($row)) {
             $object->addData($row);
+            $this->loadAttributesForObject($attributes, $object);
+
+            $this->_loadModelAttributes($object);
+            $this->_afterLoad($object);
+            $object->afterLoad();
+            $object->setOrigData();
+            $object->setHasDataChanges(false);
         } else {
             $object->isObjectNew(true);
         }
 
-        $this->loadAttributesMetadata($attributes);
-
-        $this->_loadModelAttributes($object);
-
-        $object->setOrigData();
-
-        $this->_afterLoad($object);
 
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
@@ -974,21 +976,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
+     * @deprecated Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
      */
     protected function loadAttributesMetadata($attributes)
     {
-        if (empty($attributes)) {
-            $this->loadAllAttributes();
-        } else {
-            if (!is_array($attributes)) {
-                $attributes = [$attributes];
-            }
-            foreach ($attributes as $attrCode) {
-                $this->getAttribute($attrCode);
-            }
-        }
+        $this->loadAttributesForObject($attributes);
     }
 
     /**
@@ -1108,6 +1102,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param  \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
+     * @throws AlreadyExistsException
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -1147,6 +1142,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
+        } catch (DuplicateException $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw new AlreadyExistsException(__('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
@@ -1188,7 +1187,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param array &$delete
      * @param AbstractAttribute $attribute
-     * @param \Magento\Eav\Model\Entity\AbstractEntity $object
+     * @param AbstractEntity $object
      * @return void
      */
     private function _aggregateDeleteData(&$delete, $attribute, $object)
@@ -1664,7 +1663,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $data = [
             'attribute_id' => $attribute->getId(),
-            $entity->getLinkField() => $object->getData($entity->getLinkField()),
+            $this->getLinkField() => $object->getData($this->getLinkField()),
         ];
 
         if (!$this->getEntityTable()) {
@@ -1919,5 +1918,27 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     public function afterDelete(\Magento\Framework\DataObject $object)
     {
         $this->_afterDelete($object);
+    }
+
+    /**
+     * Load attributes for object
+     *  if the object will not pass all attributes for this entity type will be loaded
+     *
+     * @param array $attributes
+     * @param AbstractEntity|null $object
+     * @return void
+     */
+    protected function loadAttributesForObject($attributes, $object = null)
+    {
+        if (empty($attributes)) {
+            $this->loadAllAttributes($object);
+        } else {
+            if (!is_array($attributes)) {
+                $attributes = [$attributes];
+            }
+            foreach ($attributes as $attrCode) {
+                $this->getAttribute($attrCode);
+            }
+        }
     }
 }

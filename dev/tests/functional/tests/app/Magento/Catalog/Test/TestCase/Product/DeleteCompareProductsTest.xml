@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\DeleteCompareProductsTest" summary="Delete Compare Products" ticketId="MAGETWO-26161">
         <variation name="DeleteCompareProductsTestVariation1_NotLoggedIn">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductVirtual::default,downloadableProduct::default,groupedProduct::grouped_product_with_price,configurableProduct::default,bundleProduct::bundle_dynamic_product,bundleProduct::bundle_fixed_product</data>
             <data name="removeProductIndex" xsi:type="string">1</data>
             <data name="isCustomerLoggedIn" xsi:type="string">No</data>
@@ -15,6 +16,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotVisibleInComparePage" />
         </variation>
         <variation name="DeleteCompareProductsTestVariation2_LoggedIn">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_for_composite_products,catalogProductVirtual::default,downloadableProduct::default,groupedProduct::grouped_product_with_price,configurableProduct::default,bundleProduct::bundle_dynamic_product,bundleProduct::bundle_fixed_product</data>
             <data name="removeProductIndex" xsi:type="string">6</data>
             <data name="isCustomerLoggedIn" xsi:type="string">Yes</data>

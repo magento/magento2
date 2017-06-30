@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Listener;
@@ -296,7 +296,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit_Framework
     protected function doEndClass()
     {
         foreach ($this->tests as $name => $data) {
-            $check = $data['failure'] == 0 ? ' [x] ' : ' [ ] ';
+            $check = $data['failure'] == 0 ? ' - [x] ' : ' - [ ] ';
             $this->write(
                 "\n" . $check . $name . ($data['failure'] + $data['success'] ==
                 0 ? ' (skipped)' : '') . ($data['time'] > 1 ? ' - ' . number_format(

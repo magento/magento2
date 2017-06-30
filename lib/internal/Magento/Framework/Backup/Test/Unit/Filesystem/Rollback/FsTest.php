@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Test\Unit\Filesystem\Rollback;
@@ -72,10 +72,9 @@ class FsTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Backup\Filesystem\Rollback\Fs::class,
             [
                 'snapshotObject' => $this->snapshotMock,
-                'fsHelper' => $this->fsHelperMock
+                'fsHelper' => $this->fsHelperMock,
             ]
         );
-
     }
 
     /**
@@ -86,7 +85,7 @@ class FsTest extends \PHPUnit_Framework_TestCase
     {
         $fsInfo = [
             'writable' => false,
-            'writableMeta' => ['test1', 'test2']
+            'writableMeta' => ['test1', 'test2'],
         ];
 
         $this->fsHelperMock->expects($this->once())

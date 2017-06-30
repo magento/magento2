@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -208,6 +208,8 @@
                         },
 
                         submit : function() {
+                            var i, child, newNode;
+
                             if( TreePanels.root.firstChild == TreePanels.root.lastChild ) {
                                 return;
                             }
@@ -221,6 +223,7 @@
 
                             if( editSet.currentNode && editSet.currentNode.attributes.cls == 'folder' ) {
                                 TreePanels.root.removeChild(editSet.currentNode);
+
                                 for( i in editSet.currentNode.childNodes ) {
                                     if( editSet.currentNode.childNodes[i].id ) {
                                         child = editSet.currentNode.childNodes[i];
@@ -231,12 +234,20 @@
                                         }
                                     }
                                 }
+
                                 editSet.req.removeGroups[editSet.currentNode.id] = editSet.currentNode.id;
                                 editSet.currentNode = false;
                             }
                         },
 
                         SystemNodesExists : function(currentNode) {
+                            if (!currentNode) {
+                                alert({
+                                    content: '<?php echo $block->escapeJs(__('Please select a node.')) ?>'
+                                });
+                                return;
+                            }
+
                             for (i in currentNode.childNodes) {
                                 if (currentNode.childNodes[i].id) {
                                     child = editSet.currentNode.childNodes[i];
@@ -253,31 +264,40 @@
 
                         addGroup : function() {
                             prompt({
+                                title: "<?php /* @escapeNotVerified */ echo __('Add New Group') ?>",
                                 content: "<?php /* @escapeNotVerified */ echo __('Please enter a new group name.') ?>",
                                 value: "",
+                                validation: true,
+                                validationRules: ['required-entry'],
+                                attributesForm: {
+                                    novalidate: 'novalidate',
+                                    action: ''
+                                },
+                                attributesField: {
+                                    name: 'name',
+                                    'data-validate': '{required:true}',
+                                    maxlength: '255'
+                                },
                                 actions: {
                                     confirm: function (group_name) {
                                         group_name = group_name.strip();
-                                        if( group_name == '' ) {
-                                            self.addGroup();
-                                        } else if( group_name != false && group_name != null && group_name != '' ) {
 
-                                            if (!editSet.validateGroupName(group_name, 0)) {
-                                                return;
-                                            }
-
-                                            var newNode = new Ext.tree.TreeNode({
-                                                text : group_name.escapeHTML(),
-                                                cls : 'folder',
-                                                allowDrop : true,
-                                                allowDrag : true
-                                            });
-                                            TreePanels.root.appendChild(newNode);
-                                            newNode.addListener('beforemove', editSet.groupBeforeMove);
-                                            newNode.addListener('beforeinsert', editSet.groupBeforeInsert);
-                                            newNode.addListener('beforeappend', editSet.groupBeforeInsert);
-                                            newNode.addListener('click', editSet.register);
+                                        if (!editSet.validateGroupName(group_name, 0)) {
+                                            return;
                                         }
+
+                                        var newNode = new Ext.tree.TreeNode({
+                                            text : group_name.escapeHTML(),
+                                            cls : 'folder',
+                                            allowDrop : true,
+                                            allowDrag : true
+                                        });
+
+                                        TreePanels.root.appendChild(newNode);
+                                        newNode.addListener('beforemove', editSet.groupBeforeMove);
+                                        newNode.addListener('beforeinsert', editSet.groupBeforeInsert);
+                                        newNode.addListener('beforeappend', editSet.groupBeforeInsert);
+                                        newNode.addListener('click', editSet.register);
                                     }
                                 }
                             });
@@ -302,7 +322,7 @@
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists".') ?>';
+                                    errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists.') ?>';
                                     alert({
                                         content: errorText.replace("/name/",name)
                                     });
@@ -313,8 +333,13 @@
                         },
 
                         save : function() {
+                            var block;
+
                             if ($('messages')) {
                                 $('messages').update();
+                            } else {
+                                block = jQuery('<div/>').attr('id', 'messages');
+                                jQuery('.page-main-actions').after(block);
                             }
                             TreePanels.rebuildTrees();
                             if(!jQuery('#set-prop-form').valid()) {

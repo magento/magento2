@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -327,31 +327,23 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $searchResults = $this->repository->getList($searchBuilder->create());
+        $searchBuilder->setPageSize(1);
+        $searchBuilder->setCurrentPage(2);
+
+        $searchCriteria = $searchBuilder->create();
+        $searchResults = $this->repository->getList($searchCriteria);
+
+        $items = array_values($searchResults->getItems());
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
+        $this->assertEquals(1, count($items));
 
-        $i = 0;
-        /** @var \Magento\Customer\Api\Data\AddressInterface $item*/
-        foreach ($searchResults->getItems() as $item) {
-            $this->assertEquals(
-                $expectedResult[$i]['id'],
-                $item->getId()
-            );
-            $this->assertEquals(
-                $expectedResult[$i]['city'],
-                $item->getCity()
-            );
-            $this->assertEquals(
-                $expectedResult[$i]['postcode'],
-                $item->getPostcode()
-            );
-            $this->assertEquals(
-                $expectedResult[$i]['firstname'],
-                $item->getFirstname()
-            );
-            $i++;
-        }
+        $expectedResultIndex = count($expectedResult) - 1;
+
+        $this->assertEquals($expectedResult[$expectedResultIndex]['id'], $items[0]->getId());
+        $this->assertEquals($expectedResult[$expectedResultIndex]['city'], $items[0]->getCity());
+        $this->assertEquals($expectedResult[$expectedResultIndex]['postcode'], $items[0]->getPostcode());
+        $this->assertEquals($expectedResult[$expectedResultIndex]['firstname'], $items[0]->getFirstname());
     }
 
     public function searchAddressDataProvider()
@@ -371,13 +363,17 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
                 [$filterBuilder->setField('postcode')->setValue('75477')->create()],
                 null,
                 null,
-                [['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John']],
+                [
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                ],
             ],
             'Address with city CityM' => [
                 [$filterBuilder->setField('city')->setValue('CityM')->create()],
                 null,
                 null,
-                [['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John']],
+                [
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                ],
             ],
             'Addresses with firstname John sorted by firstname desc, city asc' => [
                 [$filterBuilder->setField('firstname')->setValue('John')->create()],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,13 +12,18 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
+/**
+ * @api
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**
      * @var Resource
      */
     private $resource;
+
     /**
      * @var IndexScopeResolver
      */
@@ -26,11 +31,11 @@ class IndexStructure implements IndexStructureInterface
 
     /**
      * @param ResourceConnection $resource
-     * @param IndexScopeResolver $indexScopeResolver
+     * @param IndexScopeResolverInterface $indexScopeResolver
      */
     public function __construct(
         ResourceConnection $resource,
-        IndexScopeResolver $indexScopeResolver
+        IndexScopeResolverInterface $indexScopeResolver
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;

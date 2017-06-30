@@ -4,7 +4,7 @@
  *
  * Format: array(<class_name>[, <replacement>])
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -37,7 +37,11 @@ return [
     ['Mage_Admin_Model_Resource_Rules_Collection', 'Magento\Authorization\Model\ResourceModel\Rules\Collection'],
     [
         'Mage_Admin_Model_Resource_Permissions_Collection',
+        'Magento\Authorization\Model\ResourceModel\Rules\Collection'
+    ],
+    [
         'Magento\Authorization\Model\ResourceModel\Permissions\Collection',
+        'Magento\Authorization\Model\ResourceModel\Rules\Collection'
     ],
     ['Mage_Adminhtml_Block_Abstract', 'Magento\Backend\Block\AbstractBlock'],
     ['Mage_Adminhtml_Block_Backup_Grid'],
@@ -785,6 +789,7 @@ return [
     ['Mage_Core_Model_Config_Fieldset', 'Magento\Core\Model\Fieldset\Config'],
     ['Mage_Core_Model_Config_Options', 'Magento\Framework\Filesystem'],
     ['Magento\Framework\App\Dir', 'Magento\Framework\Filesystem'],
+    ['Magento\Framework\EntityManager\CustomAttributesMapper'],
     ['Magento\Framework\Filesystem\Adapter\Local', 'Magento\Framework\Filesystem\Driver\File'],
     ['Magento\Framework\Filesystem\Adapter\Zlib', 'Magento\Framework\Filesystem\Driver\Zlib'],
     ['Magento\Framework\Filesystem\AdapterInterface'],
@@ -3825,8 +3830,8 @@ return [
     ],
     ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
     [
-        'Magento\Setup\Console\Command\DeployStaticContentCommand',
-        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand',
+        'Magento\Setup\Console\Command\DeployStaticContentCommand'
     ],
     [
         'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
@@ -4068,6 +4073,10 @@ return [
     ['Magento\Persistent\Model\Observer\PreventExpressCheckout', 'Magento\Persistent\Observer\*'],
     ['Magento\Persistent\Model\Observer\PreventClearCheckoutSession', 'Magento\Persistent\Observer\*'],
     ['Magento\Persistent\Model\Observer\MakePersistentQuoteGuest', 'Magento\Persistent\Observer\*'],
+    [
+        'Magento\Persistent\Observer\RemovePersistentCookieObserver',
+        '\Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver'
+    ],
     ['Magento\CmsUrlRewrite\Model\Observer', 'Magento\CmsUrlRewrite\Observer\*'],
     ['Magento\Cms\Model\Observer', 'Magento\Cms\Observer\*'],
     ['Magento\OfflinePayments\Model\Observer', 'Magento\OfflinePayments\Observer\*'],
@@ -4225,4 +4234,9 @@ return [
     ['Magento\Catalog\Test\Unit\Webapi\Product\Option\Type\File\ValidatorTest'],
     ['Magento\Framework\Search\Document', 'Magento\Framework\Api\Search\Document'],
     ['Magento\Framework\Search\DocumentField'],
+    ['Magento\Quote\Setup\Recurring'],
+    ['Magento\Framework\Acl\Cache'],
+    ['Magento\Framework\Acl\CacheInterface'],
+    ['Magento\Framework\Acl\Test\Unit\CacheTest'],
+    ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
 ];

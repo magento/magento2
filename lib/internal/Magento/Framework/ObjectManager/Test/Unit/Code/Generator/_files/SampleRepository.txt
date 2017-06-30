@@ -3,7 +3,7 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 /**
  * Repository class for @see \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
  */
-class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generator\SampleRepositoryInterface
+class SampleRepository implements SampleRepositoryInterface
 {
     /**
      * sampleInterfacePersistor
@@ -34,6 +34,13 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
     protected $extensionAttributesJoinProcessor = null;
+
+    /**
+     * Search Criteria Collection processor.
+     *
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private $collectionProcessor = null;
 
     /**
      * Repository constructor
@@ -97,21 +104,14 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
     /**
      * Find entities by criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Framework\ObjectManager\Code\Generator\SampleInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->sampleInterfaceSearchResultFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
+        $this->getCollectionProcessor()->process($searchCriteria, $collection);
         return $collection;
     }
 
@@ -171,5 +171,21 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
     {
         $this->sampleInterfacePersistor->doPersistEntity($entity);
         return $entity;
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

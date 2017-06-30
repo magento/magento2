@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,7 +10,7 @@
         <variation name="InContextExpressCheckoutFromShoppingCartTestVariation1" summary="In-Context Checkout with PayPal Express Checkout (API Credentials) from shopping cart " ticketId="MAGETWO-47213">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="configData" xsi:type="string">paypal_express, paypal_express_in_context</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Paypal\Test\Constraint\AssertExpressCancelledMessage" />
         </variation>
     </testCase>

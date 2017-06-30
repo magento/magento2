@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
@@ -45,7 +45,7 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
      * Assert that widget with type Recently Viewed Products is present on category page
      *
      * @param CmsIndex $cmsIndex
-     * @param AdminCache $adminCache
+     * @param Cache $cache
      * @param CatalogCategoryView $catalogCategoryView
      * @param BrowserInterface $browser
      * @param CatalogProductSimple $productSimple
@@ -55,7 +55,7 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
      */
     public function processAssert(
         CmsIndex $cmsIndex,
-        AdminCache $adminCache,
+        Cache $cache,
         CatalogCategoryView $catalogCategoryView,
         BrowserInterface $browser,
         CatalogProductSimple $productSimple,
@@ -67,9 +67,7 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
         $this->catalogCategoryView = $catalogCategoryView;
 
         // Flush cache
-        $adminCache->open();
-        $adminCache->getActionsBlock()->flushMagentoCache();
-        $adminCache->getMessagesBlock()->waitSuccessMessage();
+        $cache->flush();
 
         // Log in customer
         $customer->persist();

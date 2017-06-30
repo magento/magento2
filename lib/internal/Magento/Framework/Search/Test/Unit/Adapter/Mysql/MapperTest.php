@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
@@ -98,7 +98,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getQuery', 'getIndex', 'getSize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->any())
             ->method('getIndex')
             ->will($this->returnValue(self::INDEX_NAME));
 
@@ -145,7 +145,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
-        $select->expects($this->any())->method('columns')->will($this->returnValue($select));
+        $select->expects($this->any())->method('columns')->willReturnSelf();
 
         $response = $this->mapper->buildQuery($this->request);
 
@@ -165,7 +165,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('getSize')
             ->willReturn(self::REQUEST_LIMIT);
 
-        $select->expects($this->any())->method('columns')->will($this->returnValue($select));
+        $select->expects($this->any())->method('columns')->willReturnSelf();
 
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
@@ -522,9 +522,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ->willReturnSelf();
         }
 
-        $select->expects($isInternal ? $this->once() : $this->never())
+        $select->expects($this->any())
             ->method('limit')
-            ->with(self::REQUEST_LIMIT)
+            ->with($isInternal ? self::REQUEST_LIMIT : 10000000000)
             ->willReturnSelf();
         $select->expects($isInternal ? $this->once() : $this->never())
             ->method('order')
@@ -536,5 +536,21 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         return $select;
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unsupported relevance calculation method used.
+     */
+    public function testUnsupportedRelevanceCalculationMethod()
+    {
+        $helper = new ObjectManager($this);
+        $helper->getObject(
+            \Magento\Framework\Search\Adapter\Mysql\Mapper::class,
+            [
+                'indexProviders' => [],
+                'relevanceCalculationMethod' => 'UNSUPPORTED'
+            ]
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class GiftOptions extends Form
      *
      * @var string
      */
-    protected $allowGiftOptions = '//a[contains(@class,"action-gift")][ancestor::tbody[contains(.,"%s")]]';
+    protected $allowGiftOptions = '//*[contains(@class,"action-gift")][ancestor::tbody[contains(.,"%s")]]';
 
     /**
      * Selector for apply Gift Message button on order

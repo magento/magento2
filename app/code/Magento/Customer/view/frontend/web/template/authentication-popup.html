@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -50,7 +50,7 @@
         <div class="block-content" aria-labelledby="block-customer-login-heading">
             <form class="form form-login"
                   method="post"
-                  data-bind="submit:login"
+                  data-bind="event: {submit: login }"
                   id="login-form">
                 <div class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
                     <div class="field email required">
@@ -78,7 +78,6 @@
                     <!-- ko foreach: getRegion('additional-login-form-fields') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                     <!-- /ko -->
-                    </div>
                     <div class="actions-toolbar">
                         <input name="context" type="hidden" value="checkout" />
                         <div class="primary">

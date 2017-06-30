@@ -1,11 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Entity;
 
 use Magento\Catalog\Model\Entity\Attribute;
@@ -20,72 +17,72 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Catalog\Model\Entity\Attribute
      */
-    protected $attribute;
+    private $attribute;
 
     /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contextMock;
+    private $contextMock;
 
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $registryMock;
+    private $registryMock;
 
     /**
      * @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadataServiceMock;
+    private $metadataServiceMock;
 
     /**
      * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeValueFactoryMock;
+    private $attributeValueFactoryMock;
 
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configMock;
+    private $configMock;
 
     /**
      * @var \Magento\Eav\Model\Entity\TypeFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $typeFactoryMock;
+    private $typeFactoryMock;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $helperMock;
+    private $helperMock;
 
     /**
      * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $universalFactoryMock;
+    private $universalFactoryMock;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $timezoneMock;
+    private $timezoneMock;
 
     /**
      * @var \Magento\Catalog\Model\Product\ReservedAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $reservedAttributeListMock;
+    private $reservedAttributeListMock;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resolverMock;
+    private $resolverMock;
 
     /**
      * @var \Magento\Catalog\Model\Attribute\LockValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $lockValidatorMock;
+    private $lockValidatorMock;
 
     /**
      * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
@@ -127,6 +124,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private $dateTimeFormatter;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
@@ -195,9 +196,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($this->eventDispatcher);
-        $attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
-        ->disableOriginalConstructor()
-        ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->attribute = $objectManagerHelper->getObject(
             Attribute::class,
@@ -218,8 +216,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'reservedAttributeList' => $this->reservedAttributeListMock,
                 'resolver' => $this->resolverMock,
                 'dateTimeFormatter' => $this->dateTimeFormatter,
-                'resource' => $this->resourceMock,
-                'attributeCache' => $attributeCacheMock
+                'resource' => $this->resourceMock
             ]
         );
     }

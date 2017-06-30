@@ -1,10 +1,12 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Config\Source\Group;
+
+use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 
 class MultiselectTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,22 +25,29 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
      */
     protected $converterMock;
 
+    /**
+     * @var GroupSourceLoggedInOnlyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $groupSourceLoggedInOnly;
+
     protected function setUp()
     {
         $this->groupServiceMock = $this->getMock(\Magento\Customer\Api\GroupManagementInterface::class);
         $this->converterMock = $this->getMock(\Magento\Framework\Convert\DataObject::class, [], [], '', false);
-        $this->model =
-            new \Magento\Customer\Model\Config\Source\Group\Multiselect($this->groupServiceMock, $this->converterMock);
+        $this->groupSourceLoggedInOnly = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)->getMock();
+        $this->model = new \Magento\Customer\Model\Config\Source\Group\Multiselect(
+            $this->groupServiceMock,
+            $this->converterMock,
+            $this->groupSourceLoggedInOnly
+        );
     }
 
     public function testToOptionArray()
     {
         $expectedValue = ['General', 'Retail'];
-        $this->groupServiceMock->expects($this->once())
-            ->method('getLoggedInGroups')
-            ->will($this->returnValue($expectedValue));
-        $this->converterMock->expects($this->once())->method('toOptionArray')
-            ->with($expectedValue, 'id', 'code')->will($this->returnValue($expectedValue));
+        $this->groupServiceMock->expects($this->never())->method('getLoggedInGroups');
+        $this->converterMock->expects($this->never())->method('toOptionArray');
+        $this->groupSourceLoggedInOnly->expects($this->once())->method('toOptionArray')->willReturn($expectedValue);
         $this->assertEquals($expectedValue, $this->model->toOptionArray());
     }
 }

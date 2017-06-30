@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -12,7 +12,9 @@ namespace Magento\Sales\Api\Data;
  * document lists the products and their quantities in the delivery package. A product is an item in a shipment.
  * @api
  */
-interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface ShipmentItemInterface extends
+    \Magento\Sales\Api\Data\LineItemInterface,
+    \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -103,13 +105,6 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getName();
 
     /**
-     * Gets the order item ID for the shipment item.
-     *
-     * @return int Order item ID.
-     */
-    public function getOrderItemId();
-
-    /**
      * Gets the parent ID for the shipment item.
      *
      * @return int|null Parent ID.
@@ -129,13 +124,6 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return int|null Product ID.
      */
     public function getProductId();
-
-    /**
-     * Gets the quantity for the shipment item.
-     *
-     * @return float Quantity.
-     */
-    public function getQty();
 
     /**
      * Gets the row total for the shipment item.
@@ -191,28 +179,12 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function setWeight($weight);
 
     /**
-     * Sets the quantity for the shipment item.
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function setQty($qty);
-
-    /**
      * Sets the product ID for the shipment item.
      *
      * @param int $id
      * @return $this
      */
     public function setProductId($id);
-
-    /**
-     * Sets the order item ID for the shipment item.
-     *
-     * @param int $id
-     * @return $this
-     */
-    public function setOrderItemId($id);
 
     /**
      * Sets the additional data for the shipment item.

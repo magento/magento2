@@ -1,28 +1,28 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/* @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Options */
+/* @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Options $block */
 ?>
 
 <?php $options = $block->getOptionList(); ?>
 <?php if ($options): ?>
 <div class="tooltip wrapper product-item-tooltip">
-  <span class="action details tooltip toggle"><?php /* @escapeNotVerified */ echo __('See Details') ?></span>
+  <span class="action details tooltip toggle"><?php echo $block->escapeHtml(__('See Details')) ?></span>
   <div class="tooltip content">
-      <strong class="subtitle"><?php /* @escapeNotVerified */ echo __('Options Details'); ?></strong>
+      <strong class="subtitle"><?php echo $block->escapeHtml(__('Options Details')); ?></strong>
       <dl>
           <?php foreach ($options as $option): ?>
           <dt class="label"><?php echo $block->escapeHtml($option['label']) ?></dt>
           <dd class="values">
               <?php if (is_array($option['value'])): ?>
-              <?php /* @escapeNotVerified */ echo nl2br(implode("\n", $option['value'])) ?>
+              <?php /* @noEscape */ echo nl2br(implode("\n", $option['value'])) ?>
               <?php else: ?>
-              <?php /* @escapeNotVerified */ echo $option['value'] ?>
+              <?php /* @noEscape */ echo $option['value'] ?>
               <?php endif; ?>
           </dd>
           <?php endforeach; ?>

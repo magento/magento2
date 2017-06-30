@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -122,7 +122,6 @@ class Labels extends \Magento\Shipping\Model\Shipping
             || !$storeInfo->getName()
             || !$storeInfo->getPhone()
             || !$originStreet1
-            || !$shipperRegionCode
             || !$this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_CITY,
                 ScopeInterface::SCOPE_STORE,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml;
@@ -8,6 +8,7 @@ namespace Magento\ConfigurableProduct\Controller\Adminhtml;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Registry;
 use Magento\TestFramework\ObjectManager;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * @magentoAppArea adminhtml
@@ -16,14 +17,17 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 {
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/associated_products.php
      */
     public function testSaveActionAssociatedProductIds()
     {
-        $associatedProductIds = [3, 14, 15, 92];
+        $associatedProductIds = ['3', '14', '15', '92'];
+        $associatedProductIdsJSON = json_encode($associatedProductIds);
         $this->getRequest()->setPostValue(
             [
+                'id' => 1,
                 'attributes' => [$this->_getConfigurableAttribute()->getId()],
-                'associated_product_ids' => $associatedProductIds,
+                'associated_product_ids_serialized' => $associatedProductIdsJSON,
             ]
         );
 
@@ -34,8 +38,21 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 
         /** @var $product Product */
         $product = $objectManager->get(Registry::class)->registry('current_product');
+        $configurableProductLinks = array_values($product->getExtensionAttributes()->getConfigurableProductLinks());
+        self::assertEquals(
+            $associatedProductIds,
+            $configurableProductLinks,
+            'Product links are not available in the registry'
+        );
 
-        self::assertEquals($associatedProductIds, $product->getExtensionAttributes()->getConfigurableProductLinks());
+        /** @var $product \Magento\Catalog\Api\Data\ProductInterface */
+        $product = $objectManager->get(ProductRepositoryInterface::class)->getById(1, false, null, true);
+        $configurableProductLinks = array_values($product->getExtensionAttributes()->getConfigurableProductLinks());
+        self::assertEquals(
+            $associatedProductIds,
+            $configurableProductLinks,
+            'Product links are not available in the database'
+        );
     }
 
     /**

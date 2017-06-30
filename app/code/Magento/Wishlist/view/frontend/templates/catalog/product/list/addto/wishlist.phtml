@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
-/** @var $block Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist */
+
+/** @var Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist $block */
 ?>
 <?php if ($block->getWishlistHelper()->isAllow()): ?>
     <a href="#"
        class="action towishlist"
-       title="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
-       aria-label="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
-       data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($block->getProduct()); ?>'
+       title="<?php echo $block->escapeHtmlAttr(__('Add to Wish List')); ?>"
+       aria-label="<?php echo $block->escapeHtmlAttr(__('Add to Wish List')); ?>"
+       data-post='<?php /* @noEscape */ echo $block->getAddToWishlistParams($block->getProduct()); ?>'
        data-action="add-to-wishlist"
        role="button">
-        <span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span>
+        <span><?php echo $block->escapeHtml(__('Add to Wish List')) ?></span>
     </a>
 <?php endif; ?>

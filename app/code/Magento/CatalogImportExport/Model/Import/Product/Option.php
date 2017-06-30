@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,12 +16,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Entity class which provide possibility to import product custom options
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @todo Need to explode this class because of several responsibilities
  */
 class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -105,6 +104,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         'radio' => true,
         'checkbox' => true,
         'multiple' => true,
+        'file' => ['sku', 'file_extension', 'image_size_x', 'image_size_y'],
     ];
 
     /**
@@ -1134,6 +1134,28 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         if (isset($optionRow['max_characters'])) {
             $result[$this->columnMaxCharacters] = $optionRow['max_characters'];
+        }
+
+        $result = $this->addFileOptions($result, $optionRow);
+
+        return $result;
+    }
+
+    /**
+     * Add file options
+     *
+     * @param array $result
+     * @param array $optionRow
+     * @return array
+     */
+    private function addFileOptions($result, $optionRow)
+    {
+        foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
+            if (!isset($optionRow[$fileOptionKey])) {
+                continue;
+            }
+
+            $result[self::COLUMN_PREFIX . $fileOptionKey] = $optionRow[$fileOptionKey];
         }
 
         return $result;

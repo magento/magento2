@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sniffs\NamingConventions;
@@ -11,22 +11,27 @@ use PHP_CodeSniffer_Sniff;
 class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
 {
     /**
-     * source: http://php.net/manual/en/reserved.other-reserved-words.php
+     * The following words cannot be used to name a class, interface or trait,
+     * and they are also prohibited from being used in namespaces.
      *
-     * @var array PHP 7 reserved words for name spaces
+     * @link http://php.net/manual/en/reserved.other-reserved-words.php
+     *
+     * @var string[]
      */
     protected $reservedWords = [
-        'int',
-        'float',
-        'bool',
-        'string',
-        'true',
-        'false',
-        'null',
-        'resource',
-        'object',
-        'mixed',
-        'numeric',
+        'int' => '7',
+        'float' => '7',
+        'bool' => '7',
+        'string' => '7',
+        'true' => '7',
+        'false' => '7',
+        'null' => '7',
+        'void' => '7.1',
+        'iterable' => '7.1',
+        'resource' => '7',
+        'object' => '7',
+        'mixed' => '7',
+        'numeric' => '7',
     ];
 
     /**
@@ -34,7 +39,7 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
      */
     public function register()
     {
-        return [T_NAMESPACE, T_CLASS];
+        return [T_CLASS, T_INTERFACE, T_TRAIT, T_NAMESPACE];
     }
 
     /**
@@ -44,20 +49,23 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
      * @param int $stackPtr
      * @return void
      */
-    protected function validateNameSpace(PHP_CodeSniffer_File $sourceFile, $stackPtr)
+    protected function validateNamespace(PHP_CodeSniffer_File $sourceFile, $stackPtr)
     {
-        $skippedTokens = ['T_NS_SEPARATOR', 'T_WHITESPACE'];
-        //skip "namespace" and whitespace
         $stackPtr += 2;
         $tokens = $sourceFile->getTokens();
-        while ('T_SEMICOLON' != $tokens[$stackPtr]['type']) {
-            if (in_array($tokens[$stackPtr]['type'], $skippedTokens)) {
-                $stackPtr++;
+        while ($stackPtr < $sourceFile->numTokens && $tokens[$stackPtr]['code'] !== T_SEMICOLON) {
+            if ($tokens[$stackPtr]['code'] === T_WHITESPACE || $tokens[$stackPtr]['code'] === T_NS_SEPARATOR) {
+                $stackPtr++; //skip "namespace" and whitespace
                 continue;
             }
-            $nameSpacePart = strtolower($tokens[$stackPtr]['content']);
-            if (in_array($nameSpacePart, $this->reservedWords)) {
-                $sourceFile->addError('\'' . $nameSpacePart . '\' is a reserved word in PHP 7.', $stackPtr);
+            $namespacePart = $tokens[$stackPtr]['content'];
+            if (isset($this->reservedWords[strtolower($namespacePart)])) {
+                $sourceFile->addError(
+                    'Cannot use "%s" in namespace as it is reserved since PHP %s',
+                    $stackPtr,
+                    'Namespace',
+                    [$namespacePart, $this->reservedWords[$namespacePart]]
+                );
             }
             $stackPtr++;
         }
@@ -73,12 +81,15 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
     protected function validateClass(PHP_CodeSniffer_File $sourceFile, $stackPtr)
     {
         $tokens = $sourceFile->getTokens();
-        //skipped "class" and whitespace
-        $stackPtr += 2;
+        $stackPtr += 2; //skip "class" and whitespace
         $className = strtolower($tokens[$stackPtr]['content']);
-
-        if (in_array($className, $this->reservedWords)) {
-            $sourceFile->addError('Class name \'' . $className . '\' is a reserved word in PHP 7', $stackPtr);
+        if (isset($this->reservedWords[$className])) {
+            $sourceFile->addError(
+                'Cannot use "%s" as class name as it is reserved since PHP %s',
+                $stackPtr,
+                'Class',
+                [$className, $this->reservedWords[$className]]
+            );
         }
     }
 
@@ -88,12 +99,14 @@ class ReservedWordsSniff implements PHP_CodeSniffer_Sniff
     public function process(PHP_CodeSniffer_File $sourceFile, $stackPtr)
     {
         $tokens = $sourceFile->getTokens();
-        switch ($tokens[$stackPtr]['type']) {
-            case "T_CLASS":
+        switch ($tokens[$stackPtr]['code']) {
+            case T_CLASS:
+            case T_INTERFACE:
+            case T_TRAIT:
                 $this->validateClass($sourceFile, $stackPtr);
                 break;
-            case "T_NAMESPACE":
-                $this->validateNameSpace($sourceFile, $stackPtr);
+            case T_NAMESPACE:
+                $this->validateNamespace($sourceFile, $stackPtr);
                 break;
         }
     }

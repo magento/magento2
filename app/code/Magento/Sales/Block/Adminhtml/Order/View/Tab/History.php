@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order history tab
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -157,13 +157,10 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         if (!isset($item['created_at'])) {
             return '';
         }
-        $date = $item['created_at'] instanceof \DateTimeInterface
-            ? $item['created_at']
-            : new \DateTime($item['created_at']);
         if ('date' === $dateType) {
-            return $this->_localeDate->formatDateTime($date, $format, $format);
+            return $this->formatDate($item['created_at'], $format);
         }
-        return $this->_localeDate->formatDateTime($date, \IntlDateFormatter::NONE, $format);
+        return $this->formatTime($item['created_at'], $format);
     }
 
     /**
@@ -314,7 +311,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * Get order admin date
-     * 
+     *
      * @param int $createdAt
      * @return \DateTime
      */

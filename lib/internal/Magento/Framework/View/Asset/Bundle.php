@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,8 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * Bundle model
+ * @deprecated since 2.2.0
+ * @see \Magento\Deploy\Package\Bundle
  */
 class Bundle
 {
@@ -26,7 +28,7 @@ class Bundle
      */
     protected $assetsContent = [];
 
-    /** @var  Bundle\Config */
+    /** @var Bundle\ConfigInterface */
     protected $bundleConfig;
 
     /**
@@ -261,6 +263,7 @@ class Bundle
             $assetsParts = reset($parts);
             $context = reset($assetsParts['assets'])->getContext();
             $bundlePath = empty($bundlePath) ? $context->getPath() . Manager::BUNDLE_PATH : $bundlePath;
+            $dir->delete($context->getPath() . DIRECTORY_SEPARATOR . Manager::BUNDLE_JS_DIR);
             $this->fillContent($parts, $context);
         }
 

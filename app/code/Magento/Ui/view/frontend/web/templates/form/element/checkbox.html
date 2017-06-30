@@ -1,11 +1,23 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="choice field">
-    <input type="checkbox" class="checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
+    <input type="checkbox"
+           class="checkbox"
+           data-bind="
+           checked: value,
+           attr: {
+                id: uid,
+                disabled: disabled,
+                name: inputName,
+                'aria-describedby': getDescriptionId(),
+                'aria-required': required,
+                'aria-invalid': error() ? true : 'false'
+                },
+           hasFocus: focused">
 
     <label class="label" data-bind="checked: value, attr: { for: uid }">
         <span data-bind="text: description || label"></span>

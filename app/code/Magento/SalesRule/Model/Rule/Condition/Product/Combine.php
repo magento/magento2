@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
+/**
+ * @api
+ */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**
@@ -42,12 +45,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         foreach ($productAttributes as $code => $label) {
             if (strpos($code, 'quote_item_') === 0) {
                 $iAttributes[] = [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . $code,
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . '|' . $code,
                     'label' => $label,
                 ];
             } else {
                 $pAttributes[] = [
-                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . $code,
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . '|' . $code,
                     'label' => $label,
                 ];
             }
