@@ -251,8 +251,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve thumbnail image url
      *
      * @param ModelProduct|\Magento\Framework\DataObject $product
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return string|bool
      */
     public function getThumbnailUrl($product)
     {
