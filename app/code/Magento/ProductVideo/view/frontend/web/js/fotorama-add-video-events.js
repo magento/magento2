@@ -563,13 +563,9 @@ define([
                 }
 
                 $image = $image.$stageFrame;
-
-                if ($image) {
-                    videoEventIsSet = $image.hasClass(this.VU);
-                }
             }
 
-            if ($image && videoData && videoData.mediaType === this.VID && !videoEventIsSet) {
+            if ($image && videoData && videoData.mediaType === this.VID) {
                 $(fotorama.activeFrame.$stageFrame).removeAttr('href');
                 this._prepareForVideoContainer($image, videoData, fotorama, number);
             }
@@ -603,10 +599,6 @@ define([
          */
         _createVideoContainer: function (videoData, $image) {
             var videoSettings;
-
-            if ($image.find('.' + this.PV).length !== 0) {
-                return;
-            }
 
             videoSettings = this.options.videoSettings[0];
             $image.append(
