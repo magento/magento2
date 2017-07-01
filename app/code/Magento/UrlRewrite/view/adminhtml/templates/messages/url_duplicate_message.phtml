@@ -22,9 +22,9 @@ $urls = $block->getData('urls');
 <?php
 if (!empty($urls)) {
     foreach ($urls as $url => $urlTitle) {
-?>
+        ?>
         <?='<p> - <a href="' . $block->escapeHtml($url) . '">' . $block->escapeHtml($urlTitle) . '</a></p>'; ?>
-<?php
+        <?php
     }
 }
 ?>
