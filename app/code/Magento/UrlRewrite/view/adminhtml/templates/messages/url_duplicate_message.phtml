@@ -12,18 +12,18 @@ $urls = $block->getData('urls');
 </h4>
 <p>
 <?=$block->escapeHtml(
-        __(
-                'To resolve this conflict, you can either change the value of the URL Key field '
-                . '(located in the Search Engine Optimization section) to a unique value, or change the Request Path fields'
-                . ' in all locations listed below:'
-        )
+    __(
+        'To resolve this conflict, you can either change the value of the URL Key field '
+        . '(located in the Search Engine Optimization section) to a unique value, or change the Request Path fields'
+        . ' in all locations listed below:'
+    )
 );
 ?>
 <?php
 if (!empty($urls)) {
     foreach ($urls as $url => $urlTitle) {
 ?>
-<?='<p> - <a href="' . $block->escapeHtml($url) . '">' . $block->escapeHtml($urlTitle) . '</a></p>'; ?>
+        <?='<p> - <a href="' . $block->escapeHtml($url) . '">' . $block->escapeHtml($urlTitle) . '</a></p>'; ?>
 <?php
     }
 }
