@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Accounts;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Reports\Model\ResourceModel\Customer\Collection
 {
     /**

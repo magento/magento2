@@ -219,7 +219,6 @@
                 </item>
                 <item name="custom_instructions" xsi:type="array">
                     <item name="path" xsi:type="string">design/search_engine_robots/custom_instructions</item>
-                    <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Admin\Robots</item>
                     <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
                 </item>
             </argument>
@@ -248,8 +247,8 @@
         <arguments>
             <argument name="importers" xsi:type="array">
                 <item name="themes" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Theme\Model\Config\Importer</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="importer_class" xsi:type="string">Magento\Theme\Model\Config\Importer</item>
+                    <item name="sort_order" xsi:type="number">20</item>
                 </item>
             </argument>
         </arguments>

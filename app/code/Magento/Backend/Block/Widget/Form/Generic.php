@@ -3,14 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Backend form widget
- *
- */
 namespace Magento\Backend\Block\Widget\Form;
 
 /**
+ * @api
+ * @deprecated in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Generic extends \Magento\Backend\Block\Widget\Form

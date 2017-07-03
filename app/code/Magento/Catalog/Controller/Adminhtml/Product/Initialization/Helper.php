@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Class Helper
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Helper
@@ -40,7 +40,6 @@ class Helper
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
-     *
      * @deprecated
      */
     protected $dateFilter;
@@ -81,14 +80,19 @@ class Helper
     private $linkTypeProvider;
 
     /**
-     * Helper constructor.
+     * Constructor
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory|null $customOptionFactory
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory|null $productLinkFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface|null $productRepository
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider|null $linkTypeProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -97,6 +101,9 @@ class Helper
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory = null,
+        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository = null,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider = null
     ) {
         $this->request = $request;
@@ -105,6 +112,12 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
+        $this->customOptionFactory = $customOptionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
+        $this->productLinkFactory = $productLinkFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
+        $this->productRepository = $productRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->linkTypeProvider = $linkTypeProvider ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
     }
@@ -167,7 +180,7 @@ class Helper
         } else {
             $productOptions = [];
         }
-
+        $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
         $product->addData($productData);
 
         if ($wasLockedMedia) {
@@ -211,7 +224,7 @@ class Helper
                             return empty($valueData['is_delete']);
                         });
                     }
-                    $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
+                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
                     $customOptions[] = $customOption;
                 }
@@ -272,8 +285,8 @@ class Helper
                         continue;
                     }
 
-                    $linkProduct = $this->getProductRepository()->getById($linkData['id']);
-                    $link = $this->getProductLinkFactory()->create();
+                    $linkProduct = $this->productRepository->getById($linkData['id']);
+                    $link = $this->productLinkFactory->create();
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
                         ->setLinkType($linkType)
@@ -288,10 +301,10 @@ class Helper
 
     /**
      * Internal normalization
-     * TODO: Remove this method
      *
      * @param array $productData
      * @return array
+     * @todo Remove this method
      */
     protected function normalize(array $productData)
     {
@@ -372,44 +385,8 @@ class Helper
     }
 
     /**
-     * @return CustomOptionFactory
-     */
-    private function getCustomOptionFactory()
-    {
-        if (null === $this->customOptionFactory) {
-            $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
-        }
-        return $this->customOptionFactory;
-    }
-
-    /**
-     * @return ProductLinkFactory
-     */
-    private function getProductLinkFactory()
-    {
-        if (null === $this->productLinkFactory) {
-            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
-        }
-        return $this->productLinkFactory;
-    }
-
-    /**
-     * @return ProductRepository
-     */
-    private function getProductRepository()
-    {
-        if (null === $this->productRepository) {
-            $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Api\ProductRepositoryInterface\Proxy::class);
-        }
-        return $this->productRepository;
-    }
-
-    /**
-     * @deprecated
      * @return LinkResolver
+     * @deprecated
      */
     private function getLinkResolver()
     {
@@ -421,7 +398,6 @@ class Helper
 
     /**
      * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     *
      * @deprecated
      */
     private function getDateTimeFilter()

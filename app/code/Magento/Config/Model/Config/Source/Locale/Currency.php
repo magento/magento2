@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Locale;
 
+/**
+ * @api
+ */
 class Currency implements \Magento\Framework\Option\ArrayInterface
 {
     /**

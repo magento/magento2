@@ -15,13 +15,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 use Magento\Catalog\Model\ProductLink\Link as ProductLink;
 
 /**
- * Class HelperTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -135,16 +135,19 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('initializeLinks')
             ->willReturn($this->productMock);
 
-        $this->helper = $this->objectManager->getObject(Helper::class, [
-            'request' => $this->requestMock,
-            'storeManager' => $this->storeManagerMock,
-            'stockFilter' => $this->stockFilterMock,
-            'productLinks' => $this->productLinksMock,
-            'customOptionFactory' => $this->customOptionFactoryMock,
-            'productLinkFactory' => $this->productLinkFactoryMock,
-            'productRepository' => $this->productRepositoryMock,
-            'linkTypeProvider' => $this->linkTypeProviderMock,
-        ]);
+        $this->helper = $this->objectManager->getObject(
+            Helper::class,
+            [
+                'request' => $this->requestMock,
+                'storeManager' => $this->storeManagerMock,
+                'stockFilter' => $this->stockFilterMock,
+                'productLinks' => $this->productLinksMock,
+                'customOptionFactory' => $this->customOptionFactoryMock,
+                'productLinkFactory' => $this->productLinkFactoryMock,
+                'productRepository' => $this->productRepositoryMock,
+                'linkTypeProvider' => $this->linkTypeProviderMock,
+            ]
+        );
 
         $this->linkResolverMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link\Resolver::class)
             ->disableOriginalConstructor()
@@ -156,19 +159,25 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @param bool $isSingleStore
      * @param array $websiteIds
      * @param array $expWebsiteIds
      * @param array $links
      * @param array $linkTypes
      * @param array $expectedLinks
-     *
+     * @param array|null $tierPrice
      * @dataProvider initializeDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testInitialize($isSingleStore, $websiteIds, $expWebsiteIds, $links, $linkTypes, $expectedLinks)
-    {
+    public function testInitialize(
+        $isSingleStore,
+        $websiteIds,
+        $expWebsiteIds,
+        $links,
+        $linkTypes,
+        $expectedLinks,
+        $tierPrice = null
+    ) {
         $this->linkTypeProviderMock->expects($this->once())
             ->method('getItems')
             ->willReturn($this->assembleLinkTypes($linkTypes));
@@ -183,6 +192,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'options' => $optionsData,
             'website_ids' => $websiteIds
         ];
+        if (!empty($tierPrice)) {
+            $productData = array_merge($productData, ['tier_price' => $tierPrice]);
+        }
         $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -269,9 +281,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue('sku' == $option2->getData('product_sku'));
 
         $productLinks = $this->productMock->getProductLinks();
-
         $this->assertCount(count($expectedLinks), $productLinks);
         $resultLinks = [];
+
+        $this->assertEquals($tierPrice ?: [], $this->productMock->getData('tier_price'));
 
         foreach ($productLinks as $link) {
             $this->assertInstanceOf(ProductLink::class, $link);
@@ -296,6 +309,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
+                'tierPrice' => [1, 2, 3],
             ],
             [
                 'single_store' => false,
