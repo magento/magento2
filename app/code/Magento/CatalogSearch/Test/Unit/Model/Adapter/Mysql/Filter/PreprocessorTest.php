@@ -302,7 +302,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->aliasResolver->expects($this->once())->method('getAlias')
             ->willReturn('termAttrAlias');
 
-        $this->filter->expects($this->exactly(3))
+        $this->filter->expects($this->exactly(4))
             ->method('getField')
             ->willReturn('termField');
         $this->filter->expects($this->exactly(2))
@@ -377,7 +377,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $attributeId = 1234567;
 
         $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
-        $this->filter->expects($this->exactly(4))
+        $this->filter->expects($this->exactly(5))
             ->method('getField')
             ->will($this->returnValue('not_static_attribute'));
         $this->config->expects($this->exactly(1))
