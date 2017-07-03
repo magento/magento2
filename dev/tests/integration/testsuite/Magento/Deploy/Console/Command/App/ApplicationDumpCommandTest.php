@@ -79,6 +79,23 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         // Snapshot of configuration.
         $this->config = $this->loadConfig();
         $this->envConfig = $this->loadEnvConfig();
+
+        $this->writer->saveConfig(
+            [
+                ConfigFilePool::APP_CONFIG => [
+                    'system' => [
+                        'default' => [
+                            'web' => [
+                                'test' => [
+                                    'test_value_3' => 'value from the file'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            true
+        );
     }
 
     /**
@@ -206,6 +223,13 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($themesMap[2], $config['system']['default']['design']['theme']['theme_id']);
         $this->assertEquals($themesMap[3], $config['system']['stores']['default']['design']['theme']['theme_id']);
         $this->assertEquals($themesMap[3], $config['system']['websites']['base']['design']['theme']['theme_id']);
+
+        $this->assertEquals('value from the file', $config['system']['default']['web']['test']['test_value_3']);
+        $this->assertEquals('GB', $config['system']['default']['general']['country']['default']);
+        $this->assertEquals(
+            'HK,IE,MO,PA,GB',
+            $config['system']['default']['general']['country']['optional_zip_countries']
+        );
     }
 
     /**

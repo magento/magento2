@@ -7,7 +7,9 @@ $configData = [
     'default' => [
         'web/test/test_value_1' => 'http://local2.test/',
         'web/test/test_value_2' => 5,
+        'web/test/test_value_3' => 'value from the DB',
         'web/test/test_sensitive' => 10,
+        'general/country/default' => 'GB',
 
         'web/test/test_sensitive1' => 'some_value1',
         'web/test/test_sensitive2' => 'some_value2',
