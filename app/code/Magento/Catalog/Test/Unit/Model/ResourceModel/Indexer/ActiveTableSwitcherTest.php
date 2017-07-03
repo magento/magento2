@@ -42,7 +42,7 @@ class ActiveTableSwitcherTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->model->switchTable($connectionMock, $tableName);
+        $this->model->switchTable($connectionMock, [$tableName]);
     }
 
     public function testGetAdditionalTableName()
