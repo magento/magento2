@@ -54,7 +54,8 @@ class Allow extends AbstractCurrency
     public function afterSave()
     {
         $exceptions = [];
-        foreach ($this->_getAllowedCurrencies() as $currencyCode) {
+        $allowedCurrencies = $this->_getAllowedCurrencies();
+        foreach ($allowedCurrencies as $currencyCode) {
             if (!in_array($currencyCode, $this->_getInstalledCurrencies())) {
                 $exceptions[] = __(
                     'Selected allowed currency "%1" is not available in installed currencies.',
@@ -63,7 +64,7 @@ class Allow extends AbstractCurrency
             }
         }
 
-        if (!in_array($this->_getCurrencyDefault(), $this->_getAllowedCurrencies())) {
+        if (!in_array($this->_getCurrencyDefault(), $allowedCurrencies)) {
             $exceptions[] = __(
                 'Default display currency "%1" is not available in allowed currencies.',
                 $this->_localeCurrency->getCurrency($this->_getCurrencyDefault())->getName()
