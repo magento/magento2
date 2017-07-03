@@ -8,23 +8,23 @@
 
 ?>
 <div class="multicheckout success">
-    <h2 class="subtitle"><?php echo $block->escapeHtml(__('Thank you for your purchase!')) ?></h2>
-    <p><?php echo $block->escapeHtml(__('Thanks for your order. We\'ll email you order details and tracking information.')) ?></p>
+    <h2 class="subtitle"><?= $block->escapeHtml(__('Thank you for your purchase!')) ?></h2>
+    <p><?= $block->escapeHtml(__('Thanks for your order. We\'ll email you order details and tracking information.')) ?></p>
     <?php if ($_orderIds = $block->getOrderIds()): ?>
     <p class="order-number">
         <?php $flag = false ?>
         <span>
             <?php if (count($_orderIds) > 1): ?>
-                <?php echo $block->escapeHtml(__('Your order numbers are: ')) ?>
+                <?= $block->escapeHtml(__('Your order numbers are: ')) ?>
             <?php else : ?>
-                <?php echo $block->escapeHtml(__('Your order number is: ')) ?>
+                <?= $block->escapeHtml(__('Your order number is: ')) ?>
             <?php endif; ?>
         </span>
-        <?php foreach ($_orderIds as $orderId => $incrementId): ?><?php if ($flag): ?><?php echo ', ' ?><?php endif; ?><?php $flag = true ?><a href="<?php /* @escapeNotVerified */ echo $block->getViewOrderUrl($orderId) ?>"><?php /* @escapeNotVerified */ echo $incrementId ?></a><?php endforeach; ?>
+        <?php foreach ($_orderIds as $orderId => $incrementId): ?><?php if ($flag): ?><?= ', ' ?><?php endif; ?><?php $flag = true ?><a href="<?= /* @escapeNotVerified */ $block->getViewOrderUrl($orderId) ?>"><?= /* @escapeNotVerified */ $incrementId ?></a><?php endforeach; ?>
     </p>
     <?php endif; ?>
-    <?php echo $block->getChildHtml() ?>
+    <?= $block->getChildHtml() ?>
     <div class="actions">
-        <a class="action continue" title="<?php echo $block->escapeHtml(__('Continue Shopping')) ?>" href="<?php /* @escapeNotVerified */ echo $block->getContinueUrl() ?>"><span><?php echo $block->escapeHtml(__('Continue Shopping')) ?></span></a>
+        <a class="action continue" title="<?= $block->escapeHtml(__('Continue Shopping')) ?>" href="<?= /* @escapeNotVerified */ $block->getContinueUrl() ?>"><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></a>
     </div>
 </div>
