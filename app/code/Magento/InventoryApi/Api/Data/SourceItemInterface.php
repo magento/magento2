@@ -3,6 +3,9 @@ namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * SourceItem interface represents. i.e. amount of particular product on some particular physical storage.
+ */
 interface SourceItemInterface extends ExtensibleDataInterface
 {
     /**#@+
