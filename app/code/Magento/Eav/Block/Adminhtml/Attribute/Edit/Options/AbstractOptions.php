@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
 /**
  * Attribute add/edit form options tab
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated
  */
-namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
-
 abstract class AbstractOptions extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**

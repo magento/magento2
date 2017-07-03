@@ -8,6 +8,8 @@ namespace Magento\Backend\Console\Command;
 
 /**
  * Command for enabling cache
+ *
+ * @api
  */
 class CacheEnableCommand extends AbstractCacheSetCommand
 {

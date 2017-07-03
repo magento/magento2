@@ -8,9 +8,15 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Groups all dependencies of the base Action Controller
- * Introduced to help with backwards compatibility of base controller constructor.
- * Do not call methods of this class.
+ * Constructor modification point for Magento\Framework\App\Action.
+ *
+ * All context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
+ * the classes they were introduced for.
  *
  * @api
  */

@@ -19,6 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command provides possibility to show saved system configuration.
+ *
+ * @api
  */
 class ConfigShowCommand extends Command
 {

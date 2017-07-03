@@ -8,6 +8,7 @@
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
 use Magento\Catalog\Model\Product\Type as ProductType;
@@ -19,7 +20,7 @@ use Magento\Framework\Indexer\BatchProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
 
 /**
  * Class Full reindex action
@@ -55,16 +56,21 @@ class Full extends AbstractAction
     private $batchRowsCount;
 
     /**
+     * @var ActiveTableSwitcher
+     */
+    private $activeTableSwitcher;
+
+    /**
      * @param ResourceConnection $resource
      * @param StockFactory $indexerFactory
      * @param ProductType $catalogProductType
      * @param CacheContext $cacheContext
      * @param EventManager $eventManager
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      * @param MetadataPool|null $metadataPool
      * @param BatchSizeManagementInterface|null $batchSizeManagement
      * @param BatchProviderInterface|null $batchProvider
      * @param array $batchRowsCount
+     * @param ActiveTableSwitcher|null $activeTableSwitcher
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -74,19 +80,18 @@ class Full extends AbstractAction
         ProductType $catalogProductType,
         CacheContext $cacheContext,
         EventManager $eventManager,
-        FrontendResource $indexerStockFrontendResource = null,
         MetadataPool $metadataPool = null,
         BatchSizeManagementInterface $batchSizeManagement = null,
         BatchProviderInterface $batchProvider = null,
-        array $batchRowsCount = []
+        array $batchRowsCount = [],
+        ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         parent::__construct(
             $resource,
             $indexerFactory,
             $catalogProductType,
             $cacheContext,
-            $eventManager,
-            $indexerStockFrontendResource
+            $eventManager
         );
 
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
@@ -95,6 +100,8 @@ class Full extends AbstractAction
             \Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement::class
         );
         $this->batchRowsCount = $batchRowsCount;
+        $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()
+            ->get(ActiveTableSwitcher::class);
     }
 
     /**
@@ -111,6 +118,8 @@ class Full extends AbstractAction
     {
         try {
             $this->useIdxTable(false);
+            $this->cleanIndexersTables($this->_getTypeIndexers());
+
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
             $columns = array_keys($this->_getConnection()->describeTable($this->_getIdxTable()));
@@ -119,7 +128,7 @@ class Full extends AbstractAction
             foreach ($this->_getTypeIndexers() as $indexer) {
                 $indexer->setActionType(self::ACTION_TYPE);
                 $connection = $indexer->getConnection();
-                $tableName = $indexer->getMainTable();
+                $tableName = $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
 
                 $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
                     ? $this->batchRowsCount[$indexer->getTypeId()]
@@ -150,8 +159,32 @@ class Full extends AbstractAction
                     }
                 }
             }
+            $this->activeTableSwitcher->switchTable($indexer->getConnection(), $indexer->getMainTable());
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
+        }
+    }
+
+    /**
+     * Delete all records from index table
+     * Used to clean table before re-indexation
+     *
+     * @param array $indexers
+     * @return void
+     */
+    private function cleanIndexersTables(array $indexers)
+    {
+        $tables = array_map(
+            function (StockInterface $indexer) {
+                return $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
+            },
+            $indexers
+        );
+
+        $tables = array_unique($tables);
+
+        foreach ($tables as $table) {
+            $this->_getConnection()->truncateTable($table);
         }
     }
 }

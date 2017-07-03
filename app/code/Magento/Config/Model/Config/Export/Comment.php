@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Comment. Is used to retrieve comment for config dump file
+ * @api
  */
 class Comment implements CommentInterface
 {

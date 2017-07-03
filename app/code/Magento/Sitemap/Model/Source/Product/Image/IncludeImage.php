@@ -10,6 +10,9 @@
  */
 namespace Magento\Sitemap\Model\Source\Product\Image;
 
+/**
+ * @api
+ */
 class IncludeImage implements \Magento\Framework\Option\ArrayInterface
 {
     /**#@+
