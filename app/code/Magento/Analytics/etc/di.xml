@@ -31,24 +31,24 @@
     <!--Configuration for \Magento\Analytics\ReportXml\Config-->
     <type name="Magento\Analytics\ReportXml\Config">
         <arguments>
-            <argument name="data" xsi:type="object">Magento_Analytics_reportXmlConfigData</argument>
+            <argument name="data" xsi:type="object">Magento\Analytics\ReportXml\Config\Data</argument>
         </arguments>
     </type>
-    <virtualType name="Magento_Analytics_reportXmlConfigData" type="Magento\Framework\Config\Data">
+    <virtualType name="Magento\Analytics\ReportXml\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Analytics\ReportXml\Config\Reader</argument>
             <argument name="cacheId" xsi:type="string">Magento_Analytics_ReportXml_CacheId</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento_Analytics_reportXmlSchemaLocator" type="Magento\Framework\Config\SchemaLocator">
+    <virtualType name="Magento\Analytics\ReportXml\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
         <arguments>
             <argument name="realPath" xsi:type="string">urn:magento:module:Magento_Analytics:etc/reports.xsd</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento_Analytics_reportXmlXmlReader" type="Magento\Framework\Config\Reader\Filesystem">
+    <virtualType name="Magento\Analytics\ReportXml\Config\ReaderXml" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</argument>
-            <argument name="schemaLocator" xsi:type="object">Magento_Analytics_reportXmlSchemaLocator</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Analytics\ReportXml\Config\SchemaLocator</argument>
             <argument name="fileName" xsi:type="string">reports.xml</argument>
             <argument name="idAttributes" xsi:type="array">
                 <item name="/config/report" xsi:type="string">name</item>
@@ -87,32 +87,31 @@
     <type name="Magento\Analytics\ReportXml\Config\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="xml" xsi:type="object">Magento_Analytics_reportXmlXmlReader</item>
+                <item name="xml" xsi:type="object">Magento\Analytics\ReportXml\Config\ReaderXml</item>
             </argument>
         </arguments>
     </type>
-
     <!--Configuration for \Magento\Analytics\Model\Config-->
     <type name="Magento\Analytics\Model\Config">
         <arguments>
-            <argument name="data" xsi:type="object">Magento_Analytics_analyticConfigData</argument>
+            <argument name="data" xsi:type="object">Magento\Analytics\Model\Config\Data</argument>
         </arguments>
     </type>
-    <virtualType name="Magento_Analytics_analyticsConfigData" type="Magento\Framework\Config\Data">
+    <virtualType name="Magento\Analytics\Model\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Analytics\Model\Config\Reader</argument>
             <argument name="cacheId" xsi:type="string">Magento_Analytics_CacheId</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento_Analytics_analyticsSchemaLocator" type="Magento\Framework\Config\SchemaLocator">
+    <virtualType name="Magento\Analytics\Model\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
         <arguments>
             <argument name="realPath" xsi:type="string">urn:magento:module:Magento_Analytics:etc/analytics.xsd</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento_Analytics_analyticsXmlReader" type="Magento\Framework\Config\Reader\Filesystem">
+    <virtualType name="Magento\Analytics\Model\Config\ReaderXml" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</argument>
-            <argument name="schemaLocator" xsi:type="object">Magento_Analytics_analyticsSchemaLocator</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Analytics\Model\Config\SchemaLocator</argument>
             <argument name="fileName" xsi:type="string">analytics.xml</argument>
             <argument name="idAttributes" xsi:type="array">
                 <item name="/config/file" xsi:type="string">name</item>
@@ -132,7 +131,7 @@
     <type name="Magento\Analytics\Model\Config\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="xml" xsi:type="object">Magento_Analytics_analyticsXmlReader</item>
+                <item name="xml" xsi:type="object">Magento\Analytics\Model\Config\ReaderXml</item>
             </argument>
         </arguments>
     </type>

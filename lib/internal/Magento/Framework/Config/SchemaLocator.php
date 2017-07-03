@@ -12,7 +12,7 @@ use Magento\Framework\Config\Dom\UrnResolver;
 /**
  * Class SchemaLocator provides the information about xsd schema to be used for a configuration validation
  * Current class can be configured through di.xml
- * The default value of realPath variable contains information about view.xml to keep the backward compatibility.
+ * The default value of realPath variable contains information about view.xsd to keep the backward compatibility.
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
