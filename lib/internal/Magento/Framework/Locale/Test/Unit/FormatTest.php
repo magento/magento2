@@ -70,7 +70,8 @@ class FormatTest extends \PHPUnit_Framework_TestCase
     public function testGetPriceFormat($localeCode, $expectedResult)
     {
         $result = $this->formatModel->getPriceFormat($localeCode);
-        $this->assertEquals($result, $expectedResult);
+        $intersection = array_intersect_assoc($result, $expectedResult);
+        $this->assertCount(count($expectedResult), $intersection);
     }
 
     /**
@@ -79,51 +80,10 @@ class FormatTest extends \PHPUnit_Framework_TestCase
     public function getPriceFormatDataProvider()
     {
         return [
-            [
-                'en_US',
-                [
-                    'pattern' => null,
-                    'precision' => 2,
-                    'requiredPrecision' => 2,
-                    'decimalSymbol' => '.',
-                    'groupSymbol' => ',',
-                    'groupLength' => 3,
-                    'integerRequired' => 1
-                ]
-            ], [
-                'de_DE',
-                [
-                    'pattern' => null,
-                    'precision' => 2,
-                    'requiredPrecision' => 2,
-                    'decimalSymbol' => ',',
-                    'groupSymbol' => '.',
-                    'groupLength' => 3,
-                    'integerRequired' => 1
-                ]
-            ], [
-                'de_CH',
-                [
-                    'pattern' => null,
-                    'precision' => 2,
-                    'requiredPrecision' => 2,
-                    'decimalSymbol' => '.',
-                    'groupSymbol' => '\'',
-                    'groupLength' => 3,
-                    'integerRequired' => 1
-                ]
-            ], [
-                'uk_UA',
-                [
-                    'pattern' => null,
-                    'precision' => 2,
-                    'requiredPrecision' => 2,
-                    'decimalSymbol' => ',',
-                    'groupSymbol' => ' ',
-                    'groupLength' => 3,
-                    'integerRequired' => 1
-                ]
-            ]
+            ['en_US', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
+            ['de_DE', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
+            ['de_CH', ['decimalSymbol' => '.', 'groupSymbol' => '\'']],
+            ['uk_UA', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
         ];
     }
 }
