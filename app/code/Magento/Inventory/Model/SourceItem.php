@@ -73,4 +73,26 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     {
         $this->setData(SourceItemInterface::STATUS, $status);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(SourceItemInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

@@ -12,7 +12,7 @@ interface SourceItemRepositoryInterface
      * on getList method, because entity loading way is different for these methods
      *
      * @param \Magento\InventoryApi\Api\Data\SourceItemInterface $sourceItem
-     * @return int
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\InventoryApi\Api\Data\SourceItemInterface $sourceItem);

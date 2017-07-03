@@ -15,39 +15,10 @@ use Psr\Log\LoggerInterface;
 class Collection extends AbstractCollection
 {
     /**
-     * Collection constructor
-     *
-     * @param EntityFactoryInterface $entityFactory
-     * @param LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param ManagerInterface $eventManager
-     * @param AdapterInterface $connection
-     * @param AbstractDb $resource
-     */
-    public function __construct(
-        EntityFactoryInterface $entityFactory,
-        LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        ManagerInterface $eventManager,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
-    ) {
-        parent::__construct(
-            $entityFactory,
-            $logger,
-            $fetchStrategy,
-            $eventManager,
-            $connection,
-            $resource
-        );
-    }
-
-    /**
      * @inheritdoc
      */
     protected function _construct()
     {
         $this->_init(SourceItemModel::class, ResourceSource::class);
     }
-
 }

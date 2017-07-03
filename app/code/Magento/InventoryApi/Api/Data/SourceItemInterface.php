@@ -18,8 +18,8 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Constants for status value.
      */
-    const IS_IN_STOCK = TRUE;
-    const IS_OUT_OF_STOCK = FALSE;
+    const IS_IN_STOCK = 0;
+    const IS_OUT_OF_STOCK = 1;
 
     /**
      * Get source item sku.
@@ -68,7 +68,7 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Get source item status.
      *
-     * @return bool
+     * @return int
      */
     public function getStatus();
 
@@ -76,7 +76,24 @@ interface SourceItemInterface extends ExtensibleDataInterface
      * Set source item status.
      *
      * @param bool $status
-     * @return void
+     * @return int
      */
     public function setStatus($status);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
+    );
 }
