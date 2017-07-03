@@ -16,6 +16,9 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
+use Magento\User\Test\Fixture\User;
+use Magento\User\Test\Page\Adminhtml\UserEdit;
+use Magento\User\Test\Page\Adminhtml\UserIndex;
 
 /**
  * Steps:
@@ -68,20 +71,44 @@ class CreateCustomerBackendEntityTest extends Injectable
     private $fixtureFactory;
 
     /**
+     * @var UserEdit
+     */
+    private $userEdit;
+
+    /**
+     * @var UserIndex
+     */
+    private $userIndex;
+
+    /**
+     * Array of steps.
+     *
+     * @var array
+     */
+    private $steps;
+
+    /**
      * Inject customer pages.
      *
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexNew $pageCustomerIndexNew
+     * @param FixtureFactory $fixtureFactory
+     * @param UserEdit $userEdit
+     * @param UserIndex $userIndex
      * @return void
      */
     public function __inject(
         CustomerIndex $pageCustomerIndex,
         CustomerIndexNew $pageCustomerIndexNew,
-        \Magento\Mtf\Fixture\FixtureFactory $fixtureFactory
+        \Magento\Mtf\Fixture\FixtureFactory $fixtureFactory,
+        UserEdit $userEdit,
+        UserIndex $userIndex
     ) {
         $this->pageCustomerIndex = $pageCustomerIndex;
         $this->pageCustomerIndexNew = $pageCustomerIndexNew;
         $this->fixtureFactory = $fixtureFactory;
+        $this->userEdit = $userEdit;
+        $this->userIndex = $userIndex;
     }
 
     /**
@@ -90,6 +117,8 @@ class CreateCustomerBackendEntityTest extends Injectable
      * @param Customer $customer
      * @param string $customerAction
      * @param Address $address
+     * @param array $steps
+     * @param array $beforeActionCallback
      * @return void
      */
     public function test(
@@ -99,6 +128,7 @@ class CreateCustomerBackendEntityTest extends Injectable
         array $steps = [],
         array $beforeActionCallback = []
     ) {
+        $this->steps = $steps;
         ///Process initialize steps
         foreach ($steps as $methodName => $stepData) {
             if (method_exists($this, $methodName)) {
@@ -227,6 +257,51 @@ class CreateCustomerBackendEntityTest extends Injectable
                 'website' => $websiteFixture,
                 'countries' => explode(",", $countries)
             ];
+        }
+    }
+
+    /**
+     * Change Admin locale.
+     *
+     * @param array $userData
+     */
+    private function changeAdminLocale(array $userData)
+    {
+        /** @var User $adminUser */
+        $adminUser = $this->fixtureFactory->createByCode('user', ['data' => $userData]);
+        $this->userIndex->open();
+        $this->userIndex->getUserGrid()->searchAndOpen(['username' => $adminUser->getUsername()]);
+        $this->userEdit->getUserForm()->fill($adminUser);
+        $this->userEdit->getPageActions()->save();
+    }
+
+    /**
+     * Revert Admin locale.
+     *
+     * @param array $userData
+     */
+    private function changeAdminLocaleRollback(array $userData)
+    {
+        /** @var User $defaultAdminUser */
+        $defaultAdminUser = $this->fixtureFactory->createByCode('user');
+        $adminUserData = $defaultAdminUser->getData();
+        unset($adminUserData['user_id']);
+        $defaultAdminUser = $this->fixtureFactory->createByCode('user', ['data' => $adminUserData]);
+        $this->userIndex->open();
+        $this->userIndex->getUserGrid()->searchAndOpen(['username' => $defaultAdminUser->getUsername()]);
+        $this->userEdit->getUserForm()->fill($defaultAdminUser);
+        $this->userEdit->getPageActions()->save();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        foreach ($this->steps as $key => $stepData) {
+            if (method_exists($this, $key . 'Rollback')) {
+                call_user_func_array([$this, $key . 'Rollback'], $stepData);
+            }
         }
     }
 }
