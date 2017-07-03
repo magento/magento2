@@ -265,7 +265,7 @@ class CreateCustomerBackendEntityTest extends Injectable
      *
      * @param array $userData
      */
-    private function changeAdminLocale(array $userData)
+    protected function changeAdminLocale(array $userData)
     {
         /** @var User $adminUser */
         $adminUser = $this->fixtureFactory->createByCode('user', ['data' => $userData]);
@@ -277,10 +277,8 @@ class CreateCustomerBackendEntityTest extends Injectable
 
     /**
      * Revert Admin locale.
-     *
-     * @param array $userData
      */
-    private function changeAdminLocaleRollback(array $userData)
+    protected function changeAdminLocaleRollback()
     {
         /** @var User $defaultAdminUser */
         $defaultAdminUser = $this->fixtureFactory->createByCode('user');
