@@ -159,7 +159,7 @@ class Full extends AbstractAction
                     }
                 }
             }
-            $this->activeTableSwitcher->switchTable($indexer->getConnection(), $indexer->getMainTable());
+            $this->activeTableSwitcher->switchTable($indexer->getConnection(), [$indexer->getMainTable()]);
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }
