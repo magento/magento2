@@ -6,14 +6,14 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<p><?php echo $block->escapeHtml(__('You have signed out and will go to our homepage in 5 seconds.')) ?></p>
+<p><?= $block->escapeHtml(__('You have signed out and will go to our homepage in 5 seconds.')) ?></p>
 <script>
 require([
     "jquery",
     "mage/mage"
 ], function($){
 
-    $($.mage.redirect("<?php echo $block->escapeJs($block->escapeUrl($block->getUrl())) ?>", "assign", 5000));
+    $($.mage.redirect("<?= $block->escapeJs($block->escapeUrl($block->getUrl())) ?>", "assign", 5000));
 
 });
 </script>
