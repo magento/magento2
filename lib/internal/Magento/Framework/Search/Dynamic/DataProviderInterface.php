@@ -9,6 +9,9 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * @api
+ */
 interface DataProviderInterface
 {
     /**

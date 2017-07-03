@@ -13,8 +13,12 @@ $quote->load('test01', 'reserved_order_id');
 /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customer */
 $customerRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-$customer = $customerRepository->getById(1);
+$customerId = 1;
+$customer = $customerRepository->getById($customerId);
 $quote->setCustomer($customer)->setCustomerIsGuest(false)->save();
+foreach ($quote->getAllAddresses() as $address) {
+    $address->setCustomerId($customerId)->save();
+}
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
