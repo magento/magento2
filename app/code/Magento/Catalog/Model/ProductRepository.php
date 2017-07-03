@@ -248,6 +248,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->load($productId);
             $this->cacheProduct($cacheKey, $product);
         }
+        if (!isset($this->instances[$sku])) {
+            $sku = trim($sku);
+        }
         return $this->instances[$sku][$cacheKey];
     }
 
