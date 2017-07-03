@@ -397,6 +397,7 @@ class Template implements \Zend_Filter_Interface
                 if (is_array($objectArrayData) || $objectArrayData instanceof \Traversable) {
 
                     $loopText = [];
+                    $indexCount = 1;
                     foreach ($objectArrayData as $k => $objectData) {
 
                         if (!$objectData instanceof \Magento\Framework\DataObject) { // is array?
@@ -406,9 +407,11 @@ class Template implements \Zend_Filter_Interface
                             }
 
                             $_item = new \Magento\Framework\DataObject;
-                            $_item->setData($k, $objectData);
+                            $_item->setData($objectData);
                             $objectData = $_item;
                         }
+
+                        $objectData->setData('indexCount', $indexCount++);
 
                         $this->templateVars['item'] = $objectData;
 
