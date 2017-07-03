@@ -45,7 +45,7 @@
             <argument name="realPath" xsi:type="string">urn:magento:module:Magento_Analytics:etc/reports.xsd</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Analytics\ReportXml\Config\ReaderXml" type="Magento\Framework\Config\Reader\Filesystem">
+    <virtualType name="Magento\Analytics\ReportXml\Config\Reader\Xml" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Analytics\ReportXml\Config\SchemaLocator</argument>
@@ -87,7 +87,7 @@
     <type name="Magento\Analytics\ReportXml\Config\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="xml" xsi:type="object">Magento\Analytics\ReportXml\Config\ReaderXml</item>
+                <item name="xml" xsi:type="object">Magento\Analytics\ReportXml\Config\Reader\Xml</item>
             </argument>
         </arguments>
     </type>
@@ -108,7 +108,7 @@
             <argument name="realPath" xsi:type="string">urn:magento:module:Magento_Analytics:etc/analytics.xsd</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Analytics\Model\Config\ReaderXml" type="Magento\Framework\Config\Reader\Filesystem">
+    <virtualType name="Magento\Analytics\Model\Config\Reader\Xml" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Analytics\Model\Config\SchemaLocator</argument>
@@ -131,7 +131,7 @@
     <type name="Magento\Analytics\Model\Config\Reader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="xml" xsi:type="object">Magento\Analytics\Model\Config\ReaderXml</item>
+                <item name="xml" xsi:type="object">Magento\Analytics\Model\Config\Reader\Xml</item>
             </argument>
         </arguments>
     </type>
