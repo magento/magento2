@@ -49,11 +49,6 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
     private $blockMock;
 
     /**
-     * @var Conditions
-     */
-    private $widgetConditions;
-
-    /**
      * return void
      */
     protected function setUp()
