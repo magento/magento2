@@ -20,6 +20,7 @@ use Magento\Framework\Indexer\BatchProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
 
 /**
  * Class Full reindex action
@@ -117,6 +118,8 @@ class Full extends AbstractAction
     {
         try {
             $this->useIdxTable(false);
+            $this->cleanIndexersTables($this->_getTypeIndexers());
+
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
             $columns = array_keys($this->_getConnection()->describeTable($this->_getIdxTable()));
@@ -159,6 +162,29 @@ class Full extends AbstractAction
             $this->activeTableSwitcher->switchTable($indexer->getConnection(), $indexer->getMainTable());
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
+        }
+    }
+
+    /**
+     * Delete all records from index table
+     * Used to clean table before re-indexation
+     *
+     * @param array $indexers
+     * @return void
+     */
+    private function cleanIndexersTables(array $indexers)
+    {
+        $tables = array_map(
+            function (StockInterface $indexer) {
+                return $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
+            },
+            $indexers
+        );
+
+        $tables = array_unique($tables);
+
+        foreach ($tables as $table) {
+            $this->_getConnection()->truncateTable($table);
         }
     }
 }
