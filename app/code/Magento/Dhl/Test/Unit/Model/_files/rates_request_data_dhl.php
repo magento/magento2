@@ -14,7 +14,7 @@ return [
         'dest_postal' => '10559',
         'package_value' => '5',
         'package_value_with_discount' => '5',
-        'package_weight' => '5',
+        'package_weight' => '8.2657',
         'package_qty' => '1',
         'package_physical_value' => '5',
         'free_method_weight' => '5',

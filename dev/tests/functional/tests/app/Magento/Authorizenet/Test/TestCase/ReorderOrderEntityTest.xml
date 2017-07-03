@@ -6,26 +6,26 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\ReorderOrderEntityTest" summary="Reorder Order from Admin for Offline Payment Methods" ticketId="MAGETWO-29007">
-        <variation name="ReorderOrderEntityTestVariation1">
-            <data name="description" xsi:type="string">Reorder placed order (update products, billing address).</data>
-            <data name="order/dataset" xsi:type="string">two_simple_product</data>
-            <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
+    <testCase name="Magento\Sales\Test\TestCase\ReorderOrderEntityTest" summary="Reorder Order from Admin using Authorize.Net Direct Post payment method." ticketId="MAGETWO-69939">
+        <variation name="ReorderOrderEntityAuthorizenetTestVariation1">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
+            <data name="description" xsi:type="string">Reorder placed order using Authorize.Net payment method (update products, billing address).</data>
+            <data name="order/dataset" xsi:type="string">default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">1030.00</item>
+                <item name="grandTotal" xsi:type="string">565.00</item>
             </data>
-            <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="previousOrderStatus" xsi:type="string">Pending</data>
-            <data name="status" xsi:type="string">Pending</data>
+            <data name="payment/method" xsi:type="string">authorizenet_directpost</data>
+            <data name="configData" xsi:type="string">authorizenet</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default_admin</data>
+            <data name="previousOrderStatus" xsi:type="string">Processing</data>
+            <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Reorder, Cancel, Send Email, Hold, Invoice, Ship, Edit</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertReorderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
