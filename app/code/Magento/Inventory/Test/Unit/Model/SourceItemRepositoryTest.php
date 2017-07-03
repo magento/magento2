@@ -109,18 +109,47 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $sourceItemId = 42;
 
-        $this->sourceItem
-            ->expects($this->once())
-            ->method('getSourceItemId')
-            ->willReturn($sourceItemId);
+        $tableName  = 'inventory_source_item';
+        $sourceItemId =  45;
+        $sourceId = 12;
+
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $connection->expects($this->once())
+            ->method('getTableName')
+            ->willReturn($tableName);
+
+        $connection->expects($this->once())
+            ->method('insertMultiple')
+            ->with($tableName,  array(
+                array(
+                    SourceItemInterface::SOURCE_ITEM_ID => $sourceItemId,
+                    SourceItemInterface::SOURCE_ID => $sourceId,
+                    SourceItemInterface::SKU => null,
+                    SourceItemInterface::QUANTITY => null,
+                    SourceItemInterface::STATUS => null
+                )
+            ));
+
         $this->resourceSource
             ->expects($this->once())
-            ->method('save')
-            ->with($this->sourceItem);
+            ->method('getConnection')
+            ->willReturn($connection);
 
-        self::assertEquals($sourceItemId, $this->model->save($this->sourceItem));
+        $this->sourceItem->expects($this->once())
+            ->method('getSourceItemId')
+            ->willReturn($sourceItemId);
+
+        $this->sourceItem->expects($this->once())
+            ->method('getSourceId')
+            ->willReturn($sourceId);
+
+        $sourceItemList = [
+            $this->sourceItem
+        ];
+        $this->model->save($sourceItemList);
     }
 
     /**
@@ -132,7 +161,7 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceSource
             ->expects($this->once())
-            ->method('save')
+            ->method('getConnection')
             ->willThrowException(new \Exception($message));
 
         $this->loggerMock
@@ -140,7 +169,11 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('error')
             ->with($message);
 
-        $this->model->save($this->sourceItem);
+        $sourceItemList = [
+            $this->sourceItem
+        ];
+
+        $this->model->save($sourceItemList);
     }
 
     public function testGet()
@@ -242,66 +275,6 @@ class SourceItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($searchCriteria, $sourceItemCollection);
 
         self::assertSame($searchResults, $this->model->getList($searchCriteria));
-    }
-
-    public function testGetListWithoutSearchCriteria()
-    {
-        $items = [
-            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder(SourceItem::class)->disableOriginalConstructor()->getMock()
-        ];
-        $totalCount = 3;
-
-        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaBuilder
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($searchCriteria);
-
-        $sourceItemCollection = $this->getMockBuilder(SourceItemCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sourceItemCollection
-            ->expects($this->once())
-            ->method('getItems')
-            ->willReturn($items);
-        $sourceItemCollection
-            ->expects($this->once())
-            ->method('getSize')
-            ->willReturn($totalCount);
-        $this->sourceItemCollectionFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($sourceItemCollection);
-
-        $searchResults = $this->getMockBuilder(SourceItemSearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $searchResults
-            ->expects($this->once())
-            ->method('setItems')
-            ->with($items);
-        $searchResults
-            ->expects($this->once())
-            ->method('setTotalCount')
-            ->with($totalCount);
-        $searchResults
-            ->expects($this->once())
-            ->method('setSearchCriteria')
-            ->with($searchCriteria);
-        $this->sourceItemSearchResultsFactory
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($searchResults);
-
-        $this->collectionProcessor
-            ->expects($this->never())
-            ->method('process');
-
-        self::assertSame($searchResults, $this->model->getList());
     }
 
     public function testDelete()
