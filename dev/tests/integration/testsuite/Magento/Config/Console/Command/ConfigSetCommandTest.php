@@ -432,9 +432,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @param string|null $scopeCode
      */
     private function setConfigSuccess(
-        $path, 
-        $value, 
-        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 
+        $path,
+        $value,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
         $status = $this->setConfig($path, $value, '<info>Value was saved.</info>', $scope, $scopeCode);
