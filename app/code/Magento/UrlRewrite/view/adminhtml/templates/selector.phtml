@@ -12,12 +12,12 @@
     <fieldset class="admin__fieldset fieldset" data-container-for="entity-type-selector">
         <div class="admin__field field field-entity-type-selector">
             <label for="entity-type-selector" class="admin__field-label label">
-                <span><?php echo $block->escapeHtml($block->getSelectorLabel()) ?></span>
+                <span><?= $block->escapeHtml($block->getSelectorLabel()) ?></span>
             </label>
             <div class="admin__field-control control">
                 <select data-role="entity-type-selector" class="admin__control-select select" onchange="window.location = this.value;" id="entity-type-selector">
                 <?php foreach ($block->getModes() as $mode => $label): ?>
-                    <option <?php /* noEscape */ echo $block->isMode($mode) ? 'selected="selected" ' : '' ?>value="<?php echo $block->escapeUrl($block->getModeUrl($mode)) ?>"><?php echo $block->escapeHtml($label) ?></option>
+                    <option <?php /* noEscape */ echo $block->isMode($mode) ? 'selected="selected" ' : '' ?>value="<?= $block->escapeUrl($block->getModeUrl($mode)) ?>"><?= $block->escapeHtml($label) ?></option>
                 <?php endforeach; ?>
                 </select>
             </div>

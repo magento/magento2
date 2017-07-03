@@ -5,7 +5,7 @@
  */
 /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\NewCategory */
 ?>
-<div id="<?php /* @escapeNotVerified */ echo $block->getNameInLayout() ?>" style="display:none">
-    <?php echo $block->getFormHtml();?>
-    <?php echo $block->getAfterElementHtml();?>
+<div id="<?= /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none">
+    <?= $block->getFormHtml() ?>
+    <?= $block->getAfterElementHtml() ?>
 </div>

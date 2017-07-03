@@ -16,12 +16,12 @@
         "magento/module-catalog": "101.1.*",
         "magento/module-quote": "100.2.*",
         "magento/module-paypal": "100.2.*",
-        "magento/module-theme": "100.2.*",
         "magento/module-ui": "100.2.*",
         "braintree/braintree_php": "3.22.0"
     },
     "suggest": {
-        "magento/module-checkout-agreements": "100.2.*"
+        "magento/module-checkout-agreements": "100.2.*",
+        "magento/module-theme": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
