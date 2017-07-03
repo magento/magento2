@@ -121,8 +121,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('isAvailable')
             ->willReturn(true);
 
-        $methodInstanceMock = $this->getMockBuilder(
+        $abstractMethodInstanceMock = $this->getMockBuilder(
             \Magento\Payment\Model\Method\Cc::class
+        )->disableOriginalConstructor()->getMock();
+
+        $adapterMethodInstanceMock = $this->getMockBuilder(
+            \Magento\Payment\Model\Method\Adapter::class
         )->disableOriginalConstructor()->getMock();
 
         return [
@@ -138,7 +142,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 '1',
                 $quoteMock,
                 [
-                    [$methodMock, $methodInstanceMock]
+                    [$methodMock, $abstractMethodInstanceMock]
+                ],
+                []
+            ],
+            [
+                '1',
+                $quoteMock,
+                [
+                    [$methodMock, $adapterMethodInstanceMock]
                 ],
                 []
             ]
