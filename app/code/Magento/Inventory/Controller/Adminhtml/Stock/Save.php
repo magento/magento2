@@ -18,9 +18,6 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
-/**
- * Class Save
- */
 class Save extends Action
 {
     /**
@@ -75,7 +72,7 @@ class Save extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -83,8 +80,7 @@ class Save extends Action
         $requestData = $this->getRequest()->getParam('general');
         if ($this->getRequest()->isPost() && $requestData) {
             try {
-                $stockId = !empty($requestData[StockInterface::STOCK_ID])
-                    ? $requestData[StockInterface::STOCK_ID] : null;
+                $stockId = $requestData[StockInterface::STOCK_ID]??null;
 
                 $stockId = $this->processSave($stockId, $requestData);
                 // Keep data for plugins on Save controller. Now we can not call separate services from one form.
@@ -114,6 +110,8 @@ class Save extends Action
     }
 
     /**
+     * Saves inventory stock and returns stock id
+     *
      * @param int $stockId
      * @param array $requestData
      * @return int

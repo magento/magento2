@@ -9,9 +9,6 @@ use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class Index
- */
 class Index extends Action
 {
     /**
@@ -20,7 +17,7 @@ class Index extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::stock';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
