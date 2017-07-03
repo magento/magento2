@@ -19,18 +19,18 @@ $_fullInfo  = $block->getFullTaxInfo();
 <tr class="summary-total" onclick="expandDetails(this, '.summary-details')">
 <?php else: ?>
 <tr>
-<?php endif; ?>
+    <?php endif; ?>
     <td class="label">
         <div class="summary-collapse" tabindex="0">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <?php /* @escapeNotVerified */ echo __('Total Tax') ?>
-        <?php else: ?>
-            <?php /* @escapeNotVerified */ echo __('Tax') ?>
-        <?php endif;?>
+            <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
+                <?= /* @escapeNotVerified */ __('Total Tax') ?>
+            <?php else: ?>
+                <?= /* @escapeNotVerified */ __('Tax') ?>
+            <?php endif;?>
         </div>
     </td>
     <td>
-        <?php /* @escapeNotVerified */ echo $block->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()); ?>
+        <?= /* @escapeNotVerified */ $block->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()) ?>
     </td>
 </tr>
 <?php if ($block->displayFullSummary()): ?>
@@ -49,17 +49,17 @@ $_fullInfo  = $block->getFullTaxInfo();
             ?>
 
             <?php foreach ($rates as $rate): ?>
-                <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
-                    <?php if (!is_null($rate['percent'])): ?>
-                        <td class="admin__total-mark"><?php /* @escapeNotVerified */ echo $rate['title']; ?> (<?php echo (float)$rate['percent']; ?>%)<br /></td>
-                    <?php else: ?>
-                        <td class="admin__total-mark"><?php /* @escapeNotVerified */ echo $rate['title']; ?><br /></td>
-                    <?php endif; ?>
-                    <?php if ($isFirst): ?>
-                        <td rowspan="<?php echo count($rates); ?>"><?php /* @escapeNotVerified */ echo $block->displayAmount($amount, $baseAmount); ?></td>
-                    <?php endif; ?>
-                </tr>
-                <?php
+            <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
+                <?php if (!is_null($rate['percent'])): ?>
+                    <td class="admin__total-mark"><?= /* @escapeNotVerified */ $rate['title'] ?> (<?= (float)$rate['percent'] ?>%)<br /></td>
+                <?php else: ?>
+                    <td class="admin__total-mark"><?= /* @escapeNotVerified */ $rate['title'] ?><br /></td>
+                <?php endif; ?>
+                <?php if ($isFirst): ?>
+                    <td rowspan="<?= count($rates) ?>"><?= /* @escapeNotVerified */ $block->displayAmount($amount, $baseAmount) ?></td>
+                <?php endif; ?>
+            </tr>
+            <?php
                 $isFirst = 0;
                 $isTop = 0;
                 ?>
@@ -76,11 +76,11 @@ $_fullInfo  = $block->getFullTaxInfo();
 
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                 <?php if (!is_null($info['percent'])): ?>
-                    <td class="admin__total-mark"><?php echo $block->escapeHtml($info['title']); ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
+                    <td class="admin__total-mark"><?= $block->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br /></td>
                 <?php else: ?>
-                    <td class="admin__total-mark"><?php echo $block->escapeHtml($info['title']); ?><br /></td>
+                    <td class="admin__total-mark"><?= $block->escapeHtml($info['title']) ?><br /></td>
                 <?php endif; ?>
-                <td><?php /* @escapeNotVerified */ echo $block->displayAmount($amount, $baseAmount); ?></td>
+                    <td><?= /* @escapeNotVerified */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>
             <?php
             $isFirst = 0;
@@ -89,3 +89,4 @@ $_fullInfo  = $block->getFullTaxInfo();
         <?php endforeach; ?>
     <?php endif; ?>
 <?php endif;?>
+
