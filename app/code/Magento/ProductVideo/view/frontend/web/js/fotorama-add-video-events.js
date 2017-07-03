@@ -685,17 +685,22 @@ define([
          * @private
          */
         _clickHandler: function (event) {
+            var type;
+
             if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
                 $(event.target).removeClass(this.VU);
+                type = $(event.target).find('.' + this.PV).data('type');
 
-                if (this.vimeoJSFrameworkLoaded) {
+                if (this.vimeoJSFrameworkLoaded && type === this.VI) {
                     $(event.target).find('.' + this.PV).productVideoLoader();
-                } else {
+                } else if (type === this.VI) {
                     this._showLoader();
                     this.onVimeoJSFramework = function () {
                         $(event.target).find('.' + this.PV).productVideoLoader();
                         this._hideLoader();
                     }.bind(this);
+                } else {
+                    $(event.target).find('.' + this.PV).productVideoLoader();
                 }
 
                 $('.' + this.FTAR).addClass(this.isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
