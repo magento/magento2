@@ -13,21 +13,21 @@
 ?>
 <?php foreach ($block->getTotals() as $_code => $_total): ?>
     <?php if ($_total->getBlockName()): ?>
-        <?php echo $block->getChildHtml($_total->getBlockName(), false); ?>
+        <?= $block->getChildHtml($_total->getBlockName(), false) ?>
     <?php else:?>
-    <tr class="<?php /* @escapeNotVerified */ echo $_code?>">
-        <th <?php /* @escapeNotVerified */ echo $block->getLabelProperties()?> scope="row">
+    <tr class="<?= /* @escapeNotVerified */ $_code ?>">
+        <th <?= /* @escapeNotVerified */ $block->getLabelProperties() ?> scope="row">
             <?php if ($_total->getStrong()):?>
-            <strong><?php echo $block->escapeHtml($_total->getLabel());?></strong>
+            <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
             <?php else:?>
-            <?php echo $block->escapeHtml($_total->getLabel());?>
+            <?= $block->escapeHtml($_total->getLabel()) ?>
             <?php endif?>
         </th>
-        <td <?php /* @escapeNotVerified */ echo $block->getValueProperties()?> data-th="<?php echo $block->escapeHtml($_total->getLabel());?>">
+        <td <?= /* @escapeNotVerified */ $block->getValueProperties() ?> data-th="<?= $block->escapeHtml($_total->getLabel()) ?>">
             <?php if ($_total->getStrong()):?>
-            <strong><?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?></strong>
+            <strong><?= /* @escapeNotVerified */ $block->formatValue($_total) ?></strong>
             <?php else:?>
-            <?php /* @escapeNotVerified */ echo $block->formatValue($_total) ?>
+            <?= /* @escapeNotVerified */ $block->formatValue($_total) ?>
             <?php endif?>
         </td>
     </tr>
