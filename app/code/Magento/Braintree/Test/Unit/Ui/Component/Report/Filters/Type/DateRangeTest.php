@@ -70,6 +70,17 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+
+        $this->contextMock->expects($this->any())
+            ->method('getNamespace')
+            ->willReturn(DateRange::NAME);
+        $this->contextMock->expects($this->any())
+            ->method('addComponentDefinition')
+            ->with(DateRange::NAME, ['extends' => DateRange::NAME]);
+
+        $this->contextMock->expects($this->any())
+            ->method('getDataProvider')
+            ->willReturn($this->dataProviderMock);
     }
 
     /**
@@ -84,29 +95,15 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare($name, $filterData, $expectedCondition)
     {
-        /** @var FormDate PHPUnit_Framework_MockObject_MockObject|$uiComponent */
-        $uiComponent = $this->getMockBuilder(FormDate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $uiComponent->expects($this->any())
-            ->method('getContext')
-            ->willReturn($this->contextMock);
-
-        $this->contextMock->expects($this->any())
-            ->method('getNamespace')
-            ->willReturn(DateRange::NAME);
-        $this->contextMock->expects($this->any())
-            ->method('addComponentDefinition')
-            ->with(DateRange::NAME, ['extends' => DateRange::NAME]);
-
         $this->contextMock->expects($this->any())
             ->method('getFiltersParams')
             ->willReturn($filterData);
 
-        $this->contextMock->expects($this->any())
-            ->method('getDataProvider')
-            ->willReturn($this->dataProviderMock);
+        $uiComponent = $this->getMockBuilder(FormDate::class)->disableOriginalConstructor()->getMock();
+
+        $uiComponent->expects($this->any())
+            ->method('getContext')
+            ->willReturn($this->contextMock);
 
         if ($expectedCondition !== null) {
             if (is_string($filterData[$name])) {
@@ -173,20 +170,8 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
                         new \DateTime($filterData[$name]['to'] . ' 23:59:00', new \DateTimeZone('UTC'))
                     ],
                 ]);
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('setConditionType')
-                ->willReturnSelf();
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('setField')
-                ->willReturnSelf();
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('setValue')
-                ->willReturnSelf();
 
-            $filterMock = $this->getMock(Filter::class);
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('create')
-                ->willReturn($filterMock);
+            $filterMock = $this->getFilterMockWithoutExpectedCondition();
             $this->dataProviderMock->expects(static::exactly(2))
                 ->method('addFilter')
                 ->with($filterMock);
@@ -235,6 +220,31 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
 
         $filterMock = $this->getMock(Filter::class);
         $this->filterBuilderMock->expects(static::at($i++))
+            ->method('create')
+            ->willReturn($filterMock);
+
+        return $filterMock;
+    }
+
+    /**
+     * Gets Filter mock without expected condition
+     *
+     * @return Filter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getFilterMockWithoutExpectedCondition()
+    {
+        $this->filterBuilderMock->expects(static::exactly(2))
+            ->method('setConditionType')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects(static::exactly(2))
+            ->method('setField')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects(static::exactly(2))
+            ->method('setValue')
+            ->willReturnSelf();
+
+        $filterMock = $this->getMock(Filter::class);
+        $this->filterBuilderMock->expects(static::exactly(2))
             ->method('create')
             ->willReturn($filterMock);
 
