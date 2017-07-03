@@ -33,7 +33,9 @@ class ColumnsResolver
 
     /**
      * ColumnsResolver constructor.
+     *
      * @param NameResolver $nameResolver
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         NameResolver $nameResolver,
