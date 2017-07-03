@@ -314,7 +314,10 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains('Import failed: Invalid value. Value must be', $commandTester->getDisplay());
+        $this->assertContains(
+            'Invalid Secure Base URL. Value must be a URL or one of placeholders: {{base_url}},{{unsecure_base_url}}',
+            $commandTester->getDisplay()
+        );
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
 
         $this->writeConfig($this->config, $wrongCurrency);
