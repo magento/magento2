@@ -7,7 +7,7 @@ namespace Magento\Tax\Block\Grid\Renderer;
 
 /**
  * Provides tax rates codes for each tax rule in the grid.
-  */
+ */
 class Codes extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
