@@ -69,7 +69,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->timezone as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -93,7 +93,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->currency as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
@@ -117,7 +117,7 @@
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true">
                         <?php foreach ( $this->language as $value => $label ): ?>
-                            <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </label>
