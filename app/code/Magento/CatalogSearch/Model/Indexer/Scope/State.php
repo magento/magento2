@@ -18,7 +18,6 @@ namespace Magento\CatalogSearch\Model\Indexer\Scope;
  * The 'use_temporary_table' state is an opposite for 'use_main_table'
  *   which means that default indexer table should be left unchanged during indexation
  *   and temporary table should be used instead.
- *
  */
 class State
 {

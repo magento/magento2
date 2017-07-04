@@ -286,7 +286,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'value' => ['value' => 5, 'label' => 'comment <!-- comment -->'],
             ],
             [
-                'value' => ['value' => 6, 'label' => 'php tag <?php echo "2"; ?>'],
+                'value' => ['value' => 6, 'label' => 'php tag <?= "2"; ?>'],
             ],
 
         ];

@@ -126,7 +126,6 @@ class BundleProductTemplateGenerator implements TemplateEntityGeneratorInterface
                 'option_id' => '',
             ]]);
             $option->setSku($bundleProduct->getSku());
-            $option->setOptionId(null);
 
             $links = [];
             for ($linkN = 1; $linkN <= $bundleProductsPerOption; $linkN++) {

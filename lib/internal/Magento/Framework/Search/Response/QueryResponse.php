@@ -11,6 +11,7 @@ use Magento\Framework\Search\ResponseInterface;
 
 /**
  * Search Response
+ * @api
  */
 class QueryResponse implements ResponseInterface
 {

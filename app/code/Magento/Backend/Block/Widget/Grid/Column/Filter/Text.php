@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  * Text grid column filter
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {

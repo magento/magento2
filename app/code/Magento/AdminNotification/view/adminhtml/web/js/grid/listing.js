@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'Magento_Ui/js/grid/listing',
     'Magento_Ui/js/lib/spinner',

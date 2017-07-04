@@ -68,6 +68,9 @@ class ChangeDetector
         $hashes = $this->configHash->get();
 
         foreach ($configs as $section => $config) {
+            if (null === $config) {
+                continue;
+            }
             $savedHash = isset($hashes[$section]) ? $hashes[$section] : null;
             $generatedHash = empty($config) && !$savedHash ? null : $this->hashGenerator->generate($config);
             if ($generatedHash !== $savedHash) {
