@@ -5,10 +5,13 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
+use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
+use Magento\Elasticsearch\SearchAdapter\QueryContainer;
+
 /**
  * @api
  */
-class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface
+class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface, QueryAwareInterface
 {
     /**
      * @var \Magento\Elasticsearch\SearchAdapter\ConnectionManager
@@ -32,21 +35,25 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
 
     /**
      * @var \Magento\Elasticsearch\Model\Config
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $clientConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $searchIndexNameResolver;
 
     /**
      * @var string
+     * @deprecated as this class shouldn't be responsible for query building and should only modify existing query
      */
     protected $indexerId;
 
@@ -54,6 +61,11 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $scopeResolver;
+
+    /**
+     * @var QueryContainer
+     */
+    private $queryContainer;
 
     /**
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
@@ -65,6 +77,9 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
      * @param \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver
      * @param string $indexerId
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param QueryContainer|null $queryContainer
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
@@ -75,7 +90,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId,
-        \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        QueryContainer $queryContainer = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -86,6 +102,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $this->searchIndexNameResolver = $searchIndexNameResolver;
         $this->indexerId = $indexerId;
         $this->scopeResolver = $scopeResolver;
+        $this->queryContainer = $queryContainer;
     }
 
     /**
@@ -107,39 +124,20 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
             'min' => 0,
             'std' => 0,
         ];
-        $entityIds = $entityStorage->getSource();
+
+        $query = $this->getBasicSearchQuery($entityStorage);
+
         $fieldName = $this->fieldMapper->getFieldName('price');
-        $storeId = $this->storeManager->getStore()->getId();
-        $requestQuery = [
-            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
-            'type' => $this->clientConfig->getEntityType(),
-            'body' => [
-                'fields' => [
-                    '_id',
-                    '_score',
-                ],
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            [
-                                'terms' => [
-                                    '_id' => $entityIds,
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                'aggregations' => [
-                    'prices' => [
-                        'extended_stats' => [
-                            'field' => $fieldName,
-                        ],
-                    ],
+        $query['body']['aggregations'] = [
+            'prices' => [
+                'extended_stats' => [
+                    'field' => $fieldName,
                 ],
             ],
         ];
+
         $queryResult = $this->connectionManager->getConnection()
-            ->query($requestQuery);
+            ->query($query);
 
         if (isset($queryResult['aggregations']['prices'])) {
             $aggregations = [
@@ -166,11 +164,13 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $dimension = current($dimensions);
         $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
 
-        return $this->intervalFactory->create([
-            'entityIds' => $entityIds,
-            'storeId' => $storeId,
-            'fieldName' => $fieldName
-        ]);
+        return $this->intervalFactory->create(
+            [
+                'entityIds' => $entityIds,
+                'storeId' => $storeId,
+                'fieldName' => $fieldName,
+            ]
+        );
     }
 
     /**
@@ -183,45 +183,26 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
         $result = [];
-        $entityIds = $entityStorage->getSource();
+
+        $query = $this->getBasicSearchQuery($entityStorage);
+
         $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
-        $dimension = current($dimensions);
-        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
-        $requestQuery = [
-            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
-            'type' => $this->clientConfig->getEntityType(),
-            'body' => [
-                'fields' => [
-                    '_id',
-                    '_score',
-                ],
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            [
-                                'terms' => [
-                                    '_id' => $entityIds,
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                'aggregations' => [
-                    'prices' => [
-                        'histogram' => [
-                            'field' => $fieldName,
-                            'interval' => $range,
-                        ],
-                    ],
+        $query['body']['aggregations'] = [
+            'prices' => [
+                'histogram' => [
+                    'field' => $fieldName,
+                    'interval' => $range,
                 ],
             ],
         ];
+
         $queryResult = $this->connectionManager->getConnection()
-            ->query($requestQuery);
+            ->query($query);
         foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
             $key = intval($bucket['key'] / $range + 1);
             $result[$key] = $bucket['doc_count'];
         }
+
         return $result;
     }
 
@@ -244,6 +225,64 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
                 ];
             }
         }
+
         return $data;
+    }
+
+    /**
+     * Returns a basic search query which can be used for aggregations calculation
+     *
+     * The query may be requested from a query container if it has been set
+     * or may be build by entity storage and dimensions.
+     *
+     * Building a query by entity storage is actually deprecated as the query
+     * built in this way may cause ElasticSearch's TooManyClauses exception.
+     *
+     * The code which is responsible for building query in-place should be removed someday,
+     * but for now it's a question of backward compatibility as this class may be used somewhere else
+     * by extension developers and we can't guarantee that they'll pass a query into constructor.
+     *
+     * @param \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
+     * @param array $dimensions
+     * @return array
+     */
+    private function getBasicSearchQuery(
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage,
+        array $dimensions = []
+    ) {
+        if (null !== $this->queryContainer) {
+            return $this->queryContainer->getQuery();
+        }
+
+        $entityIds = $entityStorage->getSource();
+
+        $dimension = current($dimensions);
+        $storeId = false !== $dimension
+            ? $this->scopeResolver->getScope($dimension->getValue())->getId()
+            : $this->storeManager->getStore()->getId();
+
+        $query = [
+            'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
+            'type' => $this->clientConfig->getEntityType(),
+            'body' => [
+                'fields' => [
+                    '_id',
+                    '_score',
+                ],
+                'query' => [
+                    'bool' => [
+                        'must' => [
+                            [
+                                'terms' => [
+                                    '_id' => $entityIds,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        return $query;
     }
 }
