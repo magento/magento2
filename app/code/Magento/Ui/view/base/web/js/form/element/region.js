@@ -36,6 +36,7 @@ define([
             }
             option = options[value];
             defaultPostCodeResolver.setUseDefaultPostCode(!option['is_zipcode_optional']);
+            
             if (this.skipValidation) {
                 this.validation['required-entry'] = false;
                 this.required(false);
