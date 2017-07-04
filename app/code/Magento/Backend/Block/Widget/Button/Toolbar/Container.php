@@ -12,6 +12,7 @@ use Magento\Backend\Block\Widget\Button\ContextInterface;
  * @method \Magento\Backend\Block\Widget\Button\Item getButtonItem()
  * @method ContextInterface getContext()
  * @method ContextInterface setContext(ContextInterface $context)
+ * @api
  */
 class Container extends \Magento\Framework\View\Element\AbstractBlock
 {
