@@ -15,7 +15,7 @@ class RegionTest extends \PHPUnit_Framework_TestCase
     {
         $countryFactoryMock = $this->getMock(
             \Magento\Directory\Model\CountryFactory::class,
-            ['create'],
+            [],
             [],
             '',
             false

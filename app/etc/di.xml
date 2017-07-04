@@ -674,6 +674,7 @@
     <type name="Magento\Framework\Code\Generator">
         <arguments>
             <argument name="generatedEntities" xsi:type="array">
+                <item name="extensionInterfaceFactory" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator</item>
                 <item name="factory" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Factory</item>
                 <item name="proxy" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Proxy</item>
                 <item name="interceptor" xsi:type="string">\Magento\Framework\Interception\Code\Generator\Interceptor</item>
@@ -1228,9 +1229,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
-        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
-    </type>
     <type name="Magento\Framework\EntityManager\CompositeMapper">
         <arguments>
             <argument name="mappers" xsi:type="array">
@@ -1326,5 +1324,9 @@
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
         </arguments>
     </type>
-
+    <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
+        <arguments>
+            <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
+        </arguments>
+    </type>
 </config>

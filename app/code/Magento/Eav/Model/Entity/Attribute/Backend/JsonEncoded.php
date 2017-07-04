@@ -9,6 +9,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Backend model for attribute that stores structures in json format
+ *
+ * @api
  */
 class JsonEncoded extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

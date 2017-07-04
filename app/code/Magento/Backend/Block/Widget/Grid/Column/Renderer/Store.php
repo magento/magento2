@@ -7,6 +7,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Store grid column filter
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

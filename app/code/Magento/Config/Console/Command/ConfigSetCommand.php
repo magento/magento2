@@ -6,10 +6,8 @@
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\App\Config\Type\System;
-use Magento\Config\Console\Command\ConfigSet\EmulatedProcessorFacade;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -20,6 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command provides possibility to change system configuration.
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigSetCommand extends Command
 {
@@ -34,11 +35,11 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
-     * The emulated processor facade.
+     * Emulator adminhtml area for CLI command.
      *
-     * @var EmulatedProcessorFacade
+     * @var EmulatedAdminhtmlAreaProcessor
      */
-    private $emulatedProcessorFacade;
+    private $emulatedAreaProcessor;
 
     /**
      * The config change detector.
@@ -48,25 +49,25 @@ class ConfigSetCommand extends Command
     private $changeDetector;
 
     /**
-     * The hash manager.
+     * The factory for processor facade.
      *
-     * @var Hash
+     * @var ProcessorFacadeFactory
      */
-    private $hash;
+    private $processorFacadeFactory;
 
     /**
-     * @param EmulatedProcessorFacade $emulatedProcessorFacade The emulated processor facade
+     * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param ChangeDetector $changeDetector The config change detector
-     * @param Hash $hash The hash manager
+     * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
      */
     public function __construct(
-        EmulatedProcessorFacade $emulatedProcessorFacade,
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
         ChangeDetector $changeDetector,
-        Hash $hash
+        ProcessorFacadeFactory $processorFacadeFactory
     ) {
-        $this->emulatedProcessorFacade = $emulatedProcessorFacade;
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
-        $this->hash = $hash;
+        $this->processorFacadeFactory = $processorFacadeFactory;
 
         parent::__construct();
     }
@@ -82,7 +83,7 @@ class ConfigSetCommand extends Command
                 new InputArgument(
                     static::ARG_PATH,
                     InputArgument::REQUIRED,
-                    'Configuration path in format group/section/field_name'
+                    'Configuration path in format section/group/field_name'
                 ),
                 new InputArgument(static::ARG_VALUE, InputArgument::REQUIRED, 'Configuration value'),
                 new InputOption(
@@ -128,15 +129,15 @@ class ConfigSetCommand extends Command
         }
 
         try {
-            $message = $this->emulatedProcessorFacade->process(
-                $input->getArgument(static::ARG_PATH),
-                $input->getArgument(static::ARG_VALUE),
-                $input->getOption(static::OPTION_SCOPE),
-                $input->getOption(static::OPTION_SCOPE_CODE),
-                $input->getOption(static::OPTION_LOCK)
-            );
-
-            $this->hash->regenerate(System::CONFIG_TYPE);
+            $message = $this->emulatedAreaProcessor->process(function () use ($input) {
+                return $this->processorFacadeFactory->create()->process(
+                    $input->getArgument(static::ARG_PATH),
+                    $input->getArgument(static::ARG_VALUE),
+                    $input->getOption(static::OPTION_SCOPE),
+                    $input->getOption(static::OPTION_SCOPE_CODE),
+                    $input->getOption(static::OPTION_LOCK)
+                );
+            });
 
             $output->writeln('<info>' . $message . '</info>');
 

@@ -7,6 +7,8 @@ namespace Magento\Framework\Search\Request;
 
 /**
  * Aggregation Bucket Interface
+ *
+ * @api
  */
 interface BucketInterface
 {
