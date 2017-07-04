@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Backup\Db;
 
+/**
+ * @api
+ */
 interface BackupInterface
 {
     /**

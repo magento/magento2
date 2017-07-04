@@ -13,6 +13,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 
 /**
  * Abstract class AbstractFilter
+ * @api
  */
 abstract class AbstractFilter extends AbstractComponent
 {

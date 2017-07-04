@@ -16,7 +16,7 @@ use Magento\Framework\EntityManager\EntityManager;
 /**
  * Sitemap cms page collection model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -9,6 +9,8 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface CompilerInterface
+ *
+ * @api
  */
 interface CompilerInterface
 {
