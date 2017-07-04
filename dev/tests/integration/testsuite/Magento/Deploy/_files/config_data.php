@@ -3,6 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\Config\Model\Config\Factory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Theme\Model\ResourceModel\Theme\Collection;
+
+$themeList = $objectManager->create(Collection::class);
 $configData = [
     'default' => [
         'web/test/test_value_1' => 'http://local2.test/',
@@ -20,25 +28,25 @@ $configData = [
         'web/test/test_environment7' => 'some_value7',
         'web/test/test_environment8' => 'some_value8',
         'web/test/test_environment9' => 'some_value9',
-        \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID => 2
+        DesignInterface::XML_PATH_THEME_ID => $themeList->getThemeByFullPath('frontend/Magento/blank')->getThemeId()
     ],
     'stores' => [
         'default' => [
-            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID => 3
+            DesignInterface::XML_PATH_THEME_ID => $themeList->getThemeByFullPath('frontend/Magento/luma')->getThemeId()
         ]
     ],
     'websites' => [
         'base' => [
-            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID => 3
+            DesignInterface::XML_PATH_THEME_ID => $themeList->getThemeByFullPath('frontend/Magento/luma')->getThemeId()
         ]
     ],
 ];
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$configFactory = $objectManager->create(\Magento\Config\Model\Config\Factory::class);
+$objectManager = Bootstrap::getObjectManager();
+$configFactory = $objectManager->create(Factory::class);
 
 foreach ($configData as $scope => $data) {
-    if ($scope === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+    if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
         foreach ($data as $path => $value) {
             $config = $configFactory->create();
             $config->setScope($scope);

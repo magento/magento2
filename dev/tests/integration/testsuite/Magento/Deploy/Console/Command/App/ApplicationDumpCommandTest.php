@@ -202,11 +202,6 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function validateSystemSection(array $config)
     {
-        $themesMap = [
-            1 => 'adminhtml/Magento/backend',
-            2 => 'frontend/Magento/blank',
-            3 => 'frontend/Magento/luma'
-        ];
         $this->assertArrayHasKey('test_value_1', $config['system']['default']['web']['test']);
         $this->assertArrayHasKey('test_value_2', $config['system']['default']['web']['test']);
         $this->assertArrayHasKey('test_sensitive1', $config['system']['default']['web']['test']);
@@ -220,9 +215,18 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('test_sensitive_environment6', $config['system']['default']['web']['test']);
         $this->assertArrayNotHasKey('test_environment9', $config['system']['default']['web']['test']);
         /** @see Magento/Deploy/_files/config_data.php */
-        $this->assertEquals($themesMap[2], $config['system']['default']['design']['theme']['theme_id']);
-        $this->assertEquals($themesMap[3], $config['system']['stores']['default']['design']['theme']['theme_id']);
-        $this->assertEquals($themesMap[3], $config['system']['websites']['base']['design']['theme']['theme_id']);
+        $this->assertEquals(
+            'frontend/Magento/blank',
+            $config['system']['default']['design']['theme']['theme_id']
+        );
+        $this->assertEquals(
+            'frontend/Magento/luma',
+            $config['system']['stores']['default']['design']['theme']['theme_id']
+        );
+        $this->assertEquals(
+            'frontend/Magento/luma',
+            $config['system']['websites']['base']['design']['theme']['theme_id']
+        );
 
         $this->assertEquals('value from the file', $config['system']['default']['web']['test']['test_value_3']);
         $this->assertEquals('GB', $config['system']['default']['general']['country']['default']);
