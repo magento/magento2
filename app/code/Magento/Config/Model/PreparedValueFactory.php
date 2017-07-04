@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Store\Model\ScopeTypeNormalizer;
-use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
 

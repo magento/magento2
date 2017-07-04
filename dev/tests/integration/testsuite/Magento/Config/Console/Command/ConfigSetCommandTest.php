@@ -315,7 +315,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             [
                 Custom::XML_PATH_UNSECURE_BASE_URL,
                 'value',
-                'Invalid value. Value must be a URL or one of placeholders: {{base_url}}'
+                'Invalid Base URL. Value must be a URL or one of placeholders: {{base_url}}'
             ],
             //set not existed field path
             [
@@ -503,83 +503,5 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $command = $this->objectManager->create(ConfigSetCommand::class);
         $status = $command->run($input, $output);
         return $status;
-    }
-
-    /**
-     * Tests different scenarios for scope options.
-     *
-     * @param \Closure $expectations
-     * @param string $path
-     * @param string $value
-     * @param string $scope
-     * @param string $scopeCode
-     * @magentoDbIsolation enabled
-     * @dataProvider getRunPathValidationDataProvider
-     */
-    public function testRunPathValidation(
-        \Closure $expectations,
-        $path,
-        $value,
-        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-        $scopeCode = null
-    ) {
-        $this->inputMock->expects($this->any())
-            ->method('getArgument')
-            ->willReturnMap([
-                [ConfigSetCommand::ARG_PATH, $path],
-                [ConfigSetCommand::ARG_VALUE, $value]
-            ]);
-        $this->inputMock->expects($this->any())
-            ->method('getOption')
-            ->willReturnMap([
-                [ConfigSetCommand::OPTION_SCOPE, $scope],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
-            ]);
-
-        $expectations($this->outputMock);
-
-        /** @var ConfigSetCommand $command */
-        $command = $this->objectManager->create(ConfigSetCommand::class);
-        $command->run($this->inputMock, $this->outputMock);
-    }
-
-    /**
-     * Retrieves variations with callback, path, value, scope and scope code.
-     *
-     * @return array
-     */
-    public function getRunPathValidationDataProvider()
-    {
-        return [
-            [
-                function (Mock $output) {
-                    $output->expects($this->once())
-                        ->method('writeln')
-                        ->with('<info>Value was saved.</info>');
-                },
-                'web/unsecure/base_url',
-                'http://magento2.local/',
-            ],
-            [
-                function (Mock $output) {
-                    $output->expects($this->once())
-                        ->method('writeln')
-                        ->with(
-                            '<error>Invalid Base URL. Value must be a URL or one of placeholders: {{base_url}}</error>'
-                        );
-                },
-                'web/unsecure/base_url',
-                'value',
-            ],
-            [
-                function (Mock $output) {
-                    $output->expects($this->once())
-                        ->method('writeln')
-                        ->with('<error>The "test/test/test" path does not exist</error>');
-                },
-                'test/test/test',
-                'value',
-            ]
-        ];
     }
 }
