@@ -549,28 +549,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Search grouped product.
-     *
-     * @magentoDataFixture Magento/Framework/Search/_files/grouped_product.php
-     * @magentoConfigFixture current_store catalog/search/engine mysql
-     *
-     * @return void
-     */
-    public function testSearchGroupedProduct()
-    {
-        $this->requestBuilder->bind('search_term', 'Grouped Product');
-        $this->requestBuilder->setRequestName('quick_search_container');
-
-        $queryResponse = $this->executeQuery();
-        $result = $this->getProductIds($queryResponse);
-
-        self::assertCount(3, $result);
-
-        $groupedProduct = $this->productRepository->get('grouped-product');
-        self::assertContains($groupedProduct->getId(), $result, 'Grouped product not found by name.');
-    }
-
-    /**
      * Filter by tax class.
      *
      * @magentoDataFixture Magento/Framework/Search/_files/grouped_product.php

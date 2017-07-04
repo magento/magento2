@@ -28,12 +28,15 @@ $searchCriteria = $searchCriteriaBuilder->addFilter(
 $productTaxClasses = $taxClassRepository->getList($searchCriteria);
 $taxClasses = $productTaxClasses->getItems();
 
+/** @var \Psr\Log\LoggerInterface $logger */
+$logger = $objectManager->get(\Psr\Log\LoggerInterface::class);
+
 if (!empty($taxClasses)) {
     foreach ($taxClasses as $taxClass) {
         try {
             $taxClassRepository->deleteById($taxClass->getClassId());
         } catch (Exception $e) {
-            // Something went wrong.
+            $logger->critical($e->getMessage(), ['exception' => $e]);
         }
     }
 }
