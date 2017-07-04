@@ -10,7 +10,10 @@ use Magento\Framework\View\DesignInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 
+$objectManager = Bootstrap::getObjectManager();
+$configFactory = $objectManager->create(Factory::class);
 $themeList = $objectManager->create(Collection::class);
+
 $configData = [
     'default' => [
         'web/test/test_value_1' => 'http://local2.test/',
@@ -41,9 +44,6 @@ $configData = [
         ]
     ],
 ];
-
-$objectManager = Bootstrap::getObjectManager();
-$configFactory = $objectManager->create(Factory::class);
 
 foreach ($configData as $scope => $data) {
     if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
