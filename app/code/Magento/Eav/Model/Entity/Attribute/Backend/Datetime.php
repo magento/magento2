@@ -65,7 +65,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * string format used from input fields (all date input fields need apply locale settings)
      * int value can be declared in code (this meen whot we use valid date)
      *
-     * @param string|int|\DateTime $date
+     * @param string|int|\DateTimeInterface $date
      * @return string
      */
     public function formatDate($date)
