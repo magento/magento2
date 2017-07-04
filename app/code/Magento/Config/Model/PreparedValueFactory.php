@@ -11,6 +11,8 @@ use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Store\Model\ScopeTypeNormalizer;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
@@ -53,27 +55,37 @@ class PreparedValueFactory
     private $config;
 
     /**
+     * The scope type normalizer.
+     *
+     * @var ScopeTypeNormalizer
+     */
+    private $scopeTypeNormalizer;
+
+    /**
      * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
      * @param StructureFactory $structureFactory The manager for system configuration structure
      * @param BackendFactory $valueFactory The factory for configuration value objects
      * @param ScopeConfigInterface $config The scope configuration
+     * @param ScopeTypeNormalizer $scopeTypeNormalizer The scope type normalizer
      */
     public function __construct(
         ScopeResolverPool $scopeResolverPool,
         StructureFactory $structureFactory,
         BackendFactory $valueFactory,
-        ScopeConfigInterface $config
+        ScopeConfigInterface $config,
+        ScopeTypeNormalizer $scopeTypeNormalizer
     ) {
         $this->scopeResolverPool = $scopeResolverPool;
         $this->structureFactory = $structureFactory;
         $this->valueFactory = $valueFactory;
         $this->config = $config;
+        $this->scopeTypeNormalizer = $scopeTypeNormalizer;
     }
 
     /**
      * Returns instance of Value with defined properties.
      *
-     * @param string $path The configuration path in format group/section/field_name
+     * @param string $path The configuration path in format section/group/field_name
      * @param string $value The configuration value
      * @param string $scope The configuration scope (default, website, or store)
      * @param string|int|null $scopeCode The scope code
@@ -105,20 +117,26 @@ class PreparedValueFactory
             if ($backendModel instanceof Value) {
                 $scopeId = 0;
 
-                if (in_array($scope, [StoreScopeInterface::SCOPE_WEBSITE, StoreScopeInterface::SCOPE_WEBSITES])) {
-                    $scope = StoreScopeInterface::SCOPE_WEBSITES;
-                } elseif (in_array($scope, [StoreScopeInterface::SCOPE_STORE, StoreScopeInterface::SCOPE_STORES])) {
-                    $scope = StoreScopeInterface::SCOPE_STORES;
+                $scope = $this->scopeTypeNormalizer->normalize($scope);
+
+                if ($scope !== ScopeInterface::SCOPE_DEFAULT) {
+                    $scopeId = $this->scopeResolverPool->get($scope)
+                        ->getScope($scopeCode)
+                        ->getId();
                 }
 
-                if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                    $scopeResolver = $this->scopeResolverPool->get($scope);
-                    $scopeId = $scopeResolver->getScope($scopeCode)->getId();
+                if ($field instanceof Structure\Element\Field) {
+                    $groupPath = $field->getGroupPath();
+                    $group = $structure->getElement($groupPath);
+                    $backendModel->setField($field->getId());
+                    $backendModel->setGroupId($group->getId());
+                    $backendModel->setFieldConfig($field->getData());
                 }
 
                 $backendModel->setPath($configPath);
                 $backendModel->setScope($scope);
                 $backendModel->setScopeId($scopeId);
+                $backendModel->setScopeCode($scopeCode);
                 $backendModel->setValue($value);
             }
 

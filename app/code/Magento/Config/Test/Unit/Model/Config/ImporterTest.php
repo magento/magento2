@@ -125,9 +125,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
     public function testImport()
     {
         $data = [];
@@ -150,6 +147,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('emulateAreaCode')
             ->with(Area::AREA_ADMINHTML, $this->anything())
             ->willReturnCallback(function ($area, $function) {
+                $this->assertEquals(Area::AREA_ADMINHTML, $area);
                 return $function();
             });
         $this->saveProcessorMock->expects($this->once())
