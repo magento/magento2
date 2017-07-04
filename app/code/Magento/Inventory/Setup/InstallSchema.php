@@ -373,7 +373,6 @@ class InstallSchema implements InstallSchemaInterface
             Table::TYPE_TEXT,
             64,
             [
-                InstallSchema::OPTION_UNSIGNED => true,
                 InstallSchema::OPTION_NULLABLE => false,
             ],
             'Sku'
@@ -421,11 +420,17 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $setup->getIdxName(
                 $sourceItemTable,
-                [SourceItemInterface::SOURCE_ID, SourceItemInterface::SKU],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                [
+                    SourceItemInterface::SOURCE_ID,
+                    SourceItemInterface::SKU,
+                ],
+                AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            [SourceItemInterface::SOURCE_ID, SourceItemInterface::SKU],
-            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            [
+                SourceItemInterface::SOURCE_ID,
+                SourceItemInterface::SKU,
+            ],
+            AdapterInterface::INDEX_TYPE_UNIQUE
         );
     }
 }

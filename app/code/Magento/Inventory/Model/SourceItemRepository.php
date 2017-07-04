@@ -19,6 +19,9 @@ use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterfaceFactory;
 use Psr\Log\LoggerInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
+/**
+ * Class SourceItemRepository
+ */
 class SourceItemRepository implements SourceItemRepositoryInterface
 {
     /**

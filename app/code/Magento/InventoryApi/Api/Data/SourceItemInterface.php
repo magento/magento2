@@ -3,6 +3,9 @@ namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * Interface SourceItemInterface
+ */
 interface SourceItemInterface extends ExtensibleDataInterface
 {
     /**#@+
@@ -16,10 +19,17 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**#@-*/
 
     /**
-     * Constants for status value.
+     * Constants for status value
      */
-    const IS_IN_STOCK = TRUE;
-    const IS_OUT_OF_STOCK = FALSE;
+    const STOCK_STATUS_IS_IN_STOCK = 1;
+    const STOCK_STATUS_IS_OUT_OF_STOCK = 0;
+
+    /**
+     * Get source item id.
+     *
+     * @return int
+     */
+    public function getSourceItemId();
 
     /**
      * Get source item sku.
@@ -37,18 +47,19 @@ interface SourceItemInterface extends ExtensibleDataInterface
     public function setSku($sku);
 
     /**
-     * Get source item source id.
+     * Get source id.
      *
      * @return int
      */
     public function getSourceId();
 
     /**
-     * Get source item source id.
+     * Set source id.
      *
-     * @return int
+     * @param int $sourceId
+     * @return void
      */
-    public function getSourceItemId();
+    public function setSourceId($sourceId);
 
     /**
      * Get source item quantity.
@@ -66,14 +77,14 @@ interface SourceItemInterface extends ExtensibleDataInterface
     public function setQuantity($quantity);
 
     /**
-     * Get source item status.
+     * Get source item status (One of self::STOCK_STATUS_*).
      *
      * @return bool
      */
     public function getStatus();
 
     /**
-     * Set source item status.
+     * Set source item status (One of self::STOCK_STATUS_*).
      *
      * @param bool $status
      * @return void

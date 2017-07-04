@@ -5,6 +5,9 @@
  */
 namespace Magento\InventoryApi\Api;
 
+/**
+ * Interface SourceItemRepositoryInterface
+ */
 interface SourceItemRepositoryInterface
 {
     /**
