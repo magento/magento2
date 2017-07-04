@@ -8,13 +8,13 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
+use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
-use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -91,37 +91,6 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(array $sourceItemList)
-    {
-        try {
-            $sourceItemData = [];
-
-            /** @var SourceItemInterface $sourceItem */
-            foreach ($sourceItemList as $sourceItem) {
-                $sourceItemData[] = [
-                    SourceItemInterface::SOURCE_ITEM_ID => $sourceItem->getSourceItemId(),
-                    SourceItemInterface::SOURCE_ID => $sourceItem->getSourceId(),
-                    SourceItemInterface::SKU => $sourceItem->getSku(),
-                    SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
-                    SourceItemInterface::STATUS => $sourceItem->getStatus()
-                ];
-            }
-
-            $connection = $this->resourceSource->getConnection();
-
-            $connection->insertMultiple(
-                $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM),
-                $sourceItemData
-            );
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save source item'), $e);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function get($sourceItemId)
     {
         $sourceItem = $this->sourceItemFactory->create();
@@ -139,9 +108,11 @@ class SourceItemRepository implements SourceItemRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
+        /** @var Collection $collection */
         $collection = $this->sourceItemCollectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 
+        /** @var SourceItemSearchResultsInterface $searchResult */
         $searchResult = $this->sourceItemSearchResultsFactory->create();
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());

@@ -10,7 +10,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Inventory\Model\SourceItem as SourceItemModel;
 
 /**
- * Class Collection
+ * @api
  */
 class Collection extends AbstractCollection
 {

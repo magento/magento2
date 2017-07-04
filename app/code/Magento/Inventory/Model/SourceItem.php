@@ -86,7 +86,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -99,11 +99,11 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
     ) {
-        return $this->_setExtensionAttributes($extensionAttributes);
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }

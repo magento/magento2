@@ -6,22 +6,15 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * Interface SourceItemRepositoryInterface
+ * SourceItemRepositoryInterface has not method save, use SourceItemMultipleSaveInterface instead
+ *
+ * @api
  */
 interface SourceItemRepositoryInterface
 {
     /**
-     * Save Source item data. If you want to create plugin on get method, also you need to create separate plugin
-     * on getList method, because entity loading way is different for these methods
-     *
-     * @param \Magento\InventoryApi\Api\Data\SourceItemInterface[] $sourceItemList
-     * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     */
-    public function save(array $sourceItemList);
-
-    /**
-     * Get Source Item data by given sourceItemId.
+     * Get Source Item data by given sourceItemId. If you want to create plugin on get method, also you need to create
+     * separate plugin on getList method, because entity loading way is different for these methods
      *
      * @param int $sourceItemId
      * @return \Magento\InventoryApi\Api\Data\SourceItemInterface

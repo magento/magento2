@@ -21,4 +21,16 @@ class SourceItem extends AbstractDb
     {
         $this->_init(InstallSchema::TABLE_NAME_SOURCE_ITEM, SourceItemInterface::SOURCE_ITEM_ID);
     }
+
+    /**
+     * Multiple Save Source item data
+     *
+     * @param array $sourceItemsData
+     * @return void
+     */
+    public function multipleSave(array $sourceItemsData)
+    {
+        $connection = $this->getConnection();
+        $connection->insertMultiple($connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM), $sourceItemsData);
+    }
 }

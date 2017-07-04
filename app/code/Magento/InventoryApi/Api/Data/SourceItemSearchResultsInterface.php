@@ -8,7 +8,7 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\SearchResultsInterface;
 
 /**
- * Interface SourceItemSearchResultsInterface
+ * @api
  */
 interface SourceItemSearchResultsInterface extends SearchResultsInterface
 {

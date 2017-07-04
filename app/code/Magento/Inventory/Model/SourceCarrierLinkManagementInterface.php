@@ -11,7 +11,8 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 /**
  * SourceCarrierLinkManagementInterface
  *
- * It is extension point for carrier links storage replacing
+ * It is extension point for carrier links storage replacing (spi)
+ * @api
  */
 interface SourceCarrierLinkManagementInterface
 {
