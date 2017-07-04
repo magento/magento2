@@ -15,10 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Framework\Search\Request\Filter\BoolExpression;
-use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -31,26 +28,6 @@ use Magento\Store\Model\StoreManagerInterface;
 class TableMapper
 {
     /**
-     * @var AppResource
-     */
-    private $resource;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var EavConfig
-     */
-    private $eavConfig;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var FilterStrategyInterface
      */
     private $filterStrategy;
@@ -61,6 +38,11 @@ class TableMapper
     private $aliasResolver;
 
     /**
+     * @var AliasResolver
+     */
+    private $filtersExtractor;
+
+    /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param AppResource $resource
      * @param StoreManagerInterface $storeManager
@@ -69,6 +51,8 @@ class TableMapper
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterStrategyInterface $filterStrategy
      * @param AliasResolver $aliasResolver
+     * @param FiltersExtractor $filtersExtractor
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         AppResource $resource,
@@ -77,27 +61,22 @@ class TableMapper
         EavConfig $eavConfig = null,
         ScopeConfigInterface $scopeConfig = null,
         FilterStrategyInterface $filterStrategy = null,
-        AliasResolver $aliasResolver = null
+        AliasResolver $aliasResolver = null,
+        FiltersExtractor $filtersExtractor = null
     ) {
-        $this->resource = $resource;
-        $this->storeManager = $storeManager;
-
-        if (null === $eavConfig) {
-            $eavConfig = ObjectManager::getInstance()->get(EavConfig::class);
-        }
-        if (null === $scopeConfig) {
-            $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        }
         if (null === $filterStrategy) {
             $filterStrategy = ObjectManager::getInstance()->get(FilterStrategyInterface::class);
         }
         if (null === $aliasResolver) {
             $aliasResolver = ObjectManager::getInstance()->get(AliasResolver::class);
         }
-        $this->eavConfig = $eavConfig;
-        $this->scopeConfig = $scopeConfig;
+        if (null === $filtersExtractor) {
+            $filtersExtractor = ObjectManager::getInstance()->get(FiltersExtractor::class);
+        }
+
         $this->filterStrategy = $filterStrategy;
         $this->aliasResolver = $aliasResolver;
+        $this->filtersExtractor = $filtersExtractor;
     }
 
     /**
@@ -109,7 +88,7 @@ class TableMapper
     public function addTables(Select $select, RequestInterface $request)
     {
         $appliedFilters = [];
-        $filters = $this->getFiltersFromQuery($request->getQuery());
+        $filters = $this->filtersExtractor->extractFiltersFromQuery($request->getQuery());
         foreach ($filters as $filter) {
             $alias = $this->aliasResolver->getAlias($filter);
             if (!array_key_exists($alias, $appliedFilters)) {
@@ -135,72 +114,5 @@ class TableMapper
     public function getMappingAlias(FilterInterface $filter)
     {
         return $this->aliasResolver->getAlias($filter);
-    }
-
-    /**
-     * @param RequestQueryInterface $query
-     * @return FilterInterface[]
-     */
-    private function getFiltersFromQuery(RequestQueryInterface $query)
-    {
-        $filters = [];
-        switch ($query->getType()) {
-            case RequestQueryInterface::TYPE_BOOL:
-                /** @var \Magento\Framework\Search\Request\Query\BoolExpression $query */
-                foreach ($query->getMust() as $subQuery) {
-                    $filters = array_merge($filters, $this->getFiltersFromQuery($subQuery));
-                }
-                foreach ($query->getShould() as $subQuery) {
-                    $filters = array_merge($filters, $this->getFiltersFromQuery($subQuery));
-                }
-                foreach ($query->getMustNot() as $subQuery) {
-                    $filters = array_merge($filters, $this->getFiltersFromQuery($subQuery));
-                }
-                break;
-            case RequestQueryInterface::TYPE_FILTER:
-                /** @var Filter $query */
-                $filter = $query->getReference();
-                if (FilterInterface::TYPE_BOOL === $filter->getType()) {
-                    $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
-                } else {
-                    $filters[] = $filter;
-                }
-                break;
-            default:
-                break;
-        }
-        return $filters;
-    }
-
-    /**
-     * @param BoolExpression $boolExpression
-     * @return FilterInterface[]
-     */
-    private function getFiltersFromBoolFilter(BoolExpression $boolExpression)
-    {
-        $filters = [];
-        /** @var BoolExpression $filter */
-        foreach ($boolExpression->getMust() as $filter) {
-            if ($filter->getType() === FilterInterface::TYPE_BOOL) {
-                $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
-            } else {
-                $filters[] = $filter;
-            }
-        }
-        foreach ($boolExpression->getShould() as $filter) {
-            if ($filter->getType() === FilterInterface::TYPE_BOOL) {
-                $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
-            } else {
-                $filters[] = $filter;
-            }
-        }
-        foreach ($boolExpression->getMustNot() as $filter) {
-            if ($filter->getType() === FilterInterface::TYPE_BOOL) {
-                $filters = array_merge($filters, $this->getFiltersFromBoolFilter($filter));
-            } else {
-                $filters[] = $filter;
-            }
-        }
-        return $filters;
     }
 }

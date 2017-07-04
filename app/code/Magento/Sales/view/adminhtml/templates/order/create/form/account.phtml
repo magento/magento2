@@ -5,12 +5,12 @@
  */
 ?>
 
-<div class="admin__page-section-title <?php /* @escapeNotVerified */ echo $block->getHeaderCssClass() ?>">
-    <span class="title"><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></span>
+<div class="admin__page-section-title <?= /* @escapeNotVerified */ $block->getHeaderCssClass() ?>">
+    <span class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></span>
     <div class="actions"></div>
 </div>
 <div id="customer_account_fieds" class="admin__page-section-content">
-    <?php echo $block->getForm()->getHtml() ?>
+    <?= $block->getForm()->getHtml() ?>
 </div>
 
 <script>
