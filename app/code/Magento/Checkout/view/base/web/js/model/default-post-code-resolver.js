@@ -14,10 +14,10 @@ define([], function () {
         /**
          * Resolve default post code
          *
-         * @returns {String|undefined}
+         * @returns {String|null}
          */
         resolve: function () {
-            return useDefaultPostCode ?  window.checkoutConfig.defaultPostcode : undefined;
+            return useDefaultPostCode ?  window.checkoutConfig.defaultPostcode : null;
         },
 
         /**

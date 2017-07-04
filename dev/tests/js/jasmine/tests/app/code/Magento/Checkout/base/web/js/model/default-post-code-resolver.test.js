@@ -19,7 +19,7 @@ define([
         });
 
         it('resolve', function () {
-            expect(defaultPostCodeResolver.resolve()).toBeUndefined();
+            expect(defaultPostCodeResolver.resolve()).toBeNull();
         });
         it('resolve with using default code', function () {
             defaultPostCodeResolver.setUseDefaultPostCode(true);

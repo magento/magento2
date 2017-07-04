@@ -35,10 +35,7 @@ define([
                 return;
             }
             option = options[value];
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            defaultPostCodeResolver.setUseDefaultPostCode(typeof option.is_zipcode_optional !== 'undefined' &&
-                option.is_zipcode_optional === true ? false : true);
-            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+            defaultPostCodeResolver.setUseDefaultPostCode(!option['is_zipcode_optional']);
             if (this.skipValidation) {
                 this.validation['required-entry'] = false;
                 this.required(false);
