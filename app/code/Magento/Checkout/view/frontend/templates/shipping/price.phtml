@@ -10,4 +10,4 @@
 <?php /** @var $block \Magento\Checkout\Block\Shipping\Price */ ?>
 
 <?php $shippingPrice = $block->getShippingPrice(); ?>
-<?php /* @escapeNotVerified */ echo $shippingPrice; ?>
+<?= /* @escapeNotVerified */ $shippingPrice ?>
