@@ -5,7 +5,6 @@
  */
 
 // @codingStandardsIgnoreFile
-use Magento\Framework\Json\Helper\Data;
 
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
 $params = $block->getParams();
@@ -33,11 +32,13 @@ $params = $block->getParams();
                 [
                     'jquery',
                     'Magento_Ui/js/model/messageList',
-                    'mage/translate'
+                    'mage/translate',
+                    'Magento_Checkout/js/model/full-screen-loader'
                 ],
-                function($, globalMessageList, $t) {
+                function($, globalMessageList, $t, fullScreenLoader) {
                     var parent = window.top;
                     $(parent).trigger('clearTimeout');
+                    fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
                         message: $t('An error occurred on the server. Please try to place the order again.')
                     });
