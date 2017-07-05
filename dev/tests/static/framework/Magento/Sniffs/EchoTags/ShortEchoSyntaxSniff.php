@@ -36,7 +36,8 @@ class ShortEchoSyntaxSniff implements Sniff
         if ($tokens[$nextToken]['code'] == T_ECHO) {
             $phpcsFile->addError(
                 'Short echo tag syntax must be used; expected "<?=" but found "<?php echo"',
-                $stackPtr
+                $stackPtr,
+                'ShortEchoTag'
             );
         }
     }
