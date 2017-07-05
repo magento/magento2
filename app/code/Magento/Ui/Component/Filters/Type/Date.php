@@ -83,7 +83,11 @@ class Date extends AbstractFilter
                     $this->applyFilterByType(
                         'gteq',
                         $this->wrappedComponent->convertDate(
-                            $value['from'],0, 0, 0, !$this->getData('config/skipTimeZoneConversion')
+                            $value['from'],
+                            0,
+                            0,
+                            0,
+                            !$this->getData('config/skipTimeZoneConversion')
                         )
                     );
                 }
@@ -92,7 +96,11 @@ class Date extends AbstractFilter
                     $this->applyFilterByType(
                         'lteq',
                         $this->wrappedComponent->convertDate(
-                            $value['to'], 23, 59, 59, !$this->getData('config/skipTimeZoneConversion')
+                            $value['to'],
+                            23,
+                            59,
+                            59,
+                            !$this->getData('config/skipTimeZoneConversion')
                         )
                     );
                 }
