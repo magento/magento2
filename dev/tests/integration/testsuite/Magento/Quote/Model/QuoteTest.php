@@ -449,4 +449,26 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->addProduct($product);
     }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGetItemById()
+    {
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+        $quote->load('test01', 'reserved_order_id');
+
+        $quoteItem = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Item');
+
+        $productRepository = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('simple');
+
+        $quoteItem->setProduct($product);
+        $quote->addItem($quoteItem);
+        $quote->save();
+
+        $this->assertInstanceOf('Magento\Quote\Model\Quote\Item', $quote->getItemById($quoteItem->getId()));
+        $this->assertEquals($quoteItem->getId(), $quote->getItemById($quoteItem->getId())->getId());
+    }
 }
