@@ -78,7 +78,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $areaCode = Area::AREA_FRONTEND;
         $emulatedCode = Area::AREA_ADMINHTML;
-        $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
         $this->model->setAreaCode($areaCode);
         $this->assertEquals(
             $emulatedCode,
@@ -96,7 +95,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $areaCode = Area::AREA_ADMINHTML;
         $emulatedCode = Area::AREA_FRONTEND;
-        $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
         $this->model->setAreaCode($areaCode);
         $this->assertFalse(
             $this->model->isAreaCodeEmulated(),
@@ -130,7 +128,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $areaCode = Area::AREA_FRONTEND;
         $emulatedCode = Area::AREA_ADMINHTML;
-        $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
         $this->model->setAreaCode($areaCode);
         $this->model->emulateAreaCode($emulatedCode, [$this, 'emulateAreaCodeCallbackException']);
         $this->assertEquals($this->model->getAreaCode(), $areaCode);
