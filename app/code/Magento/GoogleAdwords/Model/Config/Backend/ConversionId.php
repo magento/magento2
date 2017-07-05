@@ -7,6 +7,9 @@
  */
 namespace Magento\GoogleAdwords\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class ConversionId extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractConversion
 {
     /**

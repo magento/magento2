@@ -21,6 +21,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
+ * @api
  */
 class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
 {
@@ -167,10 +168,13 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function prolong()
     {
+        $lifetime = $this->_config->getValue(self::XML_PATH_SESSION_LIFETIME);
         $cookieValue = $this->cookieManager->getCookie($this->getName());
+
         if ($cookieValue) {
             $this->setUpdatedAt(time());
             $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+                ->setDuration($lifetime)
                 ->setPath($this->sessionConfig->getCookiePath())
                 ->setDomain($this->sessionConfig->getCookieDomain())
                 ->setSecure($this->sessionConfig->getCookieSecure())

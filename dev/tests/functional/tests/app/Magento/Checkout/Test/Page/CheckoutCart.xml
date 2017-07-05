@@ -17,5 +17,6 @@
     <block name="proceedToCheckoutBlock" class="Magento\Checkout\Test\Block\Onepage\Link" locator="ul.checkout-methods-items button.primary.checkout" strategy="css selector"/>
     <block name ="topPagerBlock" class="Magento\Checkout\Test\Block\Cart\Pager" locator="//*[@data-attribute='cart-products-toolbar-top']" strategy="xpath"/>
     <block name ="bottomPagerBlock" class="Magento\Checkout\Test\Block\Cart\Pager" locator="//*[@data-attribute='cart-products-toolbar-bottom']" strategy="xpath"/>
+    <block name="cartItemBlock" class="Magento\Checkout\Test\Block\Cart\CartItem" locator=".form.form-cart" strategy="css selector"/>
   </page>
 </config>

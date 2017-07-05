@@ -8,6 +8,9 @@ namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,14 +40,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         $productResource = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
-        $productResource->expects($this->any())->method('loadAllAttributes')->willReturnSelf();
-        $productResource->expects($this->any())->method('getAttributesByCode')->willReturn([]);
+        $productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
+        $productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
+        $productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $objectManagerHelper->getObject(
             \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
             [
                 'config' => $eavConfig,
                 'storeManager' => $storeManager,
                 'productResource' => $productResource,
+                'productCategoryList' => $productCategoryList,
                 'data' => [
                     'rule' => $ruleMock,
                     'id' => 1

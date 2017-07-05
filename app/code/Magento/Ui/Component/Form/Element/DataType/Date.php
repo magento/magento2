@@ -97,12 +97,9 @@ class Date extends AbstractDataType
      * Convert given date to default (UTC) timezone
      *
      * @param int $date
-     * @param int $hour
-     * @param int $minute
-     * @param int $second
      * @return \DateTime|null
      */
-    public function convertDate($date, $hour = 0, $minute = 0, $second = 0)
+    public function convertDate($date)
     {
         try {
             $dateObj = $this->localeDate->date(
@@ -113,7 +110,6 @@ class Date extends AbstractDataType
                 $this->getLocale(),
                 true
             );
-            $dateObj->setTime($hour, $minute, $second);
             //convert store date to default date in UTC timezone without DST
             $dateObj->setTimezone(new \DateTimeZone('UTC'));
             return $dateObj;

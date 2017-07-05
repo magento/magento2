@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Currency;
 
+/**
+ * @api
+ */
 class Cron extends \Magento\Framework\App\Config\Value
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';

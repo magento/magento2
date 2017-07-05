@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Model\Config\Source;
  * AdminNotification update frequency source
  *
  * @codeCoverageIgnore
+ * @api
  */
 class Frequency implements \Magento\Framework\Option\ArrayInterface
 {

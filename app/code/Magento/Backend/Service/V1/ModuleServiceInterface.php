@@ -8,6 +8,7 @@ namespace Magento\Backend\Service\V1;
 
 /**
  * Interface for module service.
+ * @api
  */
 interface ModuleServiceInterface
 {
