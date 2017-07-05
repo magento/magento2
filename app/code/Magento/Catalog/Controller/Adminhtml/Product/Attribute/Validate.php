@@ -173,6 +173,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      *
      * @param DataObject $response
      * @param array $optionsForCheck
+     * @return void
      */
     private function checkEmptyOption(DataObject $response, array $optionsForCheck = null)
     {
