@@ -564,8 +564,7 @@ define([
          */
         _checkForVideo: function (e, fotorama, number) {
             var videoData = this.options.videoData[number - 1],
-                $image = fotorama.data[number - 1],
-                videoEventIsSet = false;
+                $image = fotorama.data[number - 1];
 
             if ($image) {
                 !$image.type && this._setItemType($image, number - 1);
