@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Web;
 
+/**
+ * @api
+ */
 class Redirect implements \Magento\Framework\Option\ArrayInterface
 {
     /**

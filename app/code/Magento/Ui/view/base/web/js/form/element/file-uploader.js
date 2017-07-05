@@ -330,7 +330,7 @@ define([
 
             if (allowed.passed) {
                 target.on('fileuploadsend', function (event, postData) {
-                    postData.data.set('param_name', this.paramName);
+                    postData.data.append('param_name', this.paramName);
                 }.bind(data));
 
                 target.fileupload('process', data).done(function () {

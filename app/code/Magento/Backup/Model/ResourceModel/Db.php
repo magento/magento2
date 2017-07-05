@@ -7,6 +7,7 @@ namespace Magento\Backup\Model\ResourceModel;
 
 /**
  * Database backup resource model
+ * @api
  */
 class Db
 {
