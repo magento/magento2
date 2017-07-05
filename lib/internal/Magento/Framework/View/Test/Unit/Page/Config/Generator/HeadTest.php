@@ -6,10 +6,12 @@
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Generator;
 
-use \Magento\Framework\View\Page\Config\Generator\Head;
-
+use Magento\Framework\View\Page\Config\Generator\Head;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\Generator\Context;
+use Magento\Framework\View\Page\Config\Structure;
+use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 
 /**
  * Test for page config generator model
@@ -60,20 +62,11 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $generatorContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $generatorContextMock = $this->getMock(Context::class, [], [], '', false);
         $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
-        $structureMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $readerContextMock->expects($this->any())
-            ->method('getPageConfigStructure')
-            ->willReturn($structureMock);
+        $structureMock = $this->getMock(Structure::class, [], [], '', false);
+        $readerContextMock = $this->getMock(ReaderContext::class, [], [], '', false);
+        $readerContextMock->expects($this->any())->method('getPageConfigStructure')->willReturn($structureMock);
 
         $structureMock->expects($this->once())->method('processRemoveAssets');
         $structureMock->expects($this->once())->method('processRemoveElementAttributes');
@@ -158,9 +151,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
                 [PageConfig::ELEMENT_TYPE_HTML, 'html_attr_1', 'html_attr_1']
             );
 
-        $this->assertEquals(
-            $this->headGenerator,
-            $this->headGenerator->process($readerContextMock, $generatorContextMock)
-        );
+        $result = $this->headGenerator->process($readerContextMock, $generatorContextMock);
+        $this->assertEquals($this->headGenerator, $result);
     }
 }
