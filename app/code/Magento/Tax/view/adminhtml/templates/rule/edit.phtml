@@ -80,7 +80,7 @@ require([
             $.ajax({
                 type: "POST",
                 data: {id:id},
-                url: '<?php /* @escapeNotVerified */ echo $block->getTaxRateLoadUrl()?>',
+                url: '<?= /* @escapeNotVerified */ $block->getTaxRateLoadUrl() ?>',
                 success: function(result, status) {
                     $('body').trigger('processStop');
                     if (result.success) {
@@ -97,14 +97,14 @@ require([
                             });
                         else
                             alert({
-                                content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                content: '<?= /* @escapeNotVerified */ __('An error occurred') ?>'
                             });
                     }
                 },
                 error: function () {
                     $('body').trigger('processStop');
                     alert({
-                        content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                        content: '<?= /* @escapeNotVerified */ __('An error occurred') ?>'
                     });
                 },
                 dataType: "json"
@@ -114,7 +114,7 @@ require([
         TaxRateEditableMultiselect.prototype.init = function () {
             var options = {
                 toggleAddButton:false,
-                addText: '<?php /* @escapeNotVerified */ echo __('Add New Tax Rate'); ?>',
+                addText: '<?= /* @escapeNotVerified */ __('Add New Tax Rate') ?>',
                 parse: null,
                 mselectInputSubmitCallback: function (value, options) {
                     var select = $('#tax_rate');
@@ -136,7 +136,7 @@ require([
             var taxRate = $('#tax_rate'),
                 taxRateField = taxRate.parent(),
                 taxRateForm = $('#tax-rate-form'),
-                taxRateFormElement = $('#<?php /* @escapeNotVerified */ echo \Magento\Tax\Block\Adminhtml\Rate\Form::FORM_ELEMENT_ID ?>');
+                taxRateFormElement = $('#<?= /* @escapeNotVerified */ \Magento\Tax\Block\Adminhtml\Rate\Form::FORM_ELEMENT_ID ?>');
 
             if (!this.isEntityEditable) {
                 // Override default layout of editable multiselect
@@ -160,7 +160,7 @@ require([
             taxRateField.find('.mselect-list')
                     .on('click.mselect-edit', '.mselect-edit', this.edit)
                     .on("click.mselect-delete", ".mselect-delete", function () {
-                        if (!confirm('<?php /* @escapeNotVerified */ echo __('Do you really want to delete this tax rate?'); ?>')) {
+                        if (!confirm('<?= /* @escapeNotVerified */ __('Do you really want to delete this tax rate?') ?>')) {
                             return;
                         }
 
@@ -176,7 +176,7 @@ require([
                                 form_key: $('input[name="form_key"]').val()
                             },
                             dataType: 'json',
-                            url: '<?php /* @escapeNotVerified */ echo $block->getTaxRateDeleteUrl()?>',
+                            url: '<?= /* @escapeNotVerified */ $block->getTaxRateDeleteUrl() ?>',
                             success: function(result, status) {
                                 $('body').trigger('processStop');
                                 if (result.success) {
@@ -189,14 +189,14 @@ require([
                                         });
                                     else
                                         alert({
-                                            content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                            content: '<?= /* @escapeNotVerified */ __('An error occurred') ?>'
                                         });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
                                 alert({
-                                    content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                    content: '<?= /* @escapeNotVerified */ __('An error occurred') ?>'
                                 });
                             }
                         };
@@ -217,15 +217,15 @@ require([
             taxRateFormElement.mage('form').mage('validation');
 
             taxRateForm.dialogRates({
-                title: '<?php /* @escapeNotVerified */ echo __('Tax Rate'); ?>',
+                title: '<?= /* @escapeNotVerified */ __('Tax Rate') ?>',
                 type: 'slide',
-                id: '<?php /* @escapeNotVerified */ echo $block->getJsId() ?>',
+                id: '<?= /* @escapeNotVerified */ $block->getJsId() ?>',
                 modalClass: 'tax-rate-popup',
                 closed: function () {
                     taxRateFormElement.data('validation').clearError();
                 },
                 buttons: [{
-                    text: '<?php /* @escapeNotVerified */ echo __('Save'); ?>',
+                    text: '<?= /* @escapeNotVerified */ __('Save') ?>',
                     'class': 'action-save action-primary',
                     click: function() {
                         this.updateItemRate();
@@ -245,7 +245,7 @@ require([
                             type: 'POST',
                             data: itemRateData,
                             dataType: 'json',
-                            url: '<?php /* @escapeNotVerified */ echo $block->getTaxRateSaveUrl()?>',
+                            url: '<?= /* @escapeNotVerified */ $block->getTaxRateSaveUrl() ?>',
                             success: function(result, status) {
                                 $('body').trigger('processStop');
                                 if (result.success) {
@@ -271,14 +271,14 @@ require([
                                         });
                                     else
                                         alert({
-                                            content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                            content: '<?= /* @escapeNotVerified */ __('An error occurred') ?>'
                                         });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
                                 alert({
-                                    content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                    content: '<?= /* @escapeNotVerified */ __('An error occurred') ?>'
                                 });
                             }
                         };

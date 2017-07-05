@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Structure;
 
+/**
+ * @api
+ */
 abstract class AbstractMapper implements MapperInterface
 {
     /**
