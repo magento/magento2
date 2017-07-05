@@ -7,9 +7,9 @@
 namespace Magento\Setup\Model\FixtureGenerator;
 
 /**
- * Class provides information about MySQL configuration settings.
+ * Class provides information about MySQL auto_increment configuration setting.
  */
-class DbConfigurationHelper
+class AutoIncrement
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
@@ -34,7 +34,7 @@ class DbConfigurationHelper
      *
      * @return int
      */
-    public function getAutoIncrementIncrement()
+    public function getIncrement()
     {
         if ($this->incrementValue === null) {
             $increment = $this->resource->getConnection()->fetchRow('SHOW VARIABLES LIKE "auto_increment_increment"');
