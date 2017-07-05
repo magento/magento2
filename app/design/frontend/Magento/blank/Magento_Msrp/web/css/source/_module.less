@@ -40,6 +40,12 @@
                 }
             }
         }
+
+        .regular-price {
+            .price-label {
+                display: none;
+            }
+        }
     }
 
     .map-old-price,
@@ -65,6 +71,11 @@
             display: block;
             margin: 0 auto;
         }
+    }
+
+    button.map-show-info {
+        .lib-button-reset();
+        .lib-button-as-link();
     }
 }
 

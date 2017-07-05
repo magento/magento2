@@ -53,7 +53,7 @@ class Manual implements AlgorithmInterface
     }
 
     /**
-     * @param array $items \
+     * @param array $items
      * @param int $maxIntervalsNumber
      * @return array
      */

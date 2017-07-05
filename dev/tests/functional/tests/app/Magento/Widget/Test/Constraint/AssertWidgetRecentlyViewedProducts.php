@@ -80,7 +80,17 @@ class AssertWidgetRecentlyViewedProducts extends AbstractConstraint
         $productSimple->persist();
         $category->persist();
         $this->browser->open($_ENV['app_frontend_url'] . $productSimple->getUrlKey() . '.html');
+        $this->waitForJsCoreInitialize();
         $this->checkRecentlyViewedBlockOnCategory($productSimple, $category);
+    }
+
+    /**
+     * as JS is loaded after page is initialized we should have time it to load
+     * @return void
+     */
+    private function waitForJsCoreInitialize()
+    {
+        sleep(1);
     }
 
     /**
