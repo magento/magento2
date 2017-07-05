@@ -10,14 +10,11 @@
  */
 ?>
 
-<?= /* @escapeNotVerified */
-$block->renderApp(
-    [
-        'widget_columns' => [
-            'displayMode' => 'grid'
-        ],
-        'image' => [
-            'imageCode' => 'recently_viewed_products_grid_content_widget'
-        ]
+<?= /* @escapeNotVerified */ $block->renderApp([
+    'widget_columns' => [
+        'displayMode' => 'grid'
+    ],
+    'image' => [
+        'imageCode' => 'recently_viewed_products_grid_content_widget'
     ]
-);
+]);
