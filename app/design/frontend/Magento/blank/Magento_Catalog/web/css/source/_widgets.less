@@ -69,6 +69,16 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block.widget .products-grid .product-item {
         width: 100%/3;
+
+        .sidebar & {
+            margin-left: 0;
+            width: 100%;
+
+            .actions-secondary {
+                display: block;
+                padding: 10px 0;
+            }
+        }
     }
 
     .page-layout-1column .block.widget .products-grid .product-item {

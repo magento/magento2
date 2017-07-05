@@ -13,6 +13,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 
+/**
+ * @api
+ */
 class RequestGenerator
 {
     /** Filter name suffix */

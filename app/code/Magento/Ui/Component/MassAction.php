@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component;
 
 /**
- * Class MassAction
+ * @api
  */
 class MassAction extends AbstractComponent
 {

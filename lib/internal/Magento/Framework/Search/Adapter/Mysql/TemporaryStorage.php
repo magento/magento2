@@ -10,6 +10,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 
+/**
+ * @api
+ */
 class TemporaryStorage
 {
     const TEMPORARY_TABLE_PREFIX = 'search_tmp_';
