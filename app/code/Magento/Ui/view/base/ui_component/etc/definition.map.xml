@@ -128,6 +128,7 @@
                     <item name="dateFormat" type="string" xsi:type="xpath">settings/dateFormat</item>
                     <item name="timeFormat" type="string" xsi:type="xpath">settings/timeFormat</item>
                     <item name="timezone" type="string" xsi:type="xpath">settings/timezone</item>
+                    <item name="skipTime" type="boolean" xsi:type="xpath">settings/skipTime</item>
                     <item name="editor" xsi:type="array">
                         <item name="editorType" type="string" xsi:type="xpath">settings/editor/editorType</item>
                         <item name="validation" type="item" xsi:type="converter">settings/editor/validation</item>
@@ -239,6 +240,7 @@
                     <item name="showsTime" type="boolean" xsi:type="xpath">settings/showsTime</item>
                     <item name="dateFormat" type="string" xsi:type="xpath">settings/dateFormat</item>
                     <item name="timeFormat" type="string" xsi:type="xpath">settings/timeFormat</item>
+                    <item name="skipTime" type="string" xsi:type="xpath">settings/skipTime</item>
                 </item>
             </argument>
         </schema>
