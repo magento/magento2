@@ -82,6 +82,7 @@ class CustomerWebapisPermissionTest extends Injectable
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'wysiwyg_disabled']
         )->run();
+
         return ['cmsOriginal' => $cmsOriginal];
     }
 
@@ -89,21 +90,25 @@ class CustomerWebapisPermissionTest extends Injectable
      * Construct cms page with a form that contains webapi request and 'Submit Request' button.
      *
      * @param CmsPage $cmsOriginal
+     * @param string $url
+     * @param string $method
      * @return array
      */
-    public function test(CmsPage $cmsOriginal)
+    public function test(CmsPage $cmsOriginal, $url, $method = 'POST')
     {
         $this->cmsPageIndex->open();
         $this->cmsPageIndex->getCmsPageGridBlock()->searchAndOpen(['title' => $cmsOriginal->getTitle()]);
         $data = $cmsOriginal->getData();
-        $content = '<p><form action="'
-            . $_ENV['app_frontend_url']
-            . 'rest/V1/carts/mine/balance/apply" method="POST">'
-            . '<input type="submit" value="Submit Request" /></form></p>';
+        $content = <<<HTML
+            <form action="$url" method="$method" >
+                <input type="submit" value="Submit Request" />
+            </form>
+HTML;
         $data['content'] = ['content' => $content];
         $cms = $this->factory->createByCode('cmsPage', ['data' => $data]);
         $this->cmsPageNew->getPageForm()->fill($cms);
         $this->cmsPageNew->getPageMainActions()->save();
+        
         return ['cms' => $cms];
     }
 }
