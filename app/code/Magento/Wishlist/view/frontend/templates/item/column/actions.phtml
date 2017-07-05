@@ -10,9 +10,9 @@
 ?>
 <?php $children = $block->getChildNames(); ?>
 <?php if ($children): ?>
-    <div class="<?php echo $block->escapeHtmlAttr($block->getCssClass()) ?>">
+    <div class="<?= $block->escapeHtmlAttr($block->getCssClass()) ?>">
         <?php foreach ($children as $childName):?>
-            <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false);?>
+            <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
         <?php endforeach;?>
     </div>
 <?php endif; ?>
