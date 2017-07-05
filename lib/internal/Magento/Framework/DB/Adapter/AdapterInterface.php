@@ -464,7 +464,7 @@ interface AdapterInterface
      *      array('value1', 'value2')
      *
      * @param   string $table
-     * @param   array $columns  the data array column map
+     * @param   string[] $columns  the data array column map
      * @param   array $data
      * @return  int
      */

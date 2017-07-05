@@ -408,7 +408,7 @@
         <section id="web" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Web</label>
             <tab>general</tab>
-            <resource>Magento_Backend::web</resource>
+            <resource>Magento_Config::web</resource>
             <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Url Options</label>
                 <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
