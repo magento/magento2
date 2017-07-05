@@ -119,6 +119,17 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Check if temporary file is available for new image upload.
+     *
+     * @param array $value
+     * @return bool
+     */
+    private function isTmpFileAvailable($value)
+    {
+        return is_array($value) && isset($value[0]['tmp_name']);
+    }
+
+    /**
      * Save uploaded file and set its name to category
      *
      * @param \Magento\Framework\DataObject $object
@@ -128,17 +139,13 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
 
-        if(isset($value[0]['tmp_name'])) {
-            // A file was just uploaded, so process it
-            if ($imageName = $this->getUploadedImageName($value)) {
-                try {
-                    $this->getImageUploader()->moveFileFromTmp($imageName);
-                } catch (\Exception $e) {
-                    $this->_logger->critical($e);
-                }
+        if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
+            try {
+                $this->getImageUploader()->moveFileFromTmp($imageName);
+            } catch (\Exception $e) {
+                $this->_logger->critical($e);
             }
         }
-
         return $this;
     }
 }
