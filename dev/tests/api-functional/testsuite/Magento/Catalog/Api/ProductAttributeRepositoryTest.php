@@ -142,6 +142,8 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_used_in_grid' => true,
                 'default_frontend_label' => 'default_label_new',
                 'frontend_labels' => [
                     ['store_id' => 1, 'label' => 'front_lbl_new'],
@@ -183,6 +185,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertEquals($attribute['is_used_in_grid'], $result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label_new', $result['default_frontend_label']);
         //New option set as default
