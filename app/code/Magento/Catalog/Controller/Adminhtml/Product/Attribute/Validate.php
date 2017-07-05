@@ -109,7 +109,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 $response,
                 $options
             );
-            $valueOptions = is_array($options['value']) ? $options['value'] : [];
+            $valueOptions = (isset($options['value']) && is_array($options['value'])) ? $options['value'] : [];
             $this->checkEmptyOption($response, $valueOptions);
         }
 
