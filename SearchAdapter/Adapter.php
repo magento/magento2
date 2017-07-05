@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Response\QueryResponse;
@@ -40,21 +41,30 @@ class Adapter implements AdapterInterface
     protected $aggregationBuilder;
 
     /**
+     * @var QueryContainerFactory
+     */
+    private $queryContainerFactory;
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
      * @param AggregationBuilder $aggregationBuilder
+     * @param QueryContainerFactory $queryContainerFactory
      */
     public function __construct(
         ConnectionManager $connectionManager,
         Mapper $mapper,
         ResponseFactory $responseFactory,
-        AggregationBuilder $aggregationBuilder
+        AggregationBuilder $aggregationBuilder,
+        QueryContainerFactory $queryContainerFactory = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->mapper = $mapper;
         $this->responseFactory = $responseFactory;
         $this->aggregationBuilder = $aggregationBuilder;
+        $this->queryContainerFactory = $queryContainerFactory
+            ?: ObjectManager::getInstance()->get(QueryContainerFactory::class);
     }
 
     /**
@@ -64,12 +74,20 @@ class Adapter implements AdapterInterface
     public function query(RequestInterface $request)
     {
         $client = $this->connectionManager->getConnection();
+        $aggregationBuilder = $this->aggregationBuilder;
+
         $query = $this->mapper->buildQuery($request);
+        $aggregationBuilder->setQuery($this->queryContainerFactory->create(['query' => $query]));
         $rawResponse = $client->query($query);
+
         $rawDocuments = isset($rawResponse['hits']['hits']) ? $rawResponse['hits']['hits'] : [];
-        return $this->responseFactory->create([
-            'documents' => $rawDocuments,
-            'aggregations' => $this->aggregationBuilder->build($request, $rawResponse),
-        ]);
+
+        $queryResponse = $this->responseFactory->create(
+            [
+                'documents' => $rawDocuments,
+                'aggregations' => $aggregationBuilder->build($request, $rawResponse),
+            ]
+        );
+        return $queryResponse;
     }
 }
