@@ -15,27 +15,45 @@ $_order     = $block->getOrder();
 $_fullInfo  = $block->getFullTaxInfo();
 ?>
 
+<?php if ($block->displayFullSummary() && $_fullInfo): ?>
+<tr class="summary-total" onclick="expandDetails(this, '.summary-details')">
+<?php else: ?>
+<tr>
+    <?php endif; ?>
+    <td class="label">
+        <div class="summary-collapse" tabindex="0">
+            <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
+                <?= /* @escapeNotVerified */ __('Total Tax') ?>
+            <?php else: ?>
+                <?= /* @escapeNotVerified */ __('Tax') ?>
+            <?php endif;?>
+        </div>
+    </td>
+    <td>
+        <?= /* @escapeNotVerified */ $block->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()) ?>
+    </td>
+</tr>
 <?php if ($block->displayFullSummary()): ?>
     <?php $isTop = 1; ?>
     <?php if (isset($_fullInfo[0]['rates'])): ?>
         <?php foreach ($_fullInfo as $info): ?>
             <?php if (isset($info['hidden']) && $info['hidden']) {
-    continue;
-} ?>
+                continue;
+            } ?>
             <?php
-                $percent    = $info['percent'];
-                $amount     = $info['amount'];
-                $baseAmount = $info['base_amount'];
-                $rates      = $info['rates'];
-                $isFirst    = 1;
+            $percent    = $info['percent'];
+            $amount     = $info['amount'];
+            $baseAmount = $info['base_amount'];
+            $rates      = $info['rates'];
+            $isFirst    = 1;
             ?>
 
             <?php foreach ($rates as $rate): ?>
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                 <?php if (!is_null($rate['percent'])): ?>
-                    <td class="label"><?= /* @escapeNotVerified */ $rate['title'] ?> (<?= (float)$rate['percent'] ?>%)<br /></td>
+                    <td class="admin__total-mark"><?= /* @escapeNotVerified */ $rate['title'] ?> (<?= (float)$rate['percent'] ?>%)<br /></td>
                 <?php else: ?>
-                    <td class="label"><?= /* @escapeNotVerified */ $rate['title'] ?><br /></td>
+                    <td class="admin__total-mark"><?= /* @escapeNotVerified */ $rate['title'] ?><br /></td>
                 <?php endif; ?>
                 <?php if ($isFirst): ?>
                     <td rowspan="<?= count($rates) ?>"><?= /* @escapeNotVerified */ $block->displayAmount($amount, $baseAmount) ?></td>
@@ -44,48 +62,31 @@ $_fullInfo  = $block->getFullTaxInfo();
             <?php
                 $isFirst = 0;
                 $isTop = 0;
-            ?>
+                ?>
             <?php endforeach; ?>
         <?php endforeach; ?>
     <?php else: ?>
         <?php foreach ($_fullInfo as $info): ?>
             <?php
-                $percent    = $info['percent'];
-                $amount     = $info['tax_amount'];
-                $baseAmount = $info['base_tax_amount'];
-                $isFirst    = 1;
+            $percent    = $info['percent'];
+            $amount     = $info['tax_amount'];
+            $baseAmount = $info['base_tax_amount'];
+            $isFirst    = 1;
             ?>
 
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                 <?php if (!is_null($info['percent'])): ?>
-                    <td class="label"><?= $block->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br /></td>
+                    <td class="admin__total-mark"><?= $block->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br /></td>
                 <?php else: ?>
-                    <td class="label"><?= $block->escapeHtml($info['title']) ?><br /></td>
+                    <td class="admin__total-mark"><?= $block->escapeHtml($info['title']) ?><br /></td>
                 <?php endif; ?>
                     <td><?= /* @escapeNotVerified */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>
             <?php
-                $isFirst = 0;
-                $isTop = 0;
+            $isFirst = 0;
+            $isTop = 0;
             ?>
         <?php endforeach; ?>
     <?php endif; ?>
 <?php endif;?>
-<?php if ($block->displayFullSummary() && $_fullInfo): ?>
-<tr class="summary-total" onclick="expandDetails(this, '.summary-details')">
-<?php else: ?>
-<tr>
-<?php endif; ?>
-    <td class="label">
-        <div class="summary-collapse">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <?= /* @escapeNotVerified */ __('Total Tax') ?>
-        <?php else: ?>
-            <?= /* @escapeNotVerified */ __('Tax') ?>
-        <?php endif;?>
-        </div>
-    </td>
-    <td>
-        <?= /* @escapeNotVerified */ $block->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()) ?>
-    </td>
-</tr>
+
