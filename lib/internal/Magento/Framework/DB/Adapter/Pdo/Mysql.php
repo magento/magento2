@@ -1973,12 +1973,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *      array('value1', 'value2')
      *
      * @param   string $table
-     * @param   array $columns
+     * @param   string[] $columns
      * @param   array $data
-     * @return  int
-     * @throws  \Zend_Db_Exception
+     * @param   int $strategy
+     * @return int
+     * @throws \Zend_Db_Exception
      */
-    public function insertArray($table, array $columns, array $data)
+    public function insertArray($table, array $columns, array $data, $strategy = 0)
     {
         $values       = [];
         $bind         = [];
@@ -1990,10 +1991,16 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $values[] = $this->_prepareInsertData($row, $bind);
         }
 
-        $insertQuery = $this->_getInsertSqlQuery($table, $columns, $values);
+        switch ($strategy) {
+            case self::INSERT_ON_DUPLICATE:
+                $query = $this->_getReplaceSqlQuery($table, $columns, $values);
+                break;
+            default:
+                $query = $this->_getInsertSqlQuery($table, $columns, $values);
+        }
 
         // execute the statement and return the number of affected rows
-        $stmt   = $this->query($insertQuery, $bind);
+        $stmt   = $this->query($query, $bind);
         $result = $stmt->rowCount();
 
         return $result;
@@ -3633,6 +3640,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $insertSql = sprintf('INSERT INTO %s (%s) VALUES %s', $tableName, $columns, $values);
 
         return $insertSql;
+    }
+
+    /**
+     * Return replace sql query
+     *
+     * @param string $tableName
+     * @param array $columns
+     * @param array $values
+     * @return string
+     */
+    protected function _getReplaceSqlQuery($tableName, array $columns, array $values)
+    {
+        $tableName = $this->quoteIdentifier($tableName, true);
+        $columns   = array_map([$this, 'quoteIdentifier'], $columns);
+        $columns   = implode(',', $columns);
+        $values    = implode(', ', $values);
+
+        $replaceSql = sprintf('REPLACE INTO %s (%s) VALUES %s', $tableName, $columns, $values);
+
+        return $replaceSql;
     }
 
     /**
