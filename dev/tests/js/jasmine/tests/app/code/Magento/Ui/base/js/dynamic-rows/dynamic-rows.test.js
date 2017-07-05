@@ -31,9 +31,8 @@ define([
      *
      * @return void
      */
-    beforeEach(function (done) {
+    beforeEach(function () {
         model = new DynamicRows({});
-        done();
     });
 
     /**
@@ -42,6 +41,24 @@ define([
      * @return void
      */
     describe('Magento_Ui/js/dynamic-rows/dynamic-rows', function () {
+        it('Calls "setMaxPosition" method without position.', function () {
+            model.maxPosition = 0;
+            model.setMaxPosition(false);
+
+            expect(model.maxPosition).toEqual(1);
+        });
+
+        it('Calls "setMaxPosition" method with position 0.', function () {
+            var elem = {};
+
+            model.checkMaxPosition = jasmine.createSpy();
+            model.sort = jasmine.createSpy();
+            model.setMaxPosition(0, elem);
+
+            expect(model.checkMaxPosition).toHaveBeenCalledWith(0);
+            expect(model.sort).toHaveBeenCalledWith(0, elem);
+        });
+
         it('changePage without Records', function () {
             /**
              * Mock function which return length of record data
