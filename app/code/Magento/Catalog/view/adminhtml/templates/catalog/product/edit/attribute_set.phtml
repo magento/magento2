@@ -32,7 +32,7 @@
             }
         });
         $suggest
-            .mage('suggest',<?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions())?>)
+            .mage('suggest',<?= /* @escapeNotVerified */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSelectorOptions()) ?>)
             .on('suggestselect', function (e, ui) {
                 if (ui.item.id) {
                     $('[data-form=edit-product]').trigger('changeAttributeSet', ui.item);

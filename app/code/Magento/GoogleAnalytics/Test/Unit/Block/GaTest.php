@@ -19,6 +19,9 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GaTest extends PHPUnit_Framework_TestCase
 {
 
@@ -27,46 +30,56 @@ class GaTest extends PHPUnit_Framework_TestCase
      */
     protected $gaBlock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cookieHelperMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $salesOrderCollectionMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $googleAnalyticsDataMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
 
         $contextMock->expects($this->once())
             ->method('getEscaper')
             ->willReturn($objectManager->getObject(Escaper::class));
 
-        $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeMock = $this->getMockBuilder(Store::class)
+        $this->storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()->getMock();
+        $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
+
+        $this->salesOrderCollectionMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeMock->expects($this->once())
-            ->method('getFrontendName')
-            ->willReturn('test');
-
-        $storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->willReturn($storeMock);
-
-        $contextMock->expects($this->once())
-            ->method('getStoreManager')
-            ->willReturn($storeManagerMock);
-
-        $salesOrderCollectionMock = $this->getMockBuilder(CollectionFactory::class)
+        $this->googleAnalyticsDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $salesOrderCollectionMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->createCollectionMock());
-
-        $googleAnalyticsDataMock = $this->getMockBuilder(Data::class)
+        $this->cookieHelperMock = $this->getMockBuilder(\Magento\Cookie\Helper\Cookie::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -74,14 +87,21 @@ class GaTest extends PHPUnit_Framework_TestCase
             Ga::class,
             [
                 'context' => $contextMock,
-                'salesOrderCollection' => $salesOrderCollectionMock,
-                'googleAnalyticsData' => $googleAnalyticsDataMock
+                'salesOrderCollection' => $this->salesOrderCollectionMock,
+                'googleAnalyticsData' => $this->googleAnalyticsDataMock,
+                'cookieHelper' => $this->cookieHelperMock
             ]
         );
     }
 
     public function testOrderTrackingCode()
     {
+        $this->salesOrderCollectionMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->createCollectionMock());
+        $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+
         $expectedCode = "ga('require', 'ec', 'ec.js');
             ga('ec:addProduct', {
                                     'id': 'sku0',
@@ -90,7 +110,7 @@ class GaTest extends PHPUnit_Framework_TestCase
                                     'quantity': 1
                                 });
             ga('ec:setAction', 'purchase', {
-                                'id': '',
+                                'id': '100',
                                 'affiliation': 'test',
                                 'revenue': '10',
                                 'tax': '2',
@@ -103,6 +123,68 @@ class GaTest extends PHPUnit_Framework_TestCase
             $this->packString($expectedCode),
             $this->packString($this->gaBlock->getOrdersTrackingCode())
         );
+    }
+
+    public function testIsCookieRestrictionModeEnabled()
+    {
+        $this->cookieHelperMock->expects($this->once())->method('isCookieRestrictionModeEnabled')->willReturn(false);
+        $this->assertFalse($this->gaBlock->isCookieRestrictionModeEnabled());
+    }
+
+    public function testGetCurrentWebsiteId()
+    {
+        $websiteId = 100;
+        $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)->getMock();
+        $websiteMock->expects($this->once())->method('getId')->willReturn($websiteId);
+        $this->storeManagerMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
+        $this->assertEquals($websiteId, $this->gaBlock->getCurrentWebsiteId());
+    }
+
+    public function testOrderTrackingData()
+    {
+        $this->salesOrderCollectionMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->createCollectionMock());
+        $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+
+        $expectedResult = [
+            'orders' => [
+                [
+                    'id' => 100,
+                    'affiliation' => 'test',
+                    'revenue' => 10,
+                    'tax' => 2,
+                    'shipping' => 1
+                ]
+            ],
+            'products' => [
+                [
+                    'id' => 'sku0',
+                    'name' => 'testName0',
+                    'price' => 0.00,
+                    'quantity' => 1
+                ]
+            ]
+        ];
+
+        $this->gaBlock->setOrderIds([1, 2]);
+        $this->assertEquals($expectedResult, $this->gaBlock->getOrdersTrackingData());
+    }
+
+    public function testGetPageTrackingData()
+    {
+        $pageName = '/page/name';
+        $accountId = 100;
+        $expectedResult = [
+            'optPageUrl' => ", '" . $pageName . "'",
+            'isAnonymizedIpActive' => true,
+            'accountId' => $accountId
+        ];
+        $this->gaBlock->setData('page_name', $pageName);
+        $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')->willReturn(true);
+        
+        $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
     }
 
     /**
@@ -118,41 +200,19 @@ class GaTest extends PHPUnit_Framework_TestCase
             $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-
-            $orderItemMock->expects($this->once())
-                ->method('getSku')
-                ->willReturn('sku' . $i);
-
-            $orderItemMock->expects($this->once())
-                ->method('getName')
-                ->willReturn('testName' . $i);
-
-            $orderItemMock->expects($this->once())
-                ->method('getBasePrice')
-                ->willReturn($i . '.00');
-            $orderItemMock->expects($this->once())
-                ->method('getQtyOrdered')
-                ->willReturn($i + 1);
-
+            $orderItemMock->expects($this->once())->method('getSku')->willReturn('sku' . $i);
+            $orderItemMock->expects($this->once())->method('getName')->willReturn('testName' . $i);
+            $orderItemMock->expects($this->once())->method('getBasePrice')->willReturn($i . '.00');
+            $orderItemMock->expects($this->once())->method('getQtyOrdered')->willReturn($i + 1);
             $orderItems[] = $orderItemMock;
         }
 
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $orderMock->expects($this->once())
-            ->method('getAllVisibleItems')
-            ->willReturn($orderItems);
-        $orderMock->expects($this->once())
-            ->method('getBaseGrandTotal')
-            ->willReturn(10);
-        $orderMock->expects($this->once())
-            ->method('getBaseTaxAmount')
-            ->willReturn(2);
-        $orderMock->expects($this->once())
-            ->method('getBaseShippingAmount')
-            ->willReturn($orderItemCount);
+        $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+        $orderMock->expects($this->once())->method('getIncrementId')->willReturn(100);
+        $orderMock->expects($this->once())->method('getAllVisibleItems')->willReturn($orderItems);
+        $orderMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(10);
+        $orderMock->expects($this->once())->method('getBaseTaxAmount')->willReturn(2);
+        $orderMock->expects($this->once())->method('getBaseShippingAmount')->willReturn($orderItemCount);
         return $orderMock;
     }
 

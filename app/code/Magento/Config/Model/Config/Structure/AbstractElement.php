@@ -9,6 +9,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * @api
+ */
 abstract class AbstractElement implements ElementInterface
 {
     /**

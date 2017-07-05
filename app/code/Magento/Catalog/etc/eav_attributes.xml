@@ -43,5 +43,8 @@
         <attribute code="media_gallery">
             <field code="is_searchable" locked="true" />
         </attribute>
+        <attribute code="tier_price">
+            <field code="used_for_sort_by" locked="true" />
+        </attribute>
     </entity>
 </config>

@@ -17,6 +17,7 @@ interface SerializerInterface
      *
      * @param string|int|float|bool|array|null $data
      * @return string|bool
+     * @throws \InvalidArgumentException
      */
     public function serialize($data);
 
@@ -25,6 +26,7 @@ interface SerializerInterface
      *
      * @param string $string
      * @return string|int|float|bool|array|null
+     * @throws \InvalidArgumentException
      */
     public function unserialize($string);
 }

@@ -11,6 +11,8 @@ use Magento\Framework\App\Config\Initial\Reader;
 
 /**
  * Class for retrieving initial configuration from modules
+ *
+ * @api
  */
 class ModularConfigSource implements ConfigSourceInterface
 {

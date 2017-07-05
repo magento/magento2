@@ -10,9 +10,9 @@
 ?>
 
 <div data-block="minicart" class="minicart-wrapper">
-    <a class="action showcart" href="<?php /* @escapeNotVerified */ echo $block->getShoppingCartUrl(); ?>"
+    <a class="action showcart" href="<?= /* @escapeNotVerified */ $block->getShoppingCartUrl() ?>"
        data-bind="scope: 'minicart_content'">
-        <span class="text"><?php /* @escapeNotVerified */ echo __('My Cart'); ?></span>
+        <span class="text"><?= /* @escapeNotVerified */ __('My Cart') ?></span>
         <span class="counter qty empty"
               data-bind="css: { empty: !!getCartParam('summary_count') == false }, blockLoader: isLoading">
             <span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
@@ -39,19 +39,19 @@
             <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
                 <!-- ko template: getTemplate() --><!-- /ko -->
             </div>
-            <?php echo $block->getChildHtml('minicart.addons'); ?>
+            <?= $block->getChildHtml('minicart.addons') ?>
         </div>
     <?php endif ?>
     <script>
-        window.checkout = <?php /* @escapeNotVerified */ echo $block->getSerializedConfig(); ?>;
+        window.checkout = <?= /* @escapeNotVerified */ $block->getSerializedConfig() ?>;
     </script>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
-            "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+            "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>
         },
         "*": {
-            "Magento_Ui/js/block-loader": "<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/loader-1.gif'); ?>"
+            "Magento_Ui/js/block-loader": "<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>"
         }
     }
     </script>

@@ -154,6 +154,13 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     private $serializerMock;
 
     /**
+     * Product repository cache limit.
+     *
+     * @var int
+     */
+    private $cacheLimit = 2;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -337,6 +344,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'mediaGalleryProcessor' => $this->mediaGalleryProcessor,
                 'collectionProcessor' => $this->collectionProcessorMock,
                 'serializer' => $this->serializerMock,
+                'cacheLimit' => $this->cacheLimit
             ]
         );
     }
@@ -378,6 +386,19 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('load')->with('test_id');
         $this->productMock->expects($this->once())->method('getSku')->willReturn($sku);
         $this->assertEquals($this->productMock, $this->model->get($sku, true));
+    }
+
+    public function testGetBySkuWithSpace()
+    {
+        $trimmedSku = 'test_sku';
+        $sku = 'test_sku ';
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
+            ->will($this->returnValue('test_id'));
+        $this->productMock->expects($this->once())->method('load')->with('test_id');
+        $this->productMock->expects($this->once())->method('getSku')->willReturn($trimmedSku);
+        $this->assertEquals($this->productMock, $this->model->get($sku));
     }
 
     public function testGetWithSetStoreId()
@@ -467,6 +488,61 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
         //force reload
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId, true));
+    }
+
+    /**
+     * Test for getById() method if we try to get products when cache is already filled and is reduced.
+     *
+     * @return void
+     */
+    public function testGetByIdWhenCacheReduced()
+    {
+        $result = [];
+        $expectedResult = [];
+        $productsCount = $this->cacheLimit * 2;
+
+        $productMocks =  $this->getProductMocksForReducedCache($productsCount);
+        $productFactoryInvMock = $this->productFactoryMock->expects($this->exactly($productsCount))
+            ->method('create');
+        call_user_func_array([$productFactoryInvMock, 'willReturnOnConsecutiveCalls'], $productMocks);
+        $this->serializerMock->expects($this->atLeastOnce())->method('serialize');
+
+        for ($i = 1; $i <= $productsCount; $i++) {
+            $product = $this->model->getById($i, false, 0);
+            $result[] = $product->getId();
+            $expectedResult[] = $i;
+        }
+
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * Get product mocks for testGetByIdWhenCacheReduced() method.
+     *
+     * @param int $productsCount
+     * @return array
+     */
+    private function getProductMocksForReducedCache($productsCount)
+    {
+        $productMocks = [];
+
+        for ($i = 1; $i <= $productsCount; $i++) {
+            $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+                ->disableOriginalConstructor()
+                ->setMethods([
+                    'getId',
+                    'getSku',
+                    'load',
+                    'setData',
+                ])
+                ->getMock();
+            $productMock->expects($this->once())->method('load');
+            $productMock->expects($this->atLeastOnce())->method('getId')->willReturn($i);
+            $productMock->expects($this->atLeastOnce())->method('getSku')->willReturn($i . uniqid());
+            $productMocks[] = $productMock;
+        }
+
+        return $productMocks;
     }
 
     /**
