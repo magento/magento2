@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Page\Config\Generator;
 
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config\Structure;
+use Magento\Framework\App\ObjectManager;
 
 class Head implements Layout\GeneratorInterface
 {
@@ -60,20 +61,20 @@ class Head implements Layout\GeneratorInterface
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected $url;
+    private $url;
 
     /**
      * Constructor
      *
      * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\UrlInterface|null $url
      */
     public function __construct(
         \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\UrlInterface $url 
+        \Magento\Framework\UrlInterface $url = null
     ) {
         $this->pageConfig = $pageConfig;
-        $this->url = $url;
+        $this->url = $url ?: ObjectManager::getInstance()->get(\Magento\Framework\UrlInterface::class);
     }
 
     /**
