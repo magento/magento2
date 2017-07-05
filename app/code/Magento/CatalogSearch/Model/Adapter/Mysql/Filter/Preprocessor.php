@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -20,9 +19,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Session;
+use Magento\CatalogSearch\Model\Search\FilterMapper\VisibilityFilter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -166,6 +165,8 @@ class Preprocessor implements PreprocessorInterface
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
+        } elseif ($filter->getField() === VisibilityFilter::VISIBILITY_FILTER_FIELD) {
+            return '';
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM &&
             in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
         ) {
@@ -265,29 +266,7 @@ class Preprocessor implements PreprocessorInterface
             $value
         );
 
-        if ($this->isAddStockFilter()) {
-            $resultQuery = sprintf(
-                '%1$s AND %2$s%3$s.stock_status = %4$s',
-                $resultQuery,
-                $alias,
-                AliasResolver::STOCK_FILTER_SUFFIX,
-                Stock::STOCK_IN_STOCK
-            );
-        }
-
         return $resultQuery;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isAddStockFilter()
-    {
-        $isShowOutOfStock = $this->scopeConfig->isSetFlag(
-            'cataloginventory/options/show_out_of_stock',
-            ScopeInterface::SCOPE_STORE
-        );
-        return false === $isShowOutOfStock;
     }
 
     /**

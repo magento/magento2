@@ -82,7 +82,7 @@
             <argument name="source" xsi:type="object">systemConfigSourceAggregatedProxy</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorCompositeProxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-            <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
+            <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
             <argument name="reader" xsi:type="object">Magento\Config\App\Config\Type\System\Reader\Proxy</argument>
         </arguments>
@@ -91,7 +91,7 @@
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregated</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorComposite</argument>
-            <argument name="preProcessor" xsi:type="object">systemConfigPreProcessorComposite</argument>
+            <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
         </arguments>
     </type>
     <virtualType name="systemSnapshot" type="Magento\Config\App\Config\Type\System">
@@ -148,14 +148,13 @@
             </argument>
         </arguments>
     </virtualType>
-    <!-- @api -->
-    <virtualType name="systemConfigPreProcessorComposite" type="Magento\Framework\App\Config\PreProcessorComposite">
+    <type name="Magento\Framework\App\Config\PreProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="environmentPlaceholder" xsi:type="object">Magento\Config\Model\Config\Processor\EnvironmentPlaceholder</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <!-- @api -->
     <virtualType name="systemConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
         <arguments>
@@ -195,6 +194,10 @@
     <virtualType name="appDumpSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
+                <item name="modular" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ModularConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
                 <item name="dynamic" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Config\App\Config\Source\RuntimeConfigSource</item>
                     <item name="sortOrder" xsi:type="string">100</item>

@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="edit-attribute-set attribute-set-col">
-        <?php echo $block->getSetFormHtml() ?>
+        <?= $block->getSetFormHtml() ?>
         <script>
             require([
                 "jquery",
@@ -31,19 +31,19 @@
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?php /* @escapeNotVerified */ echo __('Groups') ?></span>
+            <span class="title"><?= /* @escapeNotVerified */ __('Groups') ?></span>
         </div>
         <?php if (!$block->getIsReadOnly()): ?>
-            <?php /* @escapeNotVerified */ echo $block->getAddGroupButton() ?>&nbsp;<?php /* @escapeNotVerified */ echo $block->getDeleteGroupButton() ?>
-            <p class="note-block"><?php /* @escapeNotVerified */ echo __('Double click on a group to rename it.') ?></p>
+            <?= /* @escapeNotVerified */ $block->getAddGroupButton() ?>&nbsp;<?= /* @escapeNotVerified */ $block->getDeleteGroupButton() ?>
+            <p class="note-block"><?= /* @escapeNotVerified */ __('Double click on a group to rename it.') ?></p>
         <?php endif; ?>
 
-        <?php echo $block->getSetsFilterHtml() ?>
-        <?php echo $block->getGroupTreeHtml() ?>
+        <?= $block->getSetsFilterHtml() ?>
+        <?= $block->getGroupTreeHtml() ?>
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?php /* @escapeNotVerified */ echo __('Unassigned Attributes') ?></span>
+            <span class="title"><?= /* @escapeNotVerified */ __('Unassigned Attributes') ?></span>
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
         <script id="ie-deferred-loader" defer="defer" src="//:"></script>
@@ -58,8 +58,8 @@
                 ], function(jQuery, prompt, alert){
 
                 //<![CDATA[
-                var allowDragAndDrop = <?php /* @escapeNotVerified */ echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
-                var canEditGroups = <?php /* @escapeNotVerified */ echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
+                var allowDragAndDrop = <?= /* @escapeNotVerified */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
+                var canEditGroups = <?= /* @escapeNotVerified */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
 
                 var TreePanels = function() {
                     // shorthand
@@ -86,7 +86,7 @@
                             });
 
                             tree.setRootNode(this.root);
-                            buildCategoryTree(this.root, <?php /* @escapeNotVerified */ echo $block->getGroupTreeJson() ?>);
+                            buildCategoryTree(this.root, <?= /* @escapeNotVerified */ $block->getGroupTreeJson() ?>);
                             // render the tree
                             tree.render();
                             this.root.expand(false, false);
@@ -94,7 +94,7 @@
 
                             this.ge = new Ext.tree.TreeEditor(tree, {
                                 allowBlank:false,
-                                blankText:'<?php /* @escapeNotVerified */ echo __('A name is required.') ?>',
+                                blankText:'<?= /* @escapeNotVerified */ __('A name is required.') ?>',
                                 selectOnFocus:true,
                                 cls:'folder'
                             });
@@ -125,7 +125,7 @@
                                 id:'free'
                             });
                             tree2.setRootNode(this.root2);
-                            buildCategoryTree(this.root2, <?php /* @escapeNotVerified */ echo $block->getAttributeTreeJson() ?>);
+                            buildCategoryTree(this.root2, <?= /* @escapeNotVerified */ $block->getAttributeTreeJson() ?>);
 
                             this.root2.addListener('beforeinsert', editSet.rightBeforeInsert);
                             this.root2.addListener('beforeappend', editSet.rightBeforeAppend);
@@ -216,7 +216,7 @@
 
                             if( editSet.SystemNodesExists(editSet.currentNode) ) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>'
+                                    content: '<?= $block->escapeJs(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>'
                                 });
                                 return;
                             }
@@ -243,7 +243,7 @@
                         SystemNodesExists : function(currentNode) {
                             if (!currentNode) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('Please select a node.')) ?>'
+                                    content: '<?= $block->escapeJs(__('Please select a node.')) ?>'
                                 });
                                 return;
                             }
@@ -264,8 +264,8 @@
 
                         addGroup : function() {
                             prompt({
-                                title: "<?php /* @escapeNotVerified */ echo __('Add New Group') ?>",
-                                content: "<?php /* @escapeNotVerified */ echo __('Please enter a new group name.') ?>",
+                                title: "<?= /* @escapeNotVerified */ __('Add New Group') ?>",
+                                content: "<?= /* @escapeNotVerified */ __('Please enter a new group name.') ?>",
                                 value: "",
                                 validation: true,
                                 validationRules: ['required-entry'],
@@ -322,7 +322,7 @@
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists.') ?>';
+                                    errorText = '<?= /* @escapeNotVerified */ __('An attribute group named "/name/" already exists.') ?>';
                                     alert({
                                         content: errorText.replace("/name/",name)
                                     });
@@ -350,7 +350,7 @@
                                 editSet.req.form_key = FORM_KEY;
                             }
                             var req = {data : Ext.util.JSON.encode(editSet.req)};
-                            var con = new Ext.lib.Ajax.request('POST', '<?php /* @escapeNotVerified */ echo $block->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
+                            var con = new Ext.lib.Ajax.request('POST', '<?= /* @escapeNotVerified */ $block->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
                         },
 
                         success : function(o) {
@@ -368,7 +368,7 @@
 
                         failure : function(o) {
                             alert({
-                                content: '<?php echo $block->escapeJs(__('Sorry, we\'re unable to complete this request.')) ?>'
+                                content: '<?= $block->escapeJs(__('Sorry, we\'re unable to complete this request.')) ?>'
                             });
                         },
 
@@ -385,7 +385,7 @@
                         rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                             if (node.attributes.is_user_defined == 0) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                    content: '<?= $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
                                 });
                                 return false;
                             } else {
@@ -401,7 +401,7 @@
 
                             if (node.attributes.is_unassignable == 0) {
                                 alert({
-                                    content: '<?php echo $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
+                                    content: '<?= $block->escapeJs(__('You can\'t remove attributes from this attribute set.')) ?>'
                                 });
                                 return false;
                             } else {
@@ -425,7 +425,7 @@
                         rightRemove : function(tree, nodeThis, node) {
                             if( nodeThis.firstChild == null && node.id != 'empty' ) {
                                 var newNode = new Ext.tree.TreeNode({
-                                    text : '<?php /* @escapeNotVerified */ echo __('Empty') ?>',
+                                    text : '<?= /* @escapeNotVerified */ __('Empty') ?>',
                                     id : 'empty',
                                     cls : 'folder',
                                     is_user_defined : 1,
