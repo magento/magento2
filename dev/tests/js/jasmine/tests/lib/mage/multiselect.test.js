@@ -37,6 +37,8 @@ define([
             expect(instance.data('mage-multiselect2').onCheck).toBeDefined();
             expect(instance.data('mage-multiselect2').onError).toBeDefined();
             expect(instance.data('mage-multiselect2').onOptionsChange).toBeDefined();
+            expect(instance.data('mage-multiselect2').getCurrentPage).toBeDefined();
+            expect(instance.data('mage-multiselect2').setCurrentPage).toBeDefined();
         });
 
         it('multiselect2 options check', function () {
@@ -101,7 +103,35 @@ define([
             instance.data('mage-multiselect2').onKeyUp();
 
             expect(instance.data('mage-multiselect2').setFilter).toHaveBeenCalled();
-            expect(instance.data('mage-multiselect2').loadOptions).toHaveBeenCalledWith(1);
+            expect(instance.data('mage-multiselect2').loadOptions).toHaveBeenCalled();
+            expect(instance.data('mage-multiselect2').getCurrentPage()).toEqual(0);
+        });
+
+        it('multiselect2 paging test', function () {
+            spyOn(instance.data('mage-multiselect2'), 'appendOptions').and.callFake(function () {
+                return true;
+            });
+            spyOn(instance.data('mage-multiselect2'), 'setCurrentPage').and.callFake(function () {
+                return true;
+            });
+
+            $.get = jasmine.createSpy().and.callFake(function () {
+                var d = $.Deferred();
+
+                d.resolve({
+                    'success': true
+                });
+
+                return d.promise();
+            });
+
+            expect(instance.data('mage-multiselect2').getCurrentPage()).toEqual(1);
+
+            instance.data('mage-multiselect2').loadOptions();
+
+            expect($.get).toHaveBeenCalled();
+            expect(instance.data('mage-multiselect2').appendOptions).toHaveBeenCalled();
+            expect(instance.data('mage-multiselect2').setCurrentPage).toHaveBeenCalledWith(2);
         });
     });
 });
