@@ -62,6 +62,6 @@ class AssertCustomerDoesNotHaveDefaultAddresses extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Customer has default shipping/billing address but should not.';
+        return 'Customer does not have default shipping/billing address.';
     }
 }
