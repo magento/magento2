@@ -8,6 +8,9 @@ namespace Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @api
+ */
 class Repository
 {
     /**

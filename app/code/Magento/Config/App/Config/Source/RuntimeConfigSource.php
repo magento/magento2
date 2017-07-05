@@ -14,6 +14,8 @@ use Magento\Framework\App\Config\Scope\Converter;
 
 /**
  * Class for retrieving runtime configuration from database.
+ *
+ * @api
  */
 class RuntimeConfigSource implements ConfigSourceInterface
 {

@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Source\Image;
 
+/**
+ * @api
+ */
 class Adapter implements \Magento\Framework\Option\ArrayInterface
 {
     /**

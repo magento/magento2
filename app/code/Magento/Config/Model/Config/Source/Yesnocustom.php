@@ -10,6 +10,9 @@
  */
 namespace Magento\Config\Model\Config\Source;
 
+/**
+ * @api
+ */
 class Yesnocustom implements \Magento\Framework\Option\ArrayInterface
 {
     /**
