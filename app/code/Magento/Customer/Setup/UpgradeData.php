@@ -644,7 +644,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param CustomerSetup $customerSetup
      * @return void
      */
-    private function upgradeVersionTwoZeroTwelve($customerSetup)
+    private function upgradeVersionTwoZeroTwelve(CustomerSetup $customerSetup)
     {
         $customerSetup->updateAttribute('customer_address', 'vat_id', 'frontend_label', 'VAT Number');
     }
