@@ -5,7 +5,7 @@
  */
 -->
 <form id="co-shipping-method-form" data-bind="blockLoader: isLoading, visible: isVisible()">
-    <p class="field note" data-bind="visible: (shippingRates().length <= 0)">
+    <p class="field note" data-bind="visible: (!isLoading() && shippingRates().length <= 0)">
         <!-- ko text: $t('Sorry, no quotes are available for this order at this time')--><!-- /ko -->
     </p>
     <fieldset class="fieldset rate" data-bind="visible: (shippingRates().length > 0)">
