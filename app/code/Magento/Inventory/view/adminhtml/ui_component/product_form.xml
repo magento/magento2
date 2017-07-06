@@ -11,7 +11,7 @@
             <label translate="true">Sources</label>
             <collapsible>true</collapsible>
             <opened>true</opened>
-            <dataScope>sources</dataScope>
+            <dataScope>data.sources</dataScope>
         </settings>
         <container name="assign_sources_container">
             <argument name="data" xsi:type="array">
@@ -53,7 +53,7 @@
                     <item name="addButton" xsi:type="boolean">false</item>
                     <item name="recordTemplate" xsi:type="string">record</item>
                     <item name="dataScope" xsi:type="string"/>
-                    <item name="dataProvider" xsi:type="string">sources.assign_sources_grid</item>
+                    <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                     <item name="map" xsi:type="array">
                         <item name="source_id" xsi:type="string">source_id</item>

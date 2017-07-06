@@ -41,9 +41,12 @@ final class ProcessSourceItemsObserver implements ObserverInterface
         /** @var Save $controller */
         $controller = $observer->getEvent()->getController();
 
-        $this->sourceItemsProcessor->process(
-            $product->getSku(),
-            $controller->getRequest()->getParam('sources', [])
-        );
+        $sources = $controller->getRequest()->getParam('sources', []);
+        if (isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])) {
+            $this->sourceItemsProcessor->process(
+                $product->getSku(),
+                $sources['assigned_sources']
+            );
+        }
     }
 }
