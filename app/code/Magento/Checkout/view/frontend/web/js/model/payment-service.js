@@ -81,7 +81,7 @@ define([
                 isFreeMethod = function (method) {
                     return method.method === freeMethodCode;
                 },
-                grandTotalOverZero = quote.totals().grand_total > 0;
+                grandTotalOverZero = quote.totals()['grand_total'] > 0;
 
             if (!self.isFreeAvailable) {
                 return allMethods;
