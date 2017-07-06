@@ -177,7 +177,8 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
      * @param string $customerGroup
      * @return void
      */
-    private  function updateCustomer($customerGroup){
+    private function updateCustomer($customerGroup)
+    {
         $customerData = array_merge(
             $this->customer->getData(),
             ['group_id' => ['value' => $this->vatGroups[$customerGroup]->getCustomerGroupCode()]]
