@@ -230,6 +230,7 @@
             <settings>
                 <timezone>false</timezone>
                 <dateFormat>MMM d, y</dateFormat>
+                <skipTime>true</skipTime>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
                 <label translate="true">Date of Birth</label>
