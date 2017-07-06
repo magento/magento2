@@ -140,10 +140,6 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
          */
         order.addExcludedPaymentMethod('<?= /* @noEscape */ $code ?>');
 
-        <?php if (!$block->isAjaxRequest()): ?>
-            document.observe('dom:loaded', function(){
-        <?php endif; ?>
-
         directPostModel = new directPost(
             '<?= /* @noEscape */ $code ?>',
             'directpost-iframe',
@@ -153,9 +149,5 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             '<?= $block->escapeUrl($block->getUrl('*/*/save', [
                 '_secure' => $block->getRequest()->isSecure()
             ]));?>');
-
-        <?php if (!$block->isAjaxRequest()): ?>
-            });
-        <?php endif; ?>
     });
 </script>

@@ -97,7 +97,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Eav\AbstractAction
                         $this->syncData($indexer, $mainTable);
                     }
                 }
-                $this->activeTableSwitcher->switchTable($indexer->getConnection(), $indexer->getMainTable());
+                $this->activeTableSwitcher->switchTable($indexer->getConnection(), [$indexer->getMainTable()]);
             }
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
