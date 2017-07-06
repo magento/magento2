@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Model\Import;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -673,7 +674,7 @@ abstract class AbstractEntity
         array $attributeParams,
         array $rowData,
         $rowNumber,
-        $multiSeparator
+        $multiSeparator = Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
     ) {
         $message = '';
         switch ($attributeParams['type']) {
