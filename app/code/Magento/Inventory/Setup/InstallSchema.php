@@ -430,7 +430,7 @@ class InstallSchema implements InstallSchemaInterface
                 SourceItemInterface::SOURCE_ID,
                 SourceItemInterface::SKU,
             ],
-            AdapterInterface::INDEX_TYPE_UNIQUE
+            ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
         );
     }
 }

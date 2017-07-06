@@ -15,6 +15,7 @@
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
+    <preference for="Magento\InventoryApi\Api\SourceItemSaveCommandInterface" type="Magento\Inventory\Model\SourceItemSaveCommand"/>
     <preference for="Magento\InventoryApi\Api\SourceItemMultipleSaveInterface" type="Magento\Inventory\Model\SourceItemMultipleSave"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
