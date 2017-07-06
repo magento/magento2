@@ -7,8 +7,9 @@ define([
     'underscore',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/payment/method-list',
-    'Magento_Checkout/js/action/select-payment-method'
-], function (_, quote, methodList, selectPaymentMethod) {
+    'Magento_Checkout/js/action/select-payment-method',
+    'mage/utils/objects'
+], function (_, quote, methodList, selectPaymentMethod, utils) {
     'use strict';
 
     var freeMethodCode = 'free';
@@ -21,7 +22,6 @@ define([
          * @param {Array} methods
          */
         setPaymentMethods: function (methods) {
-
             var freeMethod,
                 filteredMethods,
                 methodIsAvailable,
@@ -36,6 +36,7 @@ define([
                 methods.splice(0, methods.length, freeMethod);
                 selectPaymentMethod(freeMethod);
             }
+
             filteredMethods = _.without(methods, freeMethod);
 
             if (filteredMethods.length === 1) {
@@ -71,7 +72,12 @@ define([
          * @returns {Array}
          */
         getAvailablePaymentMethods: function () {
-            var allMethods = methodList(),
+            var allMethods = utils.copy(methodList()),
+
+                /**
+                 * Free method filter
+                 * @param {Object} method
+                 */
                 isFreeMethod = function (method) {
                     return method.method === freeMethodCode;
                 },
@@ -79,12 +85,13 @@ define([
 
             if (!self.isFreeAvailable) {
                 return allMethods;
-            } else if (grandTotalOverZero) {
-                return _.filter(allMethods, _.negate(isFreeMethod));
-            } else {
-                return _.filter(allMethods, isFreeMethod);
             }
 
+            if (grandTotalOverZero) {
+                return _.filter(allMethods, _.negate(isFreeMethod));
+            }
+
+            return _.filter(allMethods, isFreeMethod);
         }
     };
 });
