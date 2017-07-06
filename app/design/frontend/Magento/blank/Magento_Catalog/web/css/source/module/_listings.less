@@ -66,6 +66,10 @@
                 display: none;
 
                 .actions-secondary {
+                    > button.action {
+                        .lib-button-reset();
+                    }
+
                     > .action {
                         &:extend(.abs-actions-addto-gridlist all);
                         &:before {
@@ -136,6 +140,12 @@
             .old-price {
                 .price {
                     font-weight: @font-weight__regular;
+                }
+            }
+
+            .regular-price {
+                .price-label {
+                    display: none;
                 }
             }
 

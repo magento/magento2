@@ -28,6 +28,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('MM-dd-yyyy')
         );
         $model = new Date($localeMock);
+        $localeMock->expects($this->once())->method('date')->willReturn(new \DateTime($inputData));
 
         $this->assertEquals($expectedDate, $model->filter($inputData));
     }
@@ -62,6 +63,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('MM-dd-yyyy')
         );
         $model = new Date($localeMock);
+        $localeMock->expects($this->any())->method('date')->willReturn(new \DateTime($inputData));
 
         $model->filter($inputData);
     }
