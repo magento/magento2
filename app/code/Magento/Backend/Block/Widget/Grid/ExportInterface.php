@@ -5,6 +5,12 @@
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
+/**
+ * Interface ExportInterface
+ *
+ * @api
+ * @deprecated in favour of UI component implementation
+ */
 interface ExportInterface
 {
     /**

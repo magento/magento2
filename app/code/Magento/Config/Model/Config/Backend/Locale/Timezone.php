@@ -11,6 +11,9 @@ namespace Magento\Config\Model\Config\Backend\Locale;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @api
+ */
 class Timezone extends \Magento\Framework\App\Config\Value
 {
     /**

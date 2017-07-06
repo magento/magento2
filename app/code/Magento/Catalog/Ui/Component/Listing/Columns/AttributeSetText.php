@@ -9,6 +9,9 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 
+/**
+ * @api
+ */
 class AttributeSetText extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Setup\Model\DataGenerator;
@@ -71,6 +72,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @see setup/performance-toolkit/profiles/ce/small.xml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableProductsFixture extends Fixture
 {
@@ -150,7 +152,11 @@ class ConfigurableProductsFixture extends Fixture
     private $swatchesGenerator;
 
     /**
-     * ConfigurableProductsFixture constructor.
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param FixtureModel $fixtureModel
      * @param AttributeSet\AttributeSetFixture $attributeSetsFixture
      * @param AttributeSet\Pattern $attributePattern
@@ -162,7 +168,8 @@ class ConfigurableProductsFixture extends Fixture
      * @param CategoryResolver $categoryResolver
      * @param WebsiteCategoryProvider $websiteCategoryProvider
      * @param PriceProvider $priceProvider
-     * @param \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator $swatchesGenerator
+     * @param AttributeSet\SwatchesGenerator $swatchesGenerator
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -177,7 +184,8 @@ class ConfigurableProductsFixture extends Fixture
         CategoryResolver $categoryResolver,
         WebsiteCategoryProvider $websiteCategoryProvider,
         PriceProvider $priceProvider,
-        \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator $swatchesGenerator
+        \Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator $swatchesGenerator,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         parent::__construct($fixtureModel);
         $this->attributeSetsFixture = $attributeSetsFixture;
@@ -191,6 +199,7 @@ class ConfigurableProductsFixture extends Fixture
         $this->websiteCategoryProvider = $websiteCategoryProvider;
         $this->priceProvider = $priceProvider;
         $this->swatchesGenerator = $swatchesGenerator;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -518,9 +527,14 @@ class ConfigurableProductsFixture extends Fixture
                 $attributes = count($attributes);
             } elseif ($attributes && $options) {
                 $attributes  = (int)$attributes;
-                // process dynamic attribute sets
-                $attributeSet = $this->getAttributeSet($attributes, $options, $config['swatches']);
+                // convert attributes and options to array for process custom attribute set creation
+                $attributesData = array_map(function ($options) use ($config) {
+                    return ['options' => $options, 'swatches' => $config['swatches']];
+                }, array_fill(0, $attributes, $options));
+
+                $attributeSet = $this->getCustomAttributeSet($attributesData);
             }
+
             // do not process if any required option is missed
             if (count(array_filter([$attributeSet, $attributes, $options])) !== 3) {
                 unset($configurableProductConfig[$i]);
@@ -625,36 +639,6 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * @param int $attributes
-     * @param int $options
-     * @param string $swatches
-     * @return array
-     */
-    private function getAttributeSet($attributes, $options, $swatches)
-    {
-        $attributeCode = 'configurable_attribute' . $attributes . '_' . $options . '_';
-
-        return $this->attributeSetsFixture->createAttributeSet(
-            $this->attributePattern->generateAttributeSet(
-                $this->getAttributeSetName($attributes, $options),
-                $attributes,
-                $options,
-                function ($index, $attribute) use ($attributeCode, $options, $swatches) {
-                    $data = [
-                        'attribute_code' => $attributeCode . $index,
-                        'frontend_label' => 'Big Attribute ' . $attributeCode . $index,
-                    ];
-                    return array_replace_recursive(
-                        $attribute,
-                        $data,
-                        $this->swatchesGenerator->generateSwatchData($options, $attributeCode . $index, $swatches)
-                    );
-                }
-            )
-        );
-    }
-
-    /**
      * Provide attribute set based on attributes configuration
      *
      * @param array $attributes
@@ -662,24 +646,26 @@ class ConfigurableProductsFixture extends Fixture
      */
     private function getCustomAttributeSet(array $attributes)
     {
-        $attributeSetName = $this->getAttributeSetName(
-            count($attributes),
-            implode(',', array_column($attributes, 'options'))
-        );
+        $attributeSetHash = crc32($this->serializer->serialize($attributes));
+        $attributeSetName = sprintf('Dynamic Attribute Set %s', $attributeSetHash);
 
         $pattern = $this->attributePattern->generateAttributeSet(
             $attributeSetName,
             count($attributes),
             array_column($attributes, 'options'),
-            function ($index, $attribute) use ($attributeSetName, $attributes) {
+            function ($index, $attribute) use ($attributeSetName, $attributes, $attributeSetHash) {
                 $swatch = [];
-                $timeStamp = time();
+                $attributeCode = substr(
+                    sprintf('ca_%s_%s', $index, $attributeSetHash),
+                    0,
+                    Attribute::ATTRIBUTE_CODE_MAX_LENGTH
+                );
                 $data = [
-                    'attribute_code' => sprintf('custom_attribute_%s_%s', $index, $timeStamp),
-                    'frontend_label' => 'Dynamic Attribute ' . sprintf('custom_attribute_%s_%s', $index, $timeStamp),
+                    'attribute_code' => $attributeCode,
+                    'frontend_label' => 'Dynamic Attribute ' . $attributeCode,
                 ];
 
-                if (isset($attributes[$index-1]['swatches'])) {
+                if (isset($attributes[$index - 1]['swatches'])) {
                     $data['is_visible_in_advanced_search'] = 1;
                     $data['is_searchable'] = 1;
                     $data['is_filterable'] = 1;
@@ -702,18 +688,6 @@ class ConfigurableProductsFixture extends Fixture
         );
 
         return $this->attributeSetsFixture->createAttributeSet($pattern);
-    }
-
-    /**
-     * Provide attribute set name based on amount of attributes and options per attribute set
-     *
-     * @param int $attributesCount
-     * @param int $optionsCount
-     * @return string
-     */
-    private function getAttributeSetName($attributesCount, $optionsCount)
-    {
-        return sprintf('Dynamic Attribute Set %s-%s', $attributesCount, $optionsCount);
     }
 
     /**
@@ -906,7 +880,7 @@ class ConfigurableProductsFixture extends Fixture
                 'attribute_code',
                 $attributeData['name']
             );
-            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
+            /** @var Attribute $attribute */
             foreach ($attributeCollection as $attribute) {
                 $attributeSetId = $attribute->getAttributeSetId();
                 $values = [];

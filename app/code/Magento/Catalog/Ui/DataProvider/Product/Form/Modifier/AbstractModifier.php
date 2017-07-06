@@ -11,6 +11,8 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 /**
  * Class AbstractModifier
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractModifier implements ModifierInterface

@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote;
 
 /**
+ * @api
  * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item _getResource()
  * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item getResource()
  * @method int getParentItemId()

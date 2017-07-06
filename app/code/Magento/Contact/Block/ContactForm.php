@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * Main contact form block
+ *
+ * @api
  */
 class ContactForm extends Template
 {

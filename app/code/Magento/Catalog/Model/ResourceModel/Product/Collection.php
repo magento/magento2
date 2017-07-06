@@ -18,10 +18,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
 
 /**
  * Product collection
+ *
+ * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -263,16 +264,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $metadataPool;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource
-     */
-    private $indexerFrontendResource;
-
-    /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
-     */
-    private $categoryProductIndexerFrontend;
-
-    /**
      * @var bool|string
      */
     private $linkField;
@@ -307,11 +298,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -335,9 +323,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         GroupManagementInterface $groupManagement,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
+        MetadataPool $metadataPool = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -354,10 +340,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
         $this->_productLimitationFilters = $productLimitationFactory->create();
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
-        $this->indexerFrontendResource = $indexerFrontendResource ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class);
-        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(CategoryProductFrontend::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -1211,7 +1193,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )->distinct(
                 false
             )->join(
-                ['count_table' => $this->categoryProductIndexerFrontend->getMainTable()],
+                ['count_table' => $this->getTable('catalog_category_product_index')],
                 'count_table.product_id = e.entity_id',
                 [
                     'count_table.category_id',
@@ -1839,55 +1821,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->columns('visibility', 'cat_index');
         }
 
-        $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
-        if (!isset($fromPart['store_index'])) {
-            $this->getSelect()->joinLeft(
-                ['store_index' => $this->getTable('store')],
-                'store_index.store_id = ' . $filters['store_table'] . '.store_id',
-                []
-            );
-        }
-        if (!isset($fromPart['store_group_index'])) {
-            $this->getSelect()->joinLeft(
-                ['store_group_index' => $this->getTable('store_group')],
-                'store_index.group_id = store_group_index.group_id',
-                []
-            );
-        }
-        if (!isset($fromPart['store_cat_index'])) {
-            $this->getSelect()->joinLeft(
-                ['store_cat_index' => $this->categoryProductIndexerFrontend->getMainTable()],
-                join(
-                    ' AND ',
-                    [
-                        'store_cat_index.product_id = e.entity_id',
-                        'store_cat_index.store_id = ' . $filters['store_table'] . '.store_id',
-                        'store_cat_index.category_id=store_group_index.root_category_id'
-                    ]
-                ),
-                ['store_visibility' => 'visibility']
-            );
-        }
         // Avoid column duplication problems
         $this->_resourceHelper->prepareColumnsList($this->getSelect());
 
-        $whereCond = join(
-            ' OR ',
-            [
-                $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility']),
-                $this->getConnection()->quoteInto('store_cat_index.visibility IN(?)', $filters['visibility'])
-            ]
-        );
-
+        $whereCond = $this->getConnection()->quoteInto('cat_index.visibility IN(?)', $filters['visibility']);
         $wherePart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
-        $hasCond = false;
-        foreach ($wherePart as $cond) {
-            if ($cond == '(' . $whereCond . ')') {
-                $hasCond = true;
-            }
-        }
-
-        if (!$hasCond) {
+        if (array_search('(' . $whereCond . ')', $wherePart) === false) {
             $this->getSelect()->where($whereCond);
         }
 
@@ -1949,7 +1888,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'max_price',
                 'tier_price',
             ];
-            $tableName = ['price_index' => $this->indexerFrontendResource->getMainTable()];
+            $tableName = ['price_index' => $this->getTable('catalog_product_index_price')];
             if ($joinLeft) {
                 $select->joinLeft($tableName, $joinCond, $colls);
             } else {
@@ -2027,7 +1966,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         } else {
             $this->getSelect()->join(
-                ['cat_index' => $this->categoryProductIndexerFrontend->getMainTable()],
+                ['cat_index' => $this->getTable('catalog_category_product_index')],
                 $joinCond,
                 ['cat_index_position' => 'position']
             );
@@ -2216,9 +2155,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
         foreach ($this->getItems() as $item) {
             $productId = $item->getData($this->getLinkField());
-            if (isset($tierPrices[$productId])) {
-                $this->getBackend()->setPriceData($item, $tierPrices[$productId]);
-            }
+            $this->getBackend()->setPriceData($item, isset($tierPrices[$productId]) ? $tierPrices[$productId] : []);
         }
     }
 
@@ -2286,7 +2223,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        if (!$this->count()) {
+        if (!$this->getSize()) {
             return $this;
         }
 

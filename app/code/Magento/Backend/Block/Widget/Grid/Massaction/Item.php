@@ -8,7 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
 /**
  * Grid widget massaction single action item
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Item extends \Magento\Backend\Block\Widget
 {

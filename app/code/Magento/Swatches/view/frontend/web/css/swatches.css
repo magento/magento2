@@ -48,19 +48,18 @@
 }
 
 .swatch-option.text {
-    background: #F2F2F2;
-    color: #7F7F7F;
+    background: #F0F0F0;
+    color: #686868;
     font-size: 12px;
     font-weight: 700;
     line-height: 20px;
     padding: 4px 8px;
     min-width: 22px;
     margin-right: 7px;
-    /*background-color: #F2F2F2;*/
 }
 
 .swatch-option.selected {
-    outline: 2px solid #FF5100;
+    outline: 2px solid #ff5501;
     border: 1px solid #fff;
     color: #333;
 }
@@ -96,7 +95,7 @@
 
 .swatch-option.image:not(.disabled):hover,
 .swatch-option.color:not(.disabled):hover {
-    outline: 2px solid #FF5216;
+    outline: 2px solid #ee0000;
     border: 1px solid #fff;
 }
 

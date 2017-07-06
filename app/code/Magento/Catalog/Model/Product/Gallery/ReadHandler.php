@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Read handler for catalog product gallery.
+ *
+ * @api
  */
 class ReadHandler implements ExtensionInterface
 {

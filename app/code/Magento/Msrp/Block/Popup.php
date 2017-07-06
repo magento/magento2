@@ -5,6 +5,9 @@
  */
 namespace Magento\Msrp\Block;
 
+/**
+ * @api
+ */
 class Popup extends \Magento\Framework\View\Element\Template
 {
     /**

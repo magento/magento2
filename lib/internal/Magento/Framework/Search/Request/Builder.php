@@ -10,6 +10,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * @api
+ */
 class Builder
 {
     /**

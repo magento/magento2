@@ -78,6 +78,7 @@ class TaxRuleCollection extends AbstractServiceCollection
         $collectionItem->setCalculateSubtotal($taxRule->getCalculateSubtotal() ? '1' : '0');
         $collectionItem->setCustomerTaxClasses($taxRule->getCustomerTaxClassIds());
         $collectionItem->setProductTaxClasses($taxRule->getProductTaxClassIds());
+        $collectionItem->setTaxRatesCodes($taxRule->getTaxRatesCodes());
         $collectionItem->setTaxRates($taxRule->getTaxRateIds());
         return $collectionItem;
     }

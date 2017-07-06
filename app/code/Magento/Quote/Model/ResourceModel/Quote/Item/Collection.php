@@ -5,9 +5,12 @@
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Item;
 
+use \Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+
 /**
  * Quote item resource collection
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
@@ -213,9 +216,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             $this->_productIds
         )->addAttributeToSelect(
             $this->_quoteConfig->getProductAttributes()
-        )->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
-
-        $productCollection = $this->addTierPriceData($productCollection);
+        );
+        $this->skipStockStatusFilter($productCollection);
+        $productCollection->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
+        $this->addTierPriceData($productCollection);
 
         $this->_eventManager->dispatch(
             'prepare_catalog_product_collection_prices',
@@ -274,18 +278,30 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
+     * Prevents adding stock status filter to the collection of products.
+     *
+     * @param ProductCollection $productCollection
+     * @return void
+     *
+     * @see \Magento\CatalogInventory\Helper\Stock::addIsInStockFilterToCollection
+     */
+    private function skipStockStatusFilter(ProductCollection $productCollection)
+    {
+        $productCollection->setFlag('has_stock_status_filter', true);
+    }
+
+    /**
      * Add tier prices to product collection.
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @param ProductCollection $productCollection
+     * @return void
      */
-    private function addTierPriceData(\Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection)
+    private function addTierPriceData(ProductCollection $productCollection)
     {
         if (empty($this->_quote)) {
             $productCollection->addTierPriceData();
         } else {
             $productCollection->addTierPriceDataByGroupId($this->_quote->getCustomerGroupId());
         }
-        return $productCollection;
     }
 }

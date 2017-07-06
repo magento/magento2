@@ -9,6 +9,7 @@ namespace Magento\AdminNotification\Model;
  * Notification service model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class NotificationService
 {

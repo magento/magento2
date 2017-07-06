@@ -411,5 +411,72 @@
                 <item name="dataset" xsi:type="string">bundle_low_stock_fixed</item>
             </field>
         </dataset>
+
+        <dataset name="bundle_dynamic_product_shipment_together">
+            <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_dynamic</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="weight_type" xsi:type="string">Yes</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">Yes</item>
+                <item name="use_config_enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">Yes</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_dynamic</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="string">Default</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_default_dynamic</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_with_one_simple_product_and_custom_option">
+            <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_dynamic_with_category</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">one_simple_product</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_fixed_radio_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_with_one_simple_product_and_custom_option</item>
+            </field>
+        </dataset>
     </repository>
 </config>

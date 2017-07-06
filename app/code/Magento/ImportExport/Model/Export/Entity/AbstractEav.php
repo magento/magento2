@@ -13,7 +13,8 @@ use Magento\Store\Model\Store;
 /**
  * Export EAV entity abstract model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEntity

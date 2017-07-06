@@ -11,6 +11,9 @@
  */
 namespace Magento\Newsletter\Block;
 
+/**
+ * @api
+ */
 class Subscribe extends \Magento\Framework\View\Element\Template
 {
     /**

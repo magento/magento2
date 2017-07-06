@@ -11,10 +11,12 @@ namespace Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource as CategoryProductFrontend;
 
 /**
  * Class AbstractAction
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
@@ -110,23 +112,16 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
-     */
-    private $categoryProductIndexerFrontend;
-
-    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
      * @param QueryGenerator $queryGenerator
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config,
-        QueryGenerator $queryGenerator = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
+        QueryGenerator $queryGenerator = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -134,8 +129,6 @@ abstract class AbstractAction
         $this->config = $config;
         $this->queryGenerator = $queryGenerator ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(QueryGenerator::class);
-        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(CategoryProductFrontend::class);
     }
 
     /**
@@ -182,7 +175,7 @@ abstract class AbstractAction
      */
     protected function getMainTable()
     {
-        return $this->categoryProductIndexerFrontend->getMainTable();
+        return $this->getTable(self::MAIN_INDEX_TABLE);
     }
 
     /**

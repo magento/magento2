@@ -15,6 +15,9 @@ use Magento\Tax\Model\Config;
 
 /**
  * Catalog data helper
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

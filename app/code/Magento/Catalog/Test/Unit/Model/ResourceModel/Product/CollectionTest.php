@@ -258,6 +258,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn($linkField);
 
+        $this->connectionMock->expects($this->once())->method('fetchOne')->with($selectMock)->willReturn(42);
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn(
             [['row_id' => $rowId]]
         );

@@ -22,6 +22,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Customer model
  *
+ * @api
  * @method int getWebsiteId() getWebsiteId()
  * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()
@@ -334,7 +335,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $customAttributes = $customer->getCustomAttributes();
         if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
-                $this->setDataUsingMethod($attribute->getAttributeCode(), $attribute->getValue());
+                $this->setData($attribute->getAttributeCode(), $attribute->getValue());
             }
         }
 

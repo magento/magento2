@@ -122,4 +122,18 @@ class OptionTier extends AbstractOptions
     {
         return $this->_rootElement->find('tbody tr')->isPresent();
     }
+
+    /**
+     * Waiting until advanced price form becomes hidden
+     *
+     * @return void
+     */
+    public function waitTierPriceFormLocks()
+    {
+        $this->_rootElement->waitUntil(
+            function () {
+                return $this->isVisible() ? null : true;
+            }
+        );
+    }
 }

@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Layout structure model
+ *
+ * @api
  */
 class ScheduledStructure
 {
@@ -30,7 +32,6 @@ class ScheduledStructure
         'scheduledElements',
         'scheduledMoves',
         'scheduledRemoves',
-        'scheduledIfconfig',
         'scheduledPaths',
         'elementsToSort',
         'brokenParent',
@@ -70,13 +71,6 @@ class ScheduledStructure
      * @var array
      */
     protected $scheduledRemoves = [];
-
-    /**
-     * Scheduled structure elements with ifconfig attribute
-     *
-     * @var array
-     */
-    protected $scheduledIfconfig = [];
 
     /**
      * Materialized paths for overlapping workaround of scheduled structural elements
@@ -193,16 +187,6 @@ class ScheduledStructure
     }
 
     /**
-     * Get elements to check ifconfig attribute
-     *
-     * @return array
-     */
-    public function getIfconfigList()
-    {
-        return array_keys(array_intersect_key($this->scheduledElements, $this->scheduledIfconfig));
-    }
-
-    /**
      * Get scheduled elements list
      *
      * @return array
@@ -281,18 +265,6 @@ class ScheduledStructure
     }
 
     /**
-     * Get element to check by name
-     *
-     * @param string $elementName
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getIfconfigElement($elementName, $default = null)
-    {
-        return isset($this->scheduledIfconfig[$elementName]) ? $this->scheduledIfconfig[$elementName] : $default;
-    }
-
-    /**
      * Add element to move list
      *
      * @param string $elementName
@@ -324,30 +296,6 @@ class ScheduledStructure
     public function setElementToRemoveList($elementName)
     {
         $this->scheduledRemoves[$elementName] = 1;
-    }
-
-    /**
-     * Unset element by name removed by ifconfig attribute
-     *
-     * @param string $elementName
-     * @return void
-     */
-    public function unsetElementFromIfconfigList($elementName)
-    {
-        unset($this->scheduledIfconfig[$elementName]);
-    }
-
-    /**
-     * Set element value to check ifconfig attribute
-     *
-     * @param string $elementName
-     * @param string $configPath
-     * @param string $scopeType
-     * @return void
-     */
-    public function setElementToIfconfigList($elementName, $configPath, $scopeType)
-    {
-        $this->scheduledIfconfig[$elementName] = [$configPath, $scopeType];
     }
 
     /**

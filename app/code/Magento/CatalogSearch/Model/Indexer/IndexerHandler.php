@@ -13,6 +13,9 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 
+/**
+ * @api
+ */
 class IndexerHandler implements IndexerInterface
 {
     /**

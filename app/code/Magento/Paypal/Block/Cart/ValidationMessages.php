@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * PayPal order review page validation messages block
+ *
+ * @api
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {

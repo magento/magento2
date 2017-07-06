@@ -13,6 +13,11 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Code\GeneratedFiles;
 
 /**
+ * Initialization of object manager is a complex operation.
+ * To abstract away this complexity, this class was introduced.
+ * Objects of this class create fully initialized instance of object manager with "global" configuration loaded.
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManagerFactory
