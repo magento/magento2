@@ -116,12 +116,12 @@
                         </item>
                     </argument>
                 </field>
-                <field name="qty">
+                <field name="quantity">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataType" xsi:type="string">text</item>
-                            <item name="dataScope" xsi:type="string">qty</item>
+                            <item name="dataScope" xsi:type="string">quantity</item>
                             <item name="componentType" xsi:type="string">field</item>
                             <item name="label" xsi:type="string" translate="true">Qty</item>
                         </item>
