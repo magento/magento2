@@ -315,5 +315,6 @@ class System implements ConfigTypeInterface
     {
         $this->data = [];
         $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+        $this->availableDataScopes = null;
     }
 }
