@@ -96,7 +96,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with(['urlRewrite1'], ['row1'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
@@ -105,7 +105,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with(['urlRewrite2'], ['row2'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with(['urlRewrite2'], ['row2'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(1))
@@ -140,7 +140,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with(['urlRewrite1'], ['row1'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
