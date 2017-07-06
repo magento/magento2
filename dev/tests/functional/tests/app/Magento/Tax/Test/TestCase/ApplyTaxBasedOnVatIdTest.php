@@ -8,11 +8,9 @@ namespace Magento\Tax\Test\TestCase;
 
 use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Customer\Test\TestCase\AbstractApplyVatIdTest;
 
 /**
@@ -80,23 +78,28 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
     ) {
         // Preconditions
         $this->configData = $configData;
+        $this->customer = $order->getDataFieldConfig('customer_id')['source']->getCustomer();
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
-        $taxRule->persist();
+
         // Prepare data
-        $this->customer = $order->getDataFieldConfig('customer_id')['source']->getCustomer();
-        $address = $this->customer->getDataFieldConfig('address')['source']->getAddresses()[0];
-        $this->prepareVatConfig($vatConfig, $customerGroup);
-        $poducts = $order->getEntityId()['products'];
+        $taxRule->persist();
+        $this->prepareVatConfiguration($vatConfig);
+        $this->prepareCustomer($customerGroup);
+
+        $products = $order->getEntityId()['products'];
         $cart = $this->fixtureFactory->createByCode(
             'cart',
-            ['data' => array_merge($cart->getData(), ['items' => ['products' => $poducts]])]
+            ['data' => array_merge($cart->getData(), ['items' => ['products' => $products]])]
         );
+        $address = $this->customer->getDataFieldConfig('address')['source']->getAddresses()[0];
+
+        $order->persist();
+        $this->updateCustomer($customerGroup);
 
         // Steps
-        $order->persist();
         $this->objectManager->create(
             \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
@@ -115,8 +118,72 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
             'address' => $address,
             'orderId' => $order->getId(),
             'cart' => $cart,
-            'products' => $poducts
+            'products' => $products
         ];
+    }
+
+    /**
+     * Persist vat configuration
+     *
+     * @param string $vatConfig
+     * @return void
+     */
+    private function prepareVatConfiguration($vatConfig)
+    {
+        $groupConfig = [
+            'customer/create_account/viv_domestic_group' => [
+                'value' => $this->vatGroups['valid_domestic_group']->getCustomerGroupId()
+            ],
+            'customer/create_account/viv_intra_union_group' => [
+                'value' => $this->vatGroups['valid_intra_union_group']->getCustomerGroupId()
+            ],
+            'customer/create_account/viv_invalid_group' => [
+                'value' => $this->vatGroups['invalid_group']->getCustomerGroupId()
+            ],
+            'customer/create_account/viv_error_group' => [
+                'value' => $this->vatGroups['error_group']->getCustomerGroupId()
+            ]
+        ];
+        $vatConfig = $this->fixtureFactory->createByCode(
+            'configData',
+            ['data' => array_replace_recursive($vatConfig->getSection(), $groupConfig)]
+        );
+        $vatConfig->persist();
+    }
+
+    /**
+     * Persist customer with valid customer group
+     *
+     * @param string $customerGroup
+     * @return void
+     */
+    private function prepareCustomer($customerGroup)
+    {
+        $customerData = array_merge(
+            $this->customer->getData(),
+            ['group_id' => ['value' => $this->vatGroups[$customerGroup]->getCustomerGroupId()]],
+            ['address' => ['addresses' => $this->customer->getDataFieldConfig('address')['source']->getAddresses()]],
+            ['email' => 'JohnDoe%isolation%@example.com']
+        );
+
+        unset($customerData['id']);
+        $this->customer = $this->fixtureFactory->createByCode('customer', ['data' => $customerData]);
+        $this->customer->persist();
+    }
+
+    /**
+     * Update customer with customer group code for assert
+     *
+     * @param string $customerGroup
+     * @return void
+     */
+    private  function updateCustomer($customerGroup){
+        $customerData = array_merge(
+            $this->customer->getData(),
+            ['group_id' => ['value' => $this->vatGroups[$customerGroup]->getCustomerGroupCode()]]
+        );
+
+        $this->customer = $this->fixtureFactory->createByCode('customer', ['data' => $customerData]);
     }
 
     /**
