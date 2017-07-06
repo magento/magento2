@@ -79,26 +79,30 @@ class Date extends AbstractFilter
             }
 
             if (is_array($value)) {
-                $dateFrom = null;
-                $dateTo = null;
-
                 if (isset($value['from'])) {
-                    $dateFrom = $this->wrappedComponent->convertDate($value['from']);
-                    if ($this->getData('config/skipTime')) {
-                        $dateFrom->setTime(0, 0, 0);
-                    }
-                    $this->applyFilterByType('gteq', $dateFrom);
+                    $this->applyFilterByType(
+                        'gteq',
+                        $this->wrappedComponent->convertDate(
+                            $value['from'],
+                            0,
+                            0,
+                            0,
+                            !$this->getData('config/skipTimeZoneConversion')
+                        )
+                    );
                 }
 
                 if (isset($value['to'])) {
-                    $dateTo = $this->wrappedComponent->convertDate($value['to']);
-                    if ($this->getData('config/skipTime')) {
-                        $dateTo->setTime(0, 0, 0);
-                    }
-                    if ($dateFrom == $dateTo) {
-                        $dateTo->setTime(23, 59, 59);
-                    }
-                    $this->applyFilterByType('lteq', $dateTo);
+                    $this->applyFilterByType(
+                        'lteq',
+                        $this->wrappedComponent->convertDate(
+                            $value['to'],
+                            23,
+                            59,
+                            59,
+                            !$this->getData('config/skipTimeZoneConversion')
+                        )
+                    );
                 }
             } else {
                 $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));
