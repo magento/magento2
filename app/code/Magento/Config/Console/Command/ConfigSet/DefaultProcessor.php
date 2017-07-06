@@ -18,6 +18,7 @@ use Magento\Framework\App\Config\Value;
  * This processor saves the value of configuration into database.
  *
  * {@inheritdoc}
+ * @api
  */
 class DefaultProcessor implements ConfigSetProcessorInterface
 {

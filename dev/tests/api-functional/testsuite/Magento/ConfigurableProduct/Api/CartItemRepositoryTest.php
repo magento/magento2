@@ -26,7 +26,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      */
     public function testAddProduct()
     {
@@ -69,7 +69,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @expectedException \Exception
      * @expectedExceptionMessage You need to choose options for your item.
      */

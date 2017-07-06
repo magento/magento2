@@ -11,6 +11,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Backend Auth model
+ *
+ * @api
  */
 class Auth
 {

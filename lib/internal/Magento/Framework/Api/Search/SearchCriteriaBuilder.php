@@ -12,6 +12,8 @@ use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * Builder for SearchCriteria Service Data Object
+ *
+ * @api
  */
 class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 {

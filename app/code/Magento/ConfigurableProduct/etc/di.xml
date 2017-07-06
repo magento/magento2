@@ -185,9 +185,4 @@
             <argument name="connectionName" xsi:type="string">indexer</argument>
         </arguments>
     </type>
-    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock\Configurable">
-        <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
-        </arguments>
-    </type>
 </config>

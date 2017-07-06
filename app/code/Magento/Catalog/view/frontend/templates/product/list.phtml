@@ -20,10 +20,10 @@ $_productCollection = $block->getLoadedProductCollection();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
 <?php if (!$_productCollection->count()): ?>
-    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('We can\'t find products matching the selection.') ?></div></div>
+    <div class="message info empty"><div><?= /* @escapeNotVerified */ __('We can\'t find products matching the selection.') ?></div></div>
 <?php else: ?>
-    <?php echo $block->getToolbarHtml() ?>
-    <?php echo $block->getAdditionalHtml() ?>
+    <?= $block->getToolbarHtml() ?>
+    <?= $block->getAdditionalHtml() ?>
     <?php
     if ($block->getMode() == 'grid') {
         $viewMode = 'grid';
@@ -41,12 +41,12 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
      */
     $pos = $block->getPositioned();
     ?>
-    <div class="products wrapper <?php /* @escapeNotVerified */ echo $viewMode; ?> products-<?php /* @escapeNotVerified */ echo $viewMode; ?>">
+    <div class="products wrapper <?= /* @escapeNotVerified */ $viewMode ?> products-<?= /* @escapeNotVerified */ $viewMode ?>">
         <?php $iterator = 1; ?>
         <ol class="products list items product-items">
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
-                <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+                <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <div class="product-item-info" data-container="product-grid">
                     <?php
                     $productImage = $block->getImage($_product, $image);
@@ -56,8 +56,8 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                     }
                     ?>
                     <?php // Product Image ?>
-                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
-                        <?php echo $productImage->toHtml(); ?>
+                    <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
+                        <?= $productImage->toHtml() ?>
                     </a>
                     <div class="product details product-item-details">
                         <?php
@@ -65,58 +65,58 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                         ?>
                         <strong class="product name product-item-name">
                             <a class="product-item-link"
-                               href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>">
-                                <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                               href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>">
+                                <?= /* @escapeNotVerified */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
                             </a>
                         </strong>
-                        <?php echo $block->getReviewsSummaryHtml($_product, $templateType); ?>
-                        <?php /* @escapeNotVerified */ echo $block->getProductPrice($_product) ?>
-                        <?php echo $block->getProductDetailsHtml($_product); ?>
+                        <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
+                        <?= /* @escapeNotVerified */ $block->getProductPrice($_product) ?>
+                        <?= $block->getProductDetailsHtml($_product) ?>
 
                         <div class="product-item-inner">
-                            <div class="product actions product-item-actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
-                                <div class="actions-primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position : ''; ?>>
+                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $position : '' ?>>
+                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $position : '' ?>>
                                     <?php if ($_product->isSaleable()): ?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
-                                        <form data-role="tocart-form" action="<?php /* @escapeNotVerified */ echo $postParams['action']; ?>" method="post">
-                                            <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
-                                            <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
-                                            <?php echo $block->getBlockHtml('formkey')?>
+                                        <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $postParams['action'] ?>" method="post">
+                                            <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $postParams['data']['product'] ?>">
+                                            <input type="hidden" name="<?= /* @escapeNotVerified */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @escapeNotVerified */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                            <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit"
-                                                    title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                    title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
                                                     class="action tocart primary">
-                                                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                                                <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                                             </button>
                                         </form>
                                     <?php else: ?>
                                         <?php if ($_product->isAvailable()): ?>
-                                            <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                                            <div class="stock available"><span><?= /* @escapeNotVerified */ __('In stock') ?></span></div>
                                         <?php else: ?>
-                                            <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
+                                            <div class="stock unavailable"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <div data-role="add-to-links" class="actions-secondary"<?php echo strpos($pos, $viewMode . '-secondary') ? $position : ''; ?>>
+                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $position : '' ?>>
                                     <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
-                                        <?php echo $addToBlock->setProduct($_product)->getChildHtml(); ?>
+                                        <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                     <?php endif; ?>
                                 </div>
                             </div>
                             <?php if ($showDescription):?>
                                 <div class="product description product-item-description">
-                                    <?php /* @escapeNotVerified */ echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
-                                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" title="<?php /* @escapeNotVerified */ echo $_productNameStripped ?>"
-                                       class="action more"><?php /* @escapeNotVerified */ echo __('Learn More') ?></a>
+                                    <?= /* @escapeNotVerified */ $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                                    <a href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" title="<?= /* @escapeNotVerified */ $_productNameStripped ?>"
+                                       class="action more"><?= /* @escapeNotVerified */ __('Learn More') ?></a>
                                 </div>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <?php echo($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
+                <?= ($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
             <?php endforeach; ?>
         </ol>
     </div>
-    <?php echo $block->getToolbarHtml() ?>
+    <?= $block->getToolbarHtml() ?>
     <?php if (!$block->isRedirectToCartEnabled()) : ?>
         <script type="text/x-magento-init">
         {
