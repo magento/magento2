@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Swatches\Test\TestCase\CheckSwatchesOnCategoryPageTest" summary="Check Swathes visibility on category page" ticketId="MAGETWO-66928">
+    <testCase name="Magento\Swatches\Test\TestCase\CheckShowSwatchesInProductListOptionImpactTest" summary="Check Swatches Visibility on Category Page" ticketId="MAGETWO-66928">
         <variation name="CheckShowSwatchesInProductListOptionImpactTest">
             <data name="configData" xsi:type="string">disable_swatches_visibility_in_catalog</data>
             <constraint name="Magento\Swatches\Test\Constraint\AssertSwatchesAreNotVisibleOnCategoryPage" />

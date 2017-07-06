@@ -150,7 +150,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             }
             $this->activeTableSwitcher->switchTable(
                 $this->_defaultIndexerResource->getConnection(),
-                $this->_defaultIndexerResource->getMainTable()
+                [$this->_defaultIndexerResource->getMainTable()]
             );
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
