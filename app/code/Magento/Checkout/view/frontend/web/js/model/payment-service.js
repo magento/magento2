@@ -32,7 +32,7 @@ define([
             });
             this.isFreeAvailable = !!freeMethod;
 
-            if (freeMethod && quote.totals().grand_total <= 0) {
+            if (freeMethod && quote.totals()['grand_total'] <= 0) {
                 methods.splice(0, methods.length, freeMethod);
                 selectPaymentMethod(freeMethod);
             }
