@@ -76,3 +76,4 @@ Model3
 \Magento\Framework\A
 \Magento\Framework\B
 DoubleColon
+\Magento\Mtf\Client\ElementInterface

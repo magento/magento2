@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\ShoppingCartPagerTest" summary="Verify pager on Shopping Cart" ticketId="MAGETWO-70146">
+        <variation name="ShoppingCartPagerTestVariation1" summary="Verify pager is NOT presented on Shopping Cart page if qty of products = 20, by default system configuration" ticketId="MAGETWO-70096">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersNotPresentInShoppingCart"/>
+        </variation>
+        <variation name="ShoppingCartPagerTestVariation2" summary="Verify pager is presented on Shopping Cart page if items qty=21, by default system configuration" ticketId="MAGETWO-70097">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="config/dataset" xsi:type="string">default_number_of_items_per_page_on_shopping_cart</data>
+            <data name="products/21" xsi:type="string">catalogProductSimple::default</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersPresentInShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersSummaryText"/>
+        </variation>
+        <variation name="ShoppingCartPagerTestVariation3" summary="Verify pager is disapeared from Shopping Cart page if change qty from 21 to 20, by default system configuration" ticketId="MAGETWO-70098">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="products/21" xsi:type="string">catalogProductSimple::default</data>
+            <data name="itemsToRemove" xsi:type="string">1</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersNotPresentInShoppingCart"/>
+        </variation>
+        <variation name="ShoppingCartPagerTestVariation4" summary="Verify Pager is presented on Shopping Cart page with non-default system configuration" ticketId="MAGETWO-70100">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="configData" xsi:type="string">one_item_per_page_on_shopping_cart</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersPresentInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersSummaryText" />
+        </variation>
+    </testCase>
+</config>
