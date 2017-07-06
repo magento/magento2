@@ -10,6 +10,8 @@ use Magento\Shipping\Model\Config;
 
 /**
  * Class CarrierSource
+ *
+ * @api
  */
 class CarrierSource implements OptionSourceInterface
 {

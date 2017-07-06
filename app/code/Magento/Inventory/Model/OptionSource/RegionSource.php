@@ -10,6 +10,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class RegionSource
+ *
+ * @api
  */
 class RegionSource implements OptionSourceInterface
 {

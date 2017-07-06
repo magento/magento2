@@ -8,6 +8,8 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
+ * SourceCarrierLinkInterface interface represents relation between some physical storage and shipment method
+ *
  * @api
  */
 interface SourceCarrierLinkInterface extends ExtensibleDataInterface

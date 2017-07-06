@@ -6,9 +6,11 @@
 namespace Magento\InventoryApi\Api;
 
 /**
+ * Command for multiple saving of source items
+ *
  * @api
  */
-interface SourceItemMultipleSaveInterface
+interface SourceItemSaveCommandInterface
 {
     /**
      * Multiple Save Source item data

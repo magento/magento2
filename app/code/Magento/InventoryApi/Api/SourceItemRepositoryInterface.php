@@ -6,7 +6,7 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * SourceItemRepositoryInterface has not method save, use SourceItemMultipleSaveInterface instead
+ * SourceItemRepositoryInterface has not method save, use SourceItemSaveCommandInterface instead
  *
  * @api
  */
@@ -23,7 +23,7 @@ interface SourceItemRepositoryInterface
     public function get($sourceItemId);
 
     /**
-     * Load Source Item data collection by given search criteria.
+     * Load Source Item data collection by given search criteria
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
@@ -31,11 +31,12 @@ interface SourceItemRepositoryInterface
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
-     * Delete Source Item data by given sourceItemId.
+     * Delete Source Item data by given sourceItemId
      *
      * @param int $sourceItemId
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException |\Magento\Framework\Exception\CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete($sourceItemId);
 }

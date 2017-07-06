@@ -8,6 +8,8 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
+ * SourceInterface interface represents some particular physical storage
+ *
  * @api
  */
 interface SourceInterface extends ExtensibleDataInterface

@@ -104,11 +104,22 @@
                         </item>
                     </argument>
                 </field>
+                <field name="status">
+                    <argument name="data" xsi:type="array">
+                        <item name="options" xsi:type="object">Magento\Inventory\Model\OptionSource\SourceItemStatus</item>
+                        <item name="config" xsi:type="array">
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="dataScope" xsi:type="string">status</item>
+                            <item name="componentType" xsi:type="string">field</item>
+                            <item name="label" xsi:type="string" translate="true">Status</item>
+                        </item>
+                    </argument>
+                </field>
                 <field name="qty">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">input</item>
-                            <item name="elementTmpl" xsi:type="string">ui/dynamic-rows/cells/text</item>
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="dataScope" xsi:type="string">qty</item>
                             <item name="componentType" xsi:type="string">field</item>
