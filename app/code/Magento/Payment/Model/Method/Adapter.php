@@ -397,7 +397,6 @@ class Adapter implements MethodInterface
         try {
             $validator = $this->getValidatorPool()->get('global');
         } catch (\Exception $e) {
-            $this->logger->critical($e);
             return $this;
         }
 
