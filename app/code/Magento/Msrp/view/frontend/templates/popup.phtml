@@ -20,31 +20,31 @@
             <div class="map-info-price" id="map-popup-content">
                 <div class="price-box">
                     <div class="map-msrp" id="map-popup-msrp-box">
-                        <span class="label"><?php /* @escapeNotVerified */ echo __('Price'); ?></span>
+                        <span class="label"><?= /* @escapeNotVerified */ __('Price') ?></span>
                         <span class="old-price map-old-price" id="map-popup-msrp">
                             <span class="price"></span>
                         </span>
                     </div>
                     <div class="map-price" id="map-popup-price-box">
-                        <span class="label"><?php /* @escapeNotVerified */ echo __('Actual Price'); ?></span>
+                        <span class="label"><?= /* @escapeNotVerified */ __('Actual Price') ?></span>
                         <span id="map-popup-price" class="actual-price"></span>
                     </div>
                 </div>
                 <form action="" method="POST" id="product_addtocart_form_from_popup" class="map-form-addtocart">
                     <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
                     <button type="button"
-                            title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                            title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
                             class="action tocart primary"
                             id="map-popup-button">
-                        <span><?php /* @escapeNotVerified */ echo __('Add to Cart'); ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
                     </button>
                     <div class="additional-addtocart-box">
-                        <?php echo $block->getChildHtml(); ?>
+                        <?= $block->getChildHtml() ?>
                     </div>
                 </form>
             </div>
             <div class="map-text" id="map-popup-text">
-                <?php /* @escapeNotVerified */ echo $block->getExplanationMessage(); ?>
+                <?= /* @escapeNotVerified */ $block->getExplanationMessage() ?>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
         </div>
         <div class="popup-content">
             <div class="map-help-text" id="map-popup-text-what-this">
-                <?php /* @escapeNotVerified */ echo $block->getExplanationMessageWhatsThis(); ?>
+                <?= /* @escapeNotVerified */ $block->getExplanationMessageWhatsThis() ?>
             </div>
         </div>
     </div>

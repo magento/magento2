@@ -5,12 +5,11 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command;
 
-use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
@@ -40,11 +39,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $changeDetectorMock;
 
     /**
-     * @var Hash|Mock
-     */
-    private $hashMock;
-
-    /**
      * @var ProcessorFacadeFactory|Mock
      */
     private $processorFacadeFactoryMock;
@@ -53,6 +47,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @var DeploymentConfig|Mock
      */
     private $deploymentConfigMock;
+
+    /**
+     * @var ProcessorFacade|Mock
+     */
+    private $processorFacadeMock;
 
     /**
      * @inheritdoc
@@ -65,10 +64,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->changeDetectorMock = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->hashMock = $this->getMockBuilder(Hash::class)
+        $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processorFacadeFactoryMock = $this->getMockBuilder(ProcessorFacadeFactory::class)
+        $this->processorFacadeMock = $this->getMockBuilder(ProcessorFacade::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
@@ -78,7 +77,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
             $this->changeDetectorMock,
-            $this->hashMock,
             $this->processorFacadeFactoryMock,
             $this->deploymentConfigMock
         );
@@ -92,12 +90,17 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->changeDetectorMock->expects($this->once())
             ->method('hasChanges')
             ->willReturn(false);
-        $this->emulatedAreProcessorMock->expects($this->once())
+        $this->processorFacadeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->processorFacadeMock);
+        $this->processorFacadeMock->expects($this->once())
             ->method('process')
             ->willReturn('Some message');
-        $this->hashMock->expects($this->once())
-            ->method('regenerate')
-            ->with(System::CONFIG_TYPE);
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
 
         $tester = new CommandTester($this->command);
         $tester->execute([

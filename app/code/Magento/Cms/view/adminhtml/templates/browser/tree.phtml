@@ -11,11 +11,11 @@
 <div class="tree-panel" >
     <div class="categories-side-col">
         <div class="tree-actions">
-            <a onclick="jQuery('[data-role=tree]').jstree('close_all');"><?php echo $block->escapeHtml(__('Collapse All')) ?></a>
+            <a onclick="jQuery('[data-role=tree]').jstree('close_all');"><?= $block->escapeHtml(__('Collapse All')) ?></a>
             <span class="separator">|</span>
-            <a onclick="jQuery('[data-role=tree]').jstree('open_all');"><?php echo $block->escapeHtml(__('Expand All')) ?></a>
+            <a onclick="jQuery('[data-role=tree]').jstree('open_all');"><?= $block->escapeHtml(__('Expand All')) ?></a>
         </div>
     </div>
-    <div data-role="tree" data-mage-init='<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getTreeWidgetOptions())); ?>'>
+    <div data-role="tree" data-mage-init='<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getTreeWidgetOptions())) ?>'>
     </div>
 </div>

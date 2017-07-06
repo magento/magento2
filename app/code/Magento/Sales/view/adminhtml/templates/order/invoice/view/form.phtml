@@ -9,24 +9,24 @@
 ?>
 <?php $_invoice = $block->getInvoice() ?>
 <?php $_order = $_invoice->getOrder() ?>
-<?php echo $block->getChildHtml('order_info') ?>
+<?= $block->getChildHtml('order_info') ?>
 
 <section class="admin__page-section order-view-billing-shipping">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Payment &amp; Shipping Method') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Payment &amp; Shipping Method') ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?> admin__fieldset-wrapper">
             <?php /*Billing Address */ ?>
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Payment Information') ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <div class="order-payment-method-title"><?php echo $block->getChildHtml('order_payment') ?></div>
+                <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
                 <div class="order-payment-currency">
-                    <?php /* @escapeNotVerified */ echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?>
+                    <?= /* @escapeNotVerified */ __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?>
                 </div>
-                <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
+                <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
             </div>
         </div>
 
@@ -34,14 +34,14 @@
             <div class="admin__page-section-item order-shipping-address">
                 <?php /*Shipping Address */ ?>
                 <div class="admin__page-section-item-title">
-                    <span class="title"><?php /* @escapeNotVerified */ echo __('Shipping Information') ?></span>
+                    <span class="title"><?= /* @escapeNotVerified */ __('Shipping Information') ?></span>
                 </div>
                 <div class="admin__page-section-item-content shipping-description-wrapper">
                     <div class="shipping-description-title">
-                        <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                        <?= $block->escapeHtml($_order->getShippingDescription()) ?>
                     </div>
                     <div class="shipping-description-content">
-                        <?php /* @escapeNotVerified */ echo __('Total Shipping Charges'); ?>:
+                        <?= /* @escapeNotVerified */ __('Total Shipping Charges') ?>:
 
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
                             <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
@@ -50,11 +50,11 @@
                         <?php endif; ?>
                         <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
-                        <?php /* @escapeNotVerified */ echo $_excl; ?>
+                        <?= /* @escapeNotVerified */ $_excl ?>
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                            (<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?> <?php /* @escapeNotVerified */ echo $_incl; ?>)
+                            (<?= /* @escapeNotVerified */ __('Incl. Tax') ?> <?= /* @escapeNotVerified */ $_incl ?>)
                         <?php endif; ?>
-                        <div><?php echo $block->getChildHtml('shipment_tracking') ?></div>
+                        <div><?= $block->getChildHtml('shipment_tracking') ?></div>
                     </div>
                 </div>
             </div>
@@ -65,33 +65,33 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Items Invoiced') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Items Invoiced') ?></span>
     </div>
 
     <div id="invoice_item_container" class="admin__page-section-content">
-        <?php echo $block->getChildHtml('invoice_items') ?>
+        <?= $block->getChildHtml('invoice_items') ?>
     </div>
 </section>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Order Total') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Order Total') ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Invoice History') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Invoice History') ?></span>
             </div>
             <div class="admin__page-section-item-content">
-                <?php echo $block->getChildHtml('order_comments') ?>
+                <?= $block->getChildHtml('order_comments') ?>
             </div>
         </div>
 
         <div id="history_form" class="admin__page-section-item order-totals">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Invoice Totals') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Invoice Totals') ?></span>
             </div>
-            <?php echo $block->getChildHtml('invoice_totals') ?>
+            <?= $block->getChildHtml('invoice_totals') ?>
         </div>
     </div>
 </section>
