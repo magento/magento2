@@ -9,6 +9,8 @@ namespace Magento\Framework\Mail;
  * Mail Message interface
  *
  * @api
+ * @deprecated
+ * @see \Magento\Framework\Mail\MailMessageInterface
  */
 interface MessageInterface
 {
@@ -39,6 +41,10 @@ interface MessageInterface
      *
      * @param mixed $body
      * @return $this
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\MailMessageInterface::setBodyHtml
+     * @see \Magento\Framework\Mail\MailMessageInterface::setBodyText()
      */
     public function setBody($body);
 
@@ -46,6 +52,10 @@ interface MessageInterface
      * Get message body
      *
      * @return mixed
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\MailMessageInterface::getBodyHtml
+     * @see \Magento\Framework\Mail\MailMessageInterface::getBodyText()
      */
     public function getBody();
 
@@ -94,13 +104,12 @@ interface MessageInterface
      *
      * @param string $type
      * @return $this
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\MailMessageInterface::setBodyHtml
+     * @see \Magento\Framework\Mail\MailMessageInterface::getBodyHtml
+     * @see \Magento\Framework\Mail\MailMessageInterface::setBodyText()
+     * @see \Magento\Framework\Mail\MailMessageInterface::getBodyText()
      */
     public function setMessageType($type);
-
-    /**
-     * Get message source code
-     *
-     * @return string
-     */
-    public function getRawMessage();
 }

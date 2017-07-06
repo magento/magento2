@@ -7,30 +7,19 @@
  */
 namespace Magento\Framework\Mail;
 
+use Magento\Framework\Exception\LocalizedException;
 use Zend\Mime\Mime;
 use Zend\Mime\Part;
 
 /**
- * @todo get rid of temporal coupling (setMessageType() + setBody())
- * - deprecate setMessageType(), setBody() and getBody()
- * - implement setBodyHtml(), setBodyText(), getBodyHtml() and getBodyText()
- * - change usage in \Magento\Framework\Mail\Template\TransportBuilder::prepareMessage()
+ * Class Message.
  */
-class Message implements MessageInterface
+class Message implements MailMessageInterface
 {
     /**
      * @var \Zend\Mail\Message
      */
     private $zendMessage;
-
-    /**
-     * @param string $encoding
-     */
-    public function __construct($encoding = 'utf-8')
-    {
-        $this->zendMessage = new \Zend\Mail\Message;
-        $this->zendMessage->setEncoding($encoding);
-    }
 
     /**
      * Message type
@@ -40,10 +29,24 @@ class Message implements MessageInterface
     protected $messageType = self::TYPE_TEXT;
 
     /**
-     * Set message type
+     * Initialize dependencies.
      *
-     * @param string $type
-     * @return $this
+     * @param string $charset
+     */
+    public function __construct($charset = 'utf-8')
+    {
+        $this->zendMessage = new \Zend\Mail\Message();
+        $this->zendMessage->setEncoding($charset);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\Message::getBodyText
+     * @see \Magento\Framework\Mail\Message::getBodyHtml
+     * @see \Magento\Framework\Mail\Message::setBodyText
+     * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
     public function setMessageType($type)
     {
@@ -52,12 +55,15 @@ class Message implements MessageInterface
     }
 
     /**
-     * @param null|object|string|\Zend\Mime\Message $body
-     * @return $this
+     * {@inheritdoc}
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\Message::setBodyText
+     * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
     public function setBody($body)
     {
-        if (is_string($body) && $this->messageType === MessageInterface::TYPE_HTML) {
+        if (is_string($body) && $this->messageType === MailMessageInterface::TYPE_HTML) {
             $body = self::createHtmlMimeFromString($body);
         }
         $this->zendMessage->setBody($body);
@@ -83,7 +89,11 @@ class Message implements MessageInterface
     }
 
     /**
-     * @return object
+     * {@inheritdoc}
+     *
+     * @deprecated
+     * @see \Magento\Framework\Mail\Message::getBodyText
+     * @see \Magento\Framework\Mail\Message::getBodyHtml
      */
     public function getBody()
     {
@@ -160,5 +170,49 @@ class Message implements MessageInterface
         $mimeMessage = new \Zend\Mime\Message();
         $mimeMessage->addPart($htmlPart);
         return $mimeMessage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyHtml($html)
+    {
+        $this->setMessageType(self::TYPE_HTML);
+        return $this->setBody($html);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBodyText($text)
+    {
+        $this->setMessageType(self::TYPE_TEXT);
+        return $this->setBody($text);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBodyText()
+    {
+        if ($this->messageType != self::TYPE_TEXT) {
+            throw new LocalizedException(
+                __('Text message body is not set')
+            );
+        }
+        return $this->getBody();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBodyHtml()
+    {
+        if ($this->messageType != self::TYPE_HTML) {
+            throw new LocalizedException(
+                __('HTML message body is not set')
+            );
+        }
+        return $this->getBody();
     }
 }

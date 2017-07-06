@@ -9,6 +9,7 @@
 namespace Magento\Framework\Mail\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
@@ -260,23 +261,32 @@ class TransportBuilder
     }
 
     /**
-     * Prepare message
+     * Prepare message.
      *
      * @return $this
+     * @throws LocalizedException if template type is unknown
      */
     protected function prepareMessage()
     {
         $template = $this->getTemplate();
-        $types = [
-            TemplateTypesInterface::TYPE_TEXT => MessageInterface::TYPE_TEXT,
-            TemplateTypesInterface::TYPE_HTML => MessageInterface::TYPE_HTML,
-        ];
-
         $body = $template->processTemplate();
-        $this->message->setMessageType($types[$template->getType()])
-            ->setBody($body)
-            ->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
 
+        switch ($template->getType()) {
+            case MessageInterface::TYPE_TEXT:
+                $this->message->setBodyText($body);
+                break;
+
+            case MessageInterface::TYPE_HTML:
+                $this->message->setBodyHtml($body);
+                break;
+
+            default;
+                throw new LocalizedException(
+                    __('Unknown template type')
+                );
+            break;
+        }
+        $this->message->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
         return $this;
     }
 }
