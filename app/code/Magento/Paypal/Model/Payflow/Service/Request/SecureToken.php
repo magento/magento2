@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Model\Payflow\Service\Request;
 
 use Magento\Framework\Math\Random;
@@ -11,7 +12,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Model\Quote;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class SecureToken
@@ -64,6 +64,7 @@ class SecureToken
         $request->setTrxtype(Payflowpro::TRXTYPE_AUTH_ONLY);
         $request->setVerbosity('HIGH');
         $request->setAmt(0);
+        $request->setCurrency($quote->getBaseCurrencyCode());
         $request->setCreatesecuretoken('Y');
         $request->setSecuretokenid($this->mathRandom->getUniqueHash());
         $request->setReturnurl($this->url->getUrl('paypal/transparent/response'));
