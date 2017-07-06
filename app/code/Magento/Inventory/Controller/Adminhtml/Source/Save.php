@@ -11,7 +11,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -63,8 +62,8 @@ class Save extends Action
      * @param SourceInterfaceFactory $sourceFactory
      * @param SourceRepositoryInterface $sourceRepository
      * @param DataObjectHelper $dataObjectHelper
-     * @param CarrierRequestDataHydrator $carrierRequestDataHydrator
      * @param Registry $registry
+     * @param CarrierRequestDataHydrator $carrierRequestDataHydrator
      */
     public function __construct(
         Context $context,
@@ -88,11 +87,11 @@ class Save extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $requestData = $this->getRequest()->getParam('general');
-        if ($this->getRequest()->isPost() && $requestData) {
+        $requestData = $this->getRequest()->getParams();
+        if ($this->getRequest()->isPost() && !empty($requestData['general'])) {
             try {
-                $sourceId = !empty($requestData[SourceInterface::SOURCE_ID])
-                    ? $requestData[SourceInterface::SOURCE_ID] : null;
+                $sourceId = !empty($requestData['general'][SourceInterface::SOURCE_ID])
+                    ? $requestData['general'][SourceInterface::SOURCE_ID] : null;
 
                 $sourceId = $this->processSave($sourceId, $requestData);
                 // Keep data for plugins on Save controller. Now we can not call separate services from one form.
@@ -105,9 +104,6 @@ class Save extends Action
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);
             } catch (CouldNotSaveException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
-                $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
-            } catch (InputException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             } catch (Exception $e) {
@@ -135,7 +131,7 @@ class Save extends Action
             $source = $this->sourceFactory->create();
         }
         $this->dataObjectHelper->populateWithArray($source, $requestData, SourceInterface::class);
-        $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData);
+        $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData['general']);
 
         $sourceId = $this->sourceRepository->save($source);
         return $sourceId;
