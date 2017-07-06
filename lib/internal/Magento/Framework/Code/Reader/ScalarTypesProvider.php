@@ -16,7 +16,7 @@ class ScalarTypesProvider
      *
      * @return array
      */
-    public function getTypes() : array
+    public function getTypes()
     {
         return [
             'array',

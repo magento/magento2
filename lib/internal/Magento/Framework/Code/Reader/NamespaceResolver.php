@@ -72,7 +72,7 @@ class NamespaceResolver
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getImportedNamespaces(array $fileContent) : array
+    public function getImportedNamespaces(array $fileContent)
     {
         $fileContent = implode('', $fileContent);
 
