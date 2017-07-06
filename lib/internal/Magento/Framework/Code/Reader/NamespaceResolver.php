@@ -42,7 +42,7 @@ class NamespaceResolver
      * @param array $availableNamespaces
      * @return string
      */
-    public function resolveNamespace($type, array $availableNamespaces) : string
+    public function resolveNamespace($type, array $availableNamespaces)
     {
         if (substr($type, 0, 1) !== self::NS_SEPARATOR
             && !in_array($type, $this->scalarTypesProvider->getTypes())
