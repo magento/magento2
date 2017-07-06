@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Model;
 
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
@@ -93,6 +94,10 @@ class SubscriptionStatusProvider
     public function getStatusForEnabledSubscription()
     {
         $status = static::ENABLED;
+        if ($this->flagManager->getFlagData(SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE)) {
+            $status = self::PENDING;
+        }
+
         if (!$this->analyticsToken->isTokenExist()) {
             $status = static::PENDING;
             if ($this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE) === null) {
