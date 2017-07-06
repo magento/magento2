@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
@@ -740,7 +741,16 @@ class Address extends AbstractCustomer
                             continue;
                         }
                         if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                            $this->isAttributeValid($attributeCode, $attributeParams, $rowData, $rowNumber);
+                            $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
+                                $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
+                                Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                            $this->isAttributeValid(
+                                $attributeCode,
+                                $attributeParams,
+                                $rowData,
+                                $rowNumber,
+                                $multiSeparator
+                            );
                         } elseif ($attributeParams['is_required'] && (!isset(
                             $this->_addresses[$customerId]
                         ) || !in_array(
