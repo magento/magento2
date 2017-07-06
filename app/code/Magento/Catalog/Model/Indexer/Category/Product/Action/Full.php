@@ -95,7 +95,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     public function execute()
     {
         $this->reindex();
-        $this->activeTableSwitcher->switchTable($this->connection, $this->getMainTable());
+        $this->activeTableSwitcher->switchTable($this->connection, [$this->getMainTable()]);
         return $this;
     }
 
