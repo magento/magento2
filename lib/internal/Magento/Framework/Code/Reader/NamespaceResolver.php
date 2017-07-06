@@ -76,7 +76,7 @@ class NamespaceResolver
     {
         $fileContent = implode('', $fileContent);
 
-        $cacheKey = md5($fileContent);
+        $cacheKey = sha1($fileContent);
 
         if (isset($this->namespaces[$cacheKey])) {
             return $this->namespaces[$cacheKey];
