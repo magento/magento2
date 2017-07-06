@@ -388,6 +388,19 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->productMock, $this->model->get($sku, true));
     }
 
+    public function testGetBySkuWithSpace()
+    {
+        $trimmedSku = 'test_sku';
+        $sku = 'test_sku ';
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
+            ->will($this->returnValue('test_id'));
+        $this->productMock->expects($this->once())->method('load')->with('test_id');
+        $this->productMock->expects($this->once())->method('getSku')->willReturn($trimmedSku);
+        $this->assertEquals($this->productMock, $this->model->get($sku));
+    }
+
     public function testGetWithSetStoreId()
     {
         $productId = 123;
