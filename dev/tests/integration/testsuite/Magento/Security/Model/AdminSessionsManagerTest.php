@@ -38,6 +38,8 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * Session Manager.
+     *
      * @var \Magento\Framework\Session\SessionManager
      */
     private $sessionManager;

@@ -41,6 +41,8 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
     protected $dateTime;
 
     /**
+     * Session Manager.
+     *
      * @var \Magento\Framework\Session\SessionManager
      */
     private $sessionManager;

@@ -9,7 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
 use Magento\Config\Model\ResourceModel\Config as ConfigResourceModel;
-use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface as Config;
 use Magento\Store\Model\Store;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order;
