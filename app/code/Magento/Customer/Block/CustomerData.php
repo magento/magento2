@@ -17,8 +17,8 @@ class CustomerData extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array $expirableSectionNames
      * @param array $data
+     * @param array $expirableSectionNames
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
