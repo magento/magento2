@@ -79,8 +79,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $period
-     * @param \DateTime $fromDate
-     * @param \DateTime $toDate
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
      * @param int $size
      * @dataProvider intervalsDataProvider
      * @return void
@@ -105,8 +105,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $period
-     * @param \DateTime $fromDate
-     * @param \DateTime $toDate
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
      * @param int $size
      * @dataProvider intervalsDataProvider
      * @return void

@@ -389,8 +389,8 @@ define([
         onPreviewLoad: function (file, e) {
             var img = e.currentTarget;
 
-            file.previewWidth = img.naturalHeight;
-            file.previewHeight = img.naturalWidth;
+            file.previewWidth = img.naturalWidth;
+            file.previewHeight = img.naturalHeight;
         },
 
         /**

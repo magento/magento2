@@ -57,7 +57,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     private function resolveDate(\Magento\Framework\Model\AbstractModel $object, $dateIdentifier)
     {
         $date = $object->getData($dateIdentifier);
-        if ($date instanceof \DateTime) {
+        if ($date instanceof \DateTimeInterface) {
             $object->setData($dateIdentifier, $date->format('Y-m-d H:i:s'));
         } elseif (!is_string($date) || empty($date)) {
             $object->setData($dateIdentifier, null);

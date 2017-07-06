@@ -37,20 +37,41 @@ class AssertCustomerForm extends AbstractConstraint
     ];
 
     /**
+     * Locale map.
+     *
+     * @var array
+     */
+    private $localeMap = [
+        'en_GB' => 'd/m/Y'
+    ];
+
+    /**
+     * Format date for current locale.
+     *
+     * @var string
+     */
+    private $localeFormat = 'm/d/Y';
+
+    /**
      * Assert that displayed customer data on edit page(backend) equals passed from fixture.
      *
      * @param Customer $customer
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexEdit $pageCustomerIndexEdit
-     * @param Address $address[optional]
+     * @param Address $address [optional]
+     * @param string $locale
      * @return void
      */
     public function processAssert(
         Customer $customer,
         CustomerIndex $pageCustomerIndex,
         CustomerIndexEdit $pageCustomerIndexEdit,
-        Address $address = null
+        Address $address = null,
+        $locale = ''
     ) {
+        $this->localeFormat = '' !== $locale && isset($this->localeMap[$locale])
+            ? $this->localeMap[$locale]
+            : $this->localeFormat;
         $data = [];
         $filter = [];
 
@@ -59,6 +80,9 @@ class AssertCustomerForm extends AbstractConstraint
             $data['addresses'][1] = $address->hasData() ? $address->getData() : [];
         } else {
             $data['addresses'] = [];
+        }
+        if (isset($data['customer']['dob'])) {
+            $data['customer']['dob'] = date($this->localeFormat, strtotime($data['customer']['dob']));
         }
         $filter['email'] = $data['customer']['email'];
 
