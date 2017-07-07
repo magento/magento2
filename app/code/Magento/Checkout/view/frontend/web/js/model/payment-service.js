@@ -7,9 +7,8 @@ define([
     'underscore',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/payment/method-list',
-    'Magento_Checkout/js/action/select-payment-method',
-    'mage/utils/objects'
-], function (_, quote, methodList, selectPaymentMethod, utils) {
+    'Magento_Checkout/js/action/select-payment-method'
+], function (_, quote, methodList, selectPaymentMethod) {
     'use strict';
 
     /**
@@ -18,8 +17,16 @@ define([
     * @returns boolean
     */
     var isFreePaymentMethod = function (paymentMethod) {
-        return paymentMethod.method === 'free';
-    };
+            return paymentMethod.method === 'free';
+        },
+
+        /**
+         * Grabs the grand total from quote
+         * @returns number
+         */
+        getGrandTotal = function () {
+            return quote.totals().grand_total; // jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+        };
 
     return {
         isFreeAvailable: false,
@@ -37,7 +44,7 @@ define([
             freeMethod = _.find(methods, isFreePaymentMethod);
             this.isFreeAvailable = !!freeMethod;
 
-            if (freeMethod && quote.totals()['grand_total'] <= 0) {
+            if (freeMethod && getGrandTotal() <= 0) {
                 methods.splice(0, methods.length, freeMethod);
                 selectPaymentMethod(freeMethod);
             }
@@ -77,15 +84,15 @@ define([
          * @returns {Array}
          */
         getAvailablePaymentMethods: function () {
-            var allMethods = utils.copy(methodList()),
-                grandTotalOverZero = quote.totals()['grand_total'] > 0;
+            var allMethods = methodList().slice(),
+                grandTotalOverZero = getGrandTotal() > 0;
 
             if (!this.isFreeAvailable) {
                 return allMethods;
             }
 
             if (grandTotalOverZero) {
-                return _.filter(allMethods, _.negate(isFreePaymentMethod));
+                return _.reject(allMethods, isFreePaymentMethod);
             }
 
             return _.filter(allMethods, isFreePaymentMethod);
