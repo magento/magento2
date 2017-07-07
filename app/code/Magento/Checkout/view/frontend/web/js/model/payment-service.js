@@ -25,12 +25,13 @@ define([
             var freeMethod,
                 filteredMethods,
                 methodIsAvailable,
-                methodNames;
+                methodNames,
+                self = this;
 
             freeMethod = _.find(methods, function (method) {
                 return method.method === freeMethodCode;
             });
-            this.isFreeAvailable = !!freeMethod;
+            self.isFreeAvailable = !!freeMethod;
 
             if (freeMethod && quote.totals()['grand_total'] <= 0) {
                 methods.splice(0, methods.length, freeMethod);
@@ -73,6 +74,7 @@ define([
          */
         getAvailablePaymentMethods: function () {
             var allMethods = utils.copy(methodList()),
+                grandTotalOverZero = quote.totals()['grand_total'] > 0,
 
                 /**
                  * Free method filter
@@ -81,7 +83,7 @@ define([
                 isFreeMethod = function (method) {
                     return method.method === freeMethodCode;
                 },
-                grandTotalOverZero = quote.totals()['grand_total'] > 0;
+                self = this;
 
             if (!self.isFreeAvailable) {
                 return allMethods;
