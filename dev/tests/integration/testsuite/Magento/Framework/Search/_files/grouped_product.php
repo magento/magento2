@@ -19,10 +19,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 $objectManager = Bootstrap::getObjectManager();
 
 /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository */
-$attributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
+$attributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
 $attribute = $attributeRepository->get('tax_class_id');
 $attribute->setIsFilterableInSearch(true);
-$attributeRepository->save($attribute);
+$attribute->save();
 
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = $objectManager->create(SearchCriteriaBuilder::class);
