@@ -126,30 +126,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
         if ($expectedCondition !== null) {
             $this->processFilters($name, $filterData, $expectedCondition, $uiComponent);
-        } else {
-            $uiComponent->method('convertDate')
-                ->willReturnMap([
-                    [$filterData[$name]['from'], new \DateTime($filterData[$name]['from'])],
-                    [$filterData[$name]['to'], new \DateTime($filterData[$name]['to'] . ' 23:59:59')],
-                ]);
-
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('setConditionType')
-                ->willReturnSelf();
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('setField')
-                ->willReturnSelf();
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('setValue')
-                ->willReturnSelf();
-
-            $filterMock = $this->getMock(Filter::class);
-            $this->filterBuilderMock->expects(static::exactly(2))
-                ->method('create')
-                ->willReturn($filterMock);
-            $this->dataProviderMock->expects(static::exactly(2))
-                ->method('addFilter')
-                ->with($filterMock);
         }
 
         $this->uiComponentFactory->expects($this->any())
@@ -252,10 +228,12 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 ->with($filterData[$name])
                 ->willReturn(new \DateTime($filterData[$name]));
         } else {
+            $from = new \DateTime($filterData[$name]['from']);
+            $to = new \DateTime($filterData[$name]['to'] . ' 23:59:59');
             $uiComponent->method('convertDate')
                 ->willReturnMap([
-                    [$filterData[$name]['from'], new \DateTime($filterData[$name]['from'])],
-                    [$filterData[$name]['to'], new \DateTime($filterData[$name]['to'] . ' 23:59:59')],
+                    [$filterData[$name]['from'], 0, 0, 0, true, $from],
+                    [$filterData[$name]['to'], 23, 59, 59, true, $to],
                 ]);
         }
 
