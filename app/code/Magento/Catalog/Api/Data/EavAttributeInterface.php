@@ -150,9 +150,6 @@ interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
     /**
      * Set is attribute visible in grid
      *
-     * @return $this
-     */
-    /**
      * @param bool|null $isVisibleInGrid
      * @return $this
      */
