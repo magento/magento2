@@ -22,7 +22,7 @@ $objectManager = Bootstrap::getObjectManager();
 $attributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
 $attribute = $attributeRepository->get('tax_class_id');
 $attribute->setIsFilterableInSearch(true);
-$attributeRepository->save($attribute);
+$attribute->save();
 
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = $objectManager->create(SearchCriteriaBuilder::class);
