@@ -47,6 +47,11 @@ class LiteralNamespacesSniff implements Sniff
         }
 
         $content = trim($tokens[$stackPtr]['content'], "\"'");
+        // replace double slashes from class name for avoiding problems with class autoload
+        if (strpos($content, '\\') !== false) {
+            $content = preg_replace('|\\\{2,}|', '\\', $content);
+        }
+
         if (preg_match($this->literalNamespacePattern, $content) === 1 && $this->classExists($content)) {
             $sourceFile->addError(
                 "Use ::class notation instead.",
