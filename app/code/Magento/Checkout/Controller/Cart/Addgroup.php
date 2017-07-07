@@ -23,6 +23,13 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
             foreach ($itemsCollection as $item) {
                 try {
                     $this->cart->addOrderItem($item, 1);
+                    if (!$this->cart->getQuote()->getHasError()) {
+                        $message = __(
+                             'You added %1 to your shopping cart.',                             
+                             $this->escaper->escapeHtml($item->getName())
+                        );
+                        $this->messageManager->addSuccessMessage($message);
+                    }
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     if ($this->_checkoutSession->getUseNotice(true)) {
                         $this->messageManager->addNotice($e->getMessage());

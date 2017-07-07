@@ -39,12 +39,18 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
     protected $cart;
 
     /**
+    * @var \Magento\Framework\Escaper
+    */
+    protected $escaper;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
+     * @param \Magento\Framework\Escaper $escaper
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -53,13 +59,15 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        CustomerCart $cart
+        CustomerCart $cart,
+        \Magento\Framework\Escaper $escaper = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_scopeConfig = $scopeConfig;
         $this->_checkoutSession = $checkoutSession;
         $this->_storeManager = $storeManager;
-        $this->cart = $cart;
+        $this->cart = $cart;        
+        $this->escaper = $escaper ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context);
     }
 
