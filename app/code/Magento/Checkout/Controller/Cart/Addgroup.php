@@ -10,6 +10,9 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Addgroup extends \Magento\Checkout\Controller\Cart
 {
     /**
@@ -56,8 +59,8 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                     $this->cart->addOrderItem($item, 1);
                     if (!$this->cart->getQuote()->getHasError()) {
                         $message = __(
-                             'You added %1 to your shopping cart.',
-                             $this->escaper->escapeHtml($item->getName())
+                            'You added %1 to your shopping cart.',
+                            $this->escaper->escapeHtml($item->getName())
                         );
                         $this->messageManager->addSuccessMessage($message);
                     }
