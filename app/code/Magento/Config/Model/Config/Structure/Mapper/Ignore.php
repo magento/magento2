@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Mapper;
 
+/**
+ * @api
+ */
 class Ignore implements \Magento\Config\Model\Config\Structure\MapperInterface
 {
     /**

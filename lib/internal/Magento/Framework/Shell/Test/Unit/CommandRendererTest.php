@@ -19,4 +19,13 @@ class CommandRendererTest extends \PHPUnit_Framework_TestCase
             $commandRenderer->render('php -r %s | grep %s', [$testArgument, $testArgument2])
         );
     }
+
+    public function testRenderWithoutArguments()
+    {
+        $commandRenderer = new CommandRenderer();
+        $this->assertEquals(
+            "php -r %s 2>&1 | grep %s 2>&1",
+            $commandRenderer->render('php -r %s | grep %s', [])
+        );
+    }
 }

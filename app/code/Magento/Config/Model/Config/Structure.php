@@ -38,6 +38,8 @@ namespace Magento\Config\Model\Config;
  * Also you can see that the field <field id="field_two_id"> has the next paths:
  * - the structure path section_id/group_id/field_two_id
  * - the configuration path section/group/field
+ *
+ * @api
  */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {

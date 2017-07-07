@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
@@ -149,7 +147,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($this->getColumn()->getFilterTime()) {
             $value = $this->getValue($index);
-            if ($value instanceof \DateTime) {
+            if ($value instanceof \DateTimeInterface) {
                 return $this->_localeDate->formatDateTime($value);
             }
             return $value;

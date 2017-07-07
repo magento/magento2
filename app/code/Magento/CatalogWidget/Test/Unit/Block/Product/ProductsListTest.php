@@ -269,6 +269,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'addStoreFilter',
                 'setPageSize',
                 'setCurPage',
+                'distinct'
             ])->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())->method('setVisibility')
@@ -282,6 +283,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
         $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
         $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
+        $collection->expects($this->once())->method('distinct')->willReturnSelf();
 
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
