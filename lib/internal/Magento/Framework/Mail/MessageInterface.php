@@ -16,9 +16,13 @@ interface MessageInterface
 {
     /**
      * Types of message
+     * @deprecated
      */
     const TYPE_TEXT = 'text/plain';
 
+    /**
+     * @deprecated
+     */
     const TYPE_HTML = 'text/html';
 
     /**
@@ -51,11 +55,7 @@ interface MessageInterface
     /**
      * Get message body
      *
-     * @return mixed
-     *
-     * @deprecated
-     * @see \Magento\Framework\Mail\MailMessageInterface::getBodyHtml
-     * @see \Magento\Framework\Mail\MailMessageInterface::getBodyText()
+     * @return string
      */
     public function getBody();
 

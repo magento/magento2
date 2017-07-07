@@ -25,16 +25,6 @@ interface MailMessageInterface extends MessageInterface
     public function setBodyText($text);
 
     /**
-     * @return string
-     */
-    public function getBodyText();
-
-    /**
-     * @return string
-     */
-    public function getBodyHtml();
-
-    /**
      * Get message source code
      *
      * @return string

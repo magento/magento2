@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Mail;
 
-use Magento\Framework\Exception\LocalizedException;
 use Zend\Mime\Mime;
 use Zend\Mime\Part;
 
@@ -43,8 +42,6 @@ class Message implements MailMessageInterface
      * {@inheritdoc}
      *
      * @deprecated
-     * @see \Magento\Framework\Mail\Message::getBodyText
-     * @see \Magento\Framework\Mail\Message::getBodyHtml
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
@@ -90,10 +87,6 @@ class Message implements MailMessageInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated
-     * @see \Magento\Framework\Mail\Message::getBodyText
-     * @see \Magento\Framework\Mail\Message::getBodyHtml
      */
     public function getBody()
     {
@@ -188,31 +181,5 @@ class Message implements MailMessageInterface
     {
         $this->setMessageType(self::TYPE_TEXT);
         return $this->setBody($text);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBodyText()
-    {
-        if ($this->messageType != self::TYPE_TEXT) {
-            throw new LocalizedException(
-                __('Text message body is not set')
-            );
-        }
-        return $this->getBody();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBodyHtml()
-    {
-        if ($this->messageType != self::TYPE_HTML) {
-            throw new LocalizedException(
-                __('HTML message body is not set')
-            );
-        }
-        return $this->getBody();
     }
 }
