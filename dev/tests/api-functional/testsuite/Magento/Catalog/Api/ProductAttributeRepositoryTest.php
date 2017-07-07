@@ -185,7 +185,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals($attribute['is_used_in_grid'], $result['is_used_in_grid']);
+        $this->assertEquals(true, $result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label_new', $result['default_frontend_label']);
         //New option set as default
