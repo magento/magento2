@@ -133,7 +133,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'visible_on_front',
                 'checkbox',
-                ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'value' => 1]
+                ['name' => 'visible_on_front', 'label' => __('Visible On Storefront'), 'value' => 1, 'checked' => true]
             );
 
         $this->block->toHtml();
