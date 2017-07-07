@@ -91,6 +91,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $expectedData = [
             'attribute_code' => $attributeCode,
             'is_required' => true,
+            'entity_type_id' => "4",
             "frontend_input" => "select",
             "is_visible_on_front" => true,
             "is_searchable" => true,
@@ -205,6 +206,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
                 'is_required' => true,
                 'frontend_labels' => [
                     ['store_id' => 0, 'label' => 'front_lbl_new'],
@@ -281,6 +283,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attributeData = [
             'attribute' => [
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => '4',
                 'frontend_labels' => [
                     [
                         'store_id' => 0,
