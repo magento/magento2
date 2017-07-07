@@ -1,12 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+/**
+ * @api
+ */
 interface ScopeInterface
 {
+    /**
+     * Default scope reference code
+     */
+    const SCOPE_DEFAULT = 'default';
+
     /**
      * Retrieve scope code
      *
@@ -17,7 +25,28 @@ interface ScopeInterface
     /**
      * Get scope identifier
      *
-     * @return  int
+     * @return int
      */
     public function getId();
+
+    /**
+     * Get scope type
+     *
+     * @return string
+     */
+    public function getScopeType();
+
+    /**
+     * Get scope type name
+     *
+     * @return string
+     */
+    public function getScopeTypeName();
+
+    /**
+     * Get scope name
+     *
+     * @return string
+     */
+    public function getName();
 }

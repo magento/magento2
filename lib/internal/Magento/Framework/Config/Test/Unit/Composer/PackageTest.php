@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Config\Test\Unit\Composer;
 
@@ -58,6 +56,6 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             ['magento/theme-adminhtml-backend' => 7, 'magento/theme-frontend-luma' => 8],
             (array)$this->object->get('nested', '/^magento\/theme/')
-            );
+        );
     }
 }

@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
 
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Paypal\Model\Config;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class AbstractConfig
@@ -48,6 +50,16 @@ abstract class AbstractConfig implements ConfigInterface
      * @var string
      */
     protected $pathPattern;
+
+    /**
+     * @var ProductMetadataInterface
+     */
+    protected $productMetadata;
+
+    /**
+     * @var string
+     */
+    private static $bnCode = 'Magento_Cart_%s';
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -323,10 +335,20 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function getBuildNotationCode()
     {
-        return $this->_scopeConfig->getValue(
-            'paypal/bncode',
-            ScopeInterface::SCOPE_STORE,
-            $this->_storeId
-        );
+        return sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
+    }
+
+    /**
+     * The getter function to get the ProductMetadata
+     *
+     * @return ProductMetadataInterface
+     * @deprecated
+     */
+    protected function getProductMetadata()
+    {
+        if ($this->productMetadata === null) {
+            $this->productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
+        }
+        return $this->productMetadata;
     }
 }

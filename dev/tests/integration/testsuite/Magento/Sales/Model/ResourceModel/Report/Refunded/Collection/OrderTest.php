@@ -1,37 +1,74 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Refunded\Collection;
 
+/**
+ * Integration tests for refunds reports collection which is used to obtain refund reports by order date.
+ */
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Report\Refunded\Collection\Order
      */
-    private $_collection;
+    private $collection;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
 
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\ResourceModel\Report\Refunded\Collection\Order'
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->collection = $this->objectManager->create(
+            \Magento\Sales\Model\ResourceModel\Report\Refunded\Collection\Order::class
         );
-        $this->_collection->setPeriod('day')->setDateRange(null, null)->addStoreFilter([1]);
+        $this->collection->setPeriod('day')
+            ->setDateRange(null, null)
+            ->addStoreFilter([1]);
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/creditmemo.php
+     * @magentoDataFixture Magento/Sales/_files/order_info.php
+     * @magentoDataFixture Magento/Sales/_files/order_from_past.php
      * @magentoDataFixture Magento/Sales/_files/report_refunded.php
+     * @return void
      */
     public function testGetItems()
     {
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
+        $order->loadByIncrementId('100000001');
+        /** @var \Magento\Framework\Stdlib\DateTime\DateTime $dateTime */
+        $dateTime = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\DateTimeFactory::class)
+            ->create();
+        /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone */
+        $timezone = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $orderCreatedAt = $timezone->formatDateTime(
+            $order->getCreatedAt(),
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            null,
+            null,
+            'yyyy-MM-dd'
+        );
+        $creditmemoCreatedAtDate = $dateTime->date('Y-m-d', $orderCreatedAt);
+
         $expectedResult = [
-            ['orders_count' => 1, 'refunded' => 100, 'online_refunded' => 80, 'offline_refunded' => 20],
+            [
+                'orders_count' => 1,
+                'refunded' => 50,
+                'online_refunded' => 50,
+                'offline_refunded' => 0,
+                'period' => $creditmemoCreatedAtDate
+            ],
         ];
         $actualResult = [];
         /** @var \Magento\Reports\Model\Item $reportItem */
-        foreach ($this->_collection->getItems() as $reportItem) {
+        foreach ($this->collection->getItems() as $reportItem) {
             $actualResult[] = array_intersect_key($reportItem->getData(), $expectedResult[0]);
         }
         $this->assertEquals($expectedResult, $actualResult);

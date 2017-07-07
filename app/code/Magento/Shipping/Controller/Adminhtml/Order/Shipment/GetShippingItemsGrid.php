@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -11,6 +11,13 @@ use Magento\Framework\App\ResponseInterface;
 
 class GetShippingItemsGrid extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
      */
@@ -29,14 +36,6 @@ class GetShippingItemsGrid extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
-    }
-
-    /**
      * Return grid with shipping items for Ajax request
      *
      * @return ResponseInterface
@@ -50,7 +49,7 @@ class GetShippingItemsGrid extends \Magento\Backend\App\Action
         $this->shipmentLoader->load();
         return $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(
-                'Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid'
+                \Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid::class
             )->setIndex(
                 $this->getRequest()->getParam('index')
             )->toHtml()

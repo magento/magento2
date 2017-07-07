@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Composer;
@@ -82,7 +82,9 @@ class DependencyChecker
         foreach ($rawLines as $rawLine) {
             $parts = explode(' ', $rawLine);
             if (count(explode('/', $parts[0])) == 2) {
-                $packages[] = $parts[0];
+                if (strpos($parts[0], 'magento/project-') === false) {
+                    $packages[] = $parts[0];
+                }
             }
         }
         return $packages;

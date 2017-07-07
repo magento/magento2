@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
@@ -20,8 +20,10 @@ class NewAction extends ProductController
         $resultPage->setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
         $resultPage->getConfig()->getTitle()->prepend(__('Customer Reviews'));
         $resultPage->getConfig()->getTitle()->prepend(__('New Review'));
-        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Add'));
-        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Product\Grid'));
+        $resultPage->addContent($resultPage->getLayout()->createBlock(\Magento\Review\Block\Adminhtml\Add::class));
+        $resultPage->addContent($resultPage->getLayout()->createBlock(
+            \Magento\Review\Block\Adminhtml\Product\Grid::class
+        ));
         return $resultPage;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,10 +30,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->itemFactoryMock = $this->getMockBuilder('Magento\Reports\Model\ItemFactory')
+        $this->itemFactoryMock = $this->getMockBuilder(\Magento\Reports\Model\ItemFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,12 +67,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareIntervalsCollection($from, $to, $period, $results)
     {
-        $collection = $this->getMockBuilder('Magento\Framework\Data\Collection')
+        $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['addItem'])
             ->getMock();
 
-        $item = $this->getMockBuilder('Magento\Reports\Model\Item')
+        $item = $this->getMockBuilder(\Magento\Reports\Model\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['setPeriod', 'setIsEmpty'])
             ->getMock();

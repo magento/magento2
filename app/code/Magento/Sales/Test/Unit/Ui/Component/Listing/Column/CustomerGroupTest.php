@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
@@ -24,18 +24,18 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
      */
     protected $groupRepository;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
-        $this->groupRepository = $this->getMockForAbstractClass('Magento\Customer\Api\GroupRepositoryInterface');
+        $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
+        $this->groupRepository = $this->getMockForAbstractClass(\Magento\Customer\Api\GroupRepositoryInterface::class);
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\CustomerGroup',
+            \Magento\Sales\Ui\Component\Listing\Column\CustomerGroup::class,
             ['groupRepository' => $this->groupRepository, 'context' => $contextMock]
         );
     }
@@ -53,7 +53,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $group = $this->getMockForAbstractClass('Magento\Customer\Api\Data\GroupInterface');
+        $group = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\GroupInterface::class);
         $group->expects($this->once())
             ->method('getCode')
             ->willReturn($newItemValue);

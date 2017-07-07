@@ -1,141 +1,143 @@
-"Are you sure?","Are you sure?"
-Cancel,Cancel
-"Add Products","Add Products"
-Product,Product
-SKU,SKU
-Qty,Qty
-Action,Action
-"Incl. Tax","Incl. Tax"
-Add,Add
-Delete,Delete
-Title,Title
-Type,Type
-Description,Description
-"Select All","Select All"
-OK,OK
-Fixed,Fixed
-N/A,N/A
-Percent,Percent
-"Close Window","Close Window"
-"Product Name","Product Name"
-Country,Country
-"Payment Information","Payment Information"
-"Shipping Information","Shipping Information"
-City,City
-"Street Address","Street Address"
-Weight,Weight
-Contents,Contents
-Package,Package
-Packages,Packages
-Date,Date
-cm,cm
-Height,Height
-Width,Width
-"No packages for request","No packages for request"
-Region/State,Region/State
-Location,Location
-"Shipping Methods","Shipping Methods"
-"Per Order","Per Order"
-"All Allowed Countries","All Allowed Countries"
-"Specific Countries","Specific Countries"
-Status:,Status:
-Print,Print
-"Custom Value","Custom Value"
-"Print Shipping Label","Print Shipping Label"
-"Show Packages","Show Packages"
-"Products should be added to package(s)","Products should be added to package(s)"
-"Please specify a carrier.","Please specify a carrier."
-"Tracking Information","Tracking Information"
-"No detail for number ""%1""","No detail for number ""%1"""
-"Customs Value","Customs Value"
-"Qty Ordered","Qty Ordered"
-"Create Shipping Label","Create Shipping Label"
-"Add Package","Add Package"
-"Create Packages","Create Packages"
-Size,Size
-Girth,Girth
-"Total Weight","Total Weight"
-Length,Length
-"Signature Confirmation","Signature Confirmation"
-in,in
-lb,lb
-kg,kg
-"Delete Package","Delete Package"
-Explanation,Explanation
-"Add Selected Product(s) to Package","Add Selected Product(s) to Package"
-"Please select products.","Please select products."
-Carrier,Carrier
-Number,Number
-"Items in the Package","Items in the Package"
-"Shipping and Tracking Information","Shipping and Tracking Information"
-"Track this shipment","Track this shipment"
-Ship,Ship
-Shipments,Shipments
-"Order # %1","Order # %1"
-"Back to My Orders","Back to My Orders"
-"View Another Order","View Another Order"
-"The order no longer exists.","The order no longer exists."
-"Cannot add new comment.","Cannot add new comment."
-"Total Shipping Charges","Total Shipping Charges"
-"Append Comments","Append Comments"
-"The order was placed using %1.","The order was placed using %1."
-"No shipping information available","No shipping information available"
-"Items Shipped","Items Shipped"
-"Qty Shipped","Qty Shipped"
 "New Shipment for Order #%1","New Shipment for Order #%1"
 "Submit Shipment","Submit Shipment"
-"You are trying to add a quantity for some products that doesn't match the quantity that was shipped.","You are trying to add a quantity for some products that doesn't match the quantity that was shipped."
+"You are trying to add a quantity for some products that doesn\'t match the quantity that was shipped.","You are trying to add a quantity for some products that doesn\'t match the quantity that was shipped."
+"Products should be added to package(s)","Products should be added to package(s)"
 "The value that you entered is not valid.","The value that you entered is not valid."
 "Add Tracking Number","Add Tracking Number"
+"Custom Value","Custom Value"
+Add,Add
 "Send Tracking Information","Send Tracking Information"
 "Are you sure you want to send a Shipment email to customer?","Are you sure you want to send a Shipment email to customer?"
+Print,Print
 "the shipment email was sent","the shipment email was sent"
 "the shipment email is not sent","the shipment email is not sent"
 "Shipment #%1 | %3 (%2)","Shipment #%1 | %3 (%2)"
 "Create Shipping Label...","Create Shipping Label..."
+"Print Shipping Label","Print Shipping Label"
+"Show Packages","Show Packages"
 "About Your Shipment","About Your Shipment"
-"Cannot do shipment for the order separately from invoice.","Cannot do shipment for the order separately from invoice."
-"Cannot do shipment for the order.","Cannot do shipment for the order."
+"Order # %1","Order # %1"
+"Back to My Orders","Back to My Orders"
+"View Another Order","View Another Order"
+"Please enter a comment.","Please enter a comment."
+"Cannot add new comment.","Cannot add new comment."
+"Please specify a carrier.","Please specify a carrier."
 "Please enter a tracking number.","Please enter a tracking number."
-"New Shipment","New Shipment"
-"The shipment has been created.","The shipment has been created."
+Shipments,Shipments
+"We can\'t initialize shipment for adding tracking number.","We can\'t initialize shipment for adding tracking number."
+"Cannot add tracking number.","Cannot add tracking number."
 "You created the shipping label.","You created the shipping label."
 "An error occurred while creating shipping label.","An error occurred while creating shipping label."
-"Cannot save shipment.","Cannot save shipment."
 "You sent the shipment.","You sent the shipment."
 "Cannot send shipment information.","Cannot send shipment information."
-"Cannot initialize shipment for adding tracking number.","Cannot initialize shipment for adding tracking number."
-"Cannot add tracking number.","Cannot add tracking number."
-"Cannot initialize shipment for delete tracking number.","Cannot initialize shipment for delete tracking number."
-"Cannot delete tracking number.","Cannot delete tracking number."
-"Cannot load track with retrieving identifier.","Cannot load track with retrieving identifier."
-"The comment text field cannot be empty.","The comment text field cannot be empty."
-"We don't recognize or support the file extension in this shipment: %1.","We don't recognize or support the file extension in this shipment: %1."
 "There are no shipping labels related to selected orders.","There are no shipping labels related to selected orders."
+"New Shipment","New Shipment"
+"We don\'t recognize or support the file extension in this shipment: %1.","We don\'t recognize or support the file extension in this shipment: %1."
+"We can\'t initialize shipment for delete tracking number.","We can\'t initialize shipment for delete tracking number."
+"We can\'t delete tracking number.","We can\'t delete tracking number."
+"We can\'t load track with retrieving identifier right now.","We can\'t load track with retrieving identifier right now."
+"We can\'t save the shipment right now.","We can\'t save the shipment right now."
+"The shipment has been created.","The shipment has been created."
+"Cannot save shipment.","Cannot save shipment."
+"The order no longer exists.","The order no longer exists."
+"Cannot do shipment for the order separately from invoice.","Cannot do shipment for the order separately from invoice."
+"Cannot do shipment for the order.","Cannot do shipment for the order."
 "There are no shipping labels related to selected shipments.","There are no shipping labels related to selected shipments."
-"Sorry, but we can't deliver to the destination country with this shipping module.","Sorry, but we can't deliver to the destination country with this shipping module."
+"Page not found.","Page not found."
+"Tracking Information","Tracking Information"
+"Sorry, but we can\'t deliver to the destination country with this shipping module.","Sorry, but we can\'t deliver to the destination country with this shipping module."
 "The shipping module is not available.","The shipping module is not available."
 "This shipping method is not available. Please specify the zip code.","This shipping method is not available. Please specify the zip code."
+"No packages for request","No packages for request"
+"Security validation of XML document has been failed.","Security validation of XML document has been failed."
+"All Allowed Countries","All Allowed Countries"
+"Specific Countries","Specific Countries"
 Development,Development
 Live,Live
 "Divide to equal weight (one request)","Divide to equal weight (one request)"
 "Use origin weight (few requests)","Use origin weight (few requests)"
-"We don't have enough information to create shipping labels. Please make sure your store information and settings are complete.","We don't have enough information to create shipping labels. Please make sure your store information and settings are complete."
+Packages,Packages
+Package,Package
+Type,Type
+Length,Length
+"Signature Confirmation","Signature Confirmation"
+"Customs Value","Customs Value"
+Width,Width
+Contents,Contents
+"Total Weight","Total Weight"
+Height,Height
+Size,Size
+Girth,Girth
+"Items in the Package","Items in the Package"
+Product,Product
+Weight,Weight
+"Qty Ordered","Qty Ordered"
+Qty,Qty
+"No detail for number ""%1""","No detail for number ""%1"""
+"Shipping labels is not available.","Shipping labels is not available."
+"Response info is not exist.","Response info is not exist."
+"Invalid carrier: %1","Invalid carrier: %1"
+"We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.","We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete."
+"Per Order","Per Order"
 "Per Package","Per Package"
+Fixed,Fixed
+Percent,Percent
 "Tracking information is unavailable.","Tracking information is unavailable."
+message,message
+"Email has not been sent","Email has not been sent"
+"Payment &amp; Shipping Method","Payment &amp; Shipping Method"
+"Payment Information","Payment Information"
+"The order was placed using %1.","The order was placed using %1."
+"Shipping Information","Shipping Information"
+"Total Shipping Charges","Total Shipping Charges"
+"Incl. Tax","Incl. Tax"
 "Items to Ship","Items to Ship"
 "Qty to Ship","Qty to Ship"
+Ship,Ship
+"Shipment Total","Shipment Total"
 "Shipment Comments","Shipment Comments"
+"Comment Text","Comment Text"
+"Shipment Options","Shipment Options"
+"Create Shipping Label","Create Shipping Label"
+"Append Comments","Append Comments"
 "Email Copy of Shipment","Email Copy of Shipment"
 "Invalid value(s) for Qty to Ship","Invalid value(s) for Qty to Ship"
-"USPS domestic shipments don't use package types.","USPS domestic shipments don't use package types."
+"Select All","Select All"
+"Product Name","Product Name"
+Delete,Delete
+"Create Packages","Create Packages"
+Cancel,Cancel
+Save,Save
+"Add Package","Add Package"
+"Add Selected Product(s) to Package","Add Selected Product(s) to Package"
+"Add Products to Package","Add Products to Package"
+"USPS domestic shipments don\'t use package types.","USPS domestic shipments don\'t use package types."
+in,in
+cm,cm
+lb,lb
+kg,kg
+"Delete Package","Delete Package"
+Explanation,Explanation
+Carrier,Carrier
+Title,Title
+Number,Number
+Action,Action
+"Are you sure?","Are you sure?"
 "Shipping &amp; Handling Information","Shipping &amp; Handling Information"
 "Track Order","Track Order"
+"No shipping information available","No shipping information available"
+"Shipping and Tracking Information","Shipping and Tracking Information"
+"Track this shipment","Track this shipment"
+"Items Shipped","Items Shipped"
+"Order Total","Order Total"
 "Shipment History","Shipment History"
+"Qty Shipped","Qty Shipped"
 "Print All Shipments","Print All Shipments"
 "Shipment #","Shipment #"
 "Print Shipment","Print Shipment"
 "Tracking Number(s):","Tracking Number(s):"
+SKU,SKU
+"Order tracking","Order tracking"
 "Tracking Number:","Tracking Number:"
 Carrier:,Carrier:
 Error:,Error:
@@ -145,18 +147,37 @@ Error:,Error:
 "email us at ","email us at "
 Info:,Info:
 Track:,Track:
+Status:,Status:
 "Delivered on:","Delivered on:"
 "Signed by:","Signed by:"
 "Delivered to:","Delivered to:"
 "Shipped or billed on:","Shipped or billed on:"
 "Service Type:","Service Type:"
 Weight:,Weight:
+N/A,N/A
+"Track history","Track history"
+Location,Location
+Date,Date
 "Local Time","Local Time"
+Description,Description
 "There is no tracking available for this shipment.","There is no tracking available for this shipment."
 "There is no tracking available.","There is no tracking available."
-"ZIP/Postal Code","ZIP/Postal Code"
-"Street Address Line 2","Street Address Line 2"
+"Close Window","Close Window"
+"See our Shipping Policy","See our Shipping Policy"
+"Shipping Settings Section","Shipping Settings Section"
+"Shipping Policy Parameters Section","Shipping Policy Parameters Section"
+"Shipping Methods Section","Shipping Methods Section"
 "Shipping Settings","Shipping Settings"
 Origin,Origin
+Country,Country
+Region/State,Region/State
+"ZIP/Postal Code","ZIP/Postal Code"
+City,City
+"Street Address","Street Address"
+"Street Address Line 2","Street Address Line 2"
 "Shipping Policy Parameters","Shipping Policy Parameters"
 "Apply custom Shipping Policy","Apply custom Shipping Policy"
+"Shipping Policy","Shipping Policy"
+"Shipping Methods","Shipping Methods"
+"Track your order","Track your order"
+"Track All Shipments","Track All Shipments"

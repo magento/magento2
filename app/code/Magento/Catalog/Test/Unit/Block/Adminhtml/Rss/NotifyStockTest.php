@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Rss;
@@ -56,20 +56,21 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
                 'title' => 'Low Stock Product',
                 'description' => 'Low Stock Product has reached a quantity of 1.',
                 'link' => 'http://magento.com/catalog/product/edit/id/1',
+
             ],
         ],
     ];
 
     protected function setUp()
     {
-        $this->rssModel = $this->getMockBuilder('Magento\Catalog\Model\Rss\Product\NotifyStock')
+        $this->rssModel = $this->getMockBuilder(\Magento\Catalog\Model\Rss\Product\NotifyStock::class)
             ->setMethods(['getProductsCollection', '__wakeup'])
             ->disableOriginalConstructor()->getMock();
-        $this->rssUrlBuilder = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
-        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
+        $this->rssUrlBuilder = $this->getMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Block\Adminhtml\Rss\NotifyStock',
+            \Magento\Catalog\Block\Adminhtml\Rss\NotifyStock::class,
             [
                 'urlBuilder' => $this->urlBuilder,
                 'rssModel' => $this->rssModel,
@@ -82,7 +83,7 @@ class NotifyStockTest extends \PHPUnit_Framework_TestCase
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->will($this->returnValue('http://magento.com/rss/feeds/index/type/notifystock'));
-        $item = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__sleep', '__wakeup', 'getId', 'getQty', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();

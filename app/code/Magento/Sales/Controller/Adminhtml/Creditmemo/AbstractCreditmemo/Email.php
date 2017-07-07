@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
@@ -13,12 +13,11 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 class Email extends \Magento\Backend\App\Action
 {
     /**
-     * @return bool
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
-    }
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
      * Notify user
@@ -31,7 +30,7 @@ class Email extends \Magento\Backend\App\Action
         if (!$creditmemoId) {
             return;
         }
-        $this->_objectManager->create('Magento\Sales\Api\CreditmemoManagementInterface')
+        $this->_objectManager->create(\Magento\Sales\Api\CreditmemoManagementInterface::class)
             ->notify($creditmemoId);
 
         $this->messageManager->addSuccess(__('You sent the message.'));

@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -19,17 +20,197 @@ class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->addSupportVideoMediaAttributes($setup);
             $this->removeGroupPrice($setup);
         }
+        if (version_compare($context->getVersion(), '2.0.6', '<')) {
+            $this->addUniqueKeyToCategoryProductTable($setup);
+        }
+        if (version_compare($context->getVersion(), '2.1.4', '<')) {
+            $this->addSourceEntityIdToProductEavIndex($setup);
+        }
+        if (version_compare($context->getVersion(), '2.1.5', '<')) {
+            $this->addPercentageValueColumn($setup);
+            $tables = [
+                'catalog_product_index_price_cfg_opt_agr_idx',
+                'catalog_product_index_price_cfg_opt_agr_tmp',
+                'catalog_product_index_price_cfg_opt_idx',
+                'catalog_product_index_price_cfg_opt_tmp',
+                'catalog_product_index_price_final_idx',
+                'catalog_product_index_price_final_tmp',
+                'catalog_product_index_price_idx',
+                'catalog_product_index_price_opt_agr_idx',
+                'catalog_product_index_price_opt_agr_tmp',
+                'catalog_product_index_price_opt_idx',
+                'catalog_product_index_price_opt_tmp',
+                'catalog_product_index_price_tmp',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    [
+                        'type' => Table::TYPE_INTEGER,
+                        'nullable' => false,
+                        'unsigned' => true,
+                        'default' => '0',
+                        'comment' => 'Customer Group ID',
+                    ]
+                );
+            }
+            $this->recreateCatalogCategoryProductIndexTmpTable($setup);
+        }
+        if (version_compare($context->getVersion(), '2.2.0', '<')) {
+            //remove fk from price index table
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable('catalog_product_index_price'),
+                $setup->getFkName(
+                    'catalog_product_index_price',
+                    'entity_id',
+                    'catalog_product_entity',
+                    'entity_id'
+                )
+            );
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable('catalog_product_index_price'),
+                $setup->getFkName(
+                    'catalog_product_index_price',
+                    'website_id',
+                    'store_website',
+                    'website_id'
+                )
+            );
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable('catalog_product_index_price'),
+                $setup->getFkName(
+                    'catalog_product_index_price',
+                    'customer_group_id',
+                    'customer_group',
+                    'customer_group_id'
+                )
+            );
 
+            $this->addReplicaTable($setup, 'catalog_product_index_eav', 'catalog_product_index_eav_replica');
+            $this->addReplicaTable(
+                $setup,
+                'catalog_product_index_eav_decimal',
+                'catalog_product_index_eav_decimal_replica'
+            );
+            $this->addPathKeyToCategoryEntityTableIfNotExists($setup);
+            //  By adding 'catalog_product_index_price_replica' we provide separation of tables
+            //  used for indexation write and read operations and affected models.
+            $this->addReplicaTable(
+                $setup,
+                'catalog_product_index_price',
+                'catalog_product_index_price_replica'
+            );
+            // the same for 'catalog_category_product_index'
+            $this->addReplicaTable(
+                $setup,
+                'catalog_category_product_index',
+                'catalog_category_product_index_replica'
+            );
+        }
+        if (version_compare($context->getVersion(), '2.2.2', '<')) {
+            $tables = [
+                'catalog_product_entity_tier_price',
+                'catalog_product_index_price_cfg_opt_agr_idx',
+                'catalog_product_index_price_cfg_opt_agr_tmp',
+                'catalog_product_index_price_cfg_opt_idx',
+                'catalog_product_index_price_cfg_opt_tmp',
+                'catalog_product_index_price_final_idx',
+                'catalog_product_index_price_final_tmp',
+                'catalog_product_index_price_idx',
+                'catalog_product_index_price_opt_agr_idx',
+                'catalog_product_index_price_opt_agr_tmp',
+                'catalog_product_index_price_opt_idx',
+                'catalog_product_index_price_opt_tmp',
+                'catalog_product_index_price_tmp',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    [
+                        'type' => Table::TYPE_INTEGER,
+                        'nullable' => false,
+                        'unsigned' => true,
+                        'default' => '0',
+                        'comment' => 'Customer Group ID',
+                    ]
+                );
+            }
+        }
         $setup->endSetup();
+    }
+
+    /**
+     * Add the column 'source_id' to the Product EAV index tables.
+     * It allows to identify which entity was used to create value in the index.
+     * It is useful to identify original entity in a composite products.
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addSourceEntityIdToProductEavIndex(SchemaSetupInterface $setup)
+    {
+        $tables = [
+            'catalog_product_index_eav',
+            'catalog_product_index_eav_idx',
+            'catalog_product_index_eav_tmp',
+            'catalog_product_index_eav_decimal',
+            'catalog_product_index_eav_decimal_idx',
+            'catalog_product_index_eav_decimal_tmp',
+        ];
+        $connection = $setup->getConnection();
+        foreach ($tables as $tableName) {
+            $tableName = $setup->getTable($tableName);
+            if (!$connection->tableColumnExists($tableName, 'source_id')) {
+                $connection->addColumn(
+                    $tableName,
+                    'source_id',
+                    [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                        'unsigned' => true,
+                        'nullable' => false,
+                        'default' => 0,
+                        'comment' => 'Original entity Id for attribute value',
+                    ]
+                );
+                $connection->dropIndex($tableName, $connection->getPrimaryKeyName($tableName));
+                $primaryKeyFields = ['entity_id', 'attribute_id', 'store_id', 'value', 'source_id'];
+                $setup->getConnection()->addIndex(
+                    $tableName,
+                    $connection->getIndexName($tableName, $primaryKeyFields),
+                    $primaryKeyFields,
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY
+                );
+            }
+        }
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    protected function addUniqueKeyToCategoryProductTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addIndex(
+            $setup->getTable('catalog_category_product'),
+            $setup->getIdxName(
+                'catalog_category_product',
+                ['category_id', 'product_id'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['category_id', 'product_id'],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        );
     }
 
     /**
@@ -43,7 +224,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
          * Create table 'catalog_product_entity_media_gallery_value_to_entity'
          */
         $table = $setup->getConnection()
-            ->newTable($setup->getTable(Media::GALLERY_VALUE_TO_ENTITY_TABLE))
+            ->newTable($setup->getTable(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -60,7 +241,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             )
             ->addIndex(
                 $setup->getIdxName(
-                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    Gallery::GALLERY_VALUE_TO_ENTITY_TABLE,
                     ['value_id', 'entity_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -69,19 +250,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
             )
             ->addForeignKey(
                 $setup->getFkName(
-                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    Gallery::GALLERY_VALUE_TO_ENTITY_TABLE,
                     'value_id',
-                    Media::GALLERY_TABLE,
+                    Gallery::GALLERY_TABLE,
                     'value_id'
                 ),
                 'value_id',
-                $setup->getTable(Media::GALLERY_TABLE),
+                $setup->getTable(Gallery::GALLERY_TABLE),
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
                 $setup->getFkName(
-                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    Gallery::GALLERY_VALUE_TO_ENTITY_TABLE,
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -107,26 +288,26 @@ class UpgradeSchema implements UpgradeSchemaInterface
          */
         $setup->getConnection()->addForeignKey(
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'value_id',
-                Media::GALLERY_TABLE,
+                Gallery::GALLERY_TABLE,
                 'value_id'
             ),
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             'value_id',
-            $setup->getTable(Media::GALLERY_TABLE),
+            $setup->getTable(Gallery::GALLERY_TABLE),
             'value_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         );
 
         $setup->getConnection()->addForeignKey(
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'store_id',
                 $setup->getTable('store'),
                 'store_id'
             ),
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             'store_id',
             $setup->getTable('store'),
             'store_id',
@@ -140,9 +321,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addSupportVideoMediaAttributes(SchemaSetupInterface $setup)
     {
-        if ($setup->tableExists(Media::GALLERY_VALUE_TO_ENTITY_TABLE)) {
+        if ($setup->tableExists(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE)) {
             return;
-        };
+        }
 
         /** Add support video media attribute */
         $this->createValueToEntityTable($setup);
@@ -150,7 +331,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
          * Add media type property to the Gallery entry table
          */
         $setup->getConnection()->addColumn(
-            $setup->getTable(Media::GALLERY_TABLE),
+            $setup->getTable(Gallery::GALLERY_TABLE),
             'media_type',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -161,7 +342,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ]
         );
         $setup->getConnection()->addColumn(
-            $setup->getTable(Media::GALLERY_TABLE),
+            $setup->getTable(Gallery::GALLERY_TABLE),
             'disabled',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -175,32 +356,32 @@ class UpgradeSchema implements UpgradeSchemaInterface
         /**
          * Drop entity Id columns
          */
-        $setup->getConnection()->dropColumn($setup->getTable(Media::GALLERY_TABLE), 'entity_id');
+        $setup->getConnection()->dropColumn($setup->getTable(Gallery::GALLERY_TABLE), 'entity_id');
 
         /**
          * Drop primary index
          */
         $setup->getConnection()->dropForeignKey(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'value_id',
-                Media::GALLERY_TABLE,
+                Gallery::GALLERY_TABLE,
                 'value_id'
             )
         );
         $setup->getConnection()->dropForeignKey(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'store_id',
                 'store',
                 'store_id'
             )
         );
-        $setup->getConnection()->dropIndex($setup->getTable(Media::GALLERY_VALUE_TABLE), 'primary');
+        $setup->getConnection()->dropIndex($setup->getTable(Gallery::GALLERY_VALUE_TABLE), 'primary');
         $setup->getConnection()->addColumn(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             'record_id',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -216,9 +397,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
          * Add index 'value_id'
          */
         $setup->getConnection()->addIndex(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             $setup->getConnection()->getIndexName(
-                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
                 'value_id',
                 'index'
             ),
@@ -256,5 +437,154 @@ class UpgradeSchema implements UpgradeSchemaInterface
         foreach ($fields as $filedInfo) {
             $connection->dropColumn($setup->getTable($filedInfo['table']), $filedInfo['column']);
         }
+    }
+
+    /**
+     * Add percentage value column
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addPercentageValueColumn(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection();
+        $tableName = $setup->getTable('catalog_product_entity_tier_price');
+
+        if (!$connection->tableColumnExists($tableName, 'percentage_value')) {
+            $connection->addColumn(
+                $tableName,
+                'percentage_value',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                    'nullable' => true,
+                    'length' => '5,2',
+                    'comment' => 'Percentage value',
+                    'after' => 'value'
+                ]
+            );
+        }
+    }
+
+    /**
+     * Drop and recreate catalog_category_product_index_tmp table
+     *
+     * Before this update the catalog_category_product_index_tmp table was created without usage of PK
+     * and with engine=MEMORY. Such structure of catalog_category_product_index_tmp table causes
+     * issues with MySQL DB replication.
+     *
+     * To avoid replication issues this method drops catalog_category_product_index_tmp table
+     * and creates new one with PK and engine=InnoDB
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function recreateCatalogCategoryProductIndexTmpTable(SchemaSetupInterface $setup)
+    {
+        $tableName = $setup->getTable('catalog_category_product_index_tmp');
+
+        // Drop catalog_category_product_index_tmp table
+        $setup->getConnection()->dropTable($tableName);
+
+        // Create catalog_category_product_index_tmp table with PK
+        $table = $setup->getConnection()
+            ->newTable($tableName)
+            ->addColumn(
+                'category_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Category ID'
+            )
+            ->addColumn(
+                'product_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Product ID'
+            )
+            ->addColumn(
+                'position',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'default' => '0'],
+                'Position'
+            )
+            ->addColumn(
+                'is_parent',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Parent'
+            )
+            ->addColumn(
+                'store_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Store ID'
+            )
+            ->addColumn(
+                'visibility',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Visibility'
+            )
+            ->setOption(
+                'type',
+                \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY
+            )
+            ->setComment('Catalog Category Product Indexer temporary table');
+
+        $setup->getConnection()->createTable($table);
+    }
+
+    /**
+     * Add key for the path field if not exists
+     * significantly improves category tree performance
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function addPathKeyToCategoryEntityTableIfNotExists(SchemaSetupInterface $setup)
+    {
+        /**
+         * @var \Magento\Framework\DB\Adapter\AdapterInterface
+         */
+        $connection = $setup->getConnection();
+        $tableName = $setup->getTable('catalog_category_entity');
+
+        $keyName = $setup->getIdxName(
+            $tableName,
+            ['path'],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+        );
+
+        $existingKeys = $connection->getIndexList($tableName);
+        if (!array_key_exists($keyName, $existingKeys)) {
+            $connection->addIndex(
+                $tableName,
+                $keyName,
+                ['path'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
+            );
+        }
+    }
+
+    /**
+     * Add the replica table for existing one.
+     *
+     * @param SchemaSetupInterface $setup
+     * @param string $existingTable
+     * @param string $replicaTable
+     * @return void
+     */
+    private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
+    {
+        $sql = sprintf(
+            'CREATE TABLE IF NOT EXISTS %s LIKE %s',
+            $setup->getConnection()->quoteIdentifier($setup->getTable($replicaTable)),
+            $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
+        );
+        $setup->getConnection()->query($sql);
     }
 }

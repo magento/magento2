@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index;
@@ -32,15 +32,15 @@ class RenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $uiFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())
@@ -50,7 +50,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->method('getResponse')
             ->willReturn($this->responseMock);
 
-        $this->uiFactoryMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
+        $this->uiFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->render = new Render($contextMock, $this->uiFactoryMock);
@@ -76,7 +76,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $viewMock
          */
         $viewMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponentInterface',
+            \Magento\Framework\View\Element\UiComponentInterface::class,
             [],
             '',
             false,

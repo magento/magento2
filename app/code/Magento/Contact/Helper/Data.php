@@ -1,20 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Contact\Helper;
 
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Contact base helper
+ *
+ * @deprecated
+ * @see \Magento\Contact\Model\ConfigInterface
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_ENABLED = 'contact/contact/enabled';
+    const XML_PATH_ENABLED = ConfigInterface::XML_PATH_ENABLED;
 
     /**
      * Customer session
@@ -27,6 +33,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Customer\Helper\View
      */
     protected $_customerViewHelper;
+
+    /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
+     * @var array
+     */
+    private $postData = null;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -47,6 +63,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if enabled
      *
      * @return string|null
+     * @deprecated use \Magento\Contact\Api\ConfigInterface::isEnabled() instead
      */
     public function isEnabled()
     {
@@ -70,6 +87,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
          * @var \Magento\Customer\Api\Data\CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
+
         return trim($this->_customerViewHelper->getCustomerName($customer));
     }
 
@@ -87,6 +105,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
          * @var CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
+
         return $customer->getEmail();
+    }
+
+    /**
+     * Get value from POST by key
+     *
+     * @param string $key
+     * @return string
+     */
+    public function getPostValue($key)
+    {
+        if (null === $this->postData) {
+            $this->postData = (array) $this->getDataPersistor()->get('contact_us');
+            $this->getDataPersistor()->clear('contact_us');
+        }
+
+        if (isset($this->postData[$key])) {
+            return (string) $this->postData[$key];
+        }
+
+        return '';
+    }
+
+    /**
+     * Get Data Persistor
+     *
+     * @return DataPersistorInterface
+     */
+    private function getDataPersistor()
+    {
+        if ($this->dataPersistor === null) {
+            $this->dataPersistor = ObjectManager::getInstance()
+                ->get(DataPersistorInterface::class);
+        }
+
+        return $this->dataPersistor;
     }
 }

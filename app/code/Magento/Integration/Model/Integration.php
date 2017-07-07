@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model;
@@ -26,6 +26,7 @@ namespace Magento\Integration\Model;
  * @method \string getUpdatedAt()
  * @method Integration setUpdatedAt(\string $createdAt)
  * @method \Magento\Integration\Model\ResourceModel\Integration getResource()
+ * @api
  */
 class Integration extends \Magento\Framework\Model\AbstractModel
 {
@@ -35,6 +36,8 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     const STATUS_INACTIVE = 0;
 
     const STATUS_ACTIVE = 1;
+
+    const STATUS_RECREATED = 2;
 
     /**#@-*/
 
@@ -69,14 +72,8 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $_dateTime;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -84,12 +81,10 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->_dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -101,22 +96,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Integration\Model\ResourceModel\Integration');
-    }
-
-    /**
-     * Prepare data to be saved to database
-     *
-     * @return $this
-     */
-    public function beforeSave()
-    {
-        parent::beforeSave();
-        if ($this->isObjectNew()) {
-            $this->setCreatedAt($this->_dateTime->formatDate(true));
-        }
-        $this->setUpdatedAt($this->_dateTime->formatDate(true));
-        return $this;
+        $this->_init(\Magento\Integration\Model\ResourceModel\Integration::class);
     }
 
     /**

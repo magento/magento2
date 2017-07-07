@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,12 +14,12 @@
 <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
 <?php if ($block->displayProductStockStatus()): ?>
     <?php if ($_product->isAvailable() && $_hasAssociatedProducts): ?>
-        <div class="stock available" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
-            <span><?php /* @escapeNotVerified */ echo __('In stock') ?></span>
+        <div class="stock available" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+            <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
         </div>
     <?php else: ?>
-        <div class="stock unavailable" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
-            <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
+        <div class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+            <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
         </div>
     <?php endif; ?>
 <?php endif; ?>

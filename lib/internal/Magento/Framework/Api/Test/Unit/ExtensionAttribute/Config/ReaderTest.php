@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
@@ -15,18 +15,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare parameters
      */
-    public function setUp()
+    protected function setUp()
     {
-        $fileResolver = $this->getMockBuilder('Magento\Framework\App\Config\FileResolver')
+        $fileResolver = $this->getMockBuilder(\Magento\Framework\App\Config\FileResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $converter = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config\Converter')
+        $converter = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttribute\Config\Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $schema = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator')
+        $schema = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $validator = $this->getMockBuilder('\Magento\Framework\Config\ValidationStateInterface')
+        $validator = $this->getMockBuilder(\Magento\Framework\Config\ValidationStateInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->_reader = new \Magento\Framework\Api\ExtensionAttribute\Config\Reader(
@@ -42,6 +42,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstanceof()
     {
-        $this->assertInstanceOf('Magento\Framework\Api\ExtensionAttribute\Config\Reader', $this->_reader);
+        $this->assertInstanceOf(\Magento\Framework\Api\ExtensionAttribute\Config\Reader::class, $this->_reader);
     }
 }

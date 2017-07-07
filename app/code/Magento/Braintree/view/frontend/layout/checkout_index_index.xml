@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="after.body.start">
+            <referenceBlock remove="true" name="braintree.paypal.component"/>
+        </referenceContainer>
         <referenceBlock name="checkout.root">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">
@@ -23,8 +26,8 @@
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
-                                                                <item name="braintree-payments" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Magento_Braintree/js/view/payment/braintree-methods</item>
+                                                                <item name="braintree" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Magento_Braintree/js/view/payment/braintree</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="braintree" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
@@ -47,9 +50,6 @@
                     </item>
                 </argument>
             </arguments>
-        </referenceBlock>
-        <referenceBlock name="content">
-            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js2" template="data_js.phtml"/>
         </referenceBlock>
     </body>
 </page>

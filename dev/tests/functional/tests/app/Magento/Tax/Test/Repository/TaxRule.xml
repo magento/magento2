@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -57,6 +57,27 @@
             <field name="tax_rate" xsi:type="array">
                 <item name="dataset" xsi:type="array">
                     <item name="0" xsi:type="string">uk_full_tax_rate</item>
+                </item>
+            </field>
+            <field name="priority" xsi:type="string">0</field>
+            <field name="position" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="us_illinois_tax_rule">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_rate" xsi:type="array">
+                <item name="dataset" xsi:type="array">
+                    <item name="0" xsi:type="string">US-IL-Rate_1</item>
+                </item>
+            </field>
+            <field name="tax_customer_class" xsi:type="array">
+                <item name="dataset" xsi:type="array">
+                    <item name="0" xsi:type="string">retail_customer</item>
+                </item>
+            </field>
+            <field name="tax_product_class" xsi:type="array">
+                <item name="dataset" xsi:type="array">
+                    <item name="0" xsi:type="string">taxable_goods</item>
                 </item>
             </field>
             <field name="priority" xsi:type="string">0</field>

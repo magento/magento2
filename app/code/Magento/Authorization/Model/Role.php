@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Model;
@@ -8,6 +8,7 @@ namespace Magento\Authorization\Model;
 /**
  * Admin Role Model
  *
+ * @api
  * @method \Magento\Authorization\Model\ResourceModel\Role _getResource()
  * @method \Magento\Authorization\Model\ResourceModel\Role getResource()
  * @method int getParentId()
@@ -24,6 +25,7 @@ namespace Magento\Authorization\Model;
  * @method \Magento\Authorization\Model\Role setUserType(string $value)
  * @method string getRoleName()
  * @method \Magento\Authorization\Model\Role setRoleName(string $value)
+ * @api
  */
 class Role extends \Magento\Framework\Model\AbstractModel
 {
@@ -65,8 +67,10 @@ class Role extends \Magento\Framework\Model\AbstractModel
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_resource = $objectManager->get('Magento\Authorization\Model\ResourceModel\Role');
-        $this->_resourceCollection = $objectManager->get('Magento\Authorization\Model\ResourceModel\Role\Collection');
+        $this->_resource = $objectManager->get(\Magento\Authorization\Model\ResourceModel\Role::class);
+        $this->_resourceCollection = $objectManager->get(
+            \Magento\Authorization\Model\ResourceModel\Role\Collection::class
+        );
     }
 
     /**
@@ -76,7 +80,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorization\Model\ResourceModel\Role');
+        $this->_init(\Magento\Authorization\Model\ResourceModel\Role::class);
     }
 
     /**

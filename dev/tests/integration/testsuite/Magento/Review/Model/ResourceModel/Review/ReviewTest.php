@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\ResourceModel\Review;
@@ -43,10 +43,12 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resource = $this->objectManager->get('Magento\Framework\App\ResourceConnection');
+        $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $this->connection = $this->resource->getConnection();
-        $this->reviewCollection = $this->objectManager->create('Magento\Review\Model\ResourceModel\Review\Collection');
-        $this->reviewResource =  $this->objectManager->create('Magento\Review\Model\ResourceModel\Review');
+        $this->reviewCollection = $this->objectManager->create(
+            \Magento\Review\Model\ResourceModel\Review\Collection::class
+        );
+        $this->reviewResource =  $this->objectManager->create(\Magento\Review\Model\ResourceModel\Review::class);
     }
 
     /**

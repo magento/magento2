@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -34,12 +37,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $product;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->taxClassRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Tax\Api\TaxClassRepositoryInterface',
+            \Magento\Tax\Api\TaxClassRepositoryInterface::class,
             ['getList'],
             '',
             false,
@@ -48,14 +51,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             ['addFilters', 'create'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
+            \Magento\Framework\Api\FilterBuilder::class,
             ['setField', 'setValue', 'create'],
             [],
             '',
@@ -63,7 +66,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->product = $this->objectManager->getObject(
-            'Magento\Tax\Model\TaxClass\Source\Product',
+            \Magento\Tax\Model\TaxClass\Source\Product::class,
             [
                 'taxClassRepository' => $this->taxClassRepositoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
@@ -75,7 +78,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetFlatColumns()
     {
         $abstractAttrMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getAttributeCode', '__wakeup'],
             [],
             '',
@@ -109,21 +112,21 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetAllOptionsNameIntegrity(array $value)
     {
         $filterMock = $this->getMock(
-            'Magento\Framework\Api\Filter',
+            \Magento\Framework\Api\Filter::class,
             [],
             [],
             '',
             false
         );
         $searchCriteriaMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
+            \Magento\Framework\Api\SearchCriteria::class,
             [],
             [],
             '',
             false
         );
         $searchResultsMock = $this->getMockForAbstractClass(
-            'Magento\Tax\Api\Data\TaxClassSearchResultsInterface',
+            \Magento\Tax\Api\Data\TaxClassSearchResultsInterface::class,
             [],
             '',
             false,
@@ -132,7 +135,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ['getItems']
         );
         $taxClassMock = $this->getMockForAbstractClass(
-            'Magento\Tax\Api\Data\TaxClassInterface',
+            \Magento\Tax\Api\Data\TaxClassInterface::class,
             ['getClassId', 'getClassName'],
             '',
             false,
@@ -162,7 +165,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn($searchResultsMock);
-
 
         $taxClassMock->expects($this->once())
             ->method('getClassId')
@@ -205,7 +207,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'value' => ['value' => 5, 'label' => 'comment <!-- comment -->'],
             ],
             [
-                'value' => ['value' => 6, 'label' => 'php tag <?php echo "2"; ?>'],
+                'value' => ['value' => 6, 'label' => 'php tag <?= "2"; ?>'],
             ],
 
         ];

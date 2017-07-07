@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
@@ -59,10 +59,8 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $addressWeight = $address->getWeight();
         $freeMethodWeight = $address->getFreeMethodWeight();
+        $addressFreeShipping = $address->getFreeShipping();
 
-        $address->setFreeShipping(
-            $this->freeShipping->isFreeShipping($quote, $shippingAssignment->getItems())
-        );
         $total->setTotalAmount($this->getCode(), 0);
         $total->setBaseTotalAmount($this->getCode(), 0);
 
@@ -98,7 +96,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                         $itemQty = $child->getTotalQty();
                         $rowWeight = $itemWeight * $itemQty;
                         $addressWeight += $rowWeight;
-                        if ($address->getFreeShipping() || $child->getFreeShipping() === true) {
+                        if ($addressFreeShipping || $child->getFreeShipping() === true) {
                             $rowWeight = 0;
                         } elseif (is_numeric($child->getFreeShipping())) {
                             $freeQty = $child->getFreeShipping();
@@ -116,7 +114,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     $itemWeight = $item->getWeight();
                     $rowWeight = $itemWeight * $item->getQty();
                     $addressWeight += $rowWeight;
-                    if ($address->getFreeShipping() || $item->getFreeShipping() === true) {
+                    if ($addressFreeShipping || $item->getFreeShipping() === true) {
                         $rowWeight = 0;
                     } elseif (is_numeric($item->getFreeShipping())) {
                         $freeQty = $item->getFreeShipping();
@@ -136,7 +134,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $itemWeight = $item->getWeight();
                 $rowWeight = $itemWeight * $item->getQty();
                 $addressWeight += $rowWeight;
-                if ($address->getFreeShipping() || $item->getFreeShipping() === true) {
+                if ($addressFreeShipping || $item->getFreeShipping() === true) {
                     $rowWeight = 0;
                 } elseif (is_numeric($item->getFreeShipping())) {
                     $freeQty = $item->getFreeShipping();
@@ -157,6 +155,10 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $address->setWeight($addressWeight);
         $address->setFreeMethodWeight($freeMethodWeight);
+        $address->setFreeShipping(
+            $this->freeShipping->isFreeShipping($quote, $shippingAssignment->getItems())
+        );
+
         $address->collectShippingRates();
 
         if ($method) {

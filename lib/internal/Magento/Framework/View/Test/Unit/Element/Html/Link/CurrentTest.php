@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html\Link;
@@ -30,9 +30,9 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface');
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->_defaultPathMock = $this->getMock('\Magento\Framework\App\DefaultPathInterface');
+        $this->_urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->_defaultPathMock = $this->getMock(\Magento\Framework\App\DefaultPathInterface::class);
     }
 
     public function testGetUrl()
@@ -44,7 +44,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
-            'Magento\Framework\View\Element\Html\Link\Current',
+            \Magento\Framework\View\Element\Html\Link\Current::class,
             ['urlBuilder' => $this->_urlBuilderMock]
         );
 
@@ -55,7 +55,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
     public function testIsCurrentIfIsset()
     {
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
-        $link = $this->_objectManager->getObject('Magento\Framework\View\Element\Html\Link\Current');
+        $link = $this->_objectManager->getObject(\Magento\Framework\View\Element\Html\Link\Current::class);
         $link->setCurrent(true);
         $this->assertTrue($link->IsCurrent());
     }
@@ -76,7 +76,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('b'));
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
-            'Magento\Framework\View\Element\Html\Link\Current',
+            \Magento\Framework\View\Element\Html\Link\Current::class,
             [
                 'urlBuilder' => $this->_urlBuilderMock,
                 'request' => $this->_requestMock,
@@ -94,7 +94,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
-            'Magento\Framework\View\Element\Html\Link\Current',
+            \Magento\Framework\View\Element\Html\Link\Current::class,
             ['urlBuilder' => $this->_urlBuilderMock, 'request' => $this->_requestMock]
         );
         $this->assertFalse($link->isCurrent());

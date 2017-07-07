@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
@@ -13,6 +13,7 @@ use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollect
 /**
  * Review model
  *
+ * @api
  * @method string getCreatedAt()
  * @method \Magento\Review\Model\Review setCreatedAt(string $value)
  * @method \Magento\Review\Model\Review setEntityId(int $value)
@@ -161,7 +162,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Review');
+        $this->_init(\Magento\Review\Model\ResourceModel\Review::class);
     }
 
     /**
@@ -374,7 +375,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     public function getIdentities()
     {
         $tags = [];
-        if ($this->isApproved() && $this->getEntityPkValue()) {
+        if ($this->getEntityPkValue()) {
             $tags[] = Product::CACHE_TAG . '_' . $this->getEntityPkValue();
         }
         return $tags;

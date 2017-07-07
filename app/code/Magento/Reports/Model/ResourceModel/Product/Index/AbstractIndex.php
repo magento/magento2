@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,16 +8,10 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index;
 
 /**
  * Reports Product Index Abstract Resource Model
+ * @api
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    /**
-     * DateItime instance
-     *
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
     /**
      * Reports helper
      *
@@ -30,18 +24,15 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Reports\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_resourceHelper = $resourceHelper;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -90,14 +81,12 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
                 $data = [
                     'visitor_id' => $object->getVisitorId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
                 ];
             } else {
                 $where = ['index_id = ?' => $row['index_id']];
                 $data = [
                     'customer_id' => $object->getCustomerId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
                 ];
             }
 
@@ -208,16 +197,13 @@ abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\A
             'customer_id' => $object->getCustomerId(),
             'store_id' => $object->getStoreId(),
         ];
-        $addedAt = (new \DateTime())->getTimestamp();
         $data = [];
         foreach ($productIds as $productId) {
             $productId = (int)$productId;
             if ($productId) {
                 $row['product_id'] = $productId;
-                $row['added_at'] = $this->dateTime->formatDate($addedAt);
                 $data[] = $row;
             }
-            $addedAt -= $addedAt > 0 ? 1 : 0;
         }
 
         $matchFields = ['product_id', 'store_id'];

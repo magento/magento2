@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_eventManager = $this->getMock(
-            'Magento\TestFramework\EventManager',
+            \Magento\TestFramework\EventManager::class,
             ['fireEvent'],
             [[]]
         );
@@ -105,7 +105,7 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
         $this->_object->startTest(new \PHPUnit_Framework_Warning());
-        $this->_object->startTest($this->getMock('PHPUnit_Framework_Test'));
+        $this->_object->startTest($this->getMock(\PHPUnit_Framework_Test::class));
     }
 
     public function testEndTestFireEvent()
@@ -118,6 +118,6 @@ class PhpUnitTest extends \PHPUnit_Framework_TestCase
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
         $this->_object->endTest(new \PHPUnit_Framework_Warning(), 0);
-        $this->_object->endTest($this->getMock('PHPUnit_Framework_Test'), 0);
+        $this->_object->endTest($this->getMock(\PHPUnit_Framework_Test::class), 0);
     }
 }

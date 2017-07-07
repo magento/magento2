@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
@@ -39,13 +39,13 @@ class GuestCartTestHelper
     public function mockQuoteIdMask($maskedCartId, $cartId)
     {
         $quoteIdMaskMock = $this->testCase->getMock(
-            'Magento\Quote\Model\QuoteIdMask',
+            \Magento\Quote\Model\QuoteIdMask::class,
             ['load', 'getQuoteId', 'getMaskedId'],
             [],
             '',
             false
         );
-        $quoteIdMaskFactoryMock = $this->testCase->getMockBuilder('Magento\Quote\Model\QuoteIdMaskFactory')
+        $quoteIdMaskFactoryMock = $this->testCase->getMockBuilder(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

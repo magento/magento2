@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\CustomOptions;
@@ -25,22 +25,36 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /** @var CustomOptionFactory  */
     protected $customOptionFactory;
 
+    /** @var \Magento\Catalog\Model\Product\Option\UrlBuilder */
+    private $urlBuilder;
+
+    /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
     /**
      * @param DataObject\Factory $objectFactory
      * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
-        \Magento\Catalog\Model\CustomOptions\CustomOptionFactory $customOptionFactory
+        \Magento\Catalog\Model\CustomOptions\CustomOptionFactory $customOptionFactory,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->customOptionFactory = $customOptionFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -62,7 +76,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
         }
         return null;
     }
-
 
     /**
      * @inheritDoc
@@ -97,7 +110,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     protected function getOptions(CartItemInterface $cartItem)
     {
         $buyRequest = !empty($cartItem->getOptionByCode('info_buyRequest'))
-            ? unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
+            ? $this->serializer->unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
             : null;
         return is_array($buyRequest) && isset($buyRequest['options'])
             ? $buyRequest['options']
@@ -117,10 +130,64 @@ class CustomOptionProcessor implements CartItemProcessorInterface
             $option = $this->customOptionFactory->create();
             $option->setOptionId($optionId);
             if (is_array($optionValue)) {
+                $optionValue = $this->processFileOptionValue($optionValue);
+                $optionValue = $this->processDateOptionValue($optionValue);
                 $optionValue = implode(',', $optionValue);
             }
             $option->setOptionValue($optionValue);
             $optionValue = $option;
         }
+    }
+
+    /**
+     * Returns option value with file built URL
+     *
+     * @param array $optionValue
+     * @return array
+     */
+    private function processFileOptionValue(array $optionValue)
+    {
+        if (array_key_exists('url', $optionValue) &&
+            array_key_exists('route', $optionValue['url']) &&
+            array_key_exists('params', $optionValue['url'])
+        ) {
+            $optionValue['url'] = $this->getUrlBuilder()->getUrl(
+                $optionValue['url']['route'],
+                $optionValue['url']['params']
+            );
+        }
+        return $optionValue;
+    }
+
+    /**
+     * Returns date option value only with 'date_internal data
+     *
+     * @param array $optionValue
+     * @return array
+     */
+    private function processDateOptionValue(array $optionValue)
+    {
+        if (array_key_exists('date_internal', $optionValue)
+        ) {
+            $closure = function ($key) {
+                return $key === 'date_internal';
+            };
+            $optionValue = array_filter($optionValue, $closure, ARRAY_FILTER_USE_KEY);
+        }
+        return $optionValue;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
+     *
+     * @deprecated
+     */
+    private function getUrlBuilder()
+    {
+        if ($this->urlBuilder === null) {
+            $this->urlBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\Option\UrlBuilder::class);
+        }
+        return $this->urlBuilder;
     }
 }

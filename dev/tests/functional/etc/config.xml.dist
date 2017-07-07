@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,12 @@
         <appBackendUrl>http://magento2ce.com/admin/</appBackendUrl>
         <backendLoginUrl>admin/auth/login</backendLoginUrl>
     </application>
+    <isolation>
+        <resetUrlPath>dev/tests/functional/isolation.php</resetUrlPath>
+        <testSuite>none</testSuite>
+        <testCase>none</testCase>
+        <test>none</test>
+    </isolation>
     <install>
         <host>127.0.0.1</host>
         <user>root</user>

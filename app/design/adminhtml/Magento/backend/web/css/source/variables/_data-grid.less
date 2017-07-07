@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -25,6 +25,10 @@
 @data-grid-td__odd__background-color: @page__background-color;
 @data-grid-td__odd__dragging__background-color: @color-gray85;
 @data-grid-td__odd__edit__background-color: darken(@data-grid-td__odd__background-color, 10%);
+@data-grid-td__update__active__background-color: #bceeff;
+@data-grid-td__update__upcoming__background-color: #ccf391;
+@data-grid-td__odd__update__active__background-color: darken(@data-grid-td__update__active__background-color, 10%);
+@data-grid-td__odd__update__upcoming__background-color: darken(@data-grid-td__update__upcoming__background-color, 10%);
 
 @data-grid-th__border-color: @color-darkie-gray;
 @data-grid-th__border-style: solid;
@@ -47,11 +51,19 @@
 
 @data-grid-bulk-edit-panel__background-color: @color-lazy-sun-white;
 
+@data-grid-td__dragging__background-color: @color-light-gray0;
 @data-grid-td__dragging__opacity: 95%;
-@data-grid-dragging-copy__border-color: @color-blue-pure;
 @data-grid-dragging-copy__border: 1px solid @data-grid-dragging-copy__border-color;
+@data-grid-dragging-copy__border-color: @color-blue-pure;
+@data-grid-dragging-copy__outline-color: @color-blue-pure;
+
+@data-grid-horizontal-dragover-mark__color: @color-blue-dodger;
+@data-grid-horizontal-dragover-mark__width: 3px;
 
 @data-grid-spinner__size: 4rem;
+
+@data-grid__no-records__font-size: @font-size__l;
+@data-grid__no-records__padding: @indent__l;
 
 //  Header
 

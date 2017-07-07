@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Helper;
@@ -30,30 +30,30 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_formMock = $this->getMock(
-            'Magento\Framework\Data\Form',
+            \Magento\Framework\Data\Form::class,
             ['setFieldNameSuffix', 'addFieldset'],
             [],
             '',
             false
         );
         $this->_fieldsetMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Fieldset',
+            \Magento\Framework\Data\Form\Element\Fieldset::class,
             [],
             [],
             '',
             false
         );
         $this->_experimentCodeMock = $this->getMock(
-            'Magento\GoogleOptimizer\Model\Code',
+            \Magento\GoogleOptimizer\Model\Code::class,
             ['getExperimentScript', 'getCodeId', '__wakeup'],
             [],
             '',
             false
         );
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $context = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
         $data = ['context' => $context];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_helper = $objectManagerHelper->getObject('Magento\GoogleOptimizer\Helper\Form', $data);
+        $this->_helper = $objectManagerHelper->getObject(\Magento\GoogleOptimizer\Helper\Form::class, $data);
     }
 
     public function testAddFieldsWithExperimentCode()
@@ -118,7 +118,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'value' => $experimentCode,
                 'class' => 'textarea googleoptimizer',
                 'required' => false,
-                'note' => 'Experiment code should be added to the original page only.'
+                'note' => 'Experiment code should be added to the original page only.',
+                'data-form-part' => ''
             ]
         );
 
@@ -129,7 +130,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->with(
             'code_id',
             'hidden',
-            ['name' => 'code_id', 'value' => $experimentCodeId, 'required' => false]
+            [
+                'name' => 'code_id',
+                'value' => $experimentCodeId,
+                'required' => false,
+                'data-form-part' => ''
+            ]
         );
         $this->_formMock->expects($this->once())->method('setFieldNameSuffix')->with('google_experiment');
     }

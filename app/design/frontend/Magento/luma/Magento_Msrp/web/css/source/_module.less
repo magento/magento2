@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -9,13 +9,9 @@
 
 & when (@media-common = true) {
 
-    .map-popup-wrapper {
-        &.popup {
-            .action {
-                &.close {
-                    .lib-css(top, @popup-button-close__position-top);
-                }
-            }
+    .map-popup-wrapper.popup {
+        .action.close {
+            .lib-css(top, @popup-button-close__position-top);
         }
     }
 
@@ -28,29 +24,37 @@
             @_popup-position-right: false,
             @_popup-position: absolute
         );
+        box-sizing: border-box;
+
         .map-info-price {
             &:extend(.abs-add-clearfix all);
             margin: 0 0 @indent__base;
+
             .price-box {
                 margin: 0 0 @indent__base;
+
                 .label {
                     &:after {
-                        content: ": ";
+                        content: ': ';
                     }
                 }
             }
         }
+
         .action {
             &.primary {
                 margin-right: @indent__s;
             }
         }
+
         .map-msrp {
             margin-bottom: @indent__s;
         }
+
         .actual-price {
             margin: 3px 0 15px;
         }
+
         .popup-header {
             display: none;
         }
@@ -58,6 +62,7 @@
 
     .map-old-price {
         text-decoration: none;
+
         .price-wrapper {
             text-decoration: line-through;
         }
@@ -66,6 +71,9 @@
     .map-old-price,
     .product-item .map-old-price,
     .product-info-price .map-show-info {
+        display: inline-block;
+        min-width: 10rem;
+
         &:not(:last-child) {
             margin-right: @indent__s;
         }
@@ -83,6 +91,7 @@
     .map-form-addtocart {
         display: inline-block;
         text-align: center;
+
         img {
             display: block;
             margin: 0 auto;
@@ -96,11 +105,13 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .map-popup {
-        max-width: 100%; 
+        max-width: 100%;
     }
+
     .map-old-price,
     .map-show-info {
         display: inline-block;
+
         &:not(:last-child) {
             margin-bottom: @indent__s;
         }

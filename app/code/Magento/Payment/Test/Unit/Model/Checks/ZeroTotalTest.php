@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class ZeroTotalTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsApplicable($code, $total, $expectation)
     {
-        $paymentMethod = $this->getMockBuilder('\Magento\Payment\Model\MethodInterface')
+        $paymentMethod = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -29,7 +29,7 @@ class ZeroTotalTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($code));
         }
 
-        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBaseGrandTotal', '__wakeup'])
             ->getMock();

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,38 +7,71 @@
 //  Admin section wrapper title @todo ui - find the right place
 //  _____________________________________________
 
+.fieldset-wrapper-title,
 .admin__fieldset-wrapper-title {
     &:extend(.abs-clearfix all);
     border-bottom: 1px solid @color-gray80;
-    font-size: 1.7rem;
-    margin-bottom: 30px;
+    line-height: 1.2;
+    margin-bottom: 0;
     padding: 14px 0 16px;
+
     .title {
-        font-weight: 600;
+        font-size: 2rem;
+        font-weight: 400;
+
+        .admin__fieldset-wrapper-content & {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
         &.active {
             ~ .actions {
                 display: none;
             }
         }
     }
+
     .actions {
         display: block;
         float: right;
     }
 }
 
-// @todo ui Move to other place - will be done in upcoming task "Address Tabs":
+.admin__fieldset-wrapper-content {
+    .admin__fieldset {
+        padding-bottom: 3rem;
+        padding-top: 3rem;
+
+        > .admin__collapsible-block-wrapper {
+            &:first-child {
+                margin-top: -3rem;
+            }
+        }
+
+        > *:first-child {
+            margin-top: 0;
+        }
+
+        > *:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+//  @todo ui Move to other place - will be done in upcoming task 'Address Tabs':
 
 .address-item-edit-content {
-    background: #fff;
-    border: 1px solid #dad1c8;
+    background: @color-white;
+    border: 1px solid @color-gray-brown;
     box-shadow: 0 2px 1px 0 rgba(217, 210, 202, .5);
     margin-left: 359px;
     max-width: 500px;
     padding: 15px 30px;
+
     .admin__field {
         &:extend(.abs-field-rows all);
     }
+
     .admin__legend {
         display: none;
     }
@@ -47,24 +80,27 @@
 .address-list {
     float: left;
     list-style-type: none;
-    margin:0;
+    margin: 0;
     padding: 0;
     width: 360px;
+
     .address-list-item-actions {
         position: absolute;
         right: 1rem;
         top: 1rem;
     }
+
     .address-list-item {
-        background: #f1f1f1;
-        border: 1px solid #d9d2ca;
+        background: @color-white-fog2;
+        border: 1px solid @color-gray-brown;
         cursor: pointer;
         margin-bottom: -1px;
         padding: 10px 10px 15px;
         position: relative;
         z-index: 1;
+
         &.ui-state-active {
-            background: #fff;
+            background: @color-white;
             box-shadow: 0 1px 1px 0 rgba(217, 210, 202, 1);
             margin-left: -2px;
             padding-left: 12px;
@@ -73,8 +109,8 @@
 
             &:before,
             &:after {
-                color: #fff;
-                content: "\e02a";
+                color: @color-white;
+                content: '\e02a';
                 font-family: 'MUI-Icons';
                 font-size: 18px;
                 font-style: normal;
@@ -89,22 +125,26 @@
                 width: 10px;
                 z-index: 2;
             }
+
             &:before {
-                color: #d9d2ca;
+                color: @color-gray-brown;
                 right: -11px;
                 z-index: 1;
             }
         }
     }
-    address:first-line {
-        //  its not work  if First Name and Last Name in two lines
-        font-weight: bold;
-    }
+
     address {
         font-style: normal;
         line-height: 1.5;
         margin: 0 20px 15px 0;
+
+        &:first-line {
+            //  It does not work if First Name and Last Name are arranged in two lines
+            font-weight: bold;
+        }
     }
+
     .address-list-actions {
         background: none;
         border: 0;
@@ -112,6 +152,7 @@
         cursor: default;
         padding: 20px 0 0;
     }
+
     .action-delete {
         .lib-button-reset();
         .lib-icon-font(
@@ -123,18 +164,21 @@
             @_icon-font-position: after,
             @_icon-font-color: @color-brown-darkie
         );
+
         span {
             max-height: 1px;
             max-width: 1px;
         }
+
         &:hover {
-            &:after {
-                color: darken(@color-brown-darkie, 20%);
-            }
             position: relative;
             z-index: 2;
 
-            // @todo ui - testing solution to show action hint without title attribute
+            &:after {
+                color: darken(@color-brown-darkie, 20%);
+            }
+
+            //  @Todo ui - testing solution to show action hint without title attribute
             span {
                 background-color: @color-very-light-gray;
                 border: 1px solid @color-heathered-grey;
@@ -145,14 +189,14 @@
                 height: auto;
                 left: auto;
                 margin: 0 auto .1rem;
+                max-height: 50px;
+                max-width: 200px;
                 padding: .5rem;
                 right: auto;
                 top: auto;
-                max-height: 50px;
-                max-width: 200px;
+                transition: all .01s linear .7s;
                 white-space: nowrap;
                 width: auto;
-                transition: all .01s linear .7s;
             }
         }
     }
@@ -166,10 +210,10 @@
 .admin__field-control > [class*='admin__control-'].mage-error {
     border-color: @field-error-control__border-color;
 }
+
 label.mage-error {
     &:extend(.admin__field-error);
 }
-
 
 //
 //  Login page captcha reload @todo ui - remove after loader consistency
@@ -177,7 +221,7 @@ label.mage-error {
 
 .page-layout-admin-login {
     .loading-mask {
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,.2);
         height: 100%;
         left: 0;
         position: absolute;
@@ -185,14 +229,15 @@ label.mage-error {
         width: 100%;
         z-index: @z-index-10;
     }
+
     .popup-loading {
         height: 149px;
         left: 50%;
         margin-left: -218px/2;
         margin-top: -149px/2;
+        overflow: hidden;
         position: absolute;
         top: 50%;
-        overflow: hidden;
         width: 218px;
     }
 }
@@ -205,6 +250,7 @@ label.mage-error {
     .field-captcha {
         padding-left: 30px;
         vertical-align: middle;
+
         .captcha-reload {
             float: right;
             vertical-align: middle;
@@ -213,10 +259,35 @@ label.mage-error {
 }
 
 //
+//  Form loader @todo ui - remove after loader consistency
+//  _____________________________________________
+
+.admin__form-loading-mask {
+    background: rgba(255, 255, 255, .5);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: @loader-overlay__z-index;
+
+    .spinner {
+        font-size: @data-grid-spinner__size;
+        left: 50%;
+        margin-left: -(@data-grid-spinner__size / 2);
+        margin-top: -(@data-grid-spinner__size / 2);
+        position: absolute;
+        top: 50%;
+    }
+}
+
+//
 //  Selectbox in calendar @todo ui - Remove after default select styles set
 //  _____________________________________________
 
-.ui-datepicker .ui-datepicker-title select:extend(.admin__control-select all) {};
+.ui-datepicker .ui-datepicker-title select {
+    &:extend(.admin__control-select all);
+}
 
 //
 //  Data grid
@@ -228,24 +299,27 @@ label.mage-error {
             min-width: 6rem;
         }
     }
+
     .data-grid-filters {
         td {
+            border-bottom: 1px solid @color-gray84;
             padding: 1rem;
-            border-bottom: 1px solid #D6D6D6;
         }
+
         select,
-        input[type="text"]{
-            width: 100%;
-            padding: .2rem .4rem;
+        input[type='text'] {
+            font-size: 1.3rem;
             height: 2.8rem;
             min-width: 5rem;
-            font-size: 1.3rem;
+            padding: .2rem .4rem;
+            width: 100%;
         }
+
         .admin__control-text {
             width: 100%;
         }
+
         select {
-            padding: .2rem 1.8rem .2rem .3rem;
             background-position+: ~'calc(100% - 5px)' -37px;
             background-size+: auto;
             background-position+: 100%;
@@ -253,18 +327,22 @@ label.mage-error {
             background-position+: ~'calc(100% - 18px)' 0;
             background-size+: 1px 100%;
             height: 2.8rem;
+            padding: .2rem 1.8rem .2rem .3rem;
+
             &:focus {
                 background-position+: ~'calc(100% - 5px)' 11px;
                 background-position+: 100%;
                 background-position+: ~'calc(100% - 18px)' 0;
             }
         }
+
         td {
-            .hasDatepicker {
+            ._has-datepicker {
                 + .ui-datepicker-trigger {
                     height: 2.8rem;
                     margin-left: -3.2rem;
                     width: 2.8rem;
+
                     &:after {
                         line-height: 28px;
                     }
@@ -272,17 +350,21 @@ label.mage-error {
             }
         }
     }
+
     .range-line {
         position: relative;
+
         + .range-line {
             margin-top: .5rem;
         }
     }
+
     .col-qty {
         .admin__control-text {
             &:extend(.abs-control-qty all);
         }
     }
+
     .field-row {
         display: inline-block;
     }
@@ -290,50 +372,55 @@ label.mage-error {
 
 .mass-select-info {
     &:before {
-        content: "(";
+        content: '(';
     }
+
     &:after {
-        content:")";
+        content: ')';
     }
+
     &._empty {
         display: none;
     }
 }
 
 .mass-select-wrap {
+    margin-left: 1.1rem;
+    margin-top: 3.3rem;
     position: absolute;
     top: 100%;
-    margin-top: 3.3rem;
-    margin-left: 1.1rem;
+
     select {
-        position:absolute;
-        top: 0;
-        left: 0;
-        opacity: 0.01;
-        width: 22px;
-        height: 22px;
         cursor: pointer;
+        height: 22px;
+        left: 0;
+        opacity: .01;
+        position: absolute;
+        top: 0;
+        width: 22px;
         z-index: 2;
 
         + label {
             &:extend(.abs-action-default);
-            z-index: 1;
-            width: 16px;
             height: 16px;
             line-height: 16px;
             padding: 0;
+            width: 16px;
+            z-index: 1;
 
             &:before {
                 &:extend(.admin__control-checkbox + label:before);
-                position:absolute;
                 left: 0;
+                position: absolute;
                 top: 0;
             }
+
             &:after {
                 &:extend(.action-multicheck-wrap .action-multicheck-toggle:after);
                 top: 40% !important;
             }
         }
+
         &:focus {
             + label {
                 &:after {
@@ -341,27 +428,31 @@ label.mage-error {
                 }
             }
         }
+
         &._checked {
             + label {
                 &:before {
                     &:extend(.admin__control-checkbox:checked + label:before);
                 }
             }
+
             &._indeterminate {
                 + label {
                     &:before {
                         content: '-';
                         font-size: 2rem;
-                        line-height: 0.7rem;
+                        line-height: .7rem;
                     }
                 }
             }
         }
+
         &._disabled {
             display: none;
+
             + label {
-                opacity: .6;
                 cursor: not-allowed;
+                opacity: .6;
             }
         }
     }
@@ -378,6 +469,7 @@ label.mage-error {
         &:extend(.abs-cleafix);
 
         .action-select-multiselect {
+            -webkit-appearance: menulist-button;
             height: 38px;
             left: -1rem;
             min-width: 0;
@@ -398,37 +490,53 @@ label.mage-error {
             vertical-align: top;
         }
     }
+
     .admin__filter-actions {
         float: left;
     }
-    .admin__data-grid-export {
-        float: right;
+
+    .admin__control-filter {
         .admin__control-select {
             margin-right: @action__outer-indent;
         }
     }
-    .admin__grid-massaction {
-        float: left;
+
+    .admin__data-grid-export {
+        float: right;
+
         .admin__control-select {
             margin-right: @action__outer-indent;
         }
+    }
+
+    .admin__grid-massaction {
+        float: left;
+
+        .admin__control-select {
+            margin-right: @action__outer-indent;
+        }
+
         + .admin__control-text {
             float: left;
         }
+
         .form-inline {
             display: inline;
+
             .admin__field-label {
-                width: auto;
                 float: none;
-                padding-right: 1rem;
                 padding-left: 2rem;
+                padding-right: 1rem;
+                width: auto;
             }
         }
+
         .admin__grid-massaction-form {
             .admin__control-select {
                 ~ button {
                     display: none;
                 }
+
                 &._selected {
                     ~ button {
                         display: inline-block;
@@ -437,14 +545,17 @@ label.mage-error {
 
             }
         }
+
         .admin__control-select-placeholder {
-            color:  @color-darkie-gray;
+            color: @color-darkie-gray;
             font-weight: @font-weight__bold;
         }
     }
+
     .admin__data-grid-pager-wrap {
         float: right;
     }
+
     .admin__data-grid-header-row {
         &._massaction {
             position: relative;
@@ -487,6 +598,7 @@ label.mage-error {
     .admin__grid-massaction {
         z-index: 2000;
     }
+
     .admin__data-grid-wrap {
         z-index: 1999;
     }
@@ -496,13 +608,12 @@ label.mage-error {
     td.col-action {
         a + a {
             &:before {
-                content: "";
+                content: '';
                 display: block;
             }
         }
     }
 }
-
 
 //
 //  Popups
@@ -510,7 +621,8 @@ label.mage-error {
 
 .attribute-popup {
     background-color: @color-white;
-    #edit_form {
+
+    .edit-form {
         padding-left: 1.8rem;
         padding-right: 1.8rem;
     }

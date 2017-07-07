@@ -1,24 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Relations;
 
 require_once __DIR__ . '/../_files/Child.php';
+
 class RuntimeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManager\Relations\Runtime
      */
-    protected $_model;
+    private $model;
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Framework\ObjectManager\Relations\Runtime();
+        $this->model = new \Magento\Framework\ObjectManager\Relations\Runtime();
     }
 
     /**
@@ -28,36 +27,23 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParents($type, $parents)
     {
-        $this->assertEquals($parents, $this->_model->getParents($type));
+        $this->assertEquals($parents, $this->model->getParents($type));
     }
 
     public function getParentsDataProvider()
     {
         return [
-            ['Magento\Test\Di\DiInterface', []],
-            ['Magento\Test\Di\DiParent', [null, 'Magento\Test\Di\DiInterface']],
-            ['Magento\Test\Di\Child', ['Magento\Test\Di\DiParent', 'Magento\Test\Di\ChildInterface']]
+            [\Magento\Test\Di\DiInterface::class, []],
+            [\Magento\Test\Di\DiParent::class, [null, \Magento\Test\Di\DiInterface::class]],
+            [\Magento\Test\Di\Child::class, [\Magento\Test\Di\DiParent::class, \Magento\Test\Di\ChildInterface::class]]
         ];
     }
 
     /**
      * @param $entity
-     * @expectedException  \Magento\Framework\Exception\LocalizedException
-     * @dataProvider nonExistentGeneratorsDataProvider
      */
-    public function testHasIfNonExists($entity)
+    public function testHasIfNonExists()
     {
-        $this->_model->has($entity);
-    }
-
-    public function nonExistentGeneratorsDataProvider()
-    {
-        return [
-            ['Magento\Test\Module\Model\Item\Factory'],
-            ['Magento\Test\Module\Model\Item\Proxy'],
-            ['Magento\Test\Module\Model\Item\Interceptor'],
-            ['Magento\Test\Module\Model\Item\Mapper'],
-            ['Magento\Test\Module\Model\Item\SearchResults']
-        ];
+        $this->assertFalse($this->model->has(\NonexistentClass::class));
     }
 }

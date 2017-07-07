@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
 /**
  * Sales Quote Address Total  abstract model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 abstract class AbstractTotal implements CollectorInterface, ReaderInterface
 {

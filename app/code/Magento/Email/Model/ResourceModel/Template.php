@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\ResourceModel;
@@ -10,26 +10,18 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * Template db resource
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null
     ) {
-        $this->dateTime = $dateTime;
         parent::__construct($context, $connectionName);
     }
 
@@ -82,12 +74,7 @@ class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(AbstractModel $object)
     {
-        if ($object->isObjectNew()) {
-            $object->setAddedAt($this->dateTime->formatDate(true));
-        }
-        $object->setModifiedAt($this->dateTime->formatDate(true));
         $object->setTemplateType((int)$object->getTemplateType());
-
         return parent::_beforeSave($object);
     }
 

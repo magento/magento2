@@ -1,47 +1,43 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" data-bind="visible: visible, css: {'_required': element.required, '_disabled': element.disabled, '_error': element.error}">
-
-    <!-- ko if: element.label -->
-    <label class="admin__field-label" data-bind="attr: { for: element.uid }">
-        <span data-bind="text: element.label"></span>
+<div class="admin__field"
+     visible="visible"
+     css="$data.additionalClasses"
+     attr="'data-index': index">
+    <label class="admin__field-label" if="$data.label" visible="$data.labelVisible" attr="for: uid">
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
     </label>
-    <!-- /ko -->
+    <div class="admin__field-control"
+         css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
+        <render args="elementTmpl" ifnot="hasAddons()"/>
 
-    <div class="admin__field-control">
-        <!-- ko ifnot: element.hasAddons() -->
-            <!-- ko template: element.elementTmpl --><!-- /ko -->
-        <!-- /ko -->
+        <div class="admin__control-addon" if="hasAddons()">
+            <render args="elementTmpl"/>
 
-        <!-- ko if: element.hasAddons() -->
-            <div class="admin__control-addon">
-                <!-- ko template: element.elementTmpl --><!-- /ko -->
+            <label class="admin__addon-prefix" if="$data.addbefore" attr="for: uid">
+                <span text="addbefore"/>
+            </label>
+            <label class="admin__addon-suffix" if="$data.addafter" attr="for: uid">
+                <span text="addafter"/>
+            </label>
+        </div>
 
-                <!-- ko if: element.addbefore -->
-                    <label class="admin__addon-prefix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addbefore"></span></label>
-                <!-- /ko -->
+        <render args="tooltipTpl" if="$data.tooltip"/>
 
-                <!-- ko if: element.addafter -->
-                    <label class="admin__addon-suffix" data-bind="attr: { for: element.uid }"><span data-bind="text: element.addafter"></span></label>
-                <!-- /ko -->
-            </div>
-        <!-- /ko -->
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
 
-        <!-- ko if: element.tooltip -->
-            <!-- ko template: element.tooltipTpl --><!-- /ko -->
-        <!-- /ko -->
+        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
 
-        <!-- ko if: element.notice -->
-            <div class="admin__field-note" data-bind="attr: { id: element.noticeId }"><span data-bind="text: element.notice"></span></div>
-        <!-- /ko -->
+        <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
+            <span translate="notice"/>
+        </div>
+        
+        <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfo"></div>
 
-        <!-- ko if: element.error() -->
-            <label class="admin__field-error" data-bind="attr: { for: element.uid }, text: element.error"></label>
-        <!-- /ko -->
+        <render args="$data.service.template" if="$data.hasService()"/>
     </div>
 </div>
-<!-- /ko -->

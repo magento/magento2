@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Validator;
 
+/**
+ * Class AbstractValidator
+ * @package Magento\Payment\Gateway\Validator
+ * @api
+ */
 abstract class AbstractValidator implements ValidatorInterface
 {
     /**

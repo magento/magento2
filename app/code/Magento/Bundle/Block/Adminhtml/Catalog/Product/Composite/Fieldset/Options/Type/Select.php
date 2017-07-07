@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
@@ -8,6 +8,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
 /**
  * Bundle option dropdown type renderer
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select

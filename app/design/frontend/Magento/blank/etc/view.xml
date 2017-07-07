@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -73,9 +73,17 @@
                 <height>140</height>
             </image>
             <image id="product_page_image_large" type="image"/>
+            <image id="product_page_image_large_no_frame" type="image">
+                <frame>false</frame>
+            </image>
             <image id="product_page_image_medium" type="image">
                 <width>700</width>
                 <height>700</height>
+            </image>
+            <image id="product_page_image_medium_no_frame" type="image">
+                <width>700</width>
+                <height>700</height>
+                <frame>false</frame>
             </image>
             <image id="product_page_image_small" type="thumbnail">
                 <width>90</width>
@@ -190,7 +198,7 @@
             <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
             <var name="allowfullscreen">true</var> <!-- Turn on/off fullscreen (true/false) -->
             <var name="navdir">horizontal</var> <!-- Sliding direction of thumbnails (horizontal/vertical) -->
-            <var name="navarrows">true</var> <!-- Turn on/off on the thumbs navigation sides (true/false) -->
+            <var name="navarrows">true</var> <!-- Turn on/off on the thumbs navigation sides arrows(true/false) -->
             <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
             <var name="transition">
                 <var name="effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
@@ -199,23 +207,19 @@
             <var name="fullscreen">
                 <var name="nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
                 <var name="loop">true</var> <!-- Fullscreen navigation loop (true/false/null) -->
-                <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false/null) -->
-                <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview (true/false/null) -->
-                <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
-                <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in full screen(horizontal/vertical)  -->
-                <var name="thumbwidth">150</var> <!-- Width of thumbnails in fullscreen -->
-                <var name="thumbheight">150</var> <!-- Height of thumbnails in fullscreen -->
-                <var name="navigation_carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
+                <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview in fullscreen (true/false/null) -->
+                <var name="caption">false</var> <!-- Display alt text as image title in fullscreen(true/false) -->
+                <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in fullscreen(horizontal/vertical)  -->
+                <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
                 <var name="transition">
                     <var name="effect">dissolve</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
                     <var name="duration">500</var> <!-- Sets transition duration in ms -->
-                    <var name="carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
                 </var>
             </var>
         </var>
 
         <var name="magnifier">
-            <var name="fullscreenzoom">5</var>  <!-- Zoom for fullscreen (integer)-->
+            <var name="fullscreenzoom">20</var>  <!-- Zoom for fullscreen (integer)-->
             <var name="top"></var> <!-- Top position of magnifier -->
             <var name="left"></var> <!-- Left position of magnifier -->
             <var name="width"></var> <!-- Width of magnifier block -->
@@ -231,7 +235,7 @@
                 </var>
                 <var name="options">
                     <var name="options">
-                        <var name="navigation">dots</var>
+                        <var name="nav">dots</var>
                     </var>
                 </var>
             </var>
@@ -254,21 +258,40 @@
         <var name="bundle_size">1MB</var>
     </vars>
     <exclude>
+        <item type="file">Lib::jquery/jquery.min.js</item>
         <item type="file">Lib::jquery/jquery-ui-1.9.2.js</item>
         <item type="file">Lib::jquery/jquery.ba-hashchange.min.js</item>
         <item type="file">Lib::jquery/jquery.details.js</item>
         <item type="file">Lib::jquery/jquery.details.min.js</item>
         <item type="file">Lib::jquery/jquery.hoverIntent.js</item>
-        <item type="file">Lib::jquery/jquery.min.js</item>
+        <item type="file">Lib::jquery/colorpicker/js/colorpicker.js</item>
+        <item type="file">Lib::requirejs/require.js</item>
+        <item type="file">Lib::requirejs/text.js</item>
+        <item type="file">Lib::date-format-normalizer.js</item>
+        <item type="file">Lib::legacy-build.min.js</item>
         <item type="file">Lib::mage/captcha.js</item>
         <item type="file">Lib::mage/dropdown_old.js</item>
         <item type="file">Lib::mage/list.js</item>
         <item type="file">Lib::mage/loader_old.js</item>
         <item type="file">Lib::mage/webapi.js</item>
-        <item type="file">Lib::moment.js</item>
-        <item type="file">Lib::requirejs/require.js</item>
-        <item type="file">Lib::date-format-normalizer.js</item>
-        <item type="file">Lib::legacy-build.min.js</item>
+        <item type="file">Lib::mage/zoom.js</item>
+        <item type="file">Lib::mage/translate-inline-vde.js</item>
+        <item type="file">Lib::mage/requirejs/mixins.js</item>
+        <item type="file">Lib::mage/requirejs/static.js</item>
+        <item type="file">Magento_Customer::js/zxcvbn.js</item>
+        <item type="file">Magento_Catalog::js/zoom.js</item>
+        <item type="file">Magento_Ui::js/lib/step-wizard.js</item>
+        <item type="file">Magento_Ui::js/form/element/ui-select.js</item>
+        <item type="file">Magento_Ui::js/form/element/file-uploader.js</item>
+        <item type="file">Magento_Ui::js/form/components/insert.js</item>
+        <item type="file">Magento_Ui::js/form/components/insert-listing.js</item>
+        <item type="directory">Magento_Ui::js/timeline</item>
+        <item type="directory">Magento_Ui::js/grid</item>
+        <item type="directory">Magento_Ui::js/dynamic-rows</item>
+        <item type="directory">Magento_Ui::templates/timeline</item>
+        <item type="directory">Magento_Ui::templates/grid</item>
+        <item type="directory">Magento_Ui::templates/dynamic-rows</item>
+        <item type="directory">Magento_Swagger::swagger-ui</item>
         <item type="directory">Lib::modernizr</item>
         <item type="directory">Lib::tiny_mce</item>
         <item type="directory">Lib::varien</item>
@@ -280,9 +303,8 @@
         <item type="directory">Lib::extjs</item>
         <item type="directory">Lib::prototype</item>
         <item type="directory">Lib::scriptaculous</item>
-        <item type="directory">Lib::mage/requirejs</item>
+        <item type="directory">Lib::less</item>
         <item type="directory">Lib::mage/adminhtml</item>
         <item type="directory">Lib::mage/backend</item>
-        <item type="directory">Magento_Swagger::swagger-ui</item>
     </exclude>
 </view>

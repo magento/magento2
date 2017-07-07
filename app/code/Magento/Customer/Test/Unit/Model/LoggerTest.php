@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -44,19 +44,19 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'insertOnDuplicate', 'fetchRow'],
             [],
             '',
             false
         );
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->logFactory = $this->getMock('\Magento\Customer\Model\LogFactory', ['create'], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->logFactory = $this->getMock(\Magento\Customer\Model\LogFactory::class, ['create'], [], '', false);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->logger = $objectManagerHelper->getObject(
-            '\Magento\Customer\Model\Logger',
+            \Magento\Customer\Model\Logger::class,
             [
                 'resource' => $this->resource,
                 'logFactory' => $this->logFactory
@@ -121,7 +121,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             'lastVisitAt' => $data['last_visit_at']
         ];
 
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
 
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
@@ -142,7 +142,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($data);
 
         $log = $this->getMock(
-            'Magento\Customer\Model\Log',
+            \Magento\Customer\Model\Log::class,
             [],
             $logArguments
         );

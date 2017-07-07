@@ -2,11 +2,9 @@
 /**
  * Unit test for Magento\Framework\ValidatorFactory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Test\Unit;
 
@@ -20,18 +18,19 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $objectManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->model = $objectManager->getObject('Magento\Framework\ValidatorFactory',
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->model = $objectManager->getObject(
+            \Magento\Framework\ValidatorFactory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }
 
     public function testCreateWithInstanceName()
     {
-        $setName = 'Magento\Framework\DataObject';
+        $setName = \Magento\Framework\DataObject::class;
         $returnMock = $this->getMock($setName);
         $this->objectManagerMock->expects($this->once())->method('create')
             ->willReturn($returnMock);
@@ -41,7 +40,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateDefault()
     {
-        $default = 'Magento\Framework\Validator';
+        $default = \Magento\Framework\Validator::class;
         $returnMock = $this->getMock($default);
         $this->objectManagerMock->expects($this->once())->method('create')
             ->willReturn($returnMock);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,6 +27,11 @@ class AssertCartItemsOptions extends AbstractAssertForm
      * @var string
      */
     protected $errorMessage = '- %s: "%s" instead of "%s"';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $skippedFields = ['sku'];
 
     /**
      * Assert that cart item options for product(s) display with correct information block

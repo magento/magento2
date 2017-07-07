@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
      *
      * @var array
      */
-    private $extensions = ['php'];
+    private $extensions = ['php', 'phtml'];
 
     /**
      * Constructor
@@ -51,8 +51,11 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
      */
     public function __construct($rulesetDir, $reportFile, Wrapper $wrapper)
     {
-        $this->reportFile = $reportFile;
         $this->rulesetDir = $rulesetDir;
+        if (!file_exists($rulesetDir) && file_exists($fullPath = realpath(__DIR__ . '/../../../../' . $rulesetDir))) {
+            $this->rulesetDir = $fullPath;
+        }
+        $this->reportFile = $reportFile;
         $this->wrapper = $wrapper;
     }
 
@@ -88,9 +91,8 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
         $settings['files'] = $whiteList;
         $settings['standard'] = [$this->rulesetDir];
         $settings['extensions'] = $this->extensions;
-        $settings['reportFile'] = $this->reportFile;
         $settings['warningSeverity'] = 0;
-        $settings['reports']['checkstyle'] = null;
+        $settings['reports']['full'] = $this->reportFile;
 
         $this->wrapper->setValues($settings);
 

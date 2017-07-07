@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rating\Edit\Tab;
@@ -96,37 +96,43 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ratingOptionCollection = $this->getMock(
-            '\Magento\Review\Model\ResourceModel\Rating\Option\Collection',
+            \Magento\Review\Model\ResourceModel\Rating\Option\Collection::class,
             [],
             [],
             '',
             false
         );
         $this->element = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\Text',
+            \Magento\Framework\Data\Form\Element\Text::class,
             ['setValue', 'setIsChecked'],
             [],
             '',
             false
         );
         $this->session = $this->getMock(
-            '\Magento\Framework\Session\Generic',
+            \Magento\Framework\Session\Generic::class,
             ['getRatingData', 'setRatingData'],
             [],
             '',
             false
         );
-        $this->rating = $this->getMock('\Magento\Review\Model\Rating', ['getId', 'getRatingCodes'], [], '', false);
-        $this->optionRating = $this->getMock('\Magento\Review\Model\Rating\Option', [], [], '', false);
-        $this->store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->form = $this->getMock('\Magento\Framework\Data\Form', [], [], '', false);
-        $this->directoryReadInterface = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->registry = $this->getMock('\Magento\Framework\Registry');
-        $this->formFactory = $this->getMock('\Magento\Framework\Data\FormFactory', [], [], '', false);
-        $this->optionFactory = $this->getMock('\Magento\Review\Model\Rating\OptionFactory', ['create'], [], '', false);
-        $this->systemStore = $this->getMock('\Magento\Store\Model\System\Store', [], [], '', false);
-        $this->viewFileSystem = $this->getMock('\Magento\Framework\View\FileSystem', [], [], '', false);
-        $this->fileSystem = $this->getMock('\Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false);
+        $this->rating = $this->getMock(\Magento\Review\Model\Rating::class, ['getId', 'getRatingCodes'], [], '', false);
+        $this->optionRating = $this->getMock(\Magento\Review\Model\Rating\Option::class, [], [], '', false);
+        $this->store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->form = $this->getMock(\Magento\Framework\Data\Form::class, [], [], '', false);
+        $this->directoryReadInterface = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
+        $this->formFactory = $this->getMock(\Magento\Framework\Data\FormFactory::class, [], [], '', false);
+        $this->optionFactory = $this->getMock(
+            \Magento\Review\Model\Rating\OptionFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->systemStore = $this->getMock(\Magento\Store\Model\System\Store::class, [], [], '', false);
+        $this->viewFileSystem = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
+        $this->fileSystem = $this->getMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead'], [], '', false);
 
         $this->rating->expects($this->any())->method('getId')->will($this->returnValue('1'));
         $this->ratingOptionCollection->expects($this->any())->method('addRatingFilter')->will($this->returnSelf());
@@ -154,7 +160,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
-            'Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form',
+            \Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form::class,
             [
                 'registry' => $this->registry,
                 'formFactory' => $this->formFactory,

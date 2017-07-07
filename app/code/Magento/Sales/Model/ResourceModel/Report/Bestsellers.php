@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Report;
@@ -41,8 +41,8 @@ class Bestsellers extends AbstractReport
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
@@ -54,8 +54,8 @@ class Bestsellers extends AbstractReport
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper,
         $connectionName = null,
@@ -66,8 +66,8 @@ class Bestsellers extends AbstractReport
             $logger,
             $localeDate,
             $reportsFlagFactory,
-            $dateTime,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
         $this->_productResource = $productResource;
@@ -132,7 +132,8 @@ class Bestsellers extends AbstractReport
                 'product_id' => 'order_item.product_id',
                 'product_name' => new \Zend_Db_Expr('MIN(order_item.name)'),
                 'product_price' => new \Zend_Db_Expr(
-                    'MIN(order_item.base_price) * MIN(source_table.base_to_global_rate)'
+                    'MIN(IF(order_item_parent.base_price, order_item_parent.base_price, order_item.base_price))' .
+                    '* MIN(source_table.base_to_global_rate)'
                 ),
                 'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
             ];
@@ -143,6 +144,10 @@ class Bestsellers extends AbstractReport
             )->joinInner(
                 ['order_item' => $this->getTable('sales_order_item')],
                 'order_item.order_id = source_table.entity_id',
+                []
+            )->joinLeft(
+                ['order_item_parent' => $this->getTable('sales_order_item')],
+                'order_item.parent_item_id = order_item_parent.item_id',
                 []
             )->where(
                 'source_table.state != ?',

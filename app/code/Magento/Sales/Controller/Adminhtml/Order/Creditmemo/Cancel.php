@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
@@ -9,6 +9,12 @@ use Magento\Backend\App\Action;
 
 class Cancel extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
@@ -28,14 +34,6 @@ class Cancel extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
-    }
-
-    /**
      * Cancel creditmemo action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
@@ -46,7 +44,7 @@ class Cancel extends \Magento\Backend\App\Action
         if ($creditmemoId) {
             try {
                 $creditmemoManagement = $this->_objectManager->create(
-                    'Magento\Sales\Api\CreditmemoManagementInterface'
+                    \Magento\Sales\Api\CreditmemoManagementInterface::class
                 );
                 $creditmemoManagement->cancel($creditmemoId);
                 $this->messageManager->addSuccess(__('The credit memo has been canceled.'));

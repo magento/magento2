@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 /**
  * Adminhtml sales order create sidebar cart block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
@@ -100,7 +101,7 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
         $deleteAllConfirmString = __('Are you sure you want to delete all items from shopping cart?');
         $this->addChild(
             'empty_customer_cart_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Clear Shopping Cart'),
                 'onclick' => 'order.clearShoppingCart(\'' . $deleteAllConfirmString . '\')'

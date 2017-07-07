@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -64,7 +64,8 @@
                                        id="login-password"
                                        name="password"
                                        data-bind="attr: {autocomplete: autocomplete}"
-                                       data-validate="{required:true, 'validate-password':true}"/>
+                                       data-validate="{required:true}"
+                                       autocomplete="off"/>
                             </div>
                         </div>
                         <!-- ko foreach: getRegion('additional-login-form-fields') -->
@@ -78,7 +79,7 @@
                         </div>
                         <div class="secondary">
                             <a class="action action-remind" data-bind="attr: { href: forgotPasswordUrl }">
-                                <span data-bind="i18n: 'Forgot Password'"></span>
+                                <span data-bind="i18n: 'Forgot Your Password?'"></span>
                             </a>
                         </div>
                     </div>

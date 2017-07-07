@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Item;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Item;
 /**
  * Flat sales order invoice item collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
@@ -33,7 +34,10 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Invoice\Item', 'Magento\Sales\Model\ResourceModel\Order\Invoice\Item');
+        $this->_init(
+            \Magento\Sales\Model\Order\Invoice\Item::class,
+            \Magento\Sales\Model\ResourceModel\Order\Invoice\Item::class
+        );
     }
 
     /**

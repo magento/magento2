@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Config;
@@ -8,6 +8,13 @@ namespace Magento\Payment\Gateway\Config;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 
+/**
+ * Default implementation of config value handler.
+ *
+ * This class is designed to be injected into other classes. Inheritance in not recommended.
+ *
+ * @api
+ */
 class ConfigValueHandler implements ValueHandlerInterface
 {
     /**

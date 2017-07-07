@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,8 +21,9 @@ class Role extends Tab
      * @param array $fields
      * @param SimpleElement $element
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $users = (is_array($fields['in_role_users']['value']))
             ? $fields['in_role_users']['value']
@@ -40,7 +41,7 @@ class Role extends Tab
     public function getUserGrid()
     {
         return $this->blockFactory->create(
-            'Magento\User\Test\Block\Adminhtml\Role\Tab\User\Grid',
+            \Magento\User\Test\Block\Adminhtml\Role\Tab\User\Grid::class,
             ['element' => $this->_rootElement->find('#roleUserGrid')]
         );
     }

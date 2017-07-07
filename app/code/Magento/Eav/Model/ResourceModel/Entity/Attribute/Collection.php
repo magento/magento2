@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
@@ -10,6 +10,7 @@ use Magento\Eav\Model\Entity\Type;
 /**
  * EAV attribute resource collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
@@ -57,7 +58,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Entity\Attribute', 'Magento\Eav\Model\ResourceModel\Entity\Attribute');
+        $this->_init(
+            \Magento\Eav\Model\Entity\Attribute::class,
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute::class
+        );
     }
 
     /**
@@ -476,5 +480,32 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $countSelect->columns('COUNT(DISTINCT main_table.attribute_id)');
         return $countSelect;
+    }
+
+    /**
+     * Join table to collection select
+     *
+     * @param string $table
+     * @param string $cond
+     * @param string $cols
+     * @return $this
+     */
+    public function joinLeft($table, $cond, $cols = '*')
+    {
+        if (is_array($table)) {
+            foreach ($table as $k => $v) {
+                $alias = $k;
+                $table = $v;
+                break;
+            }
+        } else {
+            $alias = $table;
+        }
+
+        if (!isset($this->_joinedTables[$alias])) {
+            $this->getSelect()->joinLeft([$alias => $this->getTable($table)], $cond, $cols);
+            $this->_joinedTables[$alias] = true;
+        }
+        return $this;
     }
 }

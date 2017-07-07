@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,10 +40,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
-        $indexerRegistry = $this->objectManager->create('\Magento\Framework\Indexer\IndexerRegistry');
+        $indexerRegistry = $this->objectManager->create(\Magento\Framework\Indexer\IndexerRegistry::class);
         $this->indexer =  $indexerRegistry->get('catalogsearch_fulltext');
 
-        $this->resource = $this->objectManager->get('Magento\Framework\App\ResourceConnection');
+        $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $this->connectionMock = $this->resource->getConnection();
     }
 
@@ -61,5 +61,39 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->connectionMock->fetchAll($select);
         $this->assertCount(1, $result);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Bundle/_files/product_with_multiple_options.php
+     * @covers \Magento\Bundle\Model\Product\Type::getOptionsCollection
+     */
+    public function testGetOptionsCollection()
+    {
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Model\Product $bundleProduct */
+        $bundleProduct = $productRepository->get('bundle-product');
+        $bundleType = $bundleProduct->getTypeInstance();
+        /** @var \Magento\Bundle\Model\Product\Type $bundleType */
+        $options = $bundleType->getOptionsCollection($bundleProduct);
+        $this->assertCount(5, $options->getItems());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @covers \Magento\Bundle\Model\Product\Type::getParentIdsByChild()
+     */
+    public function testGetParentIdsByChild()
+    {
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $bundleProduct */
+        $bundleProduct = $productRepository->get('bundle-product');
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */
+        $simpleProduct = $productRepository->get('simple');
+
+        /** @var \Magento\Bundle\Model\Product\Type $bundleType */
+        $bundleType = $bundleProduct->getTypeInstance();
+        $parentIds = $bundleType->getParentIdsByChild($simpleProduct->getId());
+        $this->assertNotEmpty($parentIds);
+        $this->assertEquals($bundleProduct->getId(), $parentIds[0]);
     }
 }

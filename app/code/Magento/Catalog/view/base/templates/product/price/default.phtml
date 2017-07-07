@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,8 @@
 
 $productId = $block->getSaleableItem()->getId();
 
-/** @var \Magento\Catalog\Pricing\Price\RegularPrice $priceModel */
+/** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 
 /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [

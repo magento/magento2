@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Oauth;
@@ -41,6 +41,7 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenColle
  * @method int getAuthorized()
  * @method Token setAuthorized() setAuthorized(int $authorized)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Token extends \Magento\Framework\Model\AbstractModel
 {
@@ -81,18 +82,12 @@ class Token extends \Magento\Framework\Model\AbstractModel
     protected $_keyLengthFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $_dateTime;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory
      * @param \Magento\Framework\Url\Validator $urlValidator
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory
      * @param \Magento\Integration\Helper\Oauth\Data $oauthData
      * @param OauthHelper $oauthHelper
@@ -106,7 +101,6 @@ class Token extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
         \Magento\Framework\Url\Validator $urlValidator,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory,
         \Magento\Integration\Helper\Oauth\Data $oauthData,
         OauthHelper $oauthHelper,
@@ -117,7 +111,6 @@ class Token extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_keyLengthFactory = $keyLengthFactory;
         $this->_urlValidator = $urlValidator;
-        $this->_dateTime = $dateTime;
         $this->_consumerFactory = $consumerFactory;
         $this->_oauthData = $oauthData;
         $this->_oauthHelper = $oauthHelper;
@@ -130,7 +123,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\ResourceModel\Oauth\Token');
+        $this->_init(\Magento\Integration\Model\ResourceModel\Oauth\Token::class);
     }
 
     /**
@@ -249,20 +242,6 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function __toString()
     {
         return http_build_query(['oauth_token' => $this->getToken(), 'oauth_token_secret' => $this->getSecret()]);
-    }
-
-    /**
-     * Before save actions
-     *
-     * @return $this
-     */
-    public function beforeSave()
-    {
-        if ($this->isObjectNew() && null === $this->getCreatedAt()) {
-            $this->setCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
-        }
-        parent::beforeSave();
-        return $this;
     }
 
     /**

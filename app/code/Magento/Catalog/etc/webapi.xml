@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -30,13 +30,13 @@
     <route url="/V1/products" method="GET">
         <service class="Magento\Catalog\Api\ProductRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
     <route url="/V1/products/:sku" method="GET">
         <service class="Magento\Catalog\Api\ProductRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
 
@@ -49,7 +49,7 @@
     <route url="/V1/products/attributes/:attributeCode" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>
     </route>
     <route url="/V1/products/attributes" method="GET">
@@ -97,19 +97,19 @@
     <route url="/V1/products/types" method="GET">
         <service class="Magento\Catalog\Api\ProductTypeListInterface" method="getProductTypes"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/sets/list" method="GET">
         <service class="Magento\Catalog\Api\AttributeSetRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/:attributeSetId" method="GET">
         <service class="Magento\Catalog\Api\AttributeSetRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/:attributeSetId" method="DELETE">
@@ -133,7 +133,7 @@
     <route url="/V1/products/attribute-sets/:attributeSetId/attributes" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeManagementInterface" method="getAttributes"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/attributes" method="POST">
@@ -151,7 +151,7 @@
     <route url="/V1/products/attribute-sets/groups/list" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/groups" method="POST">
@@ -175,7 +175,7 @@
     <route url="/V1/products/attributes/:attributeCode/options" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" method="getItems"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>
     </route>
     <route url="/V1/products/attributes/:attributeCode/options" method="POST">
@@ -193,13 +193,13 @@
     <route url="/V1/products/media/types/:attributeSetName" method="GET">
         <service class="Magento\Catalog\Api\ProductMediaAttributeManagementInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::attributes_attributes"/>
         </resources>
     </route>
     <route url="/V1/products/:sku/media/:entryId" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="get"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::attributes_attributes"/>
         </resources>
     </route>
     <route url="/V1/products/:sku/media" method="POST">
@@ -223,7 +223,7 @@
     <route url="/V1/products/:sku/media" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
 
@@ -231,7 +231,7 @@
     <route url="/V1/products/:sku/group-prices/:customerGroupId/tiers" method="GET">
         <service class="Magento\Catalog\Api\ProductTierPriceManagementInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
     <route url="/V1/products/:sku/group-prices/:customerGroupId/tiers/:qty/price/:price" method="POST">
@@ -246,6 +246,78 @@
             <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
+    <route url="/V1/products/tier-prices-information" method="POST">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/tier-prices" method="POST">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/tier-prices" method="PUT">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="replace"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/tier-prices-delete" method="POST">
+        <service class="Magento\Catalog\Api\TierPriceStorageInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/base-prices-information" method="POST">
+        <service class="Magento\Catalog\Api\BasePriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/base-prices" method="POST">
+        <service class="Magento\Catalog\Api\BasePriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/cost-information" method="POST">
+        <service class="Magento\Catalog\Api\CostStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/cost" method="POST">
+        <service class="Magento\Catalog\Api\CostStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/cost-delete" method="POST">
+        <service class="Magento\Catalog\Api\CostStorageInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price-information" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price-delete" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
 
     <route url="/V1/categories/:categoryId" method="DELETE">
         <service class="Magento\Catalog\Api\CategoryRepositoryInterface" method="deleteByIdentifier" />
@@ -256,7 +328,7 @@
     <route url="/V1/categories/:categoryId" method="GET">
         <service class="Magento\Catalog\Api\CategoryRepositoryInterface" method="get" />
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
     <route url="/V1/categories" method="POST">
@@ -268,7 +340,7 @@
     <route url="/V1/categories" method="GET">
         <service class="Magento\Catalog\Api\CategoryManagementInterface" method="getTree" />
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
     <route url="/V1/categories/:id" method="PUT">
@@ -279,6 +351,12 @@
     </route>
     <route url="/V1/categories/:categoryId/move" method="PUT">
         <service class="Magento\Catalog\Api\CategoryManagementInterface" method="move" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/list" method="GET">
+        <service class="Magento\Catalog\Api\CategoryListInterface" method="getList" />
         <resources>
             <resource ref="Magento_Catalog::categories" />
         </resources>
@@ -294,13 +372,13 @@
     <route url="/V1/products/:sku/options" method="GET">
         <service class="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
     <route url="/V1/products/:sku/options/:optionId" method="GET">
         <service class="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
     <route url="/V1/products/options" method="POST">
@@ -326,19 +404,19 @@
     <route url="/V1/products/links/types" method="GET">
         <service class="Magento\Catalog\Api\ProductLinkTypeListInterface" method="getItems"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
     <route url="/V1/products/links/:type/attributes" method="GET">
         <service class="Magento\Catalog\Api\ProductLinkTypeListInterface" method="getItemAttributes"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
     <route url="/V1/products/:sku/links/:type" method="GET">
         <service class="Magento\Catalog\Api\ProductLinkManagementInterface" method="getLinkedItemsByType"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
     <route url="/V1/products/:sku/links" method="POST">
@@ -364,7 +442,7 @@
     <route url="/V1/categories/:categoryId/products" method="GET">
         <service class="Magento\Catalog\Api\CategoryLinkManagementInterface" method="getAssignedProducts" />
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::categories" />
         </resources>
     </route>
     <route url="/V1/categories/:categoryId/products" method="POST">

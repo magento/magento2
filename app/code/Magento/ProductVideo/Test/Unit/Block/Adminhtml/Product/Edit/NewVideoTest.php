@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Block\Adminhtml\Product\Edit;
@@ -48,22 +48,22 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
-        $this->mediaHelper = $this->getMock('\Magento\ProductVideo\Helper\Media', [], [], '', false);
-        $this->mathRandom = $this->getMock('\Magento\Framework\Math\Random', [], [], '', false);
-        $this->urlBuilder = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
+        $this->mediaHelper = $this->getMock(\Magento\ProductVideo\Helper\Media::class, [], [], '', false);
+        $this->mathRandom = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
+        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
         $this->contextMock->expects($this->any())->method('getMathRandom')->willReturn($this->mathRandom);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
-        $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $this->formFactoryMock = $this->getMock('\Magento\Framework\Data\FormFactory', [], [], '', false);
-        $this->jsonEncoderMock = $this->getMock('\Magento\Framework\Json\EncoderInterface', [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->formFactoryMock = $this->getMock(\Magento\Framework\Data\FormFactory::class, [], [], '', false);
+        $this->jsonEncoderMock = $this->getMock(\Magento\Framework\Json\EncoderInterface::class, [], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->block = $objectManager->getObject(
-            '\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo',
+            \Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo::class,
             [
                 'context' => $this->contextMock,
                 'mediaHelper' => $this->mediaHelper,
@@ -95,7 +95,8 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
             'saveVideoUrl' => $saveVideoUrl,
             'saveRemoteVideoUrl' => $saveRemoteVideoUrl,
             'htmlId' => 'id_' . $rand,
-            'youTubeApiKey' => null
+            'youTubeApiKey' => null,
+            'videoSelector' => '#media_gallery_content'
         ];
         $this->jsonEncoderMock->expects($this->once())->method('encode')->with(
             $value

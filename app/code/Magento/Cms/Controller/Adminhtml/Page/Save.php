@@ -1,41 +1,74 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action;
+use Magento\Cms\Model\Page;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class Save extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
     /**
      * @var PostDataProcessor
      */
     protected $dataProcessor;
 
     /**
-     * @param Action\Context $context
-     * @param PostDataProcessor $dataProcessor
+     * @var DataPersistorInterface
      */
-    public function __construct(Action\Context $context, PostDataProcessor $dataProcessor)
-    {
-        $this->dataProcessor = $dataProcessor;
-        parent::__construct($context);
-    }
+    protected $dataPersistor;
 
     /**
-     * {@inheritdoc}
+     * @var \Magento\Cms\Model\PageFactory
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::save');
+    private $pageFactory;
+
+    /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface
+     */
+    private $pageRepository;
+
+    /**
+     * @param Action\Context $context
+     * @param PostDataProcessor $dataProcessor
+     * @param DataPersistorInterface $dataPersistor
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
+     *
+     */
+    public function __construct(
+        Action\Context $context,
+        PostDataProcessor $dataProcessor,
+        DataPersistorInterface $dataPersistor,
+        \Magento\Cms\Model\PageFactory $pageFactory = null,
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
+    ) {
+        $this->dataProcessor = $dataProcessor;
+        $this->dataPersistor = $dataPersistor;
+        $this->pageFactory = $pageFactory
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
+        $this->pageRepository = $pageRepository
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+        parent::__construct($context);
     }
 
     /**
      * Save action
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
@@ -45,7 +78,15 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $data = $this->dataProcessor->filter($data);
-            $model = $this->_objectManager->create('Magento\Cms\Model\Page');
+            if (isset($data['is_active']) && $data['is_active'] === 'true') {
+                $data['is_active'] = Page::STATUS_ENABLED;
+            }
+            if (empty($data['page_id'])) {
+                $data['page_id'] = null;
+            }
+
+            /** @var \Magento\Cms\Model\Page $model */
+            $model = $this->pageFactory->create();
 
             $id = $this->getRequest()->getParam('page_id');
             if ($id) {
@@ -64,22 +105,20 @@ class Save extends \Magento\Backend\App\Action
             }
 
             try {
-                $model->save();
-                $this->messageManager->addSuccess(__('You saved this page.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->pageRepository->save($model);
+                $this->messageManager->addSuccess(__('You saved the page.'));
+                $this->dataPersistor->clear('cms_page');
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
                 }
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
             }
 
-            $this->_getSession()->setFormData($data);
+            $this->dataPersistor->set('cms_page', $data);
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');

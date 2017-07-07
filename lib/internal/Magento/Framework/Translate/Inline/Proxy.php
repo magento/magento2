@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Translate\Inline;
 
 /**
  * Proxy class for \Magento\Framework\Translate\Inline
  */
-class Proxy extends \Magento\Framework\Translate\Inline
+class Proxy extends \Magento\Framework\Translate\Inline implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -46,7 +46,7 @@ class Proxy extends \Magento\Framework\Translate\Inline
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Translate\Inline',
+        $instanceName = \Magento\Framework\Translate\Inline::class,
         $shared = true
     ) {
         $this->objectManager = $objectManager;
@@ -59,7 +59,7 @@ class Proxy extends \Magento\Framework\Translate\Inline
      */
     public function __sleep()
     {
-        return ['_subject', '_isShared'];
+        return ['subject', 'isShared'];
     }
 
     /**

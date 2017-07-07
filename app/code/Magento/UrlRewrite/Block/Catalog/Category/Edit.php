@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Category;
@@ -80,7 +80,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'category_link',
-            'Magento\UrlRewrite\Block\Link',
+            \Magento\UrlRewrite\Block\Link::class,
             [
                 'item_url' => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'category',
                 'item_name' => $this->_getCategory()->getName(),
@@ -96,7 +96,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addCategoryTreeBlock()
     {
-        $this->addChild('categories_tree', 'Magento\UrlRewrite\Block\Catalog\Category\Tree');
+        $this->addChild('categories_tree', \Magento\UrlRewrite\Block\Catalog\Category\Tree::class);
     }
 
     /**
@@ -107,7 +107,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            'Magento\UrlRewrite\Block\Catalog\Edit\Form',
+            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
             '',
             ['data' => ['category' => $this->_getCategory(), 'url_rewrite' => $this->_getUrlRewrite()]]
         );

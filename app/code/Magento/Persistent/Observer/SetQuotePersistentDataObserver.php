@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
@@ -79,7 +79,7 @@ class SetQuotePersistentDataObserver implements ObserverInterface
             && $this->quoteManager->isPersistent()
         ) {
             //Quote is not actual customer's quote, just persistent
-            $quote->setIsActive(false)->setIsPersistent(true);
+            $quote->setIsPersistent(true);
         }
     }
 }

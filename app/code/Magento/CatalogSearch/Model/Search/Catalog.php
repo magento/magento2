@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Search;
@@ -9,6 +9,8 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Search model for backend search
+ *
+ * @deprecated
  */
 class Catalog extends \Magento\Framework\DataObject
 {

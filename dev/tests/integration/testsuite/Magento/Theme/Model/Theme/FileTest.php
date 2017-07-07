@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme;
@@ -25,9 +25,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $objectManager->create('Magento\Theme\Model\Theme\File');
+        $this->_model = $objectManager->create(\Magento\Theme\Model\Theme\File::class);
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
-        $themeModel = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
+        $themeModel = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->_theme = $themeModel->getCollection()->getFirstItem();
         $this->_data = [
             'file_path' => 'main.css',

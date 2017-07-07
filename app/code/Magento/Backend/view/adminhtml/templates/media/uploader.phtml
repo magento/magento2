@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,14 +9,22 @@
 /** @var $block \Magento\Backend\Block\Media\Uploader */
 ?>
 
-<div id="<?php echo $block->getHtmlId() ?>" class="uploader">
+<div id="<?= $block->getHtmlId() ?>" class="uploader"
+    data-mage-init='{
+        "Magento_Backend/js/media-uploader" : {
+            "maxFileSize": <?= /* @escapeNotVerified */ $block->getFileSizeService()->getMaxFileSize() ?>,
+            "maxWidth":<?= /* @escapeNotVerified */ \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
+            "maxHeight": <?= /* @escapeNotVerified */ \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
+        }
+    }'
+>
     <div class="fileinput-button form-buttons button">
-        <span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>
-        <input id="fileupload" type="file" name="<?php /* @escapeNotVerified */ echo $block->getConfig()->getFileField() ?>"
-            data-url="<?php /* @escapeNotVerified */ echo $block->getConfig()->getUrl() ?>" multiple="multiple" />
+        <span><?= /* @escapeNotVerified */ __('Browse Files...') ?></span>
+        <input id="fileupload" type="file" name="<?= /* @escapeNotVerified */ $block->getConfig()->getFileField() ?>"
+            data-url="<?= /* @escapeNotVerified */ $block->getConfig()->getUrl() ?>" multiple="multiple" />
     </div>
     <div class="clear"></div>
-    <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
+    <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template" data-template="uploader">
         <div id="<%- data.id %>" class="file-row">
             <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
             <div class="progressbar-container">
@@ -27,85 +35,3 @@
     </script>
 </div>
 
-<script>
-require([
-    "jquery",
-    'mage/template',
-    'Magento_Ui/js/modal/alert',
-    "mage/translate",
-    "jquery/file-uploader"
-], function ($, mageTemplate, alert) {
-
-    $('#fileupload').fileupload({
-        dataType: 'json',
-        dropZone: '[data-tab-panel=image-management]',
-        sequentialUploads: true,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-        maxFileSize: <?php /* @escapeNotVerified */ echo $block->getFileSizeService()->getMaxFileSize() ?> ,
-        add: function (e, data) {
-            var progressTmpl = mageTemplate('#<?php echo $block->getHtmlId(); ?>-template'),
-                fileSize,
-                tmpl;
-
-            $.each(data.files, function (index, file) {
-                fileSize = typeof file.size == "undefined" ?
-                    $.mage.__('We could not detect a size.') :
-                    byteConvert(file.size);
-
-                data.fileId = Math.random().toString(33).substr(2, 18);
-
-                tmpl = progressTmpl({
-                    data: {
-                        name: file.name,
-                        size: fileSize,
-                        id: data.fileId
-                    }
-                });
-
-                $(tmpl).appendTo('#<?php echo $block->getHtmlId() ?>');
-            });
-
-            $(this).fileupload('process', data).done(function () {
-                data.submit();
-            });
-        },
-        done: function (e, data) {
-            if (data.result && !data.result.error) {
-                $('#<?php echo $block->getParentBlock()->getHtmlId() ?>').trigger('addItem', data.result);
-            } else {
-                $('#' + data.fileId)
-                    .delay(2000)
-                    .hide('highlight');
-                alert({
-                   content: $.mage.__('We don\'t recognize or support this file extension type.')
-                });
-            }
-            $('#' + data.fileId).remove();
-        },
-        progress: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).css('width', progress + '%');
-        },
-        fail: function (e, data) {
-            var progressSelector = '#' + data.fileId;
-            $(progressSelector).removeClass('upload-progress').addClass('upload-failure')
-                .delay(2000)
-                .hide('highlight')
-                .remove();
-        }
-    });
-    $('#fileupload').fileupload('option', {
-        process: [{
-            action: 'load',
-            fileTypes: /^image\/(gif|jpeg|png)$/
-        }, {
-            action: 'resize',
-            maxWidth: <?php /* @escapeNotVerified */ echo \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
-            maxHeight: <?php /* @escapeNotVerified */ echo \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
-        }, {
-            action: 'save'
-        }]
-    });
-});
-</script>

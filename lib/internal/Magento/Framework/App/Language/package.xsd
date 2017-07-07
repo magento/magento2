@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -35,13 +35,13 @@
 
     <xs:simpleType name="vendorType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-z\-_]+"/>
+            <xs:pattern value="[a-zA-Z\-_]+"/>
         </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="packageType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-z\-_]+"/>
+            <xs:pattern value="[a-zA-Z\-_]+"/>
         </xs:restriction>
     </xs:simpleType>
 

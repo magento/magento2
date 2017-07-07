@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
@@ -39,7 +39,7 @@ class ProductImage
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Request\Http $request
      */
-    public function __construct (
+    public function __construct(
         \Magento\Swatches\Helper\Data $swatchesHelperData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Request\Http $request

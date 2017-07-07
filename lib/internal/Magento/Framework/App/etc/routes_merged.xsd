@@ -3,7 +3,7 @@
 /**
  * This schema should be applied for validation of merged router.xml file
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -136,7 +136,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z0-9_\-]{3,}" />
+            <xs:pattern value="[A-Za-z0-9_\-]{1,}" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

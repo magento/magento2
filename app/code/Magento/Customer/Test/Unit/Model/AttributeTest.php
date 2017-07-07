@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,8 +10,10 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Metadata\AttributeMetadataCache;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -125,60 +127,69 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private $dateTimeFormatter;
 
     /**
-     * Test method
+     * @var \Magento\Customer\Model\Metadata\AttributeMetadataCache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeMetadataCacheMock;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->getMock();
-        $this->extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+        $this->extensionAttributesFactory = $this->getMockBuilder(
+            \Magento\Framework\Api\ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+        $this->attributeValueFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Eav\Model\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeFactoryMock = $this->getMockBuilder('Magento\Eav\Model\Entity\TypeFactory')
+        $this->typeFactoryMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\TypeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
-        $this->helperMock = $this->getMockBuilder('Magento\Eav\Model\ResourceModel\Helper')
+        $this->helperMock = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Helper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->universalFactoryMock = $this->getMockBuilder('Magento\Framework\Validator\UniversalFactory')
+        $this->universalFactoryMock = $this->getMockBuilder(\Magento\Framework\Validator\UniversalFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeOptionFactoryMock =
-            $this->getMockBuilder('Magento\Eav\Api\Data\AttributeOptionInterfaceFactory')
+            $this->getMockBuilder(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+        $this->dataObjectProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();
-        $this->reservedAttributeListMock = $this->getMockBuilder('Magento\Catalog\Model\Product\ReservedAttributeList')
+        $this->reservedAttributeListMock = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\ReservedAttributeList::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+        $this->resolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->getMock();
-        $this->dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
+        $this->dateTimeFormatter = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class);
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
             ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
             ->getMockForAbstractClass();
-        $this->cacheManager = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
+        $this->cacheManager = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
             ->getMock();
-        $this->eventDispatcher = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->getMock();
 
         $this->contextMock
@@ -190,60 +201,64 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->willReturn($this->eventDispatcher);
 
-        $this->indexerRegistryMock = $this->getMockBuilder('Magento\Framework\Indexer\IndexerRegistry')
+        $this->indexerRegistryMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->attribute = new Attribute(
-            $this->contextMock,
-            $this->registryMock,
-            $this->extensionAttributesFactory,
-            $this->attributeValueFactoryMock,
-            $this->configMock,
-            $this->typeFactoryMock,
-            $this->storeManagerMock,
-            $this->helperMock,
-            $this->universalFactoryMock,
-            $this->attributeOptionFactoryMock,
-            $this->dataObjectProcessorMock,
-            $this->dataObjectHelperMock,
-            $this->timezoneMock,
-            $this->reservedAttributeListMock,
-            $this->resolverMock,
-            $this->dateTimeFormatter,
-            $this->indexerRegistryMock,
-            $this->resourceMock
+        $this->attributeMetadataCacheMock = $this->getMockBuilder(AttributeMetadataCache::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attribute = $objectManagerHelper->getObject(
+            Attribute::class,
+            [
+                'context' => $this->contextMock,
+                'registry' => $this->registryMock,
+                'extensionFactory' => $this->extensionAttributesFactory,
+                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'eavConfig' => $this->configMock,
+                'typeFactory' => $this->typeFactoryMock,
+                'storeManager' => $this->storeManagerMock,
+                'helper' => $this->helperMock,
+                'universalFactory' => $this->universalFactoryMock,
+                'attributeOptionFactory' => $this->attributeOptionFactoryMock,
+                'dataObjectProcessor' => $this->dataObjectProcessorMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'timezone' => $this->timezoneMock,
+                'reservedAttributeList' => $this->reservedAttributeListMock,
+                'resolver' => $this->resolverMock,
+                'dateTimeFormatter' => $this->dateTimeFormatter,
+                'indexerRegistry' => $this->indexerRegistryMock,
+                'resource' => $this->resourceMock,
+                'attributeMetadataCache' => $this->attributeMetadataCacheMock
+            ]
         );
     }
 
-    /**
-     * Test method
-     */
     public function testAfterSaveEavCache()
     {
         $this->configMock
             ->expects($this->once())
             ->method('clear');
-
+        $this->attributeMetadataCacheMock
+            ->expects($this->once())
+            ->method('clean');
         $this->attribute->afterSave();
     }
 
-    /**
-     * Test method
-     */
     public function testAfterDeleteEavCache()
     {
         $this->configMock
             ->expects($this->once())
             ->method('clear');
-
+        $this->attributeMetadataCacheMock
+            ->expects($this->once())
+            ->method('clean');
         $this->attribute->afterDelete();
     }
 
     public function testInvalidate()
     {
         /** @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder('Magento\Framework\Indexer\IndexerInterface')
+        $indexerMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
             ->getMockForAbstractClass();
 
         $this->indexerRegistryMock->expects($this->once())

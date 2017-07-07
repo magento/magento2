@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
@@ -24,20 +24,20 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\App\ResponseFactory($this->_objectManagerMock);
     }
 
     public function testCreate()
     {
-        $this->_expectedObject = $this->getMockBuilder('\Magento\Framework\App\ResponseInterface')->getMock();
+        $this->_expectedObject = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)->getMock();
         $arguments = [['property' => 'value']];
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             $arguments
         )->will(
             $this->returnValue($this->_expectedObject)

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<integrations>
+    <integration name="TestIntegration2">
+        <!--Extension of data provided in integrationA.xml-->
+        <endpoint_url>http://example.com/integration2</endpoint_url>
+        <identity_link_url>http://www.example.com/identity2</identity_link_url>
+    </integration>
+    <integration name="TestIntegration3">
+        <email>test-integration3@example.com</email>
+    </integration>
+</integrations>

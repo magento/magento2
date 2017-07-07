@@ -1,8 +1,11 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'mageUtils',
@@ -174,6 +177,20 @@ define([
         },
 
         /**
+         * Returns target of action if it's been set.
+         *
+         * @param {Object} action - Action object.
+         * @returns {String}
+         */
+        getTarget: function (action) {
+            if (action.target) {
+                return action.target;
+            }
+
+            return '_self';
+        },
+
+        /**
          * Checks if specified action requires a handler function.
          *
          * @param {String} actionIndex - Actions' identifier.
@@ -202,12 +219,41 @@ define([
                 args.unshift(callback.target);
 
                 callback = registry.async(callback.provider);
+            } else if (_.isArray(callback)) {
+                return this._getCallbacks(action);
             } else if (!_.isFunction(callback)) {
                 callback = this.defaultCallback.bind(this);
             }
 
             return function () {
                 callback.apply(callback, args);
+            };
+        },
+
+        /**
+         * Creates action callback for multiple actions.
+         *
+         * @private
+         * @param {Object} action - Actions' object.
+         * @returns {Function} Callback function.
+         */
+        _getCallbacks: function (action) {
+            var callback = action.callback,
+                callbacks = [],
+                tmpCallback;
+
+            _.each(callback, function (cb) {
+                tmpCallback = {
+                    action: registry.async(cb.provider),
+                    args: _.compact([cb.target, cb.params])
+                };
+                callbacks.push(tmpCallback);
+            });
+
+            return function () {
+                _.each(callbacks, function (cb) {
+                    cb.action.apply(cb.action, cb.args);
+                });
             };
         },
 

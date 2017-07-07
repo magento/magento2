@@ -1,9 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\TestCase;
+
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -15,15 +19,31 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Message\Manager */
     private $messageManager;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject | InterpretationStrategyInterface */
+    private $interpretationStrategyMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject | CookieManagerInterface */
+    private $cookieManagerMock;
+
     protected function setUp()
     {
         $testObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $request = $testObjectManager->getObject('Magento\TestFramework\Request');
-        $response = $testObjectManager->getObject('Magento\TestFramework\Response');
+        $this->messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $this->cookieManagerMock = $this->getMock(CookieManagerInterface::class, [], [], '', false);
+        $this->interpretationStrategyMock = $this->getMock(InterpretationStrategyInterface::class, [], [], '', false);
+        $this->interpretationStrategyMock->expects($this->any())
+            ->method('interpret')
+            ->willReturnCallback(
+                function (MessageInterface $message) {
+                    return $message->getText();
+                }
+            );
+
+        $request = $testObjectManager->getObject(\Magento\TestFramework\Request::class);
+        $response = $testObjectManager->getObject(\Magento\TestFramework\Response::class);
         $this->_objectManager = $this->getMock(
-            'Magento\TestFramework\ObjectManager',
+            \Magento\TestFramework\ObjectManager::class,
             ['get', 'create'],
             [],
             '',
@@ -34,9 +54,11 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             ->will(
                 $this->returnValueMap(
                     [
-                        ['Magento\Framework\App\RequestInterface', $request],
-                        ['Magento\Framework\App\ResponseInterface', $response],
-                        ['Magento\Framework\Message\Manager', $this->messageManager],
+                        [\Magento\Framework\App\RequestInterface::class, $request],
+                        [\Magento\Framework\App\ResponseInterface::class, $response],
+                        [\Magento\Framework\Message\Manager::class, $this->messageManager],
+                        [CookieManagerInterface::class, $this->cookieManagerMock],
+                        [InterpretationStrategyInterface::class, $this->interpretationStrategyMock],
                     ]
                 )
             );
@@ -52,7 +74,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         if (!$this->_bootstrap) {
             $this->_bootstrap = $this->getMock(
-                'Magento\TestFramework\Bootstrap',
+                \Magento\TestFramework\Bootstrap::class,
                 ['getAllOptions'],
                 [],
                 '',
@@ -65,13 +87,13 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function testGetRequest()
     {
         $request = $this->getRequest();
-        $this->assertInstanceOf('Magento\TestFramework\Request', $request);
+        $this->assertInstanceOf(\Magento\TestFramework\Request::class, $request);
     }
 
     public function testGetResponse()
     {
         $response = $this->getResponse();
-        $this->assertInstanceOf('Magento\TestFramework\Response', $response);
+        $this->assertInstanceOf(\Magento\TestFramework\Response::class, $response);
     }
 
     /**
@@ -112,7 +134,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
          * which requires fully initialized application environment intentionally not available
          * for unit tests
          */
-        $setRedirectMethod = new \ReflectionMethod('Magento\Framework\App\Response\Http', 'setRedirect');
+        $setRedirectMethod = new \ReflectionMethod(\Magento\Framework\App\Response\Http::class, 'setRedirect');
         $setRedirectMethod->invoke($this->getResponse(), 'http://magentocommerce.com');
         $this->assertRedirect();
         $this->assertRedirect($this->equalTo('http://magentocommerce.com'));
@@ -127,7 +149,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $this->addSessionMessages();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit_Framework_Constraint $constraint */
-        $constraint = $this->getMock('PHPUnit_Framework_Constraint', ['toString', 'matches']);
+        $constraint = $this->getMock(\PHPUnit_Framework_Constraint::class, ['toString', 'matches']);
         $constraint->expects(
             $this->once()
         )->method('matches')
@@ -139,17 +161,21 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function assertSessionMessagesDataProvider()
     {
         return [
-            'message waning type filtering' => [
-                ['some_warning'],
-                \Magento\Framework\Message\MessageInterface::TYPE_WARNING,
+            'message warning type filtering' => [
+                ['some_warning', 'warning_cookie'],
+                MessageInterface::TYPE_WARNING,
             ],
             'message error type filtering' => [
-                ['error_one', 'error_two'],
-                \Magento\Framework\Message\MessageInterface::TYPE_ERROR,
+                ['error_one', 'error_two', 'error_cookie'],
+                MessageInterface::TYPE_ERROR,
+            ],
+            'message notice type filtering' => [
+                ['some_notice', 'notice_cookie'],
+                MessageInterface::TYPE_NOTICE,
             ],
             'message success type filtering'    => [
-                ['success!'],
-                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS,
+                ['success!', 'success_cookie'],
+                MessageInterface::TYPE_SUCCESS,
             ],
         ];
     }
@@ -166,6 +192,10 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                     'error_two',
                     'some_notice',
                     'success!',
+                    'warning_cookie',
+                    'notice_cookie',
+                    'success_cookie',
+                    'error_cookie',
                 ]
             )
         );
@@ -192,5 +222,28 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             ->addMessage(new \Magento\Framework\Message\Success('success!'));
         $this->messageManager->expects($this->any())->method('getMessages')
             ->will($this->returnValue($messagesCollection));
+
+        $cookieMessages = [
+            [
+                'type' => 'warning',
+                'text' => 'warning_cookie',
+            ],
+            [
+                'type' => 'notice',
+                'text' => 'notice_cookie',
+            ],
+            [
+                'type' => 'success',
+                'text' => 'success_cookie',
+            ],
+            [
+                'type' => 'error',
+                'text' => 'error_cookie',
+            ],
+        ];
+
+        $this->cookieManagerMock->expects($this->any())
+            ->method('getCookie')
+            ->willReturn(\Zend_Json::encode($cookieMessages));
     }
 }

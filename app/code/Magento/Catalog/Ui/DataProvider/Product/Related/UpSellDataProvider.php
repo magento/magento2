@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Catalog\Ui\DataProvider\Product\Related;
+
+/**
+ * Class UpSellDataProvider
+ *
+ * @api
+ */
+class UpSellDataProvider extends AbstractDataProvider
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected function getLinkType()
+    {
+        return 'up_sell';
+    }
+}

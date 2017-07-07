@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
@@ -63,7 +63,7 @@ class ModuleUninstaller
     {
         $uninstalls = $this->collector->collectUninstall($modules);
         $setupModel = $this->setupFactory->create();
-        $resource = $this->objectManager->get('Magento\Framework\Module\ModuleResource');
+        $resource = $this->objectManager->get(\Magento\Framework\Module\ModuleResource::class);
         foreach ($modules as $module) {
             if (isset($uninstalls[$module])) {
                 $output->writeln("<info>Removing data of $module</info>");
@@ -89,7 +89,7 @@ class ModuleUninstaller
         $output->writeln('<info>Removing code from Magento codebase:</info>');
         $packages = [];
         /** @var \Magento\Framework\Module\PackageInfo $packageInfo */
-        $packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $packageInfo = $this->objectManager->get(\Magento\Framework\Module\PackageInfoFactory::class)->create();
         foreach ($modules as $module) {
             $packages[] = $packageInfo->getPackageName($module);
         }

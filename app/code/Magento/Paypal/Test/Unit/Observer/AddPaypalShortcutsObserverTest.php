@@ -1,148 +1,240 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Observer;
 
-use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
+use Magento\Catalog\Block\ShortcutButtons;
+use Magento\Catalog\Block\ShortcutInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Layout;
+use Magento\Paypal\Block\Express\InContext\Minicart\Button;
+use Magento\Paypal\Helper\Shortcut\Factory;
+use Magento\Paypal\Model\Config;
+use Magento\Paypal\Observer\AddPaypalShortcutsObserver;
 
 /**
  * Class AddPaypalShortcutsObserverTest
+ *
+ * @see \Magento\Paypal\Observer\AddPaypalShortcutsObserver
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddPaypalShortcutsObserverTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Paypal\Observer\AddPaypalShortcutsObserver
-     */
-    protected $_model;
+    const PAYMENT_CODE = 'code';
+
+    const PAYMENT_AVAILABLE = 'isAvailable';
+
+    const PAYMENT_IS_BML = 'isBml';
 
     /**
-     * @var \Magento\Framework\Event\Observer
-     */
-    protected $_observer;
-
-    /**
-     * @var \Magento\Framework\DataObject
-     */
-    protected $_event;
-
-    /**
-     * @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $paypalConfigMock;
-
-    protected function setUp()
-    {
-        $this->_event = new \Magento\Framework\DataObject();
-
-        $this->_observer = new \Magento\Framework\Event\Observer();
-        $this->_observer->setEvent($this->_event);
-
-        $this->paypalConfigMock = $this->getMock(
-            'Magento\Paypal\Model\Config',
-            [],
-            [],
-            '',
-            false
-        );
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $objectManagerHelper->getObject(
-            'Magento\Paypal\Observer\AddPaypalShortcutsObserver',
-            [
-                'paypalConfig' => $this->paypalConfigMock,
-            ]
-        );
-    }
-
-    /**
-     * @param array $paymentMethodsAvailability
      * @param array $blocks
-     * @dataProvider addAvailabilityOfMethodsDataProvider
+     *
+     * @dataProvider dataProviderShortcutsButtons
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testAddPaypalShortcuts($paymentMethodsAvailability, $blocks)
+    public function testAddShortcutsButtons(array $blocks)
     {
-        $this->paypalConfigMock->expects($this->any())
-            ->method('isMethodAvailable')
-            ->will($this->returnValueMap($paymentMethodsAvailability));
+        /** @var ShortcutButtons|\PHPUnit_Framework_MockObject_MockObject $shortcutButtonsMock */
+        $shortcutButtonsMock = $this->getMockBuilder(ShortcutButtons::class)
+            ->setMethods(['getLayout', 'addShortcut'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $layoutMock = $this->getMockBuilder(
-            'Magento\Framework\View\Layout'
-        )->setMethods(
-            ['createBlock']
-        )->disableOriginalConstructor()->getMock();
+        /** @var ShortcutButtons|\PHPUnit_Framework_MockObject_MockObject $shortcutButtonsMock */
+        $eventMock = $this->getMockBuilder(DataObject::class)
+            ->setMethods(
+                [
+                    'getContainer',
+                    'getCheckoutSession',
+                    'getIsCatalogProduct',
+                    'getOrPosition'
+                ]
+            )->disableOriginalConstructor()
+            ->getMock();
 
-        $shortcutButtonsMock = $this->getMockBuilder(
-            'Magento\Catalog\Block\ShortcutButtons'
-        )->setMethods(
-            ['getLayout', 'addShortcut']
-        )->disableOriginalConstructor()->getMock();
+        $eventMock->expects(self::once())
+            ->method('getContainer')
+            ->willReturn($shortcutButtonsMock);
 
-        $blockInstances = [];
-        $atPosition = 0;
-        foreach ($blocks as $blockName => $blockInstance) {
-            if ($this->paypalConfigMock->isMethodAvailable($blockInstance[1])) {
-                $block = $this->getMockBuilder($blockInstance[0])
-                    ->setMethods(null)
-                    ->disableOriginalConstructor()
-                    ->getMock();
-                $blockInstances[$blockName] = $block;
-                $layoutMock->expects(new MethodInvokedAtIndex($atPosition))->method('createBlock')->with($blockName)
-                    ->will($this->returnValue($block));
-                $atPosition++;
+        $observer = new Observer();
+        $observer->setEvent($eventMock);
+
+        /** @var Config|\PHPUnit_Framework_MockObject_MockObject $paypalConfigMock */
+        $paypalConfigMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var Factory|\PHPUnit_Framework_MockObject_MockObject $shortcutFactoryMock */
+        $shortcutFactoryMock = $this->getMockBuilder(Factory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $model = new AddPaypalShortcutsObserver(
+            $shortcutFactoryMock,
+            $paypalConfigMock
+        );
+
+        /** @var Layout|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
+        $layoutMock = $this->getMockBuilder(Layout::class)
+            ->setMethods(['createBlock'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $callIndexBlock = 0;
+        $callIndexShortcutFactory = 0;
+        $callIndexAvailable = 0;
+        $callIndexSession = 0;
+
+        foreach ($blocks as $instanceName => $blockData) {
+            $params = [];
+
+            $paypalConfigMock->expects(self::at($callIndexAvailable))
+                ->method('isMethodAvailable')
+                ->with($blockData[self::PAYMENT_CODE])
+                ->willReturn($blockData[self::PAYMENT_AVAILABLE]);
+
+            ++$callIndexAvailable;
+
+            if (!$blockData[self::PAYMENT_AVAILABLE]) {
+                continue;
             }
-        }
-        $shortcutButtonsMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
-        $atPosition = 0;
-        foreach ($blocks as $blockName => $blockInstance) {
-            if ($this->paypalConfigMock->isMethodAvailable($blockInstance[1])) {
-                $shortcutButtonsMock->expects(new MethodInvokedAtIndex($atPosition))->method('addShortcut')
-                    ->with($this->identicalTo($blockInstances[$blockName]));
-                $atPosition++;
+
+            ++$callIndexSession;
+            $params['shortcutValidator'] = 'test-shortcut-validator';
+
+            $shortcutFactoryMock->expects(self::at($callIndexShortcutFactory))
+                ->method('create')
+                ->with('test-checkout-session')
+                ->willReturn('test-shortcut-validator');
+
+            ++$callIndexShortcutFactory;
+
+            if (!$blockData[self::PAYMENT_IS_BML]) {
+                $params['checkoutSession'] = 'test-checkout-session';
+                ++$callIndexSession;
             }
+
+            $blockMock = $this->getMockBuilder(Button::class)
+                ->setMethods(['setIsInCatalogProduct', 'setShowOrPosition'])
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+
+            $blockMock->expects(self::once())
+                ->method('setIsInCatalogProduct')
+                ->willReturnSelf();
+            $blockMock->expects(self::once())
+                ->method('setShowOrPosition')
+                ->willReturnSelf();
+
+            $layoutMock->expects(self::at($callIndexBlock))
+                ->method('createBlock')
+                ->with($instanceName, '', $params)
+                ->willReturn($blockMock);
+
+            ++$callIndexBlock;
         }
-        $this->_event->setContainer($shortcutButtonsMock);
-        $this->_model->execute($this->_observer);
+        $shortcutButtonsMock->expects(self::exactly($callIndexBlock))
+            ->method('addShortcut')
+            ->with(self::isInstanceOf(ShortcutInterface::class));
+        $shortcutButtonsMock->expects(self::exactly($callIndexBlock))
+            ->method('getLayout')
+            ->willReturn($layoutMock);
+        $eventMock->expects(self::exactly($callIndexSession))
+            ->method('getCheckoutSession')
+            ->willReturn('test-checkout-session');
+
+        $model->execute($observer);
     }
 
-    public function addAvailabilityOfMethodsDataProvider()
+    /**
+     * @return array
+     */
+    public function dataProviderShortcutsButtons()
     {
-        $blocks = [
-            'Magento\Paypal\Block\Express\Shortcut' =>
-                ['Magento\Paypal\Block\Express\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS],
-            'Magento\Paypal\Block\PayflowExpress\Shortcut' =>
-                ['Magento\Paypal\Block\Express\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS],
-            'Magento\Paypal\Block\Bml\Shortcut' =>
-                ['Magento\Paypal\Block\Bml\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS],
-            'Magento\Paypal\Block\Payflow\Bml\Shortcut' =>
-                ['Magento\Paypal\Block\Bml\Shortcut', \Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS],
-        ];
-
-        $allMethodsAvailable = [
-            [\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS, true],
-            [\Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS, true]
-        ];
-
-        $allMethodsNotAvailable = [
-            [\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS, false],
-            [\Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS, false]
-        ];
-
-        $firstMethodAvailable = [
-            [\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS, true],
-            [\Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS, false]
-        ];
-
-        $secondMethodAvailable = [
-            [\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS, false],
-            [\Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS, true]
-        ];
-
         return [
-            [$allMethodsAvailable, $blocks],
-            [$allMethodsNotAvailable, $blocks],
-            [$firstMethodAvailable, $blocks],
-            [$secondMethodAvailable, $blocks]
+            [
+                'blocks1' => [
+                    \Magento\Paypal\Block\Express\InContext\Minicart\Button::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\Express\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\Bml\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => true,
+                    ],
+                    \Magento\Paypal\Block\WpsExpress\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\WpsBml\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\PayflowExpress\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_PE_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\Payflow\Bml\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_PE_EXPRESS,
+                        self::PAYMENT_AVAILABLE => true,
+                        self::PAYMENT_IS_BML => true,
+                    ]
+                ],
+            ],
+            [
+                'blocks2' => [
+                    \Magento\Paypal\Block\Express\InContext\Minicart\Button::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\Express\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
+                        self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\Bml\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
+                        self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => true,
+                    ],
+                    \Magento\Paypal\Block\WpsExpress\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\WpsBml\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
+                        self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\PayflowExpress\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_PE_EXPRESS,
+                        self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => false,
+                    ],
+                    \Magento\Paypal\Block\Payflow\Bml\Shortcut::class => [
+                        self::PAYMENT_CODE => Config::METHOD_WPP_PE_EXPRESS,
+                        self::PAYMENT_AVAILABLE => false,
+                        self::PAYMENT_IS_BML => true,
+                    ]
+                ],
+            ]
         ];
     }
 }

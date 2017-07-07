@@ -1,7 +1,7 @@
 /**
  * @category    mage.collapsible
  * @package     test
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -148,7 +148,7 @@ asyncTest( "keyboard support", function() {
         group.collapsible('destroy');
         start();
     } );
-    
+
     setTimeout(function(){
         title.focus();
     },10);

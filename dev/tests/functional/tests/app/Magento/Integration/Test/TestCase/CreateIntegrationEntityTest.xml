@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -12,6 +12,7 @@
             <data name="integration/data/email" xsi:type="string">test@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
@@ -19,6 +20,7 @@
         </variation>
         <variation name="CreateIntegrationEntityTestVariation2" summary="Create Integration Entity" ticketId="MAGETWO-26009">
             <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">Custom</data>
             <data name="integration/data/resources" xsi:type="string">Sales/Operations/Invoices</data>
             <data name="strictResourcesVerify" xsi:type="boolean">false</data>
@@ -28,6 +30,7 @@
         </variation>
         <variation name="CreateIntegrationEntityTestVariation3" summary="Create Integration Entity" ticketId="MAGETWO-26009">
             <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationForm" />
@@ -38,6 +41,7 @@
             <data name="integration/data/email" xsi:type="string">-</data>
             <data name="integration/data/endpoint" xsi:type="string">&lt;script&gt;alert(&apos;XSS&apos;)&lt;/script&gt;</data>
             <data name="integration/data/identity_link_url" xsi:type="string">&lt;script&gt;alert(&apos;XSS&apos;)&lt;/script&gt;</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
@@ -49,6 +53,7 @@
             <data name="integration/data/email" xsi:type="string">-</data>
             <data name="integration/data/endpoint" xsi:type="string">&lt;IMG SRC=javascript:alert(&apos;XSS&apos;)&gt;</data>
             <data name="integration/data/identity_link_url" xsi:type="string">&lt;IMG SRC=javascript:alert(&apos;XSS&apos;)&gt;</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
@@ -60,6 +65,7 @@
             <data name="integration/data/email" xsi:type="string">-</data>
             <data name="integration/data/endpoint" xsi:type="string">endpoint&apos; OR &apos;a&apos;=&apos;a</data>
             <data name="integration/data/identity_link_url" xsi:type="string">link&apos; OR &apos;a&apos;=&apos;a</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
@@ -71,6 +77,7 @@
             <data name="integration/data/email" xsi:type="string">-</data>
             <data name="integration/data/endpoint" xsi:type="string">endpoint&quot; OR &quot;a&quot;=&quot;a</data>
             <data name="integration/data/identity_link_url" xsi:type="string">link&quot; OR &quot;a&quot;=&quot;a</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
@@ -82,6 +89,7 @@
             <data name="integration/data/email" xsi:type="string">-</data>
             <data name="integration/data/endpoint" xsi:type="string">endpoint&quot; OR &apos;a&quot;=&apos;a</data>
             <data name="integration/data/identity_link_url" xsi:type="string">link&quot; OR &apos;a&quot;=&apos;a</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertNoAlertPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessage" />
@@ -93,6 +101,7 @@
             <data name="integration/data/email" xsi:type="string">abc.example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
@@ -102,6 +111,7 @@
             <data name="integration/data/email" xsi:type="string">abc.@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
@@ -111,6 +121,7 @@
             <data name="integration/data/email" xsi:type="string">abc..123@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
@@ -120,6 +131,7 @@
             <data name="integration/data/email" xsi:type="string">a@b@c@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
@@ -129,6 +141,7 @@
             <data name="integration/data/email" xsi:type="string">a&quot;b(c)d,e:f;g&lt;h&gt;i[j\k]l@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
@@ -138,6 +151,7 @@
             <data name="integration/data/email" xsi:type="string">this\ still\&quot;not\\allowed@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
@@ -147,6 +161,7 @@
             <data name="integration/data/email" xsi:type="string">just&quot;not&quot;right@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
@@ -156,9 +171,20 @@
             <data name="integration/data/email" xsi:type="string">this is&quot;not\allowed@example.com</data>
             <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
             <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">%current_password%</data>
             <data name="integration/data/resource_access" xsi:type="string">All</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertEmailValidationErrorGenerated" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessSaveMessageNotPresent" />
+        </variation>
+        <variation name="CreateIntegrationEntityTestVariation17" summary="Incorrect user password entered">
+            <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>
+            <data name="integration/data/email" xsi:type="string">test@example.com</data>
+            <data name="integration/data/endpoint" xsi:type="string">https://endpoint.com</data>
+            <data name="integration/data/identity_link_url" xsi:type="string">https://testlink.com</data>
+            <data name="integration/data/current_password" xsi:type="string">incorrect password</data>
+            <data name="integration/data/resource_access" xsi:type="string">All</data>
+            <constraint name="Magento\Integration\Test\Constraint\AssertIncorrectUserPassword" />
+            <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNotInGrid" />
         </variation>
     </testCase>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,17 +50,17 @@ class EventTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
 
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -69,10 +69,10 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock
@@ -97,7 +97,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateCustomerTypeWithoutType()
     {
-        $eventMock = $this->getMockBuilder('Magento\Reports\Model\Event')
+        $eventMock = $this->getMockBuilder(\Magento\Reports\Model\Event::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock
@@ -105,7 +105,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('update');
 
         $this->event->updateCustomerType($eventMock, 1, 1);
-
     }
 
     /**
@@ -113,7 +112,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateCustomerTypeWithType()
     {
-        $eventMock = $this->getMockBuilder('Magento\Reports\Model\Event')
+        $eventMock = $this->getMockBuilder(\Magento\Reports\Model\Event::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock
@@ -121,7 +120,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('update');
 
         $this->event->updateCustomerType($eventMock, 1, 1, ['type']);
-
     }
 
     /**
@@ -132,7 +130,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $derivedSelect = 'SELECT * FROM table';
         $idFieldName = 'IdFieldName';
 
-        $collectionSelectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $collectionSelectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->setMethods(['joinInner', 'order'])
             ->getMock();
@@ -150,7 +148,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('order')
             ->willReturnSelf();
 
-        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock
@@ -166,7 +164,7 @@ class EventTest extends \PHPUnit_Framework_TestCase
             ->method('getSelect')
             ->willReturn($collectionSelectMock);
 
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->setMethods(['from', 'where', 'group', 'joinInner', '__toString'])
             ->getMock();
@@ -205,11 +203,11 @@ class EventTest extends \PHPUnit_Framework_TestCase
      */
     public function testClean()
     {
-        $eventMock = $this->getMockBuilder('Magento\Reports\Model\Event')
+        $eventMock = $this->getMockBuilder(\Magento\Reports\Model\Event::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->setMethods(['select', 'from', 'joinLeft', 'where', 'limit', 'fetchCol'])
             ->getMock();

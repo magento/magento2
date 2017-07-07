@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,10 @@
  * Abstract class for the controller tests
  */
 namespace Magento\TestFramework\TestCase;
+
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+use Magento\Theme\Controller\Result\MessagePlugin;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -59,8 +63,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_objectManager->removeSharedInstance('Magento\Framework\App\ResponseInterface');
-        $this->_objectManager->removeSharedInstance('Magento\Framework\App\RequestInterface');
+        $this->_objectManager->removeSharedInstance(\Magento\Framework\App\ResponseInterface::class);
+        $this->_objectManager->removeSharedInstance(\Magento\Framework\App\RequestInterface::class);
     }
 
     protected function tearDown()
@@ -103,7 +107,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get('Magento\Framework\App\RequestInterface');
+            $this->_request = $this->_objectManager->get(\Magento\Framework\App\RequestInterface::class);
         }
         return $this->_request;
     }
@@ -116,7 +120,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get('Magento\Framework\App\ResponseInterface');
+            $this->_response = $this->_objectManager->get(\Magento\Framework\App\ResponseInterface::class);
         }
         return $this->_response;
     }
@@ -182,7 +186,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * Assert that actual session messages meet expectations:
      * Usage examples:
      * $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
-     * $this->assertSessionMessages($this->equalTo(array('Entity has been saved.')),
+     * $this->assertSessionMessages($this->equalTo(['Entity has been saved.'],
      * \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS);
      *
      * @param \PHPUnit_Framework_Constraint $constraint Constraint to compare actual messages against
@@ -193,9 +197,47 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function assertSessionMessages(
         \PHPUnit_Framework_Constraint $constraint,
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         $this->_assertSessionErrors = false;
+
+        $messages = $this->getMessages($messageType, $messageManagerClass);
+
+        $this->assertThat(
+            $messages,
+            $constraint,
+            'Session messages do not meet expectations ' . var_export($messages, true)
+        );
+    }
+
+    /**
+     * Return all stored messages
+     *
+     * @param string|null $messageType
+     * @param string $messageManagerClass
+     * @return array
+     */
+    protected function getMessages(
+        $messageType = null,
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
+    ) {
+        return array_merge(
+            $this->getSessionMessages($messageType, $messageManagerClass),
+            $this->getCookieMessages($messageType)
+        );
+    }
+
+    /**
+     * Return messages stored in session
+     *
+     * @param string|null $messageType
+     * @param string $messageManagerClass
+     * @return array
+     */
+    protected function getSessionMessages(
+        $messageType = null,
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
+    ) {
         /** @var $messageManager \Magento\Framework\Message\ManagerInterface */
         $messageManager = $this->_objectManager->get($messageManagerClass);
         /** @var $messages \Magento\Framework\Message\AbstractMessage[] */
@@ -204,14 +246,46 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         } else {
             $messages = $messageManager->getMessages()->getItemsByType($messageType);
         }
+
+        /** @var $messageManager InterpretationStrategyInterface */
+        $interpretationStrategy = $this->_objectManager->get(InterpretationStrategyInterface::class);
+
         $actualMessages = [];
         foreach ($messages as $message) {
-            $actualMessages[] = $message->getText();
+            $actualMessages[] = $interpretationStrategy->interpret($message);
         }
-        $this->assertThat(
-            $actualMessages,
-            $constraint,
-            'Session messages do not meet expectations' . var_export($actualMessages, true)
-        );
+
+        return $actualMessages;
+    }
+
+    /**
+     * Return messages stored in cookies by type
+     *
+     * @param string|null $messageType
+     * @return array
+     */
+    protected function getCookieMessages($messageType = null)
+    {
+        /** @var $cookieManager CookieManagerInterface */
+        $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
+        try {
+            $messages = \Zend_Json::decode(
+                $cookieManager->getCookie(MessagePlugin::MESSAGES_COOKIES_NAME, \Zend_Json::encode([]))
+            );
+            if (!is_array($messages)) {
+                $messages = [];
+            }
+        } catch (\Zend_Json_Exception $e) {
+            $messages = [];
+        }
+
+        $actualMessages = [];
+        foreach ($messages as $message) {
+            if ($messageType === null || $message['type'] == $messageType) {
+                $actualMessages[] = $message['text'];
+            }
+        }
+
+        return $actualMessages;
     }
 }

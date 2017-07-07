@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Test\Unit;
@@ -20,7 +20,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->viewsFactoryMock = $this->getMock(
-            'Magento\Framework\Mview\View\CollectionFactory',
+            \Magento\Framework\Mview\View\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -37,7 +37,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getViews($method)
     {
-        $viewMock = $this->getMock('Magento\Framework\Mview\ViewInterface', [], [], '', false);
+        $viewMock = $this->getMock(\Magento\Framework\Mview\ViewInterface::class, [], [], '', false);
         $viewMock->expects($this->exactly(2))->method($method);
         return [$viewMock, $viewMock];
     }
@@ -49,7 +49,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getViewsMock()
     {
-        $viewsMock = $this->getMock('Magento\Framework\Mview\View\Collection', [], [], '', false);
+        $viewsMock = $this->getMock(\Magento\Framework\Mview\View\Collection::class, [], [], '', false);
         $this->viewsFactoryMock->expects($this->once())->method('create')->will($this->returnValue($viewsMock));
         return $viewsMock;
     }

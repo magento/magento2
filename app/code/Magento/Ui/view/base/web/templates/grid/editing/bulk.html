@@ -1,50 +1,22 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tr
-    class="data-grid-bulk-edit-panel data-grid-editable-row"
-    data-bind="
-        visible: active,
-        foreach: {
-            data: fields,
-            as: '$col'
-        }"
-        data-role="data-grid-bulk-row">
-    <!-- ko if: $parent.getColumn(index).visible -->
-    <td
-        data-bind="
-            css: {
-                'data-grid-actions-cell': $parent.isActionsColumn($col)
-            }">
-        <!-- ko if: $parent.isActionsColumn($col) -->
-            <!-- ko with: $parent -->
-                <button
-                    class="action-default"
-                    type="button"
-                    data-bind="
-                        click: apply,
-                        attr: {
-                            disabled: !hasData
-                        }">
-                    <span data-bind="i18n: 'Apply'"></span>
+<tr class="data-grid-bulk-edit-panel data-grid-editable-row" each="data: fields, as: '$col'" visible="active">
+    <td if="$parent.getColumn(index).visible" css="'data-grid-actions-cell': $parent.isActionsColumn($col)">
+        <if args="$parent.isActionsColumn($col)">
+            <with args="$parent">
+                <button class="action-default" type="button" click="apply" disable="!hasData">
+                    <span translate="'Apply'"/>
                 </button>
-            <!-- /ko -->
-        <!-- /ko -->
+            </with>
+        </if>
         
-        <!-- ko if: $data.isEditor -->
-            <label
-                class="admin__field-label admin__field-label-vertical"
-                data-bind="
-                    i18n: 'All in column',
-                    attr: {
-                        for: uid
-                    }
-                "></label>
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        <if args="$data.isEditor">
+            <label class="admin__field-label admin__field-label-vertical" attr="for: uid" translate="'All in Column'"/>
+            <render/>
+        </if>
     </td>
-    <!-- /ko -->
 </tr>

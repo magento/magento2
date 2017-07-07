@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -29,6 +29,7 @@
         <link src='Magento_Swagger::swagger-ui/js/lang/translator.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lang/ru.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lang/en.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/magento-swagger.js' type='text/javascript'/>
 
         <!--Remove require-js assets-->
         <remove src="requirejs/require.js"/>

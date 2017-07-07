@@ -1,77 +1,63 @@
+sudo: required
+dist: trusty
+group: edge
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+    - postfix
+  firefox: "46.0"
+  hosts:
+      - magento2.travis
 language: php
 php:
-  - 5.5
-  - 5.6
+  - 7.0
+  - 7.1
 env:
-  - TEST_SUITE=unit
-  - TEST_SUITE=integration_part_1
-  - TEST_SUITE=integration_part_2
-  - TEST_SUITE=integration_integrity
-  - TEST_SUITE=static_phpcs
-  - TEST_SUITE=static_annotation
+  global:
+    - COMPOSER_BIN_DIR=~/bin
+    - INTEGRATION_SETS=3
+    - NODE_JS_VERSION=6
+    - MAGENTO_HOST_NAME="magento2.travis"
+  matrix:
+    - TEST_SUITE=unit
+    - TEST_SUITE=static
+    - TEST_SUITE=js GRUNT_COMMAND=spec
+    - TEST_SUITE=js GRUNT_COMMAND=static
+    - TEST_SUITE=integration INTEGRATION_INDEX=1
+    - TEST_SUITE=integration INTEGRATION_INDEX=2
+    - TEST_SUITE=integration INTEGRATION_INDEX=3
+    - TEST_SUITE=functional ACCEPTANCE_INDEX=1
+    - TEST_SUITE=functional ACCEPTANCE_INDEX=2
+matrix:
+  exclude:
+    - php: 7.0
+      env: TEST_SUITE=static
+    - php: 7.0
+      env: TEST_SUITE=js GRUNT_COMMAND=spec
+    - php: 7.0
+      env: TEST_SUITE=js GRUNT_COMMAND=static
+    - php: 7.0
+      env: TEST_SUITE=functional ACCEPTANCE_INDEX=1
+    - php: 7.0
+      env: TEST_SUITE=functional ACCEPTANCE_INDEX=2
 cache:
   apt: true
   directories:
     - $HOME/.composer/cache
-    - $HOME/.cache/bin
-matrix:
-  exclude:
-    - php: 5.6
-      env: TEST_SUITE=static_phpcs
-    - php: 5.6
-      env: TEST_SUITE=static_annotation
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq postfix
-  - sh -c 'if [ "$CASHER_DIR" ]; then
-         if [ -x $HOME/.cache/bin/composer ]; then
-           $HOME/.cache/bin/composer self-update; echo '';
-         else
-           mkdir -p $HOME/.cache/bin;
-           curl --connect-timeout 30 -sS https://getcomposer.org/installer
-           | php -- --install-dir $HOME/.cache/bin/ --filename composer;
-         fi
-       fi'
-  - export PATH="$HOME/.cache/bin:$PATH"
-before_script:
-  # Mock mail
-  - sudo service postfix stop
-  - smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
-  - echo -e '#!/usr/bin/env bash\nexit 0' | sudo tee /usr/sbin/sendmail
-  - >
-      echo 'sendmail_path = "/usr/sbin/sendmail -t -i "'
-      | sudo tee "/home/travis/.phpenv/versions/`php -i
-      | grep "PHP Version"
-      | head -n 1
-      | grep -o -P '\d+\.\d+\.\d+.*'`/etc/conf.d/sendmail.ini"
-  # Disable xDebug
-  - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
-  # Install MySQL 5.6, create DB for integration tests
-  - >
-      sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ] || [ '$TEST_SUITE' = 'integration_part_2' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then
-      sudo apt-get remove --purge mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5;
-      sudo apt-get autoremove;
-      sudo apt-get autoclean;
-      sudo apt-add-repository ppa:ondrej/mysql-5.6 -y;
-      sudo apt-get update;
-      sudo apt-get install mysql-server-5.6 mysql-client-5.6;
-      mysql -uroot -e 'SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION; CREATE DATABASE magento_integration_tests;';
-      mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php;
-      fi"
-  # Change memory_limit for travis
-  - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - phpenv rehash;
-  - composer install --no-interaction --prefer-dist
+    - $HOME/.nvm
+    - $HOME/node_modules
+    - $HOME/yarn.lock
+before_install: ./dev/travis/before_install.sh
+install: composer install --no-interaction --prefer-dist
+before_script: ./dev/travis/before_script.sh
 script:
-  # Unit tests
-  - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
-  # Integration tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ] || [ '$TEST_SUITE' = 'integration_part_2' ]; then cd dev/tests/integration/; bash IntegationTestsForTravis.sh 2; fi"
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis1; fi"
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_2' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis2; fi"
-  # Integration integrity tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity; fi"
-  # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle'; fi"
-  # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard'; fi"
+  # Set arguments for variants of phpunit based tests; '|| true' prevents failing script when leading test fails
+  - test $TEST_SUITE = "static" && TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
+  - test $TEST_SUITE = "functional" && TEST_FILTER='dev/tests/functional/testsuites/Magento/Mtf/TestSuite/InjectableTests.php' || true
+
+  # The scripts for grunt/phpunit type tests
+  - if [ $TEST_SUITE != "js" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
+  - if [ $TEST_SUITE == "js" ]; then grunt $GRUNT_COMMAND; fi

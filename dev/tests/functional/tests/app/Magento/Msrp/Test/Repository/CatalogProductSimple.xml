@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,7 +14,7 @@
             <field name="name" xsi:type="string">Simple Product with msrp %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_with_msrp_%isolation%</field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">25</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -27,7 +27,9 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="checkout_data" xsi:type="array">
@@ -42,7 +44,7 @@
             <field name="url_key" xsi:type="string">simple-product-with-msrp-%isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_with_msrp_%isolation%</field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">1000</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -58,12 +60,110 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="stock_data" xsi:type="array">
                 <item name="manage_stock" xsi:type="string">No</item>
             </field>
             <field name="msrp" xsi:type="string">15</field>
+            <field name="msrp_display_actual_price_type" xsi:type="string">On Gesture</field>
+        </dataset>
+
+        <dataset name="msrp_display_actual_price_in_cart_with_quotes_in_product_name">
+            <field name="name" xsi:type="string">\'Simple Product with\' msrp %isolation%</field>
+            <field name="url_key" xsi:type="string">simple-product-with-msrp-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_with_msrp_%isolation%</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1000</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+                <item name="dataset" xsi:type="string">-</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">No</item>
+            </field>
+            <field name="msrp" xsi:type="string">15</field>
+            <field name="msrp_display_actual_price_type" xsi:type="string">In Cart</field>
+        </dataset>
+
+        <dataset name="msrp_on_gesture_for_product_with_single_quotes_in_product_name">
+            <field name="name" xsi:type="string">\'Simple Product with\' msrp on gesture %isolation%</field>
+            <field name="url_key" xsi:type="string">simple-product-with-msrp on gesture-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_with_msrp_on_gesture_%isolation%</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1000</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">20</item>
+                <item name="dataset" xsi:type="string">-</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">No</item>
+            </field>
+            <field name="msrp" xsi:type="string">35</field>
+            <field name="msrp_display_actual_price_type" xsi:type="string">On Gesture</field>
+        </dataset>
+
+        <dataset name="msrp_on_gesture_for_product_with_one_single_quote_in_product_name">
+            <field name="name" xsi:type="string">\'Simple Product with msrp on gesture %isolation%</field>
+            <field name="url_key" xsi:type="string">simple-product-with-msrp on gesture-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_with_msrp_on_gesture_%isolation%</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1000</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">20</item>
+                <item name="dataset" xsi:type="string">-</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">No</item>
+            </field>
+            <field name="msrp" xsi:type="string">35</field>
             <field name="msrp_display_actual_price_type" xsi:type="string">On Gesture</field>
         </dataset>
     </repository>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,18 +9,19 @@
  /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content */
 ?>
 
-<div data-mage-init='{"mediabrowser": <?php echo $block->escapeHtml($block->getFilebrowserSetupObject()); ?>}'>
-    <div class="side-col"><?php echo $block->getChildHtml('wysiwyg_images.tree') ?></div>
+<div data-mage-init='{"mediabrowser": <?= $block->escapeHtml($block->getFilebrowserSetupObject()) ?>}'>
+    <div class="side-col"><?= $block->getChildHtml('wysiwyg_images.tree') ?></div>
     <div class="main-col">
         <div class="insert-title" id="content_header">
             <div class="insert-title-inner">
                 <div class="insert-actions">
-                    <?php echo $block->getButtonsHtml() ?>
+                    <?= $block->getButtonsHtml() ?>
                 </div>
-                <div class="title"><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></div>
+                <div class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></div>
             </div>
         </div>
-        <div id="contents-uploader" class="contents-uploader"><?php echo $block->getChildHtml('wysiwyg_images.uploader') ?></div>
+        <div id="error-message" data-action="show-error"></div>
+        <div id="contents-uploader" class="contents-uploader"><?= $block->getChildHtml('wysiwyg_images.uploader') ?></div>
         <div id="contents"></div>
     </div>
 </div>

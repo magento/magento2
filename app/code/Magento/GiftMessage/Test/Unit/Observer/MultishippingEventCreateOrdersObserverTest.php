@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,10 +23,10 @@ class MultishippingEventCreateOrdersObserverTest extends \PHPUnit_Framework_Test
     public function testMultishippingEventCreateOrders()
     {
         $giftMessageId = 42;
-        $observerMock = $this->getMock('\Magento\Framework\Event\Observer');
-        $eventMock = $this->getMock('\Magento\Framework\Event', ['getOrder', 'getAddress']);
-        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', ['getGiftMessageId'], [], '', false);
-        $orderMock = $this->getMock('\Magento\Sales\Model\Order', ['setGiftMessageId'], [], '', false);
+        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getOrder', 'getAddress']);
+        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, ['getGiftMessageId'], [], '', false);
+        $orderMock = $this->getMock(\Magento\Sales\Model\Order::class, ['setGiftMessageId'], [], '', false);
         $observerMock->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getGiftMessageId')->willReturn($giftMessageId);

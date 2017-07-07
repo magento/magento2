@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Config;
@@ -98,7 +98,7 @@ class ClassReflector
             $methodData['interface']['in']['parameters'][$parameter->getName()] = $parameterData;
         }
         $returnType = $this->_typeProcessor->getGetterReturnType($method);
-        if ($returnType != 'void' && $returnType != 'null') {
+        if ($returnType['type'] != 'void' && $returnType['type'] != 'null') {
             $methodData['interface']['out']['parameters']['result'] = [
                 'type' => $this->_typeProcessor->register($returnType['type']),
                 'documentation' => $returnType['description'],

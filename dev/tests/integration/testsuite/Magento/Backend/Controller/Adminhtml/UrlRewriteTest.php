@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
@@ -17,7 +17,7 @@ class UrlRewriteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testSaveActionCmsPage()
     {
-        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\Page');
+        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Model\Page::class);
         $page->load('page_design_blank', 'identifier');
 
         $this->getRequest()->setPostValue(

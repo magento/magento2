@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,24 +28,24 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorUtility;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->calculatorFactory = $this->getMock(
-            'Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory',
+            \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory::class,
             [],
             [],
             '',
             false
         );
         $this->eventManager = $this->getMock(
-            'Magento\Framework\Event\Manager',
+            \Magento\Framework\Event\Manager::class,
             ['dispatch'],
             [],
             '',
             false
         );
         $this->validatorUtility = $this->getMock(
-            'Magento\SalesRule\Model\Utility',
+            \Magento\SalesRule\Model\Utility::class,
             ['canProcessRule', 'minFix', 'deltaRoundingFix', 'getItemQty'],
             [],
             '',
@@ -79,7 +79,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject $ruleWithStopFurtherProcessing
          */
         $ruleWithStopFurtherProcessing = $this->getMock(
-            'Magento\SalesRule\Model\Rule',
+            \Magento\SalesRule\Model\Rule::class,
             ['getStoreLabel', 'getCouponType', 'getRuleId', '__wakeup', 'getActions'],
             [],
             '',
@@ -87,7 +87,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject $ruleThatShouldNotBeRun */
         $ruleThatShouldNotBeRun = $this->getMock(
-            'Magento\SalesRule\Model\Rule',
+            \Magento\SalesRule\Model\Rule::class,
             ['getStopRulesProcessing', '__wakeup'],
             [],
             '',
@@ -95,7 +95,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
         );
 
         $actionMock = $this->getMock(
-            'Magento\Rule\Model\Action\Collection',
+            \Magento\Rule\Model\Action\Collection::class,
             ['validate'],
             [],
             '',
@@ -164,7 +164,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             [
                 'getQuote',
                 'setCouponCode',
@@ -177,7 +177,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'setDiscountAmount',
                 'setBaseDiscountAmount',
@@ -191,7 +191,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $quote = $this->getMock('Magento\Quote\Model\Quote', ['getStore', '__wakeUp'], [], '', false);
+        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, ['getStore', '__wakeUp'], [], '', false);
         $item->expects($this->any())->method('getAddress')->will($this->returnValue($address));
         $address->expects($this->any())
             ->method('getQuote')
@@ -204,14 +204,14 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
     {
         $qty = 2;
         $discountCalc = $this->getMock(
-            'Magento\SalesRule\Model\Rule\Action\Discount',
+            \Magento\SalesRule\Model\Rule\Action\Discount::class,
             ['fixQuantity', 'calculate'],
             [],
             '',
             false
         );
         $discountData = $this->getMock(
-            'Magento\SalesRule\Model\Rule\Action\Discount\Data',
+            \Magento\SalesRule\Model\Rule\Action\Discount\Data::class,
             [],
             [
                 'amount' => 30,

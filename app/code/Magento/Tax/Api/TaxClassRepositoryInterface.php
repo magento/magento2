@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,6 +24,10 @@ interface TaxClassRepositoryInterface
 
     /**
      * Retrieve tax classes which match a specific criteria.
+     *
+     * This call returns an array of objects, but detailed information about each object’s attributes might not be
+     * included. See http://devdocs.magento.com/codelinks/attributes.html#TaxClassRepositoryInterface to
+     * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Tax\Api\Data\TaxClassSearchResultsInterface containing Data\TaxClassInterface

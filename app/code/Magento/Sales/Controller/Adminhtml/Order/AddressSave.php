@@ -1,13 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+
     /**
      * Save order address
      *
@@ -17,7 +24,9 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $addressId = $this->getRequest()->getParam('address_id');
         /** @var $address \Magento\Sales\Api\Data\OrderAddressInterface|\Magento\Sales\Model\Order\Address */
-        $address = $this->_objectManager->create('Magento\Sales\Api\Data\OrderAddressInterface')->load($addressId);
+        $address = $this->_objectManager->create(
+            \Magento\Sales\Api\Data\OrderAddressInterface::class
+        )->load($addressId);
         $data = $this->getRequest()->getPostValue();
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {
@@ -41,13 +50,5 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
         } else {
             return $resultRedirect->setPath('sales/*/');
         }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,7 +13,7 @@
         <observer name="invalidate_builtin" instance="Magento\PageCache\Observer\FlushCacheByTags" />
     </event>
     <event name="clean_cache_after_reindex">
-        <observer name="reindex_cache_flush" instance="Magento\PageCache\Observer\InvalidateCacheIfChanged" />
+        <observer name="reindex_cache_flush" instance="Magento\PageCache\Observer\FlushCacheByTags" />
     </event>
     <event name="adminhtml_cache_flush_system">
         <observer name="flush_system_pagecache" instance="Magento\PageCache\Observer\FlushAllCache" />
@@ -47,11 +47,6 @@
     </event>
     <event name="model_save_commit_after">
         <observer name="flush_cache_after_model_save" instance="Magento\PageCache\Observer\FlushCacheByTags" />
-    </event>
-    <event name="controller_action_predispatch">
-        <observer name="register_form_key"
-                  instance="Magento\PageCache\Observer\RegisterFormKeyFromCookie"
-                  />
     </event>
     <event name="customer_logout">
         <observer name="FlushFormKeyOnLogout" instance="Magento\PageCache\Observer\FlushFormKeyOnLogout"/>

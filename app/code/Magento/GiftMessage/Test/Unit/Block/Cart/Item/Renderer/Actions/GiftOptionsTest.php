@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Block\Cart\Item\Renderer\Actions;
@@ -28,21 +28,23 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
     /** @var array  */
     protected $jsLayout = ['root' => 'node'];
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->jsonEncoderMock = $this->getMockBuilder('Magento\Framework\Json\Encoder')
+        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->compositeConfigProvider = $this->getMockBuilder('Magento\Checkout\Model\CompositeConfigProvider')
+        $this->compositeConfigProvider = $this->getMockBuilder(\Magento\Checkout\Model\CompositeConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutProcessorMock = $this->getMockBuilder('Magento\Checkout\Block\Checkout\LayoutProcessorInterface')
+        $this->layoutProcessorMock = $this->getMockBuilder(
+            \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -59,7 +61,7 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
         /**
          * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 

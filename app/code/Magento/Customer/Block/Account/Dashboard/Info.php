@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account\Dashboard;
@@ -9,6 +9,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Dashboard Customer Info
+ *
+ * @api
  */
 class Info extends \Magento\Framework\View\Element\Template
 {
@@ -122,7 +124,9 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     public function isNewsletterEnabled()
     {
-        return $this->getLayout()->getBlockSingleton('Magento\Customer\Block\Form\Register')->isNewsletterEnabled();
+        return $this->getLayout()
+            ->getBlockSingleton(\Magento\Customer\Block\Form\Register::class)
+            ->isNewsletterEnabled();
     }
 
     /**

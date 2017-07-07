@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,9 +16,9 @@
  *  getForm() - html
  */
 ?>
-<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?php echo $block->getSaveButtonHtml() ?></div>
-<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
-    <?php echo $block->getBlockHtml('formkey')?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?= $block->getSaveButtonHtml() ?></div>
+<form action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+    <?= $block->getBlockHtml('formkey') ?>
 
     <script>
     window.setCacheAction = function(id, button) {
@@ -31,10 +31,10 @@
     <input type="hidden" id="catalog_action" name="catalog_action" value="" />
     <input type="hidden" id="jscss_action" name="jscss_action" value="" />
 
-    <?php echo $block->getChildHtml('form') ?>
+    <?= $block->getChildHtml('form') ?>
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?php /* @escapeNotVerified */ echo __('Catalog') ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= /* @escapeNotVerified */ __('Catalog') ?></h4>
         </div>
         <fieldset id="catalog">
             <table class="form-list">
@@ -45,15 +45,15 @@
     continue;
 }?>
                     <tr>
-                        <td class="label"><label><?php /* @escapeNotVerified */ echo $_item['label'] ?></label></td>
+                        <td class="label"><label><?= /* @escapeNotVerified */ $_item['label'] ?></label></td>
                         <td class="value">
                             <?php foreach ($_item['buttons'] as $_button): ?>
                                 <?php $clickAction = "setCacheAction('catalog_action',this)"; ?>
                                 <?php if (isset($_button['warning']) && $_button['warning']): ?>
                                     <?php $clickAction = "if (confirm('" . addslashes($_button['warning']) . "')) {{$clickAction}}"; ?>
                                 <?php endif; ?>
-                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>onclick="<?php /* @escapeNotVerified */ echo $clickAction; ?>"<?php endif; ?> id="<?php /* @escapeNotVerified */ echo $_button['name'] ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif; ?>" style=""><span><span><span><?php /* @escapeNotVerified */ echo $_button['action'] ?></span></span></span></button>
-                                <?php if (isset($_button['comment'])): ?> <br /> <small><?php /* @escapeNotVerified */ echo $_button['comment']; ?></small> <?php endif; ?>
+                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>onclick="<?= /* @escapeNotVerified */ $clickAction ?>"<?php endif; ?> id="<?= /* @escapeNotVerified */ $_button['name'] ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif; ?>" style=""><span><span><span><?= /* @escapeNotVerified */ $_button['action'] ?></span></span></span></button>
+                                <?php if (isset($_button['comment'])): ?> <br /> <small><?= /* @escapeNotVerified */ $_button['comment'] ?></small> <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
                         <td><small>&nbsp;</small></td>
@@ -66,16 +66,16 @@
 
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?php /* @escapeNotVerified */ echo __('JavaScript/CSS') ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= /* @escapeNotVerified */ __('JavaScript/CSS') ?></h4>
         </div>
 
         <fieldset id="jscss">
             <table class="form-list">
                 <tbody>
                     <tr>
-                        <td class="label"><label><?php /* @escapeNotVerified */ echo __('JavaScript/CSS Cache') ?></label></td>
+                        <td class="label"><label><?= /* @escapeNotVerified */ __('JavaScript/CSS Cache') ?></label></td>
                         <td class="value">
-                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?php /* @escapeNotVerified */ echo __('Clear') ?></span></span></span></button>
+                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?= /* @escapeNotVerified */ __('Clear') ?></span></span></span></button>
                         </td>
                     </tr>
                 </tbody>

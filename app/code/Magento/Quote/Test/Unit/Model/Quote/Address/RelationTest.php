@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
@@ -23,7 +23,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->modelMock = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
+            \Magento\Framework\Model\AbstractModel::class,
             [
                 'getItemsCollection',
                 'getShippingRatesCollection',
@@ -34,20 +34,20 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->relation = $objectManager->getObject('Magento\Quote\Model\Quote\Address\Relation', []);
+        $this->relation = $objectManager->getObject(\Magento\Quote\Model\Quote\Address\Relation::class, []);
     }
 
     public function testProcessRelation()
     {
         $itemsCollection = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
+            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
             [],
             [],
             '',
             false
         );
         $shippingRatesCollection = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
+            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
             [],
             [],
             '',

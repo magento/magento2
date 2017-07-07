@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message\Test\Unit;
@@ -22,10 +22,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $this->objectManager->getObject('Magento\Framework\Message\Collection');
+        $this->model = $this->objectManager->getObject(\Magento\Framework\Message\Collection::class);
     }
 
     /**
@@ -35,9 +35,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddMessage()
     {
         $messages = [
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
         ];
 
         foreach ($messages as $message) {
@@ -58,12 +58,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         $messages = [
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice'),
-            $this->objectManager->getObject('Magento\Framework\Message\Warning'),
-            $this->objectManager->getObject('Magento\Framework\Message\Warning'),
-            $this->objectManager->getObject('Magento\Framework\Message\Success'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
         ];
 
         foreach ($messages as $message) {
@@ -83,13 +83,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testGetItemsByType()
     {
         $messages = [
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice'),
-            $this->objectManager->getObject('Magento\Framework\Message\Success'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice'),
-            $this->objectManager->getObject('Magento\Framework\Message\Success'),
-            $this->objectManager->getObject('Magento\Framework\Message\Warning'),
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
         ];
 
         $messageTypes = [
@@ -124,12 +124,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testGetErrors()
     {
         $messages = [
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice'),
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Warning'),
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
         ];
 
         foreach ($messages as $message) {
@@ -147,9 +147,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testGetMessageByIdentifier()
     {
         $messages = [
-            $this->objectManager->getObject('Magento\Framework\Message\Error')->setIdentifier('error_id'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice')->setIdentifier('notice_id'),
-            $this->objectManager->getObject('Magento\Framework\Message\Warning')->setIdentifier('warning_id'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class)->setIdentifier('error_id'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class)->setIdentifier('notice_id'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class)->setIdentifier('warning_id'),
         ];
 
         foreach ($messages as $message) {
@@ -173,10 +173,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testClear()
     {
         $messages = [
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Warning'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice'),
-            $this->objectManager->getObject('Magento\Framework\Message\Success'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
         ];
 
         foreach ($messages as $message) {
@@ -194,10 +194,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testClearWithSticky()
     {
         $messages = [
-            $this->objectManager->getObject('Magento\Framework\Message\Error'),
-            $this->objectManager->getObject('Magento\Framework\Message\Warning'),
-            $this->objectManager->getObject('Magento\Framework\Message\Notice')->setIsSticky(true),
-            $this->objectManager->getObject('Magento\Framework\Message\Success'),
+            $this->objectManager->getObject(\Magento\Framework\Message\Error::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Warning::class),
+            $this->objectManager->getObject(\Magento\Framework\Message\Notice::class)->setIsSticky(true),
+            $this->objectManager->getObject(\Magento\Framework\Message\Success::class),
         ];
 
         foreach ($messages as $message) {

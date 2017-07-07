@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Response;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class QueryResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Document[]
+     * @var \Magento\Framework\Api\Search\Document[]
      */
     private $documents = [];
 
@@ -29,7 +29,7 @@ class QueryResponseTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectManager($this);
 
         for ($count = 0; $count < 5; $count++) {
-            $document = $this->getMockBuilder('Magento\Framework\Search\Document')
+            $document = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -37,12 +37,12 @@ class QueryResponseTest extends \PHPUnit_Framework_TestCase
             $this->documents[] = $document;
         }
 
-        $this->aggregations = $this->getMockBuilder('Magento\Framework\Search\Response\Aggregation')
+        $this->aggregations = $this->getMockBuilder(\Magento\Framework\Search\Response\Aggregation::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->queryResponse = $helper->getObject(
-            'Magento\Framework\Search\Response\QueryResponse',
+            \Magento\Framework\Search\Response\QueryResponse::class,
             [
                 'documents' => $this->documents,
                 'aggregations' => $this->aggregations,
@@ -67,6 +67,6 @@ class QueryResponseTest extends \PHPUnit_Framework_TestCase
     public function testGetAggregations()
     {
         $aggregations = $this->queryResponse->getAggregations();
-        $this->assertInstanceOf('Magento\Framework\Search\Response\Aggregation', $aggregations);
+        $this->assertInstanceOf(\Magento\Framework\Search\Response\Aggregation::class, $aggregations);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Pack;
@@ -56,7 +56,6 @@ class Generator
      * Generate language pack
      *
      * @param string $dictionaryPath
-     * @param string $packPath
      * @param string $locale
      * @param string $mode One of const of WriterInterface::MODE_
      * @param bool $allowDuplicates
@@ -65,7 +64,6 @@ class Generator
      */
     public function generate(
         $dictionaryPath,
-        $packPath,
         $locale,
         $mode = WriterInterface::MODE_REPLACE,
         $allowDuplicates = false
@@ -84,7 +82,7 @@ class Generator
             );
         }
 
-        $this->packWriter->write($dictionary, $packPath, $locale, $mode);
+        $this->packWriter->writeDictionary($dictionary, $locale, $mode);
     }
 
     /**

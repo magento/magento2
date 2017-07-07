@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     {
         parent::setUp();
 
-        $this->_model = $this->getMockBuilder('Magento\ImportExport\Model\Import\AbstractEntity')
+        $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Import\AbstractEntity::class)
             ->setConstructorArgs($this->_getModelDependencies())
             ->setMethods(['_saveValidatedBunches'])
             ->getMockForAbstractClass();
@@ -56,10 +56,10 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     protected function _getModelDependencies()
     {
         $string = new \Magento\Framework\Stdlib\StringUtils();
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false);
-        $resourceHelper = $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false);
-        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $importFactory = $this->getMock(\Magento\ImportExport\Model\ImportFactory::class, [], [], '', false);
+        $resourceHelper = $this->getMock(\Magento\ImportExport\Model\ResourceModel\Helper::class, [], [], '', false);
+        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
 
         $data = [
             'coreString' => $string,
@@ -76,7 +76,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
                 'max_data_size' => 1,
                 'bunch_size' => 1,
                 'collection_by_pages_iterator' => 'not_used',
-            ],
+            ]
         ];
 
         return $data;
@@ -568,7 +568,7 @@ class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Ab
     {
         /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
         $source = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractSource',
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
             [],
             '',
             false,

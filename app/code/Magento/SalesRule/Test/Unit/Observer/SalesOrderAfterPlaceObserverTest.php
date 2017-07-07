@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Observer;
@@ -27,7 +27,6 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $ruleCustomerFactory;
 
-
     /**
      * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Usage|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -39,7 +38,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
         $this->initMocks();
 
         $this->model = $helper->getObject(
-            'Magento\SalesRule\Observer\SalesOrderAfterPlaceObserver',
+            \Magento\SalesRule\Observer\SalesOrderAfterPlaceObserver::class,
             [
                 'ruleFactory' => $this->ruleFactory,
                 'ruleCustomerFactory' => $this->ruleCustomerFactory,
@@ -52,7 +51,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
     protected function initMocks()
     {
         $this->couponMock = $this->getMock(
-            '\Magento\SalesRule\Model\Coupon',
+            \Magento\SalesRule\Model\Coupon::class,
             [
                 '__wakeup',
                 'save',
@@ -68,15 +67,21 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->ruleFactory = $this->getMock('Magento\SalesRule\Model\RuleFactory', ['create'], [], '', false);
+        $this->ruleFactory = $this->getMock(\Magento\SalesRule\Model\RuleFactory::class, ['create'], [], '', false);
         $this->ruleCustomerFactory = $this->getMock(
-            'Magento\SalesRule\Model\Rule\CustomerFactory',
+            \Magento\SalesRule\Model\Rule\CustomerFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->couponUsage = $this->getMock('Magento\SalesRule\Model\ResourceModel\Coupon\Usage', [], [], '', false);
+        $this->couponUsage = $this->getMock(
+            \Magento\SalesRule\Model\ResourceModel\Coupon\Usage::class,
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     /**
@@ -85,9 +90,9 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected function initOrderFromEvent($observer)
     {
-        $event = $this->getMock('Magento\Framework\Event', ['getOrder'], [], '', false);
+        $event = $this->getMock(\Magento\Framework\Event::class, ['getOrder'], [], '', false);
         $order = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             ['getAppliedRuleIds', 'getCustomerId', 'getDiscountAmount', 'getCouponCode', '__wakeup'],
             [],
             '',
@@ -106,7 +111,7 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testSalesOrderAfterPlaceWithoutOrder()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $this->initOrderFromEvent($observer);
 
         $this->assertEquals($this->model, $this->model->execute($observer));
@@ -114,12 +119,12 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testSalesOrderAfterPlaceWithoutRuleId()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $order = $this->initOrderFromEvent($observer);
-        $discountAmount = 10;
+        $ruleIds = null;
         $order->expects($this->once())
-            ->method('getDiscountAmount')
-            ->will($this->returnValue($discountAmount));
+            ->method('getAppliedRuleIds')
+            ->will($this->returnValue($ruleIds));
 
         $this->ruleFactory->expects($this->never())
             ->method('create');
@@ -132,10 +137,10 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSalesOrderAfterPlace($ruleCustomerId)
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $rule = $this->getMock('Magento\SalesRule\Model\Rule', [], [], '', false);
+        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $rule = $this->getMock(\Magento\SalesRule\Model\Rule::class, [], [], '', false);
         $ruleCustomer = $this->getMock(
-            'Magento\SalesRule\Model\Rule\Customer',
+            \Magento\SalesRule\Model\Rule\Customer::class,
             [
                 'setCustomerId',
                 'loadByCustomerRule',
@@ -153,14 +158,10 @@ class SalesOrderAfterPlaceObserverTest extends \PHPUnit_Framework_TestCase
         $ruleId = 1;
         $couponId = 1;
         $customerId = 1;
-        $discountAmount = 10;
 
-        $order->expects($this->once())
+        $order->expects($this->exactly(2))
             ->method('getAppliedRuleIds')
             ->will($this->returnValue($ruleId));
-        $order->expects($this->once())
-            ->method('getDiscountAmount')
-            ->will($this->returnValue($discountAmount));
         $order->expects($this->once())
             ->method('getCustomerId')
             ->will($this->returnValue($customerId));

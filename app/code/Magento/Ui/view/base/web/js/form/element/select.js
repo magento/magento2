@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -13,7 +17,9 @@ define([
 
     var inputNode = {
         parent: '${ $.$data.parentName }',
-        type: 'form.input',
+        component: 'Magento_Ui/js/form/element/abstract',
+        template: '${ $.$data.template }',
+        provider: '${ $.$data.provider }',
         name: '${ $.$data.index }_input',
         dataScope: '${ $.$data.customEntry }',
         customScope: '${ $.$data.customScope }',
@@ -49,7 +55,7 @@ define([
 
         return {
             options: _.compact(nodes),
-            caption: caption || false
+            caption: _.isString(caption) ? caption : false
         };
     }
 
@@ -102,7 +108,10 @@ define([
 
     return Abstract.extend({
         defaults: {
-            customName: '${ $.parentName }.${ $.index }_input'
+            customName: '${ $.parentName }.${ $.index }_input',
+            elementTmpl: 'ui/form/element/select',
+            caption: '',
+            options: []
         },
 
         /**
@@ -114,34 +123,12 @@ define([
             this._super();
 
             if (this.customEntry) {
-                this.initInput();
+                registry.get(this.name, this.initInput.bind(this));
             }
 
             if (this.filterBy) {
                 this.initFilter();
             }
-
-            return this;
-        },
-
-        /**
-         * Parses options and merges the result with instance
-         *
-         * @param  {Object} config
-         * @returns {Object} Chainable.
-         */
-        initConfig: function (config) {
-            var options = config.options,
-                captionValue = config.captionValue || '',
-                result = parseOptions(options, captionValue);
-
-            if (config.caption) {
-                delete result.caption;
-            }
-
-            _.extend(config, result);
-
-            this._super();
 
             return this;
         },
@@ -157,7 +144,7 @@ define([
 
             this.initialOptions = this.options;
 
-            this.observe('options')
+            this.observe('options caption')
                 .setOptions(this.options());
 
             return this;
@@ -191,7 +178,7 @@ define([
         },
 
         /**
-         * Matches specfied value with existing options
+         * Matches specified value with existing options
          * or, if value is not specified, returns value of the first option.
          *
          * @returns {*}
@@ -206,7 +193,7 @@ define([
                 return option && option.value;
             }
 
-            if (!this.caption) {
+            if (!this.caption()) {
                 return findFirst(this.options);
             }
         },
@@ -225,7 +212,7 @@ define([
             field = field || this.filterBy.field;
 
             result = _.filter(source, function (item) {
-                return item[field] === value;
+                return item[field] === value || item.value === '';
             });
 
             this.setOptions(result);
@@ -251,14 +238,20 @@ define([
          * @returns {Object} Chainable
          */
         setOptions: function (data) {
-            var isVisible;
+            var captionValue = this.captionValue || '',
+                result = parseOptions(data, captionValue),
+                isVisible;
 
-            this.indexedOptions = indexOptions(data);
+            this.indexedOptions = indexOptions(result.options);
 
-            this.options(data);
+            this.options(result.options);
+
+            if (!this.caption()) {
+                this.caption(result.caption);
+            }
 
             if (this.customEntry) {
-                isVisible = !!data.length;
+                isVisible = !!result.options.length;
 
                 this.setVisible(isVisible);
                 this.toggleInput(!isVisible);
@@ -283,8 +276,40 @@ define([
             return preview;
         },
 
+        /**
+         * Get option from indexedOptions list.
+         *
+         * @param {Number} value
+         * @returns {Object} Chainable
+         */
         getOption: function (value) {
             return this.indexedOptions[value];
+        },
+
+        /**
+         * Select first available option
+         *
+         * @returns {Object} Chainable.
+         */
+        clear: function () {
+            var value = this.caption() ? '' : findFirst(this.options);
+
+            this.value(value);
+
+            return this;
+        },
+
+        /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialValue: function () {
+            if (_.isUndefined(this.value()) && !this.default) {
+                this.clear();
+            }
+
+            return this._super();
         }
     });
 });

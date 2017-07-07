@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Test\Unit;
@@ -15,7 +15,7 @@ class TranslitTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Framework\Filter\Translit');
+        $this->model = $objectManager->getObject(\Magento\Framework\Filter\Translit::class);
     }
 
     /**
@@ -62,7 +62,7 @@ class TranslitTest extends \PHPUnit_Framework_TestCase
     public function testFilterConfigured()
     {
         $config = $this->getMockBuilder(
-            'Magento\Framework\App\Config\ScopeConfigInterface'
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
         )->disableOriginalConstructor()->setMethods(
             ['getValue', 'setValue', 'isSetFlag']
         )->getMock();
@@ -79,7 +79,7 @@ class TranslitTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Framework\Filter\Translit', ['config' => $config]);
+        $this->model = $objectManager->getObject(\Magento\Framework\Filter\Translit::class, ['config' => $config]);
 
         $this->assertEquals('TM', $this->model->filter('™'));
     }

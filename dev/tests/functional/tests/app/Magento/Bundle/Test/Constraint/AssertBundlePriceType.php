@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class AssertBundlePriceType extends AbstractConstraint
      *
      * @var string
      */
-    protected $productPriceType = 'Dynamic';
+    protected $productPriceType = 'Yes';
 
     /**
      * Assert that displayed price for bundle items on shopping cart page equals to passed from fixture.
@@ -79,7 +79,6 @@ class AssertBundlePriceType extends AbstractConstraint
         $cartItem = $checkoutCartView->getCartBlock()->getCartItem($product);
         $specialPrice = 0;
 
-
         $optionPrice = [];
         $fillData = $product->getCheckoutData();
         foreach ($fillData['options']['bundle_options'] as $key => $data) {
@@ -91,7 +90,7 @@ class AssertBundlePriceType extends AbstractConstraint
                 }
             }
 
-            $optionPrice[$key]['price'] = $this->productPriceType == 'Fixed'
+            $optionPrice[$key]['price'] = $this->productPriceType == 'No'
                 ? number_format(
                     $bundleData['bundle_selections']['bundle_options'][$key]['assigned_products'][$data['value']['key']]
                     ['data']['selection_price_value'],

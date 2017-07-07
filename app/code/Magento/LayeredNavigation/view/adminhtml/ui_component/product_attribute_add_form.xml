@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="front_fieldset">
+        <field name="is_filterable" component="Magento_Catalog/js/components/disable-on-option/select" sortOrder="40" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                </item>
+            </argument>
+            <settings>
+                <notice translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price.</notice>
+                <dataType>string</dataType>
+                <label translate="true">Use in Layered Navigation</label>
+                <dataScope>is_filterable</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\LayeredNavigation\Model\Attribute\Source\FilterableOptions"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="is_filterable_in_search" component="Magento_Catalog/js/components/disable-on-option/yesno" sortOrder="50" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <notice translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price.</notice>
+                <label translate="true">Use in Search Results Layered Navigation</label>
+                <dataScope>is_filterable_in_search</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="position" component="Magento_Catalog/js/components/disable-on-option/input" sortOrder="60" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="1" xsi:type="string">1</item>
+                        <item name="2" xsi:type="string">2</item>
+                    </item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="validate-digits" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>string</dataType>
+                <label translate="true">Position</label>
+                <imports>
+                    <link name="toggleDisable">${ $.parentName}.is_filterable:value</link>
+                </imports>
+            </settings>
+        </field>
+    </fieldset>
+</form>

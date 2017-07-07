@@ -1,10 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 $model->setName(
     'custom_attribute1'
 )->setEntityTypeId(
@@ -22,7 +22,7 @@ $model->setName(
 );
 $model->save();
 
-$model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 $model2->setName(
     'custom_attribute2'
 )->setEntityTypeId(
@@ -42,7 +42,7 @@ $model2->save();
 
 /** @var \Magento\Customer\Setup\CustomerSetup $setupResource */
 $setupResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Customer\Setup\CustomerSetup'
+    \Magento\Customer\Setup\CustomerSetup::class
 );
 
 $data = [['form_code' => 'customer_address_edit', 'attribute_id' => $model->getAttributeId()]];

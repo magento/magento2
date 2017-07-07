@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,16 +17,16 @@ class InfoLanguageListCommandTest extends \PHPUnit_Framework_TestCase
             'LNG' => 'Language description'
         ];
 
-        $table = $this->getMock('Symfony\Component\Console\Helper\Table', [], [], '', false);
+        $table = $this->getMock(\Symfony\Component\Console\Helper\Table::class, [], [], '', false);
         $table->expects($this->once())->method('setHeaders')->with(['Language', 'Code']);
         $table->expects($this->once())->method('addRow')->with(['Language description', 'LNG']);
 
         /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
+        $helperSet = $this->getMock(\Symfony\Component\Console\Helper\HelperSet::class, [], [], '', false);
         $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
 
         /** @var \Magento\Framework\Setup\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
-        $list = $this->getMock('Magento\Framework\Setup\Lists', [], [], '', false);
+        $list = $this->getMock(\Magento\Framework\Setup\Lists::class, [], [], '', false);
         $list->expects($this->once())->method('getLocaleList')->will($this->returnValue($languages));
         $command = new InfoLanguageListCommand($list);
         $command->setHelperSet($helperSet);

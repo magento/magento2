@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
@@ -13,6 +13,8 @@ class Range implements FilterInterface
 {
     const CONDITION_PART_GREATER_THAN = '>=';
     const CONDITION_PART_LOWER_THAN = '<=';
+    const CONDITION_NEGATION_PART_GREATER_THAN = '>';
+    const CONDITION_NEGATION_PART_LOWER_THAN = '<';
 
     /**
      * @var ConditionManager
@@ -54,7 +56,7 @@ class Range implements FilterInterface
     {
         return $this->getPart(
             $filter->getField(),
-            ($isNegation ? self::CONDITION_PART_LOWER_THAN : self::CONDITION_PART_GREATER_THAN),
+            ($isNegation ? self::CONDITION_NEGATION_PART_LOWER_THAN : self::CONDITION_PART_GREATER_THAN),
             $filter->getFrom()
         );
     }
@@ -68,7 +70,7 @@ class Range implements FilterInterface
     {
         return $this->getPart(
             $filter->getField(),
-            ($isNegation ? self::CONDITION_PART_GREATER_THAN : self::CONDITION_PART_LOWER_THAN),
+            ($isNegation ? self::CONDITION_NEGATION_PART_GREATER_THAN : self::CONDITION_PART_LOWER_THAN),
             $filter->getTo()
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,6 +84,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Export File Format'),
                 'required' => false,
                 'values' => $this->_formatFactory->create()->toOptionArray()
+            ]
+        );
+        $fieldset->addField(
+            \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE,
+            'checkbox',
+            [
+                'name' => \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE,
+                'label' => __('Fields Enclosure'),
+                'title' => __('Fields Enclosure'),
+                'value' => 1,
             ]
         );
 

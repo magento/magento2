@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Validator;
@@ -9,6 +9,11 @@ use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
+/**
+ * Class ValidatorComposite
+ * @package Magento\Payment\Gateway\Validator
+ * @api
+ */
 class ValidatorComposite extends AbstractValidator
 {
     /**

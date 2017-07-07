@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Widget;
@@ -39,14 +39,14 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
         $categoryId = (int)$this->getRequest()->getParam('id', false);
         $storeId = (int)$this->getRequest()->getParam('store');
 
-        $category = $this->_objectManager->create('Magento\Catalog\Model\Category');
+        $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->setStoreId($storeId);
 
         if ($categoryId) {
             $category->load($categoryId);
             if ($storeId) {
                 $rootId = $this->_objectManager->get(
-                    'Magento\Store\Model\StoreManager'
+                    \Magento\Store\Model\StoreManager::class
                 )->getStore(
                     $storeId
                 )->getRootCategoryId();
@@ -78,7 +78,7 @@ class CategoriesJson extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Wid
                 return;
             }
             $block = $this->_view->getLayout()->createBlock(
-                'Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree'
+                \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree::class
             )->setCategoryIds(
                 [$categoryId]
             );

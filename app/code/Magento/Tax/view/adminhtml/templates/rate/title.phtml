@@ -1,23 +1,33 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 ?>
-<div id="tax-rate-titles-table" class="form-inline">
+<fieldset id="tax-rate-titles-table" class="admin__fieldset">
     <?php $_labels = $block->getTitles() ?>
     <?php foreach ($block->getStores() as $_store): ?>
-        <div class="field">
-            <label class="label"><span><?php /* @escapeNotVerified */ echo $_store->getName() ?></span></label>
-            <div class="control">
-                <input class="input-text<?php if ($_store->getId() == 0): ?> required-entry<?php endif; ?>" type="text" name="title[<?php /* @escapeNotVerified */ echo $_store->getId() ?>]" value="<?php /* @escapeNotVerified */ echo $_labels[$_store->getId()] ?>"/>
+        <div class="admin__field">
+            <label class="admin__field-label"><span><?= /* @escapeNotVerified */ $_store->getName() ?></span></label>
+            <div class="admin__field-control">
+                <input
+                    class="admin__control-text<?php if ($_store->getId() == 0): ?> required-entry<?php endif; ?>"
+                    type="text"
+                    name="title[<?= /* @escapeNotVerified */ $_store->getId() ?>]"
+                    value="<?= /* @escapeNotVerified */ $_labels[$_store->getId()] ?>" />
             </div>
         </div>
     <?php endforeach; ?>
-    <div class="tax-rate-titles-note-td">
-        <strong><?php /* @escapeNotVerified */ echo __('Note:'); ?></strong> <?php /* @escapeNotVerified */ echo __('Leave this field empty if you wish to use the tax identifier.'); ?>
+
+    <div class="messages">
+        <div class="message message-notice">
+            <div>
+                <strong><?= /* @escapeNotVerified */ __('Note:') ?></strong>
+                <?= /* @escapeNotVerified */ __('Leave this field empty if you wish to use the tax identifier.') ?>
+            </div>
+        </div>
     </div>
-</div>
+</fieldset>

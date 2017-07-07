@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,8 @@
  */
 ?>
 <div class="paypal-logo">
-    <script data-pp-pubid="<?php echo $block->escapeHtml($block->getPublisherId()) ?>"
-            data-pp-placementtype="<?php echo $block->escapeHtml($block->getSize()) ?>"
+    <script data-pp-pubid="<?= $block->escapeHtml($block->getPublisherId()) ?>"
+            data-pp-placementtype="<?= $block->escapeHtml($block->getSize()) ?>"
         > (function (d, t) {
             "use strict";
             var s = d.getElementsByTagName(t)[0], n = d.createElement(t);

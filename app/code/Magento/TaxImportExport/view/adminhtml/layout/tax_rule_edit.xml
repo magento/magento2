@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="content">
-            <block class="Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport" name="tax-rate-importExport" template="importExport.phtml"/>
+            <block class="Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport" name="tax-rate-importExport" template="Magento_TaxImportExport::importExport.phtml"/>
         </referenceBlock>
     </body>
 </page>

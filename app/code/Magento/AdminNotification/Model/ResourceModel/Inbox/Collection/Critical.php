@@ -2,11 +2,14 @@
 /**
  * Critical messages collection
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
+/**
+ * @api
+ */
 class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -16,7 +19,10 @@ class Critical extends \Magento\Framework\Model\ResourceModel\Db\Collection\Abst
      */
     protected function _construct()
     {
-        $this->_init('Magento\AdminNotification\Model\Inbox', 'Magento\AdminNotification\Model\ResourceModel\Inbox');
+        $this->_init(
+            \Magento\AdminNotification\Model\Inbox::class,
+            \Magento\AdminNotification\Model\ResourceModel\Inbox::class
+        );
     }
 
     /**

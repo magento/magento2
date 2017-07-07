@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
@@ -22,7 +22,7 @@ class Post extends ProductController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($data = $this->getRequest()->getPostValue()) {
             /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-            $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+            $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
             if ($storeManager->hasSingleStore()) {
                 $data['stores'] = [
                     $storeManager->getStore(true)->getId(),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model;
@@ -9,6 +9,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Rating model
+ *
+ * @api
  *
  * @method \Magento\Review\Model\ResourceModel\Rating getResource()
  * @method \Magento\Review\Model\ResourceModel\Rating _getResource()
@@ -71,7 +73,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Rating');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating::class);
     }
 
     /**

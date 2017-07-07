@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -124,7 +124,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
         }
-        $data->setStores($storeId);
+        $data->setStores([$storeId]);
         try {
             $this->resourceModel->save($data);
         } catch (\Exception $e) {

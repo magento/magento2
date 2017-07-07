@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
@@ -28,13 +28,13 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->checkoutSessionMock = $this->getMock(
-            'Magento\Checkout\Model\Session',
+            \Magento\Checkout\Model\Session::class,
             ['getCheckoutState', 'setCheckoutState'],
             [],
             '',
             false
         );
-        $this->cartMock = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);
+        $this->cartMock = $this->getMock(\Magento\Checkout\Model\Cart::class, [], [], '', false);
         $this->model = new \Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin($this->checkoutSessionMock);
     }
 

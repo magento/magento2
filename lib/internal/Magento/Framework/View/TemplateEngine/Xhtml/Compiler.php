@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\TextInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\AttributeInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CdataInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CommentInterface;
-use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\AttributeInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\TextInterface;
 
 /**
  * Class Compiler
@@ -102,7 +102,7 @@ class Compiler implements CompilerInterface
                 $compiler = $this->getElementCompiler($node->nodeName);
                 if (null !== $compiler) {
                     $compiler->compile($this, $node, $processedObject, $context);
-                } else if ($node->hasChildNodes()) {
+                } elseif ($node->hasChildNodes()) {
                     foreach ($this->getChildNodes($node) as $child) {
                         $this->compile($child, $processedObject, $context);
                     }

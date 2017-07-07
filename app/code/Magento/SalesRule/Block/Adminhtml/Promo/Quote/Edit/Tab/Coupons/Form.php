@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
@@ -53,7 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
          */
         $couponHelper = $this->_salesRuleCoupon;
 
-        $model = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
         $ruleId = $model->getId();
 
         $form->setHtmlIdPrefix('coupons_');
@@ -64,7 +64,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $gridBlockJsObject = $gridBlock->getJsObjectName();
         }
 
-        $fieldset = $form->addFieldset('information_fieldset', ['legend' => __('Coupons Information')]);
+        $fieldset = $form->addFieldset('information_fieldset', []);
         $fieldset->addClass('ignore-validate');
 
         $fieldset->addField('rule_id', 'hidden', ['name' => 'rule_id', 'value' => $ruleId]);

@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\ObjectManager\DefinitionFactory;
-use Magento\Framework\Setup\ConfigOptionsListInterface;
-use Magento\Framework\Setup\Option\SelectConfigOption;
-use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
+use Magento\Framework\Setup\Option\FlagConfigOption;
+use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\DbValidator;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -71,13 +69,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
                 'Session save handler',
                 ConfigOptionsListConstants::SESSION_SAVE_FILES
-            ),
-            new SelectConfigOption(
-                ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT,
-                SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                DefinitionFactory::getSupportedFormats(),
-                ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT,
-                'Type of definitions used by Object Manager'
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
@@ -163,7 +154,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
     {
         $configData = [];
-        $configData[] = $this->configGenerator->createInstallConfig($deploymentConfig);
         $configData[] = $this->configGenerator->createCryptConfig($data, $deploymentConfig);
         $configData[] = $this->configGenerator->createSessionConfig($data);
         $definitionConfig = $this->configGenerator->createDefinitionsConfig($data);
@@ -302,7 +292,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private function validateHttpCacheHosts($option)
     {
         $errors = [];
-        if (!preg_match('/^[a-zA-Z0-9_:,.]+$/', $option)
+        if (!preg_match('/^[\-\w:,.]+$/', $option)
         ) {
             $errors[] = "Invalid http cache hosts '{$option}'";
         }
@@ -343,7 +333,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
         ) {
             try {
-
                 $options = $this->getDbSettings($options, $deploymentConfig);
 
                 $this->dbValidator->checkDatabaseConnection(

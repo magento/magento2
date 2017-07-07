@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute;
 
 /**
  * Catalog product EAV additional attribute resource collection
+ *
+ * @api
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
     /**
-     * Entity factory1
+     * Entity factory
      *
      * @var \Magento\Eav\Model\EntityFactory
      */
@@ -49,8 +51,8 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
     protected function _construct()
     {
         $this->_init(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute'
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute::class
         );
     }
 

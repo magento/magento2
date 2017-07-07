@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model;
@@ -19,21 +19,21 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $inline \Magento\Framework\Translate\Inline */
         $inline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Translate\Inline');
+            ->create(\Magento\Framework\Translate\Inline::class);
         $this->_inlineParser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Translation\Model\Inline\Parser',
+            \Magento\Translation\Model\Inline\Parser::class,
             ['translateInline' => $inline]
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getStore(
             $this->_storeId
         )->getConfig(
             'dev/translate_inline/active'
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             'dev/translate_inline/active',
             true,
@@ -54,7 +54,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         $this->_inlineParser->processAjaxPost($inputArray);
 
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Translation\Model\StringUtils'
+            \Magento\Translation\Model\StringUtils::class
         );
         $model->load($originalText);
         try {
@@ -63,7 +63,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $model->delete();
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Psr\Log\LoggerInterface')
+                ->get(\Psr\Log\LoggerInterface::class)
                 ->critical($e);
         }
     }

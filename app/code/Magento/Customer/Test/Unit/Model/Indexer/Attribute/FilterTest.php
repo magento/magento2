@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Indexer\Attribute;
@@ -31,25 +31,35 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     /** @var Filter */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->connection = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false
         );
         $this->flatScopeResolver = $this->getMock(
-            'Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver',
+            \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class,
             [],
             [],
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
-        $this->indexer = $this->getMockForAbstractClass('Magento\Framework\Indexer\IndexerInterface', [], '', false);
-        $this->indexerState = $this->getMockForAbstractClass('Magento\Framework\Indexer\StateInterface', [], '', false);
+        $this->indexerRegistry = $this->getMock(\Magento\Framework\Indexer\IndexerRegistry::class, [], [], '', false);
+        $this->indexer = $this->getMockForAbstractClass(
+            \Magento\Framework\Indexer\IndexerInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->indexerState = $this->getMockForAbstractClass(
+            \Magento\Framework\Indexer\StateInterface::class,
+            [],
+            '',
+            false
+        );
 
         $this->model = new Filter(
             $this->resource,

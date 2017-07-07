@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -11,6 +11,13 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::comment';
+
     /**
      * Add order comment action
      *
@@ -39,7 +46,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
                 $order->save();
                 /** @var OrderCommentSender $orderCommentSender */
                 $orderCommentSender = $this->_objectManager
-                    ->create('Magento\Sales\Model\Order\Email\Sender\OrderCommentSender');
+                    ->create(\Magento\Sales\Model\Order\Email\Sender\OrderCommentSender::class);
 
                 $orderCommentSender->send($order, $notify, $comment);
 
@@ -56,13 +63,5 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
             }
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::comment');
     }
 }

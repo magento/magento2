@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -11,11 +11,9 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Data collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
+ *
+ * @api
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
@@ -35,7 +33,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Framework\DataObject';
+    protected $_itemObjectClass = \Magento\Framework\DataObject::class;
 
     /**
      * Order configuration
@@ -404,7 +402,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->_items[$itemId] = $item;
@@ -503,29 +501,42 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
+            $params = $args;
             if ($useItemCallback) {
                 $cb = [$item, $callback];
             } else {
                 $cb = $callback;
-                array_unshift($args, $item);
+                array_unshift($params, $item);
             }
-            $results[$id] = call_user_func_array($cb, $args);
+            $results[$id] = call_user_func_array($cb, $params);
         }
         return $results;
     }
 
     /**
-     * @param string|array $objMethod
+     * Call method or callback on each item in the collection.
+     * 
+     * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void
      */
     public function each($objMethod, $args = [])
     {
-        foreach ($args->_items as $k => $item) {
-            $args->_items[$k] = call_user_func($objMethod, $item);
+        if ($objMethod instanceof \Closure) {
+            foreach ($this->getItems() as $item) {
+                $objMethod($item, ...$args);
+            }
+        } elseif (is_array($objMethod)) {
+            foreach ($this->getItems() as $item) {
+                call_user_func($objMethod, $item, ...$args);
+            }
+        } else {
+            foreach ($this->getItems() as $item) {
+                $item->$objMethod(...$args);
+            }
         }
     }
-
+    
     /**
      * Setting data for all collection items
      *
@@ -593,7 +604,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function setItemObjectClass($className)
     {
-        if (!is_a($className, 'Magento\Framework\DataObject', true)) {
+        if (!is_a($className, \Magento\Framework\DataObject::class, true)) {
             throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\DataObject');
         }
         $this->_itemObjectClass = $className;
@@ -865,5 +876,31 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     public function hasFlag($flag)
     {
         return array_key_exists($flag, $this->_flags);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function __sleep()
+    {
+        $properties = array_keys(get_object_vars($this));
+        $properties = array_diff(
+            $properties,
+            [
+                '_entityFactory',
+            ]
+        );
+        return $properties;
+    }
+
+    /**
+     * Init not serializable fields
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_entityFactory = $objectManager->get(EntityFactoryInterface::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model;
@@ -88,5 +88,20 @@ class FileManager
     public function getTranslationFilePath()
     {
         return $this->assetRepo->getStaticViewFileContext()->getPath();
+    }
+
+    /**
+     * @param string $content
+     * @return void
+     */
+    public function updateTranslationFileContent($content)
+    {
+        $translationDir = $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
+            \DIRECTORY_SEPARATOR .
+            $this->assetRepo->getStaticViewFileContext()->getPath();
+        if (!$this->driverFile->isExists($this->getTranslationFileFullPath())) {
+            $this->driverFile->createDirectory($translationDir);
+        }
+        $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
     }
 }

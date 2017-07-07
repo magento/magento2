@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -18,9 +18,20 @@ use Psr\Log\LoggerInterface;
  * Class IframeConfigProvider
  * @package Magento\Payment\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * Default implementation of config provider for iframe integrations.
+ * Use this class for virtual types declaration.
+ * Extends from this class only in case of urgency.
+ *
+ * @api
  */
 class IframeConfigProvider implements ConfigProviderInterface
 {
+    /**
+     * 30 sec
+     */
+    const TIMEOUT_TIME = 30000;
+
     /**
      * Default length of Cc year field
      */
@@ -95,6 +106,7 @@ class IframeConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'iframe' => [
+                    'timeoutTime' => [$this->methodCode => self::TIMEOUT_TIME],
                     'dateDelim' => [$this->methodCode => $this->getDateDelim()],
                     'cardFieldsMap' => [$this->methodCode => $this->getCardFieldsMap()],
                     'source' =>  [$this->methodCode => $this->getViewFileUrl('blank.html')],

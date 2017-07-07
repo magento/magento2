@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Block\Adminhtml;
@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 /**
  * Adminhtml backup page content block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Backup extends \Magento\Backend\Block\Template
@@ -30,7 +31,7 @@ class Backup extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'createSnapshotButton',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('System Backup'),
                 'onclick' => "return backup.backup('" . \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT . "')",
@@ -39,7 +40,7 @@ class Backup extends \Magento\Backend\Block\Template
         );
         $this->getToolbar()->addChild(
             'createMediaBackupButton',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Database and Media Backup'),
                 'onclick' => "return backup.backup('" . \Magento\Framework\Backup\Factory::TYPE_MEDIA . "')",
@@ -48,7 +49,7 @@ class Backup extends \Magento\Backend\Block\Template
         );
         $this->getToolbar()->addChild(
             'createButton',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Database Backup'),
                 'onclick' => "return backup.backup('" . \Magento\Framework\Backup\Factory::TYPE_DB . "')",
@@ -56,7 +57,7 @@ class Backup extends \Magento\Backend\Block\Template
             ]
         );
 
-        $this->addChild('dialogs', 'Magento\Backup\Block\Adminhtml\Dialogs');
+        $this->addChild('dialogs', \Magento\Backup\Block\Adminhtml\Dialogs::class);
     }
 
     /**

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true expr:true*/
@@ -33,7 +33,7 @@ define([
          */
         _initType: function () {
             if (
-                productType.type.real === 'bundle' &&
+                productType.type.init === 'bundle' &&
                 productType.type.current !== 'bundle' &&
                 !weight.isLocked()
             ) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block;
@@ -22,14 +22,14 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $path = 'checkout';
         $url = 'http://example.com/';
 
-        $urlBuilder = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');
+        $urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url . $path));
 
         $context = $this->_objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             ['urlBuilder' => $urlBuilder]
         );
-        $link = $this->_objectManagerHelper->getObject('Magento\Checkout\Block\Link', ['context' => $context]);
+        $link = $this->_objectManagerHelper->getObject(\Magento\Checkout\Block\Link::class, ['context' => $context]);
         $this->assertEquals($url . $path, $link->getHref());
     }
 
@@ -39,20 +39,20 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     public function testToHtml($canOnepageCheckout, $isOutputEnabled)
     {
         $helper = $this->getMockBuilder(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->disableOriginalConstructor()->setMethods(
             ['canOnepageCheckout', 'isModuleOutputEnabled']
         )->getMock();
 
         $moduleManager = $this->getMockBuilder(
-            'Magento\Framework\Module\Manager'
+            \Magento\Framework\Module\Manager::class
         )->disableOriginalConstructor()->setMethods(
             ['isOutputEnabled']
         )->getMock();
 
         /** @var \Magento\Checkout\Block\Link $block */
         $block = $this->_objectManagerHelper->getObject(
-            'Magento\Checkout\Block\Link',
+            \Magento\Checkout\Block\Link::class,
             ['moduleManager' => $moduleManager, 'checkoutHelper' => $helper]
         );
         $helper->expects($this->any())->method('canOnepageCheckout')->will($this->returnValue($canOnepageCheckout));

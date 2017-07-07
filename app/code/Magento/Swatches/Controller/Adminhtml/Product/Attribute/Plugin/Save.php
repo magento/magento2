@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,6 @@ use Magento\Swatches\Model\Swatch;
 
 /**
  * Class Save
- * @package Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin
  */
 class Save
 {

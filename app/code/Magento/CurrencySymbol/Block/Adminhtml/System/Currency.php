@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
+/**
+ * @api
+ */
 class Currency extends \Magento\Backend\Block\Template
 {
     /**
@@ -27,7 +30,7 @@ class Currency extends \Magento\Backend\Block\Template
     {
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save Currency Rates'),
                 'class' => 'save primary save-currency-rates',
@@ -37,21 +40,32 @@ class Currency extends \Magento\Backend\Block\Template
             ]
         );
 
+        $onClick = "setLocation('" . $this->getUrl('adminhtml/system_config/edit/section/currency') . "')";
+
+        $this->getToolbar()->addChild(
+            'options_button',
+            \Magento\Backend\Block\Widget\Button::class,
+            ['label' => __('Options'), 'onclick' => $onClick]
+        );
+
         $this->getToolbar()->addChild(
             'reset_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Reset'), 'onclick' => 'document.location.reload()', 'class' => 'reset']
         );
 
         $this->addChild(
             'import_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Import'), 'class' => 'add', 'type' => 'submit']
         );
 
-        $this->addChild('rates_matrix', 'Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix');
+        $this->addChild('rates_matrix', \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix::class);
 
-        $this->addChild('import_services', 'Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services');
+        $this->addChild(
+            'import_services',
+            \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services::class
+        );
 
         return parent::_prepareLayout();
     }

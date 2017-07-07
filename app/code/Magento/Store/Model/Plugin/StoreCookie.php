@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use \InvalidArgumentException;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class StoreCookie
@@ -34,47 +36,59 @@ class StoreCookie
     protected $storeRepository;
 
     /**
+     * @var StoreResolverInterface
+     */
+    private $storeResolver;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param StoreRepositoryInterface $storeRepository
+     * @param StoreResolverInterface $storeResolver
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         StoreCookieManagerInterface $storeCookieManager,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        StoreResolverInterface $storeResolver = null
     ) {
         $this->storeManager = $storeManager;
         $this->storeCookieManager = $storeCookieManager;
         $this->storeRepository = $storeRepository;
+        $this->storeResolver = $storeResolver ?: ObjectManager::getInstance()->get(StoreResolverInterface::class);
     }
 
     /**
      * Delete cookie "store" if the store (a value in the cookie) does not exist or is inactive
      *
      * @param \Magento\Framework\App\FrontController $subject
-     * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return mixed
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
+    public function beforeDispatch(
         \Magento\Framework\App\FrontController $subject,
-        \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $defaultStore = $this->storeManager->getDefaultStoreView();
         $storeCodeFromCookie = $this->storeCookieManager->getStoreCodeFromCookie();
         if ($storeCodeFromCookie) {
             try {
                 $this->storeRepository->getActiveStoreByCode($storeCodeFromCookie);
             } catch (StoreIsInactiveException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             } catch (NoSuchEntityException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             } catch (InvalidArgumentException $e) {
-                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+                $this->storeCookieManager->deleteStoreCookie($this->storeManager->getDefaultStoreView());
             }
         }
-        return $proceed($request);
+        if (
+            $this->storeCookieManager->getStoreCodeFromCookie() === null
+            || $request->getParam(StoreResolverInterface::PARAM_NAME) !== null
+        ) {
+            $storeId = $this->storeResolver->getCurrentStoreId();
+            $store = $this->storeRepository->getActiveStoreById($storeId);
+            $this->storeCookieManager->setStoreCookie($store);
+        }
     }
 }

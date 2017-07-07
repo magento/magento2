@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
@@ -14,19 +14,25 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetColumnValues()
     {
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(9);
+        $product = $productRepository->get('grouped-product');
+
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_product', $product);
 
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection'
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection::class
         );
 
-        $this->assertEquals(['simple-1', 'virtual-product'], $collection->getColumnValues('sku'));
+        $resultData = $collection->getColumnValues('sku');
+        $this->assertNotEmpty($resultData);
+
+        $expected = ['virtual-product', 'simple'];
+        sort($expected);
+        sort($resultData);
+        $this->assertEquals($expected, $resultData);
     }
 }

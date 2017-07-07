@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler;
@@ -37,14 +37,14 @@ class Text implements TextInterface
      */
     public function compile(\DOMText $node, DataObject $processedObject)
     {
-        $result = '';
+        $result = $node->textContent;
         foreach ($this->directivePool as $directive) {
             $result = preg_replace_callback(
                 $directive->getPattern(),
                 function ($match) use ($directive, $processedObject) {
                     return $directive->execute($match, $processedObject);
                 },
-                $node->textContent
+                $result
             );
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
@@ -9,6 +9,9 @@ namespace Magento\Backup\Controller\Adminhtml\Index;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
@@ -21,7 +24,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        if (!$this->_objectManager->get('Magento\Backup\Helper\Data')->isRollbackAllowed()) {
+        if (!$this->_objectManager->get(\Magento\Backup\Helper\Data::class)->isRollbackAllowed()) {
             $this->_forward('denied');
         }
 
@@ -29,7 +32,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
             return $this->_redirect('*/*/index');
         }
 
-        $helper = $this->_objectManager->get('Magento\Backup\Helper\Data');
+        $helper = $this->_objectManager->get(\Magento\Backup\Helper\Data::class);
         $response = new \Magento\Framework\DataObject();
 
         try {
@@ -61,13 +64,13 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
                 $backup->getName(),
                 false
             )->setResourceModel(
-                $this->_objectManager->create('Magento\Backup\Model\ResourceModel\Db')
+                $this->_objectManager->create(\Magento\Backup\Model\ResourceModel\Db::class)
             );
 
             $this->_coreRegistry->register('backup_manager', $backupManager);
 
             $passwordValid = $this->_objectManager->create(
-                'Magento\Backup\Model\Backup'
+                \Magento\Backup\Model\Backup::class
             )->validateUserPassword(
                 $this->getRequest()->getParam('password')
             );
@@ -97,7 +100,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
 
             if ($type != \Magento\Framework\Backup\Factory::TYPE_DB) {
                 /** @var Filesystem $filesystem */
-                $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+                $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
                 $backupManager->setRootDir($filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath())
                     ->addIgnorePaths($helper->getRollbackIgnorePaths());
 
@@ -126,10 +129,10 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
         } catch (\Magento\Framework\Backup\Exception\FtpValidationFailed $e) {
             $errorMsg = __('Failed to validate FTP.');
         } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMsg = __('You need more permissions to perform a rollback.');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->info($e->getMessage());
             $errorMsg = __('Failed to rollback.');
         }
 

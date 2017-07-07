@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
 namespace Magento\Integration\Controller\Adminhtml;
+
+use Magento\TestFramework\Bootstrap;
 
 /**
  * \Magento\Integration\Controller\Adminhtml\Integration
@@ -23,7 +25,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         parent::setUp();
         /** @var $integration \Magento\Integration\Model\Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $integration = $objectManager->create(\Magento\Integration\Model\Integration::class);
         $this->_integration = $integration->load('Fixture Integration', 'name');
     }
 
@@ -74,6 +76,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
                 'email' => 'test@magento.com',
                 'authentication' => '1',
                 'endpoint' => $url,
+                'current_password' => Bootstrap::ADMIN_PASSWORD,
             ]
         );
         $this->dispatch('backend/admin/integration/save');
@@ -94,6 +97,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
                 'email' => 'test@magento.com',
                 'authentication' => '1',
                 'endpoint' => $url,
+                'current_password' => Bootstrap::ADMIN_PASSWORD,
             ]
         );
         $this->dispatch('backend/admin/integration/save');

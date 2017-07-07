@@ -1,26 +1,70 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Test\Unit\Observer;
 
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
+use Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver;
+use Magento\Sales\Model\Order\Payment;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\OfflinePayments\Model\Checkmo;
 
 class BeforeOrderPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver
+     * @var BeforeOrderPaymentSaveObserver
      */
     protected $_model;
 
+    /**
+     * @var Payment|MockObject
+     */
+    private $payment;
+
+    /**
+     * @var Event|MockObject
+     */
+    private $event;
+
+    /**
+     * @var Observer|MockObject
+     */
+    private $observer;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->_model = $objectManagerHelper
-            ->getObject('Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver');
+        $this->payment = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->event = $this->getMockBuilder(Event::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getPayment'])
+            ->getMock();
+
+        $this->event->expects(self::once())
+            ->method('getPayment')
+            ->willReturn($this->payment);
+
+        $this->observer = $this->getMockBuilder(Observer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->observer->expects(self::once())
+            ->method('getEvent')
+            ->willReturn($this->event);
+
+        $this->_model = $objectManagerHelper->getObject(BeforeOrderPaymentSaveObserver::class);
     }
 
     /**
@@ -29,40 +73,31 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeOrderPaymentSaveWithInstructions($methodCode)
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
-        $event = $this->getMock('Magento\Framework\Event', ['getPayment'], [], '', false);
-        $payment = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
-            ['getMethod', 'setAdditionalInformation', 'getMethodInstance'],
-            [],
-            '',
-            false
-        );
-        $payment->expects($this->once())
+        $this->payment->expects(self::once())
             ->method('getMethod')
             ->willReturn($methodCode);
-        $payment->expects($this->once())
+        $this->payment->expects(self::once())
             ->method('setAdditionalInformation')
             ->with('instructions', 'payment configuration');
-        $method = $this->getMockBuilder('\Magento\OfflinePayments\Model\Banktransfer')
+        $method = $this->getMockBuilder(Banktransfer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $method->expects($this->once())
+        $method->expects(self::once())
             ->method('getInstructions')
             ->willReturn('payment configuration');
-        $payment->expects($this->once())
+        $this->payment->expects(self::once())
             ->method('getMethodInstance')
             ->willReturn($method);
-        $event->expects($this->once())
-            ->method('getPayment')
-            ->willReturn($payment);
-        $observer->expects($this->once())
-            ->method('getEvent')
-            ->willReturn($event);
-        $this->_model->execute($observer);
+
+        $this->_model->execute($this->observer);
     }
 
+    /**
+     * Returns list of payment method codes.
+     *
+     * @return array
+     */
     public function dataProviderBeforeOrderPaymentSaveWithInstructions()
     {
         return [
@@ -73,70 +108,68 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeOrderPaymentSaveWithCheckmo()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
-        $event = $this->getMock('Magento\Framework\Event', ['getPayment'], [], '', false);
-        $payment = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
-            ['getMethod', 'setAdditionalInformation', 'getMethodInstance'],
-            [],
-            '',
-            false
-        );
-        $payment->expects($this->exactly(2))
+        $this->payment->expects(self::exactly(2))
             ->method('getMethod')
-            ->willReturn(\Magento\OfflinePayments\Model\Checkmo::PAYMENT_METHOD_CHECKMO_CODE);
-        $payment->expects($this->exactly(2))
+            ->willReturn(Checkmo::PAYMENT_METHOD_CHECKMO_CODE);
+        $this->payment->expects(self::exactly(2))
             ->method('setAdditionalInformation')
             ->willReturnMap(
                 [
-                    ['payable_to', 'payable to', $payment],
-                    ['mailing_address', 'mailing address', $payment],
+                    ['payable_to', 'payable to', $this->payment],
+                    ['mailing_address', 'mailing address', $this->payment],
                 ]
             );
 
-        $method = $this->getMockBuilder('Magento\OfflinePayments\Model\Checkmo')
+        $method = $this->getMockBuilder(Checkmo::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $method->expects($this->once())
+        $method->expects(self::exactly(2))
             ->method('getPayableTo')
             ->willReturn('payable to');
-        $method->expects($this->once())
+        $method->expects(self::exactly(2))
             ->method('getMailingAddress')
             ->willReturn('mailing address');
-        $payment->expects($this->exactly(2))
+        $this->payment->expects(self::once())
             ->method('getMethodInstance')
             ->willReturn($method);
-        $event->expects($this->once())
-            ->method('getPayment')
-            ->willReturn($payment);
-        $observer->expects($this->once())
-            ->method('getEvent')
-            ->willReturn($event);
-        $this->_model->execute($observer);
+        $this->_model->execute($this->observer);
+    }
+
+    /**
+     * Checks a case when payment method is Check Money order and
+     * payable person and mailing address do not specified.
+     */
+    public function testBeforeOrderPaymentSaveWithCheckmoWithoutConfig()
+    {
+        $this->payment->expects(self::exactly(2))
+            ->method('getMethod')
+            ->willReturn(Checkmo::PAYMENT_METHOD_CHECKMO_CODE);
+        $this->payment->expects(self::never())
+            ->method('setAdditionalInformation');
+
+        $method = $this->getMockBuilder(Checkmo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $method->expects(self::once())
+            ->method('getPayableTo')
+            ->willReturn(null);
+        $method->expects(self::once())
+            ->method('getMailingAddress')
+            ->willReturn(null);
+        $this->payment->expects(self::once())
+            ->method('getMethodInstance')
+            ->willReturn($method);
+        $this->_model->execute($this->observer);
     }
 
     public function testBeforeOrderPaymentSaveWithOthers()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
-        $event = $this->getMock('Magento\Framework\Event', ['getPayment'], [], '', false);
-        $payment = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
-            ['getMethod', 'setAdditionalInformation', 'getMethodInstance'],
-            [],
-            '',
-            false
-        );
-        $payment->expects($this->exactly(2))
+        $this->payment->expects(self::exactly(2))
             ->method('getMethod')
             ->willReturn('somepaymentmethod');
-        $payment->expects($this->never())
+        $this->payment->expects(self::never())
             ->method('setAdditionalInformation');
-        $event->expects($this->once())
-            ->method('getPayment')
-            ->willReturn($payment);
-        $observer->expects($this->once())
-            ->method('getEvent')
-            ->willReturn($event);
-        $this->_model->execute($observer);
+
+        $this->_model->execute($this->observer);
     }
 }

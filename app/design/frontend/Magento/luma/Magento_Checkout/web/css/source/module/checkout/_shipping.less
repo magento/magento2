@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -32,7 +32,7 @@
 @checkout-shipping-item-mobile__active__padding: 15px (@indent__l + 5px) 15px 18px;
 
 @checkout-shipping-item-before__border-color: @color-gray80;
-@checkout-shipping-item-before__height: calc(~"100% - 20px");
+@checkout-shipping-item-before__height: calc(~'100% - 20px');
 
 @checkout-shipping-method__border: @checkout-step-title__border;
 @checkout-shipping-method__padding: @indent__base;
@@ -59,6 +59,7 @@
                         font-weight: @font-weight__regular;
                     }
                 }
+
                 .note {
                     font-size: @font-size__base;
                     margin-top: @indent__s;
@@ -118,6 +119,7 @@
 
         .action-show-popup {
             margin: 0 0 @indent__base;
+
             > span {
                 &:before {
                     content: '+';
@@ -147,6 +149,7 @@
         .step-title {
             margin-bottom: 0;
         }
+
         .no-quotes-block {
             margin: @indent__base 0;
         }
@@ -169,17 +172,20 @@
                 display: none;
             }
         }
+
         tbody {
             td {
                 .lib-css(border-top, @checkout-shipping-method__border);
                 .lib-css(padding-bottom, @checkout-shipping-method__padding);
                 .lib-css(padding-top, @checkout-shipping-method__padding);
+
                 &:first-child {
                     padding-left: 0;
                     padding-right: 0;
                     width: 20px;
                 }
             }
+
             tr {
                 &:first-child {
                     td {
@@ -187,9 +193,11 @@
                     }
                 }
             }
+
             .col-price {
                 font-weight: @font-weight__semibold;
             }
+
             .row-error {
                 td {
                     border-top: none;
@@ -226,6 +234,7 @@
             .lib-css(margin, @checkout-shipping-item-mobile__margin);
             .lib-css(padding, @checkout-shipping-item-mobile__padding);
             .lib-css(width, @checkout-shipping-item-mobile__width);
+
             &.selected-item {
                 .lib-css(padding, @checkout-shipping-item-mobile__active__padding);
                 border-bottom-width: 2px;
@@ -279,6 +288,7 @@
             > .primary {
                 float: right;
             }
+
             .action {
                 &.primary {
                     margin: 0;
@@ -317,7 +327,7 @@
                 width: 1px;
             }
 
-            &:nth-child(3n+1) {
+            &:nth-child(3n + 1) {
                 &:before {
                     display: none;
                 }

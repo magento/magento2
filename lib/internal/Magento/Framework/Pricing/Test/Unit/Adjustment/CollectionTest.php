@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -19,21 +19,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $adjustmentsData;
 
-    public function setUp()
+    protected function setUp()
     {
-        $adj1 = $this->getMock('Magento\Framework\Pricing\Adjustment\AdjustmentInterface');
+        $adj1 = $this->getMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj1->expects($this->any())
             ->method('getSortOrder')
             ->will($this->returnValue(10));
-        $adj2 = $this->getMock('Magento\Framework\Pricing\Adjustment\AdjustmentInterface');
+        $adj2 = $this->getMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj2->expects($this->any())
             ->method('getSortOrder')
             ->will($this->returnValue(20));
-        $adj3 = $this->getMock('Magento\Framework\Pricing\Adjustment\AdjustmentInterface');
+        $adj3 = $this->getMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj3->expects($this->any())
             ->method('getSortOrder')
             ->will($this->returnValue(5));
-        $adj4 = $this->getMock('Magento\Framework\Pricing\Adjustment\AdjustmentInterface');
+        $adj4 = $this->getMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj4->expects($this->any())
             ->method('getSortOrder')
             ->will($this->returnValue(\Magento\Framework\Pricing\Adjustment\Pool::DEFAULT_SORT_ORDER));
@@ -46,7 +46,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var \Magento\Framework\Pricing\Adjustment\Pool|\PHPUnit_Framework_MockObject_MockObject $adjustmentPool */
-        $adjustmentPool = $this->getMockBuilder('Magento\Framework\Pricing\Adjustment\Pool')
+        $adjustmentPool = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Pool::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAdjustmentByCode'])
             ->getMock();

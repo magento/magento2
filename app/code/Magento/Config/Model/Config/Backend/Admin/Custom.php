@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 
+/**
+ * @api
+ */
 class Custom extends \Magento\Framework\App\Config\Value
 {
     const CONFIG_SCOPE = 'stores';
@@ -52,7 +55,6 @@ class Custom extends \Magento\Framework\App\Config\Value
 
     /* @var \Magento\Framework\App\Config\Storage\WriterInterface */
     protected $_configWriter;
-
 
     /**
      * @param \Magento\Framework\Model\Context $context

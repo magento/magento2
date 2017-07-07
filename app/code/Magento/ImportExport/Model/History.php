@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model;
 
 /**
  * Import history model
+ *
+ * @api
  *
  * @method \Magento\ImportExport\Model\ResourceModel\History _getResource()
  * @method \Magento\ImportExport\Model\ResourceModel\History getResource()
@@ -75,7 +77,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ImportExport\Model\ResourceModel\History');
+        $this->_init(\Magento\ImportExport\Model\ResourceModel\History::class);
     }
 
     /**
@@ -269,6 +271,7 @@ class History extends \Magento\Framework\Model\AbstractModel
     {
         return $this->setData(self::ERROR_FILE, $errorFile);
     }
+
     /**
      * Set Execution Time
      *

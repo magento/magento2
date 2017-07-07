@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "New %changes for %user_name" changes=$changes user_name=$user.name}} @-->
+<!--@vars {
+"var store.getFrontendName()|escape":"Store Name"
+} @-->
+
+{{trans "Hello,"}}
+
+{{trans "We have received a request to change the following information associated with your account at %store_name: %changes." store_name=$store.getFrontendName() changes=$changes}}
+{{trans "If you have not authorized this action, please contact us immediately at %store_email" store_email=$store_email |escape}}{{depend store_phone}} {{trans "or call us at %store_phone" store_phone=$store_phone |escape}}{{/depend}}.
+
+{{trans "Thanks,"}}
+{{var store.getFrontendName()}}

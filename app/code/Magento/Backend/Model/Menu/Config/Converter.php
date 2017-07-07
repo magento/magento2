@@ -1,13 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Config;
 
+/**
+ * Class Converter converts xml to appropriate array
+ * @api
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
+     * Converts xml to appropriate array
+     *
      * @param mixed $dom
      * @return array
      */
@@ -26,6 +32,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             'resource',
             'dependsOnModule',
             'dependsOnConfig',
+            'target'
         ];
         $xpath = new \DOMXPath($dom);
         $nodeList = $xpath->query('/config/menu/*');

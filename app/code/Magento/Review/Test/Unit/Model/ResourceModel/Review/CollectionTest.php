@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review;
@@ -37,22 +37,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
-        $store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->objectManager = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this));
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->getMockForAbstractClass();
-        $this->readerAdapterMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $this->readerAdapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->setMethods(['select', 'prepareSqlCondition', 'quoteInto'])
             ->getMockForAbstractClass();
-        $this->selectMock = $this->getMockBuilder('\Magento\Framework\DB\Select')
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerAdapterMock->expects($this->any())
@@ -70,13 +70,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 return $table;
             });
         $this->model = $this->objectManager->getObject(
-            '\Magento\Review\Model\ResourceModel\Review\Collection',
+            \Magento\Review\Model\ResourceModel\Review\Collection::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'resource' => $this->resourceMock,
             ]
         );
-
     }
 
     public function testInitSelect()
@@ -89,7 +88,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 ['detail_id', 'title', 'detail', 'nickname', 'customer_id']
             );
         $this->objectManager->getObject(
-            '\Magento\Review\Model\ResourceModel\Review\Collection',
+            \Magento\Review\Model\ResourceModel\Review\Collection::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'resource' => $this->resourceMock,

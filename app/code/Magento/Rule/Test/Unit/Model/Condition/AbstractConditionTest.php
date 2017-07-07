@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,10 +13,10 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_condition;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_condition = $this->getMockForAbstractClass(
-            '\Magento\Rule\Model\Condition\AbstractCondition',
+            \Magento\Rule\Model\Condition\AbstractCondition::class,
             [],
             '',
             false,
@@ -118,7 +118,7 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
     public function testValidate($existingValue, $operator, $valueForValidate, $expectedResult)
     {
         $objectMock = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
+            \Magento\Framework\Model\AbstractModel::class,
             ['hasData', 'load', 'getId', 'getData'],
             [],
             '',

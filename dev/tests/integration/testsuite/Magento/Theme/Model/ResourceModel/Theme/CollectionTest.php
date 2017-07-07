@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Theme;
@@ -12,7 +12,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
-            ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
+            ['preferences' => [\Magento\Theme\Model\Theme::class => \Magento\Theme\Model\Theme\Data::class]]
         );
     }
 
@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected static function _getThemesCollection()
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Theme\Model\ResourceModel\Theme\Collection'
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class
         );
     }
 
@@ -91,7 +91,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Theme\Model\ResourceModel\Theme\Collection'
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class
         );
         $themeCollection->addAreaFilter($area);
         $this->assertCount($themeCount, $themeCollection);
@@ -119,7 +119,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Theme\Model\ResourceModel\Theme\Collection'
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class
         );
         $themeCollection->addAreaFilter('test_area3');
         if ($themeType !== false) {
@@ -150,7 +150,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Theme\Model\ResourceModel\Theme\Collection'
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class
         );
         $themeCollection->addAreaFilter('test_area3')->filterVisibleThemes();
         $this->assertCount(2, $themeCollection);
@@ -203,7 +203,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         foreach (self::getThemeList() as $themeData) {
             /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
             $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Framework\View\Design\ThemeInterface'
+                \Magento\Framework\View\Design\ThemeInterface::class
             );
             $themeModel->setData($themeData);
             $themeCollection->addItem($themeModel);
@@ -221,7 +221,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         foreach ($fixture as $themeData) {
             /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
             $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Framework\View\Design\ThemeInterface'
+                \Magento\Framework\View\Design\ThemeInterface::class
             );
             $themeModel->setData($themeData);
 

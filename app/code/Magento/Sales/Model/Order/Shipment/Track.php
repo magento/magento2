@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Shipment\Track getResource()
  *
@@ -91,7 +93,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Track');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Track::class);
     }
 
     /**
@@ -137,11 +139,16 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * Retrieve Shipment instance
      *
      * @return \Magento\Sales\Model\Order\Shipment
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getShipment()
     {
         if (!$this->_shipment instanceof \Magento\Sales\Model\Order\Shipment) {
-            $this->_shipment = $this->shipmentRepository->get($this->getParentId());
+            if ($this->getParentId()) {
+                $this->_shipment = $this->shipmentRepository->get($this->getParentId());
+            } else {
+                throw new LocalizedException(__("Parent shipment cannot be loaded for track object."));
+            }
         }
 
         return $this->_shipment;
@@ -208,6 +215,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns track_number
      *
@@ -408,5 +416,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

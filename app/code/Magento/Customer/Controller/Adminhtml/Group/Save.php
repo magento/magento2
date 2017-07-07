@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
@@ -77,16 +77,14 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
             $id = $this->getRequest()->getParam('id');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
+                $customerGroupCode = (string)$this->getRequest()->getParam('code');
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
+                    $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
                 } else {
                     $customerGroup = $this->groupDataFactory->create();
                 }
-                $customerGroupCode = (string)$this->getRequest()->getParam('code');
-                if (empty($customerGroupCode)) {
-                    $customerGroupCode = null;
-                }
-                $customerGroup->setCode($customerGroupCode);
+                $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
                 $customerGroup->setTaxClassId($taxClass);
 
                 $this->groupRepository->save($customerGroup);
@@ -99,7 +97,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
                     $this->storeCustomerGroupDataToSession(
                         $this->dataObjectProcessor->buildOutputDataArray(
                             $customerGroup,
-                            '\Magento\Customer\Api\Data\GroupInterface'
+                            \Magento\Customer\Api\Data\GroupInterface::class
                         )
                     );
                 }

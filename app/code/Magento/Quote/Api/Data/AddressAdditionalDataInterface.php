@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api\Data;
@@ -9,6 +9,7 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * Additional data that is provided with quote address information
+ * @api
  */
 interface AddressAdditionalDataInterface extends CustomAttributesDataInterface
 {

@@ -1,21 +1,14 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<th
-    class="data-grid-th"
-    data-bind="
-        css: {
-            '_sortable': sortable,
-            '_draggable': draggable,
-            '_ascend': sorting === 'asc',
-            '_descend': sorting === 'desc'
-        },
-        click: sort">
-    <span
-        class="data-grid-cell-content"
-        data-bind="text: label">
-    </span>
+<th class="data-grid-th" click="sort"
+    css="
+        _sortable: sortable,
+        _draggable: draggable,
+        _ascend: sorting === 'asc',
+        _descend: sorting === 'desc'">
+    <span class="data-grid-cell-content" translate="label"/>
 </th>

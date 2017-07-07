@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -34,10 +34,11 @@
 @admin__page-nav-icon-error__color: @color-phoenix;
 
 @admin__page-nav-item-message-loader__font-size: 2rem;
+@admin__page-nav-tooltip-message__width: 27rem;
 @admin__page-nav-tooltip__background: @admin__page-nav__background-color;
+@admin__page-nav-tooltip__border-color: @color-gray75;
 @admin__page-nav-tooltip__box-shadow: 0 3px 9px 0 rgba(0, 0, 0, .3);
 @admin__page-nav-tooltip__z-index1: @field-tooltip__z-index;
-@admin__page-nav-tooltip__border-color: @color-gray75;
 
 @admin__page-nav-transition: border-color .1s ease-out, background-color .1s ease-out;
 
@@ -53,21 +54,27 @@
         &:first-child {
             border-bottom: none;
         }
+
         &._show {
             border-bottom: 1px solid @admin__page-nav__border-color;
+
             ._collapsible {
                 background: @admin__page-nav-title__collapsible__active__background-color;
+
                 &:after {
                     content: @admin__page-nav-icon-up__content;
                 }
+
                 + .admin__page-nav-items {
                     display: block;
                 }
             }
         }
+
         &._hide {
             .admin__page-nav-title-messages {
                 display: inline-block;
+
                 ._active {
                     display: inline-block;
                 }
@@ -122,9 +129,11 @@
             margin: 0 0 -1px;
         }
     }
+
     strong {
         font-weight: @font-weight__bold;
     }
+
     .admin__page-nav-title-messages {
         display: none;
     }
@@ -145,6 +154,7 @@
 
     &:hover {
         border-color: @admin__page-nav-item__hover__background-color;
+
         .admin__page-nav-link {
             background: @admin__page-nav-item__hover__background-color;
             color: @admin__page-nav-link__hover__color;
@@ -155,6 +165,7 @@
     &._active,
     &.ui-state-active {
         border-color: @admin__page-nav-item__active__color;
+
         .admin__page-nav-link {
             background: @admin__page-nav-title__collapsible__background-color;
             border-color: @admin__page-nav-item__border-color;
@@ -176,6 +187,7 @@
         &:before {
             display: none;
         }
+
         .admin__page-nav-item-message-loader {
             display: inline-block;
         }
@@ -194,70 +206,122 @@
     padding: @admin__page-nav-link__padding;
     transition: @admin__page-nav-transition;
     word-wrap: break-word;
+}
 
-    &._changed {
-        .admin__page-nav-item-message {
-            &._changed {
-                display: inline-block;
-            }
+//  Messages in tooltip
+.admin__page-nav-item-messages {
+    display: inline-block;
+
+    .admin__page-nav-item-message-tooltip {
+        background: @admin__page-nav-tooltip__background;
+        border: 1px solid @admin__page-nav-tooltip__background;
+        border-radius: 1px;
+        bottom: 3.7rem;
+        box-shadow: @admin__page-nav-tooltip__box-shadow;
+        display: none;
+        font-size: @font-size__base;
+        font-weight: @font-weight__regular;
+        left: -@indent__s;
+        line-height: @line-height__base;
+        padding: 1.5rem;
+        position: absolute;
+        text-transform: none;
+        width: @admin__page-nav-tooltip-message__width;
+        word-break: normal;
+        z-index: 2;
+
+        &:after,
+        &:before {
+            .lib-arrow(
+            @_position: down,
+            @_size: 15px,
+            @_color: @admin__page-nav-tooltip__background
+            );
+            content: '';
+            display: block;
+            left: 2rem;
+            position: absolute;
+            top: 100%;
+            z-index: 3;
         }
-    }
 
-    &._error {
-        .admin__page-nav-item-message {
-            &._error {
-                display: inline-block;
-            }
+        &:after {
+            border-top-color: @admin__page-nav-tooltip__background;
+            margin-top: -1px;
+            z-index: 4;
+        }
+
+        &:before {
+            border-top-color: @admin__page-nav-tooltip__border-color;
+            margin-top: 1px;
         }
     }
 }
 
-//  Messages in tooltip
+.admin__page-nav-item-message-loader {
+    display: none;
+    margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
+    position: absolute;
+    right: 0;
+    top: 50%;
 
-.admin__page-nav-item-messages {
-    display: inline-block;
+    .spinner {
+        font-size: @admin__page-nav-item-message-loader__font-size;
+        margin-right: 1.5rem;
+    }
 
-    .admin__page-nav-item-message {
-        position: relative;
-        &:hover {
-            z-index: @admin__page-nav-tooltip__z-index;
-            .admin__page-nav-item-message-tooltip {
-                display: block;
-            }
-        }
+    ._loading > .admin__page-nav-item-messages & {
+        display: inline-block;
+    }
+}
 
-        &._error,
-        &._changed {
-            display: none;
-            .admin__page-nav-item-message-icon {
-                &:extend(.abs-icon all);
-                display: inline-block;
-                font-size: @admin__page-nav-title__font-size;
-                padding-left: .8em;
-                vertical-align: top;
-                &:after {
-                    color: @admin__page-nav-link__changed__color;
-                    content: @admin__page-nav-icon-changed__content;
-                }
-            }
-        }
+.admin__page-nav-item-message {
+    position: relative;
 
-        &._error {
-            .admin__page-nav-item-message-icon {
-                &:after {
-                    color: @admin__page-nav-icon-error__color;
-                    content: @admin__page-nav-icon-error__content;
-                }
-            }
+    &:hover {
+        z-index: @admin__page-nav-tooltip__z-index;
+
+        .admin__page-nav-item-message-tooltip {
+            display: block;
         }
     }
 
-    .admin__page-nav-item-message-loader {
+    &._error,
+    &._changed {
         display: none;
-        margin-top: -(@admin__page-nav-item-message-loader__font-size/2);
-        position: absolute;
-        right: 0;
-        top: 50%;
+    }
+
+    .admin__page-nav-item-message-icon {
+        &:extend(.abs-icon all);
+        display: inline-block;
+        font-size: @admin__page-nav-title__font-size;
+        padding-left: .8em;
+        vertical-align: baseline;
+
+        &:after {
+            color: @admin__page-nav-link__changed__color;
+            content: @admin__page-nav-icon-changed__content;
+        }
+    }
+}
+
+&._changed {
+    ._changed:not(._error) > .admin__page-nav-item-messages & {
+        display: inline-block;
+    }
+}
+
+&._error {
+    .admin__page-nav-item-message-icon {
+        &:after {
+            color: @admin__page-nav-icon-error__color;
+            content: @admin__page-nav-icon-error__content;
+        }
+    }
+
+    ._error > .admin__page-nav-item-messages & {
+        display: inline-block;
+
         .spinner {
             font-size: @admin__page-nav-item-message-loader__font-size;
             margin-right: 1.5rem;
@@ -280,6 +344,7 @@
         width: 27rem;
         word-break: normal;
         z-index: 2;
+
         &:after,
         &:before {
             .lib-arrow(
@@ -294,11 +359,13 @@
             top: 100%;
             z-index: 3;
         }
+
         &:after {
             border-top-color: @admin__page-nav-tooltip__background;
             margin-top: -1px;
             z-index: 4;
         }
+
         &:before {
             border-top-color: @admin__page-nav-tooltip__border-color;
         }

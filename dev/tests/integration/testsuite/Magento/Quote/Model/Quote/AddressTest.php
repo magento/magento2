@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -31,19 +31,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\Quote'
+            \Magento\Quote\Model\Quote::class
         );
         $this->_quote->load('test01', 'reserved_order_id');
         $this->_quote->setIsMultiShipping('0');
 
         $this->customerRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
         $this->_customer = $this->customerRepository->getById(1);
 
         /** @var \Magento\Sales\Model\Order\Address $address */
         $this->_address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\Quote\Address'
+            \Magento\Quote\Model\Quote\Address::class
         );
         $this->_address->setId(1);
         $this->_address->load($this->_address->getId());
@@ -54,7 +54,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\CustomerRegistry');
+            ->get(\Magento\Customer\Model\CustomerRegistry::class);
         //Cleanup customer from registry
         $customerRegistry->remove(1);
     }
@@ -74,7 +74,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         }
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\AddressRepositoryInterface');
+            ->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $customerAddressData = $addressRepository->getById($this->_customer->getDefaultBilling());
         $address->setSameAsBilling(0)->setCustomerAddressData($customerAddressData)->save();
         $this->assertEquals(0, $this->_quote->getBillingAddress()->getSameAsBilling());
@@ -127,7 +127,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\AddressRepositoryInterface');
+            ->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $this->_customer->setDefaultShipping(-1)
             ->setAddresses(
                 [
@@ -166,7 +166,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\AddressRepositoryInterface');
+            ->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $this->_customer->setDefaultShipping(2)
             ->setAddresses([$addressRepository->getById($this->_address->getId())]);
         $this->_customer = $this->customerRepository->save($this->_customer);
@@ -190,7 +190,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         }
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\AddressRepositoryInterface');
+            ->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $shippingAddress->setSameAsBilling(0)
             ->setCustomerAddressData($addressRepository->getById($this->_customer->getDefaultBilling()))
             ->save();
@@ -212,9 +212,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $street = 'Street1';
 
         /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
-        $addressFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
+        $addressFactory = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\Data\AddressInterfaceFactory::class
+        );
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
-        $addressRepository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\AddressRepositoryInterface');
+        $addressRepository = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\AddressRepositoryInterface::class
+        );
         $addressData = $addressFactory->create()
             ->setCustomerId($customerIdFromFixture)
             ->setFirstname('John')
@@ -270,7 +274,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
-        $addressFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
+        $addressFactory = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\Data\AddressInterfaceFactory::class
+        );
         $customerAddressData = $addressFactory->create()->setId($customerAddressId);
         $this->_address->setCustomerAddressData($customerAddressData);
         $this->_address->save();
@@ -278,5 +284,29 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($customerId, $this->_address->getCustomerId());
         $this->assertEquals($this->_quote->getId(), $this->_address->getQuoteId());
         $this->assertEquals($customerAddressId, $this->_address->getCustomerAddressId());
+    }
+
+    /**
+     * Tests
+     *
+     * @covers \Magento\Quote\Model\Quote\Address::setAppliedTaxes()
+     * @covers \Magento\Quote\Model\Quote\Address::getAppliedTaxes()
+     * @dataProvider dataProvider
+     * @param $taxes
+     * @param $expected
+     */
+    public function testAppliedTaxes($taxes, $expected)
+    {
+        $this->_address->setAppliedTaxes($taxes);
+
+        $this->assertSame($expected, $this->_address->getAppliedTaxes());
+    }
+
+    public function dataProvider()
+    {
+        return [
+            ['test', 'test'],
+            [[123, true], [123, true]]
+        ];
     }
 }

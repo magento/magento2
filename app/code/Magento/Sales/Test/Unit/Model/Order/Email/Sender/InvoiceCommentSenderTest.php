@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
@@ -23,7 +23,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
     {
         $this->stepMockSetup();
         $this->paymentHelper = $this->getMock(
-            '\Magento\Payment\Helper\Data',
+            \Magento\Payment\Helper\Data::class,
             ['getInfoBlockHtml'],
             [],
             '',
@@ -31,19 +31,19 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         );
 
         $this->invoiceResource = $this->getMock(
-            '\Magento\Sales\Model\ResourceModel\Order\Invoice',
+            \Magento\Sales\Model\ResourceModel\Order\Invoice::class,
             [],
             [],
             '',
             false
         );
 
-        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity');
+        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity::class);
 
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
 
         $this->invoiceMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Invoice',
+            \Magento\Sales\Model\Order\Invoice::class,
             ['getStore', '__wakeup', 'getOrder'],
             [],
             '',

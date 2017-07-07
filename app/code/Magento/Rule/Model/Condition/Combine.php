@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Condition;
 
+/**
+ * @api
+ */
 class Combine extends AbstractCondition
 {
     /**
@@ -28,7 +31,7 @@ class Combine extends AbstractCondition
 
         parent::__construct($context, $data);
         $this->setType(
-            'Magento\Rule\Model\Condition\Combine'
+            \Magento\Rule\Model\Condition\Combine::class
         )->setAggregator(
             'all'
         )->setValue(
@@ -50,6 +53,7 @@ class Combine extends AbstractCondition
     }
 
     /* start aggregator methods */
+
     /**
      * @return $this
      */
@@ -97,10 +101,11 @@ class Combine extends AbstractCondition
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][aggregator]',
                 'values' => $this->getAggregatorSelectOptions(),
                 'value' => $this->getAggregator(),
-                'value_name' => $this->getAggregatorName()
+                'value_name' => $this->getAggregatorName(),
+                'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
     }
 
@@ -268,10 +273,11 @@ class Combine extends AbstractCondition
             [
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][new_child]',
                 'values' => $this->getNewChildSelectOptions(),
-                'value_name' => $this->getNewChildName()
+                'value_name' => $this->getNewChildName(),
+                'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Newchild')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Newchild::class)
         );
     }
 

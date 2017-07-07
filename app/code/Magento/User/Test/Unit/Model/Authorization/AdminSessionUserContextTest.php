@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,13 +32,13 @@ class AdminSessionUserContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->adminSession = $this->getMockBuilder('Magento\Backend\Model\Auth\Session')
+        $this->adminSession = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasUser', 'getUser', 'getId'])
             ->getMock();
 
         $this->adminSessionUserContext = $this->objectManager->getObject(
-            'Magento\User\Model\Authorization\AdminSessionUserContext',
+            \Magento\User\Model\Authorization\AdminSessionUserContext::class,
             ['adminSession' => $this->adminSession]
         );
     }

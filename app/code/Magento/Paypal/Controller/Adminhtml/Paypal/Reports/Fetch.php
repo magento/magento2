@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,13 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Paypal::fetch';
+
     /**
      * Forced fetch reports action
      *
@@ -51,15 +58,5 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/index');
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Paypal::fetch');
     }
 }

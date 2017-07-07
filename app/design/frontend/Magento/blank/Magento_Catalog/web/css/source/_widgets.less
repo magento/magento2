@@ -1,91 +1,117 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
-
-.block-product-link,
-.block-category-link {
-    &.widget {
-        display: block;
-        margin-bottom: @indent__base;
-    }
-}
-
-.block-product-link-inline {
-    &.widget {
-        margin: 0;
-    }
-}
-
-.block.widget {
-    .product-item-info {
-        width: auto;
-    }
-    .pager {
-        padding: 0;
-        .toolbar-amount {
-            float: none;
-            .lib-font-size(12);
-        }
-        .pages-item-previous {
-            padding-left: 0;
-        }
-        .pages-item-next {
-            position: relative;
-        }
-        .items {
-            white-space: nowrap;
+    .block-product-link,
+    .block-category-link {
+        &.widget {
+            display: block;
+            margin-bottom: @indent__base;
         }
     }
-}
 
+    .block-product-link-inline {
+        &.widget {
+            margin: 0;
+        }
+    }
+
+    .block.widget {
+        .product-item-info {
+            width: auto;
+        }
+
+        .pager {
+            padding: 0;
+
+            .toolbar-amount {
+                float: none;
+                .lib-font-size(12);
+            }
+
+            .pages-item-previous {
+                padding-left: 0;
+            }
+
+            .pages-item-next {
+                position: relative;
+            }
+
+            .items {
+                white-space: nowrap;
+            }
+        }
+    }
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
     .block.widget .products-grid .product-item,
     .page-layout-1column .block.widget .products-grid .product-item,
-    .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/3 }
+    .page-layout-3columns .block.widget .products-grid .product-item {
+        width: 100%/3;
+    }
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .block.widget .products-grid .product-item{ width: 100%/3 }
-    .page-layout-1column .block.widget .products-grid .product-item { width: 100%/4 }
-    .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/2 }
+    .block.widget .products-grid .product-item {
+        width: 100%/3;
+    }
+
+    .page-layout-1column .block.widget .products-grid .product-item {
+        width: 100%/4;
+    }
+
+    .page-layout-3columns .block.widget .products-grid .product-item {
+        width: 100%/2;
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
-    .block.widget .products-grid .product-item { width: 100%/5 }
+    .block.widget .products-grid .product-item {
+        width: 100%/5;
+    }
+
     .page-layout-1column .block.widget .products-grid .product-item {
+        margin-left: calc(~'(100% - 5 * (100%/6)) / 4');
         width: 100%/6;
-        margin-left: calc(~"(100% - 5 * (100%/6)) / 4");
-        &:nth-child(4n+1) {
-            margin-left: calc(~"(100% - 5 * (100%/6)) / 4");
+
+        &:nth-child(4n + 1) {
+            margin-left: calc(~'(100% - 5 * (100%/6)) / 4');
         }
-        &:nth-child(5n+1) {
+
+        &:nth-child(5n + 1) {
             margin-left: 0;
         }
     }
-    .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/4 }
-    .block.widget .products-grid .product-items { margin: 0; }
+
+    .page-layout-3columns .block.widget .products-grid .product-item {
+        width: 100%/4;
+    }
+
+    .block.widget .products-grid .product-items {
+        margin: 0;
+    }
+
     .block.widget .products-grid .product-item {
-        width: 24.439%;
-        margin-left: calc(~"(100% - 4 * 24.439%) / 3");
+        margin-left: calc(~'(100% - 4 * 24.439%) / 3');
         padding: 0;
-        &:nth-child(4n+1) {
+        width: 24.439%;
+
+        &:nth-child(4n + 1) {
             margin-left: 0;
         }
     }
@@ -96,8 +122,10 @@
         .item:not(.pages-item-next):not(.pages-item-previous) {
             &:extend(.abs-no-display-desktop all);
         }
+
         .pages-item-next {
             padding: 0;
+
             .action {
                 margin: 0;
             }

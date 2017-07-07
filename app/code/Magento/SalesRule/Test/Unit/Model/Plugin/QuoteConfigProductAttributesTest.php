@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,13 +18,13 @@ class QuoteConfigProductAttributesTest extends \PHPUnit_Framework_TestCase
      */
     protected $ruleResource;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->ruleResource = $this->getMock('Magento\SalesRule\Model\ResourceModel\Rule', [], [], '', false);
+        $this->ruleResource = $this->getMock(\Magento\SalesRule\Model\ResourceModel\Rule::class, [], [], '', false);
 
         $this->plugin = $objectManager->getObject(
-            'Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes',
+            \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes::class,
             [
                 'ruleResource' => $this->ruleResource
             ]
@@ -33,7 +33,7 @@ class QuoteConfigProductAttributesTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGetProductAttributes()
     {
-        $subject = $this->getMock('Magento\Quote\Model\Quote\Config', [], [], '', false);
+        $subject = $this->getMock(\Magento\Quote\Model\Quote\Config::class, [], [], '', false);
         $attributeCode = 'code of the attribute';
         $expected = [0 => $attributeCode];
 

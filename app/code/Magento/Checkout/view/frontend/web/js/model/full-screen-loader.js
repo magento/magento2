@@ -1,31 +1,35 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
-define(
-    ['jquery'],
-    function ($) {
-        'use strict';
 
-        var containerId = '#checkout';
+define([
+    'jquery',
+    'rjsResolver'
+], function ($, resolver) {
+    'use strict';
 
-        return {
+    var containerId = '#checkout';
 
-            /**
-             * Start full page loader action
-             */
-            startLoader: function () {
-                $(containerId).trigger('processStart');
-            },
+    return {
 
-            /**
-             * Stop full page loader action
-             */
-            stopLoader: function () {
-                $(containerId).trigger('processStop');
-            }
-        };
-    }
-);
+        /**
+         * Start full page loader action
+         */
+        startLoader: function () {
+            $(containerId).trigger('processStart');
+        },
+
+        /**
+         * Stop full page loader action
+         *
+         * @param {Boolean} [forceStop]
+         */
+        stopLoader: function (forceStop) {
+            var $elem = $(containerId),
+                stop = $elem.trigger.bind($elem, 'processStop');
+
+            forceStop ? stop() : resolver(stop);
+        }
+    };
+});

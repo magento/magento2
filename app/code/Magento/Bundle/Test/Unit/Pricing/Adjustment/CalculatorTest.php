@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,14 +8,16 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
+use Magento\Bundle\Model\ResourceModel\Selection\Collection;
 use \Magento\Bundle\Pricing\Adjustment\Calculator;
-
 use Magento\Bundle\Model\Product\Price as ProductPrice;
 use Magento\Bundle\Pricing\Price;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test for \Magento\Bundle\Pricing\Adjustment\Calculator
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,18 +57,24 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected $taxData;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $selectionPriceListProvider;
+
+    /**
      * @var Calculator
      */
     protected $model;
 
     protected function setUp()
     {
-        $this->saleableItem = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup', 'getStore'])
+        $this->saleableItem = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup', 'getStore', 'getTypeInstance'])
             ->disableOriginalConstructor()
             ->getMock();
-        $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
-        $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
+
+        $priceCurrency = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock();
+        $priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
         $priceInfo->expects($this->any())->method('getPrice')->will(
             $this->returnCallback(
                 function ($type) {
@@ -79,43 +87,59 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         );
         $this->saleableItem->expects($this->any())->method('getPriceInfo')->will($this->returnValue($priceInfo));
 
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $priceCurrency->expects($this->any())->method('round')->will($this->returnArgument(0));
 
         $this->saleableItem->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $this->baseCalculator = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
-        $this->amountFactory = $this->getMock('Magento\Framework\Pricing\Amount\AmountFactory', [], [], '', false);
+        $this->baseCalculator = $this->getMock(
+            \Magento\Framework\Pricing\Adjustment\Calculator::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->amountFactory = $this->getMock(
+            \Magento\Framework\Pricing\Amount\AmountFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
 
-        $this->selectionFactory = $this->getMockBuilder('Magento\Bundle\Pricing\Price\BundleSelectionFactory')
+        $this->selectionFactory = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\BundleSelectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectionFactory->expects($this->any())->method('create')->will($this->returnArgument(1));
 
-        $this->taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')
+        $this->taxData = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Bundle\Pricing\Adjustment\Calculator',
+        $this->selectionPriceListProvider = $this->getMockBuilder(
+            \Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface::class
+        )->getMock();
+
+        $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Pricing\Adjustment\Calculator::class,
             [
                 'calculator' => $this->baseCalculator,
                 'amountFactory' => $this->amountFactory,
                 'bundleSelectionFactory' => $this->selectionFactory,
                 'taxHelper' => $this->taxData,
                 'priceCurrency' => $priceCurrency,
+                'selectionPriceListProvider' => $this->selectionPriceListProvider
             ]
         );
     }
 
     public function testEmptySelectionPriceList()
     {
-        $option = $this->getMock('Magento\Bundle\Model\Option', ['getSelections', '__wakeup'], [], '', false);
+        $option = $this->getMock(\Magento\Bundle\Model\Option::class, ['getSelections', '__wakeup'], [], '', false);
         $option->expects($this->any())->method('getSelections')
             ->will($this->returnValue(null));
-        $bundleProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $bundleProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->assertSame([], $this->model->createSelectionPriceList($option, $bundleProduct));
     }
 
@@ -124,6 +148,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetterAmount($amountForBundle, $optionList, $expectedResult)
     {
+        $searchMin = $expectedResult['isMinAmount'];
         $this->baseCalculator->expects($this->atLeastOnce())->method('getAmount')
             ->with($this->baseAmount, $this->saleableItem)
             ->will($this->returnValue($this->createAmountMock($amountForBundle)));
@@ -132,8 +157,14 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         foreach ($optionList as $optionData) {
             $options[] = $this->createOptionMock($optionData);
         }
-        $price = $this->getMock('Magento\Bundle\Pricing\Price\BundleOptionPrice', [], [], '', false);
-        $price->expects($this->atLeastOnce())->method('getOptions')->will($this->returnValue($options));
+
+        $optionSelections = [];
+        foreach ($options as $option) {
+            $optionSelections = array_merge($optionSelections, $option->getSelections());
+        }
+        $this->selectionPriceListProvider->expects($this->any())->method('getPriceList')->willReturn($optionSelections);
+
+        $price = $this->getMock(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class, [], [], '', false);
         $this->priceMocks[Price\BundleOptionPrice::PRICE_CODE] = $price;
 
         // Price type of saleable items
@@ -145,7 +176,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $this->amountFactory->expects($this->atLeastOnce())->method('create')
             ->with($expectedResult['fullAmount'], $expectedResult['adjustments']);
-        if ($expectedResult['isMinAmount']) {
+        if ($searchMin) {
             $this->model->getAmount($this->baseAmount, $this->saleableItem);
         } else {
             $this->model->getMaxAmount($this->baseAmount, $this->saleableItem);
@@ -183,7 +214,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function createAmountMock($amountData)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\Amount\Base $amount */
-        $amount = $this->getMockBuilder('Magento\Framework\Pricing\Amount\Base')
+        $amount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
             ->setMethods(['getAdjustmentAmounts', 'getValue', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -202,7 +233,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function createOptionMock($optionData)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Option $option */
-        $option = $this->getMock('Magento\Bundle\Model\Option', ['isMultiSelection', '__wakeup'], [], '', false);
+        $option = $this->getMock(\Magento\Bundle\Model\Option::class, ['isMultiSelection', '__wakeup'], [], '', false);
         $option->expects($this->any())->method('isMultiSelection')
             ->will($this->returnValue($optionData['isMultiSelection']));
         $selections = [];
@@ -225,7 +256,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function createSelectionMock($selectionData)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $selection */
-        $selection = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $selection = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['isSalable', 'getQuantity', 'getAmount', 'getProduct', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -239,7 +270,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $selection->expects($this->any())->method('getAmount')->will($this->returnValue($amountMock));
         $selection->expects($this->any())->method('getQuantity')->will($this->returnValue(1));
 
-        $innerProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $innerProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getSelectionCanChangeQty', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -274,21 +305,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'required' => '1',
                     ],
                     'selections' => [
-                        'first product selection' => [
-                            'data' => ['price' => 70.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
-                                'amount' => 18,
-                            ],
-                        ],
-                        'second product selection' => [
-                            'data' => ['price' => 80.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 18],
-                                'amount' => 28,
-                            ],
-                        ],
-                        'third product selection with the lowest price' => [
+                        'selection with the lowest price' => [
                             'data' => ['price' => 50.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
@@ -335,13 +352,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                             'data' => ['price' => 50.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
-                                'amount' => 8,
-                            ],
-                        ],
-                        'second product selection' => [
-                            'data' => ['price' => 80.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 18],
                                 'amount' => 8,
                             ],
                         ],
@@ -458,13 +468,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                                 'amount' => 8,
                             ],
                         ],
-                        'second product selection' => [
-                            'data' => ['price' => 30.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 10],
-                                'amount' => 12,
-                            ],
-                        ],
                     ]
                 ],
                 // second option
@@ -479,20 +482,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                         'required' => '0',
                     ],
                     'selections' => [
-                        'first product selection' => [
-                            'data' => ['price' => 25.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 8],
-                                'amount' => 9,
-                            ],
-                        ],
-                        'second product selection' => [
-                            'data' => ['price' => 35.],
-                            'amount' => [
-                                'adjustmentsAmounts' => ['tax' => 10],
-                                'amount' => 10,
-                            ],
-                        ],
                     ]
                 ],
             ],
@@ -510,7 +499,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $result = 5;
 
         /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
-        $calculatorMock = $this->getMockBuilder('Magento\Bundle\Pricing\Adjustment\Calculator')
+        $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['calculateBundleAmount'])
             ->getMock();
@@ -531,7 +520,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $exclude = 'false';
 
         /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
-        $calculatorMock = $this->getMockBuilder('Magento\Bundle\Pricing\Adjustment\Calculator')
+        $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOptionsAmount'])
             ->getMock();
@@ -554,7 +543,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $exclude = 'false';
 
         /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
-        $calculatorMock = $this->getMockBuilder('Magento\Bundle\Pricing\Adjustment\Calculator')
+        $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOptionsAmount'])
             ->getMock();
@@ -580,12 +569,12 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $exclude = 'false';
 
         /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
-        $calculatorMock = $this->getMockBuilder('Magento\Bundle\Pricing\Adjustment\Calculator')
+        $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['calculateBundleAmount', 'getSelectionAmounts'])
             ->getMock();
 
-        $selections[] = $this->getMockBuilder('\Magento\Bundle\Pricing\Price\BundleSelectionPrice')
+        $selections[] = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\BundleSelectionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $calculatorMock->expects($this->once())

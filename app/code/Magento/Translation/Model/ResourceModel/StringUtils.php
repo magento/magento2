@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model\ResourceModel;
@@ -208,8 +208,10 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function saveTranslate($string, $translate, $locale = null, $storeId = null)
     {
+        $string = htmlspecialchars_decode($string);
         $connection = $this->getConnection();
         $table = $this->getMainTable();
+        $translate = htmlspecialchars($translate, ENT_QUOTES);
 
         if ($locale === null) {
             $locale = $this->_localeResolver->getLocale();

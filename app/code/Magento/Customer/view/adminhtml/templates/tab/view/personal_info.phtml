@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/**
- * @var $block \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo
- */
+/** @var \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo $block */
 
 $lastLoginDateAdmin = $block->getLastLoginDate();
 $lastLoginDateStore = $block->getStoreLastLoginDate();
@@ -16,51 +14,54 @@ $lastLoginDateStore = $block->getStoreLastLoginDate();
 $createDateAdmin = $block->getCreateDate();
 $createDateStore = $block->getStoreCreateDate();
 ?>
-
 <div class="fieldset-wrapper customer-information">
     <div class="fieldset-wrapper-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Personal Information') ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Personal Information')) ?></span>
     </div>
     <table class="admin__table-secondary">
         <tbody>
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Last Logged In:') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $lastLoginDateAdmin ?> (<?php /* @escapeNotVerified */ echo $block->getCurrentStatus() ?>)</td>
+            <th><?= $block->escapeHtml(__('Last Logged In:')) ?></th>
+            <td><?= $block->escapeHtml($lastLoginDateAdmin) ?> (<?= $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
         </tr>
         <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone()) ?></th>
-            <td><?php /* @escapeNotVerified */ echo $lastLoginDateStore ?> (<?php /* @escapeNotVerified */ echo $block->getCurrentStatus() ?>)</td>
+            <th><?= $block->escapeHtml(__('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone())) ?></th>
+            <td><?= $block->escapeHtml($lastLoginDateStore) ?> (<?= $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
         </tr>
         <?php endif; ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Confirmed email:') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $block->getIsConfirmedStatus() ?></td>
+            <th><?= $block->escapeHtml(__('Account Lock:')) ?></th>
+            <td><?= $block->escapeHtml($block->getAccountLock()) ?></td>
         </tr>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Account Created:') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $createDateAdmin ?></td>
+            <th><?= $block->escapeHtml(__('Confirmed email:')) ?></th>
+            <td><?= $block->escapeHtml($block->getIsConfirmedStatus()) ?></td>
+        </tr>
+        <tr>
+            <th><?= $block->escapeHtml(__('Account Created:')) ?></th>
+            <td><?= $block->escapeHtml($createDateAdmin) ?></td>
         </tr>
         <?php if ($createDateAdmin != $createDateStore): ?>
             <tr>
-                <th><?php /* @escapeNotVerified */ echo __('Account Created on (%1):', $block->getStoreCreateDateTimezone()) ?></th>
-                <td><?php /* @escapeNotVerified */ echo $createDateStore ?></td>
+                <th><?= $block->escapeHtml(__('Account Created on (%1):', $block->getStoreCreateDateTimezone())) ?></th>
+                <td><?= $block->escapeHtml($createDateStore) ?></td>
             </tr>
         <?php endif; ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Account Created in:') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $block->getCreatedInStore() ?></td>
+            <th><?= $block->escapeHtml(__('Account Created in:')) ?></th>
+            <td><?= $block->escapeHtml($block->getCreatedInStore()) ?></td>
         </tr>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Customer Group:') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $block->getGroupName() ?></td>
+            <th><?= $block->escapeHtml(__('Customer Group:')) ?></th>
+            <td><?= $block->escapeHtml($block->getGroupName()) ?></td>
         </tr>
         </tbody>
     </table>
     <address>
-        <strong><?php /* @escapeNotVerified */ echo __('Default Billing Address') ?></strong><br/>
-        <?php echo $block->getBillingAddressHtml() ?>
+        <strong><?= $block->escapeHtml(__('Default Billing Address')) ?></strong><br/>
+        <?= $block->getBillingAddressHtml() ?>
     </address>
 
 </div>

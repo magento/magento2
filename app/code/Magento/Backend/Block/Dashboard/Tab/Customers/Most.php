@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Customers;
@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Dashboard\Tab\Customers;
 /**
  * Adminhtml dashboard most active buyers
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Most extends \Magento\Backend\Block\Dashboard\Grid
@@ -80,7 +80,14 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
 
         $this->addColumn(
             'orders_count',
-            ['header' => __('Orders'), 'sortable' => false, 'index' => 'orders_count', 'type' => 'number']
+            [
+                'header' => __('Orders'),
+                'sortable' => false,
+                'index' => 'orders_count',
+                'type' => 'number',
+                'header_css_class' => 'col-orders',
+                'column_css_class' => 'col-orders'
+            ]
         );
 
         $baseCurrencyCode = (string)$this->_storeManager->getStore(

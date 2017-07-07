@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,10 +9,10 @@
 <?php if ($block->isPossibleOnepageCheckout()):?>
     <button type="button"
             data-role="proceed-to-checkout"
-            title="<?php /* @escapeNotVerified */ echo __('Proceed to Checkout') ?>"
-            data-mage-init='{"Magento_Checkout/js/proceed-to-checkout":{"checkoutUrl":"<?php /* @escapeNotVerified */ echo $block->getCheckoutUrl(); ?>"}}'
-            class="action primary checkout<?php echo($block->isDisabled()) ? ' disabled' : ''; ?>"
+            title="<?= /* @escapeNotVerified */ __('Proceed to Checkout') ?>"
+            data-mage-init='{"Magento_Checkout/js/proceed-to-checkout":{"checkoutUrl":"<?= /* @escapeNotVerified */ $block->getCheckoutUrl() ?>"}}'
+            class="action primary checkout<?= ($block->isDisabled()) ? ' disabled' : '' ?>"
             <?php if ($block->isDisabled()):?>disabled="disabled"<?php endif; ?>>
-        <span><?php /* @escapeNotVerified */ echo __('Proceed to Checkout') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Proceed to Checkout') ?></span>
     </button>
 <?php endif?>

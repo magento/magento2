@@ -2,7 +2,7 @@
 /**
  * Data Model implementing the Address interface
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Data;
@@ -13,6 +13,8 @@ use \Magento\Framework\Api\AttributeValueFactory;
 /**
  * Class Address
  *
+ *
+ * @api
  */
 class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\AddressInterface

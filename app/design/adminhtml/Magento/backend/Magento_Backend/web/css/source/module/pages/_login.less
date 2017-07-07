@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -25,13 +25,17 @@
 
 //  Login box
 .page-layout-admin-login {
-    align-items: center;
+    .lib-vendor-box-align(center);
     .lib-vendor-prefix-display(flex);
     background-color: @login-page__background-color;
-    padding: 2rem 0 20rem;
+    height: 101%;
+    max-height: 100%;
+    min-width: 50rem;
+
+
     .page-wrapper {
-        .lib-vendor-prefix-flex-shrink(0);
         .lib-vendor-prefix-flex-grow(0);
+        .lib-vendor-prefix-flex-shrink(0);
         background-color: @login-box__background-color;
         border: @login-box__border;
         box-shadow: @login-box__shadow;
@@ -45,19 +49,24 @@
         position: relative;
         width: 100%;
         z-index: 1;
+
         .ie9 & {
             margin-top: 10%;
         }
     }
+
     :-ms-input-placeholder {
         color: transparent;
     }
+
     ::-webkit-input-placeholder {
         color: transparent;
     }
+
     ::-moz-placeholder {
         color: transparent;
     }
+
     .admin__legend {
         color: @color-phoenix;
         font-size: 2.6rem;
@@ -65,47 +74,47 @@
         line-height: @line-height__s;
         margin: -1rem 0 2.5rem;
     }
+
     .admin__field-info {
         margin-bottom: 3rem;
     }
+
     .admin__field {
         &:extend(.abs-field-rows all);
     }
+
     .messages {
         margin-top: -1rem;
+
         + form .admin__legend {
             display: none;
         }
     }
+
     .actions {
         padding: 0 0 3rem;
     }
+
     .action-primary {
         &:extend(.abs-action-l all);
     }
 }
 
-// @todo ui - Find out if this trick still relevant app/code/Magento/Backend/view/adminhtml/templates/admin/login.phtml:23
-.admin__control-dummy {
-    display: none;
-}
-
-// Footer
+//  Footer
 .login-footer {
+    color: @color-heathered-grey;
+    font-size: @font-size__xs;
+    font-weight: @font-weight__regular;
     left: 0;
+    margin: 5rem 0 2rem;
     position: absolute;
+    text-align: center;
     top: 100%;
     width: 100%;
-    .copyright {
-        color: @color-heathered-grey;
-        font-size: @font-size__xs;
-        font-weight: @font-weight__regular;
-        margin: 5rem 0 2rem;
-        text-align: center;
-        .link-copyright {
-            &:before {
-                display: none;
-            }
+
+    .link-copyright {
+        &:before {
+            display: none;
         }
     }
 }
@@ -118,9 +127,11 @@
     .form-actions {
         display: table;
         margin-top: -2rem;
+
         .links {
             display: table-header-group;
         }
+
         .actions {
             padding: 3rem 0 0;
         }

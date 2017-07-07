@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Shipment;
@@ -67,7 +67,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Comment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Comment::class);
     }
 
     /**
@@ -110,6 +110,7 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns comment
      *
@@ -221,5 +222,6 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

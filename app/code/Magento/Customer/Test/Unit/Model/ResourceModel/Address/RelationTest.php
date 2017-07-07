@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address;
@@ -21,14 +21,14 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->customerFactoryMock = $this->getMock(
-            'Magento\Customer\Model\CustomerFactory',
+            \Magento\Customer\Model\CustomerFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->relation = (new ObjectManagerHelper($this))->getObject(
-            'Magento\Customer\Model\ResourceModel\Address\Relation',
+            \Magento\Customer\Model\ResourceModel\Address\Relation::class,
             [
                 'customerFactory' => $this->customerFactoryMock
             ]
@@ -44,7 +44,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     public function testProcessRelation($addressId, $isDefaultBilling, $isDefaultShipping)
     {
         $addressModel = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
+            \Magento\Framework\Model\AbstractModel::class,
             [
                 '__wakeup',
                 'getId',
@@ -62,14 +62,14 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             false
         );
         $customerModel = $this->getMock(
-            'Magento\Customer\Model\Customer',
+            \Magento\Customer\Model\Customer::class,
             ['__wakeup', 'setDefaultBilling', 'setDefaultShipping', 'save', 'load', 'getResource', 'getId'],
             [],
             '',
             false
         );
         $customerResource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -78,7 +78,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             ['getConnection', 'getTable']
         );
         $connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,

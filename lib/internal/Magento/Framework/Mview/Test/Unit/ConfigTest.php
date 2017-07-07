@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->dataMock = $this->getMock(
-            'Magento\Framework\Mview\Config\Data', [], [], '', false
+            \Magento\Framework\Mview\Config\Data::class, [], [], '', false
         );
         $this->model = new Config(
             $this->dataMock

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@ namespace Magento\Paypal\Model;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
@@ -41,12 +42,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Payflow\Link\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Payflow\Link\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payflow\Link\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Availability option
@@ -110,6 +111,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @var OrderSender
      */
     protected $orderSender;
+
+    /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -303,18 +309,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $response = $this->getResponse();
         $payment = $order->getPayment();
         $payment->setTransactionId($response->getPnref())->setIsTransactionClosed(0);
-        $canSendNewOrderEmail = true;
+        $payment->setCcType($response->getData(OrderPaymentInterface::CC_TYPE));
 
+        $canSendNewOrderEmail = true;
         if ($response->getResult() == self::RESPONSE_CODE_FRAUDSERVICE_FILTER ||
             $response->getResult() == self::RESPONSE_CODE_DECLINED_BY_FILTER
         ) {
             $canSendNewOrderEmail = false;
 
-            $payment->setIsTransactionPending(
-                true
-            )->setIsFraudDetected(
-                true
-            );
+            $payment->setIsTransactionPending(true)
+                ->setIsFraudDetected(true);
 
             $fraudMessage = $response->getData('respmsg');
             if ($response->getData('fps_prexmldata')) {
@@ -393,12 +397,16 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             $order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
             !$amountCompared
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__(self::RESPONSE_ERROR_MSG, 'Order'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment error. %value was not found.', ['value' => 'Order'])
+            );
         }
 
         $fetchData = $this->fetchTransactionInfo($order->getPayment(), $response->getPnref());
         if (!isset($fetchData['custref']) || $fetchData['custref'] != $order->getIncrementId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__(self::RESPONSE_ERROR_MSG, 'Transaction'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment error. %value was not found.', ['value' => 'Transaction'])
+            );
         }
 
         return $order;

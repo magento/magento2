@@ -2,11 +2,21 @@
 /**
  * Customer address entity resource model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Controller\Adminhtml\Group\Delete;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Class Address
+ * @package Magento\Customer\Model\ResourceModel
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
@@ -110,20 +120,32 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @deprecated
+     * @return DeleteRelation
+     */
+    private function getDeleteRelation()
+    {
+        return ObjectManager::getInstance()->get(DeleteRelation::class);
+    }
+
+    /**
+     * @deprecated
+     * @return CustomerRegistry
+     */
+    private function getCustomerRegistry()
+    {
+        return ObjectManager::getInstance()->get(CustomerRegistry::class);
+    }
+
+    /**
+     * @param \Magento\Customer\Model\Address $address
+     * @return $this
      */
     protected function _afterDelete(\Magento\Framework\DataObject $address)
     {
-        if ($address->getId()) {
-            $customer = $this->customerRepository->getById($address->getCustomerId());
-            if ($customer->getDefaultBilling() == $address->getId()) {
-                $customer->setDefaultBilling(null);
-            }
-            if ($customer->getDefaultShipping() == $address->getId()) {
-                $customer->setDefaultShipping(null);
-            }
-            $this->customerRepository->save($customer);
-        }
+        $customer = $this->getCustomerRegistry()->retrieve($address->getCustomerId());
+
+        $this->getDeleteRelation()->deleteRelation($address, $customer);
         return parent::_afterDelete($address);
     }
 }

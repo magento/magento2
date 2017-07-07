@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Action;
@@ -37,11 +37,13 @@ class Base implements ActionInterface
 
     /**
      * @var AdapterInterface
+     * @deprecated
      */
     protected $connection;
 
     /**
      * @var SourceProviderInterface[]
+     * @deprecated
      */
     protected $sources;
 
@@ -52,6 +54,7 @@ class Base implements ActionInterface
 
     /**
      * @var HandlerInterface[]
+     * @deprecated
      */
     protected $handlers;
 
@@ -62,6 +65,7 @@ class Base implements ActionInterface
 
     /**
      * @var array
+     * @deprecated
      */
     protected $columnTypesMap = [
         'varchar'    => ['type' => Table::TYPE_TEXT, 'size' => 255],
@@ -71,11 +75,13 @@ class Base implements ActionInterface
 
     /**
      * @var array
+     * @deprecated
      */
     protected $filterColumns;
 
     /**
      * @var array
+     * @deprecated
      */
     protected $searchColumns;
 
@@ -96,6 +102,7 @@ class Base implements ActionInterface
 
     /**
      * @var String
+     * @deprecated
      */
     protected $string;
 
@@ -106,11 +113,13 @@ class Base implements ActionInterface
 
     /**
      * @var array
+     * @deprecated
      */
     protected $filterable = [];
 
     /**
      * @var array
+     * @deprecated
      */
     protected $searchable = [];
 
@@ -272,6 +281,7 @@ class Base implements ActionInterface
     protected function createResultCollection()
     {
         $select = $this->getPrimaryResource()->getSelect();
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
         $select->columns($this->getPrimaryResource()->getIdFieldName());
         foreach ($this->data['fieldsets'] as $fieldset) {
             if (isset($fieldset['references'])) {
@@ -342,6 +352,8 @@ class Base implements ActionInterface
      *
      * @param array $field
      * @return void
+     *
+     * @deprecated
      */
     protected function saveFieldByType($field)
     {

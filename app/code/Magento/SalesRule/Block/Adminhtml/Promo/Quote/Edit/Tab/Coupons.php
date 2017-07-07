@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
@@ -10,29 +10,8 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Coupons extends \Magento\Framework\View\Element\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry = null;
-
-    /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Framework\Registry $registry,
-        array $data = []
-    ) {
-        $this->_coreRegistry = $registry;
-        parent::__construct($context, $data);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -54,7 +33,7 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
      */
     public function canShowTab()
     {
-        return $this->_isEditing();
+        return true;
     }
 
     /**
@@ -62,17 +41,15 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
      */
     public function isHidden()
     {
-        return !$this->_isEditing();
+        return false;
     }
 
     /**
-     * Check whether we edit existing rule or adding new one
-     *
-     * @return bool
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
-    protected function _isEditing()
+    public function setCanSHow($canShow)
     {
-        $priceRule = $this->_coreRegistry->registry('current_promo_quote_rule');
-        return $priceRule->getRuleId() !== null;
+        $this->_data['config']['canShow'] = $canShow;
     }
 }

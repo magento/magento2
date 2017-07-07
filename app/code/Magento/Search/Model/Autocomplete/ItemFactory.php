@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,6 @@ class ItemFactory
      */
     public function create(array $data)
     {
-        return $this->objectManager->create('\Magento\Search\Model\Autocomplete\Item', ['data' => $data]);
+        return $this->objectManager->create(\Magento\Search\Model\Autocomplete\Item::class, ['data' => $data]);
     }
 }

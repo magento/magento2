@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -94,8 +94,9 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
                 : 0,
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
             'items' => $this->getRecentItems(),
-            'extra_actions' => $this->layout->createBlock('Magento\Catalog\Block\ShortcutButtons')->toHtml(),
+            'extra_actions' => $this->layout->createBlock(\Magento\Catalog\Block\ShortcutButtons::class)->toHtml(),
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
+            'website_id' => $this->getQuote()->getStore()->getWebsiteId()
         ];
     }
 
@@ -150,12 +151,15 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
         foreach (array_reverse($this->getAllQuoteItems()) as $item) {
             /* @var $item \Magento\Quote\Model\Quote\Item */
             if (!$item->getProduct()->isVisibleInSiteVisibility()) {
-                $productId = $item->getProduct()->getId();
-                $products = $this->catalogUrl->getRewriteByProductStore([$productId => $item->getStoreId()]);
-                if (!isset($products[$productId])) {
+                $product =  $item->getOptionByCode('product_type') !== null
+                    ? $item->getOptionByCode('product_type')->getProduct()
+                    : $item->getProduct();
+
+                $products = $this->catalogUrl->getRewriteByProductStore([$product->getId() => $item->getStoreId()]);
+                if (!isset($products[$product->getId()])) {
                     continue;
                 }
-                $urlDataObject = new \Magento\Framework\DataObject($products[$productId]);
+                $urlDataObject = new \Magento\Framework\DataObject($products[$product->getId()]);
                 $item->getProduct()->setUrlDataObject($urlDataObject);
             }
             $items[] = $this->itemPoolInterface->getItemData($item);

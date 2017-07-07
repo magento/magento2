@@ -1,56 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Category\UpdateCategoryEntityTest" summary="Update Category" ticketId="MAGETWO-23290">
-        <variation name="UpdateCategoryEntityTestVariation1">
+        <variation name="UpdateCategoryEntityTestVariation1_Name_Description_UrlKey_MetaTitle_ExcludeFromMenu">
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/name" xsi:type="string">Name%isolation%</data>
-            <data name="category/data/is_active" xsi:type="string">Yes</data>
+            <data name="category/data/include_in_menu" xsi:type="string">No</data>
+            <data name="category/data/description" xsi:type="string">Category Description Updated</data>
             <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
-            <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
-            <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
-            <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
-            <data name="category/data/default_sort_by" xsi:type="string">Name</data>
+            <data name="category/data/meta_title" xsi:type="string">Category Title Updated</data>
+            <data name="redirectType" xsi:type="string">No</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryRedirect" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
         </variation>
-        <variation name="UpdateCategoryEntityTestVariation2">
+        <variation name="UpdateCategoryEntityTestVariation2_SortProductsBy_DefaultProductSorting_AddProduct">
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
-            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
-            <data name="category/data/is_active" xsi:type="string">Yes</data>
-            <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
-            <data name="category/data/description" xsi:type="string">Category Description</data>
-            <data name="category/data/meta_title" xsi:type="string">Category Title</data>
-            <data name="category/data/include_in_menu" xsi:type="string">Yes</data>
+            <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
+            <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
+            <data name="category/data/default_sort_by" xsi:type="string">Product Name</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
-            <data name="category/data/available_sort_by/sort_2" xsi:type="string">Position</data>
+            <data name="category/data/available_sort_by/sort_2" xsi:type="string">Product Name</data>
             <data name="category/data/available_sort_by/sort_1" xsi:type="string">Price</data>
-            <data name="category/data/default_product_listing_config" xsi:type="string">Yes</data>
+            <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
-        <variation name="UpdateCategoryEntityTestVariation3">
+        <variation name="UpdateCategoryEntityTestVariation3_MakeInactive">
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
-            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <data name="category/data/is_active" xsi:type="string">No</data>
+            <data name="category/data/name" xsi:type="string">Name%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryIsNotActive" />
         </variation>
-        <variation name="UpdateCategoryEntityTestVariation4" summary="Update Category with custom Store View.">
+        <variation name="UpdateCategoryEntityTestVariation4_ChangeCategoryNameOnStoreView" summary="Update Category with custom Store View.">
             <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
+	        <data name="category/data/use_default_name" xsi:type="string">No</data>
             <data name="category/data/name" xsi:type="string">Category %isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryWithCustomStoreOnFrontend" />
+        </variation>
+        <variation name="UpdateCategoryEntityTestVariation5_ChangeCategoryUrlOnStoreView" summary="Update URL Key with custom Store View." ticketId="MAGETWO-16471">
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
+            <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
+            <data name="category/data/use_default_url_key" xsi:type="string">No</data>
+            <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomStore" />
+        </variation>
+        <variation name="UpdateCategoryEntityTestVariation6_CheckCategoryDefaultUrlOnStoreView" summary="Check default URL Key on the custom Store View." ticketId="MAGETWO-64337">
+            <data name="initialCategory/dataset" xsi:type="string">default_with_custom_url</data>
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
+            <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
+            <data name="category/data/use_default_url_key" xsi:type="string">Yes</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
     </testCase>
 </config>

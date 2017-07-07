@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,12 @@
 ?>
 <div class="pp-buttons-container">
     <button onclick="javascript:window.open(
-            '<?php echo $block->escapeUrl($block->getButtonUrl()); ?>',
+            '<?= $block->escapeUrl($block->getButtonUrl()) ?>',
             'bmlapiwizard',
             'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
             'left=100, top=100, width=550, height=550'
         ); return false;"
-            class="scalable" type="button" id="<?php echo $block->escapeHtml($block->getHtmlId()); ?>">
-        <span><span><span><?php echo $block->escapeHtml($block->getButtonLabel()); ?></span></span></span>
+            class="scalable" type="button" id="<?= $block->escapeHtml($block->getHtmlId()) ?>">
+        <span><span><span><?= $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
     </button>
 </div>

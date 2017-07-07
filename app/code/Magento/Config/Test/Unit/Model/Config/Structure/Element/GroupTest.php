@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
@@ -28,14 +28,14 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->_cloneFactoryMock = $this->getMock(
-            'Magento\Config\Model\Config\BackendClone\Factory',
+            \Magento\Config\Model\Config\BackendClone\Factory::class,
             [],
             [],
             '',
             false
         );
         $this->_depMapperMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Dependency\Mapper',
+            \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class,
             [],
             [],
             '',
@@ -43,7 +43,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = $objectManager->getObject(
-            'Magento\Config\Model\Config\Structure\Element\Group',
+            \Magento\Config\Model\Config\Structure\Element\Group::class,
             [
                 'cloneModelFactory' => $this->_cloneFactoryMock,
                 'dependencyMapper' => $this->_depMapperMock,
@@ -79,9 +79,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCloneModelCreatesCloneModel()
     {
-        $cloneModel = $this->getMock('Magento\Framework\App\Config\ValueInterface', [], [], '', false);
+        $cloneModel = $this->getMock(\Magento\Framework\App\Config\ValueInterface::class, [], [], '', false);
         $this->_depMapperMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Dependency\Mapper',
+            \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class,
             [],
             [],
             '',
@@ -103,7 +103,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testGetFieldsetSetsOnlyNonArrayValuesToFieldset()
     {
         $fieldsetMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Fieldset',
+            \Magento\Framework\Data\Form\Element\Fieldset::class,
             ['setOriginalData'],
             [],
             '',

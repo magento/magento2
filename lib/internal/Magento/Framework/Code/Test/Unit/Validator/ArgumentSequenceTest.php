@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
@@ -51,7 +51,7 @@ class ArgumentSequenceTest extends \PHPUnit_Framework_TestCase
             'Actual  : %s' .
             PHP_EOL;
         $message = sprintf($message, '\ArgumentSequence\InvalidChildClass', $expectedSequence, $actualSequence);
-        $this->setExpectedException('Magento\Framework\Exception\ValidatorException', $message);
+        $this->setExpectedException(\Magento\Framework\Exception\ValidatorException::class, $message);
         $this->_validator->validate('\ArgumentSequence\InvalidChildClass');
     }
 }

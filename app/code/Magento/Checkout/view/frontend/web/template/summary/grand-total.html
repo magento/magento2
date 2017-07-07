@@ -1,14 +1,16 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <!-- ko if: isDisplayed() -->
-<tr>
-    <td colspan="2" data-bind="text: title"></td>
-    <td class="col grandtotal">
-        <span data-bind ="text: getValue(), attr:{'data-label': title}"></span>
+<tr class="grand totals">
+    <td class="mark" scope="row">
+        <strong data-bind="i18n: title"></strong>
+    </td>
+    <td class="amount" data-bind="attr: {'data-th': $t(title)}">
+        <strong><span class="price" data-bind="text: getValue()"></span></strong>
         <!-- ko foreach: elems() -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->

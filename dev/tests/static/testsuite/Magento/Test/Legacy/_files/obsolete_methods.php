@@ -2,7 +2,7 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1731,6 +1731,7 @@ return [
     ['reset', 'Magento\CatalogInventory\Model\Stock\Item'],
     ['prepareValueForDuplicate', 'Magento\Catalog\Model\Product\Option\Value'],
     ['prepareOptionForDuplicate', '\Magento\Catalog\Model\Product\Option'],
+    ['saveOptions', '\Magento\Catalog\Model\Product\Option'],
     [
         'getFlatColums',
         'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
@@ -2154,7 +2155,6 @@ return [
     ['addOrderedQty', 'Magento\Reports\Model\ResourceModel\Product\Collection'],
     ['prepareForProductsInCarts', 'Magento\Reports\Model\ResourceModel\Quote\Collection'],
     ['getOrdersSubSelect', 'Magento\Reports\Model\ResourceModel\Quote\Collection'],
-    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote'],
     ['isStateProtected', 'Magento\Sales\Model\Order'],
     ['_getBundleOptions', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
     ['_getSelectionFinalPrice', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
@@ -2498,10 +2498,28 @@ return [
     ['getQuoteAddressId', 'Magento\Sales\Api\Data\OrderAddressInterface'],
     ['setQuoteAddressId', 'Magento\Sales\Api\Data\OrderAddressInterface'],
     ['getPaymentById', 'Magento\Quote\Model\Quote'],
+    ['prepareVariationCollection', 'Magento\Swatches\Helper\Data'],
+    ['getProductMedia', 'Magento\Swatches\Helper\Data'],
+    ['createSwatchProduct', 'Magento\Swatches\Helper\Data'],
     ['create', 'Magento\Quote\Model\QuoteRepository'],
     ['set', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::set'],
     ['get', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::get'],
     ['get', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['set', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['getTypeSwitcherData', 'Magento\Catalog\Block\Adminhtml\Product'],
+    ['_afterLoad', 'Magento\CatalogRule\Model\ResourceModel\Rule'],
+    ['_afterSave', 'Magento\CatalogRule\Model\ResourceModel\Rule'],
+    ['_beforeDelete', 'Magento\Cms\Model\ResourceModel\Page'],
+    ['_afterSave', 'Magento\Cms\Model\ResourceModel\Page', 'Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler::execute'],
+    ['_afterLoad', 'Magento\Cms\Model\ResourceModel\Page', 'Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler::execute'],
+    ['_beforeDelete', 'Magento\Cms\Model\ResourceModel\Block'],
+    ['_afterSave', 'Magento\Cms\Model\ResourceModel\Block', 'Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler::execute'],
+    ['_afterLoad', 'Magento\Cms\Model\ResourceModel\Block', 'Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler::execute'],
+    ['getTabElement', 'Magento\Backend\Test\Block\Widget\FormTabs', 'Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers::getContainerElement'],
+    ['getFieldsByTabs', 'Magento\Backend\Test\Block\Widget\FormTabs', 'Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers::getFixtureFieldsByContainers'],
+    ['fillFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::setFieldsData'],
+    ['getDataFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::getFieldsData'],
+    ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
+    ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
+    ['var_dump', '']
 ];

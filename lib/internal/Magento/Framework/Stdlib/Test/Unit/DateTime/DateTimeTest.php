@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
@@ -17,7 +17,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGmtTimestamp()
     {
-        $timezone = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->getMock();
+        $timezone = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)->getMock();
         $timezone->expects($this->any())
             ->method('date')
             ->willReturn(new \DateTime('2015-04-02 21:03:00'));

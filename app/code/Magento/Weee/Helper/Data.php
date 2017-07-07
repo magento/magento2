@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Helper;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
-use Magento\Catalog\Model\Product\Type;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
  * WEEE data helper
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -77,12 +80,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $cacheProductWeeeAmount = '_cache_product_weee_amount';
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Data constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Weee\Model\Tax $weeeTax
      * @param \Magento\Weee\Model\Config $weeeConfig
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -90,13 +102,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Weee\Model\Tax $weeeTax,
         \Magento\Weee\Model\Config $weeeConfig,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_weeeTax = $weeeTax;
         $this->_coreRegistry = $coreRegistry;
         $this->_taxData = $taxData;
         $this->_weeeConfig = $weeeConfig;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context);
     }
 
@@ -373,7 +388,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (empty($data)) {
             return [];
         }
-        return \Zend_Json::decode($item->getWeeeTaxApplied());
+        return $this->serializer->unserialize($item->getWeeeTaxApplied());
     }
 
     /**
@@ -385,7 +400,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function setApplied($item, $value)
     {
-        $item->setWeeeTaxApplied(\Zend_Json::encode($value));
+        $item->setWeeeTaxApplied($this->serializer->serialize($value));
         return $this;
     }
 
@@ -705,6 +720,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns the base total amount of FPT across all items.  Used for displaying the FPT totals line item.
+     *
+     * @param  \Magento\Quote\Model\Quote\Item\AbstractItem[] $items
+     * @param  null|string|bool|int|Store $store
+     * @return float
+     */
+    public function getBaseTotalAmounts($items, $store = null)
+    {
+        $baseWeeeTotal = 0;
+        $displayTotalsInclTax = $this->displayTotalsInclTax($store);
+        foreach ($items as $item) {
+            if ($displayTotalsInclTax) {
+                $baseWeeeTotal += $this->getBaseRowWeeeTaxInclTax($item);
+            } else {
+                $baseWeeeTotal += $item->getBaseWeeeTaxAppliedRowAmount();
+            }
+        }
+        return $baseWeeeTotal;
+    }
+
+    /**
      * Get FPT DISPLAY_INCL setting
      *
      * @param  int|null $storeId
@@ -791,19 +827,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $typeInstance->getOptionsIds($product),
                 $product
             );
-            $insertedWeeCodesArray = [];
+            $insertedWeeeCodesArray = [];
             foreach ($selectionCollection as $selectionItem) {
-                $weeAttributes = $this->getProductWeeeAttributes(
+                $weeeAttributes = $this->getProductWeeeAttributes(
                     $selectionItem,
                     null,
                     null,
-                    $product->getStore()->getWebsiteId()
+                    $product->getStore()->getWebsiteId(),
+                    true,
+                    false
                 );
-                foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
+                $priceTaxDisplay = $this->getTaxDisplayConfig();
+                $priceIncludesTax = $this->displayTotalsInclTax();
+                foreach ($weeeAttributes as $weeeAttribute) {
+                    if ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX ||
+                        $priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) {
+                        if ($priceIncludesTax == false) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'] + $weeeAttribute['tax_amount'];
+                        }
+                    } elseif ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                        if ($priceIncludesTax == true) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'];
+                        }
+                    }
+                    $insertedWeeeCodesArray[$selectionItem->getId()][$weeeAttribute->getCode()] = $weeeAttribute;
                 }
             }
-            return $insertedWeeCodesArray;
+            return $insertedWeeeCodesArray;
         }
         return [];
     }

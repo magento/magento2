@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,18 +41,19 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     /**
      * SetUp
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
-        $this->messageSessionMock = $this->getMock('Magento\Framework\Message\Session',
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $this->messageSessionMock = $this->getMock(
+            \Magento\Framework\Message\Session::class,
             ['clearStorage'],
             [],
             '',
             false
         );
         $this->depersonalizeCheckerMock = $this->getMock(
-            'Magento\PageCache\Model\DepersonalizeChecker',
+            \Magento\PageCache\Model\DepersonalizeChecker::class,
             [],
             [],
             '',
@@ -67,7 +68,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGenerateXml()
     {
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $expectedResult = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
 
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
@@ -86,7 +87,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
         $this->messageSessionMock->expects($this->never())->method('clearStorage');
 
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $expectedResult = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
         $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
         $this->assertEquals($expectedResult, $actualResult);
     }

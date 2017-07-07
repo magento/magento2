@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Framework\Acl\AclResourceFactory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Test\Unit;
@@ -28,12 +28,12 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
-        $this->_expectedObject = $this->getMock('Magento\Framework\Acl\AclResource', [], [], '', false);
+        $this->_expectedObject = $this->getMock(\Magento\Framework\Acl\AclResource::class, [], [], '', false);
 
         $this->_model = $helper->getObject(
-            'Magento\Framework\Acl\AclResourceFactory',
+            \Magento\Framework\Acl\AclResourceFactory::class,
             ['objectManager' => $this->_objectManager]
         );
     }
@@ -46,7 +46,7 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\Acl\AclResource',
+            \Magento\Framework\Acl\AclResource::class,
             $arguments
         )->will(
             $this->returnValue($this->_expectedObject)

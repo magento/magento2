@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -25,9 +25,9 @@ class InvoiceCommentsListTest extends WebapiAbstract
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Collection $invoiceCollection */
-        $invoiceCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Invoice\Collection');
+        $invoiceCollection = $objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Invoice\Collection::class);
         $invoice = $invoiceCollection->getFirstItem();
-        $invoiceComment = $objectManager->get('Magento\Sales\Model\Order\Invoice\Comment');
+        $invoiceComment = $objectManager->get(\Magento\Sales\Model\Order\Invoice\Comment::class);
         $invoiceComment->setComment($comment);
         $invoiceComment->setParentId($invoice->getId());
         $invoiceComment->save();
@@ -48,7 +48,7 @@ class InvoiceCommentsListTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
         foreach ($result['items'] as $item) {
             /** @var \Magento\Sales\Model\Order\Invoice\Comment $invoiceHistoryStatus */
-            $invoiceHistoryStatus = $objectManager->get('Magento\Sales\Model\Order\Invoice\Comment')
+            $invoiceHistoryStatus = $objectManager->get(\Magento\Sales\Model\Order\Invoice\Comment::class)
                 ->load($item['entity_id']);
             $this->assertEquals($invoiceHistoryStatus->getComment(), $item['comment']);
         }

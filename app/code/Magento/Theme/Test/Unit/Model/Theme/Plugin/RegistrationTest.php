@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Plugin;
@@ -26,31 +26,151 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
     protected $appState;
 
-    public function setUp()
+    /** @var \Magento\Theme\Model\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    protected $themeCollection;
+
+    /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    protected $themeLoader;
+
+    /** @var Registration */
+    protected $plugin;
+
+    protected function setUp()
     {
-        $this->themeRegistration = $this->getMock('Magento\Theme\Model\Theme\Registration', [], [], '', false);
-        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
-        $this->abstractAction = $this->getMockForAbstractClass('Magento\Backend\App\AbstractAction', [], '', false);
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface', [], '', false);
-        $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->themeRegistration = $this->getMock(\Magento\Theme\Model\Theme\Registration::class, [], [], '', false);
+        $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
+        $this->abstractAction = $this->getMockForAbstractClass(
+            \Magento\Backend\App\AbstractAction::class,
+            [],
+            '',
+            false
+        );
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->themeCollection = $this->getMock(\Magento\Theme\Model\Theme\Collection::class, [], [], '', false);
+        $this->themeLoader = $this->getMock(
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->plugin = new Registration(
+            $this->themeRegistration,
+            $this->themeCollection,
+            $this->themeLoader,
+            $this->logger,
+            $this->appState
+        );
     }
 
-    public function testBeforeDispatch()
+    /**
+     * @param bool $hasParentTheme
+     * @dataProvider dataProviderBeforeDispatch
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function testBeforeDispatch(
+        $hasParentTheme
+    ) {
+        $themeId = 1;
+        $themeTitle = 'Theme title';
+
+        $themeFromConfigMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getArea',
+                'getThemePath',
+                'getParentTheme',
+                'getThemeTitle',
+            ])
+            ->getMock();
+
+        $themeFromDbMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'setParentId',
+                'setThemeTitle',
+                'save',
+            ])
+            ->getMock();
+
+        $parentThemeFromDbMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $parentThemeFromConfigMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn('default');
+
+        $this->themeRegistration->expects($this->once())
+            ->method('register');
+
+        $this->themeCollection->expects($this->once())
+            ->method('loadData')
+            ->willReturn([$themeFromConfigMock]);
+
+        $this->themeLoader->expects($hasParentTheme ? $this->exactly(2) : $this->once())
+            ->method('getThemeByFullPath')
+            ->willReturnMap([
+                ['frontend/Magento/blank', $parentThemeFromDbMock],
+                ['frontend/Magento/luma', $themeFromDbMock],
+            ]);
+
+        $themeFromConfigMock->expects($this->once())
+            ->method('getArea')
+            ->willReturn('frontend');
+        $themeFromConfigMock->expects($this->once())
+            ->method('getThemePath')
+            ->willReturn('Magento/luma');
+        $themeFromConfigMock->expects($hasParentTheme ? $this->exactly(2) : $this->once())
+            ->method('getParentTheme')
+            ->willReturn($hasParentTheme ? $parentThemeFromConfigMock : null);
+        $themeFromConfigMock->expects($this->once())
+            ->method('getThemeTitle')
+            ->willReturn($themeTitle);
+
+        $parentThemeFromDbMock->expects($hasParentTheme ? $this->once() : $this->never())
+            ->method('getId')
+            ->willReturn($themeId);
+
+        $parentThemeFromConfigMock->expects($hasParentTheme ? $this->once() : $this->never())
+            ->method('getFullPath')
+            ->willReturn('frontend/Magento/blank');
+
+        $themeFromDbMock->expects($hasParentTheme ? $this->once() : $this->never())
+            ->method('setParentId')
+            ->with($themeId)
+            ->willReturnSelf();
+        $themeFromDbMock->expects($this->once())
+            ->method('setThemeTitle')
+            ->with($themeTitle)
+            ->willReturnSelf();
+        $themeFromDbMock->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
+
+        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderBeforeDispatch()
     {
-        $this->appState->expects($this->once())->method('getMode')->willReturn('default');
-        $this->themeRegistration->expects($this->once())->method('register');
-        $this->logger->expects($this->never())->method('critical');
-        $object = new Registration($this->themeRegistration, $this->logger, $this->appState);
-        $object->beforeDispatch($this->abstractAction, $this->request);
+        return [
+            [true],
+            [false],
+        ];
     }
 
     public function testBeforeDispatchWithProductionMode()
     {
         $this->appState->expects($this->once())->method('getMode')->willReturn('production');
-        $this->themeRegistration->expects($this->never())->method('register');
-        $this->logger->expects($this->never())->method('critical');
-        $object = new Registration($this->themeRegistration, $this->logger, $this->appState);
-        $object->beforeDispatch($this->abstractAction, $this->request);
+        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
     }
 
     public function testBeforeDispatchWithException()
@@ -58,7 +178,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         $exception = new LocalizedException(new Phrase('Phrase'));
         $this->themeRegistration->expects($this->once())->method('register')->willThrowException($exception);
         $this->logger->expects($this->once())->method('critical');
-        $object = new Registration($this->themeRegistration, $this->logger, $this->appState);
-        $object->beforeDispatch($this->abstractAction, $this->request);
+
+        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
     }
 }

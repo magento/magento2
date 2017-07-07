@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,13 +9,13 @@
     <update handle="sales_email_order_renderers"/>
     <update handle="sales_email_item_price"/>
     <body>
-        <block class="Magento\Sales\Block\Order\Email\Items" name="items" template="email/items.phtml" cacheable="false">
+        <block class="Magento\Sales\Block\Order\Email\Items" name="items" template="Magento_Sales::email/items.phtml" cacheable="false">
             <block class="Magento\Framework\View\Element\RendererList" name="sales.email.order.renderers" as="renderer.list"/>
-            <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">
+            <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="Magento_Sales::order/totals.phtml">
                 <arguments>
                     <argument name="label_properties" xsi:type="string">colspan="2"</argument>
                 </arguments>
-                <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="order/tax.phtml">
+                <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/tax.phtml">
                     <action method="setIsPlaneMode">
                         <argument name="value" xsi:type="string">1</argument>
                     </action>

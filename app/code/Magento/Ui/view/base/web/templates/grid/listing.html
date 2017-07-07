@@ -1,41 +1,22 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="admin__data-grid-wrap" data-role="grid-wrapper">
     <table class="data-grid" data-role="grid">
        <thead>
-            <tr data-bind="fastForEach: {data: getVisible(), as: '$col'}">
-                <!-- ko template: $col.getHeader() --><!-- /ko -->
-            </tr>
+            <tr each="data: getVisible(), as: '$col'" render="getHeader()"/>
         </thead>
         <tbody>
-            <!-- ko repeat: {foreach: rows, item: '$row'} -->
-            <tr class="data-row"
-                data-bind="
-                    css: {
-                        '_odd-row': !!($index % 2)
-                    }
-                ">
-                <!-- ko fastForEach: {data: getVisible(), as: '$col'} -->
-                <td data-bind="
-                        css: $col.getFieldClass(),
-                        click: $col.getFieldHandler($row()),
-                        template: $col.getBody()
-                    ">
-                </td>
-                <!-- /ko -->
+            <tr class="data-row" repeat="foreach: rows, item: '$row'" css="'_odd-row': $index % 2">
+                <td outerfasteach="data: getVisible(), as: '$col'"
+                    css="getFieldClass($row())" click="getFieldHandler($row())" template="getBody()"/>
             </tr>
-            <!-- /ko -->
-
-            <!-- ko ifnot: hasData() -->
-                <tr class="data-grid-tr-no-data">
-                    <td data-bind="attr: { colspan: countVisible() },
-                                   i18n: 'We couldn\'t find any records.'"></td>
-                </tr>
-            <!-- /ko -->
+            <tr ifnot="hasData()" class="data-grid-tr-no-data">
+                <td attr="colspan: countVisible()" translate="'We couldn\'t find any records.'"/>
+            </tr>
         </tbody>
     </table>
 </div>

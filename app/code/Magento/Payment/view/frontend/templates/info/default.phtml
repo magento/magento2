@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,16 +14,16 @@ $specificInfo = $block->getSpecificInformation();
 $title = $block->escapeHtml($block->getMethod()->getTitle());
 ?>
 <dl class="payment-method">
-    <dt class="title"><?php /* @noEscape */ echo $title; ?></dt>
+    <dt class="title"><?= /* @noEscape */ $title ?></dt>
 <?php if ($specificInfo):?>
     <dd class="content">
         <table class="data table">
-            <caption class="table-caption"><?php /* @noEscape */ echo $title; ?></caption>
+            <caption class="table-caption"><?= /* @noEscape */ $title ?></caption>
             <?php foreach ($specificInfo as $label => $value):?>
                 <tr>
-                    <th scope="row"><?php echo $block->escapeHtml($label)?></th>
+                    <th scope="row"><?= $block->escapeHtml($label) ?></th>
                     <td>
-                        <?php /* @noEscape */ echo nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true))));?>
+                        <?= /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true)))) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -31,4 +31,4 @@ $title = $block->escapeHtml($block->getMethod()->getTitle());
     </dd>
 <?php endif;?>
 </dl>
-<?php echo $block->getChildHtml()?>
+<?= $block->getChildHtml() ?>

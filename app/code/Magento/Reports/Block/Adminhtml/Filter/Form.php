@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,9 @@ namespace Magento\Reports\Block\Adminhtml\Filter;
 /**
  * Adminhtml report filter form
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -159,7 +161,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'date_format' => $dateFormat,
                 'label' => __('From'),
                 'title' => __('From'),
-                'required' => true
+                'required' => true,
+                'css_class' => 'admin__field-small',
+                'class' => 'admin__control-text'
             ]
         );
 
@@ -171,7 +175,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'date_format' => $dateFormat,
                 'label' => __('To'),
                 'title' => __('To'),
-                'required' => true
+                'required' => true,
+                'css_class' => 'admin__field-small',
+                'class' => 'admin__control-text'
             ]
         );
 

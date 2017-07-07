@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,22 +15,28 @@ class CostTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Creditmemo\Total\Cost
      */
     protected $total;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoMock;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoItemMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->creditmemoMock = $this->getMock('\Magento\Sales\Model\Order\Creditmemo', [
-            'setBaseCost', 'getAllItems'
-        ], [], '', false);
+        $this->creditmemoMock = $this->getMock(
+            \Magento\Sales\Model\Order\Creditmemo::class,
+            ['setBaseCost', 'getAllItems'],
+            [],
+            '',
+            false
+        );
         $this->creditmemoItemMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Creditmemo\Item',
+            \Magento\Sales\Model\Order\Creditmemo\Item::class,
             ['getHasChildren', 'getBaseCost', 'getQty'],
             [],
             '',

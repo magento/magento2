@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper;
@@ -21,7 +21,7 @@ class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new HandlerFactory($this->_objectManagerMock);
     }
 
@@ -29,11 +29,11 @@ class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\InvalidArgumentException',
-            'Magento\Framework\DataObject does not implement ' .
-            'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface'
+            \Magento\Framework\DataObject::class . ' does not implement ' .
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface::class
         );
         $this->_objectManagerMock->expects($this->never())->method('create');
-        $this->_model->create('Magento\Framework\DataObject');
+        $this->_model->create(\Magento\Framework\DataObject::class);
     }
 
     public function testCreateWithValidType()
@@ -43,14 +43,14 @@ class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite'
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite::class
         )->will(
             $this->returnValue('object')
         );
         $this->assertEquals(
             'object',
             $this->_model->create(
-                '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite'
+                \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite::class
             )
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Helper\Backend;
@@ -13,6 +13,8 @@ use Magento\Backend\Model\UrlInterface;
 
 /**
  * Authorize.net Backend Data Helper
+ *
+ * @api
  */
 class Data extends FrontendDataHelper
 {
@@ -85,7 +87,7 @@ class Data extends FrontendDataHelper
      *
      * @param null|int|string $storeId
      * @return string
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getRelayUrl($storeId = null)

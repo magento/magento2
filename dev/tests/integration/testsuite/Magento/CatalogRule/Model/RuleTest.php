@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
@@ -19,7 +19,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $resourceMock = $this->getMock(
-            'Magento\CatalogRule\Model\ResourceModel\Rule',
+            \Magento\CatalogRule\Model\ResourceModel\Rule::class,
             ['getIdFieldName', 'getRulesFromProduct'],
             [],
             '',
@@ -35,7 +35,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_object = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogRule\Model\Rule',
+            \Magento\CatalogRule\Model\Rule::class,
             ['resource' => $resourceMock]
         );
     }
@@ -47,11 +47,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     public function testCalcProductPriceRule()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->assertEquals($this->_object->calcProductPriceRule($product, 100), 45);
         $product->setParentId(true);
-        $this->assertEquals($this->_object->calcProductPriceRule($product, 50), 5);
+        $this->assertEquals($this->_object->calcProductPriceRule($product, 50), 50);
     }
 
     /**
@@ -64,16 +64,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'action_operator' => 'by_percent',
-                'action_amount' => '10.0000',
-                'sub_simple_action' => 'by_percent',
-                'sub_discount_amount' => '90.0000',
-                'action_stop' => '0',
+                'action_amount' => '50.0000',
+                'action_stop' => '0'
             ],
             [
                 'action_operator' => 'by_percent',
-                'action_amount' => '50.0000',
-                'sub_simple_action' => '',
-                'sub_discount_amount' => '0.0000',
+                'action_amount' => '10.0000',
                 'action_stop' => '0'
             ]
         ];

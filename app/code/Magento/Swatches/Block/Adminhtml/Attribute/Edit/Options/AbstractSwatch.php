@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
@@ -78,7 +78,9 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     /**
      * Create store values
      *
-     * @codeCoverageIgnore
+     * Method not intended to escape HTML entities
+     * Escaping will be applied in template files
+     *
      * @param integer $storeId
      * @param integer $optionId
      * @return array
@@ -88,10 +90,8 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
         $value = [];
         $storeValues = $this->getStoreOptionValues($storeId);
         $swatchStoreValue = isset($storeValues['swatch']) ? $storeValues['swatch'] : null;
-        $value['store' . $storeId] = isset($storeValues[$optionId]) ?
-            $this->escapeHtml($storeValues[$optionId]) : '';
-        $value['swatch' . $storeId] = isset($swatchStoreValue[$optionId]) ?
-            $this->escapeHtml($swatchStoreValue[$optionId]) : '';
+        $value['store' . $storeId] = isset($storeValues[$optionId]) ? $storeValues[$optionId] : '';
+        $value['swatch' . $storeId] = isset($swatchStoreValue[$optionId]) ? $swatchStoreValue[$optionId] : '';
 
         return $value;
     }
@@ -110,10 +110,8 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
             $valuesCollection = $this->_attrOptionCollectionFactory->create();
             $valuesCollection->setAttributeFilter(
                 $this->getAttributeObject()->getId()
-            )->setStoreFilter(
-                $storeId,
-                false
             );
+            $this->addCollectionStoreFilter($valuesCollection, $storeId);
             $valuesCollection->getSelect()->joinLeft(
                 ['swatch_table' => $valuesCollection->getTable('eav_attribute_option_swatch')],
                 'swatch_table.option_id = main_table.option_id AND swatch_table.store_id = '.$storeId,
@@ -127,5 +125,32 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
             $this->setData('store_option_values_' . $storeId, $values);
         }
         return $values;
+    }
+
+    /**
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $valuesCollection
+     * @param int $storeId
+     * @return void
+     */
+    private function addCollectionStoreFilter($valuesCollection, $storeId)
+    {
+        $joinCondition = $valuesCollection->getConnection()->quoteInto(
+            'tsv.option_id = main_table.option_id AND tsv.store_id = ?',
+            $storeId
+        );
+
+        $select = $valuesCollection->getSelect();
+        $select->joinLeft(
+            ['tsv' => $valuesCollection->getTable('eav_attribute_option_value')],
+            $joinCondition,
+            'value'
+        );
+        if (\Magento\Store\Model\Store::DEFAULT_STORE_ID == $storeId) {
+            $select->where(
+                'tsv.store_id = ?',
+                $storeId
+            );
+        }
+        $valuesCollection->setOrder('value', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,7 +95,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
         } else {
@@ -127,17 +127,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
         }
-
-        $fieldset->addField(
-            'synonym_for',
-            'text',
-            [
-                'name' => 'synonym_for',
-                'label' => __('Synonym For'),
-                'title' => __('Synonym For'),
-                'note' => __('Will make search for the query above return results for this search')
-            ]
-        );
 
         $fieldset->addField(
             'redirect',

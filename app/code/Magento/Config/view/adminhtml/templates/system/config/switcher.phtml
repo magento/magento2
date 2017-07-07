@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 ?>
 <?php /* @var $block \Magento\Backend\Block\Template */ ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?php /* @escapeNotVerified */ echo __('Current Configuration Scope:') ?></label>
+    <label class="label" for="store_switcher"><?= /* @escapeNotVerified */ __('Current Configuration Scope:') ?></label>
     <div class="control">
         <select id="store_switcher" class="system-config-store-switcher" onchange="location.href=this.options[this.selectedIndex].getAttribute('url')">
         <?php foreach ($block->getStoreSelectOptions() as $_value => $_option): ?>
@@ -17,20 +17,20 @@
             <?php if ($_option['is_close']): ?>
                 </optgroup>
             <?php else: ?>
-                <optgroup label="<?php echo $block->escapeHtml($_option['label']) ?>" style="<?php /* @escapeNotVerified */ echo $_option['style'] ?>">
+                <optgroup label="<?= $block->escapeHtml($_option['label']) ?>" style="<?= /* @escapeNotVerified */ $_option['style'] ?>">
             <?php endif; ?>
             <?php continue ?>
         <?php endif; ?>
-          <option value="<?php echo $block->escapeHtml($_value) ?>" url="<?php /* @escapeNotVerified */ echo $_option['url'] ?>" <?php echo $_option['selected'] ? 'selected="selected"' : '' ?> style="<?php /* @escapeNotVerified */ echo $_option['style'] ?>">
-              <?php echo $block->escapeHtml($_option['label']) ?>
+          <option value="<?= $block->escapeHtml($_value) ?>" url="<?= /* @escapeNotVerified */ $_option['url'] ?>" <?= $_option['selected'] ? 'selected="selected"' : '' ?> style="<?= /* @escapeNotVerified */ $_option['style'] ?>">
+              <?= $block->escapeHtml($_option['label']) ?>
           </option>
         <?php endforeach ?>
         </select>
     </div>
-    <?php echo $block->getHintHtml() ?>
+    <?= $block->getHintHtml() ?>
     <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
         <div class="actions">
-            <a href="<?php /* @escapeNotVerified */ echo $block->getUrl('*/system_store') ?>"><?php /* @escapeNotVerified */ echo __('Stores') ?></a>
+            <a href="<?= /* @escapeNotVerified */ $block->getUrl('*/system_store') ?>"><?= /* @escapeNotVerified */ __('Stores') ?></a>
         </div>
     <?php endif; ?>
 </div>

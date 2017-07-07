@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model;
@@ -9,6 +9,7 @@ use Magento\Framework\Module\Dir;
 
 /**
  * Configuration for reports
+ * @api
  */
 class Config extends \Magento\Framework\DataObject
 {

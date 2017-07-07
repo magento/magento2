@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ $passwordWizard = sprintf(
         </div>
     <p>%s</p>',
     'Password Strength:',
-    'Enter a mix of 7 or more numbers and letters. For a stronger password, include at least one small letter, big letter, and symbol (Ex: BuyIt$54).'
+    'Enter a mix of 7 or more numbers and letters. For a stronger password, include at least one small letter, big letter, and symbol.'
 );
 ?>
 
@@ -29,7 +29,7 @@ $passwordWizard = sprintf(
             <button
                 type="button"
                 class="btn btn-prime"
-                ng-click="nextState()"
+                ng-click="validateCredentials()"
                 ng-disabled="account.$invalid && account.submitted"
                 >Next</button>
         </div>
@@ -40,6 +40,25 @@ $passwordWizard = sprintf(
 </div>
 
 <h2 class="page-sub-title">{{$state.current.header}}</h2>
+
+<div
+    class="message message-success"
+    ng-show="validateCredentials.result.success && validateCredentials.pressed"
+>
+    <span class="message-text">Credentials validation successfully passed.</span>
+</div>
+<div
+    class="message message-error"
+    ng-show="validateCredentials.result.success === false && validateCredentials.result !== undefined"
+>
+    <span class="message-text">{{validateCredentials.result.error}}</span>
+</div>
+<div
+    class="message message-error"
+    ng-show="validateCredentials.failed !== undefined"
+>
+    <span class="message-text">{{validateCredentials.failed}}</span>
+</div>
 
 <p>
     Create a new Admin account to manage your store.
@@ -134,7 +153,7 @@ $passwordWizard = sprintf(
                 class="form-el-input"
                 ng-change="passwordStatusChange()"
                 tooltip-placement="right"
-                tooltip-html-unsafe="<?php echo $passwordWizard; ?>"
+                tooltip-html-unsafe="<?= $passwordWizard ?>"
                 tooltip-trigger="focus"
                 tooltip-append-to-body="true"
                 type="password"
@@ -143,10 +162,14 @@ $passwordWizard = sprintf(
                 ng-class="{'invalid': account.adminPassword.$invalid && account.submitted}"
                 required
                 check-Password
+                check-User-Name-Password
                 >
             <div class="error-container">
                 <span ng-show="account.adminPassword.$error.checkPassword">
                     Please enter a mix of at least 7 alpha-numeric characters.
+                </span>
+                <span ng-show="account.adminPassword.$error.checkUserNamePasswordDifferent">
+                    Password cannot be the same as the user name.
                 </span>
                 <span ng-show="account.adminPassword.$error.required">
                     Please enter your new password.

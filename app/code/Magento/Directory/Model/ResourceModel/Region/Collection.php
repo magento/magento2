@@ -1,14 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Country collection
- */
 namespace Magento\Directory\Model\ResourceModel\Region;
 
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+
+/**
+ * Regions collection
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -31,6 +39,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_localeResolver;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -49,6 +62,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_localeResolver = $localeResolver;
+        $this->_resource = $resource;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -59,7 +73,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Region', 'Magento\Directory\Model\ResourceModel\Region');
+        $this->_init(\Magento\Directory\Model\Region::class, \Magento\Directory\Model\ResourceModel\Region::class);
 
         $this->_countryTable = $this->getTable('directory_country');
         $this->_regionNameTable = $this->getTable('directory_country_region_name');
@@ -84,6 +98,40 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'main_table.region_id = rname.region_id AND rname.locale = :region_locale',
             ['name']
         );
+
+        return $this;
+    }
+
+    /**
+     * Return Allowed Countries reader
+     *
+     * @return \Magento\Directory\Model\AllowedCountries
+     * @deprecated
+     */
+    private function getAllowedCountriesReader()
+    {
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountriesReader;
+    }
+
+    /**
+     * Set allowed countries filter based on the given store.
+     * This is a convenience method for collection filtering based on store configuration settings.
+     *
+     * @param null|int|string|\Magento\Store\Model\Store $store
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
+     */
+    public function addAllowedCountriesFilter($store = null)
+    {
+        $allowedCountries = $this->getAllowedCountriesReader()
+            ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
+
+        if (!empty($allowedCountries)) {
+            $this->addFieldToFilter('main_table.country_id', ['in' => $allowedCountries]);
+        }
 
         return $this;
     }
@@ -186,15 +234,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function toOptionArray()
     {
-        $options = $this->_toOptionArray(
-            'region_id',
-            'default_name',
-            ['title' => 'default_name', 'country_id' => 'country_id']
-        );
+        $options = [];
+        $propertyMap = [
+            'value' => 'region_id',
+            'title' => 'default_name',
+            'country_id' => 'country_id',
+        ];
+
+        foreach ($this as $item) {
+            $option = [];
+            foreach ($propertyMap as $code => $field) {
+                $option[$code] = $item->getData($field);
+            }
+            $option['label'] = $item->getName();
+            $options[] = $option;
+        }
+
         if (count($options) > 0) {
             array_unshift(
                 $options,
-                ['title ' => null, 'value' => null, 'label' => __('Please select a region, state or province.')]
+                ['title' => '', 'value' => '', 'label' => __('Please select a region, state or province.')]
             );
         }
         return $options;

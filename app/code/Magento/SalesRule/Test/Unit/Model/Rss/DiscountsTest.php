@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rss;
@@ -31,7 +31,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collectionFactory = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory',
+            \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -40,7 +40,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->discounts = $this->objectManagerHelper->getObject(
-            'Magento\SalesRule\Model\Rss\Discounts',
+            \Magento\SalesRule\Model\Rss\Discounts::class,
             [
                 'collectionFactory' => $this->collectionFactory
             ]
@@ -50,7 +50,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
     public function testGetDiscountCollection()
     {
         $ruleCollection = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Rule\Collection',
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class,
             [
                 'addWebsiteGroupDateFilter',
                 'addFieldToFilter',

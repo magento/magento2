@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
@@ -36,8 +36,8 @@ class XmlInterceptorScannerTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = [
-            'Magento\Framework\App\Cache\Interceptor',
-            'Magento\Framework\App\Action\Context\Interceptor',
+            \Magento\Framework\App\Cache\Interceptor::class,
+            \Magento\Framework\App\Action\Context\Interceptor::class,
         ];
         $this->assertEquals($expected, $actual);
     }

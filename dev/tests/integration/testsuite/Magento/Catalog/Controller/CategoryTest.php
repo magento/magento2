@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller;
@@ -17,7 +17,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         parent::assert404NotFound();
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get('Magento\Framework\Registry')->registry('current_category'));
+        $this->assertNull($objectManager->get(\Magento\Framework\Registry::class)->registry('current_category'));
     }
 
     public function getViewActionDataProvider()
@@ -54,7 +54,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider getViewActionDataProvider
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {
@@ -64,18 +64,18 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $currentCategory \Magento\Catalog\Model\Category */
-        $currentCategory = $objectManager->get('Magento\Framework\Registry')->registry('current_category');
-        $this->assertInstanceOf('Magento\Catalog\Model\Category', $currentCategory);
+        $currentCategory = $objectManager->get(\Magento\Framework\Registry::class)->registry('current_category');
+        $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $currentCategory);
         $this->assertEquals($categoryId, $currentCategory->getId(), 'Category in registry.');
 
         $lastCategoryId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Session'
+            \Magento\Catalog\Model\Session::class
         )->getLastVisitedCategoryId();
         $this->assertEquals($categoryId, $lastCategoryId, 'Last visited category.');
 
         /* Layout updates */
         $handles = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->getUpdate()->getHandles();
         foreach ($expectedHandles as $expectedHandleName) {
             $this->assertContains($expectedHandleName, $handles);

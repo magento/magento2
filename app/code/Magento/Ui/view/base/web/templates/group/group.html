@@ -1,36 +1,33 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<fieldset class="admin__field" data-bind="css: {'_required': element.required}">
-    <legend class="admin__field-label">
-        <span data-bind="text: element.label"></span>
-    </legend><br />
-    <div class="admin__field-control" data-bind="css: {'admin__control-fields': element.breakLine, 'admin__control-grouped': !element.breakLine}">
-        <!-- ko foreach: { data: elems, as: 'element' } -->
+<fieldset class="admin__field"
+          visible="visible"
+          css="_required: required"
+          attr="'data-index': index">
+    <legend class="admin__field-label" if="showLabel">
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
+    </legend>
 
-            <!-- ko if: element.visible() -->
+    <div class="admin__field-control" css="$data.additionalClasses">
+        <each args="elems">
+            <if args="visible()" if="!$data.additionalForGroup">
+                <render args="$parent.fieldTemplate" if="element.input_type != 'checkbox' || element.input_type != 'radio'"/>
+                <render args="elementTmpl" if="element.input_type == 'checkbox' || element.input_type == 'radio'"/>
+            </if>
+        </each>
+        
+        <each args="getRegion('insideGroup')" render=""/>
 
-                <!-- ko ifnot: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
-                    <!-- ko template: $parent.fieldTemplate --><!-- /ko -->
-                <!-- /ko -->
-
-                <!-- ko if: (element.input_type == 'checkbox' || element.input_type == 'radio') -->
-                    <!-- ko template: element.elementTmpl --><!-- /ko -->
-                <!-- /ko -->
-
-            <!-- /ko -->
-
-        <!-- /ko -->
-
-        <!-- ko if: validateWholeGroup -->
-        <!-- ko foreach: { data: elems, as: 'element' } -->
-            <!-- ko if: element.error() && element.visible() -->
-                <label class="admin__field-error" data-bind="attr: { for: uid }, text: element.error"></label>
-            <!-- /ko -->
-        <!-- /ko -->
-        <!-- /ko -->
+        <each args="elems" if="validateWholeGroup">
+            <if args="!$data.additionalForGroup">
+                <label class="admin__field-error" if="error() && visible()" attr="for: uid" text="error"/>
+            </if>
+        </each>
     </div>
+
+    <each args="getRegion('outsideGroup')" render=""/>
 </fieldset>

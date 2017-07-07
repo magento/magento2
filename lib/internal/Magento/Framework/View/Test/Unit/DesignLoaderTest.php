@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,9 +32,9 @@ class DesignLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_areaListMock = $this->getMock('\Magento\Framework\App\AreaList', [], [], '', false);
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->_areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
         $this->_model = new \Magento\Framework\View\DesignLoader(
             $this->_requestMock,
             $this->_areaListMock,
@@ -44,7 +44,7 @@ class DesignLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $area = $this->getMock('Magento\Framework\App\Area', [], [], '', false);
+        $area = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
         $this->appState->expects($this->once())->method('getAreaCode')->will($this->returnValue('area'));
         $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->will($this->returnValue($area));
         $area->expects($this->at(0))->method('load')

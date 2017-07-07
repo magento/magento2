@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
@@ -23,8 +23,8 @@ class CompositeScannerTest extends \PHPUnit_Framework_TestCase
         $configFiles = ['one/file/config', 'two/file/config'];
         $files = ['php' => $phpFiles, 'config' => $configFiles];
 
-        $scannerPhp = $this->getMock('Magento\Setup\Module\Di\Code\Scanner\ScannerInterface');
-        $scannerXml = $this->getMock('Magento\Setup\Module\Di\Code\Scanner\ScannerInterface');
+        $scannerPhp = $this->getMock(\Magento\Setup\Module\Di\Code\Scanner\ScannerInterface::class);
+        $scannerXml = $this->getMock(\Magento\Setup\Module\Di\Code\Scanner\ScannerInterface::class);
 
         $scannerPhpExpected = ['Model_OneProxy', 'Model_TwoFactory'];
         $scannerXmlExpected = ['Model_OneProxy', 'Model_ThreeFactory'];

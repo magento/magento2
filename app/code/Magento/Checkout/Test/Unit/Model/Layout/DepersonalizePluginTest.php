@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,27 +36,28 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     /**
      * SetUp
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
         $this->checkoutSessionMock = $this->getMock(
-            'Magento\Framework\Session\Generic',
+            \Magento\Framework\Session\Generic::class,
             ['clearStorage', 'setData', 'getData'],
             [],
             '',
             false
         );
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session',
+        $this->checkoutSessionMock = $this->getMock(
+            \Magento\Checkout\Model\Session::class,
             ['clearStorage'],
             [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
-        $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->moduleManagerMock = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
+        $this->cacheConfigMock = $this->getMock(\Magento\PageCache\Model\Config::class, [], [], '', false);
         $this->depersonalizeCheckerMock = $this->getMock(
-            'Magento\PageCache\Model\DepersonalizeChecker',
+            \Magento\PageCache\Model\DepersonalizeChecker::class,
             [],
             [],
             '',
@@ -74,7 +75,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGenerateXml()
     {
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $expectedResult = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
 
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
         $this->checkoutSessionMock
@@ -88,7 +89,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGenerateXmlNoDepersonalize()
     {
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $expectedResult = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
 
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $this->checkoutSessionMock

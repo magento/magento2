@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,14 +34,15 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = $this->_objectHelper->getObject(
-            'Magento\Catalog\Model\Category\Attribute\Backend\Sortby',
+            \Magento\Catalog\Model\Category\Attribute\Backend\Sortby::class,
             ['scopeConfig' => $this->_scopeConfig]
         );
         $this->_attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [
                 'getName',
                 '__call',
@@ -91,12 +92,12 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
             'attribute does not exist' => [
                 self::DEFAULT_ATTRIBUTE_CODE,
                 [],
-                false,
+                null,
             ],
             'attribute sort by empty' => [
                 'available_sort_by',
                 ['available_sort_by' => null],
-                '',
+                null,
             ],
             'attribute sort by' => [
                 'available_sort_by',
@@ -196,7 +197,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->_attribute->expects($this->at(2))->method('getIsUnique')->will($this->returnValue(true));
 
         $entityMock = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\AbstractEntity',
+            \Magento\Eav\Model\Entity\AbstractEntity::class,
             [],
             '',
             false,
@@ -219,7 +220,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
         $this->_attribute->expects($this->at(2))->method('getIsUnique')->will($this->returnValue(true));
 
         $entityMock = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\AbstractEntity',
+            \Magento\Eav\Model\Entity\AbstractEntity::class,
             [],
             '',
             false,
@@ -228,7 +229,7 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
             ['checkAttributeUniqueValue']
         );
         $frontMock = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend',
+            \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class,
             [],
             '',
             false,

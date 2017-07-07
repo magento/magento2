@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\System\Config\Backend;
@@ -20,7 +20,7 @@ class VarnishTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         );
         $data = [
             'access_list' => 'localhost',
@@ -30,7 +30,7 @@ class VarnishTest extends \PHPUnit_Framework_TestCase
         ];
         $this->_config->setValue('system/full_page_cache/default', $data);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\PageCache\Model\System\Config\Backend\Varnish'
+            \Magento\PageCache\Model\System\Config\Backend\Varnish::class
         );
     }
 

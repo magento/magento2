@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel;
@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\ResourceModel;
 /**
  * Eav Mysql resource helper model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Helper extends \Magento\Framework\DB\Helper
 {
@@ -80,6 +80,6 @@ class Helper extends \Magento\Framework\DB\Helper
         foreach ($selects as $selectGroup) {
             $mainGroup = array_merge($mainGroup, $selectGroup);
         }
-        return [$mainGroup];
+        return $mainGroup;
     }
 }

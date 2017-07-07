@@ -1,16 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogRule\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 /**
- * Class RuleTest
- * @package Magento\CatalogRule\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuleTest extends \PHPUnit_Framework_TestCase
@@ -18,8 +13,8 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\CatalogRule\Model\Rule */
     protected $rule;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
 
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
@@ -63,10 +58,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->storeModel = $this->getMock('Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeModel = $this->getMock(\Magento\Store\Model\Store::class, ['__wakeup', 'getId'], [], '', false);
         $this->combineFactory = $this->getMock(
-            'Magento\CatalogRule\Model\Rule\Condition\CombineFactory',
+            \Magento\CatalogRule\Model\Rule\Condition\CombineFactory::class,
             [
                 'create'
             ],
@@ -75,7 +71,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productModel = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 '__wakeup', 'getId', 'setData'
             ],
@@ -84,7 +80,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->condition = $this->getMock(
-            'Magento\Rule\Model\Condition\Combine',
+            \Magento\Rule\Model\Condition\Combine::class,
             [
                 'setRule',
                 'validate'
@@ -94,7 +90,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->websiteModel = $this->getMock(
-            'Magento\Store\Model\Website',
+            \Magento\Store\Model\Website::class,
             [
                 '__wakeup',
                 'getId',
@@ -105,7 +101,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_ruleProductProcessor = $this->getMock(
-            '\Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
             [],
             [],
             '',
@@ -113,7 +109,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_productCollectionFactory = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -121,24 +117,76 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_resourceIterator = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\Iterator',
+            \Magento\Framework\Model\ResourceModel\Iterator::class,
             ['walk'],
             [],
             '',
             false
         );
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->rule = $this->objectManagerHelper->getObject(
-            'Magento\CatalogRule\Model\Rule',
+        $extensionFactoryMock = $this->getMock(
+            \Magento\Framework\Api\ExtensionAttributesFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $attributeValueFactoryMock = $this->getMock(
+            \Magento\Framework\Api\AttributeValueFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->rule = $this->objectManager->getObject(
+            \Magento\CatalogRule\Model\Rule::class,
             [
                 'storeManager' => $this->storeManager,
                 'combineFactory' => $this->combineFactory,
                 'ruleProductProcessor' => $this->_ruleProductProcessor,
                 'productCollectionFactory' => $this->_productCollectionFactory,
                 'resourceIterator' => $this->_resourceIterator,
+                'extensionFactory' => $extensionFactoryMock,
+                'customAttributeFactory' => $attributeValueFactoryMock,
+                'serializer' => $this->getSerializerMock(),
             ]
         );
+    }
+
+    /**
+     * Get mock for serializer
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getSerializerMock()
+    {
+        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['serialize', 'unserialize'])
+            ->getMock();
+
+        $serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+
+        $serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
+
+        return $serializerMock;
     }
 
     /**
@@ -163,7 +211,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             'created_at' => '2014-06-25 13:14:30',
             'updated_at' => '2014-06-25 14:37:15'
         ];
-        $this->storeManager->expects($this->any())->method('getWebsites')->with(true)
+        $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
             ->will($this->returnValue([$this->websiteModel, $this->websiteModel]));
         $this->websiteModel->expects($this->at(0))->method('getId')
             ->will($this->returnValue('1'));
@@ -232,9 +280,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'by_fixed',
                     'discount_amount' => '123',
-                    'sub_is_enable' => '0',
-                    'sub_simple_action' => 'by_percent',
-                    'sub_discount_amount' => '123',
                 ],
                 true
             ],
@@ -242,32 +287,15 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'by_percent',
                     'discount_amount' => '9,99',
-                    'sub_is_enable' => '0',
                 ],
                 true
             ],
             [
                 [
-                    'simple_action' => 'by_fixed',
-                    'discount_amount' => '123',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'by_percent',
-                    'sub_discount_amount' => '123',
-                ],
-                [
-                    'Percentage discount should be between 0 and 100.',
-                ]
-            ],
-            [
-                [
                     'simple_action' => 'by_percent',
                     'discount_amount' => '123.12',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'to_percent',
-                    'sub_discount_amount' => '123.001',
                 ],
                 [
-                    'Percentage discount should be between 0 and 100.',
                     'Percentage discount should be between 0 and 100.',
                 ]
             ],
@@ -275,9 +303,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'to_percent',
                     'discount_amount' => '-12',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'to_fixed',
-                    'sub_discount_amount' => '567.8901',
                 ],
                 [
                     'Percentage discount should be between 0 and 100.',
@@ -287,12 +312,8 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'to_fixed',
                     'discount_amount' => '-1234567890',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'by_fixed',
-                    'sub_discount_amount' => '-5',
                 ],
                 [
-                    'Discount value should be 0 or greater.',
                     'Discount value should be 0 or greater.',
                 ]
             ],
@@ -300,7 +321,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'invalid action',
                     'discount_amount' => '12',
-                    'sub_is_enable' => '0',
                 ],
                 [
                     'Unknown action.',
@@ -316,7 +336,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterDelete()
     {
-        $indexer = $this->getMock('\Magento\Framework\Indexer\IndexerInterface');
+        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
         $this->rule->afterDelete();
@@ -330,7 +350,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     public function testAfterUpdate()
     {
         $this->rule->isObjectNew(false);
-        $indexer = $this->getMock('\Magento\Framework\Indexer\IndexerInterface');
+        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
         $this->rule->afterSave();
@@ -352,7 +372,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->rule->setData('website_ids', []);
         $this->rule->isObjectNew($isObjectNew);
-        $indexer = $this->getMock('\Magento\Framework\Indexer\IndexerInterface');
+        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->any())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->any())->method('getIndexer')->will($this->returnValue($indexer));
 
@@ -382,5 +402,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [['name', 'description'], ['name', 'description'], true, true],
             [['name', 'description'], ['name', 'important_data'], true, true],
         ];
+    }
+
+    public function testGetConditionsFieldSetId()
+    {
+        $formName = 'form_name';
+        $this->rule->setId(100);
+        $expectedResult = 'form_namerule_conditions_fieldset_100';
+        $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
     }
 }

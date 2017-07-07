@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -119,7 +119,7 @@ class ItemRepository implements \Magento\GiftMessage\Api\ItemRepositoryInterface
         };
 
         if ($item->getIsVirtual()) {
-            throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
+            throw new InvalidTransitionException(__('Gift Messages are not applicable for virtual products'));
         }
         $messageText = $giftMessage->getMessage();
         if ($messageText && !$this->helper->isMessagesAllowed('items', $quote, $this->storeManager->getStore())) {

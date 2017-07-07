@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Widget\Model\ResourceModel\Widget\Instance;
 
 /**
  * Widget Instance Collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Widget\Model\ResourceModel\Widget\Instance;
-
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -28,7 +28,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Widget\Model\Widget\Instance', 'Magento\Widget\Model\ResourceModel\Widget\Instance');
+        $this->_init(
+            \Magento\Widget\Model\Widget\Instance::class,
+            \Magento\Widget\Model\ResourceModel\Widget\Instance::class
+        );
     }
 
     /**

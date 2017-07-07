@@ -1,18 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\ObjectManager;
 
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var Initialization\StockDataFilter
+     * @deprecated
      */
     protected $stockFilter;
 
@@ -58,20 +60,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         $product = $this->productBuilder->build($this->getRequest());
-
-        $productData = $this->getRequest()->getPost('product');
-        if (!$productData) {
-            $sessionData = $this->_session->getProductData(true);
-            if (!empty($sessionData['product'])) {
-                $productData = $sessionData['product'];
-            }
-        }
-        if ($productData) {
-            $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : [];
-            $productData['stock_data'] = $this->stockFilter->filter($stockData);
-            $product->addData($productData);
-        }
-
         $this->_eventManager->dispatch('catalog_product_new_action', ['product' => $product]);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */

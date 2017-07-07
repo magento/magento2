@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,46 +9,46 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Reports::report" title="Reports" sortOrder="70">
-                    <resource id="Magento_Reports::report_marketing" title="Marketing" sortOrder="10">
-                        <resource id="Magento_Reports::shopcart" title="Shopping Cart" sortOrder="10">
-                            <resource id="Magento_Reports::product" title="Products in Cart" sortOrder="10" />
-                            <resource id="Magento_Reports::abandoned" title="Abandoned Cart" sortOrder="20" />
+                <resource id="Magento_Reports::report" title="Reports" translate="title" sortOrder="70">
+                    <resource id="Magento_Reports::report_marketing" title="Marketing" translate="title" sortOrder="10">
+                        <resource id="Magento_Reports::shopcart" title="Shopping Cart" translate="title" sortOrder="10">
+                            <resource id="Magento_Reports::product" title="Products in Cart" translate="title" sortOrder="10" />
+                            <resource id="Magento_Reports::abandoned" title="Abandoned Cart" translate="title" sortOrder="20" />
                         </resource>
-                        <resource id="Magento_Reports::report_search" title="Search Terms" sortOrder="30" />
+                        <resource id="Magento_Reports::report_search" title="Search Terms" translate="title" sortOrder="30" />
                     </resource>
-                    <resource id="Magento_Reports::review" title="Reviews" sortOrder="20">
-                        <resource id="Magento_Reports::review_customer" title="By Customers" sortOrder="10" />
-                        <resource id="Magento_Reports::review_product" title="By Products" sortOrder="20" />
+                    <resource id="Magento_Reports::review" title="Reviews" translate="title" sortOrder="20">
+                        <resource id="Magento_Reports::review_customer" title="By Customers" translate="title" sortOrder="10" />
+                        <resource id="Magento_Reports::review_product" title="By Products" translate="title" sortOrder="20" />
                     </resource>
-                    <resource id="Magento_Reports::salesroot" title="Sales" sortOrder="40">
-                        <resource id="Magento_Reports::salesroot_sales" title="Orders" sortOrder="10" />
-                        <resource id="Magento_Reports::tax" title="Tax" sortOrder="20" />
-                        <resource id="Magento_Reports::invoiced" title="Invoiced" sortOrder="30" />
-                        <resource id="Magento_Reports::shipping" title="Shipping" sortOrder="40" />
-                        <resource id="Magento_Reports::refunded" title="Refunds" sortOrder="50" />
-                        <resource id="Magento_Reports::coupons" title="Coupons" sortOrder="50" />
+                    <resource id="Magento_Reports::salesroot" title="Sales" translate="title" sortOrder="40">
+                        <resource id="Magento_Reports::salesroot_sales" title="Orders" translate="title" sortOrder="10" />
+                        <resource id="Magento_Reports::tax" title="Tax" translate="title" sortOrder="20" />
+                        <resource id="Magento_Reports::invoiced" title="Invoiced" translate="title" sortOrder="30" />
+                        <resource id="Magento_Reports::shipping" title="Shipping" translate="title" sortOrder="40" />
+                        <resource id="Magento_Reports::refunded" title="Refunds" translate="title" sortOrder="50" />
+                        <resource id="Magento_Reports::coupons" title="Coupons" translate="title" sortOrder="50" />
                     </resource>
-                    <resource id="Magento_Reports::customers" title="Customers" sortOrder="50">
-                        <resource id="Magento_Reports::totals" title="Order Total" sortOrder="10" />
-                        <resource id="Magento_Reports::customers_orders" title="Order Count" sortOrder="20" />
-                        <resource id="Magento_Reports::accounts" title="New" sortOrder="30" />
+                    <resource id="Magento_Reports::customers" title="Customers" translate="title" sortOrder="50">
+                        <resource id="Magento_Reports::totals" title="Order Total" translate="title" sortOrder="10" />
+                        <resource id="Magento_Reports::customers_orders" title="Order Count" translate="title" sortOrder="20" />
+                        <resource id="Magento_Reports::accounts" title="New" translate="title" sortOrder="30" />
                     </resource>
-                    <resource id="Magento_Reports::report_products" title="Products" sortOrder="60">
-                        <resource id="Magento_Reports::viewed" title="Views" sortOrder="10" />
-                        <resource id="Magento_Reports::bestsellers" title="Bestsellers" sortOrder="20" />
-                        <resource id="Magento_Reports::lowstock" title="Low Stock" sortOrder="30" />
-                        <resource id="Magento_Reports::sold" title="Ordered" sortOrder="40" />
-                        <resource id="Magento_Reports::downloads" title="Downloads" sortOrder="50" />
+                    <resource id="Magento_Reports::report_products" title="Products" translate="title" sortOrder="60">
+                        <resource id="Magento_Reports::viewed" title="Views" translate="title" sortOrder="10" />
+                        <resource id="Magento_Reports::bestsellers" title="Bestsellers" translate="title" sortOrder="20" />
+                        <resource id="Magento_Reports::lowstock" title="Low Stock" translate="title" sortOrder="30" />
+                        <resource id="Magento_Reports::sold" title="Ordered" translate="title" sortOrder="40" />
+                        <resource id="Magento_Reports::downloads" title="Downloads" translate="title" sortOrder="50" />
                     </resource>
-                    <resource id="Magento_Reports::statistics" title="Statistics" sortOrder="80">
-                        <resource id="Magento_Reports::statistics_refresh" title="Refresh Statistics" sortOrder="10"/>
+                    <resource id="Magento_Reports::statistics" title="Statistics" translate="title" sortOrder="80">
+                        <resource id="Magento_Reports::statistics_refresh" title="Refresh Statistics" translate="title" sortOrder="10"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Reports::reports" title="Reports" sortOrder="70" />
+                            <resource id="Magento_Reports::reports" title="Reports" translate="title" sortOrder="70" />
                         </resource>
                     </resource>
                 </resource>

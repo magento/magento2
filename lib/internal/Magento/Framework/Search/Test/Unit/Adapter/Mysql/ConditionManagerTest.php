@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class ConditionManagerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['quote', 'quoteIdentifier'])
             ->getMockForAbstractClass();
@@ -50,7 +50,7 @@ class ConditionManagerTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->once())
@@ -58,7 +58,7 @@ class ConditionManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->connectionMock));
 
         $this->conditionManager = $objectManager->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\ConditionManager',
+            \Magento\Framework\Search\Adapter\Mysql\ConditionManager::class,
             [
                 'resource' => $this->resource
             ]

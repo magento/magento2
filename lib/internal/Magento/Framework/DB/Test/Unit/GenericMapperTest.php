@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit;
@@ -35,14 +35,14 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->selectMock = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             ['orWhere', 'where', 'setPart', 'getPart'],
             [],
             '',
             false
         );
         $this->mapperFactoryMock = $this->getMock(
-            'Magento\Framework\DB\MapperFactory',
+            \Magento\Framework\DB\MapperFactory::class,
             ['create'],
             [],
             '',
@@ -50,7 +50,7 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->geneticMapper = $objectManager->getObject(
-            'Magento\Framework\DB\GenericMapper',
+            \Magento\Framework\DB\GenericMapper::class,
             [
                 'select' => $this->selectMock,
                 'mapperFactory' => $this->mapperFactoryMock,
@@ -66,7 +66,7 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
     public function testMapCriteriaList()
     {
         $criteriaMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\CriteriaInterface',
+            \Magento\Framework\Api\CriteriaInterface::class,
             [],
             '',
             false,
@@ -75,7 +75,7 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
             ['getMapperInterfaceName']
         );
         $mapperInstanceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\MapperInterface',
+            \Magento\Framework\DB\MapperInterface::class,
             [],
             '',
             false,
@@ -129,7 +129,7 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
         ];
 
         $connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -140,7 +140,7 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\DB\GenericMapper|\PHPUnit_Framework_MockObject_MockObject $geneticMapper */
         $geneticMapper = $this->getMock(
-            'Magento\Framework\DB\GenericMapper',
+            \Magento\Framework\DB\GenericMapper::class,
             ['getConnection', 'getSelect'],
             [],
             '',
@@ -198,7 +198,7 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\DB\GenericMapper|\PHPUnit_Framework_MockObject_MockObject $geneticMapper */
         $geneticMapper = $this->getMock(
-            'Magento\Framework\DB\GenericMapper',
+            \Magento\Framework\DB\GenericMapper::class,
             ['getSelect'],
             [],
             '',

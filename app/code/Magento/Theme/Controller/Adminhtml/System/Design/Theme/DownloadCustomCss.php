@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
@@ -9,6 +9,10 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class DownloadCustomCss
+ * @deprecated
+ */
 class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**
@@ -21,7 +25,7 @@ class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Desig
         $themeId = $this->getRequest()->getParam('theme_id');
         try {
             /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
-            $themeFactory = $this->_objectManager->create('Magento\Framework\View\Design\Theme\FlyweightFactory');
+            $themeFactory = $this->_objectManager->create(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
             $theme = $themeFactory->create($themeId);
             if (!$theme) {
                 throw new \InvalidArgumentException(sprintf('We cannot find a theme with id "%1".', $themeId));
@@ -42,7 +46,7 @@ class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Desig
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t find file.'));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
     }
 }

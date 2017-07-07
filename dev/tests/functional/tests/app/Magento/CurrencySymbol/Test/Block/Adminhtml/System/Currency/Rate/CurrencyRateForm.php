@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,13 @@ class CurrencyRateForm extends Form
     protected $importButton = '[data-ui-id$="import-button"]';
 
     /**
+     * Locator value for "[USD][UAH] Rate" text field.
+     *
+     * @var string
+     */
+    protected $USDUAHRate = '[name$="rate[USD][UAH]"]';
+
+    /**
      * Click on the "Import" button.
      *
      * @throws \Exception
@@ -38,6 +45,27 @@ class CurrencyRateForm extends Form
     public function clickImportButton()
     {
         $this->_rootElement->find($this->importButton)->click();
+
+        //Wait message
+        $browser = $this->browser;
+        $selector = $this->message;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $message = $browser->find($selector);
+                return $message->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /*
+     * Populate USD-UAH rate value.
+     *
+     * @throws \Exception
+     * @return void
+     */
+    public function fillCurrencyUSDUAHRate()
+    {
+        $this->_rootElement->find($this->USDUAHRate)->setValue('2.000');
 
         //Wait message
         $browser = $this->browser;

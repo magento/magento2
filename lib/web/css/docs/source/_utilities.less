@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -364,6 +364,69 @@
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | true</td>
 //            <td>Sets the background-color fallback property. When set to 'false', the background-color property will be set to @_background-gradient-color-end. When set to 'true', the background-color property will be set to @_background-gradient-color-start</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+// # .lib-url-check()
+//
+//  The <code>.lib-url-check()</code> mixin wraps passed value with 'url( ... )' and returns <code>@lib-url-check-output</code> variable. Can be used with <code>.lib-css()</code> mixin.
+//
+
+.example-url-check {
+    //  Set image path variable
+    @_icon-image: '/images/test.png';
+
+    //  "Call" the mixin
+    .lib-url-check(@_icon-image);
+
+    //  Will return url('/images/test.png')
+    .lib-css(background, #eee @lib-url-check-output no-repeat 0 0);
+}
+
+//
+//  If the variable is set to <code>false</code>, the <code>.lib-url-check()</code> will return false.
+//
+//  ```
+//  <div class="example-url-check">
+//      Block with background.
+//  </div>
+//  ```
+//
+
+.example-url-check-false {
+    //  Set usage image path to false
+    @_icon-image: false;
+
+    //  "Call" the mixin
+    .lib-url-check(@_icon-image);
+
+    //  Will return 'false' and outputs nothing
+    .lib-css(background, #eee @lib-url-check-output no-repeat 0 0);
+}
+
+//  ```
+//  <div class="example-url-check-false">
+//      Block with no background.
+//  </div>
+//  ```
+//
+
+//  # .lib-url-check() variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Output variable</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_path</th>
+//            <td class="vars_value">'' | false | value</td>
+//            <td class="vars_value">@lib-url-check-output</td>
+//            <td>Passed url to wrap in 'url( ... )'. If the 'false' value passed mixin will return 'false'</td>
 //        </tr>
 //    </table>
 //  </pre>

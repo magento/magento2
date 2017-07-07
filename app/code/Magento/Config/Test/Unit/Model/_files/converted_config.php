@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,11 +29,12 @@ return [
                             'children' => [
                                 'field_2' => [
                                     'id' => 'field_2',
+                                    'config_path' => 'section/group/field2',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
                                     'label' => 'Field 2',
-                                    'backend_model' => 'Magento\Config\Model\Config\Backend\Encrypted',
+                                    'backend_model' => \Magento\Config\Model\Config\Backend\Encrypted::class,
                                     '_elementType' => 'field',
                                 ],
                             ],
@@ -74,7 +75,8 @@ return [
                                                     'id' => 'field_3_1_1',
                                                     'translate' => 'label',
                                                     'showInWebsite' => '1',
-                                                    'backend_model' => 'Magento\Config\Model\Config\Backend\Encrypted',
+                                                    'backend_model' =>
+                                                        \Magento\Config\Model\Config\Backend\Encrypted::class,
                                                     'type' => 'text',
                                                     'label' => 'Field 3.1.1',
                                                     '_elementType' => 'field',
@@ -132,11 +134,12 @@ return [
                                 ],
                                 'field_4' => [
                                     'id' => 'field_4',
+                                    'config_path' => 'section/group/field4',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
                                     'label' => 'Field 4',
-                                    'backend_model' => 'Magento\Config\Model\Config\Backend\Encrypted',
+                                    'backend_model' => \Magento\Config\Model\Config\Backend\Encrypted::class,
                                     'attribute_1' => 'test_value_1',
                                     'attribute_2' => 'test_value_2',
                                     'attribute_text' => '<test_value>',
@@ -162,7 +165,7 @@ return [
                                     'type' => 'text',
                                     'label' => '',
                                     '_elementType' => 'field',
-                                ],
+                                 ],
                             ],
                             '_elementType' => 'group',
                         ],

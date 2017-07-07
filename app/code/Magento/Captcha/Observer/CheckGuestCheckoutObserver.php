@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
@@ -69,8 +69,7 @@ class CheckGuestCheckoutObserver implements ObserverInterface
         if ($checkoutMethod == \Magento\Checkout\Model\Type\Onepage::METHOD_GUEST) {
             if ($captchaModel->isRequired()) {
                 $controller = $observer->getControllerAction();
-                if (
-                    !$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
+                if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))
                 ) {
                     $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                     $result = ['error' => 1, 'message' => __('Incorrect CAPTCHA')];

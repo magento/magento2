@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,16 +30,16 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
+        $factoryMock = $this->getMock(\Magento\Framework\Data\Form\Element\Factory::class, [], [], '', false);
         $collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
+            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
             [],
             [],
             '',
             false
         );
-        $escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
-        $this->urlBuilder = $this->getMock('\Magento\Framework\Url', [], [], '', false);
+        $escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
+        $this->urlBuilder = $this->getMock(\Magento\Framework\Url::class, [], [], '', false);
         $this->_image = new \Magento\Framework\Data\Form\Element\Image(
             $factoryMock,
             $collectionFactoryMock,

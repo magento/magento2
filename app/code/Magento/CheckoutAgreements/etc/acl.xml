@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_CheckoutAgreements::checkoutagreement" title="Terms &amp; Conditions" sortOrder="30" />
+                        <resource id="Magento_CheckoutAgreements::checkoutagreement" title="Terms &amp; Conditions" translate="title" sortOrder="30" />
                     </resource>
                 </resource>
             </resource>

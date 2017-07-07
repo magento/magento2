@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,19 +10,20 @@
 ?>
 
 <?php $_options = $block->decorateArray($block->getOptions()) ?>
+<?php $_productId = $block->getProduct()->getId() ?>
 <?php if (count($_options)):?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
             "priceOptions": {
-                "optionConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig()?>,
+                "optionConfig": <?= /* @escapeNotVerified */ $block->getJsonConfig() ?>,
                 "controlContainer": ".field",
-                "priceHolderSelector": "[data-role=priceBox]"
+                "priceHolderSelector": "[data-product-id='<?= $block->escapeHtml($_productId) ?>'][data-role=priceBox]"
             }
         }
     }
 </script>
     <?php foreach ($_options as $_option): ?>
-        <?php echo $block->getOptionHtml($_option) ?>
+        <?= $block->getOptionHtml($_option) ?>
     <?php endforeach; ?>
 <?php endif; ?>

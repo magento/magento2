@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Exception\AuthenticationException;
 
 class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {
@@ -58,6 +60,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->with(
                 __('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME])
             );
+
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -187,5 +190,103 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationController = $this->_createIntegrationController('Save');
         $integrationController->execute();
+    }
+
+    public function testSaveActionExceptionOnIntegrationsCreatedFromConfigFile()
+    {
+        $exceptionMessage = 'Cannot edit integrations created via config file.';
+        $intData = new \Magento\Framework\DataObject(
+            [
+                Info::DATA_NAME => 'nameTest',
+                Info::DATA_ID => self::INTEGRATION_ID,
+                'id' => self::INTEGRATION_ID,
+                Info::DATA_EMAIL => 'test@magento.com',
+                Info::DATA_ENDPOINT => 'http://magento.ll/endpoint',
+                Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG,
+            ]
+        );
+
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
+        $this->_integrationSvcMock
+            ->expects($this->once())
+            ->method('get')
+            ->with(self::INTEGRATION_ID)
+            ->will($this->returnValue($intData));
+
+        // Verify error
+        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $integrationContr = $this->_createIntegrationController('Save');
+        $integrationContr->execute();
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveActionUserLockedException()
+    {
+        $exceptionMessage = __('Your account is temporarily disabled.');
+        $passwordString = '1234567';
+
+        $this->_requestMock->expects($this->exactly(2))
+            ->method('getParam')
+            ->withConsecutive(
+                [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
+                [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
+            )
+            ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
+
+        $intData = $this->_getSampleIntegrationData();
+        $this->_integrationSvcMock->expects($this->once())
+            ->method('get')
+            ->with(self::INTEGRATION_ID)
+            ->willReturn($intData);
+
+        $this->_userMock->expects($this->any())
+            ->method('performIdentityCheck')
+            ->with($passwordString)
+            ->will($this->throwException(new UserLockedException(__($exceptionMessage))));
+
+        $this->_authMock->expects($this->once())
+            ->method('logout');
+
+        $this->securityCookieMock->expects($this->once())
+            ->method('setLogoutReasonCookie')
+            ->with(\Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED);
+
+        $integrationContr = $this->_createIntegrationController('Save');
+        $integrationContr->execute();
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveActionAuthenticationException()
+    {
+        $passwordString = '1234567';
+        $exceptionMessage = __('You have entered an invalid password for current user.');
+
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->withConsecutive(
+                [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
+                [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
+            )
+            ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
+
+        $intData = $this->_getSampleIntegrationData();
+        $this->_integrationSvcMock->expects($this->once())
+            ->method('get')
+            ->with(self::INTEGRATION_ID)
+            ->willReturn($intData);
+
+        $this->_userMock->expects($this->any())
+            ->method('performIdentityCheck')
+            ->with($passwordString)
+            ->will($this->throwException(new AuthenticationException(__($exceptionMessage))));
+
+        // Verify error
+        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $integrationContr = $this->_createIntegrationController('Save');
+        $integrationContr->execute();
     }
 }

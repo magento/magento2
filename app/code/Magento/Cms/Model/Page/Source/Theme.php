@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Page\Source;
@@ -35,6 +35,7 @@ class Theme implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        return $this->themeList->getLabels();
+        $options[] = ['label' => 'Default', 'value' => ''];
+        return array_merge($options, $this->themeList->getLabels());
     }
 }

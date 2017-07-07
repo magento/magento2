@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Chooser;
@@ -66,44 +66,53 @@ abstract class AbstractContainerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
             ->setMethods(['dispatch'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->themeCollectionFactoryMock = $this->getMock(
-            'Magento\Theme\Model\ResourceModel\Theme\CollectionFactory',
+            \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->themeCollectionMock = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Collection')
+        $this->themeCollectionMock = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItemById'])
             ->getMock();
-        $this->themeMock = $this->getMockBuilder('Magento\Theme\Model\Theme')->disableOriginalConstructor()->getMock();
+        $this->themeMock = $this->getMockBuilder(
+            \Magento\Theme\Model\Theme::class
+        )->disableOriginalConstructor()->getMock();
 
         $this->layoutProcessorFactoryMock = $this->getMock(
-            'Magento\Framework\View\Layout\ProcessorFactory',
+            \Magento\Framework\View\Layout\ProcessorFactory::class,
             ['create'],
             [],
             '',
             false
         );
 
-        $this->layoutMergeMock = $this->getMockBuilder('Magento\Framework\View\Model\Layout\Merge')
+        $this->layoutMergeMock = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Merge::class)
             ->setMethods(['addPageHandles', 'load', 'getContainers'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
+        $this->escaperMock = $this->getMock(
+            \Magento\Framework\Escaper::class,
+            ['escapeHtml', 'escapeHtmlAttr'],
+            [],
+            '',
+            false
+        );
+        $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
 
-        $this->contextMock = $this->getMockBuilder('Magento\Backend\Block\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->setMethods(['getEventManager', 'getScopeConfig', 'getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();

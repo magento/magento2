@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Billing\Agreement;
 
 /**
  * Customer account billing agreement view block
+ *
+ * @api
  */
 class View extends \Magento\Framework\View\Element\Template
 {
@@ -172,7 +174,7 @@ class View extends \Magento\Framework\View\Element\Template
         parent::_prepareLayout();
 
         $pager = $this->getLayout()->createBlock(
-            'Magento\Theme\Block\Html\Pager'
+            \Magento\Theme\Block\Html\Pager::class
         )->setCollection(
             $this->getRelatedOrders()
         )->setIsOutputRequired(

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow;
 
-use Magento\Framework\DataObject;
+use Magento\Payment\Helper\Formatter;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Payflowpro;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Framework\Exception\LocalizedException;
@@ -15,6 +17,8 @@ use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 
 /**
  * Payflow Pro payment gateway model
@@ -23,20 +27,36 @@ use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
  */
 class Transparent extends Payflowpro implements TransparentInterface
 {
-    /**
-     * @var string
-     */
-    protected $_formBlockType = 'Magento\Payment\Block\Transparent\Info';
+    use Formatter;
+
+    const CC_DETAILS = 'cc_details';
+
+    const CC_VAULT_CODE = 'payflowpro_cc_vault';
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payflow\Info';
+    protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
+
+    /**
+     * @var string
+     */
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * @var ResponseValidator
      */
     private $responseValidator;
+
+    /**
+     * @var PaymentTokenInterfaceFactory
+     */
+    private $paymentTokenFactory;
+
+    /**
+     * @var OrderPaymentExtensionInterfaceFactory
+     */
+    private $paymentExtensionFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -53,6 +73,8 @@ class Transparent extends Payflowpro implements TransparentInterface
      * @param Gateway $gateway
      * @param HandlerInterface $errorHandler
      * @param ResponseValidator $responseValidator
+     * @param PaymentTokenInterfaceFactory $paymentTokenFactory
+     * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -73,6 +95,8 @@ class Transparent extends Payflowpro implements TransparentInterface
         Gateway $gateway,
         HandlerInterface $errorHandler,
         ResponseValidator $responseValidator,
+        PaymentTokenInterfaceFactory $paymentTokenFactory,
+        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -96,8 +120,17 @@ class Transparent extends Payflowpro implements TransparentInterface
             $data
         );
         $this->responseValidator = $responseValidator;
+        $this->paymentTokenFactory = $paymentTokenFactory;
+        $this->paymentExtensionFactory = $paymentExtensionFactory;
     }
 
+    /**
+     * @return ResponseValidator
+     */
+    public function getResponceValidator()
+    {
+        return $this->responseValidator;
+    }
 
     /**
      * Do not validate payment form using server methods
@@ -112,38 +145,47 @@ class Transparent extends Payflowpro implements TransparentInterface
     /**
      * Performs authorize transaction
      *
-     * @param \Magento\Payment\Model\InfoInterface|Object $payment
+     * @param InfoInterface|Object $payment
      * @param float $amount
      * @return $this
      * @throws InvalidTransitionException
      * @throws LocalizedException
      */
-    public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function authorize(InfoInterface $payment, $amount)
     {
+        /** @var Payment $payment */
         $request = $this->buildBasicRequest();
 
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $payment->getOrder();
         $this->addRequestOrderInfo($request, $order);
         $request = $this->fillCustomerContacts($order, $request);
 
-        $request->setTrxtype(self::TRXTYPE_AUTH_ONLY);
-        $request->setOrigid($payment->getAdditionalInformation('pnref'));
-        $request->setAmt(round($amount, 2));
+        $token = $payment->getAdditionalInformation(self::PNREF);
+        $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
+        $request->setData('origid', $token);
+        $request->setData('amt', $this->formatPrice($amount));
+        $request->setData('currency', $order->getBaseCurrencyCode());
+        $request->setData('taxamt', $this->formatPrice($order->getBaseTaxAmount()));
+        $request->setData('freightamt', $this->formatPrice($order->getBaseShippingAmount()));
 
         $response = $this->postRequest($request, $this->getConfig());
         $this->processErrors($response);
 
         try {
-            $this->responseValidator->validate($response);
+            $this->responseValidator->validate($response, $this);
         } catch (LocalizedException $exception) {
-            $payment->setParentTransactionId($response->getPnref());
+            $payment->setParentTransactionId($response->getData(self::PNREF));
             $this->void($payment);
-            throw new LocalizedException(__('Error processing payment, please try again later.'));
+            throw new LocalizedException(__('Error processing payment. Please try again later.'));
         }
 
         $this->setTransStatus($payment, $response);
 
-        $payment->unsAdditionalInformation('pnref');
+        $this->createPaymentToken($payment, $token);
+
+        $payment->unsAdditionalInformation(self::CC_DETAILS);
+        $payment->unsAdditionalInformation(self::PNREF);
 
         return $this;
     }
@@ -154,5 +196,84 @@ class Transparent extends Payflowpro implements TransparentInterface
     public function getConfigInterface()
     {
         return parent::getConfig();
+    }
+
+    /**
+     * @param Payment $payment
+     * @param string $token
+     * @throws LocalizedException
+     * @return void
+     */
+    protected function createPaymentToken(Payment $payment, $token)
+    {
+        /** @var PaymentTokenInterface $paymentToken */
+        $paymentToken = $this->paymentTokenFactory->create();
+
+        $paymentToken->setGatewayToken($token);
+        $paymentToken->setTokenDetails(
+            json_encode($payment->getAdditionalInformation(Transparent::CC_DETAILS))
+        );
+        $paymentToken->setExpiresAt(
+            $this->getExpirationDate($payment)
+        );
+
+        $this->getPaymentExtensionAttributes($payment)->setVaultPaymentToken($paymentToken);
+    }
+
+    /**
+     * @param Payment $payment
+     * @return string
+     */
+    private function getExpirationDate(Payment $payment)
+    {
+        $expDate = new \DateTime(
+            $payment->getCcExpYear()
+            . '-'
+            . $payment->getCcExpMonth()
+            . '-'
+            . '01'
+            . ' '
+            . '00:00:00',
+            new \DateTimeZone('UTC')
+        );
+        $expDate->add(new \DateInterval('P1M'));
+        return $expDate->format('Y-m-d 00:00:00');
+    }
+
+    /**
+     * @param Payment $payment
+     * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface
+     */
+    private function getPaymentExtensionAttributes(Payment $payment)
+    {
+        $extensionAttributes = $payment->getExtensionAttributes();
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->paymentExtensionFactory->create();
+            $payment->setExtensionAttributes($extensionAttributes);
+        }
+
+        return $extensionAttributes;
+    }
+
+    /**
+     * Capture payment
+     *
+     * @param InfoInterface|Payment $payment
+     * @param float $amount
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     */
+    public function capture(InfoInterface $payment, $amount)
+    {
+        /** @var Payment $payment */
+        $token = $payment->getAdditionalInformation(self::PNREF);
+        parent::capture($payment, $amount);
+
+        if ($token && !$payment->getAuthorizationTransaction()) {
+            $this->createPaymentToken($payment, $token);
+        }
+
+        return $this;
     }
 }

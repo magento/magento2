@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,9 +12,20 @@
             <event value="0" name="deactivate-rule"/>
             <event value="1" name="activate-rule"/>
         </events>
+        <events selector="[data-enable='in-context-api']">
+            <event value="0" name="deactivate-in-context-api"/>
+            <event value="1" name="activate-in-context-api"/>
+        </events>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="inContextEnable" event="activate-rule"/>
+            <rule type="inContextDisable" event="deactivate-rule"/>
+            <rule type="inContextShowMerchantId" event="activate-rule"/>
+            <rule type="inContextHideMerchantId" event="deactivate-rule"/>
+            <rule type="inContextActivate" event="activate-in-context-api"/>
+            <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
+            <rule type="inContextDisableConditional" event=":load"/>
         </relation>
     </payment>
 </rules>

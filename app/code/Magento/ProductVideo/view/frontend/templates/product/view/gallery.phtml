@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,8 +14,9 @@
     {
         "[data-gallery-role=gallery-placeholder]": {
             "Magento_ProductVideo/js/fotorama-add-video-events": {
-                "fotoramaVideoData": <?php /* @escapeNotVerified */ echo $block->getMediaGalleryDataJson(); ?>,
-                "fotoramaVideoSettings": <?php /* @escapeNotVerified */ echo $block->getVideoSettingsJson(); ?>
+                "videoData": <?= /* @escapeNotVerified */ $block->getMediaGalleryDataJson() ?>,
+                "videoSettings": <?= /* @escapeNotVerified */ $block->getVideoSettingsJson() ?>,
+                "optionsVideoData": <?= /* @noEscape */ $block->getOptionsMediaGalleryDataJson() ?>
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,17 +14,22 @@ $addressData = include __DIR__ . '/address_data.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$billingAddress = $objectManager->create('Magento\Sales\Model\Order\Address', ['data' => $addressData]);
+$billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
-$payment = $objectManager->create('Magento\Sales\Model\Order\Payment');
+$payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
+$payment->setAdditionalInformation('last_trans_id', '11122');
+$payment->setAdditionalInformation('metadata', [
+    'type' => 'free',
+    'fraudulent' => false
+]);
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
-$orderItem = $objectManager->create('Magento\Sales\Model\Order\Item');
+$orderItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderItem->setProductId($product->getId())->setQtyOrdered(2);
 $orderItem->setBasePrice($product->getPrice());
 $orderItem->setPrice($product->getPrice());
@@ -32,7 +37,7 @@ $orderItem->setRowTotal($product->getPrice());
 $orderItem->setProductType('simple');
 
 /** @var \Magento\Sales\Model\Order $order */
-$order = $objectManager->create('Magento\Sales\Model\Order');
+$order = $objectManager->create(\Magento\Sales\Model\Order::class);
 $order->setIncrementId(
     '100000001'
 )->setState(
@@ -40,6 +45,8 @@ $order->setIncrementId(
 )->setStatus(
     $order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING)
 )->setSubtotal(
+    100
+)->setGrandTotal(
     100
 )->setBaseSubtotal(
     100
@@ -54,7 +61,7 @@ $order->setIncrementId(
 )->setShippingAddress(
     $shippingAddress
 )->setStoreId(
-    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId()
+    $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId()
 )->addItem(
     $orderItem
 )->setPayment(

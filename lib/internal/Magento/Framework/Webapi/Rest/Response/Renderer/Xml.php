@@ -2,7 +2,7 @@
 /**
  *  XML Renderer allows to format array or object as valid XML document.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;

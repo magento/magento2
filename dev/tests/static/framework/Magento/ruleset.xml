@@ -1,10 +1,29 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <ruleset name="Magento">
-    <description>A custom coding standard.</description>
+    <description>Custom Magento coding standard.</description>
+
+    <rule ref="PSR2"/>
+
+    <rule ref="Magento.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule>
+    <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
+        <exclude-pattern>*/_files/*</exclude-pattern>
+    </rule>
+
+    <rule ref="Generic.Functions.CallTimePassByReference"/>
+    <rule ref="Generic.PHP.DeprecatedFunctions"/>
+
+    <rule ref="Squiz.Commenting.DocCommentAlignment"/>
+    <rule ref="Squiz.Functions.GlobalFunction"/>
+    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 </ruleset>

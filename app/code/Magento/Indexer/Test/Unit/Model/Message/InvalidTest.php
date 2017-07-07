@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\Message;
@@ -23,7 +23,7 @@ class InvalidTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $collectionMock = $this->getMock(
-            '\Magento\Indexer\Model\Indexer\Collection',
+            \Magento\Indexer\Model\Indexer\Collection::class,
             ['getItems'],
             [],
             '',
@@ -31,8 +31,16 @@ class InvalidTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->indexerMock = $this->getMock(
-            '\Magento\Indexer\Model\Indexer',
+            \Magento\Indexer\Model\Indexer::class,
             ['getStatus'],
+            [],
+            '',
+            false
+        );
+
+        $urlBuilder = $this->getMock(
+            \Magento\Framework\UrlInterface::class,
+            [],
             [],
             '',
             false
@@ -41,7 +49,8 @@ class InvalidTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->any())->method('getItems')->with()->willReturn([$this->indexerMock]);
 
         $this->model = new \Magento\Indexer\Model\Message\Invalid(
-            $collectionMock
+            $collectionMock,
+            $urlBuilder
         );
     }
 

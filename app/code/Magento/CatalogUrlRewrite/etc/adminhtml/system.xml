@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,21 +10,21 @@
         <section id="catalog">
             <group id="seo">
                 <label>Search Engine Optimization</label>
-                <field id="category_url_suffix" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="category_url_suffix" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Category URL Suffix</label>
                     <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix</backend_model>
                     <comment>You need to refresh the cache.</comment>
                 </field>
-                <field id="product_url_suffix" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="product_url_suffix" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product URL Suffix</label>
                     <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix</backend_model>
                     <comment>You need to refresh the cache.</comment>
                 </field>
-                <field id="product_use_categories" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="product_use_categories" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Categories Path for Product URLs</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="save_rewrites_history" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="save_rewrites_history" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Create Permanent Redirect for URLs if URL Key Changed</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

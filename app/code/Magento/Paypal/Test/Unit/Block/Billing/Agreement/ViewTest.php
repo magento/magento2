@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
@@ -31,16 +31,16 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->orderConfig = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
+        $this->orderConfig = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
 
         $this->block = $objectManager->getObject(
-            'Magento\Paypal\Block\Billing\Agreement\View',
+            \Magento\Paypal\Block\Billing\Agreement\View::class,
             [
                 'orderCollectionFactory' => $this->orderCollectionFactory,
                 'orderConfig' => $this->orderConfig,
@@ -53,7 +53,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $visibleStatuses = [];
 
         $orderCollection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Collection::class,
             ['addFieldToSelect', 'addFieldToFilter', 'setOrder'],
             [],
             '',

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,9 +11,6 @@
             <block class="Magento\Backend\Block\Store\Switcher" name="adminhtml.report.grid.store_switcher" as="store_switcher">
                 <arguments>
                     <argument name="use_confirm" xsi:type="string">0</argument>
-                    <argument name="switch_url" xsi:type="url" path="*/*/*">
-                        <param name="store">null</param>
-                    </argument>
                     <argument name="switch_websites" xsi:type="string">1</argument>
                     <argument name="switch_store_groups" xsi:type="string">1</argument>
                     <argument name="switch_store_views" xsi:type="string">1</argument>

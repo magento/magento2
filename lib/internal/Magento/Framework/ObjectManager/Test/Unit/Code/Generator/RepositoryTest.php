@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
@@ -13,29 +13,24 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class RepositoryTest extends EntityChildTestAbstract
 {
-    const SOURCE_CLASS_NAME = '\Magento\Framework\ObjectManager\Code\Generator\Sample';
-    const RESULT_CLASS_NAME = '\Magento\Framework\ObjectManager\Code\Generator\Sample\Repository';
-    const GENERATOR_CLASS_NAME = 'Magento\Framework\ObjectManager\Code\Generator\Repository';
-    const OUTPUT_FILE_NAME = 'SampleConverter.php';
-
     protected function getSourceClassName()
     {
-        return self::SOURCE_CLASS_NAME;
+        return '\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample::class;
     }
 
     protected function getResultClassName()
     {
-        return self::RESULT_CLASS_NAME;
+        return '\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample\Repository::class;
     }
 
     protected function getGeneratorClassName()
     {
-        return self::GENERATOR_CLASS_NAME;
+        return '\\' . \Magento\Framework\ObjectManager\Code\Generator\Repository::class;
     }
 
     protected function getOutputFileName()
     {
-        return self::OUTPUT_FILE_NAME;
+        return 'SampleConverter.php';
     }
 
     protected function mockDefinedClassesCall()

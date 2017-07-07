@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Webapi\Model\Cache\Type\Webapi as WebApiCache;
 use Magento\Webapi\Model\Config\Converter;
-use Magento\Framework\App\Cache\Type\Webapi as WebApiCache;
 
 /**
  * Service Metadata Model
@@ -27,6 +29,12 @@ class ServiceMetadata
     const KEY_IS_REQUIRED = 'inputRequired';
 
     const KEY_ACL_RESOURCES = 'resources';
+
+    const KEY_ROUTES = 'routes';
+
+    const KEY_ROUTE_METHOD = 'method';
+
+    const KEY_ROUTE_PARAMS = 'parameters';
 
     const SERVICES_CONFIG_CACHE_ID = 'services-services-config';
 
@@ -69,23 +77,31 @@ class ServiceMetadata
     protected $typeProcessor;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Config $config
      * @param WebApiCache $cache
      * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Webapi\Model\Config $config,
         WebApiCache $cache,
         \Magento\Webapi\Model\Config\ClassReflector $classReflector,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+        SerializerInterface $serializer = null
     ) {
         $this->config = $config;
         $this->cache = $cache;
         $this->classReflector = $classReflector;
         $this->typeProcessor = $typeProcessor;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -136,12 +152,18 @@ class ServiceMetadata
             $servicesConfig = $this->cache->load(self::SERVICES_CONFIG_CACHE_ID);
             $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
             if ($servicesConfig && is_string($servicesConfig) && $typesData && is_string($typesData)) {
-                $this->services = unserialize($servicesConfig);
-                $this->typeProcessor->setTypesData(unserialize($typesData));
+                $this->services = $this->serializer->unserialize($servicesConfig);
+                $this->typeProcessor->setTypesData($this->serializer->unserialize($typesData));
             } else {
                 $this->services = $this->initServicesMetadata();
-                $this->cache->save(serialize($this->services), self::SERVICES_CONFIG_CACHE_ID);
-                $this->cache->save(serialize($this->typeProcessor->getTypesData()), self::REFLECTED_TYPES_CACHE_ID);
+                $this->cache->save(
+                    $this->serializer->serialize($this->services),
+                    self::SERVICES_CONFIG_CACHE_ID
+                );
+                $this->cache->save(
+                    $this->serializer->serialize($this->typeProcessor->getTypesData()),
+                    self::REFLECTED_TYPES_CACHE_ID
+                );
             }
         }
         return $this->services;
@@ -168,8 +190,8 @@ class ServiceMetadata
      *
      * Example:
      * <pre>
-     * - 'Magento\Customer\Api\CustomerAccountInterface', 'V1', false => customerCustomerAccount
-     * - 'Magento\Customer\Api\CustomerAddressInterface', 'V1', true  => customerCustomerAddressV1
+     * - \Magento\Customer\Api\CustomerAccountInterface::class, 'V1', false => customerCustomerAccount
+     * - \Magento\Customer\Api\CustomerAddressInterface::class, 'V1', true  => customerCustomerAddressV1
      * </pre>
      *
      * @param string $interfaceName
@@ -250,12 +272,18 @@ class ServiceMetadata
             $routesConfig = $this->cache->load(self::ROUTES_CONFIG_CACHE_ID);
             $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
             if ($routesConfig && is_string($routesConfig) && $typesData && is_string($typesData)) {
-                $this->routes = unserialize($routesConfig);
-                $this->typeProcessor->setTypesData(unserialize($typesData));
+                $this->routes = $this->serializer->unserialize($routesConfig);
+                $this->typeProcessor->setTypesData($this->serializer->unserialize($typesData));
             } else {
                 $this->routes = $this->initRoutesMetadata();
-                $this->cache->save(serialize($this->routes), self::ROUTES_CONFIG_CACHE_ID);
-                $this->cache->save(serialize($this->typeProcessor->getTypesData()), self::REFLECTED_TYPES_CACHE_ID);
+                $this->cache->save(
+                    $this->serializer->serialize($this->routes),
+                    self::ROUTES_CONFIG_CACHE_ID
+                );
+                $this->cache->save(
+                    $this->serializer->serialize($this->typeProcessor->getTypesData()),
+                    self::REFLECTED_TYPES_CACHE_ID
+                );
             }
         }
         return $this->routes;
@@ -275,10 +303,9 @@ class ServiceMetadata
                 $version = explode('/', ltrim($url, '/'))[0];
                 $serviceName = $this->getServiceName($serviceClass, $version);
                 $methodName = $data[Converter::KEY_SERVICE][Converter::KEY_METHOD];
-                $routes[$serviceName][Converter::KEY_ROUTES][$url][$method][Converter::KEY_METHOD] = $methodName;
-                $routes[$serviceName][Converter::KEY_ROUTES][$url][$method][Converter::KEY_DATA_PARAMETERS]
+                $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_METHOD] = $methodName;
+                $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_PARAMS]
                     = $data[Converter::KEY_DATA_PARAMETERS];
-
             }
         }
         return $routes;

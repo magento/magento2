@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme\Domain;
@@ -19,6 +19,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             'theme_title' => 'Test physical theme',
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'type' => ThemeInterface::TYPE_PHYSICAL,
+            'code' => 'physical',
         ],
         'virtual' => [
             'parent_id' => null,
@@ -26,6 +27,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             'theme_title' => 'Test virtual theme',
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'type' => ThemeInterface::TYPE_VIRTUAL,
+            'code' => 'virtual',
         ],
         'staging' => [
             'parent_id' => null,
@@ -33,6 +35,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             'theme_title' => 'Test staging theme',
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'type' => ThemeInterface::TYPE_STAGING,
+            'code' => 'staging',
         ],
     ];
 
@@ -54,21 +57,21 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         //1. set up fixture
         /** @var $physicalTheme \Magento\Framework\View\Design\ThemeInterface */
-        $physicalTheme = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
+        $physicalTheme = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         $physicalTheme->setData($this->_themes['physical']);
         $physicalTheme->save();
 
         $this->_themes['virtual']['parent_id'] = $physicalTheme->getId();
 
         /** @var $virtualTheme \Magento\Framework\View\Design\ThemeInterface */
-        $virtualTheme = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
+        $virtualTheme = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         $virtualTheme->setData($this->_themes['virtual']);
         $virtualTheme->save();
 
         $this->_themes['staging']['parent_id'] = $virtualTheme->getId();
 
         /** @var $stagingTheme \Magento\Framework\View\Design\ThemeInterface */
-        $stagingTheme = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
+        $stagingTheme = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         $stagingTheme->setData($this->_themes['staging']);
         $stagingTheme->save();
 
@@ -77,7 +80,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
 
         //2. run test
         /** @var $virtualTheme \Magento\Framework\View\Design\ThemeInterface */
-        $virtualTheme = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
+        $virtualTheme = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         $virtualTheme->load($this->_virtualThemeId);
 
         $this->assertEquals(
@@ -90,7 +93,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unset($this->_physicalThemeId);
-        unset($this->_virtualThemeId);
+        $this->_physicalThemeId = null;
+        $this->_virtualThemeId = null;
     }
 }

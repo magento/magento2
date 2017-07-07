@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,7 +44,9 @@ $categories = [
     ],
 ];
 foreach ($categories as $data) {
-    $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+    $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        \Magento\Catalog\Model\Category::class
+    );
     $model->isObjectNew(true);
     $model->setId($data['id'])
         ->setName($data['name'])
@@ -55,5 +57,6 @@ foreach ($categories as $data) {
         ->setDefaultSortBy($data['default_sort_by'])
         ->setIsActive($data['is_active'])
         ->setPosition($data['position'])
+        ->setStoreId(0)
         ->save();
 }

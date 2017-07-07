@@ -1,20 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Block\Form;
-use Magento\Mtf\Block\Mapper;
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Is used to represent any form with tabs on the page.
@@ -22,153 +17,40 @@ use Magento\Mtf\Client\Element\SimpleElement;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTabs extends Form
+class FormTabs extends AbstractFormContainers
 {
     /**
-     * Tabs list.
+     * List of tabs.
      *
-     * @var array
-     */
-    protected $tabs = [];
-
-    /**
-     * Fields which aren't assigned to any tab.
-     *
-     * @var array
-     */
-    protected $unassignedFields = [];
-
-    /**
-     * Page header selector.
-     *
-     * @var string
-     */
-    protected $header = 'header';
-
-    /**
-     * @constructor
-     * @param SimpleElement $element
-     * @param Mapper $mapper
-     * @param BlockFactory $blockFactory
-     * @param BrowserInterface $browser
-     * @param array $config
-     */
-    public function __construct(
-        SimpleElement $element,
-        Mapper $mapper,
-        BlockFactory $blockFactory,
-        BrowserInterface $browser,
-        array $config = []
-    ) {
-        parent::__construct($element, $blockFactory, $mapper, $browser, $config);
-    }
-
-    /**
-     * Initialize block.
-     */
-    protected function init()
-    {
-        $this->tabs = $this->getFormMapping();
-    }
-
-    /**
-     * Fill form with tabs.
-     *
-     * @param FixtureInterface $fixture
-     * @param SimpleElement|null $element
-     * @return FormTabs
-     */
-    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
-    {
-        $tabs = $this->getFieldsByTabs($fixture);
-        return $this->fillTabs($tabs, $element);
-    }
-
-    /**
-     * Fill specified form with tabs.
-     *
-     * @param array $tabs
-     * @param SimpleElement|null $element
-     * @return FormTabs
-     */
-    protected function fillTabs(array $tabs, SimpleElement $element = null)
-    {
-        $context = ($element === null) ? $this->_rootElement : $element;
-        foreach ($tabs as $tabName => $tabFields) {
-            $tab = $this->getTab($tabName);
-            $this->openTab($tabName);
-            $tab->fillFormTab($tabFields, $context);
-        }
-        if (!empty($this->unassignedFields)) {
-            $this->fillMissedFields();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Fill fields which weren't found on filled tabs.
-     *
-     * @throws \Exception
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    protected function fillMissedFields()
-    {
-        foreach ($this->tabs as $tabName => $tabData) {
-            $tab = $this->getTab($tabName);
-            if ($this->openTab($tabName) && $this->isTabVisible($tabName)) {
-                $mapping = $tab->dataMapping($this->unassignedFields);
-                foreach ($mapping as $fieldName => $data) {
-                    $element = $tab->_rootElement->find($data['selector'], $data['strategy'], $data['input']);
-                    if ($element->isVisible()) {
-                        $element->setValue($data['value']);
-                        unset($this->unassignedFields[$fieldName]);
-                    }
-                }
-                if (empty($this->unassignedFields)) {
-                    break;
-                }
-            }
-        }
-
-        if (!empty($this->unassignedFields)) {
-            throw new \Exception(
-                'Could not find all elements on the tabs: ' . implode(', ', array_keys($this->unassignedFields))
-            );
-        }
-    }
-
-    /**
-     * Get data of the tabs.
-     *
-     * @param FixtureInterface|null $fixture
-     * @param SimpleElement|null $element
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getData(FixtureInterface $fixture = null, SimpleElement $element = null)
+    public function getTabs()
     {
-        $data = [];
+        return $this->containers;
+    }
 
-        if (null === $fixture) {
-            foreach ($this->tabs as $tabName => $tab) {
-                $this->openTab($tabName);
-                $tabData = $this->getTab($tabName)->getDataFormTab();
-                $data = array_merge($data, $tabData);
-            }
-        } else {
-            $isHasData = ($fixture instanceof InjectableFixture) ? $fixture->hasData() : true;
-            $tabsFields = $isHasData ? $this->getFieldsByTabs($fixture) : [];
-            foreach ($tabsFields as $tabName => $fields) {
-                $this->openTab($tabName);
-                $tabData = $this->getTab($tabName)->getDataFormTab($fields, $this->_rootElement);
-                $data = array_merge($data, $tabData);
-            }
-        }
+    /**
+     * Get Tab class.
+     *
+     * @param string $tabName
+     * @return Tab
+     * @throws \Exception
+     */
+    public function getTab($tabName)
+    {
+        return $this->getContainer($tabName);
+    }
 
-        return $data;
+    /**
+     * Fill data into tabs.
+     *
+     * @param array $tabsData
+     * @param SimpleElement $element
+     * @return $this
+     */
+    protected function fillTabs($tabsData, $element)
+    {
+        return $this->fillContainers($tabsData, $element);
     }
 
     /**
@@ -179,123 +61,52 @@ class FormTabs extends Form
      */
     public function update(FixtureInterface $fixture)
     {
-        $tabs = $this->getFieldsByTabs($fixture);
+        $tabs = $this->getFixtureFieldsByContainers($fixture);
         foreach ($tabs as $tab => $tabFields) {
-            $this->openTab($tab)->updateFormTab($tabFields, $this->_rootElement);
+            $this->openTab($tab)->setFieldsData($tabFields, $this->_rootElement);
         }
         return $this;
     }
 
     /**
-     * Create data array for filling tabs.
-     *
-     * @param FixtureInterface $fixture
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getFieldsByTabs(FixtureInterface $fixture)
+    protected function openContainer($tabName)
     {
-        if ($fixture instanceof InjectableFixture) {
-            $tabs = $this->getFixtureFieldsByTabs($fixture);
-        } else {
-            $tabs = $this->getFixtureFieldsByTabsDeprecated($fixture);
-        }
-        return $tabs;
-    }
-
-    /**
-     * Create data array for filling tabs (new fixture specification).
-     *
-     * @param InjectableFixture $fixture
-     * @return array
-     */
-    private function getFixtureFieldsByTabs(InjectableFixture $fixture)
-    {
-        $tabs = [];
-
-        $data = $fixture->getData();
-        foreach ($data as $field => $value) {
-            $attributes = $fixture->getDataFieldConfig($field);
-            $attributes['value'] = $value;
-            if (array_key_exists('group', $attributes) && $attributes['group'] != 'null') {
-                $tabs[$attributes['group']][$field] = $attributes;
-            } elseif (!array_key_exists('group', $attributes)) {
-                $this->unassignedFields[$field] = $attributes;
-            }
-        }
-        return $tabs;
-    }
-
-    /**
-     * Create data array for filling tabs (deprecated fixture specification).
-     *
-     * @param FixtureInterface $fixture
-     * @return array
-     * @deprecated
-     */
-    private function getFixtureFieldsByTabsDeprecated(FixtureInterface $fixture)
-    {
-        $tabs = [];
-
-        $dataSet = $fixture->getData();
-        $fields = isset($dataSet['fields']) ? $dataSet['fields'] : [];
-
-        foreach ($fields as $field => $attributes) {
-            if (array_key_exists('group', $attributes) && $attributes['group'] !== null) {
-                $tabs[$attributes['group']][$field] = $attributes;
-            } elseif (!array_key_exists('group', $attributes)) {
-                $this->unassignedFields[$field] = $attributes;
-            }
-        }
-        return $tabs;
-    }
-
-    /**
-     * Get tab class.
-     *
-     * @param string $tabName
-     * @return Tab
-     * @throws \Exception
-     */
-    public function getTab($tabName)
-    {
-        $tabClass = $this->tabs[$tabName]['class'];
-        /** @var Tab $tab */
-        $tab = $this->blockFactory->create($tabClass, ['element' => $this->_rootElement]);
-        if (!$tab instanceof Tab) {
-            throw new \Exception('Wrong Tab Class.');
-        }
-        $tab->setWrapper(isset($this->tabs[$tabName]['wrapper']) ? $this->tabs[$tabName]['wrapper'] : '');
-        $tab->setMapping(isset($this->tabs[$tabName]['fields']) ? (array)$this->tabs[$tabName]['fields'] : []);
-
-        return $tab;
-    }
-
-    /**
-     * Get tab element.
-     *
-     * @param string $tabName
-     * @return ElementInterface
-     */
-    protected function getTabElement($tabName)
-    {
-        $selector = $this->tabs[$tabName]['selector'];
-        $strategy = isset($this->tabs[$tabName]['strategy'])
-            ? $this->tabs[$tabName]['strategy']
-            : Locator::SELECTOR_CSS;
-        return $this->_rootElement->find($selector, $strategy);
+        return $this->openTab($tabName);
     }
 
     /**
      * Open tab.
      *
      * @param string $tabName
-     * @return FormTabs
+     * @return $this
+     * @throws \Exception
      */
     public function openTab($tabName)
     {
         $this->browser->find($this->header)->hover();
-        $this->getTabElement($tabName)->click();
+        if (!$this->isTabVisible($tabName)) {
+            throw new \Exception(
+                'Tab "' . $tabName . '" is not visible.'
+            );
+        }
+        $this->browser->find($this->header)->hover();
+        $this->clickOnTabName($tabName);
+        $this->browser->find($this->header)->hover();
+
         return $this;
+    }
+
+    /**
+     * Click on tab name.
+     *
+     * @param string $tabName
+     * @return void
+     */
+    protected function clickOnTabName($tabName)
+    {
+        $this->getContainerElement($tabName)->click();
     }
 
     /**
@@ -306,6 +117,6 @@ class FormTabs extends Form
      */
     public function isTabVisible($tabName)
     {
-        return $this->getTabElement($tabName)->isVisible();
+        return $this->getContainerElement($tabName)->isVisible();
     }
 }

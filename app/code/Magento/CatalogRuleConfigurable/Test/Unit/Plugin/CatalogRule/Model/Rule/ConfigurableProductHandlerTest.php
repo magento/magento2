@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,20 +39,20 @@ class ConfigurableProductHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configurableMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
             ['getChildrenIds'],
             [],
             '',
             false
         );
         $this->configurableProductsProviderMock = $this->getMock(
-            'Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider',
+            \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider::class,
             ['getIds'],
             [],
             '',
             false
         );
-        $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $this->ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
 
         $this->configurableProductHandler = new ConfigurableProductHandler(
             $this->configurableMock,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,6 +20,9 @@ use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 
+/**
+ * @api
+ */
 class Front extends Generic
 {
     /**
@@ -164,7 +167,7 @@ class Front extends Generic
                 'name' => 'used_in_product_listing',
                 'label' => __('Used in Product Listing'),
                 'title' => __('Used in Product Listing'),
-                'note' => __('Depends on design theme'),
+                'note' => __('Depends on design theme.'),
                 'values' => $yesnoSource
             ]
         );
@@ -176,7 +179,7 @@ class Front extends Generic
                 'name' => 'used_for_sort_by',
                 'label' => __('Used for Sorting in Product Listing'),
                 'title' => __('Used for Sorting in Product Listing'),
-                'note' => __('Depends on design theme'),
+                'note' => __('Depends on design theme.'),
                 'values' => $yesnoSource
             ]
         );
@@ -190,7 +193,7 @@ class Front extends Generic
         $this->setChild(
             'form_after',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Element\Dependence'
+                \Magento\Backend\Block\Widget\Form\Element\Dependence::class
             )->addFieldMap(
                 "is_wysiwyg_enabled",
                 'wysiwyg_enabled'

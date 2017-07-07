@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -14,7 +14,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
      */
     public $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $adjustmentsData = [
             'adj1' => ['className' => 'adj1_class', 'sortOrder' => 10],
@@ -25,7 +25,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var Factory|\PHPUnit_Framework_MockObject_MockObject $adjustmentFactory */
-        $adjustmentFactory = $this->getMockBuilder('Magento\Framework\Pricing\Adjustment\Factory')
+        $adjustmentFactory = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Factory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

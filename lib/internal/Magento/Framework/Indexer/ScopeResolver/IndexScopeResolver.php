@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,6 +52,7 @@ class IndexScopeResolver implements IndexScopeResolverInterface
                     $tableNameParts[] = $dimension->getName() . $dimension->getValue();
             }
         }
+
         return $this->resource->getTableName(implode('_', $tableNameParts));
     }
 
@@ -63,10 +64,12 @@ class IndexScopeResolver implements IndexScopeResolverInterface
      */
     private function getScopeId($dimension)
     {
-        if (is_numeric($dimension->getValue())) {
-            return $dimension->getValue();
-        } else {
-            return $this->scopeResolver->getScope($dimension->getValue())->getId();
+        $scopeId = $dimension->getValue();
+
+        if (!is_numeric($scopeId)) {
+            $scopeId = $this->scopeResolver->getScope($scopeId)->getId();
         }
+
+        return $scopeId;
     }
 }

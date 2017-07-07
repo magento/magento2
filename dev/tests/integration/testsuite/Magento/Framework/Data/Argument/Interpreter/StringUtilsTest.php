@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Argument\Interpreter;
@@ -19,7 +19,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_booleanUtils = $this->getMock('\Magento\Framework\Stdlib\BooleanUtils');
+        $this->_booleanUtils = $this->getMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $this->_booleanUtils->expects(
             $this->any()
         )->method(
@@ -28,7 +28,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             $this->returnValueMap([['true', true], ['false', false]])
         );
         $this->_model = new StringUtils($this->_booleanUtils);
-        $translateRenderer = $this->getMockForAbstractClass('Magento\Framework\Phrase\RendererInterface');
+        $translateRenderer = $this->getMockForAbstractClass(\Magento\Framework\Phrase\RendererInterface::class);
         $translateRenderer->expects($this->any())->method('render')->will(
             $this->returnCallback(
                 function ($input) {

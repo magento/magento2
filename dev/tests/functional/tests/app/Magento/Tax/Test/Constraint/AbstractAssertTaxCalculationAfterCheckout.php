@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -96,7 +96,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         $message = 'Prices on order review should be equal to defined in dataset.';
         \PHPUnit_Framework_Assert::assertEquals(
             array_diff_key($prices, ['cart_item_price_excl_tax' => null, 'cart_item_price_incl_tax' => null]),
-            $actualPrices,
+            array_diff_key($actualPrices, ['cart_item_price_excl_tax' => null, 'cart_item_price_incl_tax' => null]),
             $message
         );
 

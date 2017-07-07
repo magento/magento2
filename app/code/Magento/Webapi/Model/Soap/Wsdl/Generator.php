@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
@@ -10,6 +10,9 @@ use Magento\Webapi\Model\AbstractSchemaGenerator;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Wsdl;
 use Magento\Webapi\Model\Soap\WsdlFactory;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Webapi\Model\ServiceMetadata;
+use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * WSDL generator.
@@ -29,23 +32,29 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\App\Cache\Type\Webapi $cache
+     * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param Authorization $authorization
      * @param WsdlFactory $wsdlFactory
      */
     public function __construct(
-        \Magento\Framework\App\Cache\Type\Webapi $cache,
+        \Magento\Webapi\Model\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
+        Authorization $authorization,
         WsdlFactory $wsdlFactory
     ) {
         $this->_wsdlFactory = $wsdlFactory;
-        parent::__construct($cache, $typeProcessor, $storeManager, $customAttributeTypeLocator, $serviceMetadata);
+        parent::__construct(
+            $cache,
+            $typeProcessor,
+            $customAttributeTypeLocator,
+            $serviceMetadata,
+            $authorization
+        );
     }
 
     /**
@@ -58,7 +67,7 @@ class Generator extends AbstractSchemaGenerator
         $faultMessageName = $this->_addGenericFaultComplexTypeNodes($wsdl);
         $wsdl = $this->addCustomAttributeTypes($wsdl);
 
-        foreach ($requestedServiceMetadata as $serviceClass => $serviceData) {
+        foreach ($requestedServiceMetadata as $serviceClass => &$serviceData) {
             $portTypeName = $this->getPortTypeName($serviceClass);
             $bindingName = $this->getBindingName($serviceClass);
             $portType = $wsdl->addPortType($portTypeName);
@@ -68,7 +77,7 @@ class Generator extends AbstractSchemaGenerator
             $serviceName = $this->getServiceName($serviceClass);
             $wsdl->addService($serviceName, $portName, Wsdl::TYPES_NS . ':' . $bindingName, $endPointUrl, SOAP_1_2);
 
-            foreach ($serviceData['methods'] as $methodName => $methodData) {
+            foreach ($serviceData[ServiceMetadata::KEY_SERVICE_METHODS] as $methodName => $methodData) {
                 $operationName = $this->typeProcessor->getOperationName($serviceClass, $methodName);
                 $bindingDataPrototype = ['use' => 'literal'];
                 $inputBinding = $bindingDataPrototype;
@@ -350,10 +359,27 @@ class Generator extends AbstractSchemaGenerator
      * Get service metadata
      *
      * @param string $serviceName
-     * @return string[]
+     * @return array
      */
     protected function getServiceMetadata($serviceName)
     {
         return $this->serviceMetadata->getServiceMetadata($serviceName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAllowedServicesMetadata($requestedServices)
+    {
+        $allowedServicesMetadata = parent::getAllowedServicesMetadata($requestedServices);
+        if (!$allowedServicesMetadata) {
+            throw new AuthorizationException(
+                __(
+                    'Consumer is not authorized to access %resources',
+                    ['resources' => implode(', ', $requestedServices)]
+                )
+            );
+        }
+        return $allowedServicesMetadata;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class PartialResponseTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $this->_markTestAsRestOnly('Partial response functionality available in REST mode only.');
 
         $this->customerHelper = Bootstrap::getObjectManager()
-            ->get('Magento\TestFramework\Helper\Customer');
+            ->get(\Magento\TestFramework\Helper\Customer::class);
 
         $this->customerData = $this->customerHelper->createSampleCustomer();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,5 +19,8 @@ class AssertDownloadableProductForm extends AssertProductForm
      *
      * @var array
      */
-    protected $sortFields = ['downloadable_links/downloadable/link::sort_order'];
+    protected $sortFields = [
+        'downloadable_links/downloadable/link::sort_order',
+        'downloadable_sample/downloadable/sample::sort_order',
+    ];
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
@@ -35,7 +35,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('sitemap_id');
-        $model = $this->_objectManager->create('Magento\Sitemap\Model\Sitemap');
+        $model = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
 
         // 2. Initial checking
         if ($id) {
@@ -48,7 +48,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         }
 
         // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
+        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getFormData(true);
         if (!empty($data)) {
             $model->setData($data);
         }
@@ -61,7 +61,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             $id ? __('Edit Sitemap') : __('New Sitemap'),
             $id ? __('Edit Sitemap') : __('New Sitemap')
         )->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Sitemap\Block\Adminhtml\Edit')
+            $this->_view->getLayout()->createBlock(\Magento\Sitemap\Block\Adminhtml\Edit::class)
         );
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Site Map'));
         $this->_view->getPage()->getConfig()->getTitle()->prepend(

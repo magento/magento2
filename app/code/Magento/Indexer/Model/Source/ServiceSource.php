@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Source;
@@ -69,7 +69,7 @@ class ServiceSource implements DataInterface
         foreach ($list->getItems() as $key => $item) {
             foreach (array_keys($fields) as $fieldName) {
                 if (!isset($item[$fieldName])) {
-                    throw new NotFoundException(__("Field {$fieldName} not found"));
+                    throw new NotFoundException(__("Field '%1' not found", $fieldName));
                 }
 
                 $requestedData[$key][$fieldName] = $item[$fieldName];

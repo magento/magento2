@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/root/dir/foo', $object->getPath(DirectoryList::APP));
         $this->assertEquals('bar', $object->getUrlPath(DirectoryList::APP));
         $this->setExpectedException(
-            '\Magento\Framework\Exception\FileSystemException',
+            \Magento\Framework\Exception\FileSystemException::class,
             "Unknown directory type: 'unknown'"
         );
         $object->getPath('unknown');
@@ -37,5 +37,32 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
     public function testUnknownDirectory()
     {
         new DirectoryList('/root/dir', ['test' => [DirectoryList::PATH => '/baz']]);
+    }
+
+    public function testGetDefaultConfig()
+    {
+        $defaultConfig = DirectoryList::getDefaultConfig();
+
+        $this->assertArrayHasKey(DirectoryList::GENERATED, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::GENERATED_METADATA, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::GENERATED_CODE, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::ROOT, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::APP, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::CONFIG, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::LIB_INTERNAL, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::VAR_DIR, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::CACHE, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::LOG, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::SESSION, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::MEDIA, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::STATIC_VIEW, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::PUB, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::LIB_WEB, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::TMP, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::UPLOAD, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::TEMPLATE_MINIFICATION_DIR, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::TMP_MATERIALIZATION_DIR, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::SETUP, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::COMPOSER_HOME, $defaultConfig);
     }
 }

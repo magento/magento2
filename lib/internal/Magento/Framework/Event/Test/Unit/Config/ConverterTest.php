@@ -1,39 +1,48 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit\Config;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Event\Config\Converter;
+
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Config\Converter
+     * @var Converter
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var string
      */
-    protected $_filePath;
+    protected $filePath;
 
     /**
      * @var \DOMDocument
      */
-    protected $_source;
+    protected $source;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
 
     protected function setUp()
     {
-        $this->_filePath = __DIR__ . '/_files/';
-        $this->_source = new \DOMDocument();
-        $this->_model = new \Magento\Framework\Event\Config\Converter();
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->filePath = __DIR__ . '/_files/';
+        $this->source = new \DOMDocument();
+        $this->model = $this->objectManagerHelper->getObject(Converter::class);
     }
 
     public function testConvert()
     {
-        $this->_source->loadXML(file_get_contents($this->_filePath . 'event_config.xml'));
-        $convertedFile = include $this->_filePath . 'event_config.php';
-        $this->assertEquals($convertedFile, $this->_model->convert($this->_source));
+        $this->source->loadXML(file_get_contents($this->filePath . 'event_config.xml'));
+        $convertedFile = include $this->filePath . 'event_config.php';
+        $this->assertEquals($convertedFile, $this->model->convert($this->source));
     }
 
     /**
@@ -42,7 +51,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertThrowsExceptionWhenDomIsInvalid()
     {
-        $this->_source->loadXML(file_get_contents($this->_filePath . 'event_invalid_config.xml'));
-        $this->_model->convert($this->_source);
+        $this->source->loadXML(file_get_contents($this->filePath . 'event_invalid_config.xml'));
+        $this->model->convert($this->source);
     }
 }

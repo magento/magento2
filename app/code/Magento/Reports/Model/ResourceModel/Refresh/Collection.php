@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Refresh;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
@@ -42,16 +45,12 @@ class Collection extends \Magento\Framework\Data\Collection
      * Get if updated
      *
      * @param string $reportCode
-     * @return string|\DateTime
+     * @return string
      */
     protected function _getUpdatedAt($reportCode)
     {
         $flag = $this->_reportsFlagFactory->create()->setReportFlagCode($reportCode)->loadSelf();
-        return $flag->hasData() ? $this->_localeDate->scopeDate(
-            0,
-            $flag->getLastUpdate(),
-            true
-        ) : '';
+        return $flag->hasData() ? $flag->getLastUpdate() : '';
     }
 
     /**

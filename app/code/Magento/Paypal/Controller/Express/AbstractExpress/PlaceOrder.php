@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
@@ -62,15 +62,21 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     public function execute()
     {
-        try {
-            if ($this->isValidationRequired() &&
-                !$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))
-            ) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please agree to all the terms and conditions before placing the order.')
-                );
-            }
+        if ($this->isValidationRequired() &&
+            !$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))
+        ) {
+            $e = new \Magento\Framework\Exception\LocalizedException(
+                __('Please agree to all the terms and conditions before placing the order.')
+            );
+            $this->messageManager->addExceptionMessage(
+                $e,
+                $e->getMessage()
+            );
+            $this->_redirect('*/*/review');
+            return;
+        }
 
+        try {
             $this->_initCheckout();
             $this->_checkout->place($this->_initToken());
 
@@ -108,12 +114,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             return;
         } catch (ApiProcessableException $e) {
             $this->_processPaypalApiError($e);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addExceptionMessage(
-                $e,
-                $e->getMessage()
-            );
-            $this->_redirect('*/*/review');
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
@@ -140,6 +140,9 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 break;
             case ApiProcessableException::API_DO_EXPRESS_CHECKOUT_FAIL:
                 $this->_redirectSameToken();
+                break;
+            case ApiProcessableException::API_ADDRESS_MATCH_FAIL:
+                $this->redirectToOrderReviewPageAndShowError($exception->getUserMessage());
                 break;
             case ApiProcessableException::API_UNABLE_TRANSACTION_COMPLETE:
                 if ($this->_config->getPaymentAction() == \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER) {
@@ -180,6 +183,18 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     {
         $this->messageManager->addErrorMessage($errorMessage);
         $this->_redirect('checkout/cart');
+    }
+
+    /**
+     * Redirect customer to the paypal order review page and show error message
+     *
+     * @param string $errorMessage
+     * @return void
+     */
+    private function redirectToOrderReviewPageAndShowError($errorMessage)
+    {
+        $this->messageManager->addErrorMessage($errorMessage);
+        $this->_redirect('*/*/review');
     }
 
     /**

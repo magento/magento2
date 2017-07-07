@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
@@ -46,13 +46,13 @@ class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentMethodManagementMock = $this->getMock(
-            'Magento\Quote\Api\PaymentMethodManagementInterface',
+            \Magento\Quote\Api\PaymentMethodManagementInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $this->paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 11;
@@ -64,7 +64,7 @@ class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement',
+            \Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement::class,
             [
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
@@ -80,7 +80,7 @@ class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $paymentMethod = $this->getMock('Magento\Quote\Api\Data\PaymentMethodInterface', [], [], '', false);
+        $paymentMethod = $this->getMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class, [], [], '', false);
         $this->paymentMethodManagementMock->expects($this->once())->method('getList')->willReturn([$paymentMethod]);
         $this->assertEquals([$paymentMethod], $this->model->getList($this->maskedCartId));
     }

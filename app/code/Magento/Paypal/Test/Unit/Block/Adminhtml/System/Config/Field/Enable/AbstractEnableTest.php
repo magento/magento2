@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
@@ -33,7 +33,7 @@ class AbstractEnableTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
+        $this->elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
             ->setMethods(
                 [
                     'getHtmlId',
@@ -44,7 +44,7 @@ class AbstractEnableTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->abstractEnable = $objectManager->getObject(
-            'Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub'
+            \Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub::class
         );
     }
 
@@ -65,7 +65,7 @@ class AbstractEnableTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender()
     {
-        $formMock = $this->getMockBuilder('Magento\Framework\Data\Form')
+        $formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
             ->setMethods(['getFieldNameSuffix'])
             ->disableOriginalConstructor()
             ->getMock();

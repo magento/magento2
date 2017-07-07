@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -26,7 +26,7 @@ class LowStockItemsTest extends WebapiAbstract
      */
     public function testGetLowStockItems($qty, $currentPage, $pageSize, $result)
     {
-        $requestData = ['websiteId' => 1, 'qty' => $qty, 'pageSize' => $pageSize, 'currentPage' => $currentPage];
+        $requestData = ['scopeId' => 1, 'qty' => $qty, 'pageSize' => $pageSize, 'currentPage' => $currentPage];
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
@@ -58,7 +58,7 @@ class LowStockItemsTest extends WebapiAbstract
                     'items' => [
                         [
                             'product_id' => 10,
-                            'website_id' => 1,
+                            'scope_id' => 1,
                             'stock_id' => 1,
                             'qty' => 100,
                             'stock_status' => null,
@@ -67,7 +67,7 @@ class LowStockItemsTest extends WebapiAbstract
                         [
                             'product_id' => 12,
                             'website_id' => 1,
-                            'stock_id' => 1,
+                            'scope_id' => 1,
                             'qty' => 140,
                             'stock_status' => null,
                             'stock_item' => null

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -10,23 +10,29 @@
         Welcome to the Magento Setup Tool. Please choose a task below.
     </p>
 
-    <div class="row" style="padding-left: 145px;" >
-        <div class="col-m-4">
-            <a href="" class="setup-home-item setup-home-item-component" ui-sref="root.update">
-                <span class="setup-home-item-title">Component Manager</span>
-                <span class="setup-home-item-description">I want to manage my packages and modules.</span>
+    <div class="row">
+        <div class="col-m-3">
+            <a href="" class="setup-home-item setup-home-item-extension" ui-sref="root.extension-auth">
+                <span class="setup-home-item-title">Extension Manager</span>
+                <span class="setup-home-item-description">I want to manage my extensions and themes</span>
             </a>
         </div>
-        <div class="col-m-4">
+        <div class="col-m-3">
+            <a href="" class="setup-home-item setup-home-item-module" ui-sref="root.module">
+                <span class="setup-home-item-title">Module Manager </span>
+                <span class="setup-home-item-description">I want to manage my modules</span>
+            </a>
+        </div>
+        <div class="col-m-3">
             <a href="" class="setup-home-item setup-home-item-upgrade" ui-sref="root.upgrade">
                 <span class="setup-home-item-title">System Upgrade</span>
-                <span class="setup-home-item-description">I want to upgrade my Magento Admin version.</span>
+                <span class="setup-home-item-description">I want to upgrade my Magento Admin version</span>
             </a>
         </div>
-        <div class="col-m-4">
+        <div class="col-m-3">
             <a href="" class="setup-home-item setup-home-item-configuration" ui-sref="root.system-config">
                 <span class="setup-home-item-title">System Configuration</span>
-                <span class="setup-home-item-description">I want to change my Magento system configurations.</span>
+                <span class="setup-home-item-description">I want to change my Magento system configurations</span>
             </a>
         </div>
     </div>

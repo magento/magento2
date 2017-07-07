@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,12 +31,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $customerIdFromFixture = 1;
-        $this->contactsHelper = Bootstrap::getObjectManager()->create('Magento\Contact\Helper\Data');
-        $this->customerSession = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session');
+        $this->contactsHelper = Bootstrap::getObjectManager()->create(\Magento\Contact\Helper\Data::class);
+        $this->customerSession = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Session::class);
         /**
          * @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface
          */
-        $customerRepository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
+        );
         $customerData = $customerRepository->getById($customerIdFromFixture);
         $this->customerSession->setCustomerDataObject($customerData);
     }

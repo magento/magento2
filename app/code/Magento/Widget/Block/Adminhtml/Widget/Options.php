@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Widget\Block\Adminhtml\Widget;
 
 /**
  * WYSIWYG widget options form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Widget\Block\Adminhtml\Widget;
-
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -95,12 +94,12 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
         $fieldset = $this->getForm()->addFieldset(
             $mainFieldsetHtmlId,
-            ['legend' => __('Widget Options'), 'class' => 'fieldset-wide']
+            ['legend' => __('Widget Options'), 'class' => 'fieldset-wide fieldset-widget-options']
         );
         $this->setData('main_fieldset', $fieldset);
 
         // add dependence javascript block
-        $block = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence');
+        $block = $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Form\Element\Dependence::class);
         $this->setChild('form_after', $block);
 
         return $fieldset;
@@ -161,6 +160,10 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             if ($fieldName == 'unique_id' && $data['value'] == '') {
                 $data['value'] = md5(microtime(1));
             }
+        }
+
+        if (is_scalar($data['value'])) {
+            $data['value'] = html_entity_decode($data['value']);
         }
 
         // prepare element dropdown values

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -21,14 +22,14 @@ class CustomerForm extends FormTabs
      *
      * @var string
      */
-    protected $spinner = '[data-role="spinner"]';
+    protected $spinner = '#container [data-role="spinner"]';
 
     /**
      * Customer form to load.
      *
      * @var string
      */
-    protected $activeFormTab = '#container [data-bind="visible: active"]:not([style="display: none;"])';
+    protected $activeFormTab = '#container [data-area-active="true"]';
 
     /**
      * Field wrapper with label on form.
@@ -45,11 +46,18 @@ class CustomerForm extends FormTabs
     protected $fieldWrapperControl = './/*[contains(@class, "admin__field")]/*[contains(@class,"control")]';
 
     /**
-     * Selector for wainting tab content to load.
+     * Selector for waiting tab content to load.
      *
      * @var string
      */
     protected $tabReadiness = '.admin__page-nav-item._active._loading';
+
+    /**
+     * Personal information xpath selector.
+     *
+     * @var string
+     */
+    protected $information = './/th[contains(text(), "%s")]/following-sibling::td[1]';
 
     /**
      * Fill Customer forms on tabs by customer, addresses data.
@@ -79,9 +87,10 @@ class CustomerForm extends FormTabs
      *
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
+     * @param Address|null $addressToDelete
      * @return $this
      */
-    public function updateCustomer(FixtureInterface $customer, $address = null)
+    public function updateCustomer(FixtureInterface $customer, $address = null, Address $addressToDelete = null)
     {
         $this->waitForm();
 
@@ -89,7 +98,11 @@ class CustomerForm extends FormTabs
         if ($isHasData) {
             parent::fill($customer);
         }
-        if (null !== $address) {
+        if ($addressToDelete !== null) {
+            $this->openTab('addresses');
+            $this->getTab('addresses')->deleteCustomerAddress($addressToDelete);
+        }
+        if ($address !== null) {
             $this->openTab('addresses');
             $this->getTab('addresses')->updateAddresses($address);
         }
@@ -125,7 +138,6 @@ class CustomerForm extends FormTabs
     protected function waitForm()
     {
         $this->waitForElementNotVisible($this->spinner);
-        $this->waitForElementVisible($this->activeFormTab);
     }
 
     /**
@@ -157,5 +169,18 @@ class CustomerForm extends FormTabs
             $jsErrors = array_merge($jsErrors, $tab->getJsErrors());
         }
         return $jsErrors;
+    }
+
+    /**
+     * Get personal information.
+     *
+     * @param string $title
+     * @return string
+     */
+    public function getPersonalInformation($title)
+    {
+        return $this->_rootElement
+            ->find(sprintf($this->information, $title), Locator::SELECTOR_XPATH)
+            ->getText();
     }
 }

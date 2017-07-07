@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -17,6 +17,7 @@
     background-color: #fff;
     border: 1px solid #ada89e;
     border-radius: 2px;
+
     &:after {
         position: absolute;
         top: 3px;
@@ -33,6 +34,7 @@
         font-size: 18px;
         color: #b2b2b2;
     }
+
     input[type="search"],
     input.search {
         width: 100%;
@@ -40,6 +42,7 @@
         background: none;
         padding-right: 30px;
     }
+
     &.category-select {
         input[type="search"],
         input.search {
@@ -56,6 +59,7 @@
     background-color: transparent;
     border: none;
     border-radius: 0;
+
     &:after {
         display: none;
     }
@@ -71,21 +75,26 @@
     background: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
     z-index: 990;
+
     ul {
         margin: 0;
         padding: 0;
         list-style: none;
     }
+
     li {
         border-bottom: 1px solid #e5e5e5;
         padding: 0;
+
         a {
             display: block;
+
             &.ui-state-focus {
                 background: #f5f5f5;
             }
         }
     }
+
     li a,
     .jstree li a:hover,
     .jstree .jstree-hovered,
@@ -95,18 +104,22 @@
         color: #333;
         height: inherit !important;
     }
+
     .jstree {
         li a:hover,
         .jstree-hovered,
         .jstree-clicked {
             border: none;
         }
+
         li {
             border-bottom: 0;
+
             a {
                 display: inline-block;
             }
         }
+
         .mage-suggest-selected > a {
             color: #000;
             background: #F1FFEB;
@@ -158,9 +171,11 @@
         font-size: 12px;
         padding: 5px 4px;
         filter: none;
+
         span {
             display: inline;
         }
+
         &:before {
             display: inline-block;
             float: right;
@@ -168,10 +183,12 @@
             font-size: 13px;
             color: #b2b0ad;
         }
+
         &:hover:before {
             color: #7e7e7e;
         }
     }
+
     .dropdown-menu {
         margin: 1px 0 0;
         left: 0;
@@ -179,14 +196,17 @@
         width: 245px;
         z-index: 4;
     }
+
     .mage-suggest {
         border: none;
         border-radius: 3px 3px 0 0;
+
         &:after {
             top: 10px;
             right: 8px;
         }
     }
+
     .mage-suggest-inner {
         .title {
             margin: 0;
@@ -196,6 +216,7 @@
             font-size: 12px;
             border-bottom: 1px solid #e5e5e5;
         }
+
         > input[type="search"],
         > input.search {
             position: relative;
@@ -205,11 +226,13 @@
             width: 236px;
             z-index: 1;
         }
+
         > input.ui-autocomplete-loading,
         > input.mage-suggest-state-loading {
             background: #fff url("@{baseDir}mui/images/ajax-loader-small.gif") no-repeat 190px 50%;
         }
     }
+
     .mage-suggest-dropdown {
         margin-top: 0;
         border-top: 0;
@@ -218,6 +241,7 @@
         overflow: auto;
         width: 100%;
         float: left;
+
         ul {
             margin: 0;
             padding: 0;

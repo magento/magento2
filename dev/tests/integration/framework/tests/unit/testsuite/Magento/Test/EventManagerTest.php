@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,8 +28,8 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_subscriberOne = $this->getMock('stdClass', ['testEvent']);
-        $this->_subscriberTwo = $this->getMock('stdClass', ['testEvent']);
+        $this->_subscriberOne = $this->getMock(\stdClass::class, ['testEvent']);
+        $this->_subscriberTwo = $this->getMock(\stdClass::class, ['testEvent']);
         $this->_eventManager = new \Magento\TestFramework\EventManager(
             [$this->_subscriberOne, $this->_subscriberTwo]
         );

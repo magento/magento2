@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,10 +35,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->countryFactoryMock = $this->getMock('\Magento\Directory\Model\CountryFactory', [], [], '', false);
-        $this->countryMock = $this->getMock('\Magento\Directory\Model\Country', [], [], '', false);
+        $this->countryFactoryMock = $this->getMock(\Magento\Directory\Model\CountryFactory::class, [], [], '', false);
+        $this->countryMock = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
         $this->itemMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['getCountryId', 'getEmail'],
             [],
             '',
@@ -49,7 +49,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->countryMock));
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\Quote\Address\Validator',
+            \Magento\Quote\Model\Quote\Address\Validator::class,
             [
                 'countryFactory' => $this->countryFactoryMock,
             ]

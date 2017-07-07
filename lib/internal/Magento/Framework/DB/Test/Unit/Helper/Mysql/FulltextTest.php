@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Helper\Mysql;
@@ -15,7 +15,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Fulltext $select */
         $select = (new ObjectManager($this))->getObject(
-            'Magento\Framework\DB\Helper\Mysql\Fulltext',
+            \Magento\Framework\DB\Helper\Mysql\Fulltext::class,
             ['resource' => $this->getResourceMock()]
         );
 
@@ -40,7 +40,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $resource = $this->getResourceMock();
 
         /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
-        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $select->expects($this->once())
@@ -49,7 +49,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         /** @var Fulltext $fulltext */
         $fulltext = (new ObjectManager($this))->getObject(
-            'Magento\Framework\DB\Helper\Mysql\Fulltext',
+            \Magento\Framework\DB\Helper\Mysql\Fulltext::class,
             ['resource' => $resource]
         );
 
@@ -74,7 +74,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     protected function getResourceMock()
     {
-        $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $connection->expects($this->at(0))
@@ -82,7 +82,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('some searchable text'))
             ->will($this->returnValue("'some searchable text'"));
 
-        $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())

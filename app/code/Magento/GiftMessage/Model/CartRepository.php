@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -101,11 +101,11 @@ class CartRepository implements \Magento\GiftMessage\Api\CartRepositoryInterface
         $quote = $this->quoteRepository->getActive($cartId);
 
         if (0 == $quote->getItemsCount()) {
-            throw new InputException(__('Gift Messages is not applicable for empty cart'));
+            throw new InputException(__('Gift Messages are not applicable for empty cart'));
         }
 
         if ($quote->isVirtual()) {
-            throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
+            throw new InvalidTransitionException(__('Gift Messages are not applicable for virtual products'));
         }
         $messageText = $giftMessage->getMessage();
         if ($messageText && !$this->helper->isMessagesAllowed('quote', $quote, $this->storeManager->getStore())) {

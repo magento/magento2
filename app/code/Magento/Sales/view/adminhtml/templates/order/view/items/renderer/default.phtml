@@ -1,39 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer */ ?>
+<?php /** @var \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer $block */ ?>
 <?php $_item = $block->getItem() ?>
 <?php $block->setPriceDataObject($_item) ?>
 <tr>
-    <td class="col-product">
-        <?php if ($block->canDisplayContainer()): ?>
-        <div id="<?php echo $block->getHtmlId() ?>">
-        <?php endif; ?>
-        <?php echo $block->getColumnHtml($_item, 'name') ?>
-        <?php if ($block->canDisplayContainer()): ?>
-        </div>
-        <?php endif ?>
-    </td>
-    <td class="col-status"><?php /* @escapeNotVerified */ echo $_item->getStatus() ?></td>
-    <td class="col-price-original"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('original_price') ?></td>
-    <td class="col-price">
-        <?php echo $block->getColumnHtml($_item, 'price'); ?>
-    </td>
-    <td class="col-ordered-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
-
-    <td class="col-subtotal">
-        <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
-    </td>
-    <td class="col-tax-amount"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('tax_amount') ?></td>
-    <td class="col-tax-percent"><?php /* @escapeNotVerified */ echo $block->displayTaxPercent($_item) ?></td>
-    <td class="col-discont"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?></td>
-    <td class="col-total last">
-        <?php echo $block->getColumnHtml($_item, 'total'); ?>
-    </td>
+    <?php $i = 0;
+    $columns = $block->getColumns();
+    $lastItemNumber = count($columns) ?>
+    <?php foreach ($columns as $columnName => $columnClass):?>
+        <?php $i++; ?>
+        <td class="<?= /* @noEscape */ $columnClass ?><?= /* @noEscape */ ($i === $lastItemNumber ? ' last' : '') ?>"><?= /* @escapeNotVerified */ $block->getColumnHtml($_item, $columnName) ?></td>
+    <?php endforeach; ?>
 </tr>

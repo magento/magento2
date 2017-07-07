@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\RegisterCustomerFrontendEntityTest" summary="Register New Customer" ticketId="MAGETWO-23546">
         <variation name="RegisterCustomerFrontendEntityTestVariation1" summary="Register new customer">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/is_subscribed" xsi:type="string">No</data>
-            <data name="customer/data/password" xsi:type="string">123123q</data>
-            <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
+            <data name="customer/data/password" xsi:type="string">123123^q</data>
+            <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogout" />
@@ -23,21 +24,21 @@
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/is_subscribed" xsi:type="string">Yes</data>
-            <data name="customer/data/password" xsi:type="string">123123q</data>
-            <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
+            <data name="customer/data/password" xsi:type="string">123123^q</data>
+            <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
             <constraint name="Magento\Newsletter\Test\Constraint\AssertCustomerIsSubscribedToNewsletter" />
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation3" summary="Register Customer" ticketId="MAGETWO-12394">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/is_subscribed" xsi:type="string">No</data>
-            <data name="customer/data/password" xsi:type="string">123123q</data>
-            <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <data name="customer/data/password" xsi:type="string">123123^q</data>
+            <data name="customer/data/password_confirmation" xsi:type="string">123123^q</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessRegisterMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerRedirectToDashboard" />
         </variation>

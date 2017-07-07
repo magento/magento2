@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Rss;
@@ -97,7 +97,10 @@ class NewOrder implements DataProviderInterface
      */
     public function getRssData()
     {
-        $passDate = $this->dateTime->formatDate(mktime(0, 0, 0, date('m'), date('d') - 7));
+        $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        $interval = new \DateInterval('P7D');
+        $dateTime->sub($interval);
+        $fromDate = $this->dateTime->formatDate($dateTime->getTimestamp());
         $newUrl = $this->rssUrlBuilder->getUrl(['_secure' => true, '_nosecret' => true, 'type' => 'new_order']);
         $title = __('New Orders');
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
@@ -106,11 +109,11 @@ class NewOrder implements DataProviderInterface
         $order = $this->orderFactory->create();
         /** @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection */
         $collection = $order->getResourceCollection();
-        $collection->addAttributeToFilter('created_at', ['date' => true, 'from' => $passDate])
+        $collection->addAttributeToFilter('created_at', ['date' => true, 'from' => $fromDate])
             ->addAttributeToSort('created_at', 'desc');
         $this->eventManager->dispatch('rss_order_new_collection_select', ['collection' => $collection]);
 
-        $detailBlock = $this->layout->getBlockSingleton('Magento\Sales\Block\Adminhtml\Order\Details');
+        $detailBlock = $this->layout->getBlockSingleton(\Magento\Sales\Block\Adminhtml\Order\Details::class);
         foreach ($collection as $item) {
             $title = __('Order #%1 created at %2', $item->getIncrementId(), $this->localeDate->formatDate(
                 $item->getCreatedAt()

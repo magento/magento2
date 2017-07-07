@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,21 +43,21 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configurableAttributeHandler = $this->getMock(
-            'Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler',
+            \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::class,
             [],
             [],
             '',
             false
         );
         $this->resourceHelperMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Helper',
+            \Magento\Catalog\Model\ResourceModel\Helper::class,
             [],
             [],
             '',
             false
         );
         $this->collectionMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class,
             [],
             [],
             '',
@@ -92,7 +92,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         );
         $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
         $this->attributeMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             $methods,
             [],
             '',
@@ -114,7 +114,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testGetSuggestedAttributesIfTheyApplicable()
     {
         $source = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
+            \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class,
             [],
             [],
             '',

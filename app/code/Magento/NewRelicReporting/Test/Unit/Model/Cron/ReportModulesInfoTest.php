@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Cron;
@@ -25,75 +25,61 @@ class ReportModulesInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\NewRelicReporting\Model\Module\Collect|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $collect;
+    protected $collectMock;
 
     /**
      * @var \Magento\NewRelicReporting\Model\SystemFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $systemFactory;
+    protected $systemFactoryMock;
 
     /**
      * @var \Magento\NewRelicReporting\Model\System|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $systemModel;
+    protected $systemModelMock;
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $jsonEncoder;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
+    protected $jsonEncoderMock;
 
     /**
      * Setup
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->config = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
+        $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->collect = $this->getMockBuilder('Magento\NewRelicReporting\Model\Module\Collect')
+        $this->collectMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Module\Collect::class)
             ->disableOriginalConstructor()
             ->setMethods(['getModuleData'])
             ->getMock();
-        $this->systemFactory = $this->getMockBuilder('Magento\NewRelicReporting\Model\SystemFactory')
+        $this->systemFactoryMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\SystemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->systemModel = $this->getMockBuilder('Magento\NewRelicReporting\Model\System')
+        $this->systemModelMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\System::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jsonEncoder = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
-            ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDate'])
+        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->getMock();
 
-        $this->systemFactory->expects($this->any())
+        $this->systemFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->systemModel);
+            ->willReturn($this->systemModelMock);
 
-        $this->jsonEncoder->expects($this->any())
+        $this->jsonEncoderMock->expects($this->any())
             ->method('encode')
             ->willReturn('json_string');
 
-        $this->dateTime->expects($this->any())
-            ->method('formatDate')
-            ->willReturn('1970-01-01 00:00:00');
-
         $this->model = new ReportModulesInfo(
             $this->config,
-            $this->collect,
-            $this->systemFactory,
-            $this->jsonEncoder,
-            $this->dateTime
+            $this->collectMock,
+            $this->systemFactoryMock,
+            $this->jsonEncoderMock
         );
     }
 
@@ -124,7 +110,7 @@ class ReportModulesInfoTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $this->collect->expects($this->once())
+        $this->collectMock->expects($this->once())
             ->method('getModuleData')
             ->willReturn([
                 'installed' => '1',
@@ -138,8 +124,8 @@ class ReportModulesInfoTest extends \PHPUnit_Framework_TestCase
                     ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'uninstalled'],
                 ]
             ]);
-        $this->systemModel->expects($this->any())->method('setData')->willReturnSelf();
-        $this->systemModel->expects($this->any())->method('save')->willReturnSelf();
+        $this->systemModelMock->expects($this->any())->method('setData')->willReturnSelf();
+        $this->systemModelMock->expects($this->any())->method('save')->willReturnSelf();
 
         $this->assertSame(
             $this->model,

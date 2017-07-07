@@ -1,14 +1,34 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="footer">
-            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js" template="data_js.phtml" ifconfig="payment/braintree/fraudprotection"/>
-        </referenceContainer>
+        <referenceBlock name="order_create_billing_form">
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">braintree</argument>
+                <argument name="template" xsi:type="string">Magento_Braintree::form/cc.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="order_create_billing_form">
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">braintree_cc_vault</argument>
+                <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
+            </action>
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">braintree_paypal_vault</argument>
+                <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="content">
+            <block name="braintree_payment_script"
+                   as="braintree_payment_script"
+                   template="Magento_Braintree::payment/script.phtml"
+                   class="Magento\Braintree\Block\Payment"
+                   after="billing_method"/>
+        </referenceBlock>
     </body>
 </page>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,8 +17,8 @@
         <div class="message global noscript">
             <div class="content">
                 <p>
-                    <strong><?php /* @escapeNotVerified */ echo __('JavaScript seems to be disabled in your browser.'); ?></strong>
-                    <span><?php /* @escapeNotVerified */ echo __('For the best experience on our site, be sure to turn on Javascript in your browser.'); ?></span>
+                    <strong><?= /* @escapeNotVerified */ __('JavaScript seems to be disabled in your browser.') ?></strong>
+                    <span><?= /* @escapeNotVerified */ __('For the best experience on our site, be sure to turn on Javascript in your browser.') ?></span>
                 </p>
             </div>
         </div>
@@ -28,8 +28,8 @@
     <div class="notice global site local_storage" style="display: none;">
         <div class="content">
             <p>
-                <strong><?php /* @escapeNotVerified */ echo __('Local Storage seems to be disabled in your browser.'); ?></strong><br />
-                <?php /* @escapeNotVerified */ echo __('For the best experience on our site, be sure to turn on Local Storage in your browser.'); ?>
+                <strong><?= /* @escapeNotVerified */ __('Local Storage seems to be disabled in your browser.') ?></strong><br />
+                <?= /* @escapeNotVerified */ __('For the best experience on our site, be sure to turn on Local Storage in your browser.') ?>
             </p>
         </div>
     </div>
@@ -54,7 +54,7 @@ require(['jquery'], function(jQuery){
 <?php if ($block->displayDemoNotice()): ?>
     <div class="message global demo">
         <div class="content">
-            <p><?php /* @escapeNotVerified */ echo __('This is demo store. No orders will be fulfilled.') ?></p>
+            <p><?= /* @escapeNotVerified */ __('This is demo store. No orders will be fulfilled.') ?></p>
         </div>
     </div>
 <?php endif; ?>

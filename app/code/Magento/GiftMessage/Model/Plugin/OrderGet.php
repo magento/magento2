@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,19 +47,14 @@ class OrderGet
      * Get gift message
      *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
-     * @param callable $proceed
-     * @param int $orderId
+     * @param \Magento\Sales\Api\Data\OrderInterface $resultOrder
      * @return \Magento\Sales\Api\Data\OrderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGet(
+    public function afterGet(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,
-        \Closure $proceed,
-        $orderId
+        \Magento\Sales\Api\Data\OrderInterface $resultOrder
     ) {
-        /** @var \Magento\Sales\Api\Data\OrderInterface $resultOrder */
-        $resultOrder = $proceed($orderId);
-
         $resultOrder = $this->getOrderGiftMessage($resultOrder);
         $resultOrder = $this->getOrderItemGiftMessage($resultOrder);
 
@@ -74,7 +69,8 @@ class OrderGet
      */
     protected function getOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
-        if ($order->getExtensionAttributes() && $order->getExtensionAttributes()->getGiftMessage()) {
+        $extensionAttributes = $order->getExtensionAttributes();
+        if ($extensionAttributes && $extensionAttributes->getGiftMessage()) {
             return $order;
         }
 
@@ -86,7 +82,7 @@ class OrderGet
         }
 
         /** @var \Magento\Sales\Api\Data\OrderExtension $orderExtension */
-        $orderExtension = $this->orderExtensionFactory->create();
+        $orderExtension = $extensionAttributes ? $extensionAttributes : $this->orderExtensionFactory->create();
         $orderExtension->setGiftMessage($giftMessage);
         $order->setExtensionAttributes($orderExtension);
 
@@ -101,10 +97,12 @@ class OrderGet
      */
     protected function getOrderItemGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
-        if (null !== $order->getItems()) {
+        $orderItems = $order->getItems();
+        if (null !== $orderItems) {
             /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
-            foreach ($order->getItems() as $orderItem) {
-                if ($orderItem->getExtensionAttributes() && $orderItem->getExtensionAttributes()->getGiftMessage()) {
+            foreach ($orderItems as $orderItem) {
+                $extensionAttributes = $orderItem->getExtensionAttributes();
+                if ($extensionAttributes && $extensionAttributes->getGiftMessage()) {
                     continue;
                 }
 
@@ -119,11 +117,30 @@ class OrderGet
                 }
 
                 /** @var \Magento\Sales\Api\Data\OrderItemExtension $orderItemExtension */
-                $orderItemExtension = $this->orderItemExtensionFactory->create();
+                $orderItemExtension = $extensionAttributes
+                    ? $extensionAttributes
+                    : $this->orderItemExtensionFactory->create();
                 $orderItemExtension->setGiftMessage($giftMessage);
                 $orderItem->setExtensionAttributes($orderItemExtension);
             }
         }
         return $order;
+    }
+
+    /**
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
+     * @param \Magento\Sales\Model\ResourceModel\Order\Collection $resultOrder
+     * @return \Magento\Sales\Model\ResourceModel\Order\Collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterGetList(
+        \Magento\Sales\Api\OrderRepositoryInterface $subject,
+        \Magento\Sales\Model\ResourceModel\Order\Collection $resultOrder
+    ) {
+        /** @var  $order */
+        foreach ($resultOrder->getItems() as $order) {
+            $this->afterGet($subject, $order);
+        }
+        return $resultOrder;
     }
 }

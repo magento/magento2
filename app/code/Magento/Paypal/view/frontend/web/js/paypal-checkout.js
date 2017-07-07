@@ -1,14 +1,15 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
 define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
+    'Magento_Customer/js/customer-data',
     'jquery/ui',
     'mage/mage'
-], function ($, confirm) {
+], function ($, confirm, customerData) {
     'use strict';
 
     $.widget('mage.paypalCheckout', {
@@ -30,13 +31,14 @@ define([
                     returnUrl = $target.data('checkout-url'),
                     productId = $target.closest('form').find(this.options.productId).val(),
                     originalForm = this.options.originalForm.replace('%1', productId),
-                    self = this;
+                    self = this,
+                    billingAgreement = customerData.get('paypal-billing-agreement');
 
                 e.preventDefault();
 
-                if (this.options.confirmUrl && this.options.confirmMessage) {
+                if (billingAgreement().askToCreate) {
                     confirm({
-                        content: this.options.confirmMessage,
+                        content: billingAgreement().confirmMessage,
                         actions: {
 
                             /**
@@ -44,7 +46,7 @@ define([
                              *
                              */
                             confirm: function () {
-                                returnUrl = self.options.confirmUrl;
+                                returnUrl = billingAgreement().confirmUrl;
                                 self._redirect(returnUrl, originalForm);
                             },
 
@@ -52,17 +54,16 @@ define([
                              * Cancel confirmation handler
                              *
                              */
-                            cancel: function () {
-                                self._redirect(returnUrl);
+                            cancel: function (event) {
+                                if (event && !$(event.target).hasClass('action-close')) {
+                                    self._redirect(returnUrl);
+                                }
                             }
                         }
                     });
-
-                    return false;
+                } else {
+                    this._redirect(returnUrl, originalForm);
                 }
-
-                this._redirect(returnUrl, originalForm);
-
             }, this));
         },
 
@@ -76,7 +77,7 @@ define([
             var $form,
                 ppCheckoutInput;
 
-            if (this.options.isCatalogProduct && originalForm) {
+            if (this.options.isCatalogProduct) {
                 // find the form from which the button was clicked
                 $form = originalForm ? $(originalForm) : $($(this.options.shortcutContainerClass).closest('form'));
 

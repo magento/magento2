@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Helper;
@@ -18,9 +18,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_customerMetadataService = $this->getMock('Magento\Customer\Api\CustomerMetadataInterface');
+        $this->_customerMetadataService = $this->getMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
         $this->_helper = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Helper\View',
+            \Magento\Customer\Helper\View::class,
             ['customerMetadataService' => $this->_customerMetadataService]
         );
         parent::setUp();
@@ -41,10 +41,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $isMiddleNameAllowed = false,
         $isSuffixAllowed = false
     ) {
-        $visibleAttribute = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
+        $visibleAttribute = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $visibleAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(true));
 
-        $invisibleAttribute = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
+        $invisibleAttribute = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $invisibleAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(false));
 
         $this->_customerMetadataService->expects(
@@ -71,7 +71,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function getCustomerNameDataProvider()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
-        $customerFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        $customerFactory = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+        );
         return [
             'With disabled prefix, middle name, suffix' => [
                 $customerFactory->create()->setPrefix(

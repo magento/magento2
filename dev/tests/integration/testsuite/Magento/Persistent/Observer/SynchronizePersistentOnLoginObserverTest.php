@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
@@ -33,10 +33,10 @@ class SynchronizePersistentOnLoginObserverTest extends \PHPUnit_Framework_TestCa
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_persistentSession = $this->_objectManager->get('Magento\Persistent\Helper\Session');
-        $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $this->_persistentSession = $this->_objectManager->get(\Magento\Persistent\Helper\Session::class);
+        $this->_customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
         $this->_model = $this->_objectManager->create(
-            'Magento\Persistent\Observer\SynchronizePersistentOnLoginObserver',
+            \Magento\Persistent\Observer\SynchronizePersistentOnLoginObserver::class,
             [
                 'persistentSession' => $this->_persistentSession,
                 'customerSession' => $this->_customerSession
@@ -54,7 +54,7 @@ class SynchronizePersistentOnLoginObserverTest extends \PHPUnit_Framework_TestCa
 
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->_objectManager->create(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
 
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
@@ -66,7 +66,7 @@ class SynchronizePersistentOnLoginObserverTest extends \PHPUnit_Framework_TestCa
         // check that persistent session has been stored for Customer
         /** @var \Magento\Persistent\Model\Session $sessionModel */
         $sessionModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Persistent\Model\Session'
+            \Magento\Persistent\Model\Session::class
         );
         $sessionModel->loadByCustomerId(1);
         $this->assertEquals(1, $sessionModel->getCustomerId());

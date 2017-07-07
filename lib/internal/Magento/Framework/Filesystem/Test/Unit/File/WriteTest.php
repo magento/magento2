@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\File;
@@ -39,9 +39,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     protected $driver;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
+        $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $this->resource = $this->getMock('resource');
         $this->driver->expects($this->any())
             ->method('isExists')
@@ -65,13 +65,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstanceFileNotExists()
     {
-        $driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
+        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
             ->will($this->returnValue(false));
         $file = new Write($this->path, $driver, 'r');
-        $this->assertInstanceOf('Magento\Framework\Filesystem\File\Read', $file);
+        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
     }
 
     /**
@@ -79,13 +79,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstanceFileAlreadyExists()
     {
-        $driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
+        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
             ->will($this->returnValue(true));
         $file = new Write($this->path, $driver, 'x');
-        $this->assertInstanceOf('Magento\Framework\Filesystem\File\Read', $file);
+        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
     }
 
     public function testWrite()

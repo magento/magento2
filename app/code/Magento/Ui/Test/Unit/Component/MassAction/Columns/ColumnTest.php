@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\MassAction\Columns;
@@ -32,12 +32,12 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->contextMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false,
@@ -45,13 +45,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
         $this->column = $this->objectManager->getObject(
-            'Magento\Ui\Component\MassAction\Columns\Column',
+            \Magento\Ui\Component\MassAction\Columns\Column::class,
             [
                 'context' => $this->contextMock,
                 'data' => [
@@ -70,6 +66,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $this->assertTrue($this->column->getComponentName() === Column::NAME);
     }
 
@@ -92,8 +89,12 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare()
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->column = $this->objectManager->getObject(
-            'Magento\Ui\Component\MassAction\Columns\Column',
+            \Magento\Ui\Component\MassAction\Columns\Column::class,
             [
                 'context' => $this->contextMock,
                 'data' => [
@@ -119,6 +120,10 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareExtendsFromConfig()
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->contextMock->expects($this->never())
             ->method('getNamespace');
         $this->contextMock->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config;
@@ -11,6 +11,8 @@ use Magento\Paypal\Model\Config\Rules\Reader;
 
 /**
  * Class ResolutionRules
+ *
+ * @api
  */
 class ResolutionRules extends Template
 {
@@ -42,6 +44,6 @@ class ResolutionRules extends Template
      */
     public function getJson()
     {
-        return json_encode($this->rulesReader->read());
+        return json_encode($this->rulesReader->read(), JSON_FORCE_OBJECT);
     }
 }

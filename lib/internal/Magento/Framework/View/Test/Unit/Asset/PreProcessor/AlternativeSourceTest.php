@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
@@ -168,7 +168,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
     {
         $alternatives = [
             'processor' => [
-                AlternativeSource::PROCESSOR_CLASS => 'Magento\Framework\View\Asset\ContentProcessorInterface'
+                AlternativeSource::PROCESSOR_CLASS => \Magento\Framework\View\Asset\ContentProcessorInterface::class
             ]
         ];
 
@@ -216,7 +216,7 @@ class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock->expects(self::once())
             ->method('get')
-            ->with('Magento\Framework\View\Asset\ContentProcessorInterface')
+            ->with(\Magento\Framework\View\Asset\ContentProcessorInterface::class)
             ->willReturn($this->getProcessorMock($assetMock));
 
         $alternativeSource = new AlternativeSource(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,12 +31,12 @@ class RangeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->requestFilter = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Range')
+        $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Range::class)
             ->setMethods(['getField', 'getFrom', 'getTo'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionManager = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\ConditionManager')
+        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition'])
             ->getMock();
@@ -51,7 +51,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->filter = $objectManager->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range',
+            \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range::class,
             [
                 'conditionManager' => $this->conditionManager,
             ]
@@ -116,7 +116,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
                 'from' => '0',
                 'to' => '10',
                 'isNegation' => true,
-                'expectedResult' => 'testField <= \'0\' OR testField >= \'10\'',
+                'expectedResult' => 'testField < \'0\' OR testField > \'10\'',
             ],
             'rangeWithoutFromValue' => [
                 'field' => 'testField',
@@ -130,7 +130,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
                 'from' => null,
                 'to' => 50,
                 'isNegation' => true,
-                'expectedResult' => 'testField >= \'50\'',
+                'expectedResult' => 'testField > \'50\'',
             ],
             'rangeWithoutToValue' => [
                 'field' => 'testField',
@@ -144,7 +144,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
                 'from' => 50,
                 'to' => null,
                 'isNegation' => true,
-                'expectedResult' => 'testField <= \'50\'',
+                'expectedResult' => 'testField < \'50\'',
             ],
             'rangeWithEmptyValues' => [
                 'field' => 'testField',

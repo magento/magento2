@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
@@ -15,16 +15,22 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $fileStorageDbMock = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
-        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $fileStorageDbMock = $this->getMock(
+            \Magento\MediaStorage\Helper\File\Storage\Database::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
+        $coreRegistry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $productFactoryMock = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, [], [], '', false);
         $this->_model = $objectHelper->getObject(
-            'Magento\Catalog\Model\Product\Type\Simple',
+            \Magento\Catalog\Model\Product\Type\Simple::class,
             [
                 'productFactory' => $productFactoryMock,
                 'eventManager' => $eventManager,

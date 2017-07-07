@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View;
@@ -10,6 +10,8 @@ use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Customer personal information template block test.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PersonalInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,12 +46,23 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Customer\Model\CustomerRegistry
+     */
+    protected $customerRegistry;
+
+    /**
+     * @var \Magento\Customer\Model\Customer
+     */
+    protected $customerModel;
+
+    /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
         $customer = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             [],
             '',
@@ -59,7 +72,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $customer->expects($this->any())->method('getStoreId')->willReturn(1);
 
         $customerDataFactory = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -68,7 +81,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $customerDataFactory->expects($this->any())->method('create')->willReturn($customer);
 
         $backendSession = $this->getMock(
-            'Magento\Backend\Model\Session',
+            \Magento\Backend\Model\Session::class,
             ['getCustomerData'],
             [],
             '',
@@ -77,7 +90,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $backendSession->expects($this->any())->method('getCustomerData')->willReturn(['account' => []]);
 
         $this->customerLog = $this->getMock(
-            'Magento\Customer\Model\Log',
+            \Magento\Customer\Model\Log::class,
             ['getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt'],
             [],
             '',
@@ -86,7 +99,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $this->customerLog->expects($this->any())->method('loadByCustomer')->willReturnSelf();
 
         $customerLogger = $this->getMock(
-            'Magento\Customer\Model\Logger',
+            \Magento\Customer\Model\Logger::class,
             ['get'],
             [],
             '',
@@ -95,7 +108,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $customerLogger->expects($this->any())->method('get')->willReturn($this->customerLog);
 
         $dateTime = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime',
+            \Magento\Framework\Stdlib\DateTime::class,
             ['now'],
             [],
             '',
@@ -104,7 +117,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $dateTime->expects($this->any())->method('now')->willReturn('2015-03-04 12:00:00');
 
         $this->localeDate = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime\Timezone',
+            \Magento\Framework\Stdlib\DateTime\Timezone::class,
             ['scopeDate', 'formatDateTime', 'getDefaultTimezonePath'],
             [],
             '',
@@ -116,8 +129,22 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->pathToDefaultTimezone);
 
         $this->scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config',
+            \Magento\Framework\App\Config::class,
             ['getValue'],
+            [],
+            '',
+            false
+        );
+        $this->customerRegistry = $this->getMock(
+            \Magento\Customer\Model\CustomerRegistry::class,
+            ['retrieve'],
+            [],
+            '',
+            false
+        );
+        $this->customerModel = $this->getMock(
+            \Magento\Customer\Model\Customer::class,
+            ['isCustomerLocked'],
             [],
             '',
             false
@@ -126,7 +153,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->block = $objectManagerHelper->getObject(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo::class,
             [
                 'customerDataFactory' => $customerDataFactory,
                 'dateTime' => $dateTime,
@@ -136,6 +163,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
                 'backendSession' => $backendSession,
             ]
         );
+        $this->block->setCustomerRegistry($this->customerRegistry);
     }
 
     /**
@@ -242,6 +270,31 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         return [
             ['2015-03-04 12:00:00', '2015-03-04 12:00:00'],
             ['Never', null]
+        ];
+    }
+
+    /**
+     * @param string $expectedResult
+     * @param bool $value
+     * @dataProvider getAccountLockDataProvider
+     * @return void
+     */
+    public function testGetAccountLock($expectedResult, $value)
+    {
+        $this->customerRegistry->expects($this->once())->method('retrieve')->willReturn($this->customerModel);
+        $this->customerModel->expects($this->once())->method('isCustomerLocked')->willReturn($value);
+        $expectedResult =  new \Magento\Framework\Phrase($expectedResult);
+        $this->assertEquals($expectedResult, $this->block->getAccountLock());
+    }
+
+    /**
+     * @return array
+     */
+    public function getAccountLockDataProvider()
+    {
+        return [
+            ['result' => 'Locked', 'expectedValue' => true],
+            ['result' => 'Unlocked', 'expectedValue' => false]
         ];
     }
 }

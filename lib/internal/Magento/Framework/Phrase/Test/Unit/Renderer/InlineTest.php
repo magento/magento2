@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
@@ -29,9 +29,15 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->translator = $this->getMock('Magento\Framework\TranslateInterface', [], [], '', false);
-        $this->provider = $this->getMock('Magento\Framework\Translate\Inline\ProviderInterface', [], [], '', false);
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->translator = $this->getMock(\Magento\Framework\TranslateInterface::class, [], [], '', false);
+        $this->provider = $this->getMock(
+            \Magento\Framework\Translate\Inline\ProviderInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
 
         $this->renderer = new \Magento\Framework\Phrase\Renderer\Inline(
@@ -51,7 +57,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
             ->method('getTheme')
             ->will($this->returnValue($theme));
 
-        $inlineTranslate = $this->getMock('Magento\Framework\Translate\InlineInterface', [], [], '', []);
+        $inlineTranslate = $this->getMock(\Magento\Framework\Translate\InlineInterface::class, [], [], '', []);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
             ->will($this->returnValue(true));
@@ -67,7 +73,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     {
         $text = 'test';
 
-        $inlineTranslate = $this->getMock('Magento\Framework\Translate\InlineInterface', [], [], '', []);
+        $inlineTranslate = $this->getMock(\Magento\Framework\Translate\InlineInterface::class, [], [], '', []);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
             ->will($this->returnValue(false));

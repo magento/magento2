@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -67,12 +67,6 @@
                             <argument name="header" xsi:type="string" translate="true">Uses</argument>
                             <argument name="index" xsi:type="string">popularity</argument>
                             <argument name="type" xsi:type="string">number</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="synonym_for">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Synonym</argument>
-                            <argument name="index" xsi:type="string">synonym_for</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="redirect">

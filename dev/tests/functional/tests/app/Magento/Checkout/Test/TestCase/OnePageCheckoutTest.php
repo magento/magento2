@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,9 +20,9 @@ use Magento\Mtf\TestCase\Scenario;
  * 1. Go to Frontend.
  * 2. Add products to the cart.
  * 3. Apply discounts in shopping cart according to dataset.
- * 4. In 'Estimate Shipping and Tax' section specify destination using values from Test Data
- * 5. Click the 'Get a Quote' button
- * 6. In the section appeared select Shipping method, click the 'Update Total' button
+ * 4. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
+ * 5. Click the 'Get a Quote' button.
+ * 6. In the section appeared select Shipping method, click the 'Update Total' button.
  * 7. Click the 'Proceed to Checkout' button.
  * 8. Select checkout method according to dataset.
  * 9. Fill billing information and select the 'Ship to this address' option.
@@ -32,16 +32,16 @@ use Magento\Mtf\TestCase\Scenario;
  * 13. Place order.
  * 14. Perform assertions.
  *
- * @group One_Page_Checkout_(CS)
- * @ZephyrId MAGETWO-27485, MAGETWO-12412, MAGETWO-12429
+ * @group One_Page_Checkout
+ * @ZephyrId MAGETWO-27485, MAGETWO-12412, MAGETWO-12429, MAGETWO-49917, MAGETWO-27485
  * @ZephyrId MAGETWO-12444, MAGETWO-12848, MAGETWO-12849, MAGETWO-12850
  */
 class OnePageCheckoutTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
-    const TEST_TYPE = 'acceptance_test, 3rd_party_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test, 3rd_party_test, 3rd_party_test_single_flow';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

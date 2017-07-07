@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config\Source;
@@ -15,15 +15,34 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         /** @var Group $group */
-        $group = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Source\Group');
-        $this->assertEquals(
-            [
-                ['value' => '', 'label' => '-- Please Select --'],
-                ['value' => 1, 'label' => 'General'],
-                ['value' => 2, 'label' => 'Wholesale'],
-                ['value' => 3, 'label' => 'Retailer'],
-            ],
-            $group->toOptionArray()
+        $group = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Config\Source\Group::class);
+        $options = $group->toOptionArray();
+        $this->assertContainsOptionRecursive('', '-- Please Select --', $options);
+    }
+
+    private function assertContainsOptionRecursive($expectedValue, $expectedLabel, array $values)
+    {
+        $this->assertTrue(
+            $this->hasOptionLabelRecursive($expectedValue, $expectedLabel, $values),
+            'Label ' . $expectedLabel . ' not found'
         );
+    }
+
+    private function hasOptionLabelRecursive($value, $label, array $values)
+    {
+        $hasLabel = false;
+        foreach ($values as $option) {
+            $this->assertArrayHasKey('label', $option);
+            $this->assertArrayHasKey('value', $option);
+            if (strpos((string)$option['label'], (string)$label) !== false) {
+                $this->assertEquals($value, $option['value']);
+                $hasLabel = true;
+                break;
+            } elseif (is_array($option['value'])) {
+                $hasLabel |= $this->hasOptionLabelRecursive($value, $label, $option['value']);
+            }
+        }
+
+        return (bool)$hasLabel;
     }
 }

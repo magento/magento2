@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Block\Adminhtml\Transparent;
@@ -32,25 +32,25 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $this->urlBuilderMock = $this->getMockBuilder('\Magento\Framework\UrlInterface')
+        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->setMethods(['getUrl'])
             ->getMockForAbstractClass();
 
-        $context = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');
+        $context = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template\Context::class);
 
-        $this->methodMock = $this->getMockBuilder('Magento\Payment\Model\Method\TransparentInterface')
+        $this->methodMock = $this->getMockBuilder(\Magento\Payment\Model\Method\TransparentInterface::class)
             ->getMock();
 
-        $this->checkoutSessionMock = $this->getMockBuilder('Magento\Checkout\Model\Session')
+        $this->checkoutSessionMock = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paymentConfigMock = $this->getMockBuilder('Magento\Payment\Model\Config')
+        $paymentConfigMock = $this->getMockBuilder(\Magento\Payment\Model\Config::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,10 +64,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testToHtmlShouldRender()
     {
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Payment')
+        $paymentMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 

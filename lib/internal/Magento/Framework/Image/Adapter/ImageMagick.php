@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
@@ -167,6 +167,13 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 $this->_options['sharpen']['deviation']
             );
         }
+
+        $newImage->compositeImage(
+            $this->_imageHandler,
+            \Imagick::COMPOSITE_COPYOPACITY,
+            $dims['dst']['x'],
+            $dims['dst']['y']
+        );
 
         $newImage->compositeImage(
             $this->_imageHandler,

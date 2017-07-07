@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
@@ -14,9 +14,9 @@ class FullModuleListTest extends \PHPUnit_Framework_TestCase
      */
     private $moduleList;
 
-    public function setUp()
+    protected function setUp()
     {
-        $loaderMock = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
+        $loaderMock = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
         $modules = [
             'Vendor_A' => ['data' => 'a'],
             'Vendor_B' => ['data' => 'b'],

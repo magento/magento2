@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Frame;
@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 /**
  * Import frame result block.
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Result extends \Magento\Backend\Block\Template
 {
@@ -190,7 +190,7 @@ class Result extends \Magento\Backend\Block\Template
     public function getMessagesHtml()
     {
         /** @var $messagesBlock \Magento\Framework\View\Element\Messages */
-        $messagesBlock = $this->_layout->createBlock('Magento\Framework\View\Element\Messages');
+        $messagesBlock = $this->_layout->createBlock(\Magento\Framework\View\Element\Messages::class);
 
         foreach ($this->_messages as $priority => $messages) {
             $method = "add{$priority}";

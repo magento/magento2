@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Helper\File;
@@ -23,27 +23,27 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /** @var  Media */
     protected $helper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dirMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+        $this->dirMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->dirMock));
-        $dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+        $dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $dateMock->expects($this->any())
             ->method('date')
             ->will($this->returnValue(self::UPDATE_TIME));
         $this->helper = $this->objectManager->getObject(
-            'Magento\MediaStorage\Helper\File\Media',
+            \Magento\MediaStorage\Helper\File\Media::class,
             ['filesystem' => $filesystemMock, 'date' => $dateMock]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
@@ -18,11 +18,13 @@ class ValidationRulesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validationRules = $this->getMockBuilder('Magento\Customer\Ui\Component\Listing\Column\ValidationRules')
+        $this->validationRules = $this->getMockBuilder(
+            \Magento\Customer\Ui\Component\Listing\Column\ValidationRules::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+        $this->validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

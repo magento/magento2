@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Product;
@@ -44,27 +44,27 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->commonPriceMock = $this->getMock(
-            'Magento\Catalog\Model\Product\CatalogPrice',
+            \Magento\Catalog\Model\Product\CatalogPrice::class,
             [],
             [],
             '',
             false
         );
         $productMethods = ['getWebsiteId', 'getCustomerGroupId', '__wakeup', 'getTypeInstance', 'setTaxClassId'];
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $productMethods, [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $productMethods, [], '', false);
         $methods = ['setWebsiteId', 'isSalable', '__wakeup', 'setCustomerGroupId', 'getTaxClassId'];
-        $this->associatedProductMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
+        $this->associatedProductMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
         $this->priceModelMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Type\Price',
+            \Magento\Catalog\Model\Product\Type\Price::class,
             ['getTotalPrices'],
             [],
             '',
             false
         );
         $this->productTypeMock = $this->getMock(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped',
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
             [],
             [],
             '',
@@ -145,9 +145,9 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCatalogPriceWithCustomStoreAndSubProductIsSalable()
     {
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
+        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeMock->expects($this->once())->method('getId')->willReturn('store_id');
-        $currentStoreMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
+        $currentStoreMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
         $currentStoreMock->expects($this->once())->method('getId')->willReturn('current_store_id');
 
         $this->productMock->expects(

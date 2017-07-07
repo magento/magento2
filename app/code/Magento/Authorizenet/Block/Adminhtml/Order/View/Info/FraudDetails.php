@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Block\Adminhtml\Order\View\Info;
 
 use Magento\Authorizenet\Model\Directpost;
 
+/**
+ * @api
+ */
 class FraudDetails extends \Magento\Backend\Block\Template
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model\Export;
@@ -11,7 +11,12 @@ use Magento\Ui\Component\Filters;
 use Magento\Ui\Component\Filters\Type\Select;
 use Magento\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\MassAction\Filter;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MetadataProvider
 {
     /**
@@ -25,12 +30,44 @@ class MetadataProvider
     protected $columns;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $localeDate;
+
+    /**
+     * @var string
+     */
+    protected $locale;
+
+    /**
+     * @var string
+     */
+    protected $dateFormat;
+
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
      * @param Filter $filter
+     * @param TimezoneInterface $localeDate
+     * @param ResolverInterface $localeResolver
+     * @param string $dateFormat
+     * @param array $data
      */
     public function __construct(
-        Filter $filter
+        Filter $filter,
+        TimezoneInterface $localeDate,
+        ResolverInterface $localeResolver,
+        $dateFormat = 'M j, Y H:i:s A',
+        array $data = []
     ) {
         $this->filter = $filter;
+        $this->localeDate = $localeDate;
+        $this->locale = $localeResolver->getLocale();
+        $this->dateFormat = $dateFormat;
+        $this->data = $data;
     }
 
     /**
@@ -61,7 +98,9 @@ class MetadataProvider
         if (!isset($this->columns[$component->getName()])) {
             $columns = $this->getColumnsComponent($component);
             foreach ($columns->getChildComponents() as $column) {
-                $this->columns[$component->getName()][$column->getName()] = $column;
+                if ($column->getData('config/label') && $column->getData('config/dataType') !== 'actions') {
+                    $this->columns[$component->getName()][$column->getName()] = $column;
+                }
             }
         }
         return $this->columns[$component->getName()];
@@ -77,9 +116,7 @@ class MetadataProvider
     {
         $row = [];
         foreach ($this->getColumns($component) as $column) {
-            if ($column->getData('config/label')) {
-                $row[] = $column->getData('config/label');
-            }
+            $row[] = $column->getData('config/label');
         }
         return $row;
     }
@@ -94,9 +131,7 @@ class MetadataProvider
     {
         $row = [];
         foreach ($this->getColumns($component) as $column) {
-            if ($column->getData('config/label')) {
-                $row[] = $column->getName();
-            }
+            $row[] = $column->getName();
         }
         return $row;
     }
@@ -190,5 +225,31 @@ class MetadataProvider
             }
         }
         return $options;
+    }
+
+    /**
+     * Convert document date(UTC) fields to default scope specified
+     *
+     * @param \Magento\Framework\Api\Search\DocumentInterface $document
+     * @param string $componentName
+     * @return void
+     */
+    public function convertDate($document, $componentName)
+    {
+        if (!isset($this->data[$componentName])) {
+            return;
+        }
+        foreach ($this->data[$componentName] as $field) {
+            $fieldValue = $document->getData($field);
+            if (!$fieldValue) {
+                continue;
+            }
+            $convertedDate = $this->localeDate->date(
+                new \DateTime($fieldValue, new \DateTimeZone('UTC')),
+                $this->locale,
+                true
+            );
+            $document->setData($field, $convertedDate->format($this->dateFormat));
+        }
     }
 }

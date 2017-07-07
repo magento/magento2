@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,8 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
  * Customer attribute metadata class.
  */
 class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject implements
-    \Magento\Customer\Api\Data\AttributeMetadataInterface
+    \Magento\Customer\Api\Data\AttributeMetadataInterface,
+    \Magento\Eav\Api\Data\AttributeDefaultValueInterface
 {
     /**
      * {@inheritdoc}
@@ -399,5 +400,21 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     public function setIsSearchableInGrid($isSearchableInGrid)
     {
         return $this->setData(self::IS_SEARCHABLE_IN_GRID, $isSearchableInGrid);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDefaultValue()
+    {
+        return $this->_get(self::DEFAULT_VALUE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        return $this->setData(self::DEFAULT_VALUE, $defaultValue);
     }
 }

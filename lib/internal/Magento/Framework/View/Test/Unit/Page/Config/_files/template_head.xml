@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,6 +9,8 @@
     <head>
         <title>Test title</title>
         <meta name="meta_name" content="meta_content"/>
+        <meta property="og:video:secure_url" content="https://secure.example.com/movie.swf" />
+        <meta property="og:locale:alternate" content="uk_UA" />
         <css src="path/file.css" media="all" />
         <script src="path/file.js" defer="defer"/>
         <link src="http://url.com" src_type="url"/>

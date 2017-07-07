@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
@@ -68,12 +66,9 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     {
         if ($this->getColumn()->getFilterTime()) {
             try {
-                $adminTimeZone = new \DateTimeZone(
-                    $this->_scopeConfig->getValue(
-                        $this->_localeDate->getDefaultTimezonePath(),
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                );
+                $timezone = $this->getColumn()->getTimezone() !== false
+                    ? $this->_localeDate->getConfigTimezone() : 'UTC';
+                $adminTimeZone = new \DateTimeZone($timezone);
                 $simpleRes = new \DateTime($date, $adminTimeZone);
                 $simpleRes->setTimezone(new \DateTimeZone('UTC'));
                 return $simpleRes;

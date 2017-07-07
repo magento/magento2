@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true expr:true*/
@@ -48,7 +48,10 @@ define([
          */
         bindAll: function () {
             this.$checkbox.on('change', function (event) {
-                $(document).trigger('setTypeProduct', $(event.target).prop('checked') ? 'downloadable' : null);
+                $(document).trigger('setTypeProduct', $(event.target).prop('checked') ?
+                    'downloadable' :
+                    productType.type.init === 'downloadable' ? 'virtual' : productType.type.init
+                );
             });
 
             $(document).on('changeTypeProduct', this._initType.bind(this));
@@ -61,8 +64,11 @@ define([
         _initType: function () {
             if (productType.type.current === 'downloadable') {
                 weight.change(false);
-                weight.$weightSwitcher.one('change', function () {
-                    $(document).trigger('setTypeProduct', null);
+                weight.$weightSwitcher().one('change', function () {
+                    $(document).trigger(
+                        'setTypeProduct',
+                        productType.type.init === 'downloadable' ? 'virtual' : productType.type.init
+                    );
                 });
                 this.show();
             } else {

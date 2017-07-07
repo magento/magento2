@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Newsletter::newsletter_template" title="Newsletter Template" module="Magento_Newsletter" parent="Magento_Backend::marketing_communications" sortOrder="30" action="newsletter/template/" resource="Magento_Newsletter::template"/>
-        <add id="Magento_Newsletter::newsletter_queue" title="Newsletter Queue" module="Magento_Newsletter" sortOrder="40" parent="Magento_Backend::marketing_communications" action="newsletter/queue/" resource="Magento_Newsletter::queue"/>
-        <add id="Magento_Newsletter::newsletter_subscriber" title="Newsletter Subscribers" module="Magento_Newsletter" sortOrder="50" parent="Magento_Backend::marketing_communications" action="newsletter/subscriber/" resource="Magento_Newsletter::subscriber"/>
-        <add id="Magento_Newsletter::newsletter_problem" title="Newsletter Problem Reports" module="Magento_Newsletter" sortOrder="50" parent="Magento_Reports::report_marketing" action="newsletter/problem/" resource="Magento_Newsletter::problem"/>
+        <add id="Magento_Newsletter::newsletter_template" title="Newsletter Template" translate="title" module="Magento_Newsletter" parent="Magento_Backend::marketing_communications" sortOrder="30" action="newsletter/template/" resource="Magento_Newsletter::template"/>
+        <add id="Magento_Newsletter::newsletter_queue" title="Newsletter Queue" translate="title" module="Magento_Newsletter" sortOrder="40" parent="Magento_Backend::marketing_communications" action="newsletter/queue/" resource="Magento_Newsletter::queue"/>
+        <add id="Magento_Newsletter::newsletter_subscriber" title="Newsletter Subscribers" translate="title" module="Magento_Newsletter" sortOrder="50" parent="Magento_Backend::marketing_communications" action="newsletter/subscriber/" resource="Magento_Newsletter::subscriber"/>
+        <add id="Magento_Newsletter::newsletter_problem" title="Newsletter Problem Reports" translate="title" module="Magento_Newsletter" sortOrder="50" parent="Magento_Reports::report_marketing" action="newsletter/problem/" resource="Magento_Newsletter::problem"/>
     </menu>
 </config>

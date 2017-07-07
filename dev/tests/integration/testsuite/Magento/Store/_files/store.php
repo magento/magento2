@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Create fixture store with code test
+ *
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var $store \Magento\Store\Model\Store */
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 if (!$store->load('test', 'code')->getId()) {
     $store->setData(
         [
@@ -19,3 +21,6 @@ if (!$store->load('test', 'code')->getId()) {
     );
     $store->save();
 }
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/* Refresh stores memory cache */
+$objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();

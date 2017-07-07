@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
@@ -10,7 +10,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 /**
  * Sitemap resource catalog collection model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -39,20 +39,28 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_categoryResource;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_categoryResource = $categoryResource;
         parent::__construct($context, $connectionName);
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -147,6 +155,9 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
+        $meta = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $linkField = $meta->getLinkField();
+
         if (!$this->_select instanceof \Magento\Framework\DB\Select) {
             return false;
         }
@@ -181,7 +192,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } else {
             $this->_select->join(
                 ['t1_' . $attributeCode => $attribute['table']],
-                'e.entity_id = t1_' . $attributeCode . '.entity_id AND t1_' . $attributeCode . '.store_id = 0',
+                'e.' . $linkField . ' = t1_' . $attributeCode . '.' . $linkField .
+                ' AND t1_' . $attributeCode . '.store_id = 0',
                 []
             )->where(
                 't1_' . $attributeCode . '.attribute_id=?',
@@ -201,9 +213,9 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $this->getConnection()->quoteInto(
                         't1_' .
                         $attributeCode .
-                        '.entity_id = t2_' .
+                        '.' . $linkField . ' = t2_' .
                         $attributeCode .
-                        '.entity_id AND t1_' .
+                        '.' . $linkField . ' AND t1_' .
                         $attributeCode .
                         '.attribute_id = t2_' .
                         $attributeCode .

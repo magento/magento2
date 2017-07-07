@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -76,6 +76,7 @@
     .lib-line-height(@_button-line-height);
     box-sizing: border-box;
     vertical-align: middle;
+
     ._lib-button-icon (
         @_button-icon-use: @_button-icon-use,
         @_icon-font-content: @_button-font-content,
@@ -90,6 +91,7 @@
         @_icon-font-position: @_button-icon-font-position,
         @_icon-font-text-hide: @_button-icon-font-text-hide
     );
+
     &:focus,
     &:active {
         .lib-css(background, @_button-background-active);
@@ -102,6 +104,7 @@
         .lib-css(border, @_button-border-active);
         .lib-css(color, @_button-color-active);
     }
+
     &:hover {
         .lib-css(background, @_button-background-hover);
         .lib-background-gradient(
@@ -113,6 +116,7 @@
         .lib-css(border, @_button-border-hover);
         .lib-css(color, @_button-color-hover);
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
@@ -173,6 +177,7 @@
 .lib-link-as-button() {
     .lib-css(display, @button__display);
     text-decoration: none;
+
     &:hover,
     &:active,
     &:focus {
@@ -199,15 +204,18 @@
     background: none;
     border: 0;
     display: inline;
+
     &:hover {
         .lib-css(color, @_link-color-hover);
     }
+
     &:hover,
     &:active,
     &:focus {
         background: none;
         border: 0;
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
@@ -243,15 +251,18 @@
     text-decoration: none;
     text-shadow: none;
     .lib-css(font-weight, @font-weight__regular);
+
     &:focus,
     &:active {
         background: none;
         border: none;
     }
+
     &:hover {
         background: none;
         border: none;
     }
+
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
@@ -333,12 +344,14 @@
     .lib-css(background, @_button-background);
     .lib-css(border, @_button-border);
     .lib-css(color, @_button-color);
+
     &:focus,
     &:active {
         .lib-css(background, @_button-background-active);
         .lib-css(border, @_button-border-active);
         .lib-css(color, @_button-color-active);
     }
+
     &:hover {
         .lib-css(background, @_button-background-hover);
         .lib-css(border, @_button-border-hover);

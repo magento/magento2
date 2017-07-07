@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
@@ -47,13 +47,24 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     protected $layout;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
-        $this->context = $this->getMock('\Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $this->customerSession = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $this->checkoutSession = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-        $this->configProvider = $this->getMock('\Magento\Checkout\Model\CompositeConfigProvider', [], [], '', false);
-        $this->layoutProcessor = $this->getMock('\Magento\Checkout\Block\Checkout\LayoutProcessorInterface');
+        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->checkoutSession = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->configProvider = $this->getMock(
+            \Magento\Checkout\Model\CompositeConfigProvider::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->layoutProcessor = $this->getMock(\Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class);
         $this->layout = [
             'components' => [
                 'firstComponent' => ['param' => 'value'],
@@ -61,8 +72,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $this->model = new \Magento\Checkout\Block\Cart\Shipping(
             $this->context,
@@ -70,7 +82,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             $this->checkoutSession,
             $this->configProvider,
             [$this->layoutProcessor],
-            ['jsLayout' => $this->layout]
+            ['jsLayout' => $this->layout],
+            $this->serializer
         );
     }
 
@@ -85,13 +98,18 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $layoutProcessed = $this->layout;
         $layoutProcessed['components']['thirdComponent'] = ['param' => 'value'];
+        $jsonLayoutProcessed = json_encode($layoutProcessed);
 
         $this->layoutProcessor->expects($this->once())
             ->method('process')
             ->with($this->layout)
             ->willReturn($layoutProcessed);
+
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue($jsonLayoutProcessed)
+        );
         $this->assertEquals(
-            \Zend_Json::encode($layoutProcessed),
+            $jsonLayoutProcessed,
             $this->model->getJsLayout()
         );
     }
@@ -99,9 +117,20 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrl()
     {
         $baseUrl = 'baseUrl';
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getBaseUrl'], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, ['getBaseUrl'], [], '', false);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $this->assertEquals($baseUrl, $this->model->getBaseUrl());
+    }
+
+    public function testGetSerializedCheckoutConfig()
+    {
+        $checkoutConfig = ['checkout', 'config'];
+        $this->configProvider->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue(json_encode($checkoutConfig))
+        );
+
+        $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
     }
 }

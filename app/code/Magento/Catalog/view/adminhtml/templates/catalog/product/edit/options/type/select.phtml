@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,19 +14,19 @@
             <thead>
                 <tr>
                     <th class="col-draggable">&nbsp;</th>
-                    <th class="col-name required"><?php /* @escapeNotVerified */ echo __('Title') ?><span class="required">*</span></th>
+                    <th class="col-name required"><?= /* @escapeNotVerified */ __('Title') ?><span class="required">*</span></th>
                     <?php if ($block->getCanReadPrice() !== false) : ?>
-                    <th class="col-price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                    <th class="col-price-type"><?php /* @escapeNotVerified */ echo __('Price Type') ?></th>
+                    <th class="col-price"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                    <th class="col-price-type"><?= /* @escapeNotVerified */ __('Price Type') ?></th>
                     <?php endif; ?>
-                    <th class="col-sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
+                    <th class="col-sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
                     <th class="col-actions">&nbsp;</th>
                 </tr>
             </thead>
             <tbody id="select_option_type_row_<%- data.option_id %>"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6"><?php echo $block->getAddButtonHtml() ?>
+                    <td colspan="6"><?= $block->getAddButtonHtml() ?>
                         <input name="validation_<%- data.option_id %>_result" class="required-option-select-type-rows" type="hidden" value="">
                     </td>
                 </tr>
@@ -38,7 +38,7 @@
     <tr id="product_option_<%- data.id %>_select_<%- data.select_id %>">
         <td class="col-draggable">
             <div data-role="draggable-handle" class="draggable-handle"
-                 title="<?php /* @escapeNotVerified */ echo __('Sort Custom Option'); ?>"></div>
+                 title="<?= /* @escapeNotVerified */ __('Sort Custom Option') ?>"></div>
             <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][sort_order]" type="hidden" value="<%- data.sort_order %>">
         </td>
         <td class="col-name select-opt-title">
@@ -58,7 +58,7 @@
                 <?php endif; ?>>
         </td>
         <td class="col-price-type select-opt-price-type">
-            <?php /* @escapeNotVerified */ echo $block->getPriceTypeSelectHtml('data-attr="price-type" <% if (typeof data.scopePriceDisabled != "undefined" && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>') ?><%- data.checkboxScopePrice %>
+            <?= /* @escapeNotVerified */ $block->getPriceTypeSelectHtml('data-attr="price-type" <% if (typeof data.scopePriceDisabled != "undefined" && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>') ?><%- data.checkboxScopePrice %>
         </td>
         <?php else : ?>
         <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price" name="product[options][<%- data.id %>][values][<%- data.select_id %>][price]" type="hidden">
@@ -67,6 +67,6 @@
         <td class="col-sku">
             <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][sku]" class="input-text" type="text" value="<%- data.sku %>">
         </td>
-        <td class="col-actions col-delete"> <?php echo $block->getDeleteButtonHtml() ?></td>
+        <td class="col-actions col-delete"> <?= $block->getDeleteButtonHtml() ?></td>
     </tr>
 </script>

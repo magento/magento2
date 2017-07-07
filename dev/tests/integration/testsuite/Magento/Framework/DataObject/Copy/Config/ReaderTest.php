@@ -2,7 +2,7 @@
 /**
  * \Magento\Framework\DataObject\Copy\Config\Reader
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DataObject\Copy\Config;
@@ -23,10 +23,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fileResolver = $this->getMockForAbstractClass('Magento\Framework\Config\FileResolverInterface');
+        $this->fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = Bootstrap::getObjectManager();
         $this->model = $objectManager->create(
-            'Magento\Framework\DataObject\Copy\Config\Reader',
+            \Magento\Framework\DataObject\Copy\Config\Reader::class,
             ['fileResolver' => $this->fileResolver]
         );
     }

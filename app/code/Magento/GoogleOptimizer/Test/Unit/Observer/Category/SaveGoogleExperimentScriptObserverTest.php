@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Category;
@@ -44,8 +44,8 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperMock = $this->getMock('Magento\GoogleOptimizer\Helper\Data', [], [], '', false);
-        $this->_categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $this->_helperMock = $this->getMock(\Magento\GoogleOptimizer\Helper\Data::class, [], [], '', false);
+        $this->_categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $this->_storeId = 0;
         $this->_categoryMock->expects(
             $this->atLeastOnce()
@@ -54,16 +54,16 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_storeId)
         );
-        $event = $this->getMock('Magento\Framework\Event', ['getCategory'], [], '', false);
+        $event = $this->getMock(\Magento\Framework\Event::class, ['getCategory'], [], '', false);
         $event->expects($this->once())->method('getCategory')->will($this->returnValue($this->_categoryMock));
-        $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->_eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
-        $this->_codeMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', [], [], '', false);
-        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->_codeMock = $this->getMock(\Magento\GoogleOptimizer\Model\Code::class, [], [], '', false);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(
-            'Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver',
+            \Magento\GoogleOptimizer\Observer\Category\SaveGoogleExperimentScriptObserver::class,
             ['helper' => $this->_helperMock, 'modelCode' => $this->_codeMock, 'request' => $this->_requestMock]
         );
     }
@@ -85,7 +85,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -113,8 +113,6 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $params
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Wrong request parameters
      * @dataProvider dataProviderWrongRequestForCreating
      */
     public function testCreatingCodeIfRequestIsNotValid($params)
@@ -174,7 +172,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -223,7 +221,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -254,7 +252,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
- * Tire prices model
+ * @api
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {
@@ -162,6 +162,11 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         $qtyCache = [];
         $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
         foreach ($priceList as $priceKey => &$price) {
+            if ($price['price'] >= $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue()) {
+                unset($priceList[$priceKey]);
+                continue;
+            }
+
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
                 continue;
@@ -203,8 +208,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      */
     public function getSavePercent(AmountInterface $amount)
     {
-        return ceil(
-            100 - ((100 / $this->priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getBaseAmount())
+        return round(
+            100 - ((100 / $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue())
                 * $amount->getBaseAmount())
         );
     }

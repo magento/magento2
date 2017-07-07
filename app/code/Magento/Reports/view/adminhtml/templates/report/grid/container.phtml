@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 ?>
 
 <div class="reports-content">
-    <?php echo $block->getChildHtml('grid.filter.form') ?>
+    <?= $block->getChildHtml('grid.filter.form') ?>
 </div>
 
-<?php echo $block->getGridHtml() ?>
+<?= $block->getGridHtml() ?>
 
 <script>
 require([
@@ -24,13 +22,19 @@ require([
 //<![CDATA[
     jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});
     function filterFormSubmit() {
-        var filters = $$('#filter_form input', '#filter_form select');
-        var elements = [];
-        for(var i in filters){
-            if(filters[i].value && filters[i].value.length && !filters[i].disabled) elements.push(filters[i]);
+        var filters = $$('#filter_form input', '#filter_form select'),
+            elements = [];
+
+        for (var i in filters) {
+            if (filters[i].value && filters[i].value.length && !filters[i].disabled) {
+                elements.push(filters[i]);
+            }
         }
+
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
+            setLocation('<?= /* @escapeNotVerified */ $block->getFilterUrl() ?>filter/'+
+                Base64.encode(Form.serializeElements(elements))+'/'
+            );
         }
     }
 //]]>

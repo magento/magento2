@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,5 +22,8 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\Controller\ResultInterface">
+        <plugin name="result-messages" type="Magento\Theme\Controller\Result\MessagePlugin"/>
     </type>
 </config>

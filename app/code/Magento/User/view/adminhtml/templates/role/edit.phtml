@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,26 +12,26 @@
 /** @var $block \Magento\User\Block\Role\Tab\Edit */
 ?>
 
-<?php echo $block->getChildHtml(); ?>
+<?= $block->getChildHtml() ?>
 
 <fieldset class="fieldset form-inline entry-edit">
     <legend class="legend">
-        <span><?php /* @escapeNotVerified */ echo __('Roles Resources') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Roles Resources') ?></span>
     </legend><br />
 
     <div class="field">
-        <label class="label" for="all"><span><?php /* @escapeNotVerified */ echo __('Resource Access') ?></span></label>
+        <label class="label" for="all"><span><?= /* @escapeNotVerified */ __('Resource Access') ?></span></label>
 
         <div class="control">
             <select id="all" name="all" onchange="jQuery('[data-role=tree-resources-container]').toggle()" class="select">
-                <option value="0" <?php echo($block->isEverythingAllowed() ? '' : 'selected="selected"'); ?>><?php /* @escapeNotVerified */ echo __('Custom') ?></option>
-                <option value="1" <?php echo($block->isEverythingAllowed() ? 'selected="selected"' : ''); ?>><?php /* @escapeNotVerified */ echo __('All') ?></option>
+                <option value="0" <?= ($block->isEverythingAllowed() ? '' : 'selected="selected"') ?>><?= /* @escapeNotVerified */ __('Custom') ?></option>
+                <option value="1" <?= ($block->isEverythingAllowed() ? 'selected="selected"' : '') ?>><?= /* @escapeNotVerified */ __('All') ?></option>
             </select>
         </div>
     </div>
 
     <div class="field<?php if ($block->isEverythingAllowed()):?> no-display<?php endif?>" data-role="tree-resources-container">
-        <label class="label"><span><?php /* @escapeNotVerified */ echo __('Resources') ?></span></label>
+        <label class="label"><span><?= /* @escapeNotVerified */ __('Resources') ?></span></label>
 
         <div class="control">
             <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?php

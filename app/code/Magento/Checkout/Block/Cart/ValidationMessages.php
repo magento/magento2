@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Shopping cart validation messages block
+ *
+ * @api
  */
 class ValidationMessages extends \Magento\Framework\View\Element\Messages
 {
@@ -17,6 +20,11 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
 
     /** @var \Magento\Framework\Locale\CurrencyInterface */
     protected $currency;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     */
+    private $minimumAmountErrorMessage;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -72,22 +80,23 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
     protected function validateMinimumAmount()
     {
         if (!$this->cartHelper->getQuote()->validateMinimumAmount()) {
-            $warning = $this->_scopeConfig->getValue(
-                'sales/minimum_order/description',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-            if (!$warning) {
-                $currencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
-                $minimumAmount = $this->currency->getCurrency($currencyCode)->toCurrency(
-                    $this->_scopeConfig->getValue(
-                        'sales/minimum_order/amount',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                );
-                $warning = __('Minimum order amount is %1', $minimumAmount);
-            }
-            $this->messageManager->addNotice($warning);
+            $this->messageManager->addNotice($this->getMinimumAmountErrorMessage()->getMessage());
         }
+    }
+
+    /**
+     * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     * @deprecated
+     */
+    private function getMinimumAmountErrorMessage()
+    {
+        if ($this->minimumAmountErrorMessage === null) {
+            $objectManager = ObjectManager::getInstance();
+            $this->minimumAmountErrorMessage = $objectManager->get(
+                \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
+            );
+        }
+        return $this->minimumAmountErrorMessage;
     }
 
     /**

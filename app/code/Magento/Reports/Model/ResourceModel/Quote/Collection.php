@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\ResourceModel\Quote;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
 {
     /**
@@ -156,7 +159,7 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
 
         $select->from(
             ['customer' => $this->customerResource->getTable('customer_entity')],
-            ['email']
+            ['entity_id', 'email']
         );
         $select->columns(
             ['customer_name' => $customerName]
@@ -171,8 +174,11 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
         $customersData = $this->customerResource->getConnection()->fetchAll($select);
 
         foreach ($this->getItems() as $item) {
-            $item->setData(array_merge($item->getData(), current($customersData)));
-            next($customersData);
+            foreach ($customersData as $customerItemData) {
+                if ($item['customer_id'] == $customerItemData['entity_id']) {
+                    $item->setData(array_merge($item->getData(), $customerItemData));
+                }
+            }
         }
     }
 }

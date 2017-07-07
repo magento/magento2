@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,5 +9,5 @@
 /** @var $block \Magento\Review\Block\Adminhtml\Grid\Rss\Link */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink()): ?>
-<a href="<?php /* @escapeNotVerified */ echo $block->getLink() ?>" class="link-feed"><?php /* @escapeNotVerified */ echo $block->getLabel() ?></a>
+<a href="<?= $block->escapeUrl($block->getLink()) ?>" class="link-feed"><?= $block->escapeHtml($block->getLabel()) ?></a>
 <?php endif; ?>

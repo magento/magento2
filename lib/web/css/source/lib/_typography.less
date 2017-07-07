@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -28,31 +28,34 @@
 
 //  Rem font size
 .lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, @font-size-unit)) {
-    font-size: @sizeValue;
+    .lib-css(font-size, @sizeValue);
 }
 
 .lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, em)) {
-    font-size: @sizeValue;
+    .lib-css(font-size, @sizeValue);
 }
 
 .lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and not (isunit(@sizeValue, em)) and not (isunit(@sizeValue, @font-size-unit)) {
     .lib-font-size-value(@sizeValue);
-    font-size: @fontValue;
+    .lib-css(font-size, @fontValue);
 }
 
 //  Rem line height
 .lib-line-height(@heightValue) when not (@heightValue = false) and not (ispercentage(@heightValue)) {
     .lib-font-size-value(@heightValue);
-    line-height: @fontValue;
+    .lib-css(line-height, @fontValue);
 }
 
 .lib-line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
-    line-height: @heightValue;
+    .lib-css(line-height, @heightValue);
 }
 
 .lib-wrap-words() {
-    .lib-hyphens();
+    overflow-wrap: break-word;
     word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    .lib-hyphens();
 }
 
 .lib-text-overflow() {
@@ -71,7 +74,6 @@
 
 //  Optional hyphenation
 .lib-hyphens(@mode: auto) {
-    word-wrap: break-word;
     -webkit-hyphens: @mode;
        -moz-hyphens: @mode;
         -ms-hyphens: @mode; // IE10+
@@ -102,6 +104,7 @@
 
 .lib-list-inline() {
     .lib-list-reset-styles();
+
     > li {
         display: inline-block;
         vertical-align: top;
@@ -120,14 +123,17 @@
 ) {
     .lib-css(color, @_link-color);
     .lib-css(text-decoration, @_link-text-decoration);
+
     &:visited {
         .lib-css(color, @_link-color-visited);
         .lib-css(text-decoration, @_link-text-decoration-visited);
     }
+
     &:hover {
         .lib-css(color, @_link-color-hover);
         .lib-css(text-decoration, @_link-text-decoration-hover);
     }
+
     &:active {
         .lib-css(color,@_link-color-active);
         .lib-css(text-decoration, @_link-text-decoration-active);
@@ -151,13 +157,15 @@
         @@_line-height,
         @@_font-style
     );
+
     & {
         .lib-font-size-value(@@_margin-top);
-        margin-top: @fontValue;
+        .lib-css(margin-top, @fontValue);
     }
+
     & {
         .lib-font-size-value(@@_margin-bottom);
-        margin-bottom: @fontValue;
+        .lib-css(margin-bottom, @fontValue);
     }
 }
 
@@ -165,77 +173,98 @@
 //  Base typography
 //  ---------------------------------------------
 
-.lib-typography__base() {
+.lib-typography__base(
+    @_abbr-border-color: @abbr__border-color,
+    @_dfn-font-style: @font-style__emphasis,
+    @_emphasis-font-style: @font-style__emphasis,
+    @_hr-border-color: @hr__border-color,
+    @_hr-border-style: @hr__border-style,
+    @_hr-border-width: @hr__border-width,
+    @_hr-margin-bottom: @line-height__computed,
+    @_hr-margin-top: @line-height__computed,
+    @_mark-background-color: @mark__background-color,
+    @_mark-color: @mark__color,
+    @_p-margin-bottom: @p__margin-bottom,
+    @_p-margin-top: @p__margin-top,
+    @_root-font-size: @root__font-size,
+    @_small-font-size: @font-size__s,
+    @_strong-font-weight: @font-weight__bold,
+    @_sub-sup-font-size: (@font-size__xs/@font-size__base)*100%
+) {
     html {
-        .lib-css(font-size, @root__font-size);
+        .lib-css(font-size, @_root-font-size);
         -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-                font-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        font-size-adjust: 100%;
     }
+
     body {
         .lib-typography();
     }
 
     p {
         & {
-            .lib-font-size-value(@p__margin-top);
-            margin-top: @fontValue;
+            .lib-font-size-value(@_p-margin-top);
+            .lib-css(margin-top, @fontValue);
         }
+
         & {
-            .lib-font-size-value(@p__margin-bottom);
-            margin-bottom: @fontValue;
+            .lib-font-size-value(@_p-margin-bottom);
+            .lib-css(margin-bottom, @fontValue);
         }
     }
 
     //  Abbreviations and acronyms
     abbr[title] {
+        .lib-css(border-bottom, 1px dotted @_abbr-border-color);
         cursor: help;
-        .lib-css(border-bottom, 1px dotted @abbr__border-color);
     }
 
     b,
     strong {
-        .lib-css(font-weight, @font-weight__bold);
+        .lib-css(font-weight, @_strong-font-weight);
     }
 
     em,
     i {
-        .lib-css(font-style, @font-style__emphasis);
+        .lib-css(font-style, @_emphasis-font-style);
     }
 
     mark {
-        .lib-css(background, @mark__background-color);
-        .lib-css(color, @mark__color);
+        .lib-css(background, @_mark-background-color);
+        .lib-css(color, @_mark-color);
     }
 
     small,
     .small {
-        .lib-css(font-size, @font-size__s);
+        .lib-css(font-size, @_small-font-size);
     }
 
     hr {
         border: 0;
-        .lib-css(border-top, @hr__border-width @hr__border-style @hr__border-color);
-        .lib-css(margin-bottom, @line-height__computed);
-        .lib-css(margin-top, @line-height__computed);
+        .lib-css(border-top, @_hr-border-width @_hr-border-style @_hr-border-color);
+        .lib-css(margin-bottom, @_hr-margin-bottom);
+        .lib-css(margin-top, @_hr-margin-top);
     }
 
     sub,
     sup {
-        .lib-css(font-size, (@font-size__xs/@font-size__base)*100%);
+        .lib-css(font-size, @_sub-sup-font-size);
         line-height: 0;
         position: relative;
         vertical-align: baseline;
     }
+
     sup {
         top: -.5em;
     }
+
     sub {
         bottom: -.25em;
     }
 
     dfn {
-        .lib-css(font-style, @font-style__emphasis);
+        .lib-css(font-style, @_dfn-font-style);
     }
 }
 
@@ -243,7 +272,11 @@
 //  Headings
 //  ---------------------------------------------
 
-.lib-typography-headings() {
+.lib-typography-headings(
+    @_heading-small-color: @heading__small-color,
+    @_heading-small-line-height: @heading__small-line-height,
+    @_heading-small-size: @heading__small-size
+) {
     h1 {
         .lib-heading(h1);
     }
@@ -272,13 +305,14 @@
         small,
         .small {
             .lib-typography(
-                @heading__small-size,
-                @heading__small-color,
-                @_line-height: @heading__small-line-height
+            @_heading-small-size,
+            @_heading-small-color,
+            @_line-height: @_heading-small-line-height
             );
         }
     }
 }
+
 
 //
 //  Links
@@ -295,28 +329,43 @@
 //  Unordered and Ordered lists
 //  ---------------------------------------------
 
-.lib-typography-lists() {
+.lib-typography-lists(
+    @_list-margin-bottom: @list__margin-bottom,
+    @_list-margin-top: @list__margin-top,
+    @_list-item-margin-bottom: @list-item__margin-bottom,
+    @_list-item-margin-top: @list-item__margin-top,
+    @_dl-margin-bottom: @dl__margin-bottom,
+    @_dl-margin-top: @dl__margin-top,
+    @_dd-margin-bottom: @dd__margin-bottom,
+    @_dd-margin-top: @dd__margin-top,
+    @_dt-font-weight: @dt__font-weight,
+    @_dt-margin-bottom: @dt__margin-bottom,
+    @_dt-margin-top: @dt__margin-top
+) {
     ul,
     ol {
         & {
-            .lib-font-size-value(@list__margin-top);
-            margin-top: @fontValue;
+            .lib-font-size-value(@_list-margin-top);
+            .lib-css(margin-top, @fontValue);
         }
+
         & {
-            .lib-font-size-value(@list__margin-bottom);
-            margin-bottom: @fontValue;
+            .lib-font-size-value(@_list-margin-bottom);
+            .lib-css(margin-bottom, @fontValue);
         }
-        //.lib-typography(@list__font-size__base, @list__color__base);
+
         > li {
             & {
-                .lib-font-size-value(@list-item__margin-top);
-                margin-top: @fontValue;
+                .lib-font-size-value(@_list-item-margin-top);
+                .lib-css(margin-top, @fontValue);
             }
+
             & {
-                .lib-font-size-value(@list-item__margin-bottom);
-                margin-bottom: @fontValue;
+                .lib-font-size-value(@_list-item-margin-bottom);
+                .lib-css(margin-bottom, @fontValue);
             }
         }
+
         ul,
         ol {
             margin-bottom: 0;
@@ -324,17 +373,19 @@
     }
 
     dl {
-        .lib-css(margin-bottom, @dl__margin-bottom);
-        .lib-css(margin-top, @dl__margin-top);
+        .lib-css(margin-bottom, @_dl-margin-bottom);
+        .lib-css(margin-top, @_dl-margin-top);
     }
+
     dt {
-        .lib-css(font-weight, @dt__font-weight);
-        .lib-css(margin-bottom, @dt__margin-bottom);
-        .lib-css(margin-top, @dt__margin-top);
+        .lib-css(font-weight, @_dt-font-weight);
+        .lib-css(margin-bottom, @_dt-margin-bottom);
+        .lib-css(margin-top, @_dt-margin-top);
     }
+
     dd {
-        .lib-css(margin-bottom, @dd__margin-bottom);
-        .lib-css(margin-top, @dd__margin-top);
+        .lib-css(margin-bottom, @_dd-margin-bottom);
+        .lib-css(margin-top, @_dd-margin-top);
         margin-left: 0;
     }
 }
@@ -343,43 +394,61 @@
 //  Code (inline and block)
 //  ---------------------------------------------
 
-.lib-typography-code() {
+.lib-typography-code(
+    @_font-family-monospace: @font-family__monospace,
+    @_code-background-color: @code__background-color,
+    @_code-color: @code__color,
+    @_code-font-size: @code__font-size,
+    @_code-padding: @code__padding,
+    @_kbd-background-color: @kbd__background-color,
+    @_kbd-color: @kbd__color,
+    @_kbd-font-size: @code__font-size,
+    @_kbd-padding: @code__padding,
+    @_pre-background-color: @pre__background-color,
+    @_pre-border-color: @pre__border-color,
+    @_pre-border-width: @pre__border-width,
+    @_pre-color: @pre__color,
+    @_pre-font-size: @code__font-size,
+    @_pre-line-height: @line-height__base,
+    @_pre-margin: 0 0 @indent__s,
+    @_pre-padding: @indent__s
+) {
     code,
     kbd,
     pre,
     samp {
-        .lib-css(font-family, @font-family__monospace);
+        .lib-css(font-family, @_font-family-monospace);
     }
 
     //  Inline code
     code {
-        .lib-css(background, @code__background-color);
-        .lib-css(color, @code__color);
-        .lib-css(padding, @code__padding);
-        .lib-font-size(@code__font-size);
+        .lib-css(background, @_code-background-color);
+        .lib-css(color, @_code-color);
+        .lib-css(padding, @_code-padding);
+        .lib-font-size(@_code-font-size);
         white-space: nowrap;
     }
 
     //  User input typically entered via keyboard
     kbd {
-        .lib-css(background, @kbd__background-color);
-        .lib-css(color, @kbd__color);
-        .lib-css(padding, @code__padding);
-        .lib-font-size(@code__font-size);
+        .lib-css(background, @_kbd-background-color);
+        .lib-css(color, @_kbd-color);
+        .lib-css(padding, @_kbd-padding);
+        .lib-font-size(@_kbd-font-size);
     }
 
     //  Blocks of code
     pre {
-        .lib-css(background, @pre__background-color);
-        .lib-css(border, @pre__border-width solid @pre__border-color);
-        .lib-css(color, @pre__color);
-        .lib-css(line-height, @line-height__base);
-        .lib-css(margin, 0 0 @indent__s);
-        .lib-css(padding, @indent__s);
-        .lib-font-size (@code__font-size);
+        .lib-css(background, @_pre-background-color);
+        .lib-css(border, @_pre-border-width solid @_pre-border-color);
+        .lib-css(color, @_pre-color);
+        .lib-css(line-height, @_pre-line-height);
+        .lib-css(margin, @_pre-margin);
+        .lib-css(padding, @_pre-padding);
+        .lib-font-size(@_pre-font-size);
         display: block;
         word-wrap: break-word;
-        word-wrap: break-word;
+
         code {
             background-color: transparent;
             border-radius: 0;
@@ -395,14 +464,27 @@
 //  Blockquotes
 //  ---------------------------------------------
 
-.lib-typography-blockquote() {
+.lib-typography-blockquote(
+    @_blockquote-border-color: @blockquote__border-color,
+    @_blockquote-border-width: @blockquote__border-width,
+    @_blockquote-font-size: @blockquote__font-size,
+    @_blockquote-font-style: @blockquote__font-style,
+    @_blockquote-margin: @blockquote__margin,
+    @_blockquote-padding: @blockquote__padding,
+    @_blockquote-small-before-content: @blockquote__content-before,
+    @_blockquote-small-color: @blockquote-small__color,
+    @_blockquote-small-font-size: @blockquote-small__font-size,
+    @_blockquote-small-line-height: @line-height__base,
+    @_blockquote-cite: @cite__font-style,
+    @_cite: @cite__font-style
+) {
     blockquote {
-        .lib-css(border-left, @blockquote__border-width solid @blockquote__border-color);
-        .lib-css(margin, @blockquote__margin);
-        .lib-css(padding, @blockquote__padding);
+        .lib-css(border-left, @_blockquote-border-width solid @_blockquote-border-color);
+        .lib-css(margin, @_blockquote-margin);
+        .lib-css(padding, @_blockquote-padding);
         .lib-typography(
-            @_font-size: @blockquote__font-size,
-            @_font-style: @blockquote__font-style
+            @_font-size: @_blockquote-font-size,
+            @_font-style: @_blockquote-font-style
         );
 
         p,
@@ -416,40 +498,48 @@
         footer,
         small,
         .small {
-            .lib-css(color, @blockquote-small__color);
-            .lib-css(line-height, @line-height__base);
-            .lib-font-size(@blockquote-small__font-size);
+            .lib-css(color, @_blockquote-small-color);
+            .lib-css(line-height, @_blockquote-small-line-height);
+            .lib-font-size(@_blockquote-small-font-size);
             display: block;
+
             &:before {
-                .lib-css(content, @blockquote__content-before);
+                .lib-css(content, @_blockquote-small-before-content);
             }
         }
 
         cite {
-            .lib-css(font-style, @cite__font-style);
+            .lib-css(font-style, @_blockquote-cite);
         }
     }
 
     //  Quotes
-    blockquote:before,
-    blockquote:after {
-        content: '';
+    blockquote {
+        &:before,
+        &:after {
+            content: '';
+        }
     }
 
     q {
         quotes: none;
-    }
-    q:before,
-    q:after {
-        content: '';
-        content: none;
+
+        &:before,
+        &:after {
+            content: '';
+            content: none;
+        }
     }
 
     //  Undo browser default styling
     cite {
-        .lib-css(font-style, @cite__font-style);
+        .lib-css(font-style, @_cite);
     }
 }
+
+//
+//  All typography
+//  ---------------------------------------------
 
 .lib-typography-all() {
     .lib-typography__base();

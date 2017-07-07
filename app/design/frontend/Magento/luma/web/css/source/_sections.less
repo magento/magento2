@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -14,34 +14,43 @@
         margin-bottom: @indent__base;
         margin-left: -@layout__width-xs-indent;
         margin-right: -@layout__width-xs-indent;
+
         .item.title {
             a {
                 position: relative;
                 .lib-icon-font(
-                    @_icon-font-content: @icon-down,
-                    @_icon-font-size: @font-size__base,
-                    @_icon-font-line-height: @icon-font__line-height,
-                    @_icon-font-color: @icon-font__color,
-                    @_icon-font-color-hover: @icon-font__color-hover,
-                    @_icon-font-color-active: @icon-font__color-active,
-                    @_icon-font-margin: @icon-font__margin,
-                    @_icon-font-vertical-align: @icon-font__vertical-align,
-                    @_icon-font-position: after,
-                    @_icon-font-display: false
+                @_icon-font-content: @icon-down,
+                @_icon-font-size: @font-size__base,
+                @_icon-font-line-height: @icon-font__line-height,
+                @_icon-font-color: @icon-font__color,
+                @_icon-font-color-hover: @icon-font__color-hover,
+                @_icon-font-color-active: @icon-font__color-active,
+                @_icon-font-margin: @icon-font__margin,
+                @_icon-font-vertical-align: @icon-font__vertical-align,
+                @_icon-font-position: after,
+                @_icon-font-display: false
                 );
+
                 &:after {
                     position: absolute;
                     right: @accordion-control__padding-right;
                     top: @accordion-control__padding-top;
                 }
             }
-            &.active a:after {
-                content: @icon-up;
+
+            &.active a {
+                &:after {
+                    content: @icon-up;
+                }
             }
         }
-        .value p:last-child {
-            margin-bottom: 0;
+
+        .value p {
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
+
         .table-wrapper {
             margin: 0;
         }
@@ -58,8 +67,11 @@
         border-bottom: 0;
         margin-left: 0;
         margin-right: 0;
-        .item.title a:after {
-            display: none;
+
+        .item.title a {
+            &:after {
+                display: none;
+            }
         }
     }
 }

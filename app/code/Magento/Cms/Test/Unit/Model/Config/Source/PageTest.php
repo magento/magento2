@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Config\Source;
@@ -30,7 +30,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->collectionFactory = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\CollectionFactory',
+            \Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -38,7 +38,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->page = $objectManager->getObject(
-            'Magento\Cms\Model\Config\Source\Page',
+            \Magento\Cms\Model\Config\Source\Page::class,
             [
                 'collectionFactory' => $this->collectionFactory,
             ]
@@ -53,7 +53,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $pageCollectionMock = $this->getMock(
-            'Magento\Cms\Model\ResourceModel\Page\Collection',
+            \Magento\Cms\Model\ResourceModel\Page\Collection::class,
             [],
             [],
             '',

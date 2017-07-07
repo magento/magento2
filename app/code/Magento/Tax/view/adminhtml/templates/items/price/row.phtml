@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,18 +16,18 @@ $_item = $block->getItem();
 <?php if ($block->displayBothPrices() || $block->displayPriceExclTax()): ?>
     <div class="price-excl-tax">
         <?php if ($block->displayBothPrices()): ?>
-            <span class="label"><?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>:</span>
+            <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
         <?php endif; ?>
-        <?php /* @escapeNotVerified */ echo $block->displayPrices($_item->getBaseRowTotal(), $_item->getRowTotal()) ?>
+        <?= /* @escapeNotVerified */ $block->displayPrices($_item->getBaseRowTotal(), $_item->getRowTotal()) ?>
     </div>
 <?php endif; ?>
 <?php if ($block->displayBothPrices() || $block->displayPriceInclTax()): ?>
     <div class="price-incl-tax">
         <?php if ($block->displayBothPrices()): ?>
-            <span class="label"><?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>:</span>
+            <span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
         <?php endif; ?>
         <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
         <?php $_baseIncl = $this->helper('Magento\Checkout\Helper\Data')->getBaseSubtotalInclTax($_item); ?>
-        <?php /* @escapeNotVerified */ echo $block->displayPrices($_baseIncl, $_incl) ?>
+        <?= /* @escapeNotVerified */ $block->displayPrices($_baseIncl, $_incl) ?>
     </div>
 <?php endif; ?>

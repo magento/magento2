@@ -2,7 +2,7 @@
 /**
  * Filesystem configuration loader. Loads configuration from XML files, split by scopes
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -10,6 +10,7 @@ namespace Magento\Framework\Config\Reader;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @api
  */
 class Filesystem implements \Magento\Framework\Config\ReaderInterface
 {
@@ -68,6 +69,16 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected $validationState;
 
     /**
+     * @var string
+     */
+    protected $_defaultScope;
+
+    /**
+     * @var string
+     */
+    protected $_schemaFile;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
@@ -86,7 +97,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName,
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {
         $this->_fileResolver = $fileResolver;

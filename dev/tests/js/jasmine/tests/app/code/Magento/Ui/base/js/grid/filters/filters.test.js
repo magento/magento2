@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,9 @@ define([
             temp;
 
         beforeEach(function () {
-            filterObj = new Filter();
+            filterObj = new Filter({
+                name: 'filter'
+            });
         });
         it('has been initialized', function () {
             expect(filterObj).toBeDefined();
@@ -39,18 +41,9 @@ define([
             temp = filterObj.cancel();
             expect(temp).toBeDefined();
         });
-        it('has isOpened method', function () {
-            filterObj.opened = function () {
-                return true;
-            };
-            filterObj.hasVisible = function () {
-                return true;
-            };
-            temp = filterObj.isOpened();
-            expect(temp).toBeTruthy();
-        });
         it('has isFilterVisible method', function () {
             temp = {
+                /** Stub */
                 visible: function () {
                     return false;
                 }
@@ -68,16 +61,6 @@ define([
             spyOn(filterObj, 'hasVisible');
             filterObj.hasVisible();
             expect(filterObj.hasVisible).toHaveBeenCalled();
-        });
-        it('has extractActive method', function () {
-            spyOn(filterObj, 'extractActive');
-            filterObj.extractActive();
-            expect(filterObj.extractActive).toHaveBeenCalled();
-        });
-        it('has extractPreviews method', function () {
-            spyOn(filterObj, 'extractPreviews');
-            filterObj.extractPreviews();
-            expect(filterObj.extractPreviews).toHaveBeenCalled();
         });
     });
 });

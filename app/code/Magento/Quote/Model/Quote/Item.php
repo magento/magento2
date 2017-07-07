@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Sales Quote Item Model
  *
+ * @api
  * @method \Magento\Quote\Model\ResourceModel\Quote\Item _getResource()
  * @method \Magento\Quote\Model\ResourceModel\Quote\Item getResource()
  * @method string getCreatedAt()
@@ -172,8 +172,16 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @deprecated
      */
     protected $stockRegistry;
+
+    /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -191,6 +199,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -207,13 +216,16 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->quoteItemCompare = $quoteItemCompare;
         $this->stockRegistry = $stockRegistry;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $context,
             $registry,
@@ -234,7 +246,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Item');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
     }
 
     /**
@@ -423,8 +435,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             ->setTaxClassId($product->getTaxClassId())
             ->setBaseCost($product->getCost());
 
-        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
-        $this->setIsQtyDecimal($stockItem->getIsQtyDecimal());
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->setIsQtyDecimal($stockItem ? $stockItem->getIsQtyDecimal() : false);
 
         $this->_eventManager->dispatch(
             'sales_quote_item_set_product',
@@ -561,8 +573,10 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function setOptions($options)
     {
-        foreach ($options as $option) {
-            $this->addOption($option);
+        if (is_array($options)) {
+            foreach ($options as $option) {
+                $this->addOption($option);
+            }
         }
         return $this;
     }
@@ -602,8 +616,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         if (is_array($option)) {
             $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
-        } elseif (
-            $option instanceof \Magento\Framework\DataObject &&
+        } elseif ($option instanceof \Magento\Framework\DataObject &&
             !$option instanceof \Magento\Quote\Model\Quote\Item\Option
         ) {
             $option = $this->_itemOptionFactory->create()->setData(
@@ -806,7 +819,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $buyRequest = new \Magento\Framework\DataObject($option ? unserialize($option->getValue()) : []);
+        $data = $option ? $this->serializer->unserialize($option->getValue()) : [];
+        $buyRequest = new \Magento\Framework\DataObject($data);
 
         // Overwrite standard buy request qty, because item qty could have changed since adding to quote
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
@@ -1031,6 +1045,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         return $this->setData(self::KEY_PRODUCT_OPTION, $productOption);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

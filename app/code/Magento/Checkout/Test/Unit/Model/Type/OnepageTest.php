@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -107,48 +107,48 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->addressRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AddressRepositoryInterface',
+            \Magento\Customer\Api\AddressRepositoryInterface::class,
             ['get'],
             '',
             false
         );
         $this->accountManagementMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AccountManagementInterface',
+            \Magento\Customer\Api\AccountManagementInterface::class,
             [],
             '',
             false
         );
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $this->checkoutHelperMock = $this->getMock('Magento\Checkout\Helper\Data', [], [], '', false);
-        $this->customerUrlMock = $this->getMock('Magento\Customer\Model\Url', [], [], '', false);
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->checkoutHelperMock = $this->getMock(\Magento\Checkout\Helper\Data::class, [], [], '', false);
+        $this->customerUrlMock = $this->getMock(\Magento\Customer\Model\Url::class, [], [], '', false);
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->checkoutSessionMock = $this->getMock(
-            'Magento\Checkout\Model\Session',
+            \Magento\Checkout\Model\Session::class,
             ['getLastOrderId', 'getQuote', 'setStepData', 'getStepData'],
             [],
             '',
             false
         );
         $this->customerSessionMock = $this->getMock(
-            'Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             ['getCustomerDataObject', 'isLoggedIn'],
             [],
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->addressFactoryMock = $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false);
-        $this->formFactoryMock = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', [], [], '', false);
-        $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
-        $this->quoteManagementMock = $this->getMock('\Magento\Quote\Api\CartManagementInterface');
-        $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
+        $this->addressFactoryMock = $this->getMock(\Magento\Customer\Model\AddressFactory::class, [], [], '', false);
+        $this->formFactoryMock = $this->getMock(\Magento\Customer\Model\Metadata\FormFactory::class, [], [], '', false);
+        $this->customerFactoryMock = $this->getMock(\Magento\Customer\Model\CustomerFactory::class, [], [], '', false);
+        $this->quoteManagementMock = $this->getMock(\Magento\Quote\Api\CartManagementInterface::class);
+        $this->orderFactoryMock = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
+        $this->copyMock = $this->getMock(\Magento\Framework\DataObject\Copy::class, [], [], '', false);
+        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
 
         $this->customerFormFactoryMock = $this->getMock(
-            'Magento\Customer\Model\FormFactory',
+            \Magento\Customer\Model\FormFactory::class,
             ['create'],
             [],
             '',
@@ -156,35 +156,35 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->customerDataFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             [],
             [],
             '',
             false
         );
 
-        $this->randomMock = $this->getMock('Magento\Framework\Math\Random');
-        $this->encryptorMock = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
+        $this->randomMock = $this->getMock(\Magento\Framework\Math\Random::class);
+        $this->encryptorMock = $this->getMock(\Magento\Framework\Encryption\EncryptorInterface::class);
 
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
-            '\Magento\Customer\Api\CustomerRepositoryInterface',
+            \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
             '',
             false
         );
 
         $orderSenderMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Sender\OrderSender',
+            \Magento\Sales\Model\Order\Email\Sender\OrderSender::class,
             [],
             [],
             '',
             false
         );
 
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
-            'Magento\Framework\Api\ExtensibleDataObjectConverter'
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::class
         )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
 
         $this->extensibleDataObjectConverterMock
@@ -192,9 +192,15 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->method('toFlatArray')
             ->will($this->returnValue([]));
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->totalsCollectorMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
+        $this->totalsCollectorMock = $this->getMock(
+            \Magento\Quote\Model\Quote\TotalsCollector::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->onepage = $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Model\Type\Onepage',
+            \Magento\Checkout\Model\Type\Onepage::class,
             [
                 'eventManager' => $this->eventManagerMock,
                 'helper' => $this->checkoutHelperMock,
@@ -236,7 +242,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     public function testSetQuote()
     {
         /** @var \Magento\Quote\Model\Quote $quoteMock */
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->onepage->setQuote($quoteMock);
         $this->assertEquals($quoteMock, $this->onepage->getQuote());
     }
@@ -247,14 +253,14 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     public function testInitCheckout($stepData, $isLoggedIn, $isSetStepDataCalled)
     {
         $customer = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
             false
         );
         /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
         $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             [
                 'isMultipleShippingAddresses',
                 'removeAllAddresses',
@@ -316,7 +322,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue($isLoggedIn));
         /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('setCheckoutMethod')->with($expected);
 
         $quoteMock->expects($this->any())
@@ -348,7 +354,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveCheckoutMethod(null));
         /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
         $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['setCheckoutMethod', '__wakeup'],
             [],
             '',
@@ -367,7 +373,13 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $orderId = 1;
         $this->checkoutSessionMock->expects($this->once())->method('getLastOrderId')
             ->will($this->returnValue($orderId));
-        $orderMock = $this->getMock('Magento\Sales\Model\Order', ['load', 'getIncrementId', '__wakeup'], [], '', false);
+        $orderMock = $this->getMock(
+            \Magento\Sales\Model\Order::class,
+            ['load', 'getIncrementId', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $orderMock->expects($this->once())->method('load')->with($orderId)->will($this->returnSelf());
         $orderMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($orderIncrementId));
         $this->orderFactoryMock->expects($this->once())->method('create')->will($this->returnValue($orderMock));

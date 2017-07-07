@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -19,11 +19,6 @@ use Magento\Framework\Api\ImageContentValidatorInterface;
 class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
@@ -34,48 +29,24 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     protected $contentValidator;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param ImageContentValidatorInterface $contentValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         ImageContentValidatorInterface $contentValidator
     ) {
         $this->productRepository = $productRepository;
-        $this->storeManager = $storeManager;
         $this->contentValidator = $contentValidator;
-    }
-
-    /**
-     * Retrieve backend model of product media gallery attribute
-     *
-     * @param Product $product
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * @throws StateException
-     */
-    protected function getGalleryAttributeBackend(Product $product)
-    {
-        $galleryAttributeBackend = $product->getGalleryAttributeBackend();
-        if ($galleryAttributeBackend == null) {
-            throw new StateException(__('Requested product does not support images.'));
-        }
-        return $galleryAttributeBackend;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry, $storeId = 0)
+    public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
-        try {
-            $this->storeManager->getStore($storeId);
-        } catch (\Exception $exception) {
-            throw new NoSuchEntityException(__('There is no store with provided ID.'));
-        }
         /** @var $entry ProductAttributeMediaGalleryEntryInterface */
         $entryContent = $entry->getContent();
 
@@ -114,13 +85,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function update($sku, ProductAttributeMediaGalleryEntryInterface $entry, $storeId = 0)
+    public function update($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
-        try {
-            $this->storeManager->getStore($storeId);
-        } catch (\Exception $exception) {
-            throw new NoSuchEntityException(__('There is no store with provided ID.'));
-        }
         $product = $this->productRepository->get($sku);
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
         if ($existingMediaGalleryEntries == null) {
@@ -128,17 +94,22 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         }
         $found = false;
         foreach ($existingMediaGalleryEntries as $key => $existingEntry) {
+            $entryTypes = (array)$entry->getTypes();
+            $existingEntryTypes = (array)$existingMediaGalleryEntries[$key]->getTypes();
+            $existingMediaGalleryEntries[$key]->setTypes(array_diff($existingEntryTypes, $entryTypes));
+
             if ($existingEntry->getId() == $entry->getId()) {
                 $found = true;
+                if ($entry->getFile()) {
+                    $entry->setId(null);
+                }
                 $existingMediaGalleryEntries[$key] = $entry;
-                break;
             }
         }
         if (!$found) {
             throw new NoSuchEntityException(__('There is no image with provided ID.'));
         }
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
-        $product->setStoreId($storeId);
 
         try {
             $this->productRepository->save($product);

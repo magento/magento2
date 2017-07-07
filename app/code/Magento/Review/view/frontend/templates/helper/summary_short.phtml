@@ -1,34 +1,36 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Review\Block\Product\ReviewRenderer $block */
+
+$url = $block->getReviewsUrl() . '#reviews';
+$urlForm = $block->getReviewsUrl() . '#review-form';
 ?>
-<?php $url = $block->getReviewsUrl() . '#reviews'; ?>
-<?php $urlForm = $block->getReviewsUrl() . '#review-form'; ?>
 <?php if ($block->getReviewsCount()): ?>
 <?php $rating = $block->getRatingSummary(); ?>
-<div class="product-reviews-summary short<?php echo !$rating ? ' no-rating' : ''?>">
+<div class="product-reviews-summary short<?= !$rating ? ' no-rating' : '' ?>">
     <?php if ($rating):?>
     <div class="rating-summary">
-        <span class="label"><span><?php /* @escapeNotVerified */ echo __('Rating') ?>:</span></span>
-        <div class="rating-result" title="<?php /* @escapeNotVerified */ echo $rating; ?>%">
-            <span style="width:<?php /* @escapeNotVerified */ echo $rating; ?>%"><span><?php /* @escapeNotVerified */ echo $rating; ?>%</span></span>
+        <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
+        <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
+            <span style="width:<?= $block->escapeHtmlAttr($rating) ?>%"><span><?= $block->escapeHtml($rating) ?>%</span></span>
         </div>
     </div>
     <?php endif;?>
     <div class="reviews-actions">
-        <a class="action view" href="<?php /* @escapeNotVerified */ echo $url ?>"><?php /* @escapeNotVerified */ echo $block->getReviewsCount() ?>&nbsp;<span><?php /* @escapeNotVerified */ echo($block->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
+        <a class="action view" href="<?= $block->escapeUrl($url) ?>"><?= $block->escapeHtml($block->getReviewsCount()) ?>&nbsp;<span><?= ($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?></span></a>
     </div>
 </div>
 <?php elseif ($block->getDisplayIfEmpty()): ?>
 <div class="product-reviews-summary short empty">
     <div class="reviews-actions">
-        <a class="action add" href="<?php /* @escapeNotVerified */ echo $urlForm; ?>">
-            <?php /* @escapeNotVerified */ echo __('Be the first to review this product') ?>
+        <a class="action add" href="<?= $block->escapeUrl($urlForm) ?>">
+            <?= $block->escapeHtml(__('Be the first to review this product')) ?>
         </a>
     </div>
 </div>

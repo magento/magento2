@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,7 +61,7 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
             [[__CLASS__, 'getTestValueStatically'], self::TEST_VALUE],
             [[$mock, 'getValue'], 'Value from mock', ['arg1', 'arg2']],
             [
-                ['Magento\Framework\Validator\Test\Unit\Test\Callback', 'getId'],
+                [\Magento\Framework\Validator\Test\Unit\Test\Callback::class, 'getId'],
                 \Magento\Framework\Validator\Test\Unit\Test\Callback::ID,
                 null,
                 true

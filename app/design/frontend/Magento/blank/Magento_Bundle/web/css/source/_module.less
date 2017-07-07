@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -62,9 +62,11 @@
 
             .bundle-summary {
                 margin-top: @indent__l;
+
                 &.empty {
                     display: none;
                 }
+
                 > .subtitle {
                     .lib-heading(h3);
                     display: block;
@@ -73,6 +75,7 @@
 
             .bundle.items {
                 &:extend(.abs-reset-list all);
+
                 > li {
                     margin-bottom: @indent__s;
                 }
@@ -83,10 +86,12 @@
                     display: inline-block;
                     margin-bottom: @indent__s;
                 }
+
                 .action.primary {
                     &:extend(.abs-button-l all);
                 }
             }
+
             .product-addto-links {
                 > .action {
                     &:extend(.abs-action-addto-product all);
@@ -101,9 +106,11 @@
                     .lib-css(margin, 0 0 @indent__xs);
                     display: inline-block;
                 }
+
                 .lib-css(margin-top, @form-field__vertical-indent);
             }
         }
+
         p.required {
             .lib-css(color, @form-field-label-asterisk__color);
         }
@@ -123,16 +130,19 @@
         .legend.title {
             &:extend(.abs-reset-left-margin-desktop all);
         }
+
         .bundle-options-wrapper,
         .product-options-wrapper {
             float: left;
             width: 57%;
         }
+
         .block-bundle-summary {
             float: right;
             position: relative;
             width: 40%;
         }
+
         .bundle-options-wrapper,
         .block-bundle-summary {
             .page-layout-2columns-left &,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Status\History;
@@ -11,7 +11,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidate()
     {
-        $history = $this->getMock('Magento\Sales\Model\Order\Status\History', ['hasData'], [], '', false);
+        $history = $this->getMock(\Magento\Sales\Model\Order\Status\History::class, ['hasData'], [], '', false);
         $history->expects($this->any())
             ->method('hasData')
             ->will($this->returnValue(true));
@@ -21,7 +21,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateNegative()
     {
-        $history = $this->getMock('Magento\Sales\Model\Order\Status\History', ['hasData'], [], '', false);
+        $history = $this->getMock(\Magento\Sales\Model\Order\Status\History::class, ['hasData'], [], '', false);
         $history->expects($this->any())
             ->method('hasData')
             ->with('parent_id')

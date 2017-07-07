@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Model\System\Config\Initial;
@@ -32,7 +32,13 @@ class Converter
     public function afterConvert(\Magento\Framework\App\Config\Initial\Converter $subject, array $result)
     {
         if (isset($result['data']['default']['system'])) {
-            $result['data']['default']['system']['cron'] = $this->groupsConfig->get();
+            $groups = $this->groupsConfig->get();
+            foreach ($groups as $group => $fields) {
+                foreach ($fields as $key => $field) {
+                    $groups[$group][$key] = $field['value'];
+                }
+            }
+            $result['data']['default']['system']['cron'] = $groups;
         }
         return $result;
     }

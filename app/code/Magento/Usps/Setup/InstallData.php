@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class InstallData implements InstallDataInterface
         $installer = $setup;
         $configDataTable = $installer->getTable('core_config_data');
         $connection = $installer->getConnection();
-        
+
         $oldToNewMethodCodesMap = [
             'First-Class' => '0_FCLE',
             'First-Class Mail International Large Envelope' => 'INT_14',
@@ -40,7 +40,7 @@ class InstallData implements InstallDataInterface
             'First-Class Mail Parcel' => '0_FCP',
             'First-Class Mail Package' => '0_FCP',
             'Parcel Post' => '4',
-            'Standard Post' => '4',
+            'Retail Ground' => '4',
             'Media Mail' => '6',
             'Library Mail' => '7',
             'Express Mail' => '3',
@@ -67,7 +67,7 @@ class InstallData implements InstallDataInterface
             'Priority Mail International Medium Flat Rate Box' => 'INT_9',
             'Priority Mail International Large Flat Rate Box' => 'INT_11',
         ];
-        
+
         $select = $connection->select()->from(
             $configDataTable
         )->where(
@@ -75,7 +75,7 @@ class InstallData implements InstallDataInterface
             ['carriers/usps/free_method', 'carriers/usps/allowed_methods']
         );
         $oldConfigValues = $connection->fetchAll($select);
-        
+
         foreach ($oldConfigValues as $oldValue) {
             if (stripos($oldValue['path'], 'free_method') && isset($oldToNewMethodCodesMap[$oldValue['value']])) {
                 $newValue = $oldToNewMethodCodesMap[$oldValue['value']];
@@ -90,12 +90,11 @@ class InstallData implements InstallDataInterface
             } else {
                 continue;
             }
-        
+
             if ($newValue && $newValue != $oldValue['value']) {
                 $whereConfigId = $connection->quoteInto('config_id = ?', $oldValue['config_id']);
                 $connection->update($configDataTable, ['value' => $newValue], $whereConfigId);
             }
         }
-        
     }
 }

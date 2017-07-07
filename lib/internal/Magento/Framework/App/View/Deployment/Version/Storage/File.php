@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,15 +40,10 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
      */
     public function load()
     {
-        try {
+        if ($this->directory->isReadable($this->fileName)) {
             return $this->directory->readFile($this->fileName);
-        } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            throw new \UnexpectedValueException(
-                'Unable to retrieve deployment version of static files from the file system.',
-                0,
-                $e
-            );
         }
+        return false;
     }
 
     /**

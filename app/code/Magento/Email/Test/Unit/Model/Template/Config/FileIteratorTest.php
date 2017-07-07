@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
@@ -42,10 +42,16 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePaths = ['directory/path/file1', 'directory/path/file2'];
-        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
-        $this->fileRead = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $this->fileReadFactory = $this->getMock(
+            \Magento\Framework\Filesystem\File\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->fileRead = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false);
         $this->moduleDirResolverMock = $this->getMock(
-            'Magento\Framework\Module\Dir\ReverseResolver',
+            \Magento\Framework\Module\Dir\ReverseResolver::class,
             [],
             [],
             '',

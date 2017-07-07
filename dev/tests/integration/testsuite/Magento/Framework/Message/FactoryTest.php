@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
@@ -23,7 +23,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create('Magento\Framework\Message\Factory');
+        $this->model = $this->objectManager->create(\Magento\Framework\Message\Factory::class);
     }
 
     /**
@@ -32,7 +32,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate($messageType)
     {
         $message = $this->model->create($messageType, 'some text');
-        $this->assertInstanceOf('\Magento\Framework\Message\MessageInterface', $message);
+        $this->assertInstanceOf(\Magento\Framework\Message\MessageInterface::class, $message);
     }
 
     public function createProvider()

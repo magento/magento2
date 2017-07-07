@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,14 +13,14 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetValueElement()
     {
-        $layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $context = $objectManager->create('Magento\Rule\Model\Condition\Context', ['layout' => $layoutMock]);
+        $context = $objectManager->create(\Magento\Rule\Model\Condition\Context::class, ['layout' => $layoutMock]);
 
         /** @var \Magento\Rule\Model\Condition\AbstractCondition $model */
         $model = $this->getMockForAbstractClass(
-            'Magento\Rule\Model\Condition\AbstractCondition',
+            \Magento\Rule\Model\Condition\AbstractCondition::class,
             [$context],
             '',
             true,
@@ -29,22 +29,22 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ['getValueElementRenderer']
         );
         $editableBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Rule\Block\Editable'
+            \Magento\Rule\Block\Editable::class
         );
         $model->expects($this->any())->method('getValueElementRenderer')->will($this->returnValue($editableBlock));
 
-        $rule = $this->getMockBuilder('Magento\Rule\Model\AbstractModel')
+        $rule = $this->getMockBuilder(\Magento\Rule\Model\AbstractModel::class)
             ->setMethods(['getForm'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $rule->expects($this->any())
             ->method('getForm')
             ->willReturn(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\Data\Form')
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Framework\Data\Form::class)
             );
         $model->setRule($rule);
 
-        $property = new \ReflectionProperty('Magento\Rule\Model\Condition\AbstractCondition', '_inputType');
+        $property = new \ReflectionProperty(\Magento\Rule\Model\Condition\AbstractCondition::class, '_inputType');
         $property->setAccessible(true);
         $property->setValue($model, 'date');
 

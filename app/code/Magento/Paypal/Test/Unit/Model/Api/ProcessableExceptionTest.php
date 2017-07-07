@@ -1,23 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Paypal\Model\Api\ProcessableException;
 
 class ProcessableExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManager;
+    const UNKNOWN_CODE = 10411;
 
     /**
-     * @var \Magento\Paypal\Model\Api\ProcessableException
+     * @var ProcessableException
      */
-    protected $model;
+    private $model;
 
     /**
      * @param int $code
@@ -27,8 +24,7 @@ class ProcessableExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUserMessage($code, $msg)
     {
-        $this->objectManager = new ObjectManager($this);
-        $this->model = new \Magento\Paypal\Model\Api\ProcessableException(__($msg), null, $code);
+        $this->model = new ProcessableException(__($msg), null, $code);
         $this->assertEquals($msg, $this->model->getUserMessage());
     }
 
@@ -39,28 +35,35 @@ class ProcessableExceptionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                10001,
+                ProcessableException::API_INTERNAL_ERROR,
                 "I'm sorry - but we were not able to process your payment. "
                 . "Please try another payment method or contact us so we can assist you.",
             ],
             [
-                10417,
+                ProcessableException::API_UNABLE_PROCESS_PAYMENT_ERROR_CODE,
                 "I'm sorry - but we were not able to process your payment. "
                 . "Please try another payment method or contact us so we can assist you."
             ],
             [
-                10537,
+                ProcessableException::API_COUNTRY_FILTER_DECLINE,
                 "I'm sorry - but we are not able to complete your transaction. Please contact us so we can assist you."
             ],
             [
-                10538,
+                ProcessableException::API_MAXIMUM_AMOUNT_FILTER_DECLINE,
                 "I'm sorry - but we are not able to complete your transaction. Please contact us so we can assist you."
             ],
             [
-                10539,
+                ProcessableException::API_OTHER_FILTER_DECLINE,
                 "I'm sorry - but we are not able to complete your transaction. Please contact us so we can assist you."
             ],
-            [10411, "something went wrong"]
+            [
+                ProcessableException::API_ADDRESS_MATCH_FAIL,
+                'A match of the Shipping Address City, State, and Postal Code failed.'
+            ],
+            [
+                self::UNKNOWN_CODE,
+                "We can't place the order."
+            ]
         ];
     }
 }

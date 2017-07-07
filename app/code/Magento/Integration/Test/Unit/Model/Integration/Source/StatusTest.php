@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\Integration\Source;
@@ -15,6 +15,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $expectedStatusArr = [
             ['value' => \Magento\Integration\Model\Integration::STATUS_INACTIVE, 'label' => __('Inactive')],
             ['value' => \Magento\Integration\Model\Integration::STATUS_ACTIVE, 'label' => __('Active')],
+            ['value' => \Magento\Integration\Model\Integration::STATUS_RECREATED, 'label' => __('Reset')],
         ];
         $statusArr = $statusSource->toOptionArray();
         $this->assertEquals($expectedStatusArr, $statusArr, "Status source arrays don't match");

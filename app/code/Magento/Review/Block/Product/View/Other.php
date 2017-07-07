@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Product\View;
 
 /**
  * Product view other block
+ *
+ * @api
  */
 class Other extends \Magento\Framework\View\Element\Template
 {

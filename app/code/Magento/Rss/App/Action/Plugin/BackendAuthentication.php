@@ -2,7 +2,7 @@
 /**
  * RSS Backend Authentication plugin
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Rss\App\Action\Plugin;
@@ -13,8 +13,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
- * Class BackendAuthentication
- *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentication
@@ -48,6 +47,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\BackendAppList $backendAppList
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\AuthorizationInterface $authorization
@@ -63,6 +63,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\BackendAppList $backendAppList,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\HTTP\Authentication $httpAuthentication,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\AuthorizationInterface $authorization,
@@ -80,7 +81,8 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
             $messageManager,
             $backendUrl,
             $resultRedirectFactory,
-            $backendAppList
+            $backendAppList,
+            $formKeyValidator
         );
     }
 

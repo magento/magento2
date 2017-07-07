@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,8 +27,8 @@ class ModuleOutputTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
-        $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
+        $this->_fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
+        $this->_moduleManager = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
         $this->_moduleManager
             ->expects($this->any())
             ->method('isOutputEnabled')
@@ -43,7 +43,7 @@ class ModuleOutputTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFiles()
     {
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $fileOne = new \Magento\Framework\View\File('1.xml', 'Module_OutputEnabled');
         $fileTwo = new \Magento\Framework\View\File('2.xml', 'Module_OutputDisabled');
         $fileThree = new \Magento\Framework\View\File('3.xml', 'Module_OutputEnabled', $theme);

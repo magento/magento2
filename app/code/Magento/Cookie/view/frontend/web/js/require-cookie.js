@@ -1,14 +1,17 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint evil:true browser:true jquery:true */
+
+/**
+ * @api
+ */
 define([
-    "jquery",
-    "jquery/ui"
-], function($){
-    "use strict";
-    
+    'jquery',
+    'jquery/ui'
+], function ($) {
+    'use strict';
+
     $.widget('mage.requireCookie', {
         options: {
             event: 'click',
@@ -20,7 +23,7 @@ define([
          * Constructor
          * @private
          */
-        _create: function() {
+        _create: function () {
             this._bind();
         },
 
@@ -28,10 +31,10 @@ define([
          * This method binds elements found in this widget.
          * @private
          */
-        _bind: function() {
+        _bind: function () {
             var events = {};
 
-            $.each(this.options.triggers, function(index, value) {
+            $.each(this.options.triggers, function (index, value) {
                 events['click ' + value] = '_checkCookie';
             });
             this._on(events);
@@ -39,9 +42,10 @@ define([
 
         /**
          * This method set the url for the redirect.
+         * @param {jQuery.Event} event
          * @private
          */
-        _checkCookie: function(event) {
+        _checkCookie: function (event) {
             if (navigator.cookieEnabled) {
                 return;
             }

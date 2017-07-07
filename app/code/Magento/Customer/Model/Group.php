@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -8,6 +8,7 @@ namespace Magento\Customer\Model;
 /**
  * Customer group model
  *
+ * @api
  * @method \Magento\Customer\Model\ResourceModel\Group _getResource()
  * @method \Magento\Customer\Model\ResourceModel\Group getResource()
  * @method string getCustomerGroupCode()
@@ -96,7 +97,7 @@ class Group extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\ResourceModel\Group');
+        $this->_init(\Magento\Customer\Model\ResourceModel\Group::class);
     }
 
     /**

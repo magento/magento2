@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,9 +22,19 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     protected $categoryTree;
 
     /**
+     * @var \Magento\Framework\App\ScopeResolverInterface
+     */
+    private $scopeResolver;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     */
+    private $categoriesFactory;
+    
+    /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param Category\Tree $categoryTree
-     * @param CollectionFactory $categoriesFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoriesFactory
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
@@ -45,9 +55,47 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
         if ($rootCategoryId !== null) {
             /** @var \Magento\Catalog\Model\Category $category */
             $category = $this->categoryRepository->get($rootCategoryId);
+        } elseif ($this->isAdminStore()) {
+            $category = $this->getTopLevelCategory();
         }
         $result = $this->categoryTree->getTree($this->categoryTree->getRootNode($category), $depth);
         return $result;
+    }
+
+    /**
+     * Check is request use default scope
+     *
+     * @return bool
+     */
+    private function isAdminStore()
+    {
+        return $this->getScopeResolver()->getScope()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE;
+    }
+
+    /**
+     * Get store manager for operations with admin code
+     *
+     * @return \Magento\Framework\App\ScopeResolverInterface
+     */
+    private function getScopeResolver()
+    {
+        if ($this->scopeResolver == null) {
+            $this->scopeResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\ScopeResolverInterface::class);
+        }
+
+        return $this->scopeResolver;
+    }
+
+    /**
+     * Get top level hidden root category
+     *
+     * @return \Magento\Catalog\Model\Category
+     */
+    private function getTopLevelCategory()
+    {
+        $categoriesCollection = $this->categoriesFactory->create();
+        return $categoriesCollection->addFilter('level', ['eq' => 0])->getFirstItem();
     }
 
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -50,6 +50,7 @@
             <data name="saveAction" xsi:type="string">save</data>
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessSaveMessage" />
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInGrid" />
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableForm" />
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage" />
         </variation>
     </testCase>

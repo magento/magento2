@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,10 +13,12 @@
 
 $productId = $block->getSaleableItem()->getId();
 
-/** @var \Magento\Catalog\Pricing\Price\RegularPrice $priceModel */
+/** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 
-/** @var \Magento\Catalog\Pricing\Price\FinalPrice $finalPriceModel */
+/** ex: \Magento\Catalog\Pricing\Price\FinalPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
 $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
@@ -51,12 +53,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 
 <?php if ($block->showMinimalPrice()): ?>
     <?php if ($block->getUseLinkForAsLowAs()):?>
-        <a href="<?php /* @escapeNotVerified */ echo $block->getSaleableItem()->getProductUrl(); ?>" class="minimal-price-link">
-            <?php /* @escapeNotVerified */ echo $block->renderAmountMinimal(); ?>
+        <a href="<?= /* @escapeNotVerified */ $block->getSaleableItem()->getProductUrl() ?>" class="minimal-price-link">
+            <?= /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
         </a>
     <?php else:?>
         <span class="minimal-price-link">
-            <?php /* @escapeNotVerified */ echo $block->renderAmountMinimal(); ?>
+            <?= /* @escapeNotVerified */ $block->renderAmountMinimal() ?>
         </span>
     <?php endif?>
 <?php endif; ?>

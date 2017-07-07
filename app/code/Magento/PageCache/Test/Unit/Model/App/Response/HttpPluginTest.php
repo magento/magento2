@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,8 +29,8 @@ class HttpPluginTest extends \PHPUnit_Framework_TestCase
     public function beforeSendResponseDataProvider()
     {
         return [
-            ['Magento\Framework\App\Response\Http', 1],
-            ['Magento\MediaStorage\Model\File\Storage\Response', 0]
+            [\Magento\Framework\App\Response\Http::class, 1],
+            [\Magento\MediaStorage\Model\File\Storage\Response::class, 0]
         ];
     }
 }

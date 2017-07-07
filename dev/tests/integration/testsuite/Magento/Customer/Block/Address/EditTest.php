@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Address;
@@ -26,23 +26,23 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_customerSession = $objectManager->get('Magento\Customer\Model\Session');
+        $this->_customerSession = $objectManager->get(\Magento\Customer\Model\Session::class);
         $this->_customerSession->setCustomerId(1);
 
-        $this->_context = $objectManager->get('Magento\Backend\Block\Template\Context');
+        $this->_context = $objectManager->get(\Magento\Backend\Block\Template\Context::class);
         $this->_requestId = $this->_context->getRequest()->getParam('id');
         $this->_context->getRequest()->setParam('id', '1');
 
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
 
         /** @var $layout \Magento\Framework\View\Layout */
-        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
+        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
         $currentCustomer = $objectManager->create(
-            'Magento\Customer\Helper\Session\CurrentCustomer',
+            \Magento\Customer\Helper\Session\CurrentCustomer::class,
             ['customerSession' => $this->_customerSession]
         );
         $this->_block = $layout->createBlock(
-            'Magento\Customer\Block\Address\Edit',
+            \Magento\Customer\Block\Address\Edit::class,
             '',
             ['customerSession' => $this->_customerSession, 'currentCustomer' => $currentCustomer]
         );
@@ -54,13 +54,13 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession->setCustomerId(null);
         $this->_context->getRequest()->setParam('id', $this->_requestId);
         /** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
-        $addressRegistry = $objectManager->get('Magento\Customer\Model\AddressRegistry');
+        $addressRegistry = $objectManager->get(\Magento\Customer\Model\AddressRegistry::class);
         //Cleanup address from registry
         $addressRegistry->remove(1);
         $addressRegistry->remove(2);
 
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
-        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry = $objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
         //Cleanup customer from registry
         $customerRegistry->remove(1);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -8,8 +8,18 @@ namespace Magento\Payment\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\View\Asset\Source;
 
+/**
+ * Class CcConfigProvider
+ *
+ * @api
+ */
 class CcConfigProvider implements ConfigProviderInterface
 {
+    /**
+     * @var array
+     */
+    private $icons = [];
+
     /**
      * @var CcConfig
      */
@@ -51,17 +61,20 @@ class CcConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    protected function getIcons()
+    public function getIcons()
     {
-        $icons = [];
+        if (!empty($this->icons)) {
+            return $this->icons;
+        }
+
         $types = $this->ccConfig->getCcAvailableTypes();
         foreach (array_keys($types) as $code) {
-            if (!array_key_exists($code, $icons)) {
+            if (!array_key_exists($code, $this->icons)) {
                 $asset = $this->ccConfig->createAsset('Magento_Payment::images/cc/' . strtolower($code) . '.png');
-                $placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
+                $placeholder = $this->assetSource->findSource($asset);
                 if ($placeholder) {
                     list($width, $height) = getimagesize($asset->getSourceFile());
-                    $icons[$code] = [
+                    $this->icons[$code] = [
                         'url' => $asset->getUrl(),
                         'width' => $width,
                         'height' => $height
@@ -69,6 +82,7 @@ class CcConfigProvider implements ConfigProviderInterface
                 }
             }
         }
-        return $icons;
+
+        return $this->icons;
     }
 }

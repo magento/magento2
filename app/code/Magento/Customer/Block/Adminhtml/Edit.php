@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml;
@@ -174,7 +174,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $html = parent::getFormHtml();
         $html .= $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Composite\Configure'
+            \Magento\Catalog\Block\Adminhtml\Product\Composite\Configure::class
         )->toHtml();
         return $html;
     }

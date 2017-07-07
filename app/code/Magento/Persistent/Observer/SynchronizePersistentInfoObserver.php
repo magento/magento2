@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\Observer;
-
 use Magento\Framework\Event\ObserverInterface;
 
 /**
@@ -55,6 +54,7 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @deprecated
      */
     public function execute(Observer $observer)
     {
@@ -70,7 +70,7 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
 
         // Quote Id could be changed only by logged in customer
         if ($this->_customerSession->isLoggedIn() ||
-            $request && $request->getActionName() == 'logout' && $request->getControllerName() == 'account'
+            $request && $request->getFullActionName() == 'customer_account_logout'
         ) {
             $sessionModel->save();
         }

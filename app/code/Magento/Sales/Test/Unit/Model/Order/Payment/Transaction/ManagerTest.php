@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Transaction;
-
 
 use Magento\Sales\Model\Order\Payment\Transaction;
 
@@ -31,14 +30,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->repositoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction\Repository',
+            \Magento\Sales\Model\Order\Payment\Transaction\Repository::class,
             [],
             [],
             '',
             false
         );
         $this->manager = $objectManager->getObject(
-            'Magento\Sales\Model\Order\Payment\Transaction\Manager',
+            \Magento\Sales\Model\Order\Payment\Transaction\Manager::class,
             ['transactionRepository' => $this->repositoryMock]
         );
     }
@@ -52,7 +51,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetAuthorizationTransaction($parentTransactionId, $paymentId, $orderId)
     {
         $transaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
+            \Magento\Sales\Model\Order\Payment\Transaction::class,
             [],
             [],
             '',
@@ -90,7 +89,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         if ($transactionId && $isRepositoryReturnTransaction) {
             $transaction = $this->getMock(
-                'Magento\Sales\Model\Order\Payment\Transaction',
+                \Magento\Sales\Model\Order\Payment\Transaction::class,
                 [],
                 [],
                 '',
@@ -123,7 +122,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $transactionBasedOn = false;
 
         $payment = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
+            \Magento\Sales\Model\Order\Payment::class,
             ["setParentTransactionId", "getParentTransactionId", "getTransactionId"],
             [],
             '',
@@ -133,7 +132,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         if (!$parentTransactionId && !$transactionId && $transactionBasedTxnId) {
             $transactionBasedOn = $this->getMock(
-                'Magento\Sales\Model\Order\Payment\Transaction',
+                \Magento\Sales\Model\Order\Payment\Transaction::class,
                 [],
                 [],
                 '',

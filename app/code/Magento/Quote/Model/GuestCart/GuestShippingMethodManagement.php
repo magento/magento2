@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Quote\Model\GuestCart;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\GuestShipmentEstimationInterface;
+use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -15,7 +19,8 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
  */
 class GuestShippingMethodManagement implements
     \Magento\Quote\Api\GuestShippingMethodManagementInterface,
-    \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface
+    \Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface,
+    GuestShipmentEstimationInterface
 {
     /**
      * @var ShippingMethodManagementInterface
@@ -26,6 +31,11 @@ class GuestShippingMethodManagement implements
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
+
+    /**
+     * @var ShipmentEstimationInterface
+     */
+    private $shipmentEstimationManagement;
 
     /**
      * Constructs a shipping method read service object.
@@ -79,5 +89,31 @@ class GuestShippingMethodManagement implements
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingMethodManagement->estimateByAddress($quoteIdMask->getQuoteId(), $address);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function estimateByExtendedAddress($cartId, AddressInterface $address)
+    {
+        /** @var $quoteIdMask QuoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+
+        return $this->getShipmentEstimationManagement()
+            ->estimateByExtendedAddress((int) $quoteIdMask->getQuoteId(), $address);
+    }
+
+    /**
+     * Get shipment estimation management service
+     * @return ShipmentEstimationInterface
+     * @deprecated
+     */
+    private function getShipmentEstimationManagement()
+    {
+        if ($this->shipmentEstimationManagement === null) {
+            $this->shipmentEstimationManagement = ObjectManager::getInstance()
+                ->get(ShipmentEstimationInterface::class);
+        }
+        return $this->shipmentEstimationManagement;
     }
 }

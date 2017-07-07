@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
@@ -200,10 +200,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $this->setAxisLabels($axis, $this->getRowsData($attr, true));
         }
 
-        $timezoneLocal = $this->_scopeConfig->getValue(
-            $this->_localeDate->getDefaultTimezonePath(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $timezoneLocal = $this->_localeDate->getConfigTimezone();
 
         /** @var \DateTime $dateStart */
         /** @var \DateTime $dateEnd */
@@ -217,10 +214,17 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $dateStart->setTimezone(new \DateTimeZone($timezoneLocal));
         $dateEnd->setTimezone(new \DateTimeZone($timezoneLocal));
 
+        if ($this->getDataHelper()->getParam('period') == '24h') {
+            $dateEnd->modify('-1 hour');
+        } else {
+            $dateEnd->setTime(23, 59, 59);
+            $dateStart->setTime(0, 0, 0);
+        }
+
         $dates = [];
         $datas = [];
 
-        while ($dateStart < $dateEnd) {
+        while ($dateStart <= $dateEnd) {
             switch ($this->getDataHelper()->getParam('period')) {
                 case '7d':
                 case '1m':
@@ -387,7 +391,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                      */
                     foreach ($this->_axisLabels[$idx] as $_index => $_label) {
                         if ($_label != '') {
-                            $period = new \DateTime($_label);
+                            $period = new \DateTime($_label, new \DateTimeZone($timezoneLocal));
                             switch ($this->getDataHelper()->getParam('period')) {
                                 case '24h':
                                     $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
@@ -398,7 +402,11 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                                     break;
                                 case '7d':
                                 case '1m':
-                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime($period);
+                                    $this->_axisLabels[$idx][$_index] = $this->_localeDate->formatDateTime(
+                                        $period,
+                                        \IntlDateFormatter::SHORT,
+                                        \IntlDateFormatter::NONE
+                                    );
                                     break;
                                 case '1y':
                                 case '2y':

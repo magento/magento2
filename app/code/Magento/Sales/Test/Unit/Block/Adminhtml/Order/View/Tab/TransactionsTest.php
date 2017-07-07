@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab;
@@ -44,10 +44,10 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->authorizationMock = $this->getMock('\Magento\Framework\Authorization', [], [], '', false);
-        $this->coreRegistryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->orderMock = $this->getMock('\Magento\Sales\Model\Order', [], [], '', false);
-        $this->paymentMock = $this->getMock('\Magento\Sales\Model\Order\Payment', [], [], '', false);
+        $this->authorizationMock = $this->getMock(\Magento\Framework\Authorization::class, [], [], '', false);
+        $this->coreRegistryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $this->paymentMock = $this->getMock(\Magento\Sales\Model\Order\Payment::class, [], [], '', false);
 
         $this->coreRegistryMock->expects($this->any())
             ->method('registry')
@@ -59,7 +59,7 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentMock);
 
         $this->transactionsTab = $this->objectManager->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions',
+            \Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions::class,
             [
                 'authorization' => $this->authorizationMock,
                 'registry' => $this->coreRegistryMock
@@ -69,7 +69,7 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrder()
     {
-        $this->assertInstanceOf('\Magento\Sales\Model\Order', $this->transactionsTab->getOrder());
+        $this->assertInstanceOf(\Magento\Sales\Model\Order::class, $this->transactionsTab->getOrder());
     }
 
     /**
@@ -94,11 +94,11 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase
     public function canShowTabDataProvider()
     {
         return [
-            ['\Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab\Stub\OnlineMethod', true],
-            ['\Magento\OfflinePayments\Model\Cashondelivery', false],
-            ['\Magento\OfflinePayments\Model\Checkmo', false],
-            ['\Magento\OfflinePayments\Model\Banktransfer', false],
-            ['\Magento\OfflinePayments\Model\Purchaseorder', false]
+            [\Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab\Stub\OnlineMethod::class, true],
+            [\Magento\OfflinePayments\Model\Cashondelivery::class, false],
+            [\Magento\OfflinePayments\Model\Checkmo::class, false],
+            [\Magento\OfflinePayments\Model\Banktransfer::class, false],
+            [\Magento\OfflinePayments\Model\Purchaseorder::class, false]
         ];
     }
 

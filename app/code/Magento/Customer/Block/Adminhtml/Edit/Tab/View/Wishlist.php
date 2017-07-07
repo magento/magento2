@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -9,6 +9,8 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer view wishlist block
+ *
+ * @api
  */
 class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -97,7 +99,7 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Product'),
                 'index' => 'product_name',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
+                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item::class
             ]
         );
 

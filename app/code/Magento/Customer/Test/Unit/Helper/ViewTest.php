@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Helper;
@@ -18,14 +18,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerMetadataService;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerMetadataService = $this->getMock('Magento\Customer\Api\CustomerMetadataInterface');
+        $this->customerMetadataService = $this->getMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
 
-        $attributeMetadata = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
+        $attributeMetadata = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $attributeMetadata->expects($this->any())->method('isVisible')->will($this->returnValue(true));
         $this->customerMetadataService->expects($this->any())
             ->method('getAttributeMetadata')
@@ -39,7 +39,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomerName($prefix, $firstName, $middleName, $lastName, $suffix, $result)
     {
-        $customerData = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $customerData = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerData->expects($this->any())

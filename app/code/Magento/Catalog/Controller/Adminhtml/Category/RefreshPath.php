@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -34,7 +34,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         $categoryId = (int)$this->getRequest()->getParam('id');
         if ($categoryId) {
-            $category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+            $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class)->load($categoryId);
 
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();

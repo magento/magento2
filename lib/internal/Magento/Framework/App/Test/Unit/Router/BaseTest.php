@@ -2,7 +2,7 @@
 /**
  * Tests Magento\Framework\App\Router\Base
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Router;
@@ -49,17 +49,17 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
      */
     private $defaultPathMock;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         // Create mocks
-        $this->requestMock = $this->basicMock('Magento\Framework\App\Request\Http');
-        $this->routeConfigMock = $this->basicMock('Magento\Framework\App\Route\ConfigInterface');
-        $this->appStateMock = $this->basicMock('Magento\Framework\App\State');
-        $this->actionListMock = $this->basicMock('Magento\Framework\App\Router\ActionList');
-        $this->actionFactoryMock = $this->basicMock('Magento\Framework\App\ActionFactory');
-        $this->nameBuilderMock = $this->basicMock('Magento\Framework\Code\NameBuilder');
-        $this->defaultPathMock = $this->basicMock('Magento\Framework\App\DefaultPathInterface');
+        $this->requestMock = $this->basicMock(\Magento\Framework\App\Request\Http::class);
+        $this->routeConfigMock = $this->basicMock(\Magento\Framework\App\Route\ConfigInterface::class);
+        $this->appStateMock = $this->basicMock(\Magento\Framework\App\State::class);
+        $this->actionListMock = $this->basicMock(\Magento\Framework\App\Router\ActionList::class);
+        $this->actionFactoryMock = $this->basicMock(\Magento\Framework\App\ActionFactory::class);
+        $this->nameBuilderMock = $this->basicMock(\Magento\Framework\Code\NameBuilder::class);
+        $this->defaultPathMock = $this->basicMock(\Magento\Framework\App\DefaultPathInterface::class);
 
         // Prepare SUT
         $mocks = [
@@ -70,7 +70,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
             'nameBuilder' => $this->nameBuilderMock,
             'defaultPath' => $this->defaultPathMock,
         ];
-        $this->model = $this->objectManager->getObject('Magento\Framework\App\Router\Base', $mocks);
+        $this->model = $this->objectManager->getObject(\Magento\Framework\App\Router\Base::class, $mocks);
     }
 
     public function testMatch()
@@ -80,7 +80,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = 'Magento\Cms\Controller\Index\Index';
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 
@@ -109,7 +109,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = 'Magento\Cms\Controller\Index\Index';
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
         $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
@@ -137,7 +137,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = 'Magento\Cms\Controller\Index\Index';
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 
@@ -169,7 +169,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = 'Magento\Cms\Controller\Index\Index';
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $emptyModuleList = [];
 
         // Stubs
@@ -192,7 +192,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = 'Magento\Cms\Controller\Index\Index';
+        $actionClassName = \Magento\Framework\App\Action\Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
 

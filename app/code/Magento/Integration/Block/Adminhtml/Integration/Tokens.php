@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Block\Adminhtml\Integration;
@@ -10,6 +10,7 @@ use Magento\Integration\Controller\Adminhtml\Integration as IntegrationControlle
 /**
  * Main Integration properties edit form
  *
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Tokens extends \Magento\Backend\Block\Widget\Form\Generic

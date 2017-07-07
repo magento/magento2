@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -60,11 +60,14 @@
     .lib-css(background, @_message-background);
     .lib-css(border-color, @_message-border-color);
     .lib-css(color, @_message-color);
+
     a {
         .lib-css(color, @_message-link-color);
+
         &:hover {
             .lib-css(color, @_message-link-color-hover);
         }
+
         &:active {
             .lib-css(color, @_message-link-color-active);
         }
@@ -136,6 +139,7 @@ and not (@_message-border-style = false) {
     @_message-icon-right
 ) {
     position: relative;
+
     &:before {
         .lib-css(background, @_message-icon-background);
         .lib-css(width, @message-icon__lateral-width);
@@ -147,6 +151,7 @@ and not (@_message-border-style = false) {
         text-align: center;
         top: 0;
     }
+
     > *:first-child {
         &:before {
             .lib-css(margin-top, -@message-icon__lateral-arrow-size);
@@ -156,6 +161,7 @@ and not (@_message-border-style = false) {
             top: 50%;
         }
     }
+
     > *:first-child {
         &:after {
             ._lib-icon-font(
@@ -176,6 +182,7 @@ and not (@_message-border-style = false) {
             text-align: center;
         }
     }
+
     ._lib-message-icon-lateral-position(
         @_message-icon-position,
         @_message-icon-background
@@ -187,16 +194,20 @@ and not (@_message-border-style = false) {
     @_message-icon-background
 ) when (@_message-icon-position = right) {
     .lib-css(padding-right, @message-icon__lateral-width + @indent__s);
+
     &:before {
         right: 0;
+
         ._lib-message-icon-lateral-border-radius(@_message-icon-position);
     }
+
     > *:first-child {
         &:before {
             .lib-arrow(left, @message-icon__lateral-arrow-size, @_message-icon-background);
             .lib-css(right, @message-icon__lateral-width);
         }
     }
+
     > *:first-child {
         &:after {
             right: 0;
@@ -214,10 +225,12 @@ and not (@_message-border-style = false) {
         left: 0;
         ._lib-message-icon-lateral-border-radius(@_message-icon-position);
     }
+
     > *:first-child:before {
         .lib-arrow(right, @message-icon__lateral-arrow-size, @_message-icon-background);
         .lib-css(left, @message-icon__lateral-width);
     }
+
     > *:first-child:after {
         left: 0;
     }
@@ -226,13 +239,13 @@ and not (@_message-border-style = false) {
 ._lib-message-icon-lateral-border-radius(
     @_message-icon-position
 ) when (@_message-icon-position = left) and not (@message__border-radius = false) and not (@message__border-width = false) {
-    border-radius: (@message__border-radius - @message__border-width) 0 0 (@message__border-radius - @message__border-width);
+    .lib-css(border-radius, (@message__border-radius - @message__border-width) 0 0 (@message__border-radius - @message__border-width));
 }
 
 ._lib-message-icon-lateral-border-radius(
     @_message-icon-position
 ) when (@_message-icon-position = right) and not (@message__border-radius = false) and not (@message__border-width = false) {
-    border-radius: 0 (@message__border-radius - @message__border-width) (@message__border-radius - @message__border-width) 0;
+    .lib-css(border-radius, 0 (@message__border-radius - @message__border-width) (@message__border-radius - @message__border-width) 0);
 }
 
 ._lib-message-icon-inner(

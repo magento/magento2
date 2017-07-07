@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation;
@@ -98,7 +98,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $resourceCollection,
             $data
         );
-        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rule');
+        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rule::class);
         $this->_taxClass = $taxClass;
     }
 
@@ -231,6 +231,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     {
         return $this->getData(self::KEY_PRIORITY);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

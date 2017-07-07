@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Simplexml\Test\Unit;
@@ -40,7 +40,7 @@ class ElementTest extends \PHPUnit_Framework_TestCase
     public static function xmlDataProvider()
     {
         return [
-            [[__DIR__ . '/_files/data.xml', 'Magento\Framework\Simplexml\Element']]
+            [[__DIR__ . '/_files/data.xml', \Magento\Framework\Simplexml\Element::class]]
         ];
     }
 
@@ -48,7 +48,7 @@ class ElementTest extends \PHPUnit_Framework_TestCase
     {
         $dataFile = file_get_contents(__DIR__ . '/_files/mixed_data.xml');
         /** @var \Magento\Framework\Simplexml\Element $xml  */
-        $xml = simplexml_load_string($dataFile, 'Magento\Framework\Simplexml\Element');
+        $xml = simplexml_load_string($dataFile, \Magento\Framework\Simplexml\Element::class);
 
         $expected = <<<XML
 <root>
@@ -69,11 +69,11 @@ XML;
     public function testAppendChild()
     {
         /** @var \Magento\Framework\Simplexml\Element $baseXml */
-        $baseXml = simplexml_load_string('<root/>', 'Magento\Framework\Simplexml\Element');
+        $baseXml = simplexml_load_string('<root/>', \Magento\Framework\Simplexml\Element::class);
         /** @var \Magento\Framework\Simplexml\Element $appendXml */
         $appendXml = simplexml_load_string(
             '<node_a attr="abc"><node_b innerAttribute="xyz">text</node_b></node_a>',
-            'Magento\Framework\Simplexml\Element'
+            \Magento\Framework\Simplexml\Element::class
         );
         $baseXml->appendChild($appendXml);
 
@@ -86,7 +86,7 @@ XML;
         $path = '/node1/node2';
         $value = 'value';
         /** @var \Magento\Framework\Simplexml\Element $xml */
-        $xml = simplexml_load_string('<root/>', 'Magento\Framework\Simplexml\Element');
+        $xml = simplexml_load_string('<root/>', \Magento\Framework\Simplexml\Element::class);
         $this->assertEmpty($xml->xpath('/root/node1/node2'));
         $xml->setNode($path, $value);
         $this->assertNotEmpty($xml->xpath('/root/node1/node2'));
@@ -101,7 +101,7 @@ XML;
     public function testSetAttribute($name, $value)
     {
         /** @var \Magento\Framework\Simplexml\Element $xml */
-        $xml = simplexml_load_string('<root name="test2" data=""/>', 'Magento\Framework\Simplexml\Element');
+        $xml = simplexml_load_string('<root name="test2" data=""/>', \Magento\Framework\Simplexml\Element::class);
         $this->assertEquals($xml->getAttribute('name'), 'test2');
         $this->assertNull($xml->getAttribute('new'));
         $xml->setAttribute($name, $value);

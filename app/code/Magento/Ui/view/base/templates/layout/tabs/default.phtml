@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**
  * @var \Magento\Ui\Component\Layout\Tabs $block
  */
 ?>
-<div data-bind="scope: '<?php /* @escapeNotVerified */ echo $block->getDataScope(); ?>.sections' " class="ui-tabs">
+<div data-bind="scope: '<?= /* @escapeNotVerified */ $block->getDataScope() ?>.sections' " class="ui-tabs">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>

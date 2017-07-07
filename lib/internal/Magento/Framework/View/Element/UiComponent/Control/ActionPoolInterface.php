@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Control;
@@ -46,4 +46,14 @@ interface ActionPoolInterface
      * @return bool|BlockInterface
      */
     public function getToolbar();
+
+    /**
+     * Add html block
+     *
+     * @param  string $type
+     * @param  string $name
+     * @param  array $arguments
+     * @return void
+     */
+    public function addHtmlBlock($type, $name = '', array $arguments = []);
 }

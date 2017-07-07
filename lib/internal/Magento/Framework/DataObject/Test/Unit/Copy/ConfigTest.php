@@ -2,7 +2,7 @@
 /**
  * \Magento\Framework\DataObject\Copy\Config
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DataObject\Test\Unit\Copy;
@@ -19,10 +19,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_storageMock = $this->getMock(
-            'Magento\Framework\DataObject\Copy\Config\Data',
+            \Magento\Framework\DataObject\Copy\Config\Data::class,
             ['get'],
             [],
             '',

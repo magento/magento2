@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme;
@@ -29,17 +29,26 @@ class ThemePackageInfo
     private $packageNameToFullPathMap = [];
 
     /**
-     * Constructor
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Initialize dependencies.
      *
      * @param ComponentRegistrar $componentRegistrar
      * @param ReadFactory $readDirFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,
-        ReadFactory $readDirFactory
+        ReadFactory $readDirFactory,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->readDirFactory = $readDirFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -47,7 +56,6 @@ class ThemePackageInfo
      *
      * @param string $themePath
      * @return string
-     * @throws \Zend_Json_Exception
      */
     public function getPackageName($themePath)
     {
@@ -57,7 +65,7 @@ class ThemePackageInfo
             $rawData = [];
             $themeFile = $themeDir->readFile('composer.json');
             if ($themeFile) {
-                $rawData = \Zend_Json::decode($themeFile);
+                $rawData = $this->serializer->unserialize($themeFile);
             }
             return isset($rawData['name']) ? $rawData['name'] : '';
         }
@@ -83,7 +91,6 @@ class ThemePackageInfo
      * Initialize package name to full theme path map
      *
      * @return void
-     * @throws \Zend_Json_Exception
      */
     private function initializeMap()
     {
@@ -92,7 +99,7 @@ class ThemePackageInfo
         foreach ($themePaths as $fullThemePath => $themeDir) {
             $themeDirRead = $this->readDirFactory->create($themeDir);
             if ($themeDirRead->isExist('composer.json')) {
-                $rawData = \Zend_Json::decode($themeDirRead->readFile('composer.json'));
+                $rawData = $this->serializer->unserialize($themeDirRead->readFile('composer.json'));
                 if (isset($rawData['name'])) {
                     $this->packageNameToFullPathMap[$rawData['name']] = $fullThemePath;
                 }

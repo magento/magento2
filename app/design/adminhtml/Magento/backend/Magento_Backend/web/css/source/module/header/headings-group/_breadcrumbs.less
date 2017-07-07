@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -10,6 +10,7 @@
 .page-title-breadcrumbs {
     font-size: @page-title-breadcrumb__font-size;
     min-height: @page-title-breadcrumbs__min-height;
+
     + .page-title-wrapper {
         margin-top: 0;
     }
@@ -19,6 +20,7 @@
     &:hover {
         text-decoration: none;
     }
+
     &:after {
         &:extend(.abs-icon all);
         content: @icon-caret-right__content;

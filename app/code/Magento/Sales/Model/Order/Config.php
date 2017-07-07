@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
 /**
  * Order configuration model
+ *
+ * @api
  */
 class Config
 {
@@ -47,7 +49,8 @@ class Config
      */
     protected $maskStatusesMapping = [
         \Magento\Framework\App\Area::AREA_FRONTEND => [
-            \Magento\Sales\Model\Order::STATUS_FRAUD => \Magento\Sales\Model\Order::STATE_PROCESSING
+            \Magento\Sales\Model\Order::STATUS_FRAUD => \Magento\Sales\Model\Order::STATE_PROCESSING,
+            \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW => \Magento\Sales\Model\Order::STATE_PROCESSING
         ]
     ];
 
@@ -191,7 +194,7 @@ class Config
      */
     public function getStateStatuses($state, $addLabels = true)
     {
-        $key = md5(serialize([$state, $addLabels]));
+        $key = sha1(json_encode([$state, $addLabels]));
         if (isset($this->stateStatuses[$key])) {
             return $this->stateStatuses[$key];
         }
@@ -248,11 +251,33 @@ class Config
     protected function _getStatuses($visibility)
     {
         if ($this->statuses == null) {
+            $this->statuses = [
+                true => [],
+                false => [],
+            ];
             foreach ($this->_getCollection() as $item) {
                 $visible = (bool) $item->getData('visible_on_front');
                 $this->statuses[$visible][] = $item->getData('status');
             }
         }
         return $this->statuses[(bool) $visibility];
+    }
+
+    /**
+     * Retrieve label by state  and status
+     *
+     * @param string $state
+     * @param string $status
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getStateLabelByStateAndStatus($state, $status)
+    {
+        foreach ($this->_getCollection() as $item) {
+            if ($item->getData('state') == $state && $item->getData('status') == $status) {
+                $label = $item->getData('label');
+                return __($label);
+            }
+        }
+        return $state;
     }
 }

@@ -2,7 +2,7 @@
 /**
  * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,9 +12,14 @@ namespace Magento\Customer\Test\Unit\Model\Account;
 
 use Magento\Customer\Model\Account\Redirect;
 use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Url\HostChecker;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RedirectTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -68,15 +73,25 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     protected $resultRedirect;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Controller\Result\RedirectFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Controller\Result\Forward
      */
-    protected $resultRedirectFactory;
+    protected $resultForward;
 
-    public function setUp()
+    /**
+     * @var ResultFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactory;
+
+    /**
+     * @var HostChecker | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $hostChecker;
+
+    protected function setUp()
     {
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
 
-        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getLastCustomerId',
@@ -88,41 +103,50 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
                 'setBeforeAuthUrl',
                 'getAfterAuthUrl',
                 'setAfterAuthUrl',
+                'getBeforeRequestParams',
+                'getBeforeModuleName',
+                'getBeforeControllerName',
+                'getBeforeAction',
             ])
             ->getMock();
 
-        $this->scopeConfig = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->url = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');
-        $this->urlDecoder = $this->getMockForAbstractClass('Magento\Framework\Url\DecoderInterface');
+        $this->url = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
+        $this->urlDecoder = $this->getMockForAbstractClass(\Magento\Framework\Url\DecoderInterface::class);
 
-        $this->customerUrl = $this->getMockBuilder('Magento\Customer\Model\Url')
+        $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+        $this->resultForward = $this->getMockBuilder(\Magento\Framework\Controller\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultRedirect);
+
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->hostChecker = $this->getMockBuilder(HostChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Customer\Model\Account\Redirect',
+            \Magento\Customer\Model\Account\Redirect::class,
             [
                 'request'               => $this->request,
                 'customerSession'       => $this->customerSession,
@@ -131,12 +155,25 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
                 'url'                   => $this->url,
                 'urlDecoder'            => $this->urlDecoder,
                 'customerUrl'           => $this->customerUrl,
-                'resultRedirectFactory' => $this->resultRedirectFactory
+                'resultFactory'         => $this->resultFactory,
+                'hostChecker' => $this->hostChecker
             ]
         );
     }
 
     /**
+     * @param int $customerId
+     * @param int $lastCustomerId
+     * @param string $referer
+     * @param string $baseUrl
+     * @param string $beforeAuthUrl
+     * @param string $afterAuthUrl
+     * @param string $accountUrl
+     * @param string $loginUrl
+     * @param string $logoutUrl
+     * @param string $dashboardUrl
+     * @param bool $customerLoggedIn
+     * @param bool $redirectToDashboard
      * @dataProvider getRedirectDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -190,6 +227,9 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->method('setAfterAuthUrl')
             ->with($beforeAuthUrl)
             ->willReturnSelf();
+        $this->customerSession->expects($this->any())
+            ->method('getBeforeRequestParams')
+            ->willReturn(false);
 
         $this->customerUrl->expects($this->any())
             ->method('getAccountUrl')
@@ -225,7 +265,13 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirect->expects($this->once())
             ->method('setUrl')
+            ->with($beforeAuthUrl)
             ->willReturnSelf();
+
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($this->resultRedirect);
 
         $this->model->getRedirect();
     }
@@ -252,6 +298,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         return [
             // Loggend In, Redirect by Referer
             [1, 2, 'referer', 'base', '', '', 'account', '', '', '', true, false],
+            [1, 2, 'http://referer.com/', 'http://base.com/', '', '', 'account', '', '', 'dashboard', true, false],
             // Loggend In, Redirect by AfterAuthUrl
             [1, 2, 'referer', 'base', '', 'defined', 'account', '', '', '', true, true],
             // Not logged In, Redirect by LoginUrl
@@ -261,5 +308,54 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             // Default redirect
             [1, 2, 'referer', 'base', 'defined', '', 'account', 'login', 'logout', 'dashboard', true, true],
         ];
+    }
+
+    public function testBeforeRequestParams()
+    {
+        $requestParams = [
+            'param1' => 'value1',
+        ];
+
+        $module = 'module';
+        $controller = 'controller';
+        $action = 'action';
+
+        $this->customerSession->expects($this->exactly(2))
+            ->method('getBeforeRequestParams')
+            ->willReturn($requestParams);
+        $this->customerSession->expects($this->once())
+            ->method('getBeforeModuleName')
+            ->willReturn($module);
+        $this->customerSession->expects($this->once())
+            ->method('getBeforeControllerName')
+            ->willReturn($controller);
+        $this->customerSession->expects($this->once())
+            ->method('getBeforeAction')
+            ->willReturn($action);
+
+        $this->resultForward->expects($this->once())
+            ->method('setParams')
+            ->with($requestParams)
+            ->willReturnSelf();
+        $this->resultForward->expects($this->once())
+            ->method('setModule')
+            ->with($module)
+            ->willReturnSelf();
+        $this->resultForward->expects($this->once())
+            ->method('setController')
+            ->with($controller)
+            ->willReturnSelf();
+        $this->resultForward->expects($this->once())
+            ->method('forward')
+            ->with($action)
+            ->willReturnSelf();
+
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_FORWARD)
+            ->willReturn($this->resultForward);
+
+        $result = $this->model->getRedirect();
+        $this->assertSame($this->resultForward, $result);
     }
 }

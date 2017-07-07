@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -21,7 +21,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const KEY_QTY = StockStatusInterface::QTY;
     const KEY_ITEM_ID = 'item_id';
     const KEY_PRODUCT_ID = StockStatusInterface::PRODUCT_ID;
-    const KEY_WEBSITE_ID = StockStatusInterface::WEBSITE_ID;
     const KEY_CUSTOM_ATTRIBUTES = 'custom_attributes';
     const KEY_ATTRIBUTE_CODE = \Magento\Eav\Api\Data\AttributeInterface::ATTRIBUTE_CODE;
     const CODE_QUANTITY_AND_STOCK_STATUS = 'quantity_and_stock_status';
@@ -38,7 +37,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productData = $this->getSimpleProductData($qty);
         $stockItemData = $this->getStockItemData($qty);
         $this->assertArrayNotHasKey(self::KEY_ITEM_ID, $stockItemData);
-        $this->assertArrayNotHasKey(self::KEY_WEBSITE_ID, $stockItemData);
         $this->assertArrayNotHasKey(self::KEY_PRODUCT_ID, $stockItemData);
         $productData[self::KEY_EXTENSION_ATTRIBUTES] = $stockItemData;
 
@@ -51,7 +49,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($qty, $returnedQty, 'CREATE: Expected qty to be same: ' . $qty .', '. $returnedQty);
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
-        $this->assertArrayHasKey(self::KEY_WEBSITE_ID, $stockItemData);
 
         // officially get the product
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -100,7 +97,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productData = $this->getSimpleProductData($qty);
         $stockItemData = $this->getStockItemData($qty);
         $this->assertArrayNotHasKey(self::KEY_ITEM_ID, $stockItemData);
-        $this->assertArrayNotHasKey(self::KEY_WEBSITE_ID, $stockItemData);
         $this->assertArrayNotHasKey(self::KEY_PRODUCT_ID, $stockItemData);
         $productData[self::KEY_EXTENSION_ATTRIBUTES] = $stockItemData;
 
@@ -113,7 +109,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($qty, $returnedQty, 'POST 1: Expected qty to be same: ' . $qty .', '. $returnedQty);
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
-        $this->assertArrayHasKey(self::KEY_WEBSITE_ID, $stockItemData);
 
         // re-save the catalog inventory:
         // -- update quantity (which should be honored)
@@ -126,10 +121,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $bogusProductId = $this->getDifferent($originalProductId);
         $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM][self::KEY_PRODUCT_ID] = $bogusProductId;
 
-        $originalWebsiteId = $stockItemData[self::KEY_WEBSITE_ID];
-        $bogusWebsiteId = $this->getDifferent($originalWebsiteId);
-        $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM][self::KEY_WEBSITE_ID] = $bogusWebsiteId;
-
         $response = $this->saveProduct($response);
 
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
@@ -138,9 +129,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $returnedProductId = $stockItemData[self::KEY_PRODUCT_ID];
         $this->assertEquals($originalProductId, $returnedProductId);
-
-        $returnedWebsiteId = $stockItemData[self::KEY_WEBSITE_ID];
-        $this->assertEquals($originalWebsiteId, $returnedWebsiteId);
 
         // delete the product; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -165,7 +153,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
         $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
         $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
-        $this->assertArrayHasKey(self::KEY_WEBSITE_ID, $stockItemData);
 
         // delete the product; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);

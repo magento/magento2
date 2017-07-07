@@ -2,7 +2,7 @@
 /**
  * Scheduled jobs entry point
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Store\Model\StoreManager;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
-if (php_sapi_name() === 'cli'){
+if (php_sapi_name() === 'cli') {
     echo "You cannot run this from the command line." . PHP_EOL .
         "Run \"php bin/magento cron:run\" instead." . PHP_EOL;
     exit(1);
@@ -20,9 +20,6 @@ if (php_sapi_name() === 'cli'){
 }
 
 try {
-    if (empty($opt['group'])) {
-        $opt['group'] = 'default';
-    }
     foreach ($opt as $key => $value) {
         $opt[$key] = escapeshellarg($value);
     }
@@ -32,7 +29,7 @@ try {
     $params[Store::CUSTOM_ENTRY_POINT_PARAM] = true;
     $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
     /** @var \Magento\Framework\App\Cron $app */
-    $app = $bootstrap->createApplication('Magento\Framework\App\Cron', ['parameters' => $opt]);
+    $app = $bootstrap->createApplication(\Magento\Framework\App\Cron::class, ['parameters' => $opt]);
     $bootstrap->run($app);
 } catch (\Exception $e) {
     echo $e;

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,6 +16,24 @@
                 <item name="chosen_option" xsi:type="array">
                     <item name="filter_url_key" xsi:type="string">home</item>
                 </item>
+            </field>
+        </dataset>
+
+        <dataset name="compared_products_grid">
+            <field name="widget" xsi:type="array">
+                <item name="widget_type" xsi:type="string">Recently Compared Products</item>
+                <item name="page_size" xsi:type="string">10</item>
+                <item name="template" xsi:type="string">Compared Products Grid Template</item>
+            </field>
+        </dataset>
+
+        <dataset name="new_products_grid">
+            <field name="widget" xsi:type="array">
+                <item name="widget_type" xsi:type="string">Catalog New Products List</item>
+                <item name="display_type" xsi:type="string">All products</item>
+                <item name="show_pager" xsi:type="string">Yes</item>
+                <item name="products_count" xsi:type="string">10</item>
+                <item name="template" xsi:type="string">New Products Grid Template</item>
             </field>
         </dataset>
 

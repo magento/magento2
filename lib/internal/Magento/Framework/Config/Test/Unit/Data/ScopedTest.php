@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit\Data;
 
 class ScopedTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Framework\Config\Data\Scoped
      */
@@ -27,17 +32,28 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cacheMock;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
-        $this->_readerMock = $this->getMock('Magento\Framework\Config\ReaderInterface');
-        $this->_configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
-        $this->_cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
-        $this->_model = new \Magento\Framework\Config\Data\Scoped(
-            $this->_readerMock,
-            $this->_configScopeMock,
-            $this->_cacheMock,
-            'tag'
+        $this->_model = $this->objectManager->getObject(
+            \Magento\Framework\Config\Data\Scoped::class,
+            [
+                'reader' => $this->_readerMock,
+                'configScope' => $this->_configScopeMock,
+                'cache' => $this->_cacheMock,
+                'cacheId' => 'tag',
+                'serializer' => $this->serializerMock
+            ]
         );
     }
 
@@ -47,7 +63,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
      * @param string $default
      * @dataProvider getConfigByPathDataProvider
      */
-    public function testgetConfigByPath($path, $expectedValue, $default)
+    public function testGetConfigByPath($path, $expectedValue, $default)
     {
         $testData = [
             'key_1' => [
@@ -55,7 +71,12 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
                 'key_1.2' => ['some' => 'arrayValue'],
             ],
         ];
-        $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize([])));
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+        $this->_readerMock->expects($this->once())
+            ->method('read')
+            ->willReturn([]);
         $this->_model->merge($testData);
         $this->assertEquals($expectedValue, $this->_model->get($path, $default));
     }
@@ -77,6 +98,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     public function testGetScopeSwitchingWithNonCachedData()
     {
         $testValue = ['some' => 'testValue'];
+        $serializedData = 'serialized data';
 
         /** change current area */
         $this->_configScopeMock->expects(
@@ -109,8 +131,15 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($testValue)
         );
 
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($testValue)
+            ->willReturn($serializedData);
+
         /** test cache saving  */
-        $this->_cacheMock->expects($this->once())->method('save')->with(serialize($testValue), 'adminhtml::tag');
+        $this->_cacheMock->expects($this->once())
+            ->method('save')
+            ->with($serializedData, 'adminhtml::tag');
 
         /** test config value existence */
         $this->assertEquals('testValue', $this->_model->get('some'));
@@ -122,6 +151,7 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     public function testGetScopeSwitchingWithCachedData()
     {
         $testValue = ['some' => 'testValue'];
+        $serializedData = 'serialized data';
 
         /** change current area */
         $this->_configScopeMock->expects(
@@ -132,16 +162,16 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('adminhtml')
         );
 
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedData)
+            ->willReturn($testValue);
+
         /** set cache data */
-        $this->_cacheMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'adminhtml::tag'
-        )->will(
-            $this->returnValue(serialize($testValue))
-        );
+        $this->_cacheMock->expects($this->once())
+            ->method('load')
+            ->with('adminhtml::tag')
+            ->willReturn($serializedData);
 
         /** test preventing of getting data from reader  */
         $this->_readerMock->expects($this->never())->method('read');

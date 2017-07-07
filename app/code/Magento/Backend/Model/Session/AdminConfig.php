@@ -2,7 +2,7 @@
 /**
  * Backend Session configuration object
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
@@ -14,8 +14,7 @@ use Magento\Framework\Session\Config;
 
 /**
  * Magento Backend session configuration
- *
- * @method Config setSaveHandler()
+ * @api
  */
 class AdminConfig extends Config
 {
@@ -84,6 +83,7 @@ class AdminConfig extends Config
         $adminPath = $this->extractAdminPath();
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
+        $this->setCookieSecure($this->_httpRequest->isSecure());
     }
 
     /**
@@ -105,5 +105,15 @@ class AdminConfig extends Config
         $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
         $cookiePath = $baseUrl . $backendApp->getCookiePath();
         return $cookiePath;
+    }
+
+    /**
+     * Set session cookie lifetime to session duration
+     *
+     * @return $this
+     */
+    protected function configureCookieLifetime()
+    {
+        return $this->setCookieLifetime(0);
     }
 }

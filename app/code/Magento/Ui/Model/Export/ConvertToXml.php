@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model\Export;
@@ -125,17 +125,26 @@ class ConvertToXml
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
 
+        $component->getContext()->getDataProvider()->setLimit(0, 0);
+
         /** @var SearchResultInterface $searchResult */
         $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
 
+        /** @var DocumentInterface[] $searchResultItems */
+        $searchResultItems = $searchResult->getItems();
+
+        $this->prepareItems($component->getName(), $searchResultItems);
+
         /** @var SearchResultIterator $searchResultIterator */
-        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResult->getItems()]);
+        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResultItems]);
 
         /** @var Excel $excel */
-        $excel = $this->excelFactory->create([
-            'iterator' => $searchResultIterator,
-            'rowCallback'=> [$this, 'getRowData'],
-        ]);
+        $excel = $this->excelFactory->create(
+            [
+                'iterator' => $searchResultIterator,
+                'rowCallback'=> [$this, 'getRowData'],
+            ]
+        );
 
         $this->directory->create('export');
         $stream = $this->directory->openFile($file, 'w+');
@@ -152,5 +161,17 @@ class ConvertToXml
             'value' => $file,
             'rm' => true  // can delete file after use
         ];
+    }
+
+    /**
+     * @param string $componentName
+     * @param array $items
+     * @return void
+     */
+    protected function prepareItems($componentName, array $items = [])
+    {
+        foreach ($items as $document) {
+            $this->metadataProvider->convertDate($document, $componentName);
+        }
     }
 }

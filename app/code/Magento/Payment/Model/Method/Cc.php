@@ -1,25 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\DataObject;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote\Payment;
+
 /**
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
  */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Form\Cc';
+    protected $_formBlockType = \Magento\Payment\Block\Form\Cc::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info\Cc';
+    protected $_infoBlockType = \Magento\Payment\Block\Info\Cc::class;
 
     /**
      * @var bool
@@ -82,43 +87,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
-     * Assign data to info model instance
-     *
-     * @param \Magento\Framework\DataObject|mixed $data
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function assignData(\Magento\Framework\DataObject $data)
-    {
-        if (!$data instanceof \Magento\Framework\DataObject) {
-            $data = new \Magento\Framework\DataObject($data);
-        }
-        $info = $this->getInfoInstance();
-        $info->setCcType(
-            $data->getCcType()
-        )->setCcOwner(
-            $data->getCcOwner()
-        )->setCcLast4(
-            substr($data->getCcNumber(), -4)
-        )->setCcNumber(
-            $data->getCcNumber()
-        )->setCcCid(
-            $data->getCcCid()
-        )->setCcExpMonth(
-            $data->getCcExpMonth()
-        )->setCcExpYear(
-            $data->getCcExpYear()
-        )->setCcSsIssue(
-            $data->getCcSsIssue()
-        )->setCcSsStartMonth(
-            $data->getCcSsStartMonth()
-        )->setCcSsStartYear(
-            $data->getCcSsStartYear()
-        );
-        return $this;
-    }
-
-    /**
      * Validate payment method information object
      *
      * @return $this
@@ -159,28 +127,27 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                     //Solo, Switch or Maestro. International safe
                     'SO' => '/(^(6334)[5-9](\d{11}$|\d{13,14}$))|(^(6767)(\d{12}$|\d{14,15}$))/',
                     'SM' => '/(^(5[0678])\d{11,18}$)|(^(6[^05])\d{11,18}$)|(^(601)[^1]\d{9,16}$)|(^(6011)\d{9,11}$)' .
-                    '|(^(6011)\d{13,16}$)|(^(65)\d{11,13}$)|(^(65)\d{15,18}$)' .
-                    '|(^(49030)[2-9](\d{10}$|\d{12,13}$))|(^(49033)[5-9](\d{10}$|\d{12,13}$))' .
-                    '|(^(49110)[1-2](\d{10}$|\d{12,13}$))|(^(49117)[4-9](\d{10}$|\d{12,13}$))' .
-                    '|(^(49118)[0-2](\d{10}$|\d{12,13}$))|(^(4936)(\d{12}$|\d{14,15}$))/',
+                        '|(^(6011)\d{13,16}$)|(^(65)\d{11,13}$)|(^(65)\d{15,18}$)' .
+                        '|(^(49030)[2-9](\d{10}$|\d{12,13}$))|(^(49033)[5-9](\d{10}$|\d{12,13}$))' .
+                        '|(^(49110)[1-2](\d{10}$|\d{12,13}$))|(^(49117)[4-9](\d{10}$|\d{12,13}$))' .
+                        '|(^(49118)[0-2](\d{10}$|\d{12,13}$))|(^(4936)(\d{12}$|\d{14,15}$))/',
                     // Visa
                     'VI' => '/^4[0-9]{12}([0-9]{3})?$/',
                     // Master Card
-                    'MC' => '/^5[1-5][0-9]{14}$/',
+                    'MC' => '/^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/',
                     // American Express
                     'AE' => '/^3[47][0-9]{13}$/',
                     // Discover
-                    'DI' => '/^(30[0-5][0-9]{13}|3095[0-9]{12}|35(2[8-9][0-9]{12}|[3-8][0-9]{13})' .
-                    '|36[0-9]{12}|3[8-9][0-9]{14}|6011(0[0-9]{11}|[2-4][0-9]{11}|74[0-9]{10}|7[7-9][0-9]{10}' .
-                    '|8[6-9][0-9]{10}|9[0-9]{11})|62(2(12[6-9][0-9]{10}|1[3-9][0-9]{11}|[2-8][0-9]{12}' .
-                    '|9[0-1][0-9]{11}|92[0-5][0-9]{10})|[4-6][0-9]{13}|8[2-8][0-9]{12})|6(4[4-9][0-9]{13}' .
-                    '|5[0-9]{14}))$/',
+                    'DI' => '/^(6011((0|9|[2-4])[0-9]{11,14}|(74|7[7-9]|8[6-9])[0-9]{10,13})|6(4[4-9][0-9]{13,16}|' .
+                        '5[0-9]{14,17}))/',
+                    'DN' => '/^3(0[0-5][0-9]{13,16}|095[0-9]{12,15}|(6|[8-9])[0-9]{14,17})/',
+                    // UnionPay
+                    'UN' => '/^622(1(2[6-9][0-9]{10,13}|[3-9][0-9]{11,14})|[3-8][0-9]{12,15}|9([[0-1][0-9]{11,14}|' .
+                        '2[0-5][0-9]{10,13}))|62[4-6][0-9]{13,16}|628[2-8][0-9]{12,15}/',
                     // JCB
-                    'JCB' => '/^(30[0-5][0-9]{13}|3095[0-9]{12}|35(2[8-9][0-9]{12}|[3-8][0-9]{13})|36[0-9]{12}' .
-                    '|3[8-9][0-9]{14}|6011(0[0-9]{11}|[2-4][0-9]{11}|74[0-9]{10}|7[7-9][0-9]{10}' .
-                    '|8[6-9][0-9]{10}|9[0-9]{11})|62(2(12[6-9][0-9]{10}|1[3-9][0-9]{11}|[2-8][0-9]{12}' .
-                    '|9[0-1][0-9]{11}|92[0-5][0-9]{10})|[4-6][0-9]{13}|8[2-8][0-9]{12})|6(4[4-9][0-9]{13}' .
-                    '|5[0-9]{14}))$/',
+                    'JCB' => '/^35(2[8-9][0-9]{12,15}|[3-8][0-9]{13,16})/',
+                    'MI' => '/^(5(0|[6-9])|63|67(?!59|6770|6774))\d*$/',
+                    'MD' => '/^(6759(?!24|38|40|6[3-9]|70|76)|676770|676774)\d*$/',
                 ];
 
                 $ccNumAndTypeMatches = isset(
@@ -245,11 +212,15 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             'MC' => '/^[0-9]{3}$/',
             'AE' => '/^[0-9]{4}$/',
             'DI' => '/^[0-9]{3}$/',
+            'DN' => '/^[0-9]{3}$/',
+            'UN' => '/^[0-9]{3}$/',
             'SS' => '/^[0-9]{3,4}$/',
             'SM' => '/^[0-9]{3,4}$/',
             'SO' => '/^[0-9]{3,4}$/',
             'OT' => '/^[0-9]{3,4}$/',
             'JCB' => '/^[0-9]{3,4}$/',
+            'MI' => '/^[0-9]{3}$/',
+            'MD' => '/^[0-9]{3}$/',
         ];
         return $verificationExpList;
     }
@@ -268,6 +239,40 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             return false;
         }
         return true;
+    }
+
+    /**
+     * Assign data to info model instance
+     *
+     * @param \Magento\Framework\DataObject|mixed $data
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function assignData(\Magento\Framework\DataObject $data)
+    {
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+        if (!is_object($additionalData)) {
+            $additionalData = new DataObject($additionalData ?: []);
+        }
+
+        /** @var DataObject $info */
+        $info = $this->getInfoInstance();
+        $info->addData(
+            [
+                'cc_type' => $additionalData->getCcType(),
+                'cc_owner' => $additionalData->getCcOwner(),
+                'cc_last_4' => substr($additionalData->getCcNumber(), -4),
+                'cc_number' => $additionalData->getCcNumber(),
+                'cc_cid' => $additionalData->getCcCid(),
+                'cc_exp_month' => $additionalData->getCcExpMonth(),
+                'cc_exp_year' => $additionalData->getCcExpYear(),
+                'cc_ss_issue' => $additionalData->getCcSsIssue(),
+                'cc_ss_start_month' => $additionalData->getCcSsStartMonth(),
+                'cc_ss_start_year' => $additionalData->getCcSsStartYear()
+            ]
+        );
+
+        return $this;
     }
 
     /**

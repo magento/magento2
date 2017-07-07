@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -24,7 +24,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->gridBlock = Bootstrap::getObjectManager()
-            ->create('Magento\Integration\Block\Adminhtml\Integration\Grid');
+            ->create(\Magento\Integration\Block\Adminhtml\Integration\Grid::class);
     }
 
     public function testGetRowClickCallback()

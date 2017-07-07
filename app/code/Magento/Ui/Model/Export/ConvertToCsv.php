@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model\Export;
@@ -27,18 +27,26 @@ class ConvertToCsv
     protected $metadataProvider;
 
     /**
+     * @var int|null
+     */
+    protected $pageSize = null;
+
+    /**
      * @param Filesystem $filesystem
      * @param Filter $filter
      * @param MetadataProvider $metadataProvider
+     * @param int $pageSize
      */
     public function __construct(
         Filesystem $filesystem,
         Filter $filter,
-        MetadataProvider $metadataProvider
+        MetadataProvider $metadataProvider,
+        $pageSize = 200
     ) {
         $this->filter = $filter;
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->metadataProvider = $metadataProvider;
+        $this->pageSize = $pageSize;
     }
 
     /**
@@ -56,8 +64,7 @@ class ConvertToCsv
 
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
-
-        $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
+        $dataProvider = $component->getContext()->getDataProvider();
         $fields = $this->metadataProvider->getFields($component);
         $options = $this->metadataProvider->getOptions();
 
@@ -65,8 +72,19 @@ class ConvertToCsv
         $stream = $this->directory->openFile($file, 'w+');
         $stream->lock();
         $stream->writeCsv($this->metadataProvider->getHeaders($component));
-        foreach ($searchResult->getItems() as $document) {
-            $stream->writeCsv($this->metadataProvider->getRowData($document, $fields, $options));
+        $i = 1;
+        $searchCriteria = $dataProvider->getSearchCriteria()
+            ->setCurrentPage($i)
+            ->setPageSize($this->pageSize);
+        $totalCount = (int) $dataProvider->getSearchResult()->getTotalCount();
+        while ($totalCount > 0) {
+            $items = $dataProvider->getSearchResult()->getItems();
+            foreach ($items as $item) {
+                $this->metadataProvider->convertDate($item, $component->getName());
+                $stream->writeCsv($this->metadataProvider->getRowData($item, $fields, $options));
+            }
+            $searchCriteria->setCurrentPage(++$i);
+            $totalCount = $totalCount - $this->pageSize;
         }
         $stream->unlock();
         $stream->close();

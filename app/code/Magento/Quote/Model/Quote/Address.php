@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -8,11 +8,13 @@ namespace Magento\Quote\Model\Quote;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Sales Quote address model
  *
+ * @api
  * @method int getQuoteId()
  * @method Address setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -86,6 +88,8 @@ use Magento\Quote\Api\Data\AddressInterface;
  * @method \Magento\SalesRule\Model\Rule[] getCartFixedRules()
  * @method int[] getAppliedRuleIds()
  * @method Address setBaseShippingInclTax(float $value)
+ *
+ * @property $_objectCopyService \Magento\Framework\DataObject\Copy
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -234,6 +238,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $totalsReader;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -266,6 +275,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -301,7 +311,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_addressItemFactory = $addressItemFactory;
@@ -320,6 +331,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->attributeList = $attributeList;
         $this->totalsCollector = $totalsCollector;
         $this->totalsReader = $totalsReader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $context,
             $registry,
@@ -347,7 +359,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Address::class);
     }
 
     /**
@@ -512,7 +524,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $customerAddressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         return $addressDataObject;
     }
@@ -564,8 +576,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function getAllItems()
     {
         // We calculate item list once and cache it in three arrays - all items
-        $cachedItems = 'all';
-        $key = 'cached_items_' . $cachedItems;
+        $key = 'cached_items_all';
         if (!$this->hasData($key)) {
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
@@ -1009,13 +1020,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
                     if ($item) {
                         $item->setBaseShippingAmount($rate->getPrice());
                     } else {
-                        /**
-                         * possible bug: this should be setBaseShippingAmount(),
-                         * see \Magento\Quote\Model\Quote\Address\Total\Shipping::collect()
-                         * where this value is set again from the current specified rate price
-                         * (looks like a workaround for this bug)
-                         */
-                        $this->setShippingAmount($rate->getPrice());
+
+                        /** @var \Magento\Quote\Model\Quote $quote */
+                        $quote = $this->getQuote();
+                        $amountPrice = $quote->getStore()
+                            ->getBaseCurrency()
+                            ->convert($rate->getPrice(), $quote->getQuoteCurrencyCode());
+                        $this->setBaseShippingAmount($rate->getPrice());
+                        $this->setShippingAmount($amountPrice);
                     }
 
                     $found = true;
@@ -1027,6 +1039,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /******************************* Total Collector Interface *******************************************/
+
     /**
      * Get address totals as array
      *
@@ -1054,7 +1067,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $addressTotal = null;
         if (is_array($total)) {
             /** @var \Magento\Quote\Model\Quote\Address\Total $addressTotal */
-            $addressTotal = $this->_addressTotalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+            $addressTotal = $this->_addressTotalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class);
             $addressTotal->setData($total);
         } elseif ($total instanceof \Magento\Quote\Model\Quote\Address\Total) {
             $addressTotal = $total;
@@ -1142,7 +1155,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getAppliedTaxes()
     {
-        return unserialize($this->getData('applied_taxes'));
+        return $this->serializer->unserialize($this->getData('applied_taxes'));
     }
 
     /**
@@ -1153,7 +1166,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function setAppliedTaxes($data)
     {
-        return $this->setData('applied_taxes', serialize($data));
+        return $this->setData('applied_taxes', $this->serializer->serialize($data));
     }
 
     /******************************* Start Total Collector Interface *******************************************/
@@ -1301,6 +1314,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Get all total amount values
      *
@@ -1653,6 +1667,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     {
         return $this->setData(self::SAVE_IN_ADDRESS_BOOK, $saveInAddressBook);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**

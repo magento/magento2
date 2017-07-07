@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Media;
@@ -34,15 +34,15 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->factoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->storeId = 1;
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($this->storeId));
@@ -60,10 +60,10 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
     {
         $attributeSetName = 'Default Attribute Set';
         $expectedResult = [
-            $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeInterface'),
+            $this->getMock(\Magento\Catalog\Api\Data\ProductAttributeInterface::class),
         ];
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class,
             [],
             [],
             '',

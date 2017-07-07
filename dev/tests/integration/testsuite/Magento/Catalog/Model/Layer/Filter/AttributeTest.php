@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter;
@@ -31,7 +31,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Entity\Attribute'
+            \Magento\Catalog\Model\Entity\Attribute::class
         );
         $attribute->loadByCode('catalog_product', 'attribute_with_option');
         foreach ($attribute->getSource()->getAllOptions() as $optionInfo) {
@@ -42,9 +42,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->_layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Category');
+            ->create(\Magento\Catalog\Model\Layer\Category::class);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Attribute', ['layer' => $this->_layer]);
+            ->create(\Magento\Catalog\Model\Layer\Filter\Attribute::class, ['layer' => $this->_layer]);
         $this->_model->setData([
             'attribute_model' => $attribute,
         ]);
@@ -59,14 +59,14 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEmpty($this->_model->getLayer()->getState()->getFilters());
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('attribute', []);
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\View\LayoutInterface'
+                \Magento\Framework\View\LayoutInterface::class
             )->createBlock(
-                'Magento\Framework\View\Element\Text'
+                \Magento\Framework\View\Element\Text::class
             )
         );
 
@@ -78,7 +78,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_model->getLayer()->getState()->getFilters());
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('attribute', $this->_attributeOptionId);
         $this->_model->apply($request);
 
@@ -95,7 +95,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Layer\Filter\Item', $item);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Layer\Filter\Item::class, $item);
         $this->assertSame($this->_model, $item->getFilter());
         $this->assertEquals('Option Label', $item->getLabel());
         $this->assertEquals($this->_attributeOptionId, $item->getValue());

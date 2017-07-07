@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Model\ResourceModel\Rules;
@@ -8,7 +8,7 @@ namespace Magento\Authorization\Model\ResourceModel\Rules;
 /**
  * Rules collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +19,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorization\Model\Rules', 'Magento\Authorization\Model\ResourceModel\Rules');
+        $this->_init(
+            \Magento\Authorization\Model\Rules::class,
+            \Magento\Authorization\Model\ResourceModel\Rules::class
+        );
     }
 
     /**

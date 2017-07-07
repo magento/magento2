@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\SampleData;
@@ -47,7 +47,7 @@ class Executor
     public function exec(InstallerInterface $installer)
     {
         try {
-            $this->appState->emulateAreaCode('setup', [$installer, 'install']);
+            $this->appState->emulateAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL, [$installer, 'install']);
             $this->state->setInstalled();
         } catch (\Exception $e) {
             $this->state->setError();

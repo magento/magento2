@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Api;
@@ -22,7 +22,7 @@ class CountryInformationAcquirerTest extends WebapiAbstract
     public function testGetCountries()
     {
         /** @var $store \Magento\Store\Model\Group   */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->load(self::STORE_CODE_FROM_FIXTURE);
         $this->assertNotEmpty($store->getId(), 'Precondition failed: fixture store was not created.');
 
@@ -47,7 +47,7 @@ class CountryInformationAcquirerTest extends WebapiAbstract
     public function testGetCountry()
     {
         /** @var $store \Magento\Store\Model\Group   */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->load(self::STORE_CODE_FROM_FIXTURE);
         $this->assertNotEmpty($store->getId(), 'Precondition failed: fixture store was not created.');
 
@@ -122,13 +122,14 @@ class CountryInformationAcquirerTest extends WebapiAbstract
     {
         parent::tearDownAfterClass();
         /** @var \Magento\Framework\Registry $registry */
-        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Registry::class);
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
         /** @var $store \Magento\Store\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->load(self::STORE_CODE_FROM_FIXTURE);
         if ($store->getId()) {
             $store->delete();

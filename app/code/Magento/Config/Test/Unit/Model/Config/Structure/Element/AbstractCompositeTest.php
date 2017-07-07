@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
+
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +31,11 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
     protected $moduleManagerMock;
 
     /**
+     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementVisibilityMock;
+
+    /**
      * Test element data
      *
      * @var array
@@ -41,18 +49,27 @@ class AbstractCompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
+            ->getMockForAbstractClass();
         $this->_iteratorMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Iterator',
+            \Magento\Config\Model\Config\Structure\Element\Iterator::class,
             [],
             [],
             '',
             false
         );
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->moduleManagerMock = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Config\Model\Config\Structure\Element\AbstractComposite',
+            \Magento\Config\Model\Config\Structure\Element\AbstractComposite::class,
             [$this->_storeManagerMock, $this->moduleManagerMock, $this->_iteratorMock]
+        );
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->_model,
+            'elementVisibility',
+            $this->elementVisibilityMock,
+            \Magento\Config\Model\Config\Structure\AbstractElement::class
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Form\Element;
@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\ResourceModel\Form\Element;
 /**
  * Eav Form Element Resource Collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -20,7 +20,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Form\Element', 'Magento\Eav\Model\ResourceModel\Form\Element');
+        $this->_init(\Magento\Eav\Model\Form\Element::class, \Magento\Eav\Model\ResourceModel\Form\Element::class);
     }
 
     /**

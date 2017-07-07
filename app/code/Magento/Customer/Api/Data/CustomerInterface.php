@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api\Data;
 
 /**
  * Customer interface.
+ * @api
  */
 interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
@@ -39,7 +40,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get customer id
      *
-     * @api
      * @return int|null
      */
     public function getId();
@@ -47,7 +47,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set customer id
      *
-     * @api
      * @param int $id
      * @return $this
      */
@@ -56,7 +55,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get group id
      *
-     * @api
      * @return int|null
      */
     public function getGroupId();
@@ -64,7 +62,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set group id
      *
-     * @api
      * @param int $groupId
      * @return $this
      */
@@ -73,7 +70,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get default billing address id
      *
-     * @api
      * @return string|null
      */
     public function getDefaultBilling();
@@ -81,7 +77,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set default billing address id
      *
-     * @api
      * @param string $defaultBilling
      * @return $this
      */
@@ -90,7 +85,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get default shipping address id
      *
-     * @api
      * @return string|null
      */
     public function getDefaultShipping();
@@ -98,7 +92,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set default shipping address id
      *
-     * @api
      * @param string $defaultShipping
      * @return $this
      */
@@ -107,7 +100,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get confirmation
      *
-     * @api
      * @return string|null
      */
     public function getConfirmation();
@@ -115,7 +107,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set confirmation
      *
-     * @api
      * @param string $confirmation
      * @return $this
      */
@@ -124,7 +115,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get created at time
      *
-     * @api
      * @return string|null
      */
     public function getCreatedAt();
@@ -132,7 +122,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set created at time
      *
-     * @api
      * @param string $createdAt
      * @return $this
      */
@@ -141,7 +130,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get updated at time
      *
-     * @api
      * @return string|null
      */
     public function getUpdatedAt();
@@ -149,7 +137,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set updated at time
      *
-     * @api
      * @param string $updatedAt
      * @return $this
      */
@@ -158,7 +145,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get created in area
      *
-     * @api
      * @return string|null
      */
     public function getCreatedIn();
@@ -166,7 +152,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set created in area
      *
-     * @api
      * @param string $createdIn
      * @return $this
      */
@@ -175,7 +160,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get date of birth
      *
-     * @api
      * @return string|null
      */
     public function getDob();
@@ -183,7 +167,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set date of birth
      *
-     * @api
      * @param string $dob
      * @return $this
      */
@@ -192,7 +175,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get email address
      *
-     * @api
      * @return string
      */
     public function getEmail();
@@ -200,7 +182,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set email address
      *
-     * @api
      * @param string $email
      * @return $this
      */
@@ -209,7 +190,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get first name
      *
-     * @api
      * @return string
      */
     public function getFirstname();
@@ -217,7 +197,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set first name
      *
-     * @api
      * @param string $firstname
      * @return $this
      */
@@ -226,7 +205,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get last name
      *
-     * @api
      * @return string
      */
     public function getLastname();
@@ -234,7 +212,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set last name
      *
-     * @api
      * @param string $lastname
      * @return $this
      */
@@ -243,7 +220,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get middle name
      *
-     * @api
      * @return string|null
      */
     public function getMiddlename();
@@ -251,7 +227,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set middle name
      *
-     * @api
      * @param string $middlename
      * @return $this
      */
@@ -260,7 +235,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get prefix
      *
-     * @api
      * @return string|null
      */
     public function getPrefix();
@@ -268,7 +242,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set prefix
      *
-     * @api
      * @param string $prefix
      * @return $this
      */
@@ -277,7 +250,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get suffix
      *
-     * @api
      * @return string|null
      */
     public function getSuffix();
@@ -285,7 +257,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set suffix
      *
-     * @api
      * @param string $suffix
      * @return $this
      */
@@ -294,7 +265,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get gender
      *
-     * @api
      * @return int|null
      */
     public function getGender();
@@ -302,7 +272,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set gender
      *
-     * @api
      * @param int $gender
      * @return $this
      */
@@ -311,7 +280,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get store id
      *
-     * @api
      * @return int|null
      */
     public function getStoreId();
@@ -319,7 +287,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set store id
      *
-     * @api
      * @param int $storeId
      * @return $this
      */
@@ -328,7 +295,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get tax Vat
      *
-     * @api
      * @return string|null
      */
     public function getTaxvat();
@@ -336,7 +302,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set tax Vat
      *
-     * @api
      * @param string $taxvat
      * @return $this
      */
@@ -345,7 +310,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get website id
      *
-     * @api
      * @return int|null
      */
     public function getWebsiteId();
@@ -353,7 +317,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set website id
      *
-     * @api
      * @param int $websiteId
      * @return $this
      */
@@ -362,7 +325,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get customer addresses.
      *
-     * @api
      * @return \Magento\Customer\Api\Data\AddressInterface[]|null
      */
     public function getAddresses();
@@ -370,7 +332,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set customer addresses.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
      * @return $this
      */
@@ -379,7 +340,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get disable auto group change flag.
      *
-     * @api
      * @return int|null
      */
     public function getDisableAutoGroupChange();
@@ -387,7 +347,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set disable auto group change flag.
      *
-     * @api
      * @param int $disableAutoGroupChange
      * @return $this
      */
@@ -396,7 +355,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @api
      * @return \Magento\Customer\Api\Data\CustomerExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -404,7 +362,6 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Set an extension attributes object.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\CustomerExtensionInterface $extensionAttributes
      * @return $this
      */

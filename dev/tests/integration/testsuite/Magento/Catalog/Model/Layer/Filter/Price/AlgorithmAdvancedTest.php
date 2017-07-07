@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
@@ -30,7 +30,7 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', null);
         $model = $this->_prepareFilter($layer, $priceResource);
         $this->assertEquals(
@@ -55,11 +55,11 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Search\Dynamic\Algorithm $model */
         $model = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Search\Dynamic\Algorithm');
+            ->create(\Magento\Framework\Search\Dynamic\Algorithm::class);
         /** @var $filter \Magento\Catalog\Model\Layer\Filter\Price */
         $filter = Bootstrap::getObjectManager()
             ->create(
-                'Magento\Catalog\Model\Layer\Filter\Price',
+                \Magento\Catalog\Model\Layer\Filter\Price::class,
                 ['layer' => $layer, 'resource' => $priceResource, 'priceAlgorithm' => $model]
             );
         $filter->setLayer($layer)->setAttributeModel(new DataObject(['attribute_code' => 'price']));
@@ -67,9 +67,9 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
             $filter->apply(
                 $request,
                 Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\View\LayoutInterface'
+                    \Magento\Framework\View\LayoutInterface::class
                 )->createBlock(
-                    'Magento\Framework\View\Element\Text'
+                    \Magento\Framework\View\Element\Text::class
                 )
             );
             $interval = $filter->getInterval();
@@ -104,7 +104,7 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', '10-100');
         $model = $this->_prepareFilter($layer, $priceResource, $request);
         $this->assertEquals(
@@ -122,10 +122,10 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
     protected function createLayer()
     {
         $layer = Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Category');
+            ->create(\Magento\Catalog\Model\Layer\Category::class);
         $layer->setCurrentCategory(4);
         $layer->setState(
-            Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Layer\State')
+            Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Layer\State::class)
         );
         return $layer;
     }
@@ -137,7 +137,7 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
     protected function createPriceResource($layer)
     {
         return Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\ResourceModel\Layer\Filter\Price', ['layer' => $layer]);
+            ->create(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Price::class, ['layer' => $layer]);
     }
 
     /**
@@ -147,6 +147,6 @@ class AlgorithmAdvancedTest extends \PHPUnit_Framework_TestCase
     protected function createInterval($priceResource)
     {
         return Bootstrap::getObjectManager()
-            ->create('Magento\CatalogSearch\Model\Price\Interval', ['resource' => $priceResource]);
+            ->create(\Magento\CatalogSearch\Model\Price\Interval::class, ['resource' => $priceResource]);
     }
 }

@@ -1,52 +1,42 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product\CopyConstructor;
 
+use Magento\Bundle\Api\Data\BundleOptionInterface;
+use Magento\Bundle\Model\Product\CopyConstructor\Bundle;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $product;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $duplicate;
-
-    /**
-     * @var \Magento\Bundle\Model\Product\CopyConstructor\Bundle
+     * @var Bundle
      */
     protected $model;
 
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManager;
-
     protected function setUp()
     {
-        // Magento\Catalog\Model\Product $product, \Magento\Catalog\Model\Product $duplicate
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->duplicate = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['setBundleOptionsData', 'setBundleSelectionsData', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $this->model = new \Magento\Bundle\Model\Product\CopyConstructor\Bundle();
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Bundle::class);
     }
 
     public function testBuildNegative()
     {
-        $this->product->expects($this->once())->method('getTypeId')->will($this->returnValue('other product'));
-        $this->product->expects($this->never())->method('getTypeInstance');
-        $this->model->build($this->product, $this->duplicate);
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $duplicate = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn('other product type');
+        $this->model->build($product, $duplicate);
     }
 
     /**
@@ -55,112 +45,90 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildPositive()
     {
-        //prepare mocks and data samples
-        $instance = $this->getMock(
-            'Magento\Bundle\Model\Product\Type',
-            ['setStoreFilter', 'getOptionsCollection', 'getSelectionsCollection', 'getOptionsIds'],
-            [],
-            '',
-            false
-        );
-        $option = $this->getMock(
-            'Magento\Bundle\Model\Option',
-            ['getSelections', '__wakeup', 'getData'],
-            [],
-            '',
-            false
-        );
-        $options = [$option];
-        $optionCollection = $this->objectManager->getCollectionMock(
-            'Magento\Bundle\Model\ResourceModel\Option\Collection',
-            $options
-        );
-        $optionRawData = [
-            ['required' => true, 'position' => 100, 'type' => 'someType', 'title' => 'title', 'delete' => ''],
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesProduct = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['getBundleProductOptions'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $product->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(Type::TYPE_BUNDLE);
+        $product->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributesProduct);
+
+        $bundleOptions = [
+            $this->getMockBuilder(BundleOptionInterface::class)
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass(),
+            $this->getMockBuilder(BundleOptionInterface::class)
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass()
         ];
-        $selectionRawData = [
-            [
-                [
-                    'product_id' => 123,
-                    'position' => 500,
-                    'is_default' => false,
-                    'selection_price_type' => 'priceType',
-                    'selection_price_value' => 'priceVal',
-                    'selection_qty' => 21,
-                    'selection_can_change_qty' => 11,
-                    'delete' => '',
-                ],
-            ],
-        ];
+        $extensionAttributesProduct->expects($this->once())
+            ->method('getBundleProductOptions')
+            ->willReturn($bundleOptions);
 
-        $selection = $this->getMock(
-            'Magento\Bundle\Model\Selection',
-            [
-                'getProductId',
-                'getPosition',
-                'getIsDefault',
-                'getSelectionPriceType',
-                'getSelectionPriceValue',
-                'getSelectionQty',
-                'getSelectionCanChangeQty',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $selections = [$selection];
-        $selectionCollection = $this->getMock(
-            'Magento\Bundle\Model\ResourceModel\Selection\Collection',
-            [],
-            [],
-            '',
-            false
-        );
+        $duplicate = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesDuplicate = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['setBundleProductOptions'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        // method flow
-        $this->product->expects($this->once())->method('getTypeId')->will($this->returnValue('bundle'));
-        $this->product->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instance));
-        $instance->expects($this->once())->method('setStoreFilter')->with(null, $this->product);
-        $instance->expects(
-            $this->once()
-        )->method(
-            'getOptionsCollection'
-        )->with(
-            $this->product
-        )->will(
-            $this->returnValue($optionCollection)
-        );
-        $instance->expects(
-            $this->once()
-        )->method(
-            'getSelectionsCollection'
-        )->with(
-            null,
-            $this->product
-        )->will(
-            $this->returnValue($selectionCollection)
-        );
-        $optionCollection->expects($this->once())->method('appendSelections')->with($selectionCollection);
-        $option->expects($this->any())->method('getSelections')->will($this->returnValue($selections));
+        $duplicate->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributesDuplicate);
+        $extensionAttributesDuplicate->expects($this->once())
+            ->method('setBundleProductOptions')
+            ->withConsecutive([$bundleOptions]);
 
-        $option->expects($this->at(0))->method('getData')->with('required')->will($this->returnValue(true));
-        $option->expects($this->at(1))->method('getData')->with('position')->will($this->returnValue(100));
-        $option->expects($this->at(2))->method('getData')->with('type')->will($this->returnValue('someType'));
-        $option->expects($this->at(3))->method('getData')->with('title')->will($this->returnValue('title'));
-        $option->expects($this->at(4))->method('getData')->with('title')->will($this->returnValue('title'));
+        $this->model->build($product, $duplicate);
+    }
 
-        $selection->expects($this->once())->method('getProductId')->will($this->returnValue(123));
-        $selection->expects($this->once())->method('getPosition')->will($this->returnValue(500));
-        $selection->expects($this->once())->method('getIsDefault')->will($this->returnValue(false));
-        $selection->expects($this->once())->method('getSelectionPriceType')->will($this->returnValue('priceType'));
-        $selection->expects($this->once())->method('getSelectionPriceValue')->will($this->returnValue('priceVal'));
-        $selection->expects($this->once())->method('getSelectionQty')->will($this->returnValue(21));
-        $selection->expects($this->once())->method('getSelectionCanChangeQty')->will($this->returnValue(11));
+    /**
+     * @return void
+     */
+    public function testBuildWithoutOptions()
+    {
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesProduct = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['getBundleProductOptions'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $this->duplicate->expects($this->once())->method('setBundleOptionsData')->with($optionRawData);
-        $this->duplicate->expects($this->once())->method('setBundleSelectionsData')->with($selectionRawData);
+        $product->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(Type::TYPE_BUNDLE);
+        $product->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributesProduct);
 
-        $this->model->build($this->product, $this->duplicate);
+        $extensionAttributesProduct->expects($this->once())
+            ->method('getBundleProductOptions')
+            ->willReturn(null);
+
+        $duplicate = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesDuplicate = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['setBundleProductOptions'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $duplicate->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributesDuplicate);
+        $extensionAttributesDuplicate->expects($this->once())
+            ->method('setBundleProductOptions')
+            ->with([]);
+
+        $this->model->build($product, $duplicate);
     }
 }

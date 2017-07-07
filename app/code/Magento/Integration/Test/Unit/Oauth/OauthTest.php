@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,13 +55,13 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     const REQUEST_URL = 'http://magento.ll';
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_consumerFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
+        $this->_consumerFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\ConsumerFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->_consumerMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Consumer')
+        $this->_consumerMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Consumer::class)
             ->disableOriginalConstructor()->setMethods(
                 [
                     'getCreatedAt',
@@ -80,14 +80,14 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_consumerFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->_consumerMock));
-        $this->_nonceFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\NonceFactory')
+        $this->_nonceFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\NonceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\TokenFactory'
+            \Magento\Integration\Model\Oauth\TokenFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
-        $this->_tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $this->_tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -109,16 +109,16 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $this->_tokenFactory->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
-        $this->_oauthHelperMock = $this->getMockBuilder('Magento\Framework\Oauth\Helper\Oauth')
+        $this->_oauthHelperMock = $this->getMockBuilder(\Magento\Framework\Oauth\Helper\Oauth::class)
             ->setConstructorArgs([new \Magento\Framework\Math\Random()])
             ->getMock();
-        $this->_httpUtilityMock = $this->getMockBuilder('Zend_Oauth_Http_Utility')
+        $this->_httpUtilityMock = $this->getMockBuilder(\Zend_Oauth_Http_Utility::class)
             ->setMethods(['sign'])
             ->getMock();
-        $this->_dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+        $this->_dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->_loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -305,7 +305,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     protected function _setupNonce($isUsed = false, $timestamp = 0)
     {
         $nonceMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Nonce'
+            \Magento\Integration\Model\Oauth\Nonce::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'loadByCompositeKey',
@@ -780,7 +780,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     public function testMissingParamForBuildAuthorizationHeader($expectedMessage, $request)
     {
         $this->setExpectedException(
-            '\Magento\Framework\Oauth\OauthInputException',
+            \Magento\Framework\Oauth\OauthInputException::class,
             $expectedMessage,
             0
         );

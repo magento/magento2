@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,12 +14,12 @@
             <thead>
             <tr>
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th><?php /* @escapeNotVerified */ echo __('Price'); ?></th>
-                <th><?php /* @escapeNotVerified */ echo __('Price Type'); ?></th>
+                <th><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th><?= /* @escapeNotVerified */ __('Price Type') ?></th>
                 <?php endif; ?>
-                <th><?php /* @escapeNotVerified */ echo __('SKU'); ?></th>
-                <th><?php /* @escapeNotVerified */ echo __('Compatible File Extensions'); ?></th>
-                <th><?php /* @escapeNotVerified */ echo __('Maximum Image Size'); ?></th>
+                <th><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th><?= /* @escapeNotVerified */ __('Compatible File Extensions') ?></th>
+                <th><?= /* @escapeNotVerified */ __('Maximum Image Size') ?></th>
             </tr>
             </thead>
             <tr>
@@ -31,7 +31,7 @@
                            disabled="disabled"
                         <?php endif; ?>>
                 </td>
-                <td class="opt-price-type"><?php echo $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %></td>
+                <td class="opt-price-type"><?= $block->getPriceTypeSelectHtml('data-attr="price-type"') ?><%- data.checkboxScopePrice %></td>
                 <?php else : ?>
                 <input name="product[options][<%- data.option_id %>][price]" type="hidden">
                 <input id="product_option_<%- data.option_id %>_price_type" name="product[options][<%- data.option_id %>][price_type]" type="hidden">
@@ -45,7 +45,7 @@
                 <td class="col-file"><?php /* @escapeNotVerified */ echo __('%1 <span>x</span> %2 <span>px.</span>',
                     '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_x]" value="<%- data.image_size_x %>">',
                     '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_y]" value="<%- data.image_size_y %>">') ?>
-                    <div class="note"><?php /* @escapeNotVerified */ echo __('Please leave blank if it is not an image.') ?></div>
+                    <div class="note"><?= /* @escapeNotVerified */ __('Please leave blank if it is not an image.') ?></div>
                 </td>
             </tr>
         </table>

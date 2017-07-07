@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created */
@@ -8,7 +8,7 @@
 <script>
 (function ($) {
 
-    var data = <?php /* @escapeNotVerified */ echo $block->getAttributesBlockJson() ?>;
+    var data = <?= /* @escapeNotVerified */ $block->getAttributesBlockJson() ?>;
     var set = data.set || {id: $('#attribute_set_id').val()};
     if (data.tab == 'variations') {
         $('[data-role=product-variations-matrix]').trigger('add', data.attribute);
@@ -19,6 +19,3 @@
 
 })(window.parent.jQuery);
 </script>
-<div class="a-center">
-    <?php echo $block->getCloseButtonHtml() ?>
-</div>

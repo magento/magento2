@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Coupon;
@@ -24,7 +24,7 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\SalesRule\Model\Coupon', 'Magento\SalesRule\Model\ResourceModel\Coupon');
+        $this->_init(\Magento\SalesRule\Model\Coupon::class, \Magento\SalesRule\Model\ResourceModel\Coupon::class);
     }
 
     /**

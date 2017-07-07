@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,7 +10,7 @@
         <variation name="DeleteCustomerAddressTestVariation1">
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="customer/data/address/dataset" xsi:type="string">US_address_default_billing,US_address_NY_default_no</data>
-            <constraint name="Magento\Customer\Test\Constraint\AssertAddressDeletedFrontend" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertAdditionalAddressDeletedFrontend" />
             <constraint name="Magento\Customer\Test\Constraint\AssertAddressDeletedBackend" />
         </variation>
     </testCase>

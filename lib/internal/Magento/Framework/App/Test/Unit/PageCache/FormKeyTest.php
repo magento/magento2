@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,15 +44,15 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
     /**
      * Create cookie mock and FormKey instance
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
+        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->cookieMetadataFactory = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMock('Magento\Framework\Session\SessionManagerInterface');
+        $this->sessionManager = $this->getMock(\Magento\Framework\Session\SessionManagerInterface::class);
         $this->formKey = new FormKey(
             $this->cookieManagerMock,
             $this->cookieMetadataFactory,
@@ -79,7 +79,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
         $formKeyValue = 'form_key';
         /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
         $metadata = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -101,7 +101,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
         $cookieDomain = 'example.com';
         /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
         $metadata = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         )
             ->disableOriginalConstructor()
             ->getMock();

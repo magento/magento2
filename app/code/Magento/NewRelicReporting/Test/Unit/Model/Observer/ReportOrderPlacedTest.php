@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
@@ -33,31 +33,22 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
     protected $ordersModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
-
-    /**
      * Setup
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->config = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
+        $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->ordersFactory = $this->getMockBuilder('Magento\NewRelicReporting\Model\OrdersFactory')
+        $this->ordersFactory = $this->getMockBuilder(\Magento\NewRelicReporting\Model\OrdersFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->ordersModel = $this->getMockBuilder('Magento\NewRelicReporting\Model\Orders')
+        $this->ordersModel = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Orders::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDate'])
             ->getMock();
         $this->ordersFactory->expects($this->any())
             ->method('create')
@@ -65,8 +56,7 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new ReportOrderPlaced(
             $this->config,
-            $this->ordersFactory,
-            $this->dateTime
+            $this->ordersFactory
         );
     }
 
@@ -78,7 +68,7 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
     public function testReportOrderPlacedModuleDisabledFromConfig()
     {
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -101,26 +91,22 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
         $testBaseTotal = '1.00';
         $testItemCount = null;
         $testTotalQtyOrderedCount = 1;
-        $testUpdated = '1970-01-01 00:00:00';
 
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $this->dateTime->expects($this->once())
-            ->method('formatDate')
-            ->willReturn($testUpdated);
-        $event = $this->getMockBuilder('Magento\Framework\Event')
+        $event = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->setMethods(['getOrder'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')->disableOriginalConstructor()->getMock();
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getOrder')
             ->willReturn($order);
@@ -147,7 +133,6 @@ class ReportOrderPlacedTest extends \PHPUnit_Framework_TestCase
                     'total' => $testTotal,
                     'total_base' => $testBaseTotal,
                     'item_count' => $testTotalQtyOrderedCount,
-                    'updated_at' => $testUpdated
                 ]
             )
             ->willReturnSelf();

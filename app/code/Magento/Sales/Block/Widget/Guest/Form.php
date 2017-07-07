@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\Sales\Block\Widget\Guest;
 
 use Magento\Customer\Model\Context;
 
+/**
+ * @api
+ */
 class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
@@ -51,7 +54,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
     public function getTypeSelectHtml()
     {
         $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setData(
             ['id' => 'quick_search_type_id', 'class' => 'select guest-select']
         )->setName(

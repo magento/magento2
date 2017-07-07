@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ */
 class Dashboard extends \Magento\Backend\Block\Template
 {
     /**
@@ -25,21 +26,21 @@ class Dashboard extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->addChild('lastOrders', 'Magento\Backend\Block\Dashboard\Orders\Grid');
+        $this->addChild('lastOrders', \Magento\Backend\Block\Dashboard\Orders\Grid::class);
 
-        $this->addChild('totals', 'Magento\Backend\Block\Dashboard\Totals');
+        $this->addChild('totals', \Magento\Backend\Block\Dashboard\Totals::class);
 
-        $this->addChild('sales', 'Magento\Backend\Block\Dashboard\Sales');
+        $this->addChild('sales', \Magento\Backend\Block\Dashboard\Sales::class);
 
         $isChartEnabled = $this->_scopeConfig->getValue(
             self::XML_PATH_ENABLE_CHARTS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($isChartEnabled) {
-            $block = $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Diagrams');
+            $block = $this->getLayout()->createBlock(\Magento\Backend\Block\Dashboard\Diagrams::class);
         } else {
             $block = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Template'
+                \Magento\Backend\Block\Template::class
             )->setTemplate(
                 'dashboard/graph/disabled.phtml'
             )->setConfigUrl(
@@ -51,7 +52,7 @@ class Dashboard extends \Magento\Backend\Block\Template
         }
         $this->setChild('diagrams', $block);
 
-        $this->addChild('grids', 'Magento\Backend\Block\Dashboard\Grids');
+        $this->addChild('grids', \Magento\Backend\Block\Dashboard\Grids::class);
 
         parent::_prepareLayout();
     }

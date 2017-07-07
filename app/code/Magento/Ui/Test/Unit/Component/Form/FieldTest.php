@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form;
@@ -51,15 +51,11 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->uiComponentFactoryMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
+        $this->uiComponentFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
         $this->field = new Field(
             $this->contextMock,
@@ -78,6 +74,10 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareSuccess(array $data, array $expectedData)
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactoryMock->expects($this->once())
             ->method('create')
             ->with(self::NAME, $data['config']['formElement'], $this->arrayHasKey('context'))
@@ -128,7 +128,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function getWrappedComponentMock()
     {
-        $wrappedComponentMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $wrappedComponentMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         $wrappedComponentMock->expects($this->any())
@@ -139,7 +139,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ->with('config', $this->logicalNot($this->isEmpty()));
         $wrappedComponentMock->expects($this->once())
             ->method('prepare');
-        $wrappedComponentMock->expects($this->once())
+        $wrappedComponentMock->expects($this->atLeastOnce())
             ->method('getChildComponents')
             ->willReturn($this->getComponentsMock());
         $wrappedComponentMock->expects($this->any())
@@ -157,7 +157,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function getComponentsMock()
     {
-        $componentMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $componentMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         return [$componentMock];
@@ -173,6 +173,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareException()
     {
+        $this->contextMock->expects($this->never())->method('getProcessor');
         $this->uiComponentFactoryMock->expects($this->never())
             ->method('create');
         $this->field->setData(['name' => self::NAME]);

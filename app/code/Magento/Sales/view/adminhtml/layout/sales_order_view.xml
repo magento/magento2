@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,24 +20,56 @@
         </referenceContainer>
         <referenceContainer name="left">
             <block class="Magento\Sales\Block\Adminhtml\Order\View\Tabs" name="sales_order_tabs">
-                <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Info" name="order_tab_info" template="order/view/tab/info.phtml">
+                <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Info" name="order_tab_info" template="Magento_Sales::order/view/tab/info.phtml">
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Messages" name="order_messages"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="order/view/info.phtml"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Items" name="order_items" template="order/view/items.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer" as="default" template="order/view/items/renderer/default.phtml"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="items/column/qty.phtml" group="column"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="items/column/name.phtml" group="column"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml">
+                        <container name="extra_customer_info"/>
+                    </block>
+                    <container name="order_additional_info"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Items" name="order_items" template="Magento_Sales::order/view/items.phtml">
+                        <arguments>
+                            <argument name="columns" xsi:type="array">
+                                <item name="product" xsi:type="string" translate="true">Product</item>
+                                <item name="status" xsi:type="string" translate="true">Item Status</item>
+                                <item name="price-original" xsi:type="string" translate="true">Original Price</item>
+                                <item name="price" xsi:type="string" translate="true">Price</item>
+                                <item name="ordered-qty" xsi:type="string" translate="true">Qty</item>
+                                <item name="subtotal" xsi:type="string" translate="true">Subtotal</item>
+                                <item name="tax-amount" xsi:type="string" translate="true">Tax Amount</item>
+                                <item name="tax-percent" xsi:type="string" translate="true">Tax Percent</item>
+                                <item name="discont" xsi:type="string" translate="true">Discount Amount</item>
+                                <item name="total" xsi:type="string" translate="true">Row Total</item>
+                            </argument>
+                        </arguments>
+                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/view/items/renderer/default.phtml">
+                        <arguments>
+                            <argument name="columns" xsi:type="array">
+                                <item name="product" xsi:type="string" translate="false">col-product</item>
+                                <item name="status" xsi:type="string" translate="false">col-status</item>
+                                <item name="price-original" xsi:type="string" translate="false">col-price-original</item>
+                                <item name="price" xsi:type="string" translate="false">col-price</item>
+                                <item name="qty" xsi:type="string" translate="false">col-ordered-qty</item>
+                                <item name="subtotal" xsi:type="string" translate="false">col-subtotal</item>
+                                <item name="tax-amount" xsi:type="string" translate="false">col-tax-amount</item>
+                                <item name="tax-percent" xsi:type="string" translate="false">col-tax-percent</item>
+                                <item name="discont" xsi:type="string" translate="false">col-discont</item>
+                                <item name="total" xsi:type="string" translate="false">col-total</item>
+                            </argument>
+                        </arguments>
+                        </block>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_Sales::items/column/qty.phtml" group="column"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>
                         <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
                     </block>
 
                     <container name="payment_additional_info" htmlTag="div" htmlClass="order-payment-additional" />
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\History" name="order_history" template="order/view/history.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\History" name="order_history" template="Magento_Sales::order/view/history.phtml"/>
                     <block class="Magento\Backend\Block\Template" name="gift_options" template="Magento_Sales::order/giftoptions.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Giftmessage" name="order_giftmessage" template="order/view/giftmessage.phtml"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Giftmessage" name="order_giftmessage" template="Magento_Sales::order/view/giftmessage.phtml"/>
                     </block>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Totals" name="order_totals" template="order/totals.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="order/totals/tax.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Totals" name="order_totals" template="Magento_Sales::order/totals.phtml">
+                        <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="Magento_Sales::order/totals/tax.phtml"/>
                     </block>
                 </block>
                 <action method="addTab">

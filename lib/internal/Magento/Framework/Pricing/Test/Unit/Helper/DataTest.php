@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Helper;
@@ -20,9 +20,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrencyMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->priceCurrencyMock = $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
@@ -101,6 +101,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     private function getHelper($arguments)
     {
-        return $this->objectManager->getObject('Magento\Framework\Pricing\Helper\Data', $arguments);
+        return $this->objectManager->getObject(\Magento\Framework\Pricing\Helper\Data::class, $arguments);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,9 +51,10 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->messageFactoryMock =
-            $this->getMock('\Magento\GiftMessage\Model\MessageFactory', ['create', '__wakeup'], [], '', false);
+            $this->getMock(\Magento\GiftMessage\Model\MessageFactory::class, ['create', '__wakeup'], [], '', false);
 
-        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote',
+        $this->quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
             [
                 'setGiftMessageId',
                 'getGiftMessageId',
@@ -68,7 +69,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false);
-        $this->quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item',
+        $this->quoteItemMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'setGiftMessageId',
                 'getGiftMessageId',
@@ -79,7 +81,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false);
 
-        $this->quoteAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address',
+        $this->quoteAddressMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
             [
                 'getGiftMessageId',
                 'setGiftMessageId',
@@ -92,7 +95,7 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             false);
 
         $this->quoteAddressItemMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address\Item',
+            \Magento\Quote\Model\Quote\Address\Item::class,
             [
                 'getGiftMessageId',
                 'setGiftMessageId',
@@ -103,7 +106,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false);
 
-        $this->giftMessageMock = $this->getMock('\Magento\GiftMessage\Model\Message',
+        $this->giftMessageMock = $this->getMock(
+            \Magento\GiftMessage\Model\Message::class,
             [
                 'setSender',
                 'setRecipient',

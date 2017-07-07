@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Adapter;
@@ -10,7 +10,7 @@ use Magento\Framework\DB\Ddl\Table;
 /**
  * Magento Database Adapter Interface
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface AdapterInterface
 {
@@ -928,7 +928,6 @@ interface AdapterInterface
      */
     public function getTableName($tableName);
 
-
     /**
      * Build a trigger name based on table name and trigger details
      *
@@ -1114,4 +1113,13 @@ interface AdapterInterface
      * @return \Zend_Db_Expr
      */
     public function getCaseSql($valueName, $casesResults, $defaultValue = null);
+
+    /**
+     * Returns auto increment field if exists
+     *
+     * @param string $tableName
+     * @param string|null $schemaName
+     * @return string|bool
+     */
+    public function getAutoIncrementField($tableName, $schemaName = null);
 }

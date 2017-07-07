@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -149,9 +153,6 @@ define([
          * Creates function that removes element
          * from collection using '_removeChild' method.
          * @param  {Object} elem - Element that should be removed.
-         * @returns {Function}
-         *      Since this method is used by 'click' binding,
-         *      it requires function to invoke.
          */
         removeAddress: function (elem) {
             var self = this;
@@ -159,8 +160,9 @@ define([
             confirm({
                 content: this.removeMessage,
                 actions: {
+                    /** @inheritdoc */
                     confirm: function () {
-                        self._removeAddress(elem)
+                        self._removeAddress(elem);
                     }
                 }
             });

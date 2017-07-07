@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DataObject;
@@ -15,7 +15,7 @@ interface IdentityInterface
     /**
      * Return unique ID(s) for each object in system
      *
-     * @return array
+     * @return string[]
      */
     public function getIdentities();
 }

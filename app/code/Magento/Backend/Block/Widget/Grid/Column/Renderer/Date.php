@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
@@ -9,6 +9,8 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Backend grid item renderer date
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -47,11 +49,12 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      * Retrieve date format
      *
      * @return string
+     * @deprecated
      */
     protected function _getFormat()
     {
         $format = $this->getColumn()->getFormat();
-        if (!$format) {
+        if ($format === null) {
             if (self::$_format === null) {
                 try {
                     self::$_format = $this->_localeDate->getDateFormat(
@@ -74,10 +77,18 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     public function render(\Magento\Framework\DataObject $row)
     {
-        if ($data = $row->getData($this->getColumn()->getIndex())) {
-            return $this->dateTimeFormatter->formatObject(
-                $this->_localeDate->date(new \DateTime($data)),
-                $this->_getFormat()
+        $format = $this->getColumn()->getFormat();
+        $date = $this->_getValue($row);
+        if ($date) {
+            if (!($date instanceof \DateTimeInterface)) {
+                $date = new \DateTime($date);
+            }
+            return $this->_localeDate->formatDateTime(
+                $date,
+                $format ?: \IntlDateFormatter::MEDIUM,
+                \IntlDateFormatter::NONE,
+                null,
+                $this->getColumn()->getTimezone() === false ? 'UTC' : null
             );
         }
         return $this->getColumn()->getDefault();

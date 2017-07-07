@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,18 +9,18 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Customer::customer" title="Customers" sortOrder="40">
-                    <resource id="Magento_Customer::manage" title="All Customers" sortOrder="10" />
-                    <resource id="Magento_Customer::online" title="Now Online" sortOrder="20" />
+                <resource id="Magento_Customer::customer" title="Customers" translate="title" sortOrder="40">
+                    <resource id="Magento_Customer::manage" title="All Customers" translate="title" sortOrder="10" />
+                    <resource id="Magento_Customer::online" title="Now Online" translate="title" sortOrder="20" />
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Customer::config_customer" title="Customers Section" sortOrder="50" />
+                            <resource id="Magento_Customer::config_customer" title="Customers Section" translate="title" sortOrder="50" />
                         </resource>
                     </resource>
                     <resource id="Magento_Backend::stores_other_settings">
-                        <resource id="Magento_Customer::group" title="Customer Groups" sortOrder="10" />
+                        <resource id="Magento_Customer::group" title="Customer Groups" translate="title" sortOrder="10" />
                     </resource>
                 </resource>
             </resource>

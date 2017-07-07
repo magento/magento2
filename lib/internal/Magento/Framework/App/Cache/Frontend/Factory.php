@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,12 +14,16 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Factory
 {
     /**
      * Default cache entry lifetime
      */
     const DEFAULT_LIFETIME = 7200;
+
     /**
      * Caching params, that applied for all cache frontends regardless of type
      */
@@ -67,7 +71,7 @@ class Factory
      */
     protected $_backendOptions = [
         'hashed_directory_level' => 1,
-        'hashed_directory_umask' => DriverInterface::WRITEABLE_DIRECTORY_MODE,
+        'hashed_directory_umask' => 0777,
         'file_name_prefix' => 'mage',
     ];
 
@@ -142,7 +146,7 @@ class Factory
 
         /** @var $result \Magento\Framework\Cache\Frontend\Adapter\Zend */
         $result = $this->_objectManager->create(
-            'Magento\Framework\Cache\Frontend\Adapter\Zend',
+            \Magento\Framework\Cache\Frontend\Adapter\Zend::class,
             [
                 'frontend' => \Zend_Cache::factory(
                     $frontend['type'],
@@ -255,11 +259,11 @@ class Factory
             case 'varien_cache_backend_eaccelerator':
                 if (extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
                     $enableTwoLevels = true;
-                    $backendType = 'Magento\Framework\Cache\Backend\Eaccelerator';
+                    $backendType = \Magento\Framework\Cache\Backend\Eaccelerator::class;
                 }
                 break;
             case 'database':
-                $backendType = 'Magento\Framework\Cache\Backend\Database';
+                $backendType = \Magento\Framework\Cache\Backend\Database::class;
                 $options = $this->_getDbAdapterOptions();
                 break;
             default:
@@ -346,7 +350,7 @@ class Factory
             $options['slow_backend_options'] = $this->_backendOptions;
         }
         if ($options['slow_backend'] == 'database') {
-            $options['slow_backend'] = 'Magento\Framework\Cache\Backend\Database';
+            $options['slow_backend'] = \Magento\Framework\Cache\Backend\Database::class;
             $options['slow_backend_options'] = $this->_getDbAdapterOptions();
             if (isset($cacheOptions['slow_backend_store_data'])) {
                 $options['slow_backend_options']['store_data'] = (bool)$cacheOptions['slow_backend_store_data'];
@@ -381,7 +385,7 @@ class Factory
             $options['automatic_cleaning_factor'] = 0;
         }
         $options['type'] =
-            isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : 'Magento\Framework\Cache\Core';
+            isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : \Magento\Framework\Cache\Core::class;
         return $options;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
@@ -55,12 +55,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock class dependencies
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [
                 'describeTable',
                 'insert',
@@ -76,27 +76,27 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
             [],
             [],
             '',
             false
         );
         $this->relationCompositeMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class,
             [],
             [],
             '',
             false
         );
         $this->objectRelationProcessorMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
             [],
             [],
             '',
             false
         );
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')
@@ -104,7 +104,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\ResourceModel\Quote\Item',
+            \Magento\Quote\Model\ResourceModel\Quote\Item::class,
             [
                 'context' => $contextMock,
                 'entitySnapshot' => $this->entitySnapshotMock,
@@ -115,7 +115,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf('Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb', $this->model);
+        $this->assertInstanceOf(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb::class,
+            $this->model
+        );
     }
 
     public function testSaveNotModifiedItem()

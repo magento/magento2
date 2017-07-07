@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Cron;
@@ -97,6 +97,7 @@ class SystemBackup
      * Create Backup
      *
      * @return $this
+     * @throws \Exception
      */
     public function execute()
     {
@@ -138,8 +139,7 @@ class SystemBackup
         } catch (\Exception $e) {
             $this->_errors[] = $e->getMessage();
             $this->_errors[] = $e->getTrace();
-            $this->_logger->info($e->getMessage());
-            $this->_logger->critical($e);
+            throw $e;
         }
 
         if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE, ScopeInterface::SCOPE_STORE)) {

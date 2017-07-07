@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Test\Unit\Controller\Adminhtml\System\Currencysymbol;
@@ -57,21 +57,21 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $titleMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $this->menuItemMock = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
-        $this->menuMock = $this->getMock('Magento\Backend\Model\Menu', [], [], '', false);
+        $this->menuItemMock = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
+        $this->menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
 
-        $this->titleMock = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
+        $this->titleMock = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
 
-        $this->pageConfigMock = $this->getMock('Magento\Framework\View\Page\Config', [], [], '', false);
+        $this->pageConfigMock = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
 
-        $this->pageMock = $this->getMock('Magento\Framework\View\Result\Page', [], [], '', false);
+        $this->pageMock = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
 
         $this->blockMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\BlockInterface',
+            \Magento\Framework\View\Element\BlockInterface::class,
             [],
             '',
             false,
@@ -80,12 +80,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ['addLink', 'setActive', 'getMenuModel']
         );
 
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
 
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
+        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class, [], [], '', false);
 
         $this->action = $objectManager->getObject(
-            'Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index',
+            \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index::class,
             [
                 'view' => $this->viewMock
             ]

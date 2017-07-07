@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Sitemap resource product collection model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -32,14 +34,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_attributesCache = [];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Media
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
      */
-    protected $_mediaGalleryModel = null;
+    protected $mediaGalleryReadHandler;
 
-    /**
-     * Init resource model (catalog/category)
-     *
-     */
     /**
      * Sitemap data
      *
@@ -68,19 +66,25 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_productStatus;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
      */
-    protected $_mediaAttribute;
-
-    /**
-     * @var \Magento\Eav\Model\ConfigFactory
-     */
-    protected $_eavConfigFactory;
+    protected $mediaGalleryResourceModel;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @deprecated unused
      */
     protected $_mediaConfig;
+
+    /**
+     * @var \Magento\Catalog\Model\Product
+     */
+    private $productModel;
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    private $catalogImageHelper;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -89,10 +93,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $mediaAttribute
-     * @param \Magento\Eav\Model\ConfigFactory $eavConfigFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel
+     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param string $connectionName
+     * @param \Magento\Catalog\Model\Product $productModel
+     * @param \Magento\Catalog\Helper\Image $catalogImageHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -102,19 +108,24 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media $mediaAttribute,
-        \Magento\Eav\Model\ConfigFactory $eavConfigFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel,
+        \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Catalog\Model\Product $productModel = null,
+        \Magento\Catalog\Helper\Image $catalogImageHelper = null
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
         $this->_productVisibility = $productVisibility;
         $this->_productStatus = $productStatus;
-        $this->_mediaAttribute = $mediaAttribute;
-        $this->_eavConfigFactory = $eavConfigFactory;
+        $this->mediaGalleryResourceModel = $mediaGalleryResourceModel;
+        $this->mediaGalleryReadHandler = $mediaGalleryReadHandler;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
+        $this->productModel = $productModel ?: ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
+        $this->catalogImageHelper = $catalogImageHelper ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Helper\Image::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -184,35 +195,23 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $attribute = $this->_getAttribute($attributeCode);
+        $linkField = $this->_productResource->getLinkField();
+        $attrTableAlias = 't1_' . $attributeCode;
         $this->_select->joinLeft(
-            ['t1_' . $attributeCode => $attribute['table']],
-            'e.entity_id = t1_' . $attributeCode . '.entity_id AND ' . $connection->quoteInto(
-                ' t1_' . $attributeCode . '.store_id = ?',
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            ) . $connection->quoteInto(
-                ' AND t1_' . $attributeCode . '.attribute_id = ?',
-                $attribute['attribute_id']
-            ),
+            [$attrTableAlias => $attribute['table']],
+            "e.{$linkField} = {$attrTableAlias}.{$linkField}"
+            . ' AND ' . $connection->quoteInto($attrTableAlias . '.store_id = ?', Store::DEFAULT_STORE_ID)
+            . ' AND ' . $connection->quoteInto($attrTableAlias . '.attribute_id = ?', $attribute['attribute_id']),
             []
         );
 
         if (!$attribute['is_global']) {
+            $attrTableAlias2 = 't2_' . $attributeCode;
             $this->_select->joinLeft(
                 ['t2_' . $attributeCode => $attribute['table']],
-                $this->getConnection()->quoteInto(
-                    't1_' .
-                    $attributeCode .
-                    '.entity_id = t2_' .
-                    $attributeCode .
-                    '.entity_id AND t1_' .
-                    $attributeCode .
-                    '.attribute_id = t2_' .
-                    $attributeCode .
-                    '.attribute_id AND t2_' .
-                    $attributeCode .
-                    '.store_id = ?',
-                    $storeId
-                ),
+                "{$attrTableAlias}.{$linkField} = {$attrTableAlias2}.{$linkField}"
+                . ' AND ' . $attrTableAlias . '.attribute_id = ' . $attrTableAlias2 . '.attribute_id'
+                . ' AND ' . $connection->quoteInto($attrTableAlias2 . '.store_id = ?', $storeId),
                 []
             );
         }
@@ -244,14 +243,14 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get category collection array
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
+     * @param null|string|bool|int|Store $storeId
      * @return array|bool
      */
     public function getCollection($storeId)
     {
         $products = [];
 
-        /* @var $store \Magento\Store\Model\Store */
+        /* @var $store Store */
         $store = $this->_storeManager->getStore($storeId);
         if (!$store) {
             return false;
@@ -261,14 +260,14 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $this->_select = $connection->select()->from(
             ['e' => $this->getMainTable()],
-            [$this->getIdFieldName(), 'updated_at']
+            [$this->getIdFieldName(), $this->_productResource->getLinkField(), 'updated_at']
         )->joinInner(
             ['w' => $this->getTable('catalog_product_website')],
             'e.entity_id = w.product_id',
             []
         )->joinLeft(
             ['url_rewrite' => $this->getTable('url_rewrite')],
-            'e.entity_id = url_rewrite.entity_id AND url_rewrite.is_autogenerated = 1'
+            'e.entity_id = url_rewrite.entity_id AND url_rewrite.is_autogenerated = 1 AND url_rewrite.metadata IS NULL'
             . $connection->quoteInto(' AND url_rewrite.store_id = ?', $store->getId())
             . $connection->quoteInto(' AND url_rewrite.entity_type = ?', ProductUrlRewriteGenerator::ENTITY_TYPE),
             ['url' => 'request_path']
@@ -359,7 +358,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         ) {
             $imagesCollection = [
                 new \Magento\Framework\DataObject(
-                    ['url' => $this->_getMediaConfig()->getBaseMediaUrlAddition() . $product->getImage()]
+                    ['url' => $this->getProductImageUrl($product->getImage())]
                 ),
             ];
         }
@@ -368,7 +367,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             // Determine thumbnail path
             $thumbnail = $product->getThumbnail();
             if ($thumbnail && $product->getThumbnail() != self::NOT_SELECTED_IMAGE) {
-                $thumbnail = $this->_getMediaConfig()->getBaseMediaUrlAddition() . $thumbnail;
+                $thumbnail = $this->getProductImageUrl($thumbnail);
             } else {
                 $thumbnail = $imagesCollection[0]->getUrl();
             }
@@ -391,18 +390,17 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getAllProductImages($product, $storeId)
     {
         $product->setStoreId($storeId);
-        $gallery = $this->_mediaAttribute->loadProductGalleryByAttributeId(
+        $gallery = $this->mediaGalleryResourceModel->loadProductGalleryByAttributeId(
             $product,
-            $this->_getMediaGalleryModel()->getAttribute()->getId()
+            $this->mediaGalleryReadHandler->getAttribute()->getId()
         );
 
         $imagesCollection = [];
         if ($gallery) {
-            $productMediaPath = $this->_getMediaConfig()->getBaseMediaUrlAddition();
             foreach ($gallery as $image) {
                 $imagesCollection[] = new \Magento\Framework\DataObject(
                     [
-                        'url' => $productMediaPath . $image['file'],
+                        'url' => $this->getProductImageUrl($image['file']),
                         'caption' => $image['label'] ? $image['label'] : $image['label_default'],
                     ]
                 );
@@ -413,29 +411,31 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Get media gallery model
-     *
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Media|null
-     */
-    protected function _getMediaGalleryModel()
-    {
-        if ($this->_mediaGalleryModel === null) {
-            /** @var $eavConfig \Magento\Eav\Model\Config */
-            $eavConfig = $this->_eavConfigFactory->create();
-            /** @var $eavConfig \Magento\Eav\Model\Attribute */
-            $mediaGallery = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'media_gallery');
-            $this->_mediaGalleryModel = $mediaGallery->getBackend();
-        }
-        return $this->_mediaGalleryModel;
-    }
-
-    /**
      * Get media config
      *
      * @return \Magento\Catalog\Model\Product\Media\Config
+     * @deprecated No longer used, as we're getting full image URL from getProductImageUrl method
+     * @see getProductImageUrl()
      */
     protected function _getMediaConfig()
     {
         return $this->_mediaConfig;
+    }
+
+    /**
+     * Get product image URL from image filename and path
+     *
+     * @param string $image
+     * @return string
+     */
+    private function getProductImageUrl($image)
+    {
+        $productObject = $this->productModel;
+        $imgUrl = $this->catalogImageHelper
+            ->init($productObject, 'product_page_image_large')
+            ->setImageFile($image)
+            ->getUrl();
+
+        return $imgUrl;
     }
 }

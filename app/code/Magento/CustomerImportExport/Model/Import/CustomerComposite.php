@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -488,13 +488,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      */
     public function getValidColumnNames()
     {
-        $this->validColumnNames = array_merge(
-            $this->validColumnNames,
-            $this->_customerAttributes,
-            $this->_addressAttributes,
-            $this->_customerEntity->getValidColumnNames()
+        return array_unique(
+            array_merge(
+                $this->validColumnNames,
+                $this->_customerAttributes,
+                $this->_addressAttributes,
+                $this->_customerEntity->getValidColumnNames()
+            )
         );
-
-        return $this->validColumnNames;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
@@ -10,6 +10,7 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
+ * @api
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item _getResource()
  * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,7 +82,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item::class);
     }
 
     /**
@@ -128,39 +129,36 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     {
         if ($this->_orderItem === null) {
             if ($this->getCreditmemo()) {
-                $this->_orderItem = $this->getCreditmemo()->getOrder()->getItemById($this->getOrderItemId());
+                $orderItem = $this->getCreditmemo()->getOrder()->getItemById($this->getOrderItemId());
             } else {
-                $this->_orderItem = $this->_orderItemFactory->create()->load($this->getOrderItemId());
+                $orderItem = $this->_orderItemFactory->create()->load($this->getOrderItemId());
             }
+            $this->_orderItem = $orderItem;
         }
         return $this->_orderItem;
     }
 
     /**
+     * Checks if quantity available for refund
+     *
+     * @param int $qty
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return bool
+     */
+    private function isQtyAvailable($qty, \Magento\Sales\Model\Order\Item $orderItem)
+    {
+        return $qty <= $orderItem->getQtyToRefund() || $orderItem->isDummy();
+    }
+
+    /**
      * Declare qty
      *
-     * @param   float $qty
+     * @param float $qty
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
-        if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-        $qty = $qty > 0 ? $qty : 0;
-        /**
-         * Check qty availability
-         */
-        if ($qty <= $this->getOrderItem()->getQtyToRefund() || $this->getOrderItem()->isDummy()) {
-            $this->setData('qty', $qty);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid quantity to refund item "%1".', $this->getName())
-            );
-        }
+        $this->setData(CreditmemoItemInterface::QTY, $qty);
         return $this;
     }
 
@@ -173,7 +171,8 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     {
         $orderItem = $this->getOrderItem();
 
-        $orderItem->setQtyRefunded($orderItem->getQtyRefunded() + $this->getQty());
+        $qty = $this->processQty();
+        $orderItem->setQtyRefunded($orderItem->getQtyRefunded() + $qty);
         $orderItem->setTaxRefunded($orderItem->getTaxRefunded() + $this->getTaxAmount());
         $orderItem->setBaseTaxRefunded($orderItem->getBaseTaxRefunded() + $this->getBaseTaxAmount());
         $orderItem->setDiscountTaxCompensationRefunded(
@@ -191,21 +190,45 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
+     * @return int|float
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function processQty()
+    {
+        $orderItem = $this->getOrderItem();
+        $qty = $this->getQty();
+        if ($orderItem->getIsQtyDecimal()) {
+            $qty = (double)$qty;
+        } else {
+            $qty = (int)$qty;
+        }
+        $qty = $qty > 0 ? $qty : 0;
+        if ($this->isQtyAvailable($qty, $orderItem)) {
+            return $qty;
+        } else {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We found an invalid quantity to refund item "%1".', $this->getName())
+            );
+        }
+    }
+
+    /**
      * @return $this
      */
     public function cancel()
     {
-        $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $this->getQty());
+        $qty = $this->processQty();
+        $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $qty);
         $this->getOrderItem()->setTaxRefunded(
             $this->getOrderItem()->getTaxRefunded() -
             $this->getOrderItem()->getBaseTaxAmount() *
-            $this->getQty() /
+            $qty /
             $this->getOrderItem()->getQtyOrdered()
         );
         $this->getOrderItem()->setDiscountTaxCompensationRefunded(
             $this->getOrderItem()->getDiscountTaxCompensationRefunded() -
             $this->getOrderItem()->getDiscountTaxCompensationAmount() *
-            $this->getQty() /
+            $qty /
             $this->getOrderItem()->getQtyOrdered()
         );
         return $this;
@@ -227,10 +250,11 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $rowTotalInclTax = $orderItem->getRowTotalInclTax();
         $baseRowTotalInclTax = $orderItem->getBaseRowTotalInclTax();
 
-        if (!$this->isLast() && $orderItemQtyInvoiced > 0 && $this->getQty() >= 0) {
+        $qty = $this->processQty();
+        if (!$this->isLast() && $orderItemQtyInvoiced > 0 && $qty >= 0) {
             $availableQty = $orderItemQtyInvoiced - $orderItem->getQtyRefunded();
-            $rowTotal = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
-            $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $this->getQty(), 'base');
+            $rowTotal = $creditmemo->roundPrice($rowTotal / $availableQty * $qty);
+            $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $qty, 'base');
         }
         $this->setRowTotal($rowTotal);
         $this->setBaseRowTotal($baseRowTotal);
@@ -238,10 +262,10 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         if ($rowTotalInclTax && $baseRowTotalInclTax) {
             $orderItemQty = $orderItem->getQtyOrdered();
             $this->setRowTotalInclTax(
-                $creditmemo->roundPrice($rowTotalInclTax / $orderItemQty * $this->getQty(), 'including')
+                $creditmemo->roundPrice($rowTotalInclTax / $orderItemQty * $qty, 'including')
             );
             $this->setBaseRowTotalInclTax(
-                $creditmemo->roundPrice($baseRowTotalInclTax / $orderItemQty * $this->getQty(), 'including_base')
+                $creditmemo->roundPrice($baseRowTotalInclTax / $orderItemQty * $qty, 'including_base')
             );
         }
         return $this;
@@ -255,7 +279,8 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     public function isLast()
     {
         $orderItem = $this->getOrderItem();
-        if ((string)(double)$this->getQty() == (string)(double)$orderItem->getQtyToRefund()) {
+        $qty = $this->processQty();
+        if ((string)(double)$qty == (string)(double)$orderItem->getQtyToRefund()) {
             return true;
         }
         return false;
@@ -264,7 +289,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns additional_data
      *
-     * @return string
+     * @return string|null
      */
     public function getAdditionalData()
     {
@@ -284,7 +309,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountAmount()
     {
@@ -294,7 +319,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -314,7 +339,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_price_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBasePriceInclTax()
     {
@@ -324,7 +349,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_row_total
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseRowTotal()
     {
@@ -334,7 +359,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_row_total_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseRowTotalInclTax()
     {
@@ -344,7 +369,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTaxAmount()
     {
@@ -354,7 +379,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_weee_tax_applied_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseWeeeTaxAppliedAmount()
     {
@@ -364,7 +389,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_weee_tax_applied_row_amnt
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseWeeeTaxAppliedRowAmnt()
     {
@@ -374,7 +399,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_weee_tax_disposition
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseWeeeTaxDisposition()
     {
@@ -384,7 +409,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns base_weee_tax_row_disposition
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseWeeeTaxRowDisposition()
     {
@@ -394,7 +419,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns description
      *
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -404,7 +429,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountAmount()
     {
@@ -414,7 +439,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -424,7 +449,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns name
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -444,7 +469,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns parent_id
      *
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {
@@ -454,7 +479,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns price
      *
-     * @return float
+     * @return float|null
      */
     public function getPrice()
     {
@@ -464,7 +489,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns price_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getPriceInclTax()
     {
@@ -474,7 +499,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns product_id
      *
-     * @return int
+     * @return int|null
      */
     public function getProductId()
     {
@@ -494,7 +519,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns row_total
      *
-     * @return float
+     * @return float|null
      */
     public function getRowTotal()
     {
@@ -504,7 +529,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns row_total_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getRowTotalInclTax()
     {
@@ -514,7 +539,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns sku
      *
-     * @return string
+     * @return string|null
      */
     public function getSku()
     {
@@ -524,7 +549,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getTaxAmount()
     {
@@ -534,7 +559,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns weee_tax_applied
      *
-     * @return string
+     * @return string|null
      */
     public function getWeeeTaxApplied()
     {
@@ -544,7 +569,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns weee_tax_applied_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getWeeeTaxAppliedAmount()
     {
@@ -554,7 +579,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns weee_tax_applied_row_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getWeeeTaxAppliedRowAmount()
     {
@@ -564,7 +589,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns weee_tax_disposition
      *
-     * @return float
+     * @return float|null
      */
     public function getWeeeTaxDisposition()
     {
@@ -574,7 +599,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Returns weee_tax_row_disposition
      *
-     * @return float
+     * @return float|null
      */
     public function getWeeeTaxRowDisposition()
     {
@@ -582,6 +607,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */
@@ -851,5 +877,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

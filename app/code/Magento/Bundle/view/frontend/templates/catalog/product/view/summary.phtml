@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,27 +16,27 @@
      class="block-bundle-summary"
      data-mage-init='{"sticky":{"container": ".product-add-form"}}'>
     <div class="title">
-        <strong><?php /* @escapeNotVerified */ echo __('Your Customization'); ?></strong>
+        <strong><?= /* @escapeNotVerified */ __('Your Customization') ?></strong>
     </div>
     <div class="content">
         <div class="bundle-info">
-            <?php echo $block->getImage($_product, 'bundled_product_customization_page')->toHtml(); ?>
+            <?= $block->getImage($_product, 'bundled_product_customization_page')->toHtml() ?>
             <div class="product-details">
-                <strong class="product name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
+                <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
                 <?php if ($_product->getIsSalable()): ?>
-                    <p class="available stock" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
-                        <span><?php /* @escapeNotVerified */ echo __('In stock') ?></span>
+                    <p class="available stock" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                        <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
                     </p>
                 <?php else: ?>
-                    <p class="unavailable stock" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
-                        <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
+                    <p class="unavailable stock" title="<?= /* @escapeNotVerified */ __('Availability') ?>">
+                        <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
                     </p>
                 <?php endif; ?>
-                <?php echo $block->getChildHtml('', true);?>
+                <?= $block->getChildHtml('', true) ?>
             </div>
         </div>
         <div class="bundle-summary">
-            <strong class="subtitle"><?php /* @escapeNotVerified */ echo __('Summary'); ?></strong>
+            <strong class="subtitle"><?= /* @escapeNotVerified */ __('Summary') ?></strong>
             <div id="bundle-summary" data-container="product-summary">
                 <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
                 <script data-template="bundle-summary" type="text/x-magento-template">
@@ -46,7 +46,7 @@
                     </li>
                 </script>
                 <script data-template="bundle-option" type="text/x-magento-template">
-                    <div><?php /* @escapeNotVerified */ echo __('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>') ?></div>
+                    <div><?= /* @escapeNotVerified */ __('%1 x %2', '<%- data._quantity_ %>', '<%- data._label_ %>') ?></div>
                 </script>
             </div>
         </div>

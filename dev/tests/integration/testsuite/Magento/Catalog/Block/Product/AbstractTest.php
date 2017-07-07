@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
@@ -21,54 +21,55 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Catalog\Block\Product\AbstractProduct
      */
-    protected $_block;
+    protected $block;
 
     /**
      * @var \Magento\Catalog\Model\Product
      */
-    protected $_product;
+    protected $product;
+
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
 
     /**
      * Flag is stub class was created
      *
      * @var bool
      */
-    protected static $_isStubClass = false;
+    protected static $isStubClass = false;
 
     protected function setUp()
     {
-        if (!self::$_isStubClass) {
+        if (!self::$isStubClass) {
             $this->getMockForAbstractClass(
-                'Magento\Catalog\Block\Product\AbstractProduct',
+                \Magento\Catalog\Block\Product\AbstractProduct::class,
                 [],
                 self::STUB_CLASS,
                 false
             );
-            self::$_isStubClass = true;
+            self::$isStubClass = true;
         }
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
-            ->setAreaCode('frontend');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
-        )->setDefaultDesignTheme();
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
-        )->createBlock(
-            self::STUB_CLASS
-        );
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $this->_product->load(1);
-        $this->_product->addData(
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\View\DesignInterface::class)->setDefaultDesignTheme();
+        $this->block = $objectManager->get(
+            \Magento\Framework\View\LayoutInterface::class
+        )->createBlock(self::STUB_CLASS);
+        $this->productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
+        $this->product = $this->productRepository->get('simple');
+        $this->product->addData(
             [
                 'image' => '/m/a/magento_image.jpg',
                 'small_image' => '/m/a/magento_image.jpg',
                 'thumbnail' => '/m/a/magento_image.jpg',
             ]
         );
-        $this->_block->setProduct($this->_product);
+        $this->block->setProduct($this->product);
     }
 
     /**
@@ -77,9 +78,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddToCartUrl()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-        $product->load(1);
-        $url = $this->_block->getAddToCartUrl($product);
+        $product = $this->productRepository->get('simple');
+        $url = $this->block->getAddToCartUrl($product);
         $this->assertStringEndsWith('?options=cart', $url);
         $this->assertStringMatchesFormat('%ssimple-product.html%s', $url);
     }
@@ -87,17 +87,17 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetSubmitUrl()
     {
         /* by default same as add to cart */
-        $this->assertStringEndsWith('?options=cart', $this->_block->getSubmitUrl($this->_product));
-        $this->_block->setData('submit_route_data', ['route' => 'catalog/product/view']);
-        $this->assertStringEndsWith('catalog/product/view/', $this->_block->getSubmitUrl($this->_product));
+        $this->assertStringEndsWith('?options=cart', $this->block->getSubmitUrl($this->product));
+        $this->block->setData('submit_route_data', ['route' => 'catalog/product/view']);
+        $this->assertStringEndsWith('catalog/product/view/', $this->block->getSubmitUrl($this->product));
     }
 
     public function testGetAddToWishlistParams()
     {
-        $json = $this->_block->getAddToWishlistParams($this->_product);
+        $json = $this->block->getAddToWishlistParams($this->product);
         $params = (array)json_decode($json);
         $data = (array)$params['data'];
-        $this->assertEquals('1', $data['product']);
+        $this->assertEquals($this->product->getId(), $data['product']);
         $this->assertArrayHasKey('uenc', $data);
         $this->assertStringEndsWith(
             'wishlist/index/add/',
@@ -107,27 +107,28 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddToCompareUrl()
     {
-        $this->assertStringMatchesFormat('%scatalog/product_compare/add/', $this->_block->getAddToCompareUrl());
+        $this->assertStringMatchesFormat('%scatalog/product_compare/add/', $this->block->getAddToCompareUrl());
     }
 
     public function testGetMinimalQty()
     {
-        $this->assertGreaterThan(0, $this->_block->getMinimalQty($this->_product));
+        $this->assertGreaterThan(0, $this->block->getMinimalQty($this->product));
     }
 
     public function testGetReviewsSummaryHtml()
     {
-        $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
+        $this->block->setLayout(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get(\Magento\Framework\View\LayoutInterface::class)
         );
-        $html = $this->_block->getReviewsSummaryHtml($this->_product, false, true);
+        $html = $this->block->getReviewsSummaryHtml($this->product, false, true);
         $this->assertNotEmpty($html);
         $this->assertContains('review', $html);
     }
 
     public function testGetProduct()
     {
-        $this->assertSame($this->_product, $this->_block->getProduct());
+        $this->assertSame($this->product, $this->block->getProduct());
     }
 
     /**
@@ -136,34 +137,32 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductUrl()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
-        $product->load(1);
-
-        $this->assertStringEndsWith('simple-product.html', $this->_block->getProductUrl($product));
+        $product = $this->productRepository->get('simple');
+        $this->assertStringEndsWith('simple-product.html', $this->block->getProductUrl($product));
     }
 
     public function testHasProductUrl()
     {
-        $this->assertTrue($this->_block->hasProductUrl($this->_product));
+        $this->assertTrue($this->block->hasProductUrl($this->product));
     }
 
     public function testLayoutDependColumnCount()
     {
-        $this->_block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
+        $this->block->setLayout(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get(\Magento\Framework\View\LayoutInterface::class)
         );
-        $this->assertEquals(3, $this->_block->getColumnCount());
+        $this->assertEquals(3, $this->block->getColumnCount());
         /* default column count */
 
-        $this->_block->addColumnCountLayoutDepend('test', 10);
-        $this->assertEquals(10, $this->_block->getColumnCountLayoutDepend('test'));
-        $this->_block->removeColumnCountLayoutDepend('test');
-        $this->assertFalse($this->_block->getColumnCountLayoutDepend('test'));
+        $this->block->addColumnCountLayoutDepend('test', 10);
+        $this->assertEquals(10, $this->block->getColumnCountLayoutDepend('test'));
+        $this->block->removeColumnCountLayoutDepend('test');
+        $this->assertFalse($this->block->getColumnCountLayoutDepend('test'));
     }
 
     public function testGetCanShowProductPrice()
     {
-        $this->assertTrue($this->_block->getCanShowProductPrice($this->_product));
+        $this->assertTrue($this->block->getCanShowProductPrice($this->product));
     }
 }

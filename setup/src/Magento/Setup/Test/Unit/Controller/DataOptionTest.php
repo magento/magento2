@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,14 +37,14 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $this->response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+        $this->request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
+        $this->response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
+        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
 
-        $this->uninstallCollector = $this->getMock('Magento\Setup\Model\UninstallCollector', [], [], '', false);
+        $this->uninstallCollector = $this->getMock(\Magento\Setup\Model\UninstallCollector::class, [], [], '', false);
         $this->controller = new DataOption($this->uninstallCollector);
 
-        $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $this->mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)
@@ -63,7 +63,7 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -75,6 +75,7 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
         $this->uninstallCollector->expects($this->never())->method('collectUninstall')->with(["some_module"]);
         $this->assertFalse($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
     }
+
     /**
      * @param string $content
      * @param array $expected

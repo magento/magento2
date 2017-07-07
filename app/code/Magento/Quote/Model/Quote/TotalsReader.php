@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -14,6 +14,7 @@ class TotalsReader
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
      */
     protected $totalFactory;
+
     /**
      * @var \Magento\Quote\Model\Quote\TotalsCollectorList
      */
@@ -34,12 +35,12 @@ class TotalsReader
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @param array $total
-     * @return array
+     * @return Total[]
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, array $total)
     {
         $output = [];
-        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total')->setData($total);
+        $total = $this->totalFactory->create()->setData($total);
         /** @var ReaderInterface $reader */
         foreach ($this->collectorList->getCollectors($quote->getStoreId()) as $reader) {
             $data = $reader->fetch($quote, $total);
@@ -61,7 +62,7 @@ class TotalsReader
 
     /**
      * @param array $total
-     * @return Total|array
+     * @return Total|Total[]
      */
     protected function convert($total)
     {
@@ -72,20 +73,20 @@ class TotalsReader
         if (count(array_column($total, 'code')) > 0) {
             $totals = [];
             foreach ($total as $item) {
-                $totals[] = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total')->setData($item);
+                $totals[] = $this->totalFactory->create()->setData($item);
             }
             return $totals;
         }
 
-        return $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total')->setData($total);
+        return $this->totalFactory->create()->setData($total);
     }
 
     /**
      * @param Total $totalInstance
-     * @param array $output
-     * @return array
+     * @param Total[] $output
+     * @return Total[]
      */
-    protected function merge($totalInstance, $output)
+    protected function merge(Total $totalInstance, $output)
     {
         if (array_key_exists($totalInstance->getCode(), $output)) {
             $output[$totalInstance->getCode()] = $output[$totalInstance->getCode()]->addData(

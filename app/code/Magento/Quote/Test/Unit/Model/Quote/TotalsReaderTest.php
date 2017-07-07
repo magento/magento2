@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,16 +38,21 @@ class TotalsReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectorMock;
 
-
     protected function setUp()
     {
         $this->totalFactoryMock =
-            $this->getMock('Magento\Quote\Model\Quote\Address\TotalFactory', ['create'], [], '', false);
-        $this->collectionListMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollectorList', [], [], '', false);
-        $this->totalMock = $this->getMock('Magento\Quote\Model\Quote\Address\Total', ['setData'], [], '', false);
-        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+            $this->getMock(\Magento\Quote\Model\Quote\Address\TotalFactory::class, ['create'], [], '', false);
+        $this->collectionListMock = $this->getMock(
+            \Magento\Quote\Model\Quote\TotalsCollectorList::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->totalMock = $this->getMock(\Magento\Quote\Model\Quote\Address\Total::class, ['setData'], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->collectorMock =
-            $this->getMock('Magento\Quote\Model\Quote\Address\Total\AbstractTotal', [], [], '', false);
+            $this->getMock(\Magento\Quote\Model\Quote\Address\Total\AbstractTotal::class, [], [], '', false);
         $this->model = new \Magento\Quote\Model\Quote\TotalsReader(
             $this->totalFactoryMock,
             $this->collectionListMock
@@ -59,7 +64,7 @@ class TotalsReaderTest extends \PHPUnit_Framework_TestCase
         $total = [];
         $storeId = 1;
         $testedTotalMock =
-            $this->getMock('Magento\Quote\Model\Quote\Address\Total', ['setData', 'getCode'], [], '', false);
+            $this->getMock(\Magento\Quote\Model\Quote\Address\Total::class, ['setData', 'getCode'], [], '', false);
         $expected = ['my_total_type' => $testedTotalMock];
         $data = ['code' => 'my_total_type'];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -110,9 +115,9 @@ class TotalsReaderTest extends \PHPUnit_Framework_TestCase
         $total = [];
         $storeId = 1;
         $firstTotalMock =
-            $this->getMock('Magento\Quote\Model\Quote\Address\Total', ['setData', 'getCode'], [], '', false);
+            $this->getMock(\Magento\Quote\Model\Quote\Address\Total::class, ['setData', 'getCode'], [], '', false);
         $secondTotalMock =
-            $this->getMock('Magento\Quote\Model\Quote\Address\Total', ['setData', 'getCode'], [], '', false);
+            $this->getMock(\Magento\Quote\Model\Quote\Address\Total::class, ['setData', 'getCode'], [], '', false);
         $expected = ['first_total_type' => $firstTotalMock, 'second_total_type' => $secondTotalMock];
         $data = [['code' => 'first_total_type'], ['code' => 'second_total_type']];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
@@ -144,7 +149,7 @@ class TotalsReaderTest extends \PHPUnit_Framework_TestCase
         $total = [];
         $storeId = 1;
         $testedTotalMock =
-            $this->getMock('Magento\Quote\Model\Quote\Address\Total', ['setData', 'getCode'], [], '', false);
+            $this->getMock(\Magento\Quote\Model\Quote\Address\Total::class, ['setData', 'getCode'], [], '', false);
         $expected = ['my_total_type' => $testedTotalMock];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);

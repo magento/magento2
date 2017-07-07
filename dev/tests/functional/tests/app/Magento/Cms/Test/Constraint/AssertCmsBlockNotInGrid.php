@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,7 @@ class AssertCmsBlockNotInGrid extends AbstractConstraint
     {
         $cmsBlockIndex->open();
         $data = $cmsBlock->getData();
+        $data['is_active'] = $data['is_active'] == 'Yes' ?  'Enabled' : 'Disabled';
         if (isset($data['stores'])) {
             $storeId = is_array($data['stores']) ? reset($data['stores']) : $data['stores'];
             $parts = explode("/", $storeId);

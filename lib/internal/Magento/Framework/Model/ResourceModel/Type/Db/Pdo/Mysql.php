@@ -1,57 +1,52 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\DB;
-use Magento\Framework\Stdlib;
+use Magento\Framework\DB\Adapter\Pdo\MysqlFactory;
+use Magento\Framework\DB\SelectFactory;
 
-class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements ConnectionAdapterInterface
+// @codingStandardsIgnoreStart
+class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
+    ConnectionAdapterInterface
+// @codingStandardsIgnoreEnd
 {
-    /**
-     * @var Stdlib\StringUtils
-     */
-    protected $string;
-
-    /**
-     * @var Stdlib\DateTime
-     */
-    protected $dateTime;
-
     /**
      * @var array
      */
     protected $connectionConfig;
 
     /**
-     * @param Stdlib\StringUtils $string
-     * @param Stdlib\DateTime $dateTime
+     * @var MysqlFactory
+     */
+    private $mysqlFactory;
+
+    /**
+     * Constructor
+     *
      * @param array $config
+     * @param MysqlFactory|null $mysqlFactory
      */
     public function __construct(
-        Stdlib\StringUtils $string,
-        Stdlib\DateTime $dateTime,
-        array $config
+        array $config,
+        MysqlFactory $mysqlFactory = null
     ) {
-        $this->string = $string;
-        $this->dateTime = $dateTime;
         $this->connectionConfig = $this->getValidConfig($config);
-
+        $this->mysqlFactory = $mysqlFactory ?: ObjectManager::getInstance()->get(MysqlFactory::class);
         parent::__construct();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConnection(DB\LoggerInterface $logger)
+    public function getConnection(DB\LoggerInterface $logger = null, SelectFactory $selectFactory = null)
     {
-        $connection = $this->getDbConnectionInstance($logger);
+        $connection = $this->getDbConnectionInstance($logger, $selectFactory);
 
         $profiler = $connection->getProfiler();
         if ($profiler instanceof DB\Profiler) {
@@ -63,15 +58,20 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
     }
 
     /**
-     * Create and return DB connection object instance
+     * Create and return database connection object instance
      *
-     * @param DB\LoggerInterface $logger
+     * @param DB\LoggerInterface|null $logger
+     * @param SelectFactory|null $selectFactory
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function getDbConnectionInstance(DB\LoggerInterface $logger)
+    protected function getDbConnectionInstance(DB\LoggerInterface $logger = null, SelectFactory $selectFactory = null)
     {
-        $className = $this->getDbConnectionClassName();
-        return new $className($this->string, $this->dateTime, $logger, $this->connectionConfig);
+        return $this->mysqlFactory->create(
+            $this->getDbConnectionClassName(),
+            $this->connectionConfig,
+            $logger,
+            $selectFactory
+        );
     }
 
     /**
@@ -103,6 +103,12 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
             if (!isset($config[$name])) {
                 throw new \InvalidArgumentException("MySQL adapter: Missing required configuration option '$name'");
             }
+        }
+
+        if (isset($config['port'])) {
+            throw new \InvalidArgumentException(
+                "Port must be configured within host (like '$config[host]:$config[port]') parameter, not within port"
+            );
         }
 
         $config['active'] = !(

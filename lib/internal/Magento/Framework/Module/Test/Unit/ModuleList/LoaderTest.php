@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,18 +49,24 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->converter = $this->getMock('Magento\Framework\Module\Declaration\Converter\Dom', [], [], '', false);
-        $this->parser = $this->getMock('Magento\Framework\Xml\Parser', [], [], '', false);
+        $this->converter = $this->getMock(
+            \Magento\Framework\Module\Declaration\Converter\Dom::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->parser = $this->getMock(\Magento\Framework\Xml\Parser::class, [], [], '', false);
         $this->parser->expects($this->once())->method('initErrorHandler');
         $this->registry = $this->getMock(
-            'Magento\Framework\Component\ComponentRegistrarInterface',
+            \Magento\Framework\Component\ComponentRegistrarInterface::class,
             [],
             [],
             '',
             false,
             false
         );
-        $this->driver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false, false);
+        $this->driver = $this->getMock(\Magento\Framework\Filesystem\DriverInterface::class, [], [], '', false, false);
         $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 

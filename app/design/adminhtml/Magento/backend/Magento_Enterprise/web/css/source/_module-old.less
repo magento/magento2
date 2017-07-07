@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -24,17 +24,18 @@
 //     &:extend(.CustomGridView all);
 // }
 
-/*
-    Reports - Customer Segment
--------------------------------------- */
+//
+//  Reports - Customer Segment
+//  ---------------------------------------------
 
 // .adminhtml-report-customer-customersegment-segment {
 //     &:extend(.CustomGridView all);
 // }
 
-/*
-    Reports - Customer Segment Report
--------------------------------------- */
+//
+//  Reports - Customer Segment Report
+//  ---------------------------------------------
+
 .filter-segments {
     list-style: none;
     padding: 0;
@@ -53,9 +54,9 @@
     width: 50px;
 }
 
-/*
-    Reports - Customer Segments
--------------------------------------- */
+//
+//  Reports - Customer Segment
+//  ---------------------------------------------
 
 .adminhtml-report-customer-customersegment-segment .col-id {
     width: 35px;
@@ -78,28 +79,31 @@
     width: 45px;
 }
 
-/*
-    Gift Registry
---------------------------------------*/
+//
+//  Gift Registry
+//  ---------------------------------------------
 
 .giftregistry-custom-attributes {
     margin-bottom: 20px;
 }
 
-/*
-    Gift Wrapping
---------------------------------------*/
+//
+//  Gift Wrapping
+//  ---------------------------------------------
 
 .adminhtml-giftwrapping-index th.col-id {
     text-align: left;
 }
+
 .adminhtml-giftwrapping-index .col-price {
     text-align: right;
     width: 50px;
 }
+
 .adminhtml-giftwrapping-index .col-actions {
     width: 50px;
 }
+
 .adminhtml-giftwrapping-index .col-select {
     width: 60px;
 }
@@ -129,8 +133,8 @@
     border: 0;
     box-shadow: none;
     display: inline-block;
-    margin: 0 15px 0 0;
     height: auto;
+    margin: 0 15px 0 0;
     width: auto;
 }
 
@@ -141,9 +145,9 @@
 }
 
 .adminhtml-giftwrapping-edit .field-image .delete-image input {
+    display: inline-block;
     margin: -3px 5px 0 0;
     width: auto;
-    display: inline-block;
 }
 
 .adminhtml-giftwrapping-edit .field-image .addon .delete-image input:focus + label {
@@ -156,6 +160,7 @@
 //     position: relative;
 //     bottom: -14px;
 // }
+
 .adminhtml-giftwrapping-index .col-id {
     width: 35px;
 }
@@ -179,9 +184,10 @@
     font-weight: bold;
 }
 
-/*
-    Invitations
---------------------------------------*/
+//
+//  Invitations
+//  ---------------------------------------------
+
 .invitee_information,
 .inviter_information {
     width: 48.9362%;
@@ -213,14 +219,15 @@
 }
 
 .invitations-history ul .status:before {
+    content: '|';
     display: inline-block;
-    content: "|";
     margin: 0 10px;
 }
 
-/*
-    Reports - Order Conversion Rate
--------------------------------------- */
+//
+//  Reports - Order Conversion Rate
+//  ---------------------------------------------
+
 .adminhtml-report-invitation-order .col-period {
     white-space: nowrap;
     width: 70px;
@@ -234,9 +241,10 @@
     width: 23%;
 }
 
-/*
-    Reports - Invitations - Customer
--------------------------------------- */
+//
+//  Reports - Invitations - Customer
+//  ---------------------------------------------
+
 .adminhtml-report-invitation-customer .col-id {
     width: 35px;
 }
@@ -252,9 +260,10 @@
     width: 120px;
 }
 
-/*
-    Reports - Invitations - General
--------------------------------------- */
+//
+//  Reports - Invitations - General
+//  ---------------------------------------------
+
 .adminhtml-report-invitation-index .col-period {
     white-space: nowrap;
 }
@@ -268,9 +277,10 @@
     width: 19%;
 }
 
-/*
-    Invitation Data table - alternative view
--------------------------------------- */
+//
+//  Invitation Data table - alternative view
+//  ---------------------------------------------
+
 .invitation_information .data-table,
 .invitee_information .data-table,
 .inviter_information .data-table {
@@ -291,8 +301,8 @@
 .inviter_information .data-table tbody tr th {
     background-color: #fff;
     border: 0;
-    padding: 9px 10px 10px;
     color: #666;
+    padding: 9px 10px 10px;
     vertical-align: top;
 }
 
@@ -305,17 +315,20 @@
     background-color: #fbfaf6;
 }
 
-[class^=" adminhtml-giftregistry-"] {
+[class^=' adminhtml-giftregistry-'] {
     .fieldset-wrapper-content .data-table {
         .col-sort-order {
             width: 80px;
         }
+
         td {
             vertical-align: top;
+
             select {
                 display: block;
                 width: 100%;
             }
+
             .input-radio.global-scope {
                 margin-top: 9px;
             }
@@ -324,25 +337,30 @@
 }
 
 .sales-order-create-index {
-    // Configure product popup
+    //  Configure product popup
     .ui-dialog {
         .content > .giftcard {
             .field.text .input-text {
                 width: 100%;
             }
+
             .note .price {
                 font-weight: 600;
+
                 &:before {
-                    content: ": ";
+                    content: ': ';
                 }
             }
+
             .fixed.amount {
                 .label:after {
-                    content: ": ";
+                    content: ': ';
                 }
+
                 .control {
                     display: inline-block;
                     font-weight: 600;
+
                     .control-value {
                         margin: -2px 0 0;
                         padding: 0;
@@ -354,32 +372,37 @@
 }
 
 //
-//    Stores -> Gift Registry
-// --------------------------------------
+//  Stores -> Gift Registry
+//  ---------------------------------------------
+
 .adminhtml-giftregistry-index {
     .col-label {
         &:extend(.col-370-max all);
     }
+
     .col-is_listed {
         &:extend(.col-70 all);
     }
 }
 
 //
-//    Reports -> Invitations
-// --------------------------------------
+//  Reports -> Invitations
+//  ---------------------------------------------
+
 [class^=' invitations-report-invitation'] {
     [class^='col-inv-'] {
         &:extend(.col-70 all);
     }
+
     .grid .col-period {
         &:extend(.col-auto all);
     }
 }
 
 //
-//    Reports -> Wish List Report
-// --------------------------------------
+//  Reports -> Wish List Report
+//  ---------------------------------------------
+
 .multiplewishlist-report-customer-wishlist-wishlist .grid {
     .col-name,
     .col-subject,

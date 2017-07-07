@@ -1,11 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure\Search;
 
-class Proxy implements \Magento\Config\Model\Config\Structure\SearchInterface
+/**
+ * @api
+ */
+class Proxy implements
+    \Magento\Config\Model\Config\Structure\SearchInterface,
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object manager
@@ -34,7 +39,7 @@ class Proxy implements \Magento\Config\Model\Config\Structure\SearchInterface
     protected function _getSubject()
     {
         if (!$this->_subject) {
-            $this->_subject = $this->_objectManager->get('Magento\Config\Model\Config\Structure');
+            $this->_subject = $this->_objectManager->get(\Magento\Config\Model\Config\Structure::class);
         }
         return $this->_subject;
     }

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,9 +7,17 @@
 //  Variables
 //  ---------------------------------------------
 
+@control-table__dragging__outline-color: @color-blue-pure;
+
+@control-table-row__dragging__background-color: @color-light-gray0;
+
 @control-table-cell__background-color: @color-white-dark-smoke;
 @control-table-cell__border-color: @color-white;
 @control-table-cell__padding-vertical: 1.3rem;
+@control-table-cell__padding-horizontal: 1rem;
+
+@control-table-horizontal-dragover-mark__color: @color-blue-dodger;
+@control-table-horizontal-dragover-mark__width: 3px;
 
 //
 
@@ -21,82 +29,211 @@
 
 .admin__control-table {
     width: 100%;
+
     thead {
         background-color: transparent;
     }
+
     tbody {
         td {
             vertical-align: top;
         }
     }
+
     tfoot {
         th {
             padding-bottom: @control-table-cell__padding-vertical;
+
+            &.validation {
+                padding-bottom: 0;
+                padding-top: 0;
+            }
+        }
+
+        td {
+            border-top: 1px solid @control-table-cell__border-color;
+        }
+
+        .admin__control-table-pagination {
+            float: right;
+            padding-bottom: 0;
+        }
+
+        .action-previous {
+            margin-right: .5rem;
+        }
+
+        .action-next {
+            margin-left: .9rem;
         }
     }
+
     tr {
         &:last-child {
-            th,
             td {
                 border-bottom: none;
             }
         }
+
+        &._dragover-top {
+            td {
+                box-shadow: inset 0 @control-table-horizontal-dragover-mark__width 0 0 @control-table-horizontal-dragover-mark__color;
+            }
+        }
+
+        &._dragover-bottom {
+            td {
+                box-shadow: inset 0 -@control-table-horizontal-dragover-mark__width 0 0 @control-table-horizontal-dragover-mark__color;
+            }
+        }
+
+        &._dragged {
+            td,
+            th {
+                background: @control-table-row__dragging__background-color;
+            }
+        }
     }
+
     td,
     th {
         background-color: @control-table-cell__background-color;
         border: 0;
         border-bottom: 1px solid @control-table-cell__border-color;
-        padding: @control-table-cell__padding-vertical 2.5rem @control-table-cell__padding-vertical 0;
+        padding: @control-table-cell__padding-vertical @control-table-cell__padding-horizontal @control-table-cell__padding-vertical 0;
         text-align: left;
         vertical-align: top;
+
         &:first-child {
-            padding-left: 1.5rem;
+            padding-left: @control-table-cell__padding-horizontal;
         }
+
         > .admin__control-select,
         > .admin__control-text {
             width: 100%;
         }
+
+        &._hidden {
+            display: none;
+        }
+
+        &._fit {
+            width: 1px;
+        }
     }
+
     th {
-        border: 0;
-        vertical-align: bottom;
         color: @color-very-dark-gray-black;
         font-size: @font-size__base;
         font-weight: @font-weight__semibold;
-        padding-bottom: 0;
+        vertical-align: bottom;
+
         &._required {
             span {
                 &:after {
-                    color: @field-label__required__color;
+                    .lib-css(margin, @form-field-label-asterisk__margin);
+                    color: @validation__color;
                     content: '*';
                 }
             }
         }
     }
+
     //  Actions column
     .control-table-actions-th {
         white-space: nowrap;
     }
+
     .control-table-actions-cell {
         padding-top: 1.8rem;
         text-align: center;
         width: 1%;
     }
+
+    //  Column with option
+    .control-table-options-th {
+        text-align: center;
+        width: 10rem;
+    }
+
+    .control-table-options-cell {
+        text-align: center;
+    }
+
+    //  Static text in row
+    .control-table-text {
+        line-height: 3.2rem;
+    }
+
     //  Draggable column
     .col-draggable {
         padding-top: 2.2rem;
         width: 1%;
     }
+
     //  Actions
     .action-delete {
         .action-icon();
+        padding-left: 0;
+        padding-right: 0;
+
         &:before {
             &:extend(.abs-icon all);
             content: @icon-delete__content;
+            font-size: 2rem;
         }
+
         > span {
             display: none;
         }
+    }
+
+    .draggable-handle {
+        &:extend(.abs-draggable-handle all);
+        padding: 0;
+    }
+
+    &._dragged {
+        outline: 1px solid @control-table__dragging__outline-color;
+    }
+}
+
+.admin__control-table-action {
+    background-color: @control-table-cell__background-color;
+    border-top: 1px solid @control-table-cell__border-color;
+    padding: @control-table-cell__padding-vertical @control-table-cell__padding-horizontal;
+}
+
+.admin__dynamic-rows {
+    &._dragged {
+        opacity: .95;
+        position: absolute;
+        z-index: 999;
+    }
+
+    &.admin__control-table {
+        .admin__control-fields {
+            > .admin__field {
+                border: 0;
+                padding: 0;
+            }
+        }
+    }
+
+    td {
+        > .admin__field {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.admin__control-table-pagination {
+    &:extend(.abs-clearfix all);
+    padding-bottom: @indent__s;
+
+    .admin__data-grid-pager {
+        float: right;
     }
 }

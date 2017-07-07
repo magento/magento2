@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
@@ -18,15 +18,15 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\UrlRewrite\Block\Cms\Page\Grid $gridBlock */
         $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\UrlRewrite\Block\Cms\Page\Grid'
+            \Magento\UrlRewrite\Block\Cms\Page\Grid::class
         );
         $gridBlock->toHtml();
 
         foreach (['title', 'identifier', 'is_active'] as $key) {
             $this->assertInstanceOf(
-                'Magento\Backend\Block\Widget\Grid\Column',
+                \Magento\Backend\Block\Widget\Grid\Column::class,
                 $gridBlock->getColumn($key),
                 'Column with key "' . $key . '" is invalid'
             );
@@ -54,13 +54,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\UrlRewrite\Block\Cms\Page\Grid $gridBlock */
         $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\UrlRewrite\Block\Cms\Page\Grid'
+            \Magento\UrlRewrite\Block\Cms\Page\Grid::class
         );
         $gridBlock->toHtml();
         $this->assertInstanceOf(
-            'Magento\Backend\Block\Widget\Grid\Column',
+            \Magento\Backend\Block\Widget\Grid\Column::class,
             $gridBlock->getColumn('store_id'),
             'When there is more than one store column with key "store_id" should be present'
         );

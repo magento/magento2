@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Controller;
@@ -14,7 +14,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->markTestSkipped('MAGETWO-44910');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Locale\ResolverInterface')->setLocale('de_DE');
+        $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class)->setLocale('de_DE');
 
         $this->getRequest()->setParam('q', 'query_text');
         $this->dispatch('catalogsearch/result');
@@ -36,5 +36,27 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $data = '<script>alert(1)</script>';
         $this->assertNotContains($data, $responseBody);
         $this->assertContains(htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false), $responseBody);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogSearch/_files/query_redirect.php
+     */
+    public function testRedirect()
+    {
+        $this->dispatch('/catalogsearch/result/?q=query_text');
+        $responseBody = $this->getResponse();
+
+        $this->assertTrue($responseBody->isRedirect());
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogSearch/_files/query_redirect.php
+     */
+    public function testNoRedirectIfCurrentUrlAndRedirectTermAreSame()
+    {
+        $this->dispatch('/catalogsearch/result/?q=query_text&cat=41');
+        $responseBody = $this->getResponse();
+
+        $this->assertFalse($responseBody->isRedirect());
     }
 }

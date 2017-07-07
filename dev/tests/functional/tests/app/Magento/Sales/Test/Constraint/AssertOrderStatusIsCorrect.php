@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,13 +11,12 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderStatusIsCorrect
- * Assert that status is correct on order page in backend (same with value of orderStatus variable)
+ * Assert that status is correct on order page in admin panel (same with value of orderStatus variable).
  */
 class AssertOrderStatusIsCorrect extends AbstractConstraint
 {
     /**
-     * Assert that status is correct on order page in backend (same with value of orderStatus variable)
+     * Assert that status is correct on order page in admin panel (same with value of orderStatus variable).
      *
      * @param string $status
      * @param string $orderId
@@ -37,14 +36,16 @@ class AssertOrderStatusIsCorrect extends AbstractConstraint
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
         $orderStatus = $statusToCheck == null ? $status : $statusToCheck;
 
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         \PHPUnit_Framework_Assert::assertEquals(
-            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
+            $infoTab->getOrderStatus(),
             $orderStatus
         );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

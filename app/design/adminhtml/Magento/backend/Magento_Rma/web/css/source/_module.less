@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -19,15 +19,21 @@
 
 .rma-items {
     .col-actions {
-        .item_details,
-        .item_split_line {
+        .action-item-details,
+        .action-item-split-line {
             &:extend(.abs-action-default all);
             margin: 0 0 @order-create-sidebar__margin__s;
         }
-        .item_delete_line {
+
+        .action-item-delete-line {
             &:extend(.abs-action-delete all);
         }
+
+        .action {
+            margin-right: @indent__xs;
+        }
     }
+
     .admin__control-select {
         max-width: 10rem;
     }
@@ -53,13 +59,13 @@
         .actions {
             float: right;
             margin-bottom: 1.7rem;
-            margin-top: -0.3rem;
+            margin-top: -.3rem;
         }
     }
 }
 
 .col-rma-product {
-    .product_to_add {
+    a {
         float: right;
     }
 }

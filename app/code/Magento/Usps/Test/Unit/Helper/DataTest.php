@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Usps\Test\Unit\Helper;
@@ -16,10 +16,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
-            'context' => $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false),
+            'context' => $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false),
         ];
 
-        $this->_helperData = $helper->getObject('Magento\Usps\Helper\Data', $arguments);
+        $this->_helperData = $helper->getObject(\Magento\Usps\Helper\Data::class, $arguments);
     }
 
     /**
@@ -49,7 +49,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['usps_1'],        // Priority Mail
             ['usps_2'],        // Priority Mail Express Hold For Pickup
             ['usps_3'],        // Priority Mail Express
-            ['usps_4'],        // Standard Post
+            ['usps_4'],        // Retail Ground
             ['usps_6'],        // Media Mail
             ['usps_INT_1'],    // Priority Mail Express International
             ['usps_INT_2'],    // Priority Mail International
@@ -63,7 +63,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['usps_INT_14'],   // First-Class Mail International Large Envelope
             ['usps_INT_16'],   // Priority Mail International Small Flat Rate Box
             ['usps_INT_20'],   // Priority Mail International Small Flat Rate Envelope
-            ['usps_INT_26']    // Priority Mail Express International Flat Rate Boxes
         ];
     }
 }

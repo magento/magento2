@@ -1,12 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\DocumentInterface;
+
 /**
  * Document Factory
+ * @api
  */
 class DocumentFactory
 {
@@ -14,6 +21,7 @@ class DocumentFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @deprecated
      */
     protected $objectManager;
 
@@ -25,12 +33,12 @@ class DocumentFactory
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Search\EntityMetadata $entityMetadata
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Search\EntityMetadata $entityMetadata
     ) {
-        $this->objectManager = $objectManager;
         $this->entityMetadata = $entityMetadata;
     }
 
@@ -38,25 +46,31 @@ class DocumentFactory
      * Create Search Document instance
      *
      * @param mixed $rawDocument
-     * @return \Magento\Framework\Search\Document
+     * @return \Magento\Framework\Api\Search\Document
      */
     public function create($rawDocument)
     {
-        /** @var \Magento\Framework\Search\DocumentField[] $fields */
-        $fields = [];
         $documentId = null;
         $entityId = $this->entityMetadata->getEntityId();
-        foreach ($rawDocument as $rawField) {
-            $fieldName = $rawField['name'];
+        $attributes = [];
+        foreach ($rawDocument as $fieldName => $value) {
             if ($fieldName === $entityId) {
-                $documentId = $rawField['value'];
+                $documentId = $value;
             } else {
-                $fields[$fieldName] = $this->objectManager->create('Magento\Framework\Search\DocumentField', $rawField);
+                $attributes[$fieldName] = new AttributeValue(
+                    [
+                        AttributeInterface::ATTRIBUTE_CODE => $fieldName,
+                        AttributeInterface::VALUE => $value,
+                    ]
+                );
             }
         }
-        return $this->objectManager->create(
-            'Magento\Framework\Search\Document',
-            ['documentFields' => $fields, 'documentId' => $documentId]
+
+        return new Document(
+            [
+                DocumentInterface::ID => $documentId,
+                CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => $attributes,
+            ]
         );
     }
 }

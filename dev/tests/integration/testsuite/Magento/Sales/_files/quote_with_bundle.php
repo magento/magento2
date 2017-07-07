@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** Create simple and bundle products for quote*/
-$simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
+$simpleProducts[] = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(1)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Simple Product 1')
@@ -21,9 +20,8 @@ $simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();
 
-$simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
+$simpleProducts[] = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(2)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Simple Product 2')
@@ -35,11 +33,13 @@ $simpleProducts[] = $objectManager->create('Magento\Catalog\Model\Product')
     ->setCategoryIds([2])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();
-
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$productRepository = $objectManager->get(Magento\Catalog\Api\ProductRepositoryInterface::class);
+/**
+ * @var \Magento\Catalog\Model\Product $product
+ */
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
-    ->setId(3)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Bundle Product')
@@ -99,24 +99,66 @@ $product
                 ]
             ],
         ]
-    )
+    )->setCustomAttributes([
+        "price_type" => [
+            'attribute_code' => 'price_type',
+            'value' => \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
+        ],
+        "price_view" => [
+            "attribute_code" => "price_view",
+            "value" => "1",
+        ],
+    ])
     ->setCanSaveBundleSelections(true)
-    ->setAffectBundleProductSelections(true)
-    ->save();
+    ->setHasOptions(false)
+    ->setAffectBundleProductSelections(true);
+if ($product->getBundleOptionsData()) {
+    $options = [];
+    foreach ($product->getBundleOptionsData() as $key => $optionData) {
+        if (!(bool)$optionData['delete']) {
+            $option = $objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
+                ->create(['data' => $optionData]);
+            $option->setSku($product->getSku());
+            $option->setOptionId(null);
 
-//Load options
-$typeInstance = $product->getTypeInstance();
-$typeInstance->setStoreFilter($product->getStoreId(), $product);
-$optionCollection = $typeInstance->getOptionsCollection($product);
-$selectionCollection = $typeInstance->getSelectionsCollection($typeInstance->getOptionsIds($product), $product);
+            $links = [];
+            $bundleLinks = $product->getBundleSelectionsData();
+            if (!empty($bundleLinks[$key])) {
+                foreach ($bundleLinks[$key] as $linkData) {
+                    if (!(bool)$linkData['delete']) {
+                        /** @var \Magento\Bundle\Api\Data\LinkInterface$link */
+                        $link = $objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
+                            ->create(['data' => $linkData]);
+                        $linkProduct = $productRepository->getById($linkData['product_id']);
+                        $link->setSku($linkProduct->getSku());
+                        $link->setQty($linkData['selection_qty']);
+                        if (isset($linkData['selection_can_change_qty'])) {
+                            $link->setCanChangeQuantity($linkData['selection_can_change_qty']);
+                        }
+                        $links[] = $link;
+                    }
+                }
+                $option->setProductLinks($links);
+                $options[] = $option;
+            }
+        }
+    }
+    $extension = $product->getExtensionAttributes();
+    $extension->setBundleProductOptions($options);
+    $product->setExtensionAttributes($extension);
+}
+$productRepository->save($product);
 
+$product = $productRepository->get($product->getSku());
 $bundleOptions = [];
 $bundleOptionsQty = [];
 /** @var $option \Magento\Bundle\Model\Option */
-foreach ($optionCollection as $option) {
-    /** @var $selection \Magento\Bundle\Model\Selection */
-    foreach ($selectionCollection as $selection) {
-        $bundleOptions[$option->getId()][] = $selection->getSelectionId();
+foreach ($product->getExtensionAttributes()->getBundleProductOptions() as $option) {
+    foreach ($option->getProductLinks() as $selection) {
+        /**
+         * @var \Magento\Bundle\Api\Data\LinkInterface $selection
+         */
+        $bundleOptions[$option->getId()][] = $selection->getId();
         $bundleOptionsQty[$option->getId()][] = 1;
     }
 }
@@ -127,7 +169,7 @@ $buyRequest = new \Magento\Framework\DataObject(
 $product->setSkipCheckRequiredOption(true);
 
 $addressData = include __DIR__ . '/address_data.php';
-$billingAddress = $objectManager->create('Magento\Quote\Model\Quote\Address', ['data' => $addressData]);
+$billingAddress = $objectManager->create(\Magento\Quote\Model\Quote\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
 /** @var Magento\Quote\Model\Quote\Address $shippingAddress */
@@ -135,10 +177,10 @@ $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
 /** @var \Magento\Quote\Model\Quote $quote */
-$quote = $objectManager->create('Magento\Quote\Model\Quote');
+$quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote
     ->setCustomerIsGuest(true)
-    ->setStoreId($objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId())
+    ->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId())
     ->setReservedOrderId('test01')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
@@ -146,7 +188,7 @@ $quote
     ->addProduct($product, $buyRequest);
 
 /** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
-$rate = $objectManager->create('Magento\Quote\Model\Quote\Address\Rate');
+$rate = $objectManager->create(\Magento\Quote\Model\Quote\Address\Rate::class);
 $rate
     ->setCode('freeshipping_freeshipping')
     ->getPrice(1);
@@ -158,7 +200,7 @@ $quote->collectTotals();
 $quote->save();
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-$quoteIdMask = $objectManager->create('Magento\Quote\Model\QuoteIdMaskFactory')->create();
+$quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);
 $quoteIdMask->save();

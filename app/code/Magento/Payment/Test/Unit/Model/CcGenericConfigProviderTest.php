@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model;
@@ -22,8 +22,8 @@ class CcGenericConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ccConfigMock = $this->getMock('Magento\Payment\Model\CcConfig', [], [], '', false);
-        $this->paymentHelperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+        $this->ccConfigMock = $this->getMock(\Magento\Payment\Model\CcConfig::class, [], [], '', false);
+        $this->paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
 
         $this->model = new CcGenericConfigProvider(
             $this->ccConfigMock,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent;
@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ContextFactory
 {
-    const INSTANCE_NAME = 'Magento\Framework\View\Element\UiComponent\ContextInterface';
+    const INSTANCE_NAME = \Magento\Framework\View\Element\UiComponent\ContextInterface::class;
 
     /**
      * @var ObjectManagerInterface

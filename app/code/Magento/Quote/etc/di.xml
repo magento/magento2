@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Quote\Api\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\ShipmentEstimationInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
     <preference for="Magento\Quote\Api\Data\ShippingMethodInterface" type="Magento\Quote\Model\Cart\ShippingMethod" />
     <preference for="Magento\Quote\Api\BillingAddressManagementInterface" type="Magento\Quote\Model\BillingAddressManagement" />
     <preference for="Magento\Quote\Model\ShippingAddressManagementInterface" type="Magento\Quote\Model\ShippingAddressManagement" />
@@ -16,17 +17,16 @@
     <preference for="Magento\Quote\Api\CartItemRepositoryInterface" type="Magento\Quote\Model\Quote\Item\Repository" />
     <preference for="Magento\Quote\Api\CartRepositoryInterface" type="Magento\Quote\Model\QuoteRepository" />
     <preference for="Magento\Quote\Api\Data\CartSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="\Magento\Quote\Model\PaymentMethodManagement" />
-    <preference for="Magento\Quote\Api\Data\PaymentInterface" type="\Magento\Quote\Model\Quote\Payment" />
+    <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="Magento\Quote\Model\PaymentMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\PaymentInterface" type="Magento\Quote\Model\Quote\Payment" />
     <preference for="Magento\Quote\Api\CouponManagementInterface" type="Magento\Quote\Model\CouponManagement" />
     <preference for="Magento\Quote\Api\CartManagementInterface" type="Magento\Quote\Model\QuoteManagement" />
-    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
-    <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="\Magento\Quote\Model\Cart\CartTotalRepository" />
-    <preference for="Magento\Quote\Api\CartTotalManagementInterface" type="\Magento\Quote\Model\Cart\CartTotalManagement" />
-    <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
-    <preference for="Magento\Quote\Api\Data\TotalSegmentInterface" type="\Magento\Quote\Model\Cart\TotalSegment" />
-    <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="\Magento\Quote\Model\Cart\Totals\Item" />
-    <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Quote\Model\Cart\Currency" />
+    <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="Magento\Quote\Model\Cart\CartTotalRepository" />
+    <preference for="Magento\Quote\Api\CartTotalManagementInterface" type="Magento\Quote\Model\Cart\CartTotalManagement" />
+    <preference for="Magento\Quote\Api\Data\TotalsInterface" type="Magento\Quote\Model\Cart\Totals" />
+    <preference for="Magento\Quote\Api\Data\TotalSegmentInterface" type="Magento\Quote\Model\Cart\TotalSegment" />
+    <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="Magento\Quote\Model\Cart\Totals\Item" />
+    <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="Magento\Quote\Model\Cart\Currency" />
     <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />
     <preference for="Magento\Quote\Api\GuestCartRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartRepository" />
     <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartItemRepository" />
@@ -35,11 +35,11 @@
     <preference for="Magento\Quote\Api\GuestCartTotalRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalRepository" />
     <preference for="Magento\Quote\Model\GuestCart\GuestShippingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingAddressManagement" />
     <preference for="Magento\Quote\Api\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\GuestShipmentEstimationInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
-    <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
+    <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
-    <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="\Magento\Quote\Model\Quote\ProductOption" />
-    <!--<preference for="Magento\Quote\Model\Quote\Address\Total\CollectorInterface" type="\Magento\Quote\Model\Quote\Address\Total\Composite" />-->
+    <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="Magento\Quote\Model\Quote\ProductOption" />
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
@@ -87,4 +87,11 @@
     <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\Quote\Model\Quote\Address\FreeShipping" />
     <preference for="Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Model\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\ShippingInterface" type="Magento\Quote\Model\Shipping" />
+    <preference for="Magento\Quote\Api\Data\ShippingAssignmentInterface" type="Magento\Quote\Model\ShippingAssignment" />
+    <preference for="Magento\Quote\Model\Product\QuoteItemsCleanerInterface" type="Magento\Quote\Model\Product\QuoteItemsCleaner" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="clean_quote_items_after_product_delete" type="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems"/>
+        <plugin name="update_quote_items_after_product_save" type="Magento\Quote\Model\Product\Plugin\UpdateQuoteItems"/>
+    </type>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@ use \Magento\Bundle\Pricing\Price\TierPrice;
 
 use Magento\Customer\Model\Group;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TierPriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,9 +50,9 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
 
-        $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -58,19 +61,22 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->calculator = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->calculator = $this->getMock(\Magento\Framework\Pricing\Adjustment\Calculator::class, [], [], '', false);
         $this->groupManagement = $this
-            ->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
+            ->getMock(\Magento\Customer\Api\GroupManagementInterface::class, [], [], '', false);
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Price\TierPrice', [
-            'saleableItem' => $this->product,
-            'calculator' => $this->calculator,
-            'priceCurrency' => $this->priceCurrencyMock,
-            'groupManagement' => $this->groupManagement
-            ]);
+        $this->model = $objectHelper->getObject(
+            \Magento\Bundle\Pricing\Price\TierPrice::class,
+            [
+                'saleableItem' => $this->product,
+                'calculator' => $this->calculator,
+                'priceCurrency' => $this->priceCurrencyMock,
+                'groupManagement' => $this->groupManagement
+            ]
+        );
     }
 
     /**
@@ -81,7 +87,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
 
-        $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
+        $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
         $price->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($basePrice));
@@ -94,11 +100,10 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getAmount')
             ->will($this->returnArgument(0));
 
-        $this->priceCurrencyMock->expects($this->never())
-            ->method('convertAndRound');
+        $this->priceCurrencyMock->expects($this->never())->method('convertAndRound');
 
         $group = $this->getMock(
-            '\Magento\Customer\Model\Data\Group',
+            \Magento\Customer\Model\Data\Group::class,
             [],
             [],
             '',
@@ -162,14 +167,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 'basePrice' => 20.,
                 'expectedResult' => [
                     [
-                        'price'         => '50.',
-                        'website_price' => '50.',
-                        'price_qty'     => '2.',
-                        'cust_group'    => Group::CUST_GROUP_ALL,
-                    ],
-                    [
-                        'price'         => '30.',
-                        'website_price' => '30.',
+                        'price'         => '15.',
+                        'website_price' => '15.',
                         'price_qty'     => '5.',
                         'cust_group'    => Group::CUST_GROUP_ALL
                     ],
@@ -189,9 +188,17 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSavePercent($baseAmount, $savePercent)
     {
-        $amount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $basePrice = 10.;
+        $amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $amount->expects($this->once())->method('getBaseAmount')->willReturn($baseAmount);
+        $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $price->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue($basePrice));
 
+        $this->priceInfo->expects($this->any())
+            ->method('getPrice')
+            ->will($this->returnValue($price));
         $this->assertEquals($savePercent, $this->model->getSavePercent($amount));
     }
 
@@ -201,10 +208,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     public function providerForTestGetSavePercent()
     {
         return [
-            'no fraction' => [10.0000, 10],
-            'lower half'  => [10.1234, 10],
-            'half way'    => [10.5000, 11],
-            'upper half'  => [10.6789, 11],
+            'no fraction' => [9.0000, 10],
+            'lower half'  => [9.1234, 9],
         ];
     }
 }

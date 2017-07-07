@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
@@ -40,12 +40,13 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     {
         parent::setUp();
 
-        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
+        $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
 
-        $this->_auth = $this->_objectManager->get('Magento\Backend\Model\Auth');
+        $this->_auth = $this->_objectManager->get(\Magento\Backend\Model\Auth::class);
         $this->_session = $this->_auth->getAuthStorage();
         $credentials = $this->_getAdminCredentials();
         $this->_auth->login($credentials['user'], $credentials['password']);
+        $this->_objectManager->get(\Magento\Security\Model\Plugin\Auth::class)->afterLogin($this->_auth);
     }
 
     /**
@@ -66,7 +67,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         $this->_auth->getAuthStorage()->destroy(['send_expire_cookie' => false]);
         $this->_auth = null;
         $this->_session = null;
-        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOnSecretKey();
+        $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOnSecretKey();
         parent::tearDown();
     }
 
@@ -80,11 +81,10 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     public function assertSessionMessages(
         \PHPUnit_Framework_Constraint $constraint,
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         parent::assertSessionMessages($constraint, $messageType, $messageManagerClass);
     }
-
 
     public function testAclHasAccess()
     {
@@ -101,7 +101,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         if ($this->resource === null) {
             $this->markTestIncomplete('Acl test is not complete');
         }
-        $this->_objectManager->get('Magento\Framework\Acl\Builder')
+        $this->_objectManager->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl()
             ->deny(null, $this->resource);
         $this->dispatch($this->uri);

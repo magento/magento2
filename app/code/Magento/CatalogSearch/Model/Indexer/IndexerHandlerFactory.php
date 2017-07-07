@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
@@ -10,6 +10,9 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 class IndexerHandlerFactory
 {
     /**
@@ -75,12 +78,14 @@ class IndexerHandlerFactory
         $indexer = $this->_objectManager->create($this->handlers[$currentHandler], $data);
 
         if (!$indexer instanceof IndexerInterface) {
-            throw new \InvalidArgumentException($indexer . ' doesn\'t implement \Magento\Framework\IndexerInterface');
+            throw new \InvalidArgumentException(
+                $currentHandler . ' indexer handler doesn\'t implement ' . IndexerInterface::class
+            );
         }
 
         if ($indexer && !$indexer->isAvailable()) {
             throw new \LogicException(
-                'Indexer handler is not available: ' . $indexer
+                'Indexer handler is not available: ' . $currentHandler
             );
         }
         return $indexer;

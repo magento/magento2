@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element\DataType;
@@ -60,13 +60,18 @@ class Date extends AbstractDataType
     public function prepare()
     {
         $config = $this->getData('config');
-        if (!isset($config['dateFormat'])) {
-            $config['dateFormat'] = $this->localeDate->getDateTimeFormat(\IntlDateFormatter::MEDIUM);
-            $this->setData('config', $config);
+
+        if (!isset($config['storeTimeZone'])) {
+            $storeTimeZone = $this->localeDate->getConfigTimezone();
+            $config['storeTimeZone'] = $storeTimeZone;
         }
+        // Set date format pattern by current locale
+        $localeDateFormat = $this->localeDate->getDateFormat();
+        $config['options']['dateFormat'] = $localeDateFormat;
+        $config['options']['storeLocale'] = $this->locale;
+        $this->setData('config', $config);
         parent::prepare();
     }
-
 
     /**
      * Get locale
@@ -92,13 +97,23 @@ class Date extends AbstractDataType
      * Convert given date to default (UTC) timezone
      *
      * @param int $date
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
      * @return \DateTime|null
      */
-    public function convertDate($date)
+    public function convertDate($date, $hour = 0, $minute = 0, $second = 0)
     {
         try {
-            $dateObj = $this->localeDate->date(new \DateTime($date), $this->getLocale(), false);
-            $dateObj->setTime(0, 0, 0);
+            $dateObj = $this->localeDate->date(
+                new \DateTime(
+                    $date,
+                    new \DateTimeZone($this->localeDate->getConfigTimezone())
+                ),
+                $this->getLocale(),
+                true
+            );
+            $dateObj->setTime($hour, $minute, $second);
             //convert store date to default date in UTC timezone without DST
             $dateObj->setTimezone(new \DateTimeZone('UTC'));
             return $dateObj;

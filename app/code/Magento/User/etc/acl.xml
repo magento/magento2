@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,10 +10,10 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
-                    <resource id="Magento_User::acl" title="Permissions" sortOrder="60">
-                        <resource id="Magento_User::acl_users" title="All Users" sortOrder="10" />
-                        <resource id="Magento_User::locks" title="Locked Users" sortOrder="20" />
-                        <resource id="Magento_User::acl_roles" title="User Roles" sortOrder="30" />
+                    <resource id="Magento_User::acl" title="Permissions" translate="title" sortOrder="60">
+                        <resource id="Magento_User::acl_users" title="All Users" translate="title" sortOrder="10" />
+                        <resource id="Magento_User::locks" title="Locked Users" translate="title" sortOrder="20" />
+                        <resource id="Magento_User::acl_roles" title="User Roles" translate="title" sortOrder="30" />
                     </resource>
                 </resource>
             </resource>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,12 +22,12 @@ class ParamOverriderCustomerIdTest extends \PHPUnit_Framework_TestCase
      */
     private $userContext;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->userContext = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
+        $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
             ->getMockForAbstractClass();
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Webapi\Controller\Rest\ParamOverriderCustomerId',
+            \Magento\Webapi\Controller\Rest\ParamOverriderCustomerId::class,
             [
                 'userContext' => $this->userContext
             ]

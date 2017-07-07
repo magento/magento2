@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
@@ -42,7 +42,7 @@ class Tax extends AbstractTotal
                  */
 
                 $tax = $orderItemTax - $orderItem->getTaxRefunded();
-                $baseTax = $baseOrderItemTax - $orderItem->getTaxRefunded();
+                $baseTax = $baseOrderItemTax - $orderItem->getBaseTaxRefunded();
                 $discountTaxCompensation = $orderItem->getDiscountTaxCompensationInvoiced() -
                     $orderItem->getDiscountTaxCompensationRefunded();
                 $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationInvoiced() -

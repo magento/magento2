@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
@@ -10,6 +10,7 @@ use Magento\Framework\Flag;
 class TransactionTest extends \PHPUnit_Framework_TestCase
 {
     protected $objectManager;
+
     /**
      * @var \Magento\Framework\DB\Transaction
      */
@@ -19,7 +20,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->objectManager
-            ->create('Magento\Framework\DB\Transaction');
+            ->create(\Magento\Framework\DB\Transaction::class);
     }
 
     /**

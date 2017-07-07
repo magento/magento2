@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
@@ -23,16 +23,16 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         /** Prepare mocks for SUT constructor. */
         $this->_apiConfigMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Rest\Config'
+            \Magento\Webapi\Model\Rest\Config::class
         )->disableOriginalConstructor()->getMock();
 
         $this->_routeMock = $this->getMockBuilder(
-            'Magento\Webapi\Controller\Rest\Router\Route'
+            \Magento\Webapi\Controller\Rest\Router\Route::class
         )->disableOriginalConstructor()->setMethods(
             ['match']
         )->getMock();
 
-        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
+        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
 
         $areaListMock->expects($this->once())
             ->method('getFrontName')
@@ -40,7 +40,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_request = $objectManager->getObject(
-            'Magento\Framework\Webapi\Rest\Request',
+            \Magento\Framework\Webapi\Rest\Request::class,
             [
                 'areaList' => $areaListMock,
             ]
@@ -48,7 +48,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         /** Initialize SUT. */
         $this->_router = $objectManager->getObject(
-            'Magento\Webapi\Controller\Rest\Router',
+            \Magento\Webapi\Controller\Rest\Router::class,
             [
                 'apiConfig' => $this->_apiConfigMock
             ]

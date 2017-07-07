@@ -1,25 +1,29 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 // @codingStandardsIgnoreStart
 namespace {
     $mockTranslateSetCookie = false;
 }
 
-namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
-    // @codingStandardsIgnoreEnd
+namespace Magento\Framework\Stdlib\Test\Unit\Cookie
+{
     use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
     use Magento\Framework\Exception\InputException;
     use Magento\Framework\Stdlib\Cookie\FailureToSendException;
     use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+    use Magento\Framework\Phrase;
+    use Magento\Framework\HTTP\Header as HttpHeader;
+    use Psr\Log\LoggerInterface;
+    // @codingStandardsIgnoreEnd
 
     /**
      * Test PhpCookieManager
+     *
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
     {
@@ -43,13 +47,13 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         const COOKIE_HTTP_ONLY = true;
         const COOKIE_NOT_HTTP_ONLY = false;
         const COOKIE_EXPIRE_END_OF_SESSION = 0;
-        const MAX_NUM_COOKIES = 20;
+        const MAX_NUM_COOKIES = 50;
         const MAX_COOKIE_SIZE = 4096;
 
         /**
          * Mapping from constant names to functions that handle the assertions.
          */
-        static $functionTestAssertionMapping = [
+        protected static $functionTestAssertionMapping = [
             self::DELETE_COOKIE_NAME => 'self::assertDeleteCookie',
             self::DELETE_COOKIE_NAME_NO_METADATA => 'self::assertDeleteCookieWithNoMetadata',
             self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS => 'self::assertSensitiveCookieWithNoMetaDataHttps',
@@ -75,6 +79,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
          * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
          */
         protected $cookieManager;
+
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|CookieScopeInterface
          */
@@ -96,6 +101,16 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         protected $readerMock;
 
         /**
+         * @var LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+         */
+        protected $loggerMock;
+
+        /**
+         * @var HttpHeader | \PHPUnit_Framework_MockObject_MockObject
+         */
+        protected $httpHeaderMock;
+
+        /**
          * @var array
          */
         protected $cookieArray;
@@ -108,20 +123,27 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             $mockTranslateSetCookie = true;
             self::$isSetCookieInvoked = false;
             $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-            $this->scopeMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieScopeInterface')
+            $this->scopeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieScopeInterface::class)
                 ->setMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->readerMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
+            $this->readerMock = $this->getMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
+            $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+                ->getMockForAbstractClass();
+            $this->httpHeaderMock = $this->getMockBuilder(HttpHeader::class)
+                ->disableOriginalConstructor()
+                ->getMock();
             $this->cookieManager = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\PhpCookieManager',
+                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
                 [
                     'scope' => $this->scopeMock,
                     'reader' => $this->readerMock,
+                    'logger' => $this->loggerMock,
+                    'httpHeader' => $this->httpHeaderMock
                 ]
             );
 
-            $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         }
@@ -156,9 +178,9 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         {
             self::$isSetCookieInvoked = false;
 
-            /** @var \Magento\Framework\Stdlib\Cookie\CookieMetaData $cookieMetadata */
+            /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadata $cookieMetadata */
             $cookieMetadata = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\CookieMetaData',
+                \Magento\Framework\Stdlib\Cookie\CookieMetadata::class,
                 [
                     'metadata' => [
                         'domain' => 'magento.url',
@@ -182,7 +204,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         {
             self::$isSetCookieInvoked = false;
 
-            $cookieMetadata = $this->objectManager->getObject('Magento\Framework\Stdlib\Cookie\CookieMetaData');
+            $cookieMetadata = $this->objectManager->getObject(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class);
             $this->scopeMock->expects($this->once())
                 ->method('getCookieMetadata')
                 ->with()
@@ -198,7 +220,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         {
             self::$isSetCookieInvoked = false;
 
-            $cookieMetadata = $this->objectManager->getObject('Magento\Framework\Stdlib\Cookie\CookieMetaData');
+            $cookieMetadata = $this->objectManager->getObject(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class);
             $this->scopeMock->expects($this->once())
                 ->method('getCookieMetadata')
                 ->with()
@@ -229,11 +251,11 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             /** @var SensitiveCookieMetadata $sensitiveCookieMetadata */
             $sensitiveCookieMetadata = $this->objectManager
                 ->getObject(
-                    'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
+                    \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
                     [
                         'request' => $this->requestMock
                     ]
-                 );
+                );
             $this->scopeMock->expects($this->once())
                 ->method('getSensitiveCookieMetadata')
                 ->with()
@@ -266,7 +288,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             /** @var SensitiveCookieMetadata $sensitiveCookieMetadata */
             $sensitiveCookieMetadata = $this->objectManager
                 ->getObject(
-                    'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
+                    \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
                     [
                         'request' => $this->requestMock,
                         'metadata' => [
@@ -301,7 +323,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             /** @var SensitiveCookieMetadata $sensitiveCookieMetadata */
             $sensitiveCookieMetadata = $this->objectManager
                 ->getObject(
-                    'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
+                    \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
                     [
                         'request' => $this->requestMock,
                         'metadata' => [
@@ -335,7 +357,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             self::$isSetCookieInvoked = false;
             /** @var PublicCookieMetadata $publicCookieMetadata */
             $publicCookieMetadata = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+                \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
             );
 
             $this->scopeMock->expects($this->once())
@@ -356,7 +378,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         {
             /** @var PublicCookieMetadata $publicCookieMetadata */
             $publicCookieMetadata = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+                \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
                 [
                     'metadata' => [
                         'domain' => null,
@@ -388,7 +410,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
             self::$isSetCookieInvoked = false;
             /** @var PublicCookieMetadata $publicCookieMetadata */
             $publicCookieMetadata = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+                \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
                 [
                     'metadata' => [
                         'domain' => 'magento.url',
@@ -417,7 +439,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         {
             /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $publicCookieMetadata */
             $publicCookieMetadata = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+                \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
                 [
                     'metadata' => [
                         'domain' => null,
@@ -457,7 +479,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         {
             /** @var PublicCookieMetadata $publicCookieMetadata */
             $publicCookieMetadata = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+                \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
                 [
                     'metadata' => [
                         'domain' => null,
@@ -500,14 +522,14 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         {
             /** @var PublicCookieMetadata $publicCookieMetadata */
             $publicCookieMetadata = $this->objectManager->getObject(
-                'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+                \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
             );
 
-            $cookieValue = 'some_value';
+            $userAgent = 'some_user_agent';
 
             // Set self::MAX_NUM_COOKIES number of cookies in superglobal $_COOKIE.
             for ($i = count($_COOKIE); $i < self::MAX_NUM_COOKIES; $i++) {
-                $_COOKIE['test_cookie_' . $i] = 'some_value';
+                $_COOKIE['test_cookie_' . $i] = self::COOKIE_VALUE . '_' . $i;
             }
 
             $this->scopeMock->expects($this->once())
@@ -517,19 +539,22 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
                     $this->returnValue($publicCookieMetadata)
                 );
 
-            try {
-                $this->cookieManager->setPublicCookie(
-                    self::MAX_COOKIE_SIZE_TEST_NAME,
-                    $cookieValue,
-                    $publicCookieMetadata
+            $this->httpHeaderMock->expects($this->any())
+                ->method('getHttpUserAgent')
+                ->willReturn($userAgent);
+
+            $this->loggerMock->expects($this->once())
+                ->method('warning')
+                ->with(
+                    new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
+                    array_merge($_COOKIE, ['user-agent' => $userAgent])
                 );
-                $this->fail('Failed to throw exception of too many cookies.');
-            } catch (CookieSizeLimitReachedException $e) {
-                $this->assertEquals(
-                    'Unable to send the cookie. Maximum number of cookies would be exceeded.',
-                    $e->getMessage()
-                );
-            }
+
+            $this->cookieManager->setPublicCookie(
+                self::MAX_COOKIE_SIZE_TEST_NAME,
+                self::COOKIE_VALUE,
+                $publicCookieMetadata
+            );
         }
 
         /**

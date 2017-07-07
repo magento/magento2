@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\Config;
@@ -15,7 +15,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     /** @var  array */
     protected $_targetArray;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_model = new \Magento\Widget\Model\Config\Converter();
     }

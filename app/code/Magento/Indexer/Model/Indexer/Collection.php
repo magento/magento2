@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Indexer;
@@ -12,7 +12,7 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Framework\Indexer\IndexerInterface';
+    protected $_itemObjectClass = \Magento\Framework\Indexer\IndexerInterface::class;
 
     /**
      * @var \Magento\Framework\Indexer\ConfigInterface

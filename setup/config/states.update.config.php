@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,8 +60,8 @@ return [
             'url'         => 'start-updater',
             'templateUrl' => "$base/start-updater",
             'controller'  => 'startUpdaterController',
-            'title'       => "Component \n Update",
-            'header'      => 'Step 3: Component Update',
+            'title'       => "Extension \n Update",
+            'header'      => 'Step 3: Extension Update',
             'nav'         => true,
             'order'       => 6,
             'type'        => 'update'

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -45,7 +45,6 @@
         <attribute name="default_sort_by" />
         <attribute name="filter_price_range" />
         <attribute name="image" />
-        <attribute name="category_ids" />
         <attribute name="media_gallery_content" />
         <attribute name="tier_price" />
         <attribute name="gift_message_available" />

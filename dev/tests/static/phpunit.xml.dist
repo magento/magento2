@@ -3,7 +3,7 @@
 /**
  * Default test suites declaration: run verification of coding standards and code integrity test suites
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,9 @@
          bootstrap="./framework/bootstrap.php"
 >
     <testsuites>
+        <testsuite name="Less Static Code Analysis">
+            <file>testsuite/Magento/Test/Less/LiveCodeTest.php</file>
+        </testsuite>
         <testsuite name="Javascript Static Code Analysis">
             <file>testsuite/Magento/Test/Js/LiveCodeTest.php</file>
         </testsuite>

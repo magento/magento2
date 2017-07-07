@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -10,42 +10,9 @@ require([
     "uiRegistry",
     'Magento_Ui/js/modal/alert',
     'prototype'
-], function(jQuery, registry, alert){
+], function(jQuery, registry, alert) {
 
 //<![CDATA[
-var couponTypeSpecific = '<?php /* @escapeNotVerified */ echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
-    tmpButtonsActionsStorage = [];
-
-function disableEnableCouponsTabContent(disable) {
-    var containerId = 'promo_catalog_edit_tabs_coupons_section_content',
-        couponCode = $('rule_coupon_code');
-
-    if($(containerId)){
-        var dataFields = $(containerId).select('input', 'select', 'textarea', 'button');
-        for(var i = 0; i < dataFields.length; i++) {
-            disable ? dataFields[i].disable().addClassName('disabled')
-                : dataFields[i].enable().removeClassName('disabled');
-        }
-    }
-
-    couponCode.disabled = !disable;
-}
-
-function handleCouponsTabContentActivity() {
-    jQuery('#couponCodesGrid').addClass('ignore-validate');
-    disableEnableCouponsTabContent(!$('rule_use_auto_generation').checked);
-}
-
-function handleCouponTypeChange() {
-    $('rule_coupon_type').observe('change', function() {
-        var disable = $('rule_coupon_type').value != couponTypeSpecific;
-        if (!disable) {
-            disable = !$('rule_use_auto_generation').checked;
-        }
-        disableEnableCouponsTabContent(disable);
-    });
-}
-
 function refreshCouponCodesGrid(grid, gridMassAction, transport) {
     grid.reload();
     gridMassAction.unselectAll();
@@ -110,27 +77,7 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
     });
 }
 
-Ajax.Responders.register({
-    onComplete: function() {
-        if ($('promo_catalog_edit_tabs_coupons_section_content')
-            && $('promo_catalog_edit_tabs_coupons_section_content').visible()
-            && Ajax.activeRequestCount == 0
-        ) {
-            handleCouponsTabContentActivity();
-        }
-    }
-});
-
 window.generateCouponCodes = generateCouponCodes;
 window.refreshCouponCodesGrid = refreshCouponCodesGrid;
-window.handleCouponTypeChange = handleCouponTypeChange;
-window.handleCouponsTabContentActivity = handleCouponsTabContentActivity;
-window.disableEnableCouponsTabContent = disableEnableCouponsTabContent;
-
-registry.get('formDependenceController', function() {
-    handleCouponsTabContentActivity();
-    handleCouponTypeChange();
-});
-
 });
 </script>

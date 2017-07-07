@@ -1,33 +1,28 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
     <head>
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <link src="Magento_Catalog::js/edit-tree.js"/>
     </head>
     <update handle="editor"/>
     <body>
-        <referenceContainer name="left" htmlClass="admin__scope-old" htmlTag="div" />
+        <referenceContainer name="left" htmlTag="div" />
         <referenceContainer name="page.main.actions">
-            <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml">
-                <!--<arguments>-->
-                <!--<argument name="switch_url" xsi:type="url" path="catalog/*/*">-->
-                <!--<param name="_current" xsi:type="boolean">true</param>-->
-                <!--<param name="_query" xsi:type="boolean">false</param>-->
-                <!--<param name="store" xsi:type="null" />-->
-                <!--</argument>-->
-                <!--</arguments>-->
-            </block>
+            <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
         </referenceContainer>
         <referenceContainer name="left">
-            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="catalog/category/tree.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="Magento_Catalog::catalog/category/tree.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="catalog/category/edit.phtml"/>
+            <uiComponent name="category_form"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Category\Edit" name="category.edit" template="Magento_Catalog::catalog/category/edit.phtml" />
         </referenceContainer>
         <referenceContainer name="js">
             <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="topic" type="topicType">
+                    <xs:unique name="uniqueHandlerName">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Handler name must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="handler"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+        <xs:unique name="topic-unique-name">
+            <xs:annotation>
+                <xs:documentation>
+                    Topic name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="topic"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="topicType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="handler" type="handlerType"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="schemaType" name="schema" use="optional"/>
+        <xs:attribute type="xs:string" name="request" use="optional"/>
+        <xs:attribute type="xs:string" name="response" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="handlerType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="serviceTypeType" name="type" use="required"/>
+        <xs:attribute type="serviceMethodType" name="method" use="required"/>
+        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="schemaType">
+        <xs:annotation>
+            <xs:documentation>
+                Service schema is expected in a format "Vendor\Module\Api\ServiceName::methodName".
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+" />
+            <xs:minLength value="5" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="serviceTypeType">
+        <xs:annotation>
+            <xs:documentation>
+                Service class/interface name is expected in a format "Vendor\Module\Api\ServiceName".
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z]+[a-zA-Z0-9\\]+" />
+            <xs:minLength value="4" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="serviceMethodType">
+        <xs:annotation>
+            <xs:documentation>
+                Method name is expected in a format "someMethodName".
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9]+" />
+            <xs:minLength value="2" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

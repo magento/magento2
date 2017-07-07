@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\DeleteProductFromMiniShoppingCartTest" summary="Delete Product from Mini Shopping Cart" ticketId="MAGETWO-29104">
         <variation name="DeleteProductFromMiniShoppingCartTestVariation1">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="description" xsi:type="string">delete Simple</data>
-            <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">catalogProductVirtual::default</data>
             <data name="deletedProductIndex" xsi:type="string">0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductAbsentInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductPresentInMiniShoppingCart" />
         </variation>
         <variation name="DeleteProductFromMiniShoppingCartTestVariation2">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="description" xsi:type="string">delete Simple</data>
-            <data name="products" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="deletedProductIndex" xsi:type="string">0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
+        </variation>
+        <variation name="DeleteProductFromMiniShoppingCartTestVariationWithCartItemsDisplayDefaultLimitation" summary="Delete item from mini shopping cart with max displayed item limitation" ticketId="MAGETWO-63443">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/1" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/2" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/3" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/4" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/5" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/6" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/7" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/8" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/10" xsi:type="string">catalogProductSimple::default</data>
+            <data name="deletedProductIndex" xsi:type="string">0</data>
+            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
+            <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductAbsentInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
         </variation>
     </testCase>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Rss\Product;
@@ -45,15 +45,15 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
-        $this->visibility = $this->getMock('Magento\Catalog\Model\Product\Visibility', [], [], '', false);
-        $this->timezone = $this->getMock('Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false);
+        $this->visibility = $this->getMock(\Magento\Catalog\Model\Product\Visibility::class, [], [], '', false);
+        $this->timezone = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->newProducts = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Rss\Product\NewProducts',
+            \Magento\Catalog\Model\Rss\Product\NewProducts::class,
             [
                 'productFactory' => $this->productFactory,
                 'visibility' => $this->visibility,
@@ -65,7 +65,7 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
     public function testGetProductsCollection()
     {
         /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
-        $dateObject = $this->getMock('DateTime');
+        $dateObject = $this->getMock(\DateTime::class);
         $dateObject->expects($this->any())
             ->method('setTime')
             ->will($this->returnSelf());
@@ -79,7 +79,7 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection =
-            $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
+            $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, [], [], '', false);
         $this->product->expects($this->once())->method('getResourceCollection')->will(
             $this->returnValue($productCollection)
         );

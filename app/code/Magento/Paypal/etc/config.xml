@@ -1,16 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <paypal>
-            <bncode>Magento_Cart_Community</bncode>
             <style>
-                <logo>nowAccepting_150x60</logo>
+                <logo></logo>
             </style>
             <wpp>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -73,7 +72,7 @@
                 <cctypes>AE,VI</cctypes>
                 <useccv>1</useccv>
                 <tender>C</tender>
-                <verbosity>MEDIUM</verbosity>
+                <verbosity>HIGH</verbosity>
                 <user backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <pwd backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <group>paypal</group>
@@ -90,7 +89,15 @@
                 <avs_international>0</avs_international>
                 <avs_security_code>1</avs_security_code>
                 <cc_year_length>2</cc_year_length>
+                <can_authorize_vault>1</can_authorize_vault>
+                <can_capture_vault>1</can_capture_vault>
+                <avs_ems_adapter>Magento\Paypal\Model\Payflow\AvsEmsCodeMapper</avs_ems_adapter>
+                <cvv_ems_adapter>Magento\Paypal\Model\Payflow\CvvEmsCodeMapper</cvv_ems_adapter>
             </payflowpro>
+            <payflowpro_cc_vault>
+               <model>PayflowProCreditCardVaultFacade</model>
+               <title>Stored Cards (Payflow Pro)</title>
+            </payflowpro_cc_vault>
             <paypal_billing_agreement>
                 <active>1</active>
                 <allow_billing_agreement_wizard>1</allow_billing_agreement_wizard>

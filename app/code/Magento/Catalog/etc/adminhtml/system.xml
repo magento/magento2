@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,50 +17,50 @@
             <resource>Magento_Catalog::config_catalog</resource>
             <group id="fields_masks" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Product Fields Auto-Generation</label>
-                <field id="sku" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="sku" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Mask for SKU</label>
                     <comment>Use {{name}} as Product Name placeholder</comment>
                 </field>
-                <field id="meta_title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="meta_title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Mask for Meta Title</label>
                     <comment>Use {{name}} as Product Name placeholder</comment>
                 </field>
-                <field id="meta_keyword" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="meta_keyword" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Mask for Meta Keywords</label>
                     <comment>Use {{name}} as Product Name or {{sku}} as Product SKU placeholders</comment>
                 </field>
-                <field id="meta_description" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="meta_description" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Mask for Meta Description</label>
                     <comment>Use {{name}} and {{description}} as Product Name and Product Description placeholders</comment>
                 </field>
             </group>
             <group id="frontend" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Storefront</label>
-                <field id="list_mode" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="list_mode" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>List Mode</label>
                     <source_model>Magento\Catalog\Model\Config\Source\ListMode</source_model>
                 </field>
-                <field id="grid_per_page_values" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="grid_per_page_values" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Allowed Values</label>
                     <comment>Comma-separated.</comment>
                     <validate>validate-per-page-value-list</validate>
                 </field>
-                <field id="grid_per_page" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="grid_per_page" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Default Value</label>
                     <comment>Must be in the allowed values list</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
-                <field id="list_per_page_values" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="list_per_page_values" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Allowed Values</label>
                     <comment>Comma-separated.</comment>
                     <validate>validate-per-page-value-list</validate>
                 </field>
-                <field id="list_per_page" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="list_per_page" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Default Value</label>
                     <comment>Must be in the allowed values list</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
-                <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Use Flat Catalog Category</label>
                     <backend_model>Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -70,7 +70,7 @@
                     <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product Listing Sort by</label>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
@@ -79,7 +79,7 @@
                     <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="parse_url_directives" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow Dynamic Media URLs in Products and Categories</label>
                     <comment>E.g. {{media url="path/to/image.jpg"}} {{skin url="path/to/picture.gif"}}. Dynamic directives parsing impacts catalog performance.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -98,14 +98,14 @@
             </group>
             <group id="seo" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Search Engine Optimization</label>
-                <field id="title_separator" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="title_separator" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Page Title Separator</label>
                 </field>
-                <field id="category_canonical_tag" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="category_canonical_tag" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Canonical Link Meta Tag For Categories</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="product_canonical_tag" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="product_canonical_tag" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Canonical Link Meta Tag For Products</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -122,7 +122,7 @@
             </group>
             <group id="navigation" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Category Top Navigation</label>
-                <field id="max_depth" translate="label" type="text" sortOrder="1" showInDefault="1">
+                <field id="max_depth" translate="label" type="text" sortOrder="1" showInDefault="1" canRestore="1">
                     <label>Maximal Depth</label>
                 </field>
             </group>
@@ -132,11 +132,11 @@
                     <label>Use JavaScript Calendar</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="date_fields_order" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="date_fields_order" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Date Fields Order</label>
                     <frontend_model>Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\DateFieldsOrder</frontend_model>
                 </field>
-                <field id="time_format" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="time_format" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Time Format</label>
                     <source_model>Magento\Catalog\Model\Config\Source\TimeFormat</source_model>
                 </field>
@@ -144,31 +144,6 @@
                     <label>Year Range</label>
                     <comment>Please use a four-digit year format.</comment>
                     <frontend_model>Magento\Catalog\Block\Adminhtml\Form\Renderer\Config\YearRange</frontend_model>
-                </field>
-            </group>
-        </section>
-        <section id="design">
-            <group id="watermark" translate="label" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Product Image Watermarks</label>
-                <clone_fields>1</clone_fields>
-                <clone_model>Magento\Catalog\Model\Config\CatalogClone\Media\Image</clone_model>
-                <field id="size" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark Default Size</label>
-                    <comment>Example format: 200x300.</comment>
-                </field>
-                <field id="imageOpacity" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark Opacity, Percent</label>
-                </field>
-                <field id="image" translate="label" type="image" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark</label>
-                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
-                    <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/watermark</upload_dir>
-                    <base_url type="media" scope_info="1">catalog/product/watermark</base_url>
-                    <comment>Allowed file types: jpeg, gif, png.</comment>
-                </field>
-                <field id="position" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark Position</label>
-                    <source_model>Magento\Catalog\Model\Config\Source\Watermark\Position</source_model>
                 </field>
             </group>
         </section>

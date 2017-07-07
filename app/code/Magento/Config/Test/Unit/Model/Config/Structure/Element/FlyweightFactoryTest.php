@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
@@ -19,7 +19,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Config\Model\Config\Structure\Element\FlyweightFactory(
             $this->_objectManagerMock
         );
@@ -40,9 +40,9 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 [
-                    ['Magento\Config\Model\Config\Structure\Element\Section', [], 'sectionObject'],
-                    ['Magento\Config\Model\Config\Structure\Element\Group', [], 'groupObject'],
-                    ['Magento\Config\Model\Config\Structure\Element\Field', [], 'fieldObject'],
+                    [\Magento\Config\Model\Config\Structure\Element\Section::class, [], 'sectionObject'],
+                    [\Magento\Config\Model\Config\Structure\Element\Group::class, [], 'groupObject'],
+                    [\Magento\Config\Model\Config\Structure\Element\Field::class, [], 'fieldObject'],
                 ]
             )
         );

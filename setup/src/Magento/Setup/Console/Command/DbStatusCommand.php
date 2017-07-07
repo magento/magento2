@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,6 +18,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DbStatusCommand extends AbstractSetupCommand
 {
+    /**
+     * Code for error when application upgrade is required.
+     */
+    const EXIT_CODE_UPGRADE_REQUIRED = 2;
+
     /**
      * Object manager provider
      *
@@ -60,12 +66,14 @@ class DbStatusCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            $output->writeln(
+                "<info>No information is available: the Magento application is not installed.</info>"
+            );
+            return Cli::RETURN_FAILURE;
         }
         /** @var DbVersionInfo $dbVersionInfo */
         $dbVersionInfo = $this->objectManagerProvider->get()
-            ->get('Magento\Framework\Module\DbVersionInfo');
+            ->get(\Magento\Framework\Module\DbVersionInfo::class);
         $outdated = $dbVersionInfo->getDbVersionErrors();
         if (!empty($outdated)) {
             $output->writeln("<info>The module code base doesn't match the DB schema and data.</info>");
@@ -93,11 +101,18 @@ class DbStatusCommand extends AbstractSetupCommand
                     '<info>Some modules use code versions newer or older than the database. ' .
                     "First update the module code, then run 'setup:upgrade'.</info>"
                 );
-            } else {
-                $output->writeln("<info>Run 'setup:upgrade' to update your DB schema and data.</info>");
+                return Cli::RETURN_FAILURE;
             }
-        } else {
-            $output->writeln('<info>All modules are up to date.</info>');
+
+            $output->writeln(
+                "<info>Run 'setup:upgrade' to update your DB schema and data.</info>"
+            );
+            return static::EXIT_CODE_UPGRADE_REQUIRED;
         }
+
+        $output->writeln(
+            '<info>All modules are up to date.</info>'
+        );
+        return Cli::RETURN_SUCCESS;
     }
 }

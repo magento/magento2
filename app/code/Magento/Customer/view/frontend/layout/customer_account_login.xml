@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,10 +10,10 @@
         <referenceContainer name="content">
             <!-- customer.form.login.extra -->
             <container name="customer.login.container" label="Customer Login Container" htmlTag="div" htmlClass="login-container">
-                <block class="Magento\Customer\Block\Form\Login" name="customer_form_login" template="form/login.phtml">
+                <block class="Magento\Customer\Block\Form\Login" name="customer_form_login" template="Magento_Customer::form/login.phtml">
                     <container name="form.additional.info" as="form_additional_info"/>
                 </block>
-                <block class="Magento\Customer\Block\Form\Login\Info" name="customer.new" template="newcustomer.phtml"/>
+                <block class="Magento\Customer\Block\Form\Login\Info" name="customer.new" template="Magento_Customer::newcustomer.phtml"/>
             </container>
             <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml">
                 <arguments>

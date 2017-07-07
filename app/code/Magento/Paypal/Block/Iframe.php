@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block;
 
 /**
  * HSS iframe block
+ *
+ * @api
  */
 class Iframe extends \Magento\Payment\Block\Form
 {
@@ -89,10 +91,10 @@ class Iframe extends \Magento\Payment\Block\Form
         $this->_hssHelper = $hssHelper;
         $this->_orderFactory = $orderFactory;
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->readFactory = $readFactory;
         $this->reader = $reader;
+        parent::__construct($context, $data);
     }
 
     /**

@@ -1,17 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\SalesRule\Model\ResourceModel\Rule">
-        <plugin name="catalog_rule_resource_rule_after_loader" type="Magento\SalesRule\Model\Plugin\ResourceModel\Rule"/>
-    </type>
-    <type name="Magento\SalesRule\Model\Rule">
-        <plugin name="catalog_rule_model_Rule_after_loader" type="Magento\SalesRule\Model\Plugin\Rule"/>
-    </type>
     <type name="Magento\SalesRule\Helper\Coupon">
         <arguments>
             <argument name="couponParameters" xsi:type="array">

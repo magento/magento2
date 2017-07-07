@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -14,6 +14,7 @@
     box-shadow: none;
     margin: 0;
     padding: 0;
+
     &:hover {
         background-color: transparent;
         border: none;
@@ -25,6 +26,7 @@
     background-color: transparent;
     border-color: transparent;
     box-shadow: none;
+
     &:hover {
         background-color: transparent;
         border-color: transparent;
@@ -42,12 +44,14 @@
     @_triangle__right: (@_dropdown__padding-right / 2) - (@_triangle__width / 2);
 ) {
     padding-right: @_dropdown__padding-right;
+
     &._active,
     &.active {
         &:after {
             transform: rotate(180deg);
         }
     }
+
     &:after {
         border-color: @_triangle__color transparent transparent transparent;
         border-style: solid;
@@ -60,11 +64,13 @@
         top: 50%;
         transition: all .2s linear;
         width: 0;
+
         ._active &,
         .active & {
             transform: rotate(180deg);
         }
     }
+
     &:hover {
         &:after {
             border-color: @_triangle__hover__color transparent transparent transparent;

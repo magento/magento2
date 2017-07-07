@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,8 +27,8 @@ class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
-        $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
+        $this->_fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
+        $this->_moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleListInterface::class);
         $this->_moduleListMock->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue(['Fixture_ModuleB', 'Fixture_ModuleA']));
@@ -45,7 +45,7 @@ class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFiles(array $fixtureFiles, array $expectedFiles, $message)
     {
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->_fileSource
             ->expects($this->once())
             ->method('getFiles')

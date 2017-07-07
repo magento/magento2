@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -23,6 +23,11 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      * @var CustomOptionFactory
      */
     protected $customOptionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     */
+    private $urlBuilder;
 
     /**
      * @param DataObjectFactory $objectFactory
@@ -84,6 +89,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
             $data = [];
             foreach ($options as $optionId => $optionValue) {
                 if (is_array($optionValue)) {
+                    $optionValue = $this->processFileOptionValue($optionValue);
                     $optionValue = implode(',', $optionValue);
                 }
 
@@ -97,5 +103,39 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
         }
 
         return [];
+    }
+
+    /**
+     * Returns option value with file built URL
+     *
+     * @param array $optionValue
+     * @return array
+     */
+    private function processFileOptionValue(array $optionValue)
+    {
+        if (array_key_exists('url', $optionValue) &&
+            array_key_exists('route', $optionValue['url']) &&
+            array_key_exists('params', $optionValue['url'])
+        ) {
+            $optionValue['url'] = $this->getUrlBuilder()->getUrl(
+                $optionValue['url']['route'],
+                $optionValue['url']['params']
+            );
+        }
+        return $optionValue;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
+     *
+     * @deprecated
+     */
+    private function getUrlBuilder()
+    {
+        if ($this->urlBuilder === null) {
+            $this->urlBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\Product\Option\UrlBuilder::class);
+        }
+        return $this->urlBuilder;
     }
 }

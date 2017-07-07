@@ -1,13 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Product validate
@@ -18,6 +20,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     *
+     * @deprecated
      */
     protected $_dateFilter;
 
@@ -38,6 +42,16 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /** @var \Magento\Catalog\Model\ProductFactory */
     protected $productFactory;
+
+    /**
+     * @var Initialization\Helper
+     */
+    protected $initializationHelper;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @param Action\Context $context
@@ -78,15 +92,17 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         $response->setError(false);
 
         try {
-            $productData = $this->getRequest()->getPost('product');
+            $productData = $this->getRequest()->getPost('product', []);
 
             if ($productData && !isset($productData['stock_data']['use_config_manage_stock'])) {
                 $productData['stock_data']['use_config_manage_stock'] = 0;
             }
+            $storeId = $this->getRequest()->getParam('store', 0);
+            $store = $this->getStoreManager()->getStore($storeId);
+            $this->getStoreManager()->setCurrentStore($store->getCode());
             /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productFactory->create();
             $product->setData('_edit_mode', true);
-            $storeId = $this->getRequest()->getParam('store');
             if ($storeId) {
                 $product->setStoreId($storeId);
             }
@@ -102,19 +118,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             if ($productId) {
                 $product->load($productId);
             }
-
-            $dateFieldFilters = [];
-            $attributes = $product->getAttributes();
-            foreach ($attributes as $attrKey => $attribute) {
-                if ($attribute->getBackend()->getType() == 'datetime') {
-                    if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                        $dateFieldFilters[$attrKey] = $this->_dateFilter;
-                    }
-                }
-            }
-            $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $productData);
-            $productData = $inputFilter->getUnescaped();
-            $product->addData($productData);
+            $product = $this->getInitializationHelper()->initializeFromData($product, $productData);
 
             /* set restrictions for date ranges */
             $resource = $product->getResource();
@@ -126,10 +130,10 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
-            $response->setMessage($e->getMessage());
+            $response->setMessages([$e->getMessage()]);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
-            $response->setMessage($e->getMessage());
+            $response->setMessages([$e->getMessage()]);
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $layout = $this->layoutFactory->create();
@@ -138,6 +142,31 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         }
 
-        return $this->resultJsonFactory->create()->setJsonData($response->toJson());
+        return $this->resultJsonFactory->create()->setData($response);
+    }
+
+    /**
+     * @return StoreManagerInterface
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if (null === $this->storeManager) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
+        }
+        return $this->storeManager;
+    }
+
+    /**
+     * @return Initialization\Helper
+     * @deprecated
+     */
+    protected function getInitializationHelper()
+    {
+        if (null === $this->initializationHelper) {
+            $this->initializationHelper = ObjectManager::getInstance()->get(Initialization\Helper::class);
+        }
+        return $this->initializationHelper;
     }
 }

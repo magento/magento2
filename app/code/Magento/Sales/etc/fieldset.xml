@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -283,65 +283,48 @@
             </field>
             <field name="prefix">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="firstname">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="middlename">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="lastname">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="suffix">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="company">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="street">
                 <aspect name="to_order_address" />
-            </field>
-            <field name="street">
-                <aspect name="to_customer_address" />
             </field>
             <field name="city">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="region">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="region_id">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="postcode">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="country_id">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="telephone">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="fax">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
             <field name="email">
                 <aspect name="to_order_address" />
-                <aspect name="to_customer_address" />
             </field>
         </fieldset>
         <fieldset id="sales_convert_quote_payment">
@@ -501,9 +484,11 @@
             </field>
             <field name="discount_amount">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="shipping_amount">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="shipping_incl_tax">
                 <aspect name="to_quote_address_shipping" />
@@ -519,12 +504,14 @@
             </field>
             <field name="base_discount_amount">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="base_shipping_amount">
                 <aspect name="to_quote_address_shipping" />
             </field>
             <field name="base_shipping_incl_tax">
                 <aspect name="to_quote_address_shipping" />
+                <aspect name="to_cm"/>
             </field>
             <field name="base_custbalance_amount">
                 <aspect name="to_quote_address_shipping" />

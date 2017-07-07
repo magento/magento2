@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\ProductVideo\Test\Constraint;
 
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
@@ -18,20 +19,23 @@ class AssertGetVideoInfoDataIsCorrect extends AbstractAssertForm
     /**
      * Assert that video data received from external service is correct.
      *
+     * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
-     * @param InjectableFixture $initialProduct
+     * @param InjectableFixture $product
      * @param array $video
      * @return void
      */
     public function processAssert(
+        CatalogProductIndex $productGrid,
         CatalogProductEdit $editProductPage,
-        InjectableFixture $initialProduct,
+        InjectableFixture $product,
         array $video
     ) {
+        $productGrid->open();
+        $productGrid->getProductGrid()->searchAndOpen(['sku' => $product->getSku()]);
 
-        $editProductPage->open(['id' => $initialProduct->getId()]);
-        $editProductPage->getProductForm()->openTab('images-and-videos');
-        $imagesTab = $editProductPage->getProductForm()->getTab('images-and-videos');
+        $editProductPage->getProductForm()->openSection('images-and-videos');
+        $imagesTab = $editProductPage->getProductForm()->getSection('images-and-videos');
         $result = $imagesTab->clickFirstVideo()->getVideoDialog()->validate($video);
 
         \PHPUnit_Framework_Assert::assertTrue(

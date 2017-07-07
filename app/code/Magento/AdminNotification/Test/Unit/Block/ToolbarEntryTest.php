@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 /**
  * Test class for \Magento\AdminNotification\Block\ToolbarEntry
@@ -24,7 +22,7 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         // mock collection of unread notifications
         $notificationList = $this->getMock(
-            'Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread',
+            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class,
             ['getSize', 'setCurPage', 'setPageSize'],
             [],
             '',
@@ -33,7 +31,7 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
         $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
 
         $block = $objectManagerHelper->getObject(
-            'Magento\AdminNotification\Block\ToolbarEntry',
+            \Magento\AdminNotification\Block\ToolbarEntry::class,
             ['notificationList' => $notificationList]
         );
 
@@ -52,12 +50,15 @@ class ToolbarEntryTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         // 1. Create mocks
-        $notificationList = $this->getMockBuilder('Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread')
+        $notificationList = $this->getMockBuilder(
+            \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var \Magento\AdminNotification\Block\ToolbarEntry $model */
-        $model = $helper->getObject('Magento\AdminNotification\Block\ToolbarEntry',
+        $model = $helper->getObject(
+            \Magento\AdminNotification\Block\ToolbarEntry::class,
             ['notificationList' => $notificationList]
         );
 

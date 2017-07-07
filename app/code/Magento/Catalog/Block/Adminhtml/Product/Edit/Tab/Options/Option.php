@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
 
 use Magento\Backend\Block\Widget;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Option extends Widget
 {
     /**
@@ -206,7 +210,7 @@ class Option extends Widget
     public function getTypeSelectHtml()
     {
         $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setData(
             [
                 'id' => $this->getFieldId() . '_<%- data.id %>_type',
@@ -227,7 +231,7 @@ class Option extends Widget
     public function getRequireSelectHtml()
     {
         $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setData(
             ['id' => $this->getFieldId() . '_<%- data.id %>_is_require', 'class' => 'select']
         )->setName(
@@ -314,7 +318,7 @@ class Option extends Widget
                     $value['scopeTitleDisabled'] = is_null($option->getStoreTitle()) ? 'disabled' : null;
                 }
 
-                if ($option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
+                if ($option->getGroupByType() == ProductCustomOptionInterface::OPTION_GROUP_SELECT) {
                     $i = 0;
                     $itemCount = 0;
                     foreach ($option->getValues() as $_value) {

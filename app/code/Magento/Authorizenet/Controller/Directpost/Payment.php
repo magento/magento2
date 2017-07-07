@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Directpost;
@@ -10,7 +10,7 @@ use Magento\Payment\Block\Transparent\Iframe;
 /**
  * DirectPost Payment Controller
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Payment extends \Magento\Framework\App\Action\Action
 {
@@ -48,7 +48,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      */
     protected function _getCheckout()
     {
-        return $this->_objectManager->get('Magento\Checkout\Model\Session');
+        return $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
     }
 
     /**
@@ -58,7 +58,7 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      */
     protected function _getDirectPostSession()
     {
-        return $this->_objectManager->get('Magento\Authorizenet\Model\Directpost\Session');
+        return $this->_objectManager->get(\Magento\Authorizenet\Model\Directpost\Session::class);
     }
 
     /**
@@ -73,9 +73,10 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
         $helper = $this->dataFactory->create($area);
 
         $params = [];
-        $data = $this->getRequest()->getPostValue();
+        $data = $this->getRequest()->getParams();
+
         /* @var $paymentMethod \Magento\Authorizenet\Model\DirectPost */
-        $paymentMethod = $this->_objectManager->create('Magento\Authorizenet\Model\Directpost');
+        $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
 
         $result = [];
         if (!empty($data['x_invoice_num'])) {
@@ -90,11 +91,11 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $paymentMethod->process($data);
             $result['success'] = 1;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $result['success'] = 0;
             $result['error_msg'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $result['success'] = 0;
             $result['error_msg'] = __('We can\'t process your order right now. Please try again later.');
         }
@@ -110,9 +111,8 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 
+        //registering parameter for iframe content
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false)->renderLayout();
     }
 
     /**
@@ -127,11 +127,11 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
         $incrementId = $this->_getDirectPostSession()->getLastOrderIncrementId();
         if ($incrementId && $this->_getDirectPostSession()->isCheckoutOrderIncrementIdExist($incrementId)) {
             /* @var $order \Magento\Sales\Model\Order */
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($incrementId);
+            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId($incrementId);
             if ($order->getId()) {
                 try {
                     /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
-                    $quoteRepository = $this->_objectManager->create('Magento\Quote\Api\CartRepositoryInterface');
+                    $quoteRepository = $this->_objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
                     /** @var \Magento\Quote\Model\Quote $quote */
                     $quote = $quoteRepository->get($order->getQuoteId());
 

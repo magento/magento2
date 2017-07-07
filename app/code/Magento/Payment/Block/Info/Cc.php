@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block\Info;
 
 /**
  * Credit card generic payment info
+ *
+ * @api
  */
 class Cc extends \Magento\Payment\Block\Info
 {

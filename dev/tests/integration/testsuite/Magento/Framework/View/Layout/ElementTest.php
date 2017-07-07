@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -29,7 +29,7 @@ class ElementTest extends \PHPUnit_Framework_TestCase
         $this->model->prepare();
 
         $this->assertEquals('root', (string)$blockNode->attributes()->parent);
-        $this->assertEquals('Magento\Backend\Block\Page', (string)$blockNode->attributes()->class);
+        $this->assertEquals(\Magento\Backend\Block\Page::class, (string)$blockNode->attributes()->class);
         $this->assertEquals('nodeForTesting', (string)$actionNode->attributes()->block);
     }
 }

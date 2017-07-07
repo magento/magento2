@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api\Data;
@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Customer address region interface.
+ * @api
  */
 interface RegionInterface extends ExtensibleDataInterface
 {
@@ -24,7 +25,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Get region code
      *
-     * @api
      * @return string
      */
     public function getRegionCode();
@@ -32,7 +32,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Set region code
      *
-     * @api
      * @param string $regionCode
      * @return $this
      */
@@ -41,7 +40,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Get region
      *
-     * @api
      * @return string
      */
     public function getRegion();
@@ -49,7 +47,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Set region
      *
-     * @api
      * @param string $region
      * @return $this
      */
@@ -58,7 +55,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Get region id
      *
-     * @api
      * @return int
      */
     public function getRegionId();
@@ -66,7 +62,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Set region id
      *
-     * @api
      * @param int $regionId
      * @return $this
      */
@@ -75,7 +70,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @api
      * @return \Magento\Customer\Api\Data\RegionExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -83,7 +77,6 @@ interface RegionInterface extends ExtensibleDataInterface
     /**
      * Set an extension attributes object.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
      * @return $this
      */

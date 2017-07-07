@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,21 +21,21 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var  MockObject|\Magento\Catalog\Model\Product */
     private $product;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $this->product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->setMethods(['getEntityId'])
             ->getMock();
-        $this->type = $this->getMockBuilder('\Magento\Bundle\Model\Product\Type')
+        $this->type = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParentIdsByChild'])
             ->getMock();
 
         $this->plugin = $objectManager->getObject(
-            'Magento\Bundle\Model\Plugin\Product',
+            \Magento\Bundle\Model\Plugin\Product::class,
             [
                 'type' => $this->type,
             ]
@@ -59,7 +59,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             Product::CACHE_TAG . '_' . 100500,
         ];
         $this->product->expects($this->once())
-            ->method('getId')
+            ->method('getEntityId')
             ->will($this->returnValue($id));
         $this->type->expects($this->once())
             ->method('getParentIdsByChild')

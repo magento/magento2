@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Test\Unit;
@@ -19,7 +19,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storage = $this->getMock('Magento\Framework\Cache\Config\Data', ['get'], [], '', false);
+        $this->_storage = $this->getMock(\Magento\Framework\Cache\Config\Data::class, ['get'], [], '', false);
         $this->_model = new \Magento\Framework\Cache\Config($this->_storage);
     }
 

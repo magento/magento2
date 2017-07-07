@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,17 +49,16 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $dataProviderFactory = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\DataProvider\CategoryFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $dataProviderFactory = $this->getMockBuilder(
+            \Magento\Catalog\Model\Layer\Filter\DataProvider\CategoryFactory::class
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
-        $this->dataProvider = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\DataProvider\Category')
+        $this->dataProvider = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\DataProvider\Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryId', 'getCategory'])
             ->getMock();
@@ -68,7 +67,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->dataProvider));
 
-        $this->category = $this->getMockBuilder('\Magento\Catalog\Model\Category')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getChildrenCategories', 'getIsActive'])
             ->getMock();
@@ -77,13 +76,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getCategory', 'isValid')
             ->will($this->returnValue($this->category));
 
-        $this->layer = $this->getMockBuilder('\Magento\Catalog\Model\Layer')
+        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
 
         $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
-            '\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection'
+            \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['addCategoryFilter', 'getFacetedData', 'getSize'])
@@ -93,20 +92,20 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getProductCollection')
             ->will($this->returnValue($this->fulltextCollection));
 
-        $this->itemDataBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder')
+        $this->itemDataBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['addItemData', 'build'])
             ->getMock();
 
         $this->filterItemFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Layer\Filter\ItemFactory'
+            \Magento\Catalog\Model\Layer\Filter\ItemFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $filterItem = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Layer\Filter\Item'
+            \Magento\Catalog\Model\Layer\Filter\Item::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
@@ -118,7 +117,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($filterItem));
 
-        $escaper = $this->getMockBuilder('\Magento\Framework\Escaper')
+        $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->setMethods(['escapeHtml'])
             ->getMock();
@@ -128,7 +127,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
-            'Magento\CatalogSearch\Model\Layer\Filter\Category',
+            \Magento\CatalogSearch\Model\Layer\Filter\Category::class,
             [
                 'categoryDataProviderFactory' => $dataProviderFactory,
                 'layer' => $this->layer,
@@ -236,7 +235,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getIsActive')
             ->will($this->returnValue(true));
 
-        $category1 = $this->getMockBuilder('\Magento\Catalog\Model\Category')
+        $category1 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getName', 'getIsActive'])
             ->getMock();
@@ -250,7 +249,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getIsActive')
             ->will($this->returnValue(true));
 
-        $category2 = $this->getMockBuilder('\Magento\Catalog\Model\Category')
+        $category2 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getName', 'getIsActive'])
             ->getMock();
@@ -264,7 +263,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getIsActive')
             ->will($this->returnValue(true));
 
-        $category3 = $this->getMockBuilder('\Magento\Catalog\Model\Category')
+        $category3 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getName', 'getIsActive'])
             ->getMock();

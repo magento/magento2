@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
@@ -37,7 +36,7 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('block_id');
-        $model = $this->_objectManager->create('Magento\Cms\Model\Block');
+        $model = $this->_objectManager->create(\Magento\Cms\Model\Block::class);
 
         // 2. Initial checking
         if ($id) {
@@ -49,19 +48,12 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
                 return $resultRedirect->setPath('*/*/');
             }
         }
-        // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
-        if (!empty($data)) {
-            $model->setData($data);
-        }
 
-        // 4. Register model to use later in blocks
         $this->_coreRegistry->register('cms_block', $model);
 
+        // 5. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-
-        // 5. Build edit form
         $this->initPage($resultPage)->addBreadcrumb(
             $id ? __('Edit Block') : __('New Block'),
             $id ? __('Edit Block') : __('New Block')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
@@ -22,8 +22,8 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
         $moduleName,
         $expected
     ) {
-        $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
+        $packageInfoMock = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
         $moduleListMock->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue($enabledModules));
@@ -33,7 +33,13 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
             ->will($this->returnValue('0.1'));
-        $packageInfoFactoryMock = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
+        $packageInfoFactoryMock = $this->getMock(
+            \Magento\Framework\Module\PackageInfoFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
         $packageInfoFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($packageInfoMock));
@@ -118,8 +124,8 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckConflictWhenEnableModuleDifferentVersion()
     {
-        $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
+        $packageInfoMock = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
         $moduleListMock->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue(['Vendor_A', 'Vendor_B']));
@@ -133,7 +139,13 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
             ->will($this->returnValueMap([['Vendor_A', '0.2'], ['Vendor_B', '0.4']]));
-        $packageInfoFactoryMock = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
+        $packageInfoFactoryMock = $this->getMock(
+            \Magento\Framework\Module\PackageInfoFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
         $packageInfoFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($packageInfoMock));
@@ -146,8 +158,8 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckConflictWhenEnableModuleDifferentVersionWithCurEnabledModules()
     {
-        $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
+        $packageInfoMock = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
         $packageInfoMock->expects($this->any())
             ->method('getConflict')
             ->will($this->returnValueMap([
@@ -158,7 +170,13 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
             ->will($this->returnValueMap([['Vendor_A', '0.2'], ['Vendor_B', '0.4']]));
-        $packageInfoFactoryMock = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
+        $packageInfoFactoryMock = $this->getMock(
+            \Magento\Framework\Module\PackageInfoFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
         $packageInfoFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($packageInfoMock));

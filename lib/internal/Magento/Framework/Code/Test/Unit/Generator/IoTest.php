@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Phrase;
 
@@ -47,7 +46,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
-        $this->_filesystemDriverMock = $this->getMock('Magento\Framework\Filesystem\Driver\File');
+        $this->_filesystemDriverMock = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class);
 
         $this->_object = new \Magento\Framework\Code\Generator\Io(
             $this->_filesystemDriverMock,
@@ -93,12 +92,12 @@ class IoTest extends \PHPUnit_Framework_TestCase
 
         if (!$exceptionDuringRename) {
             $renameMockEvent = $this->returnValue(true);
-        } else if ($fileExists) {
+        } elseif ($fileExists) {
             $renameMockEvent = $this->throwException(new FileSystemException(new Phrase('File already exists')));
         } else {
             $exceptionMessage = 'Some error renaming file';
             $renameMockEvent = $this->throwException(new FileSystemException(new Phrase($exceptionMessage)));
-            $this->setExpectedException('\Magento\Framework\Exception\FileSystemException', $exceptionMessage);
+            $this->setExpectedException(\Magento\Framework\Exception\FileSystemException::class, $exceptionMessage);
         }
 
         $this->_filesystemDriverMock->expects($this->once())

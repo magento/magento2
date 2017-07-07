@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
  /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config */
 ?>
-<div class="entry-edit form-inline" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>" data-panel="product-variations">
+<div class="entry-edit form-inline" id="<?= /* @escapeNotVerified */ $block->getId() ?>" data-panel="product-variations">
     <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
         <div class="product-create-configuration-info">
             <div class="note" data-role="product-create-configuration-info">
@@ -21,7 +21,7 @@
                 <button type="button" data-action="open-steps-wizard" title="Create Product Configurations"
                         class="action-secondary" data-bind="click: open">
                 <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
-                    <?= /* @escapeNotVerified */  $block->getProduct()->getId() && $block->isConfigurableProduct()
+                    <?= /* @escapeNotVerified */  $block->isHasVariations()
                         ? __('Edit Configurations')
                         : __('Create Configurations')
                     ?>
@@ -31,13 +31,13 @@
             <div class="product-create-configuration-action" data-bind="scope: 'configurableProductGrid'">
                 <button class="action-tertiary action-menu-item" type="button" data-action="choose"
                         data-bind="click: showManuallyGrid, visible: button">
-                    <?= /* @noEscape */ __('Add Products Manually');?>
+                    <?= /* @noEscape */ __('Add Products Manually') ?>
                 </button>
             </div>
         </div>
     </div>
     <div class="fieldset">
-        <?php echo $block->getChildHtml('matrix'); ?>
+        <?= $block->getChildHtml('matrix') ?>
 
         <!-- Select Associated Product popup -->
         <div data-grid-id="associated-products-container">
@@ -66,15 +66,15 @@
                         "productsProvider": "configurable_associated_product_listing.data_source",
                         "productsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
                         "productsColumns": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns",
-                        "productsGridUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
+                        "productsGridUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/associated_grid', ['componentJson' => true]) ?>",
                         "configurableVariations": "configurableVariations"
                     }
                 }
             },
             "Magento_ConfigurableProduct/js/configurable-type-handler": {
-                "blockId": "#<?= /* @noEscape */ $block->getId()?>",
-                "tabId": "<?= /* @noEscape */ $block->getTabId()?>",
-                "hasVariations": "<?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>"
+                "blockId": "#<?= /* @noEscape */ $block->getId() ?>",
+                "tabId": "<?= /* @noEscape */ $block->getTabId() ?>",
+                "hasVariations": <?= /* @noEscape */ $block->isHasVariations() ? 'true' : 'false' ?>
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
@@ -68,19 +68,19 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
-        $context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')->getMock();
-        $this->redirect = $this->getMockBuilder('Magento\Framework\App\Response\RedirectInterface')->getMock();
-        $this->response = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
+        $this->redirect = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)->getMock();
+        $this->response = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->setMethods(['sendResponse', 'setRedirect'])
             ->getMock();
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')->getMock();
-        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')->getMock();
-        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)->getMock();
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)->getMock();
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())
@@ -102,14 +102,16 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')->disableOriginalConstructor()->getMock();
-        $this->fileFactory = $this->getMockBuilder('Magento\Framework\App\Response\Http\FileFactory')
+        $this->registry = $this->getMockBuilder(
+            \Magento\Framework\Registry::class
+        )->disableOriginalConstructor()->getMock();
+        $this->fileFactory = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->repository = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $this->repository = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -129,11 +131,11 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
         $fileName = 'file.ext';
         $fullPath = 'path/to/file';
 
-        $file = $this->getMockBuilder('Magento\Framework\View\Design\Theme\FileInterface')->getMock();
-        $customization = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Customization')
+        $file = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)->getMock();
+        $customization = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Customization::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $theme = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
+        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
             ->setMethods(['getCustomization'])
             ->getMockForAbstractClass();
         $file->expects($this->once())
@@ -156,13 +158,13 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('theme_id')
             ->willReturn($themeId);
-        $themeFactory = $this->getMockBuilder('Magento\Framework\View\Design\Theme\FlyweightFactory')
+        $themeFactory = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FlyweightFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->with('Magento\Framework\View\Design\Theme\FlyweightFactory')
+            ->with(\Magento\Framework\View\Design\Theme\FlyweightFactory::class)
             ->willReturn($themeFactory);
         $themeFactory->expects($this->once())
             ->method('create')
@@ -171,9 +173,9 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
         $this->fileFactory->expects($this->once())
             ->method('create')
             ->with($fileName, ['type' => 'filename', 'value' => $fullPath], DirectoryList::ROOT)
-            ->willReturn($this->getMockBuilder('Magento\Framework\App\ResponseInterface')->getMock());
+            ->willReturn($this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)->getMock());
 
-        $this->assertInstanceOf('Magento\Framework\App\ResponseInterface', $this->controller->execute());
+        $this->assertInstanceOf(\Magento\Framework\App\ResponseInterface::class, $this->controller->execute());
     }
 
     public function testExecuteInvalidArgument()
@@ -185,18 +187,18 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('theme_id')
             ->willReturn($themeId);
-        $themeFactory = $this->getMockBuilder('Magento\Framework\View\Design\Theme\FlyweightFactory')
+        $themeFactory = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FlyweightFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->with('Psr\Log\LoggerInterface')
+            ->with(\Psr\Log\LoggerInterface::class)
             ->willReturn($logger);
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->with('Magento\Framework\View\Design\Theme\FlyweightFactory')
+            ->with(\Magento\Framework\View\Design\Theme\FlyweightFactory::class)
             ->willReturn($themeFactory);
         $themeFactory->expects($this->once())
             ->method('create')

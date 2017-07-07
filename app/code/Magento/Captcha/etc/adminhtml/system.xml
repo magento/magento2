@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,32 +10,32 @@
         <section id="admin">
             <group id="captcha" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>CAPTCHA</label>
-                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Enable CAPTCHA in Admin</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="font" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="font" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Font</label>
                     <source_model>Magento\Captcha\Model\Config\Font</source_model>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="forms" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="forms" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Forms</label>
                     <source_model>Magento\Captcha\Model\Config\Form\Backend</source_model>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="mode" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="mode" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Displaying Mode</label>
                     <source_model>Magento\Captcha\Model\Config\Mode</source_model>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="failed_attempts_login" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="failed_attempts_login" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Number of Unsuccessful Attempts to Login</label>
                     <comment>If 0 is specified, CAPTCHA on the Login form will be always available.</comment>
                     <depends>
@@ -44,14 +44,14 @@
                     </depends>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
-                <field id="timeout" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="timeout" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>CAPTCHA Timeout (minutes)</label>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
-                <field id="length" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="length" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Number of Symbols</label>
                     <comment>Please specify 8 symbols at the most. Range allowed (e.g. 3-5)</comment>
                     <depends>
@@ -59,7 +59,7 @@
                     </depends>
                     <frontend_class>required-entry</frontend_class>
                 </field>
-                <field id="symbols" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="symbols" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Symbols Used in CAPTCHA</label>
                     <comment>
                         <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
@@ -69,7 +69,7 @@
                     </depends>
                     <frontend_class>required-entry validate-alphanum</frontend_class>
                 </field>
-                <field id="case_sensitive" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="case_sensitive" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Case Sensitive</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
@@ -81,18 +81,18 @@
         <section id="customer">
             <group id="captcha" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>CAPTCHA</label>
-                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable CAPTCHA on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="font" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="font" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Font</label>
                     <source_model>Magento\Captcha\Model\Config\Font</source_model>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="forms" translate="label comment" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="forms" translate="label comment" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Forms</label>
                     <source_model>Magento\Captcha\Model\Config\Form\Frontend</source_model>
                     <comment>CAPTCHA for "Create user" and "Forgot password" forms is always enabled if chosen.</comment>
@@ -100,14 +100,14 @@
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="mode" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="mode" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Displaying Mode</label>
                     <source_model>Magento\Captcha\Model\Config\Mode</source_model>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                 </field>
-                <field id="failed_attempts_login" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="failed_attempts_login" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Number of Unsuccessful Attempts to Login</label>
                     <comment>If 0 is specified, CAPTCHA on the Login form will be always available.</comment>
                     <depends>
@@ -116,14 +116,14 @@
                     </depends>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
-                <field id="timeout" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="timeout" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>CAPTCHA Timeout (minutes)</label>
                     <depends>
                         <field id="enable">1</field>
                     </depends>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
-                <field id="length" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="length" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Number of Symbols</label>
                     <comment>Please specify 8 symbols at the most. Range allowed (e.g. 3-5)</comment>
                     <depends>
@@ -131,7 +131,7 @@
                     </depends>
                     <frontend_class>required-entry validate-range range-1-8</frontend_class>
                 </field>
-                <field id="symbols" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="symbols" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Symbols Used in CAPTCHA</label>
                     <comment>
                         <![CDATA[Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. "i", "l", "1") decrease chance of correct recognition by customer.]]>
@@ -141,7 +141,7 @@
                     </depends>
                     <frontend_class>required-entry validate-alphanum</frontend_class>
                 </field>
-                <field id="case_sensitive" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="case_sensitive" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Case Sensitive</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>

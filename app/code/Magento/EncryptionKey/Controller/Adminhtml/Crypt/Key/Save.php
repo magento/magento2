@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
             if (!$key) {
                 $this->messageManager->addNoticeMessage(
                     __(
-                        'This is your new encryption key: <span style="font-family:monospace;">%1</span>. ' .
+                        'This is your new encryption key: %1. ' .
                         'Be sure to write it down and take good care of it!',
                         $newKey
                     )

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product\Flat;
 
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,12 +42,12 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_changelogMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
 
         $this->_resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -53,7 +56,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
 
         $flatHelperMock = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             ['isAddChildData'],
             [],
             '',
@@ -61,24 +64,24 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         );
         $flatHelperMock->expects($this->any())->method('isAddChildData')->will($this->returnValue(true));
 
-        $eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
 
-        $attributeConfigMock = $this->getMock('Magento\Catalog\Model\Attribute\Config', [], [], '', false);
+        $attributeConfigMock = $this->getMock(\Magento\Catalog\Model\Attribute\Config::class, [], [], '', false);
 
         $resourceConfigFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\ConfigFactory',
+            \Magento\Catalog\Model\ResourceModel\ConfigFactory::class,
             ['create'],
             [],
             '',
             false
         );
 
-        $eavFactoryMock = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', ['create'], [], '', false);
+        $eavFactoryMock = $this->getMock(\Magento\Eav\Model\Entity\AttributeFactory::class, ['create'], [], '', false);
 
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->_connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['getTables', 'dropTable'],
             [],
             '',
@@ -86,7 +89,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_changelogMock = $this->getMock(
-            'Magento\Framework\Mview\View\Changelog',
+            \Magento\Framework\Mview\View\Changelog::class,
             ['getName'],
             [],
             '',
@@ -95,7 +98,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $this->_objectManager->getObject(
-            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             [
                 'context' => $contextMock,
                 'resource' => $this->_resourceMock,
@@ -257,7 +260,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $stores = [];
         foreach ($storeIds as $storeId) {
             $store = $this->getMock(
-                'Magento\Store\Model\Store',
+                \Magento\Store\Model\Store::class,
                 ['getId', '__sleep', '__wakeup'],
                 [],
                 '',

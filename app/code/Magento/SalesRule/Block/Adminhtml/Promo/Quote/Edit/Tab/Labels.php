@@ -1,15 +1,73 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+    \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
+     * @var \Magento\SalesRule\Model\RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
+        array $data = []
+    ) {
+        $this->ruleFactory = $ruleFactory;
+        parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
+     * @var string
+     */
+    protected $_nameInLayout = 'store_view_labels';
+
+    /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -18,6 +76,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -26,6 +85,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -34,6 +94,7 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -47,33 +108,26 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $rule = $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+
+        if (!$rule) {
+            $id = $this->getRequest()->getParam('id');
+            $rule = $this->ruleFactory->create();
+            $rule->load($id);
+        }
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
 
-        $fieldset = $form->addFieldset('default_label_fieldset', ['legend' => __('Default Label')]);
         $labels = $rule->getStoreLabels();
-
-        $fieldset->addField(
-            'store_default_label',
-            'text',
-            [
-                'name' => 'store_labels[0]',
-                'required' => false,
-                'label' => __('Default Rule Label for All Store Views'),
-                'value' => isset($labels[0]) ? $labels[0] : ''
-            ]
-        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $fieldset = $this->_createStoreSpecificFieldset($form, $labels);
-        }
-
-        if ($rule->isReadonly()) {
-            foreach ($fieldset->getElements() as $element) {
-                $element->setReadonly(true, true);
+            if ($rule->isReadonly()) {
+                foreach ($fieldset->getElements() as $element) {
+                    $element->setReadonly(true, true);
+                }
             }
         }
 
@@ -94,7 +148,9 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
             'store_labels_fieldset',
             ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope']
         );
-        $renderer = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset');
+        $renderer = $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset::class
+        );
         $fieldset->setRenderer($renderer);
 
         foreach ($this->_storeManager->getWebsites() as $website) {
@@ -119,10 +175,12 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
                         'text',
                         [
                             'name' => 'store_labels[' . $store->getId() . ']',
-                            'required' => false,
+                            'title' => $store->getName(),
                             'label' => $store->getName(),
+                            'required' => false,
                             'value' => isset($labels[$store->getId()]) ? $labels[$store->getId()] : '',
-                            'fieldset_html_class' => 'store'
+                            'fieldset_html_class' => 'store',
+                            'data-form-part' => 'sales_rule_form'
                         ]
                     );
                 }

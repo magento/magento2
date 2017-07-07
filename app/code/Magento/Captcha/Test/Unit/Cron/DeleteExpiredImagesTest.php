@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Cron;
@@ -49,13 +49,13 @@ class DeleteExpiredImagesTest extends \PHPUnit_Framework_TestCase
     /**
      * Create mocks and model
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
-        $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', [], [], '', false);
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->_directory = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->_helper = $this->getMock(\Magento\Captcha\Helper\Data::class, [], [], '', false);
+        $this->_adminHelper = $this->getMock(\Magento\Captcha\Helper\Adminhtml\Data::class, [], [], '', false);
+        $this->_filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->_directory = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
+        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
 
         $this->_filesystem->expects(
             $this->once()
@@ -136,13 +136,13 @@ class DeleteExpiredImagesTest extends \PHPUnit_Framework_TestCase
     public function getExpiredImages()
     {
         $website = $this->getMock(
-            'Magento\Store\Model\Website',
+            \Magento\Store\Model\Website::class,
             ['__wakeup', 'getDefaultStore'],
             [],
             '',
             false
         );
-        $store = $this->getMock('Magento\Store\Model\Store', ['__wakeup'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['__wakeup'], [], '', false);
         $website->expects($this->any())->method('getDefaultStore')->will($this->returnValue($store));
         $time = time();
         return [

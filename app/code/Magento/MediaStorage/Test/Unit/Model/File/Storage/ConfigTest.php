@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
@@ -15,11 +15,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $config = [];
-        $fileStorageMock = $this->getMock('Magento\MediaStorage\Model\File\Storage', [], [], '', false);
+        $fileStorageMock = $this->getMock(\Magento\MediaStorage\Model\File\Storage::class, [], [], '', false);
         $fileStorageMock->expects($this->once())->method('getScriptConfig')->will($this->returnValue($config));
 
         $file = $this->getMock(
-            'Magento\Framework\Filesystem\File\Write',
+            \Magento\Framework\Filesystem\File\Write::class,
             ['lock', 'write', 'unlock', 'close'],
             [],
             '',
@@ -30,7 +30,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->once())->method('unlock');
         $file->expects($this->once())->method('close');
         $directory = $this->getMock(
-            'Magento\Framework\Filesystem\Direcoty\Write',
+            \Magento\Framework\Filesystem\Direcoty\Write::class,
             ['openFile', 'getRelativePath'],
             [],
             '',
@@ -39,7 +39,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $directory->expects($this->once())->method('getRelativePath')->will($this->returnArgument(0));
         $directory->expects($this->once())->method('openFile')->with('cacheFile')->will($this->returnValue($file));
         $filesystem = $this->getMock(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['getDirectoryWrite'],
             [],
             '',

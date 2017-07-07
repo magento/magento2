@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -19,7 +19,7 @@
                 <match field="data_index"/>
             </query>
         </queries>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="one_aggregations" index="catalogsearch_fulltext">
@@ -53,7 +53,7 @@
             </bucket>
             <bucket xsi:type="dynamicBucket" method="manual" name="dynamic_price" field="price" />
         </aggregations>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="one_wildcard" index="catalogsearch_fulltext">
@@ -68,7 +68,7 @@
         <filters>
             <filter xsi:type="wildcardFilter" name="wildcard_filter" value="$wildcard_filter$" field="name"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="one_match_filters" index="catalogsearch_fulltext">
@@ -112,7 +112,7 @@
             <filter name="pidm" xsi:type="rangeFilter" field="price" from="$pidm_from$" to="$pidm_to$"/>
             <filter name="pidsh" xsi:type="termFilter" field="price" value="$pidsh$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="range_filter" index="catalogsearch_fulltext">
@@ -131,7 +131,7 @@
                     from="$range_filter_from$"
                     to="$range_filter_to$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="range_filter_without_from_field" index="catalogsearch_fulltext">
@@ -149,7 +149,7 @@
                     field="price"
                     to="$range_filter_to$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="range_filter_without_to_field" index="catalogsearch_fulltext">
@@ -167,7 +167,7 @@
                     field="price"
                     from="$range_filter_from$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="term_filter" index="catalogsearch_fulltext">
@@ -182,7 +182,7 @@
         <filters>
             <filter name="term_filter" xsi:type="termFilter" field="price" value="$request.price$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="bool_filter" index="catalogsearch_fulltext">
@@ -234,7 +234,7 @@
                     field="price"
                     value="$not_term_filter2$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="bool_filter_with_nested_bool_filter" index="catalogsearch_fulltext">
@@ -264,7 +264,7 @@
                     field="price"
                     value="$nested_not_term_filter$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="bool_filter_with_range_in_nested_negative_filter" index="catalogsearch_fulltext">
@@ -289,7 +289,7 @@
                     from="$nested_must_range_filter_from$"
                     to="$nested_must_range_filter_to$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="advanced_search_test" index="catalogsearch_fulltext">
@@ -305,7 +305,7 @@
             <query xsi:type="matchQuery" name="name_query" value="$name_query$">
                 <match field="data_index"/>
             </query>
-            <query xsi:type="matchQuery" name="description_query" value="$description$">
+            <query xsi:type="matchQuery" name="description_query" value="$description_query$">
                 <match field="data_index"/>
             </query>
             <query xsi:type="filteredQuery" name="query_filter">
@@ -318,7 +318,7 @@
             </filter>
             <filter name="price_filter" xsi:type="rangeFilter" field="price" from="$request.from_price$" to="$request.to_price$"/>
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
     <request query="filterable_custom_attributes" index="catalogsearch_fulltext">
@@ -363,6 +363,78 @@
                 </metrics>
             </bucket>
         </aggregations>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="advanced_search_date_field" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="advanced_search_date_field" boost="1">
+                <queryReference clause="should" ref="query_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="query_filter">
+                <filterReference clause="must" ref="filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="filter">
+                <filterReference clause="must" ref="date_filter"/>
+            </filter>
+            <filter name="date_filter" xsi:type="rangeFilter" field="date_attribute" from="$date.from$" to="$date.to$"/>
+        </filters>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="filter_out_of_stock_child" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="filter_out_of_stock_child" boost="1">
+                <queryReference clause="must" ref="test_configurable"/>
+            </query>
+            <query xsi:type="filteredQuery" name="test_configurable">
+                <filterReference clause="must" ref="test_configurable_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="test_configurable_filter" field="test_configurable" value="$test_configurable$"/>
+        </filters>
+        <aggregations/>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="search_boost" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="search_boost" boost="1">
+                <queryReference clause="should" ref="search_boost_query"/>
+            </query>
+            <query xsi:type="matchQuery" name="search_boost_query" value="$query$" boost="1">
+                <match field="name"/>
+                <match field="description"/>
+            </query>
+        </queries>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="search_boost_name" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="search_boost_name" boost="1">
+                <queryReference clause="should" ref="search_boost_query"/>
+            </query>
+            <query xsi:type="matchQuery" name="search_boost_query" value="$query$" boost="20">
+                <match field="name"/>
+                <match field="description"/>
+            </query>
+        </queries>
         <from>0</from>
         <size>10</size>
     </request>

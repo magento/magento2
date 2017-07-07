@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block;
@@ -29,8 +29,8 @@ class Selector extends \Magento\Backend\Block\Template
     {
         $this->_modes = [
             'id' => __('Custom'),
-            'category' => __('For category'),
-            'product' => __('For product'),
+            'category' => __('For Category'),
+            'product' => __('For Product'),
             'cms_page' => __('For CMS page'),
         ];
     }
@@ -52,7 +52,7 @@ class Selector extends \Magento\Backend\Block\Template
      */
     public function getSelectorLabel()
     {
-        return __('Create URL Rewrite:');
+        return __('Create URL Rewrite');
     }
 
     /**
@@ -75,5 +75,16 @@ class Selector extends \Magento\Backend\Block\Template
     {
         $keys = array_keys($this->_modes);
         return array_shift($keys);
+    }
+
+    /**
+     * Get mode Url
+     *
+     * @param string $mode
+     * @return string
+     */
+    public function getModeUrl($mode)
+    {
+        return $this->getUrl('adminhtml/*/*') . $mode;
     }
 }

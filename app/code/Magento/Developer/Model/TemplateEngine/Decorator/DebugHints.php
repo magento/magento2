@@ -2,7 +2,7 @@
 /**
  * Decorator that inserts debugging hints into the rendered block contents
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,11 @@
 
 namespace Magento\Developer\Model\TemplateEngine\Decorator;
 
+/**
+ * Decorates block with block and template hints
+ *
+ * @api
+ */
 class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
 {
     /**

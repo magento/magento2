@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Controller\Adminhtml\Indexer;
@@ -65,7 +65,7 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'getAuthorization',
                 'getSession',
@@ -88,7 +88,7 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse'],
             [],
             '',
@@ -96,14 +96,14 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->request = $this->getMockForAbstractClass(
-            '\Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             ['getParam', 'getRequest'],
             '',
             false
         );
 
         $this->view = $this->getMock(
-            '\Magento\Framework\App\ViewInterface',
+            \Magento\Framework\App\ViewInterface::class,
             [
                 'loadLayout',
                 'getPage',
@@ -126,7 +126,7 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->block = $this->getMock(
-            '\Magento\Framework\View\Element\AbstractBlock',
+            \Magento\Framework\View\Element\AbstractBlock::class,
             ['setActive', 'getMenuModel'],
             [],
             '',
@@ -134,14 +134,14 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->layout = $this->getMockForAbstractClass(
-            '\Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             ['getBlock'],
             '',
             false
         );
 
         $this->menu = $this->getMock(
-            '\Magento\Backend\Model\Menu',
+            \Magento\Backend\Model\Menu::class,
             ['getParentItems'],
             [],
             '',
@@ -149,7 +149,7 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->items = $this->getMock(
-            '\Magento\Backend\Model\Menu\Item',
+            \Magento\Backend\Model\Menu\Item::class,
             ['getParentItems'],
             [],
             '',
@@ -160,9 +160,9 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())->method("getResponse")->willReturn($this->response);
         $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->view));
 
-        $this->page = $this->getMock('\Magento\Framework\View\Result\Page', ['getConfig'], [], '', false);
-        $this->config = $this->getMock('\Magento\Framework\View\Result\Page', ['getTitle'], [], '', false);
-        $this->title = $this->getMock('\Title', ['prepend'], [], '', false);
+        $this->page = $this->getMock(\Magento\Framework\View\Result\Page::class, ['getConfig'], [], '', false);
+        $this->config = $this->getMock(\Magento\Framework\View\Result\Page::class, ['getTitle'], [], '', false);
+        $this->title = $this->getMock('Title', ['prepend'], [], '', false);
 
         $this->block->expects($this->any())->method('setActive')->will($this->returnValue(1));
         $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
@@ -171,9 +171,7 @@ class ListActionTest extends \PHPUnit_Framework_TestCase
         $this->menu->expects($this->any())->method('getParentItems')->will($this->returnValue($this->items));
 
         $this->object = new \Magento\Indexer\Controller\Adminhtml\Indexer\ListAction($this->contextMock);
-
     }
-
 
     public function testExecute()
     {

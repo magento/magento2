@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Adminhtml\Rate;
@@ -33,20 +33,20 @@ class TitleTest extends \PHPUnit_Framework_TestCase
     public function testGetTitles()
     {
         /** @var \Magento\Tax\Model\Calculation\Rate $rate */
-        $rate = $this->_objectManager->create('Magento\Tax\Model\Calculation\Rate');
+        $rate = $this->_objectManager->create(\Magento\Tax\Model\Calculation\Rate::class);
         $rate->load(1);
         /** @var \Magento\Store\Model\Store $store */
-        $store = $this->_objectManager->get('Magento\Store\Model\Store');
+        $store = $this->_objectManager->get(\Magento\Store\Model\Store::class);
         $store->load('test', 'code');
         $title = 'title';
         $rate->saveTitles([$store->getId() => $title]);
 
-        $coreRegistry = $this->_objectManager->create('Magento\Framework\Registry');
+        $coreRegistry = $this->_objectManager->create(\Magento\Framework\Registry::class);
         $coreRegistry->register(RegistryConstants::CURRENT_TAX_RATE_ID, 1);
 
         /** @var \Magento\Tax\Block\Adminhtml\Rate\Title $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Block\Adminhtml\Rate\Title',
+            \Magento\Tax\Block\Adminhtml\Rate\Title::class,
             [
                 'coreRegistry' => $coreRegistry,
             ]

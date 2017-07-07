@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model\ResourceModel\Price;
@@ -9,6 +9,7 @@ namespace Magento\ProductAlert\Model\ResourceModel\Price;
  * Product alert for changed price collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +20,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\Price', 'Magento\ProductAlert\Model\ResourceModel\Price');
+        $this->_init(\Magento\ProductAlert\Model\Price::class, \Magento\ProductAlert\Model\ResourceModel\Price::class);
     }
 
     /**

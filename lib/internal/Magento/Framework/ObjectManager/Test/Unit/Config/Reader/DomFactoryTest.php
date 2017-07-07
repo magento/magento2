@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,11 +25,11 @@ class DomFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_object = $this->getMock('Magento\Framework\ObjectManager\Config\Reader\Dom', [], [], '', false);
+        $this->_object = $this->getMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class, [], [], '', false);
         $this->_objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create'],
             [],
             '',
@@ -42,7 +42,7 @@ class DomFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\ObjectManager\Config\Reader\Dom')
+            ->with(\Magento\Framework\ObjectManager\Config\Reader\Dom::class)
             ->will($this->returnValue($this->_object));
 
         $this->_factory->create([1]);

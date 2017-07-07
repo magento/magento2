@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -9,6 +9,8 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer orders grid block
+ *
+ * @api
  */
 class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -139,7 +141,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                     'filter' => false,
                     'sortable' => false,
                     'width' => '100px',
-                    'renderer' => 'Magento\Sales\Block\Adminhtml\Reorder\Renderer\Action'
+                    'renderer' => \Magento\Sales\Block\Adminhtml\Reorder\Renderer\Action::class
                 ]
             );
         }

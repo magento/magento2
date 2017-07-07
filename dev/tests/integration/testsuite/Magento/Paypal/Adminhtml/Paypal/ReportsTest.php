@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Adminhtml\Paypal;
@@ -23,7 +23,7 @@ class ReportsTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     {
         $this->dispatch('backend/paypal/paypal_reports/fetch');
         $this->assertSessionMessages(
-            $this->equalTo(['We can\'t fetch reports from "login@127.0.0.1."']),
+            $this->equalTo(['We can&#039;t fetch reports from &quot;login@127.0.0.1.&quot;']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

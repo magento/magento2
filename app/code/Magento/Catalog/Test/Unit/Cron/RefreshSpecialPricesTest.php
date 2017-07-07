@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Cron;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -49,31 +53,43 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
      */
     protected $_priceProcessorMock;
 
+    /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
+
+    /**
+     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataMock;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->_dateTimeMock = $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false);
-        $this->_localeDateMock = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $this->_eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->_resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->_dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class, [], [], '', false);
+        $this->_localeDateMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->_eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $this->_priceProcessorMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Price\Processor',
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class,
             [],
             [],
             '',
             false
         );
 
+        $this->metadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadata::class, [], [], '', false);
+
         $this->_model = $this->_objectManager->getObject(
-            'Magento\Catalog\Cron\RefreshSpecialPrices',
+            \Magento\Catalog\Cron\RefreshSpecialPrices::class,
             [
                 'storeManager' => $this->_storeManagerMock,
                 'resource' => $this->_resourceMock,
@@ -83,28 +99,42 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
                 'processor' => $this->_priceProcessorMock
             ]
         );
+
+        $this->metadataPool = $this->getMock(MetadataPool::class, [], [], '', false);
+
+        $reflection = new \ReflectionClass(get_class($this->_model));
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->_model, $this->metadataPool);
     }
 
     public function testRefreshSpecialPrices()
     {
         $idsToProcess = [1, 2, 3];
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->metadataPool->expects($this->atLeastOnce())
+            ->method('getMetadata')
+            ->willReturn($this->metadataMock);
+
+        $this->metadataMock->expects($this->atLeastOnce())->method('getLinkField')->willReturn('row_id');
+
+        $this->metadataMock->expects($this->atLeastOnce())->method('getIdentifierField')->willReturn('entity_id');
+
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $selectMock->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $selectMock->expects($this->any())->method('where')->will($this->returnSelf());
 
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $connectionMock->expects(
             $this->any()
         )->method(
             'fetchCol'
-        )->with(
-            $selectMock,
-            ['entity_id']
         )->will(
             $this->returnValue($idsToProcess)
         );
+
         $this->_resourceMock->expects(
             $this->once()
         )->method(
@@ -113,7 +143,15 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($connectionMock)
         );
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->_resourceMock->expects(
+            $this->any()
+        )->method(
+            'getTableName'
+        )->will(
+            $this->returnValue('category')
+        );
+
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
 
         $this->_storeManagerMock->expects(
@@ -136,7 +174,7 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(32000)
         );
 
-        $indexerMock = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerMock = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerMock->expects($this->exactly(2))->method('reindexList');
 
         $this->_priceProcessorMock->expects(
@@ -148,7 +186,7 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
         );
 
         $attributeMock = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [],
             '',
             false,

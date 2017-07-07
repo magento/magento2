@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,11 @@
         <tab id="advanced" translate="label" sortOrder="999999">
             <label>Advanced</label>
         </tab>
-        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+        <!--
+        @deprecated Magento does not support custom disabling/enabling modules output since 2.2.0 version.
+        Section 'Advanced' was disabled. This section will be removed from code in one release.
+        -->
+        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="0" showInWebsite="0" showInStore="0">
             <label>Advanced</label>
             <tab>advanced</tab>
             <resource>Magento_Backend::advanced</resource>
@@ -29,15 +33,15 @@
             <class>separator-top</class>
             <label>Store Email Addresses</label>
             <tab>general</tab>
-            <resource>Magento_Backend::trans_email</resource>
+            <resource>Magento_Config::trans_email</resource>
             <group id="ident_custom1" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Email 1</label>
-                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
                 </field>
-                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Name</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Sender</backend_model>
                     <validate>validate-emailSender</validate>
@@ -45,12 +49,12 @@
             </group>
             <group id="ident_custom2" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Email 2</label>
-                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
                 </field>
-                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Name</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Sender</backend_model>
                     <validate>validate-emailSender</validate>
@@ -58,12 +62,12 @@
             </group>
             <group id="ident_general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General Contact</label>
-                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
                 </field>
-                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Name</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Sender</backend_model>
                     <validate>validate-emailSender</validate>
@@ -71,12 +75,12 @@
             </group>
             <group id="ident_sales" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sales Representative</label>
-                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
                 </field>
-                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Name</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Sender</backend_model>
                     <validate>validate-emailSender</validate>
@@ -84,12 +88,12 @@
             </group>
             <group id="ident_support" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Customer Support</label>
-                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Email</label>
                     <validate>validate-email</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
                 </field>
-                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="name" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sender Name</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Sender</backend_model>
                     <validate>validate-emailSender</validate>
@@ -100,43 +104,6 @@
             <label>Design</label>
             <tab>general</tab>
             <resource>Magento_Config::config_design</resource>
-            <group id="theme" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Design Theme</label>
-                <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Design Theme</label>
-                    <source_model>Magento\Framework\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
-                    <backend_model>Magento\Theme\Model\Design\Backend\Theme</backend_model>
-                    <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
-                </field>
-                <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>User-Agent Exceptions</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Regexceptions</frontend_model>
-                    <backend_model>Magento\Theme\Model\Design\Backend\Exceptions</backend_model>
-                    <comment>
-                        <![CDATA[Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style="font-family:monospace">Firefox<br />/^mozilla/i</span>]]>
-                    </comment>
-                    <tooltip>Find a string in client user-agent header and switch to specific design theme for that browser.</tooltip>
-                </field>
-            </group>
-            <group id="pagination" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Pagination</label>
-                <field id="pagination_frame" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pagination Frame</label>
-                    <comment>How many links to display at once.</comment>
-                </field>
-                <field id="pagination_frame_skip" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pagination Frame Skip</label>
-                    <comment>If the current frame position does not cover utmost pages, will render link to current position plus/minus this value.</comment>
-                </field>
-                <field id="anchor_text_for_previous" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Anchor Text for Previous</label>
-                    <comment>Alternative text for previous link in pagination menu. If empty, default arrow image will used.</comment>
-                </field>
-                <field id="anchor_text_for_next" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Anchor Text for Next</label>
-                    <comment>Alternative text for next link in pagination menu. If empty, default arrow image will used.</comment>
-                </field>
-            </group>
         </section>
         <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Developer</label>
@@ -164,9 +131,10 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.</comment>
                 </field>
-                <field id="minify_html" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_html" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minify Html</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="translate_inline" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -190,12 +158,13 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable Javascript Bundling</label>
+                    <label>Enable JavaScript Bundling</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -204,18 +173,19 @@
                     <label>Merge CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="image" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Image Processing Settings</label>
-                <field id="default_adapter" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="default_adapter" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Image Adapter</label>
                     <source_model>Magento\Config\Model\Config\Source\Image\Adapter</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Adapter</backend_model>
-                    <comment>When the adapter was changed, please, flush Catalog Images Cache.</comment>
+                    <comment>When the adapter was changed, please flush Catalog Images Cache.</comment>
                 </field>
             </group>
             <group id="static" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -232,16 +202,16 @@
             <resource>Magento_Config::config_general</resource>
             <group id="country" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Country Options</label>
-                <field id="allow" translate="label" type="multiselect" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="allow" translate="label" type="multiselect" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Allow Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="default" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="default" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Country</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
-                <field id="eu_countries" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="eu_countries" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>European Union Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
@@ -261,11 +231,11 @@
                     <label>Locale</label>
                     <source_model>Magento\Config\Model\Config\Source\Locale</source_model>
                 </field>
-                <field id="firstday" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="firstday" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>First Day of Week</label>
                     <source_model>Magento\Config\Model\Config\Source\Locale\Weekdays</source_model>
                 </field>
-                <field id="weekend" translate="label" type="multiselect" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="weekend" translate="label" type="multiselect" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Weekend Days</label>
                     <source_model>Magento\Config\Model\Config\Source\Locale\Weekdays</source_model>
                     <can_be_empty>1</can_be_empty>
@@ -324,15 +294,15 @@
             <resource>Magento_Config::config_system</resource>
             <group id="smtp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Mail Sending Settings</label>
-                <field id="disable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="disable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Disable Email Communications</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="host" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="host" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Host</label>
                     <comment>For Windows server only.</comment>
                 </field>
-                <field id="port" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="port" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Port (25)</label>
                     <comment>For Windows server only.</comment>
                 </field>
@@ -356,37 +326,31 @@
             <resource>Magento_Config::config_admin</resource>
             <group id="emails" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Admin User Emails</label>
-                <field id="forgot_email_template" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="forgot_email_template" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Forgot Password Email Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="forgot_email_identity" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="forgot_email_identity" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Forgot and Reset Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
-                </field>
-                <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Recovery Link Expiration Period (days)</label>
-                    <comment>Please enter a number 1 or greater in this field.</comment>
-                    <validate>required-entry integer validate-greater-than-zero</validate>
-                    <backend_model>Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
                 </field>
             </group>
             <group id="startup" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Startup Page</label>
-                <field id="menu_item_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="menu_item_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Startup Page</label>
                     <source_model>Magento\Config\Model\Config\Source\Admin\Page</source_model>
                 </field>
             </group>
             <group id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Admin Base URL</label>
-                <field id="use_custom" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_custom" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Use Custom Admin URL</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Usecustom</backend_model>
                 </field>
-                <field id="custom" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="custom" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Custom Admin URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Custom</backend_model>
                     <depends>
@@ -394,12 +358,12 @@
                     </depends>
                     <comment>Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/</comment>
                 </field>
-                <field id="use_custom_path" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_custom_path" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Use Custom Admin Path</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Custompath</backend_model>
                 </field>
-                <field id="custom_path" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="custom_path" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Custom Admin Path</label>
                     <validate>required-entry validate-alphanum</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Custompath</backend_model>
@@ -411,24 +375,31 @@
             </group>
             <group id="security" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Security</label>
-                <field id="use_form_key" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Recovery Link Expiration Period (hours)</label>
+                    <comment>Please enter a number 1 or greater in this field.</comment>
+                    <validate>required-entry integer validate-greater-than-zero</validate>
+                    <backend_model>Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
+                </field>
+                <field id="use_form_key" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Add Secret Key to URLs</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Usesecretkey</backend_model>
                 </field>
-                <field id="use_case_sensitive_login" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_case_sensitive_login" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Login is Case Sensitive</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="session_lifetime" translate="label comment" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="session_lifetime" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Admin Session Lifetime (seconds)</label>
-                    <comment>Values less than 60 are ignored.</comment>
+                    <comment>Please enter at least 60 and at most 31536000 (one year).</comment>
+                    <backend_model>Magento\Backend\Model\Config\SessionLifetime\BackendModel</backend_model>
                     <validate>validate-digits</validate>
                 </field>
             </group>
             <group id="dashboard" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Dashboard</label>
-                <field id="enable_charts" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable_charts" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Enable Charts</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -440,7 +411,7 @@
             <resource>Magento_Backend::web</resource>
             <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Url Options</label>
-                <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Add Store Code to Urls</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Store</backend_model>
@@ -448,7 +419,7 @@
                         <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third party services (e.g. PayPal etc.).]]>
                     </comment>
                 </field>
-                <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="redirect_to_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Auto-redirect to Base URL</label>
                     <source_model>Magento\Config\Model\Config\Source\Web\Redirect</source_model>
                     <comment>I.e. redirect from http://example.com/store/ to http://www.example.com/store/</comment>
@@ -456,7 +427,7 @@
             </group>
             <group id="seo" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Search Engine Optimization</label>
-                <field id="use_rewrites" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="use_rewrites" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Web Server Rewrites</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -469,7 +440,7 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>Specify URL or {{base_url}} placeholder.</comment>
                 </field>
-                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Base Link URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May start with {{unsecure_base_url}} placeholder.</comment>
@@ -493,7 +464,7 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="base_link_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Secure Base Link URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May start with {{secure_base_url}} or {{unsecure_base_url}} placeholder.</comment>
@@ -508,50 +479,70 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="use_in_frontend" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="use_in_frontend" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Use Secure URLs on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs on Storefront.</comment>
                 </field>
-                <field id="use_in_adminhtml" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_in_adminhtml" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Use Secure URLs in Admin</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs in Admin.</comment>
                 </field>
-                <field id="offloader_header" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable_hsts" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable HTTP Strict Transport Security (HSTS)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
+                    <comment><![CDATA[See <a href="https://www.owasp.org/index.php/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
+                    <depends>
+                        <field id="use_in_frontend">1</field>
+                        <field id="use_in_adminhtml">1</field>
+                    </depends>
+                </field>
+                <field id="enable_upgrade_insecure" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Upgrade Insecure Requests</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
+                    <comment><![CDATA[See <a href="http://www.w3.org/TR/upgrade-insecure-requests/" target="_blank">Upgrade Insecure Requests</a> page for details.]]></comment>
+                    <depends>
+                        <field id="use_in_frontend">1</field>
+                        <field id="use_in_adminhtml">1</field>
+                    </depends>
+                </field>
+                <field id="offloader_header" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Offloader header</label>
                 </field>
             </group>
             <group id="default" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Default Pages</label>
-                <field id="front" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="front" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Web URL</label>
                 </field>
-                <field id="no_route" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="no_route" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default No-route URL</label>
                 </field>
             </group>
             <group id="session" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Session Validation Settings</label>
-                <field id="use_remote_addr" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_remote_addr" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Validate REMOTE_ADDR</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="use_http_via" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_http_via" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Validate HTTP_VIA</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="use_http_x_forwarded_for" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_http_x_forwarded_for" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Validate HTTP_X_FORWARDED_FOR</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="use_http_user_agent" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_http_user_agent" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Validate HTTP_USER_AGENT</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="use_frontend_sid" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="use_frontend_sid" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Use SID on Storefront</label>
                     <comment>Allows customers to stay logged in when switching between different stores.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

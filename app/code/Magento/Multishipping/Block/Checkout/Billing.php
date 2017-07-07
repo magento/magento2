@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -8,6 +8,7 @@ namespace Magento\Multishipping\Block\Checkout;
 /**
  * Multishipping billing information
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Billing extends \Magento\Payment\Block\Form\Container
@@ -35,6 +36,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param array $data
+     * @param array $additionalChecks
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -43,12 +45,13 @@ class Billing extends \Magento\Payment\Block\Form\Container
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
-        array $data = []
+        array $data = [],
+        array $additionalChecks = []
     ) {
         $this->_multishipping = $multishipping;
         $this->_checkoutSession = $checkoutSession;
         $this->paymentSpecification = $paymentSpecification;
-        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data, $additionalChecks);
         $this->_isScopePrivate = true;
     }
 

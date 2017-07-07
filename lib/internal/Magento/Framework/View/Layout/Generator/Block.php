@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Generator;
@@ -251,6 +251,7 @@ class Block implements Layout\GeneratorInterface
      */
     protected function getBlockInstance($block, array $arguments = [])
     {
+        $e = null;
         if ($block && is_string($block)) {
             try {
                 $block = $this->blockFactory->createBlock($block, $arguments);
@@ -260,7 +261,11 @@ class Block implements Layout\GeneratorInterface
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Invalid block type: %1', [$block])
+                new \Magento\Framework\Phrase(
+                    'Invalid block type: %1',
+                    [is_object($block) ? get_class($block) : (string) $block]
+                ),
+                $e
             );
         }
         return $block;

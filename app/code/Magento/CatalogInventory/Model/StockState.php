@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -47,29 +47,29 @@ class StockState implements StockStateInterface
 
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return bool
      */
-    public function verifyStock($productId, $websiteId = null)
+    public function verifyStock($productId, $scopeId = null)
     {
-        if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        }
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        // if ($scopeId === null) {
+            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        // }
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->verifyStock($stockItem);
     }
 
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return bool
      */
-    public function verifyNotification($productId, $websiteId = null)
+    public function verifyNotification($productId, $scopeId = null)
     {
-        if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        }
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        // if ($scopeId === null) {
+            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        // }
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->verifyNotification($stockItem);
     }
 
@@ -78,16 +78,16 @@ class StockState implements StockStateInterface
      *
      * @param int $productId
      * @param float $qty
-     * @param int $websiteId
+     * @param int $scopeId
      * @exception \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
-    public function checkQty($productId, $qty, $websiteId = null)
+    public function checkQty($productId, $qty, $scopeId = null)
     {
-        if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        }
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        // if ($scopeId === null) {
+            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        // }
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->checkQty($stockItem, $qty);
     }
 
@@ -97,15 +97,15 @@ class StockState implements StockStateInterface
      *
      * @param int $productId
      * @param float $qty
-     * @param int $websiteId
+     * @param int $scopeId
      * @return float
      */
-    public function suggestQty($productId, $qty, $websiteId = null)
+    public function suggestQty($productId, $qty, $scopeId = null)
     {
-        if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        }
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        // if ($scopeId === null) {
+            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        // }
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->suggestQty($stockItem, $qty);
     }
 
@@ -113,15 +113,15 @@ class StockState implements StockStateInterface
      * Retrieve stock qty whether product is composite or no
      *
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return float
      */
-    public function getStockQty($productId, $websiteId = null)
+    public function getStockQty($productId, $scopeId = null)
     {
-        if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        }
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        // if ($scopeId === null) {
+            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        // }
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->getStockQty($stockItem);
     }
 
@@ -133,9 +133,9 @@ class StockState implements StockStateInterface
      */
     public function checkQtyIncrements($productId, $qty, $websiteId = null)
     {
-        if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        }
+        // if ($websiteId === null) {
+            $websiteId = $this->stockConfiguration->getDefaultScopeId();
+        // }
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
         return $this->stockStateProvider->checkQtyIncrements($stockItem, $qty);
     }
@@ -145,15 +145,15 @@ class StockState implements StockStateInterface
      * @param float $itemQty
      * @param float $qtyToCheck
      * @param float $origQty
-     * @param int $websiteId
-     * @return \Magento\Framework\DataObject
+     * @param int $scopeId
+     * @return int
      */
-    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $websiteId = null)
+    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
     {
-        if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        }
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        // if ($scopeId === null) {
+            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        // }
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         return $this->stockStateProvider->checkQuoteItemQty($stockItem, $itemQty, $qtyToCheck, $origQty);
     }
 }

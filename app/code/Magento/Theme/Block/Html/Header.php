@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@ namespace Magento\Theme\Block\Html;
 
 /**
  * Html page header block
+ *
+ * @api
  */
 class Header extends \Magento\Framework\View\Element\Template
 {
@@ -31,6 +33,6 @@ class Header extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->_data['welcome'];
+        return __($this->_data['welcome']);
     }
 }

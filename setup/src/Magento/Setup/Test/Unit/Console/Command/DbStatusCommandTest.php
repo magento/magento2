@@ -1,23 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
 use Magento\Setup\Console\Command\DbStatusCommand;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @inheritdoc
+ */
 class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Module\DbVersionInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbVersionInfo|Mock
      */
     private $dbVersionInfo;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|Mock
      */
     private $deploymentConfig;
 
@@ -26,28 +34,42 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->dbVersionInfo = $this->getMock('Magento\Framework\Module\DbVersionInfo', [], [], '', false);
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->dbVersionInfo = $this->getMockBuilder(DbVersionInfo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var ObjectManagerProvider|Mock $objectManagerProvider */
+        $objectManagerProvider = $this->getMockBuilder(ObjectManagerProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var ObjectManagerInterface|Mock $objectManager */
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->will($this->returnValue($objectManager));
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValue($this->dbVersionInfo));
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+
         $this->command = new DbStatusCommand($objectManagerProvider, $this->deploymentConfig);
     }
 
     /**
      * @param array $outdatedInfo
      * @param string $expectedMessage
+     * @param int $expectedCode
      *
      * @dataProvider executeDataProvider
      */
-    public function testExecute(array $outdatedInfo, $expectedMessage)
+    public function testExecute(array $outdatedInfo, $expectedMessage, $expectedCode)
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
@@ -55,9 +77,12 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
         $this->dbVersionInfo->expects($this->once())
             ->method('getDbVersionErrors')
             ->will($this->returnValue($outdatedInfo));
+
         $tester = new CommandTester($this->command);
         $tester->execute([]);
+
         $this->assertStringMatchesFormat($expectedMessage, $tester->getDisplay());
+        $this->assertSame($expectedCode, $tester->getStatusCode());
     }
 
     public function executeDataProvider()
@@ -65,9 +90,10 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
         return [
             'DB is up to date' => [
                 [],
-                'All modules are up to date%a'
+                'All modules are up to date%a',
+                Cli::RETURN_SUCCESS
             ],
-            'DB is outdated'   => [
+            'DB is outdated' => [
                 [
                     [
                         DbVersionInfo::KEY_MODULE => 'module_a',
@@ -78,6 +104,7 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
                 ],
                 '%amodule_a%aschema%a1%a->%a2'
                 . "%aRun 'setup:upgrade' to update your DB schema and data%a",
+                DbStatusCommand::EXIT_CODE_UPGRADE_REQUIRED,
             ],
             'code is outdated' => [
                 [
@@ -90,6 +117,7 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
                 ],
                 '%amodule_a%adata%a2.0.0%a->%a1.0.0'
                 . '%aSome modules use code versions newer or older than the database%a',
+                Cli::RETURN_FAILURE,
             ],
             'both DB and code is outdated' => [
                 [
@@ -109,6 +137,7 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
                 '%amodule_a%aschema%a1.0.0%a->%a2.0.0'
                 . '%amodule_b%adata%a2.0.0%a->%a1.0.0'
                 . '%aSome modules use code versions newer or older than the database%a',
+                Cli::RETURN_FAILURE,
             ],
         ];
     }
@@ -120,11 +149,14 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->dbVersionInfo->expects($this->never())
             ->method('getDbVersionErrors');
+
         $tester = new CommandTester($this->command);
         $tester->execute([]);
+
         $this->assertStringMatchesFormat(
             'No information is available: the Magento application is not installed.%w',
             $tester->getDisplay()
         );
+        $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());
     }
 }

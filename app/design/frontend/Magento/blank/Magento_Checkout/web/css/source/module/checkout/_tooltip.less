@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -48,6 +48,7 @@
             .field-tooltip-content {
                 display: block;
             }
+
             .field-tooltip-action {
                 &:before {
                     .lib-css(color, @checkout-tooltip-icon__hover__color);
@@ -68,9 +69,11 @@
             &:focus {
                 ._keyfocus & {
                     .lib-css(z-index, @checkout-tooltip__hover__z-index);
+
                     + .field-tooltip-content {
                         display: block;
                     }
+
                     &:before {
                         .lib-css(color, @checkout-tooltip-icon__hover__color);
                     }
@@ -107,9 +110,11 @@
                 position: absolute;
                 z-index: 3;
             }
+
             &:before {
                 .lib-css(border-right-color, @checkout-tooltip-content__active__border-color);
             }
+
             &:after {
                 .lib-css(border-right-color, @checkout-tooltip-content__background-color);
                 width: 1px;

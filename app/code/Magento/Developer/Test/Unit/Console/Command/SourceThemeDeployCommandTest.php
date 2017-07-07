@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Console\Command;
@@ -24,7 +24,11 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
 
     const LOCALE_TEST_VALUE = 'locale-test-value';
 
-    const THEME_TEST_VALUE = 'theme-test-value';
+    const THEME_TEST_VALUE = 'Vendor/theme';
+
+    const THEME_INCORRECT_FORMAT_VALUE = 'theme-value';
+
+    const THEME_NONEXISTING_VALUE = 'NonExistentVendor/theme';
 
     const TYPE_TEST_VALUE = 'type-test-value';
 
@@ -129,22 +133,102 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Run test for execute method with incorrect theme value
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Value "theme-value" of the option "theme" has invalid format. The format should be
+     */
+    public function testExecuteIncorrectThemeFormat()
+    {
+        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        $outputMock = $this->getMockBuilder(OutputInterface::class)
+            ->getMockForAbstractClass();
+        $this->validatorMock->expects(self::once())
+            ->method('isValid')
+            ->with(self::LOCALE_TEST_VALUE)
+            ->willReturn(true);
+
+        $valueMap = [
+            ['area', self::AREA_TEST_VALUE],
+            ['locale', self::LOCALE_TEST_VALUE],
+            ['theme', self::THEME_INCORRECT_FORMAT_VALUE],
+            ['type', self::TYPE_TEST_VALUE]
+        ];
+
+        $this->sourceThemeDeployCommand->run(
+            $this->getInputMock($valueMap),
+            $outputMock
+        );
+    }
+
+    /**
+     * Run test for execute method with non existing theme
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Verify entered values of the argument and options.
+     */
+    public function testExecuteNonExistingValue()
+    {
+        /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
+        $outputMock = $this->getMockBuilder(OutputInterface::class)
+            ->getMockForAbstractClass();
+        $assetMock = $this->getMockBuilder(LocalInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->validatorMock->expects(self::once())
+            ->method('isValid')
+            ->with(self::LOCALE_TEST_VALUE)
+            ->willReturn(true);
+
+        $this->assetRepositoryMock->expects(self::once())
+            ->method('createAsset')
+            ->with(
+                'file-test-value/test' . DIRECTORY_SEPARATOR . 'file' . '.' . self::TYPE_TEST_VALUE,
+                [
+                    'area' => self::AREA_TEST_VALUE,
+                    'theme' => self::THEME_NONEXISTING_VALUE,
+                    'locale' => self::LOCALE_TEST_VALUE,
+                ]
+            )->willReturn($assetMock);
+
+        $this->assetPublisherMock->expects(self::once())
+            ->method('publish')
+            ->with($assetMock)
+            ->willThrowException(new \Magento\Framework\View\Asset\File\NotFoundException);
+
+        $valueMap = [
+            ['area', self::AREA_TEST_VALUE],
+            ['locale', self::LOCALE_TEST_VALUE],
+            ['theme', self::THEME_NONEXISTING_VALUE],
+            ['type', self::TYPE_TEST_VALUE]
+        ];
+
+        $this->sourceThemeDeployCommand->run(
+            $this->getInputMock($valueMap),
+            $outputMock
+        );
+    }
+
+    /**
      * @return InputInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getInputMock()
+    private function getInputMock(array $valueMap = [])
     {
         $inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
 
+        $defaultValueMap = [
+            ['area', self::AREA_TEST_VALUE],
+            ['locale', self::LOCALE_TEST_VALUE],
+            ['theme', self::THEME_TEST_VALUE],
+            ['type', self::TYPE_TEST_VALUE]
+        ];
+        $valueMap = empty($valueMap) ? $defaultValueMap : $valueMap;
+
         $inputMock->expects(self::exactly(4))
             ->method('getOption')
             ->willReturnMap(
-                [
-                    ['area', self::AREA_TEST_VALUE],
-                    ['locale', self::LOCALE_TEST_VALUE],
-                    ['theme', self::THEME_TEST_VALUE],
-                    ['type', self::TYPE_TEST_VALUE]
-                ]
+                $valueMap
             );
         $inputMock->expects(self::once())
             ->method('getArgument')

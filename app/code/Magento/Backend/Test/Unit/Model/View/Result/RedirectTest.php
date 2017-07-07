@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\View\Result;
@@ -31,11 +31,11 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->session = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
-        $this->urlBuilder = $this->getMock('Magento\Backend\Model\UrlInterface', [], [], '', false);
+        $this->session = $this->getMock(\Magento\Backend\Model\Session::class, [], [], '', false);
+        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
+        $this->urlBuilder = $this->getMock(\Magento\Backend\Model\UrlInterface::class, [], [], '', false);
         $this->redirect = $this->getMock(
-            'Magento\Framework\App\Response\RedirectInterface',
+            \Magento\Framework\App\Response\RedirectInterface::class,
             [],
             [],
             '',
@@ -43,7 +43,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             [
                 'session' => $this->session,
                 'actionFlag' => $this->actionFlag,

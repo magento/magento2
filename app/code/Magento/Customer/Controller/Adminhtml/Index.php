@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -27,7 +27,15 @@ use Magento\Framework\Api\DataObjectHelper;
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var \Magento\Framework\Validator
+     * @deprecated
      */
     protected $_validator;
 
@@ -45,15 +53,19 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
+     * @deprecated
      */
     protected $_customerFactory = null;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
+     * @deprecated
      */
     protected $_addressFactory = null;
 
-    /** @var \Magento\Newsletter\Model\SubscriberFactory */
+    /**
+     * @var \Magento\Newsletter\Model\SubscriberFactory
+     */
     protected $_subscriberFactory;
 
     /**
@@ -61,20 +73,30 @@ abstract class Index extends \Magento\Backend\App\Action
      */
     protected $_formFactory;
 
-    /** @var CustomerRepositoryInterface */
+    /**
+     * @var CustomerRepositoryInterface
+     */
     protected $_customerRepository;
 
-    /** @var  \Magento\Customer\Helper\View */
+    /**
+     * @var  \Magento\Customer\Helper\View
+     */
     protected $_viewHelper;
 
-    /** @var \Magento\Framework\Math\Random */
+    /**
+     * @var \Magento\Framework\Math\Random
+     * @deprecated
+     */
     protected $_random;
 
-    /** @var ObjectFactory */
+    /**
+     * @var ObjectFactory
+     */
     protected $_objectFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @deprecated
      */
     protected $_extensibleDataObjectConverter;
 
@@ -110,6 +132,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @deprecated
      */
     protected $dataObjectProcessor;
 
@@ -120,6 +143,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
+     * @deprecated
      */
     protected $layoutFactory;
 
@@ -144,6 +168,8 @@ abstract class Index extends \Magento\Backend\App\Action
     protected $resultJsonFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
@@ -169,7 +195,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -281,6 +306,7 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param callable $singleAction A single action callable that takes a customer ID as input
      * @param int[] $customerIds Array of customer Ids to perform the action upon
      * @return int Number of customers successfully acted upon
+     * @deprecated
      */
     protected function actUponMultipleCustomers(callable $singleAction, $customerIds)
     {
@@ -298,15 +324,5 @@ abstract class Index extends \Magento\Backend\App\Action
             }
         }
         return $customersUpdated;
-    }
-
-    /**
-     * Customer access rights checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }

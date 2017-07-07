@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -11,9 +11,11 @@
     .lib-clearfix();
     position: relative;
     z-index: 1;
+
     > .item.title {
         float: left;
         width: auto;
+
         > .switch {
             .lib-css(height, @_tab-control-height__base);
             display: block;
@@ -21,6 +23,7 @@
             z-index: 2;
         }
     }
+
     > .item.content {
         .lib-clearfix();
         .lib-css(margin-top, @_tab-control-height__base);
@@ -28,6 +31,7 @@
         float: right;
         margin-left: -100%;
         width: 100%;
+
         &.active {
             display: block;
         }
@@ -105,10 +109,12 @@
             .lib-css(height, @_tab-control-height);
             .lib-css(padding, @_tab-control-padding-top @_tab-control-padding-right @_tab-control-padding-bottom @_tab-control-padding-left);
         }
+
         &:not(.disabled) > .switch:focus,
         &:not(.disabled) > .switch:hover {
             .lib-css(background, @_tab-control-background-color-hover);
         }
+
         &:not(.disabled) > .switch:active,
         &.active > .switch,
         &.active > .switch:focus,
@@ -116,16 +122,19 @@
             .lib-css(background, @_tab-control-background-color-active);
             .lib-css(color, @_tab-control-color-active);
         }
+
         &.active > .switch,
         &.active > .switch:focus,
         &.active > .switch:hover {
             .lib-css(padding-bottom, @_tab-control-padding-bottom + @_tab-control-border-width);
         }
     }
+
     > .item.content {
         .lib-css(background, @_tab-content-background-color);
         margin-top: @_tab-content-margin-top;
         padding: @_tab-content-padding-top @_tab-content-padding-right @_tab-content-padding-bottom @_tab-content-padding-left;
+
         ._lib-tab-content-border(
             @_tab-content-border-top-status: @_tab-content-border-top-status,
             @_tab-content-border: @_tab-content-border
@@ -151,20 +160,24 @@
 .lib-data-accordion__base() {
     margin: 0;
     padding: 0;
+
     > .item.title {
         box-sizing: border-box;
         float: none;
         width: 100%;
+
         > .switch {
             display: block;
         }
     }
+
     > .item.content {
         .lib-clearfix();
         box-sizing: border-box;
         display: block;
         float: none;
         margin: 0;
+
         &.active {
             display: block;
         }
@@ -251,10 +264,12 @@
                 @_link-text-decoration-active: @_accordion-control-text-decoration-active
             );
         }
+
         &:not(.disabled) > .switch:focus,
         &:not(.disabled) > .switch:hover {
             .lib-css(background, @_accordion-control-background-color-hover);
         }
+
         &:not(.disabled) > .switch:active,
         &.active > .switch,
         &.active > .switch:focus,
@@ -263,6 +278,7 @@
             .lib-css(padding-bottom, @_accordion-control-padding-bottom);
         }
     }
+
     > .item.content {
         .lib-css(background, @_accordion-content-background-color);
         .lib-css(border, @_accordion-content-border);

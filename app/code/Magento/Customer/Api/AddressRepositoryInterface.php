@@ -1,20 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
 
 /**
  * Customer address CRUD interface.
+ * @api
  */
 interface AddressRepositoryInterface
 {
     /**
      * Save customer address.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -24,7 +24,6 @@ interface AddressRepositoryInterface
     /**
      * Retrieve customer address.
      *
-     * @api
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -34,7 +33,6 @@ interface AddressRepositoryInterface
     /**
      * Retrieve customers addresses matching the specified criteria.
      *
-     * @api
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\AddressSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -44,7 +42,6 @@ interface AddressRepositoryInterface
     /**
      * Delete customer address.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -54,7 +51,6 @@ interface AddressRepositoryInterface
     /**
      * Delete customer address by ID.
      *
-     * @api
      * @param int $addressId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException

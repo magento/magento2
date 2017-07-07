@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Constraint;
@@ -12,6 +12,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Check that Terms and Conditions is present on the last checkout step - Order Review.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssertTermRequireMessageOnMultishippingCheckout extends AbstractConstraint
 {
@@ -43,39 +44,41 @@ class AssertTermRequireMessageOnMultishippingCheckout extends AbstractConstraint
         $shipping
     ) {
         $customer = ['customer' => ['dataset' => 'johndoe_with_multiple_addresses']];
-        $customer = $stepFactory->create('\Magento\Customer\Test\TestStep\CreateCustomerStep', $customer)->run();
-        $products = $stepFactory->create('\Magento\Catalog\Test\TestStep\CreateProductsStep', ['products' => $products])
-            ->run();
-        $stepFactory->create('\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep', $customer)->run();
-        $stepFactory->create('\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep', $products)->run();
-        $stepFactory->create('\Magento\Multishipping\Test\TestStep\ProceedToMultipleAddressCheckoutStep')->run();
+        $customer = $stepFactory->create(\Magento\Customer\Test\TestStep\CreateCustomerStep::class, $customer)->run();
+        $products = $stepFactory->create(
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
+            ['products' => $products]
+        )->run();
+        $stepFactory->create(\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class, $customer)->run();
+        $stepFactory->create(\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class, $products)->run();
+        $stepFactory->create(\Magento\Multishipping\Test\TestStep\ProceedToMultipleAddressCheckoutStep::class)->run();
         $stepFactory->create(
-            '\Magento\Multishipping\Test\TestStep\FillCustomerAddressesStep',
+            \Magento\Multishipping\Test\TestStep\FillCustomerAddressesStep::class,
             array_merge($products, $customer)
         )->run();
         $stepFactory->create(
-            '\Magento\Multishipping\Test\TestStep\FillShippingInformationStep',
+            \Magento\Multishipping\Test\TestStep\FillShippingInformationStep::class,
             array_merge(['shippingMethod' => $shipping], $customer)
         )->run();
         $stepFactory->create(
-            '\Magento\Multishipping\Test\TestStep\SelectPaymentMethodStep',
+            \Magento\Multishipping\Test\TestStep\SelectPaymentMethodStep::class,
             ['payment' => $payment]
         )->run();
         $stepFactory->create(
-            '\Magento\CheckoutAgreements\Test\TestStep\CheckTermOnMultishippingStep',
+            \Magento\CheckoutAgreements\Test\TestStep\CheckTermOnMultishippingStep::class,
             ['agreementValue' => 'No']
         )->run();
-        $stepFactory->create('\Magento\Multishipping\Test\TestStep\PlaceOrderStep')->run();
+        $stepFactory->create(\Magento\Multishipping\Test\TestStep\PlaceOrderStep::class)->run();
         \PHPUnit_Framework_Assert::assertEquals(
             self::NOTIFICATION_MESSAGE,
             $page->getAgreementReview()->getNotificationMassage(),
             'Notification required message of Terms and Conditions is absent.'
         );
         $stepFactory->create(
-            '\Magento\CheckoutAgreements\Test\TestStep\CheckTermOnMultishippingStep',
+            \Magento\CheckoutAgreements\Test\TestStep\CheckTermOnMultishippingStep::class,
             ['agreementValue' => 'Yes']
         )->run();
-        $stepFactory->create('\Magento\Multishipping\Test\TestStep\PlaceOrderStep')->run();
+        $stepFactory->create(\Magento\Multishipping\Test\TestStep\PlaceOrderStep::class)->run();
     }
 
     /**

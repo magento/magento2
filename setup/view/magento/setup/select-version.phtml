@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -39,9 +39,11 @@
         <span class="message-text">Checking for a new version...</span>
     </div>
     <div class="message message-error" ng-show="upgradeProcessError">
-            <span class="message-text">
-                Sorry, we can't take that action right now.
-            </span>
+            <span class="message-text" ng-bind-html="upgradeProcessErrorMessage"></span>
+    </div>
+    <div class="message" ng-show="upgradeProcessed && !upgradeProcessError && currentVersion">
+        Your Magento version is {{currentVersion}}.
+        <span ng-show="versions">You are about to upgrade to a newer version.</span>
     </div>
     <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
         <div class="col-m-3">
@@ -56,6 +58,21 @@
                 ng-model="selectedOption"
                 ng-options="item.versionInfo as item.version.name for item in versions">
             </select>
+        </div>
+    </div>
+    <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
+        <div class="col-m-3">
+            <label class="form-label" for="showUnstable">
+                Show All Versions
+            </label>
+        </div>
+        <div class="col-m-4">
+            <input
+                id="showUnstable"
+                type="checkbox"
+                ng-model="showUnstable"
+                ng-change="showUnstableClick()"
+            >
         </div>
     </div>
 </div>
@@ -144,7 +161,12 @@
                         >
                             <span>Previous page</span>
                         </button>
-                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage}}">
+                    <input id="pageCurrent"
+                           class="admin__control-text"
+                           type="number"
+                           ng-value="currentPage"
+                           ng-model="currentPage"
+                    >
                         <label class="admin__control-support-text" for="pageCurrent">
                         of {{numberOfPages}}
                         </label>
@@ -184,17 +206,19 @@
                 </tr>
                 </thead>
                 <tbody>
-            <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
+                <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
                     <td class="data-grid-indicator-cell">
-                        <div class="actions-switch">
-                            <input type="checkbox" name="{{component.checkboxId}}"
-                                   class="actions-switch-checkbox" id="{{component.checkboxId}}"
+                        <div class="admin__actions-switch">
+                            <input class="admin__actions-switch-checkbox"
+                                   name="{{component.checkboxId}}"
+                                   type="checkbox"
                                    ng-click="AddRemoveComponentOnSliderMove(component)"
                                    ng-checked="isSelected(component.name)">
-                            <label class="actions-switch-label" for="{{component.checkboxId}}">
-                                <span class="actions-switch-inner"></span>
-                                <span class="actions-switch-indicator"></span>
-                                <span class="actions-switch-text" data-label-yes="Yes" data-label-no="No"></span>
+                            <label class="admin__actions-switch-label"
+                                   for="{{component.checkboxId}}">
+                                <span data-text-on="Yes"
+                                      data-text-off="No"
+                                      class="admin__actions-switch-text"></span>
                             </label>
                         </div>
                     </td>
@@ -227,4 +251,3 @@
 <div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
     <div class="grid-loader"></div>
 </div>
-

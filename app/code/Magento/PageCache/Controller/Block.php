@@ -2,10 +2,13 @@
 /**
  * PageCache controller
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller;
+
+use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
@@ -15,15 +18,33 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     protected $translateInline;
 
     /**
+     * @var Json
+     */
+    private $jsonSerializer;
+
+    /**
+     * @var Base64Json
+     */
+    private $base64jsonSerializer;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param Json $jsonSerializer
+     * @param Base64Json $base64jsonSerializer
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Translate\InlineInterface $translateInline
+        \Magento\Framework\Translate\InlineInterface $translateInline,
+        Json $jsonSerializer = null,
+        Base64Json $base64jsonSerializer = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
+        $this->jsonSerializer = $jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->base64jsonSerializer = $base64jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
     }
 
     /**
@@ -39,8 +60,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         if (!$handles || !$blocks) {
             return [];
         }
-        $blocks = json_decode($blocks);
-        $handles = json_decode($handles);
+        $blocks = $this->jsonSerializer->unserialize($blocks);
+        $handles = $this->base64jsonSerializer->unserialize($handles);
 
         $this->_view->loadLayout($handles, true, true, false);
         $data = [];

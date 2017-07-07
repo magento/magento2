@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
 
     const CONTENT_TYPE = 'test-type';
 
-    const PREPROCESSOR_CLASS = 'Magento\Framework\View\Asset\PreProcessorInterface';
+    const PREPROCESSOR_CLASS = \Magento\Framework\View\Asset\PreProcessorInterface::class;
 
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -40,12 +40,13 @@ class PoolTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->sorterMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface')
-            ->getMockForAbstractClass();
+        $this->sorterMock = $this->getMockBuilder(
+            \Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface::class
+        )->getMockForAbstractClass();
     }
 
     /**
@@ -54,7 +55,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     private function getChainMock($type)
     {
         /** @var Chain|\PHPUnit_Framework_MockObject_MockObject $chainMock */
-        $chainMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
+        $chainMock = $this->getMockBuilder(\Magento\Framework\View\Asset\PreProcessor\Chain::class)
             ->disableOriginalConstructor()
             ->getMock();
 

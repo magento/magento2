@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -21,7 +21,9 @@ class StoreCookieManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeCookieManager = Bootstrap::getObjectManager()->create('Magento\Store\Model\StoreCookieManager');
+        $this->storeCookieManager = Bootstrap::getObjectManager()->create(
+            \Magento\Store\Model\StoreCookieManager::class
+        );
         $this->existingCookies = $_COOKIE;
     }
 
@@ -33,7 +35,7 @@ class StoreCookieManagerTest extends \PHPUnit_Framework_TestCase
     public function testSetCookie()
     {
         $storeCode = 'store code';
-        $store = $this->getMock('Magento\Store\Model\Store', ['getStorePath', 'getCode'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getStorePath', 'getCode'], [], '', false);
         $store->expects($this->once())->method('getStorePath')->willReturn('/');
         $store->expects($this->once())->method('getCode')->willReturn($storeCode);
 

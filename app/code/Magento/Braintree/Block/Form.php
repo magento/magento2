@@ -1,260 +1,149 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block;
 
-class Form extends \Magento\Payment\Block\Form\Cc
+use Magento\Backend\Model\Session\Quote;
+use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
+use Magento\Braintree\Model\Adminhtml\Source\CcType;
+use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Block\Form\Cc;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Config;
+use Magento\Vault\Model\VaultPaymentInterface;
+
+/**
+ * Class Form
+ */
+class Form extends Cc
 {
-    /**
-     * @var \Magento\Braintree\Model\Vault
-     */
-    protected $vault;
 
     /**
-     * @var \Magento\Braintree\Model\Config\Cc
-     */
-    protected $config;
-
-    /**
-     * @var \Magento\Checkout\Model\Type\Onepage
-     */
-    protected $onepage;
-
-    /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $checkoutSession;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var \Magento\Braintree\Helper\Data
-     */
-    protected $dataHelper;
-
-    /**
-     * @var \Magento\Backend\Model\Session\Quote
+     * @var Quote
      */
     protected $sessionQuote;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Payment\Model\Config $paymentConfig
-     * @param \Magento\Braintree\Model\Vault $vault
-     * @param \Magento\Braintree\Model\Config\Cc $config
-     * @param \Magento\Checkout\Model\Type\Onepage $onepage
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Braintree\Helper\Data $dataHelper
-     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
+     * @var Config
+     */
+    protected $gatewayConfig;
+
+    /**
+     * @var CcType
+     */
+    protected $ccType;
+
+    /**
+     * @var Data
+     */
+    private $paymentDataHelper;
+
+    /**
+     * @param Context $context
+     * @param Config $paymentConfig
+     * @param Quote $sessionQuote
+     * @param GatewayConfig $gatewayConfig
+     * @param CcType $ccType
      * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Payment\Model\Config $paymentConfig,
-        \Magento\Braintree\Model\Vault $vault,
-        \Magento\Braintree\Model\Config\Cc $config,
-        \Magento\Checkout\Model\Type\Onepage $onepage,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Braintree\Helper\Data $dataHelper,
-        \Magento\Backend\Model\Session\Quote $sessionQuote,
+        Context $context,
+        Config $paymentConfig,
+        Quote $sessionQuote,
+        GatewayConfig $gatewayConfig,
+        CcType $ccType,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
-        $this->vault = $vault;
-        $this->config = $config;
-        $this->onepage = $onepage;
-        $this->checkoutSession = $checkoutSession;
-        $this->customerSession = $customerSession;
-        $this->dataHelper = $dataHelper;
         $this->sessionQuote = $sessionQuote;
+        $this->gatewayConfig = $gatewayConfig;
+        $this->ccType = $ccType;
     }
 
     /**
-     * Internal constructor. Set template
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setTemplate('form.phtml');
-    }
-
-    /**
-     * Set quote and payment
-     * 
-     * @return $this
-     */
-    public function setMethodInfo()
-    {
-        $payment = $this->onepage
-            ->getQuote()
-            ->getPayment();
-        $this->setMethod($payment->getMethodInstance());
-
-        return $this;
-    }
-
-    /**
-     * Returns applicable stored cards
-     * 
-     * @return array
-     */
-    public function getStoredCards()
-    {
-        $storedCards = $this->vault->currentCustomerStoredCards();
-        $country = $this->checkoutSession->getQuote()->getBillingAddress()->getCountryId();
-        $cardTypes = $this->config->getApplicableCardTypes($country);
-        $applicableCards = [];
-        foreach ($storedCards as $card) {
-            if (in_array($this->dataHelper->getCcTypeCodeByName($card->cardType), $cardTypes)) {
-                $applicableCards[] = $card;
-            }
-        }
-        return $applicableCards;
-    }
-
-    /**
-     * Retrieve availables credit card types
-     *
+     * Get list of available card types of order billing address country
      * @return array
      */
     public function getCcAvailableTypes()
     {
-        if ($this->_appState->getAreaCode() === \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) {
-            $country = $this->sessionQuote->getQuote()->getBillingAddress()->getCountryId();
-        } else {
-            $country = $this->checkoutSession->getQuote()->getBillingAddress()->getCountryId();
-        }
-        $applicableTypes = $this->config->getApplicableCardTypes($country);
-        $types = $this->_paymentConfig->getCcTypes();
-        foreach (array_keys($types) as $code) {
-            if (!in_array($code, $applicableTypes)) {
-                unset($types[$code]);
-            }
-        }
-        return $types;
+        $configuredCardTypes = $this->getConfiguredCardTypes();
+        $countryId = $this->sessionQuote->getQuote()->getBillingAddress()->getCountryId();
+        return $this->filterCardTypesForCountry($configuredCardTypes, $countryId);
     }
 
     /**
-     * If card can be saved for further use
-     *
+     * Check if cvv validation is available
      * @return boolean
-     */
-    public function canSaveCard()
-    {
-        if ($this->config->useVault() &&
-            ($this->customerSession->isLoggedIn() ||
-            $this->onepage->getCheckoutMethod() == \Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCustomerLoggedIn()
-    {
-        return $this->customerSession->isLoggedIn();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCcDetectionEnabled()
-    {
-        return (bool)$this->config->getConfigData('enable_cc_detection');
-    }
-
-    /**
-     * @return bool
-     */
-    public function useVault()
-    {
-        return (bool)$this->config->useVault();
-    }
-
-    /**
-     * @return bool
      */
     public function useCvv()
     {
-        return (bool)$this->config->useCvv();
+        return $this->gatewayConfig->isCvvEnabled();
     }
 
     /**
+     * Check if vault enabled
      * @return bool
      */
-    public function is3dSecureEnabled()
+    public function isVaultEnabled()
     {
-        return (bool)$this->config->is3dSecureEnabled();
+        $storeId = $this->_storeManager->getStore()->getId();
+        $vaultPayment = $this->getVaultPayment();
+        return $vaultPayment->isActive($storeId);
     }
 
     /**
-     * @return string
+     * Get card types available for Braintree
+     * @return array
      */
-    public function getBraintreeDataJs()
+    private function getConfiguredCardTypes()
     {
-        return $this->config->getBraintreeDataJs();
-    }
+        $types = $this->ccType->getCcTypeLabelMap();
+        $configCardTypes = array_fill_keys($this->gatewayConfig->getAvailableCardTypes(), '');
 
-
-    /**
-     * If fraud detection is enabled
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function isFraudDetectionEnabled()
-    {
-        return $this->config->isFraudDetectionEnabled();
+        return array_intersect_key($types, $configCardTypes);
     }
 
     /**
-     * Get configuration data
-     *
-     * @param string $path
-     * @return mixed
+     * Filter card types for specific country
+     * @param array $configCardTypes
+     * @param string $countryId
+     * @return array
      */
-    public function getConfigData($path)
+    private function filterCardTypesForCountry(array $configCardTypes, $countryId)
     {
-        return $this->config->getConfigData($path);
+        $filtered = $configCardTypes;
+        $countryCardTypes = $this->gatewayConfig->getCountryAvailableCardTypes($countryId);
+        // filter card types only if specific card types are set for country
+        if (!empty($countryCardTypes)) {
+            $availableTypes = array_fill_keys($countryCardTypes, '');
+            $filtered = array_intersect_key($filtered, $availableTypes);
+        }
+        return $filtered;
     }
 
     /**
-     * @return string
+     * Get configured vault payment for Braintree
+     * @return VaultPaymentInterface
      */
-    public function getClientToken()
+    private function getVaultPayment()
     {
-        return $this->config->getClientToken();
+        return $this->getPaymentDataHelper()->getMethodInstance(ConfigProvider::CC_VAULT_CODE);
     }
 
     /**
-     * Retrieve today month
-     *
-     * @return string
+     * Get payment data helper instance
+     * @return Data
+     * @deprecated
      */
-    public function getTodayMonth()
+    private function getPaymentDataHelper()
     {
-        return $this->dataHelper->getTodayMonth();
-    }
-
-    /**
-     * Retrieve today year
-     *
-     * @return string
-     */
-    public function getTodayYear()
-    {
-        return $this->dataHelper->getTodayYear();
+        if ($this->paymentDataHelper === null) {
+            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        }
+        return $this->paymentDataHelper;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\AbstractController;
@@ -66,7 +66,7 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
             $order = $creditmemo->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         }
 
         if ($this->orderAuthorization->canView($order)) {
@@ -81,7 +81,7 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
         } else {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
+            if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
                 $resultRedirect->setPath('*/*/history');
             } else {
                 $resultRedirect->setPath('sales/guest/form');

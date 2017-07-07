@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -22,27 +22,29 @@
 //  Z axis
 //  ---------------------------------------------
 
-// z-index 2
-@actions-split__z-index: @z-index-2;
+//  z-index 2
 @action-multicheck__z-index: @z-index-2;
 
-// z-index 3
+//  z-index 3
 @data-grid-header__z-index: @z-index-3;
 
-// z-index 4
-@header__z-index: @z-index-4;
+//  z-index 4
 @page-actions__fixed__z-index: @z-index-4;
 @data-grid-overlay__z-index: @z-index-4;
+@data-grid-sticky-header__z-index: @page-actions__fixed__z-index - 2;
+@data-grid-overlay__z-index: @data-grid-sticky-header__z-index + 1;
+@actions-split__z-index: @data-grid-overlay__z-index + 1;
 
-// z-index 5
+//  z-index 5
+@header__z-index: @z-index-5;
 @field-tooltip__z-index: @z-index-5;
 @action-select__z-index: @z-index-5;
 @admin__page-nav-tooltip__z-index: @field-tooltip__z-index;
 
-// z-index 7
+//  z-index 7
 @menu__z-index: @z-index-7;
 
-// z-index 10
+//  z-index 10
 @data-grid-dargging-copy__z-index: @z-index-10;
 
 //  Base z-index for page wrapper to prevent inner page element overlap with pop-ups

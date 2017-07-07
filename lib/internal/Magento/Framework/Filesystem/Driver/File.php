@@ -2,13 +2,14 @@
 /**
  * Origin filesystem driver
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class File
@@ -193,16 +194,41 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function createDirectory($path, $permissions)
+    public function createDirectory($path, $permissions = 0777)
     {
-        $result = @mkdir($this->getScheme() . $path, $permissions, true);
+        return $this->mkdirRecursive($path, $permissions);
+    }
+
+    /**
+     * Create a directory recursively taking into account race conditions
+     *
+     * @param string $path
+     * @param int $permissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    private function mkdirRecursive($path, $permissions = 0777)
+    {
+        $path = $this->getScheme() . $path;
+        if (is_dir($path)) {
+            return true;
+        }
+        $parentDir = dirname($path);
+        while (!is_dir($parentDir)) {
+            $this->mkdirRecursive($parentDir, $permissions);
+        }
+        $result = @mkdir($path, $permissions);
         if (!$result) {
-            throw new FileSystemException(
-                new \Magento\Framework\Phrase(
-                    'Directory "%1" cannot be created %2',
-                    [$path, $this->getWarningMessage()]
-                )
-            );
+            if (is_dir($path)) {
+                $result = true;
+            } else {
+                throw new FileSystemException(
+                    new \Magento\Framework\Phrase(
+                        'Directory "%1" cannot be created %2',
+                        [$path, $this->getWarningMessage()]
+                    )
+                );
+            }
         }
         return $result;
     }
@@ -243,7 +269,7 @@ class File implements DriverInterface
     {
         clearstatcache();
         $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
-        $result = @glob($globPattern, GLOB_BRACE);
+        $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
         return is_array($result) ? $result : [];
     }
 
@@ -271,7 +297,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'The "%1" path cannot be renamed into "%2" %3',
+                    'The path "%1" cannot be renamed into "%2" %3',
                     [$oldPath, $newPath, $this->getWarningMessage()]
                 )
             );
@@ -676,16 +702,34 @@ class File implements DriverInterface
      */
     public function fileWrite($resource, $data)
     {
-        $result = @fwrite($resource, $data);
-        if (false === $result) {
-            throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+        $lenData = strlen($data);
+        for ($result = 0; $result < $lenData; $result += $fwrite) {
+            $fwrite = @fwrite($resource, substr($data, $result));
+            if (0 === $fwrite) {
+                $this->fileSystemException('Unable to write');
+            }
+            if (false === $fwrite) {
+                $this->fileSystemException(
                     'Error occurred during execution of fileWrite %1',
                     [$this->getWarningMessage()]
-                )
-            );
+                );
+            }
         }
+
         return $result;
+    }
+
+    /**
+     * Throw a FileSystemException with a Phrase of message and optional arguments
+     *
+     * @param string $message
+     * @param array $arguments
+     * @return void
+     * @throws FileSystemException
+     */
+    private function fileSystemException($message, $arguments = [])
+    {
+        throw new FileSystemException(new \Magento\Framework\Phrase($message, $arguments));
     }
 
     /**
@@ -799,6 +843,13 @@ class File implements DriverInterface
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {
+        // check if the path given is already an absolute path containing the
+        // basepath. so if the basepath starts at position 0 in the path, we
+        // must not concatinate them again because path is already absolute.
+        if (0 === strpos($path, $basePath)) {
+            return $this->getScheme($scheme) . $path;
+        }
+
         return $this->getScheme($scheme) . $basePath . ltrim($this->fixSeparator($path), '/');
     }
 

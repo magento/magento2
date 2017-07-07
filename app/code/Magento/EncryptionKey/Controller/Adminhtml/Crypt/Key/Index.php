@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key;
@@ -19,7 +19,7 @@ class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
     public function execute()
     {
         /** @var \Magento\Framework\App\DeploymentConfig\Writer $writer */
-        $writer = $this->_objectManager->get('Magento\Framework\App\DeploymentConfig\Writer');
+        $writer = $this->_objectManager->get(\Magento\Framework\App\DeploymentConfig\Writer::class);
         if (!$writer->checkIfWritable()) {
             $this->messageManager->addError(__('Deployment configuration file is not writable.'));
         }
@@ -29,7 +29,7 @@ class Index extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Encryption Key'));
 
         if (($formBlock = $this->_view->getLayout()->getBlock('crypt.key.form')) &&
-            ($data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true))) {
+            ($data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getFormData(true))) {
             /* @var \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form $formBlock */
             $formBlock->setFormData($data);
         }

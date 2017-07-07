@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,25 +18,25 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
      */
     protected $_object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_object = $this->getMock(
-            '\Magento\Framework\App\Route\ConfigInterface',
+            \Magento\Framework\App\Route\ConfigInterface::class,
             ['getRouteFrontName', 'getRouteByFrontName', 'getModulesByFrontName'],
             [],
             '',
             false
         );
 
-        $objectManager = $this->getMock('\Magento\Framework\ObjectManager\ObjectManager', ['get'], [], '', false);
+        $objectManager = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['get'], [], '', false);
         $objectManager->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\App\Route\ConfigInterface')
+            ->with(\Magento\Framework\App\Route\ConfigInterface::class)
             ->will($this->returnValue($this->_object));
 
         $this->_proxy = new \Magento\Framework\App\Route\ConfigInterface\Proxy(
             $objectManager,
-            'Magento\Framework\App\Route\ConfigInterface'
+            \Magento\Framework\App\Route\ConfigInterface::class
         );
     }
 

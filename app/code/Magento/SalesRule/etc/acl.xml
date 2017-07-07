@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,13 +11,13 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_CatalogRule::promo">
-                        <resource id="Magento_SalesRule::quote" sortOrder="30" title="Cart Price Rules" />
+                        <resource id="Magento_SalesRule::quote" sortOrder="30" title="Cart Price Rules" translate="title" />
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_SalesRule::config_promo" title="Promotion" sortOrder="90"/>
+                            <resource id="Magento_SalesRule::config_promo" title="Promotion" translate="title" sortOrder="90"/>
                         </resource>
                     </resource>
                 </resource>

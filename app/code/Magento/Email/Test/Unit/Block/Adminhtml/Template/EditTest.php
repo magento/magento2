@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EditTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,29 +49,32 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
-        $layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
-        $helperMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false, false);
-        $menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', [], [], '', false, false);
+        $this->_registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false, false);
+        $layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false, false);
+        $helperMock = $this->getMock(\Magento\Backend\Helper\Data::class, [], [], '', false, false);
+        $menuConfigMock = $this->getMock(\Magento\Backend\Model\Menu\Config::class, [], [], '', false, false);
         $menuMock = $this->getMock(
-            'Magento\Backend\Model\Menu',
+            \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock('Psr\Log\LoggerInterface')]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)],
+            '',
+            false,
+            false
         );
-        $menuItemMock = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false, false);
-        $urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false, false);
+        $menuItemMock = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false, false);
+        $urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false, false);
         $this->_configStructureMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure',
+            \Magento\Config\Model\Config\Structure::class,
             [],
             [],
             '',
             false,
             false
         );
-        $this->_emailConfigMock = $this->getMock('Magento\Email\Model\Template\Config', [], [], '', false);
+        $this->_emailConfigMock = $this->getMock(\Magento\Email\Model\Template\Config::class, [], [], '', false);
 
         $this->filesystemMock = $this->getMock(
-            '\Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead'],
             [],
             '',
@@ -76,7 +82,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
 
         $viewFilesystem = $this->getMock(
-            '\Magento\Framework\View\Filesystem',
+            \Magento\Framework\View\Filesystem::class,
             ['getTemplateFileName'],
             [],
             '',
@@ -100,7 +106,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
             'filesystem' => $this->filesystemMock,
             'viewFileSystem' => $viewFilesystem,
         ];
-        $arguments = $objectManager->getConstructArguments('Magento\Email\Block\Adminhtml\Template\Edit', $params);
+        $arguments = $objectManager->getConstructArguments(
+            \Magento\Email\Block\Adminhtml\Template\Edit::class,
+            $params
+        );
 
         $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
         $menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($menuMock));
@@ -109,7 +118,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $layoutMock->expects($this->any())->method('helper')->will($this->returnValue($helperMock));
 
-        $this->_block = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Edit', $arguments);
+        $this->_block = $objectManager->getObject(\Magento\Email\Block\Adminhtml\Template\Edit::class, $arguments);
     }
 
     /**
@@ -119,7 +128,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrentlyUsedForPaths()
     {
         $sectionMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Section',
+            \Magento\Config\Model\Config\Structure\Element\Section::class,
             [],
             [],
             '',
@@ -127,7 +136,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $groupMock1 = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Group',
+            \Magento\Config\Model\Config\Structure\Element\Group::class,
             [],
             [],
             '',
@@ -135,7 +144,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $groupMock2 = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Group',
+            \Magento\Config\Model\Config\Structure\Element\Group::class,
             [],
             [],
             '',
@@ -143,7 +152,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $groupMock3 = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Group',
+            \Magento\Config\Model\Config\Structure\Element\Group::class,
             [],
             [],
             '',
@@ -151,7 +160,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false
         );
         $filedMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Field',
+            \Magento\Config\Model\Config\Structure\Element\Field::class,
             [],
             [],
             '',
@@ -181,7 +190,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('getElementByPathParts')
             ->will($this->returnValueMap($map));
 
-        $templateMock = $this->getMock('Magento\Email\Model\BackendTemplate', [], [], '', false, false);
+        $templateMock = $this->getMock(\Magento\Email\Model\BackendTemplate::class, [], [], '', false, false);
         $templateMock->expects($this->once())
             ->method('getSystemConfigPathsWhereCurrentlyUsed')
             ->will($this->returnValue($this->_fixtureConfigPath));
@@ -224,7 +233,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultTemplatesAsOptionsArray()
     {
         $directoryMock = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\Read',
+            \Magento\Framework\Filesystem\Directory\Read::class,
             [],
             [],
             '',

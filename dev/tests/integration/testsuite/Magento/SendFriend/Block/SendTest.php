@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SendFriend\Block;
@@ -16,7 +16,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = Bootstrap::getObjectManager()->create('Magento\SendFriend\Block\Send');
+        $this->_block = Bootstrap::getObjectManager()->create(\Magento\SendFriend\Block\Send::class);
     }
 
     /**
@@ -54,11 +54,11 @@ class SendTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomerFieldFromSession($field, $value)
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
         /** @var $session \Magento\Customer\Model\Session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', [$logger]);
+        $session = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Session::class, [$logger]);
         /** @var \Magento\Customer\Api\AccountManagementInterface $service */
-        $service = Bootstrap::getObjectManager()->create('Magento\Customer\Api\AccountManagementInterface');
+        $service = Bootstrap::getObjectManager()->create(\Magento\Customer\Api\AccountManagementInterface::class);
         $customer = $service->authenticate('customer@example.com', 'password');
         $session->setCustomerDataAsLoggedIn($customer);
         $this->assertEquals($value, $this->_callBlockMethod($field));

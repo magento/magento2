@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Api\Test\Unit\Api;
 
@@ -23,10 +21,12 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->imageContentValidator = $this->objectManager->getObject('Magento\Framework\Api\ImageContentValidator');
+        $this->imageContentValidator = $this->objectManager->getObject(
+            \Magento\Framework\Api\ImageContentValidator::class
+        );
     }
 
     /**
@@ -35,7 +35,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidEmptyContent()
     {
-        $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
+        $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $imageContent->expects($this->any())
@@ -51,7 +51,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidEmptyProperties()
     {
-        $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
+        $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $imageContent->expects($this->any())
@@ -70,7 +70,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
         $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 
-        $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
+        $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $imageContent->expects($this->any())
@@ -92,7 +92,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
         $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 
-        $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
+        $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $imageContent->expects($this->any())
@@ -113,7 +113,7 @@ class ImageContentValidatorTest extends \PHPUnit_Framework_TestCase
         $pathToImageFile = __DIR__ . '/_files/image.jpg';
         $encodedData = @base64_encode(file_get_contents($pathToImageFile));
 
-        $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
+        $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $imageContent->expects($this->any())

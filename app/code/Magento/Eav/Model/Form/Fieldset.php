@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Form;
@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Form;
 /**
  * Eav Form Fieldset Model
  *
+ * @api
  * @method \Magento\Eav\Model\ResourceModel\Form\Fieldset getResource()
  * @method int getTypeId()
  * @method \Magento\Eav\Model\Form\Fieldset setTypeId(int $value)
@@ -15,8 +16,6 @@ namespace Magento\Eav\Model\Form;
  * @method \Magento\Eav\Model\Form\Fieldset setCode(string $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Form\Fieldset setSortOrder(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Fieldset extends \Magento\Framework\Model\AbstractModel
 {
@@ -61,7 +60,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Form\Fieldset');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Form\Fieldset::class);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -138,7 +138,7 @@
          <Rate>5.60</Rate>
       </Postage>
       <Postage CLASSID="4">
-         <MailService>Standard Post&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt;</MailService>
+         <MailService>Retail Ground&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt;</MailService>
          <Rate>8.85</Rate>
       </Postage>
       <Postage CLASSID="6">

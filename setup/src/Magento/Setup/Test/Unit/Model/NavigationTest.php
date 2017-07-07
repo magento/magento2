@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serviceLocatorMock =
-            $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
+            $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
         $this->serviceLocatorMock
             ->expects($this->exactly(2))
             ->method('get')
@@ -49,7 +49,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                 ]
             ]));
         $this->deploymentConfig = $this->getMock(
-            'Magento\Framework\App\DeploymentConfig',
+            \Magento\Framework\App\DeploymentConfig::class,
             [],
             [],
             '',

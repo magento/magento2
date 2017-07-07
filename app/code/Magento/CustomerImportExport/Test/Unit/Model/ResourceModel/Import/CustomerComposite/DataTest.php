@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Cust
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,7 +35,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $statementMock \Magento\Framework\DB\Statement\Pdo\Mysql */
         $statementMock = $this->getMock(
-            'Magento\Framework\DB\Statement\Pdo\Mysql',
+            \Magento\Framework\DB\Statement\Pdo\Mysql::class,
             ['setFetchMode', 'getIterator'],
             [],
             '',
@@ -47,13 +50,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $selectMock \Magento\Framework\DB\Select */
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'order'], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['from', 'order'], [], '', false);
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $selectMock->expects($this->any())->method('order')->will($this->returnSelf());
 
         /** @var $connectionMock \Magento\Framework\DB\Adapter\AdapterInterface */
         $connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'from', 'order', 'query'],
             [],
             '',
@@ -64,7 +67,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
         $resourceModelMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -97,26 +100,26 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $resource = $dependencies['resource'];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $jsonDecoderMock = $this->getMockBuilder('Magento\Framework\Json\DecoderInterface')
+        $jsonDecoderMock = $this->getMockBuilder(\Magento\Framework\Json\DecoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $jsonDecoderMock->expects($this->once())
             ->method('decode')
-            ->willReturn(\Zend_Json::decode($bunchData));
+            ->willReturn(json_decode($bunchData, true));
         $jsonHelper = $helper->getObject(
-            'Magento\Framework\Json\Helper\Data',
+            \Magento\Framework\Json\Helper\Data::class,
             [
                 'jsonDecoder' => $jsonDecoderMock,
             ]
         );
         unset($dependencies['resource'], $dependencies['json_helper']);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $object = $objectManager->getObject(
-            '\Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\Data',
+            \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\Data::class,
             [
                 'context' => $contextMock,
                 'jsonHelper' => $jsonHelper,
@@ -137,7 +140,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         return [
             'address entity' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_ADDRESS,
-                '$bunchData' => \Zend_Json::encode(
+                '$bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -167,7 +170,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'customer entity default scope' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => \Zend_Json::encode(
+                '$bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -199,7 +202,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'customer entity address scope' => [
                 '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => \Zend_Json::encode(
+                '$bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_ADDRESS,

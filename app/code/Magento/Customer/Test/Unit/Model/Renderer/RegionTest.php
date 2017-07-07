@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Renderer;
@@ -14,49 +14,49 @@ class RegionTest extends \PHPUnit_Framework_TestCase
     public function testRender($regionCollection)
     {
         $countryFactoryMock = $this->getMock(
-            'Magento\Directory\Model\CountryFactory',
-            ['create'],
+            \Magento\Directory\Model\CountryFactory::class,
+            [],
             [],
             '',
             false
         );
         $directoryHelperMock = $this->getMock(
-            'Magento\Directory\Helper\Data',
+            \Magento\Directory\Helper\Data::class,
             ['isRegionRequired'],
             [],
             '',
             false
         );
-        $escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
         $elementMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\AbstractElement',
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
             ['getForm', 'getHtmlAttributes'],
             [],
             '',
             false
         );
         $countryMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\AbstractElement',
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
             ['getValue'],
             [],
             '',
             false
         );
         $regionMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\AbstractElement',
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [],
             [],
             '',
             false
         );
         $countryModelMock = $this->getMock(
-            'Magento\Directory\Model\Country',
+            \Magento\Directory\Model\Country::class,
             ['setId', 'getLoadedRegionCollection', 'toOptionArray', '__wakeup'],
             [],
             '',
             false
         );
-        $formMock = $this->getMock('Magento\Framework\Data\Form', ['getElement'], [], '', false);
+        $formMock = $this->getMock(\Magento\Framework\Data\Form::class, ['getElement'], [], '', false);
 
         $elementMock->expects($this->any())->method('getForm')->will($this->returnValue($formMock));
         $elementMock->expects(
@@ -100,7 +100,7 @@ class RegionTest extends \PHPUnit_Framework_TestCase
 
         $model = new \Magento\Customer\Model\Renderer\Region($countryFactoryMock, $directoryHelperMock, $escaperMock);
 
-        $static = new \ReflectionProperty('Magento\Customer\Model\Renderer\Region', '_regionCollections');
+        $static = new \ReflectionProperty(\Magento\Customer\Model\Renderer\Region::class, '_regionCollections');
         $static->setAccessible(true);
         $static->setValue([]);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl;
@@ -25,14 +25,14 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
      */
     protected $entitySnapshot;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         $objectManager = new ObjectManager($this);
 
         $this->entitySnapshot = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
             ['registerSnapshot'],
             [],
             '',
@@ -40,7 +40,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
         );
 
         $this->subject = $objectManager->getObject(
-            'Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub',
+            \Magento\Eav\Test\Unit\Model\Entity\Collection\VersionControl\AbstractCollectionStub::class,
             [
                 'entityFactory' => $this->coreEntityFactoryMock,
                 'universalFactory' => $this->validatorFactoryMock,

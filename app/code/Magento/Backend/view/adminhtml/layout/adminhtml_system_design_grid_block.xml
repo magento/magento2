@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -41,6 +41,8 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="package">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Design</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Framework\View\Design\Theme\Label\Options"/>
                             <argument name="width" xsi:type="string">150px</argument>
                             <argument name="index" xsi:type="string">design</argument>
                         </arguments>
@@ -51,6 +53,7 @@
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="width" xsi:type="string">100px</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="index" xsi:type="string">date_from</argument>
                         </arguments>
                     </block>
@@ -60,6 +63,7 @@
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="width" xsi:type="string">100px</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="index" xsi:type="string">date_to</argument>
                         </arguments>
                     </block>

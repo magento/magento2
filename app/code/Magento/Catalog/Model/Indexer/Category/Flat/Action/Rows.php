@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
@@ -122,14 +122,16 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         /** @var \Magento\Framework\DB\Select $select */
         $select = $this->connection->select()->from(
             ['cf' => $this->getTableNameByStore($store, $useTempTable)]
-        )->joinLeft(
-            ['ce' => $this->getTableName('catalog_category_entity')],
-            'cf.path = ce.path',
-            []
         )->where(
             "cf.path = {$rootIdExpr} OR cf.path = {$rootCatIdExpr} OR cf.path like {$catIdExpr}"
         )->where(
-            'ce.entity_id IS NULL'
+            'cf.entity_id NOT IN (?)',
+            new \Zend_Db_Expr(
+                $this->connection->select()->from(
+                    ['ce' => $this->getTableName('catalog_category_entity')],
+                    ['entity_id']
+                )
+            )
         );
 
         $sql = $select->deleteFromSelect('cf');
@@ -157,7 +159,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         )->where(
             "path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}"
         )->where(
-            'entity_id IN (?)',
+            "entity_id IN (?)",
             $ids
         );
 

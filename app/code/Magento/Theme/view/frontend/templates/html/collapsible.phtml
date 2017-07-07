@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,11 @@
 
 ?>
 
-<div class="block <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>">
-    <div class="title <?php /* @escapeNotVerified */ echo $block->getBlockCss();?>-title" data-mage-init='{"toggleAdvanced": {"toggleContainers": "#<?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>", "selectorsToggleClass": "active"}}'>
-        <strong><?php /* @escapeNotVerified */ echo $block->getBlockTitle(); ?></strong>
+<div class="block <?= /* @escapeNotVerified */ $block->getBlockCss() ?>">
+    <div class="title <?= /* @escapeNotVerified */ $block->getBlockCss() ?>-title" data-mage-init='{"toggleAdvanced": {"toggleContainers": "#<?= /* @escapeNotVerified */ $block->getBlockCss() ?>", "selectorsToggleClass": "active"}}'>
+        <strong><?= /* @escapeNotVerified */ $block->getBlockTitle() ?></strong>
     </div>
-    <div class="content <?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>-content" id="<?php /* @escapeNotVerified */ echo $block->getBlockCss(); ?>">
-        <?php echo $block->getChildHtml(); ?>
+    <div class="content <?= /* @escapeNotVerified */ $block->getBlockCss() ?>-content" id="<?= /* @escapeNotVerified */ $block->getBlockCss() ?>">
+        <?= $block->getChildHtml() ?>
     </div>
 </div>

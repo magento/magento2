@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,10 +13,15 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQuery;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFactory;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -87,50 +92,51 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreConfig;
+    protected $coreConfig;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    protected $logger;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
-     * @var \Magento\OfflineShipping\Model\Carrier\Tablerate
+     * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
      */
-    protected $_carrierTablerate;
-
-    /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
-     */
-    protected $_countryCollectionFactory;
-
-    /**
-     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
-     */
-    protected $_regionCollectionFactory;
+    protected $carrierTablerate;
 
     /**
      * Filesystem instance
      *
      * @var \Magento\Framework\Filesystem
      */
-    protected $_filesystem;
+    protected $filesystem;
 
     /**
+     * @var Import
+     */
+    private $import;
+
+    /**
+     * @var RateQueryFactory
+     */
+    private $rateQueryFactory;
+
+    /**
+     * Tablerate constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate
-     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
-     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param string $connectionName
+     * @param Filesystem $filesystem
+     * @param RateQueryFactory $rateQueryFactory
+     * @param Import $import
+     * @param null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -138,19 +144,19 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate,
-        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
-        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Framework\Filesystem $filesystem,
+        Import $import,
+        RateQueryFactory $rateQueryFactory,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->_coreConfig = $coreConfig;
-        $this->_logger = $logger;
-        $this->_storeManager = $storeManager;
-        $this->_carrierTablerate = $carrierTablerate;
-        $this->_countryCollectionFactory = $countryCollectionFactory;
-        $this->_regionCollectionFactory = $regionCollectionFactory;
-        $this->_filesystem = $filesystem;
+        $this->coreConfig = $coreConfig;
+        $this->logger = $logger;
+        $this->storeManager = $storeManager;
+        $this->carrierTablerate = $carrierTablerate;
+        $this->filesystem = $filesystem;
+        $this->import = $import;
+        $this->rateQueryFactory = $rateQueryFactory;
     }
 
     /**
@@ -172,71 +178,64 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $connection = $this->getConnection();
-        $bind = [
-            ':website_id' => (int)$request->getWebsiteId(),
-            ':country_id' => $request->getDestCountryId(),
-            ':region_id' => (int)$request->getDestRegionId(),
-            ':postcode' => $request->getDestPostcode(),
-        ];
-        $select = $connection->select()->from(
-            $this->getMainTable()
-        )->where(
-            'website_id = :website_id'
-        )->order(
-            ['dest_country_id DESC', 'dest_region_id DESC', 'dest_zip DESC']
-        )->limit(
-            1
-        );
 
-        // Render destination condition
-        $orWhere = '(' . implode(
-            ') OR (',
-            [
-                "dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = :postcode",
-                "dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = ''",
+        $select = $connection->select()->from($this->getMainTable());
+        /** @var RateQuery $rateQuery */
+        $rateQuery = $this->rateQueryFactory->create(['request' => $request]);
 
-                // Handle asterix in dest_zip field
-                "dest_country_id = :country_id AND dest_region_id = :region_id AND dest_zip = '*'",
-                "dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = '*'",
-                "dest_country_id = '0' AND dest_region_id = :region_id AND dest_zip = '*'",
-                "dest_country_id = '0' AND dest_region_id = 0 AND dest_zip = '*'",
-                "dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = ''",
-                "dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = :postcode",
-                "dest_country_id = :country_id AND dest_region_id = 0 AND dest_zip = '*'"
-            ]
-        ) . ')';
-        $select->where($orWhere);
+        $rateQuery->prepareSelect($select);
+        $bindings = $rateQuery->getBindings();
 
-        // Render condition by condition name
-        if (is_array($request->getConditionName())) {
-            $orWhere = [];
-            $i = 0;
-            foreach ($request->getConditionName() as $conditionName) {
-                $bindNameKey = sprintf(':condition_name_%d', $i);
-                $bindValueKey = sprintf(':condition_value_%d', $i);
-                $orWhere[] = "(condition_name = {$bindNameKey} AND condition_value <= {$bindValueKey})";
-                $bind[$bindNameKey] = $conditionName;
-                $bind[$bindValueKey] = $request->getData($conditionName);
-                $i++;
-            }
-
-            if ($orWhere) {
-                $select->where(implode(' OR ', $orWhere));
-            }
-        } else {
-            $bind[':condition_name'] = $request->getConditionName();
-            $bind[':condition_value'] = $request->getData($request->getConditionName());
-
-            $select->where('condition_name = :condition_name');
-            $select->where('condition_value <= :condition_value');
-        }
-
-        $result = $connection->fetchRow($select, $bind);
+        $result = $connection->fetchRow($select, $bindings);
         // Normalize destination zip code
         if ($result && $result['dest_zip'] == '*') {
             $result['dest_zip'] = '';
         }
+
         return $result;
+    }
+
+    /**
+     * @param array $condition
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function deleteByCondition(array $condition)
+    {
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
+        $connection->delete($this->getMainTable(), $condition);
+        $connection->commit();
+        return $this;
+    }
+
+    /**
+     * @param array $fields
+     * @param array $values
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     */
+    private function importData(array $fields, array $values)
+    {
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
+
+        try {
+            if (count($fields) && count($values)) {
+                $this->getConnection()->insertArray($this->getMainTable(), $fields, $values);
+                $this->_importedRows += count($values);
+            }
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $connection->rollback();
+            throw new \Magento\Framework\Exception\LocalizedException(__('Unable to import data'), $e);
+        } catch (\Exception $e) {
+            $connection->rollback();
+            $this->logger->critical($e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Something went wrong while importing table rates.')
+            );
+        }
+        $connection->commit();
     }
 
     /**
@@ -252,142 +251,72 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function uploadAndImport(\Magento\Framework\DataObject $object)
     {
+        /**
+         * @var \Magento\Framework\App\Config\Value $object
+         */
         if (empty($_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'])) {
             return $this;
         }
+        $filePath = $_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'];
 
-        $csvFile = $_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'];
-        $website = $this->_storeManager->getWebsite($object->getScopeId());
+        $websiteId = $this->storeManager->getWebsite($object->getScopeId())->getId();
+        $conditionName = $this->getConditionName($object);
 
-        $this->_importWebsiteId = (int)$website->getId();
-        $this->_importUniqueHash = [];
-        $this->_importErrors = [];
-        $this->_importedRows = 0;
-
-        $tmpDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
-        $path = $tmpDirectory->getRelativePath($csvFile);
-        $stream = $tmpDirectory->openFile($path);
-
-        // check and skip headers
-        $headers = $stream->readCsv();
-        if ($headers === false || count($headers) < 5) {
-            $stream->close();
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct Table Rates File Format.'));
-        }
-
-        if ($object->getData('groups/tablerate/fields/condition_name/inherit') == '1') {
-            $conditionName = (string)$this->_coreConfig->getValue('carriers/tablerate/condition_name', 'default');
-        } else {
-            $conditionName = $object->getData('groups/tablerate/fields/condition_name/value');
-        }
-        $this->_importConditionName = $conditionName;
-
-        $connection = $this->getConnection();
-        $connection->beginTransaction();
-
+        $file = $this->getCsvFile($filePath);
         try {
-            $rowNumber = 1;
-            $importData = [];
-
-            $this->_loadDirectoryCountries();
-            $this->_loadDirectoryRegions();
-
             // delete old data by website and condition name
             $condition = [
-                'website_id = ?' => $this->_importWebsiteId,
-                'condition_name = ?' => $this->_importConditionName,
+                'website_id = ?' => $websiteId,
+                'condition_name = ?' => $conditionName,
             ];
-            $connection->delete($this->getMainTable(), $condition);
+            $this->deleteByCondition($condition);
 
-            while (false !== ($csvLine = $stream->readCsv())) {
-                $rowNumber++;
-
-                if (empty($csvLine)) {
-                    continue;
-                }
-
-                $row = $this->_getImportRow($csvLine, $rowNumber);
-                if ($row !== false) {
-                    $importData[] = $row;
-                }
-
-                if (count($importData) == 5000) {
-                    $this->_saveImportData($importData);
-                    $importData = [];
-                }
+            $columns = $this->import->getColumns();
+            $conditionFullName = $this->_getConditionFullName($conditionName);
+            foreach ($this->import->getData($file, $websiteId, $conditionName, $conditionFullName) as $bunch) {
+                $this->importData($columns, $bunch);
             }
-            $this->_saveImportData($importData);
-            $stream->close();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $connection->rollback();
-            $stream->close();
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         } catch (\Exception $e) {
-            $connection->rollback();
-            $stream->close();
-            $this->_logger->critical($e);
+            $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while importing table rates.')
             );
+        } finally {
+            $file->close();
         }
 
-        $connection->commit();
-
-        if ($this->_importErrors) {
+        if ($this->import->hasErrors()) {
             $error = __(
                 'We couldn\'t import this file because of these errors: %1',
-                implode(" \n", $this->_importErrors)
+                implode(" \n", $this->import->getErrors())
             );
             throw new \Magento\Framework\Exception\LocalizedException($error);
         }
-
-        return $this;
     }
 
     /**
-     * Load directory countries
-     *
-     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
+     * @param \Magento\Framework\DataObject $object
+     * @return mixed|string
      */
-    protected function _loadDirectoryCountries()
+    public function getConditionName(\Magento\Framework\DataObject $object)
     {
-        if ($this->_importIso2Countries !== null && $this->_importIso3Countries !== null) {
-            return $this;
+        if ($object->getData('groups/tablerate/fields/condition_name/inherit') == '1') {
+            $conditionName = (string)$this->coreConfig->getValue('carriers/tablerate/condition_name', 'default');
+        } else {
+            $conditionName = $object->getData('groups/tablerate/fields/condition_name/value');
         }
-
-        $this->_importIso2Countries = [];
-        $this->_importIso3Countries = [];
-
-        /** @var $collection \Magento\Directory\Model\ResourceModel\Country\Collection */
-        $collection = $this->_countryCollectionFactory->create();
-        foreach ($collection->getData() as $row) {
-            $this->_importIso2Countries[$row['iso2_code']] = $row['country_id'];
-            $this->_importIso3Countries[$row['iso3_code']] = $row['country_id'];
-        }
-
-        return $this;
+        return $conditionName;
     }
 
     /**
-     * Load directory regions
-     *
-     * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
+     * @param string $filePath
+     * @return \Magento\Framework\Filesystem\File\ReadInterface
      */
-    protected function _loadDirectoryRegions()
+    private function getCsvFile($filePath)
     {
-        if ($this->_importRegions !== null) {
-            return $this;
-        }
-
-        $this->_importRegions = [];
-
-        /** @var $collection \Magento\Directory\Model\ResourceModel\Region\Collection */
-        $collection = $this->_regionCollectionFactory->create();
-        foreach ($collection->getData() as $row) {
-            $this->_importRegions[$row['country_id']][$row['code']] = (int)$row['region_id'];
-        }
-
-        return $this;
+        $tmpDirectory = $this->filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
+        $path = $tmpDirectory->getRelativePath($filePath);
+        return $tmpDirectory->openFile($path);
     }
 
     /**
@@ -399,108 +328,11 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _getConditionFullName($conditionName)
     {
         if (!isset($this->_conditionFullNames[$conditionName])) {
-            $name = $this->_carrierTablerate->getCode('condition_name_short', $conditionName);
+            $name = $this->carrierTablerate->getCode('condition_name_short', $conditionName);
             $this->_conditionFullNames[$conditionName] = $name;
         }
 
         return $this->_conditionFullNames[$conditionName];
-    }
-
-    /**
-     * Validate row for import and return table rate array or false
-     * Error will be add to _importErrors array
-     *
-     * @param array $row
-     * @param int $rowNumber
-     * @return array|false
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function _getImportRow($row, $rowNumber = 0)
-    {
-        // validate row
-        if (count($row) < 5) {
-            $this->_importErrors[] = __('Please correct Table Rates format in the Row #%1.', $rowNumber);
-            return false;
-        }
-
-        // strip whitespace from the beginning and end of each row
-        foreach ($row as $k => $v) {
-            $row[$k] = trim($v);
-        }
-
-        // validate country
-        if (isset($this->_importIso2Countries[$row[0]])) {
-            $countryId = $this->_importIso2Countries[$row[0]];
-        } elseif (isset($this->_importIso3Countries[$row[0]])) {
-            $countryId = $this->_importIso3Countries[$row[0]];
-        } elseif ($row[0] == '*' || $row[0] == '') {
-            $countryId = '0';
-        } else {
-            $this->_importErrors[] = __('Please correct Country "%1" in the Row #%2.', $row[0], $rowNumber);
-            return false;
-        }
-
-        // validate region
-        if ($countryId != '0' && isset($this->_importRegions[$countryId][$row[1]])) {
-            $regionId = $this->_importRegions[$countryId][$row[1]];
-        } elseif ($row[1] == '*' || $row[1] == '') {
-            $regionId = 0;
-        } else {
-            $this->_importErrors[] = __('Please correct Region/State "%1" in the Row #%2.', $row[1], $rowNumber);
-            return false;
-        }
-
-        // detect zip code
-        if ($row[2] == '*' || $row[2] == '') {
-            $zipCode = '*';
-        } else {
-            $zipCode = $row[2];
-        }
-
-        // validate condition value
-        $value = $this->_parseDecimalValue($row[3]);
-        if ($value === false) {
-            $this->_importErrors[] = __(
-                'Please correct %1 "%2" in the Row #%3.',
-                $this->_getConditionFullName($this->_importConditionName),
-                $row[3],
-                $rowNumber
-            );
-            return false;
-        }
-
-        // validate price
-        $price = $this->_parseDecimalValue($row[4]);
-        if ($price === false) {
-            $this->_importErrors[] = __('Please correct Shipping Price "%1" in the Row #%2.', $row[4], $rowNumber);
-            return false;
-        }
-
-        // protect from duplicate
-        $hash = sprintf("%s-%d-%s-%F", $countryId, $regionId, $zipCode, $value);
-        if (isset($this->_importUniqueHash[$hash])) {
-            $this->_importErrors[] = __(
-                'Duplicate Row #%1 (Country "%2", Region/State "%3", Zip "%4" and Value "%5")',
-                $rowNumber,
-                $row[0],
-                $row[1],
-                $zipCode,
-                $value
-            );
-            return false;
-        }
-        $this->_importUniqueHash[$hash] = true;
-
-        return [
-            $this->_importWebsiteId,    // website_id
-            $countryId,                 // dest_country_id
-            $regionId,                  // dest_region_id,
-            $zipCode,                   // dest_zip
-            $this->_importConditionName,// condition_name,
-            $value,                     // condition_value
-            $price                      // price
-        ];
     }
 
     /**
@@ -526,24 +358,5 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $this;
-    }
-
-    /**
-     * Parse and validate positive decimal value
-     * Return false if value is not decimal or is not positive
-     *
-     * @param string $value
-     * @return bool|float
-     */
-    protected function _parseDecimalValue($value)
-    {
-        if (!is_numeric($value)) {
-            return false;
-        }
-        $value = (double)sprintf('%.4F', $value);
-        if ($value < 0.0000) {
-            return false;
-        }
-        return $value;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -25,5 +25,6 @@
         <field name="resource_access" group="role-resources" />
         <field name="roles_resources" group="role-resources" />
         <field name="in_role_users" group="in_role_users" source="Magento\User\Test\Fixture\Role\InRoleUsers" />
+        <field name="current_password" group="role-info" source="Magento\User\Test\Fixture\User\CurrentPassword" />
     </fixture>
 </config>

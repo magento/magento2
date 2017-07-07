@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,30 +41,32 @@ class DiscountCalculatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [],
             [],
             '',
             false
         );
         $this->priceInfoMock = $this->getMock(
-            'Magento\Framework\Pricing\PriceInfo\Base',
+            \Magento\Framework\Pricing\PriceInfo\Base::class,
             ['getPrice', 'getPrices'],
             [],
             '',
             false
         );
         $this->finalPriceMock = $this->getMock(
-            'Magento\Catalog\Pricing\Price\FinalPrice',
+            \Magento\Catalog\Pricing\Price\FinalPrice::class,
             [],
             [],
             '',
             false
         );
-        $this->priceMock = $this->getMockForAbstractClass('Magento\Bundle\Pricing\Price\DiscountProviderInterface');
+        $this->priceMock = $this->getMockForAbstractClass(
+            \Magento\Bundle\Pricing\Price\DiscountProviderInterface::class
+        );
         $this->calculator = new \Magento\Bundle\Pricing\Price\DiscountCalculator();
     }
 

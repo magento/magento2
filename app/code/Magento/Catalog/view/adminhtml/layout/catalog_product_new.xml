@@ -1,59 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
     <head>
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
-        <css src="Magento_Catalog::catalog/category-selector.css"/>
-        <css src="Magento_Catalog::product/product.css"/>
     </head>
     <update handle="editor"/>
-    <body>
-        <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
-        <referenceContainer name="content">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit" name="product_edit">
-                <container name="product-type-tabs" label="Tabs">
-            </container>
-            </block>
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet" name="attribute-set-info" template="Magento_Catalog::catalog/product/edit/attribute_set.phtml"/>
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\NewCategory" name="new-category" template="Magento_Catalog::catalog/product/edit/category/new/form.phtml"/>
-        </referenceContainer>
-        <referenceContainer name="left">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs" name="product_tabs">
-                <!-- @todo ui: remove arguments within .admin__scope-old -->
-                <arguments>
-                    <argument name="panels_class" xsi:type="string">admin__scope-old</argument>
-                </arguments>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab" name="product_tabs.child-tab" as="child-tab"  template="Magento_Catalog::product/edit/tabs/child_tab.phtml"/>
-                <block class="Magento\Backend\Block\Widget\Tab" name="product_tabs.customer_options" as="customer_options">
-                    <arguments>
-                        <argument name="label" xsi:type="string" translate="true">Custom Options</argument>
-                        <argument name="url" xsi:type="url" path="catalog/*/options">
-                            <param name="_current">1</param>
-                        </argument>
-                        <argument name="class" xsi:type="string">ajax</argument>
-                    </arguments>
-                </block>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory" name="product_tabs.advanced-inventory" as="advanced-inventory">
-                    <arguments>
-                        <argument name="label" xsi:type="string" translate="true">Advanced Inventory</argument>
-                        <argument name="group_code" xsi:type="string">advanced</argument>
-                    </arguments>
-                </block>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts" name="product_tabs.product-alerts" as="product-alerts">
-                    <arguments>
-                        <argument name="label" xsi:type="string" translate="true">Product Alerts</argument>
-                    </arguments>
-                </block>
-            </block>
-        </referenceContainer>
-        <referenceContainer name="js">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Js" name="catalog_product_js" template="catalog/product/js.phtml"/>
-            <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml"/>
-        </referenceContainer>
-    </body>
+    <update handle="catalog_product_form"/>
 </page>

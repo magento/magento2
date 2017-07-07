@@ -1,100 +1,192 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use \Magento\Framework\App\PageCache\Kernel;
+use \Magento\Framework\App\Http\ContextFactory;
+use \Magento\Framework\App\Response\HttpFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class KernelTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Kernel
-     */
+    /** @var Kernel */
     protected $kernel;
 
-    /**
-     * @var \Magento\Framework\App\PageCache\Cache|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\PageCache\Cache|\PHPUnit_Framework_MockObject_MockObject */
     protected $cacheMock;
 
-    /**
-     * @var \Magento\Framework\App\PageCache\Identifier|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\PageCache\Identifier|\PHPUnit_Framework_MockObject_MockObject */
     protected $identifierMock;
 
-    /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $requestMock;
 
-    /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $responseMock;
+
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Cache\Type */
+    private $fullPageCacheMock;
+
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    private $httpResponseMock;
+
+    /** @var ContextFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $contextFactoryMock;
+
+    /** @var HttpFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $httpFactoryMock;
+
+    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializer;
+
+    /** @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject */
+    private $contextMock;
 
     /**
      * Setup
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', [], [], '', false);
-        $this->identifierMock =
-            $this->getMock('Magento\Framework\App\PageCache\Identifier', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->kernel = new Kernel($this->cacheMock, $this->identifierMock, $this->requestMock);
-        $this->responseMock = $this->getMockBuilder(
-            'Magento\Framework\App\Response\Http'
-        )->setMethods(
-            ['getHeader', 'getHttpResponseCode', 'setNoCacheHeaders', 'clearHeader', '__wakeup']
-        )->disableOriginalConstructor()->getMock();
+        $headersMock = $this->getMock(\Zend\Http\Headers::class, [], [], '', false);
+        $this->cacheMock = $this->getMock(\Magento\Framework\App\PageCache\Cache::class, [], [], '', false);
+        $this->fullPageCacheMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
+        $this->httpResponseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->identifierMock = $this->getMock(\Magento\Framework\App\PageCache\Identifier::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->contextFactoryMock = $this->getMock(ContextFactory::class, ['create'], [], '', false);
+        $this->httpFactoryMock = $this->getMock(HttpFactory::class, ['create'], [], '', false);
+        $this->responseMock->expects($this->any())->method('getHeaders')->willReturn($headersMock);
+
+        $this->kernel = new Kernel(
+            $this->cacheMock,
+            $this->identifierMock,
+            $this->requestMock,
+            $this->contextMock,
+            $this->contextFactoryMock,
+            $this->httpFactoryMock,
+            $this->serializer
+        );
+
+        $reflection = new \ReflectionClass(\Magento\Framework\App\PageCache\Kernel::class);
+        $reflectionProperty = $reflection->getProperty('fullPageCache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
     }
 
     /**
-     * @dataProvider loadProvider
-     * @param mixed $expected
+     * @dataProvider dataProviderForResultWithCachedData
      * @param string $id
      * @param mixed $cache
      * @param bool $isGet
      * @param bool $isHead
      */
-    public function testLoad($expected, $id, $cache, $isGet, $isHead)
+    public function testLoadWithCachedData($id, $cache, $isGet, $isHead)
     {
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
+        $this->contextFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'data' => ['context_data'],
+                    'default' => ['context_default_data']
+                ]
+            )
+            ->willReturn($this->contextMock);
+
+        $this->httpFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(['context' => $this->contextMock])
+            ->willReturn($this->httpResponseMock);
+
         $this->requestMock->expects($this->once())->method('isGet')->will($this->returnValue($isGet));
         $this->requestMock->expects($this->any())->method('isHead')->will($this->returnValue($isHead));
-        $this->cacheMock->expects(
+        $this->fullPageCacheMock->expects(
             $this->any()
         )->method(
             'load'
         )->with(
             $this->equalTo($id)
         )->will(
-            $this->returnValue(serialize($cache))
+            $this->returnValue(json_encode($cache))
         );
+        $this->httpResponseMock->expects($this->once())->method('setStatusCode')->with($cache['status_code']);
+        $this->httpResponseMock->expects($this->once())->method('setContent')->with($cache['content']);
+        $this->httpResponseMock->expects($this->once())->method('setHeader')->with(0, 'header', true);
         $this->identifierMock->expects($this->any())->method('getValue')->will($this->returnValue($id));
-        $this->assertEquals($expected, $this->kernel->load());
+        $this->assertEquals($this->httpResponseMock, $this->kernel->load());
     }
 
     /**
      * @return array
      */
-    public function loadProvider()
+    public function dataProviderForResultWithCachedData()
     {
-        $data = [1, 2, 3];
-        return [
-            [$data, 'existing key', $data, true, false],
-            [$data, 'existing key', $data, false, true],
-            [
-                new \Magento\Framework\DataObject($data),
-                'existing key',
-                new \Magento\Framework\DataObject($data),
-                true,
-                false
+        $data = [
+            'context' => [
+                'data' => ['context_data'],
+                'default' => ['context_default_data']
             ],
-            [false, 'existing key', $data, false, false],
-            [false, 'non existing key', false, true, false],
-            [false, 'non existing key', false, false, false]
+            'status_code' => 'status_code',
+            'content' => 'content',
+            'headers' => ['header']
+        ];
+
+        return [
+            ['existing key', $data, true, false],
+            ['existing key', $data, false, true],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForResultWithoutCachedData
+     * @param string $id
+     * @param mixed $cache
+     * @param bool $isGet
+     * @param bool $isHead
+     */
+    public function testLoadWithoutCachedData($id, $cache, $isGet, $isHead)
+    {
+        $this->requestMock->expects($this->once())->method('isGet')->will($this->returnValue($isGet));
+        $this->requestMock->expects($this->any())->method('isHead')->will($this->returnValue($isHead));
+        $this->fullPageCacheMock->expects(
+            $this->any()
+        )->method(
+            'load'
+        )->with(
+            $this->equalTo($id)
+        )->will(
+            $this->returnValue(json_encode($cache))
+        );
+        $this->identifierMock->expects($this->any())->method('getValue')->will($this->returnValue($id));
+        $this->assertEquals(false, $this->kernel->load());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForResultWithoutCachedData()
+    {
+        return [
+            ['existing key', [], false, false],
+            ['non existing key', false, true, false],
+            ['non existing key', false, false, false]
         ];
     }
 
@@ -104,6 +196,14 @@ class KernelTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessSaveCache($httpCode, $at)
     {
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
         $cacheControlHeader = \Zend\Http\Header\CacheControl::fromString(
             'Cache-Control: public, max-age=100, s-maxage=100'
         );
@@ -136,7 +236,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->responseMock->expects($this->at($at[2]))
             ->method('clearHeader')
             ->with($this->equalTo('X-Magento-Tags'));
-        $this->cacheMock->expects($this->once())
+        $this->fullPageCacheMock->expects($this->once())
             ->method('save');
         $this->kernel->process($this->responseMock);
     }
@@ -173,7 +273,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         if ($overrideHeaders) {
             $this->responseMock->expects($this->once())->method('setNoCacheHeaders');
         }
-        $this->cacheMock->expects($this->never())->method('save');
+        $this->fullPageCacheMock->expects($this->never())->method('save');
         $this->kernel->process($this->responseMock);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,115 +13,140 @@ class DataTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Contact\Helper\Data
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * Scope config mock
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeConfig;
+    protected $scopeConfigMock;
 
     /**
      * Customer session mock
      *
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_customerSession;
+    protected $customerSessionMock;
 
     /**
      * Customer view helper mock
      *
      * @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_customerViewHelper;
+    protected $customerViewHelperMock;
 
-    public function setUp()
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManagerHelper;
+
+    protected function setUp()
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = '\Magento\Contact\Helper\Data';
-        $arguments = $objectManagerHelper->getConstructArguments($className);
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $className = \Magento\Contact\Helper\Data::class;
+        $arguments = $this->objectManagerHelper->getConstructArguments($className);
         /**
          * @var \Magento\Framework\App\Helper\Context $context
          */
         $context = $arguments['context'];
-        $this->_scopeConfig = $context->getScopeConfig();
-        $this->_customerSession = $arguments['customerSession'];
-        $this->_customerViewHelper = $arguments['customerViewHelper'];
-        $this->_helper = $objectManagerHelper->getObject($className, $arguments);
+        $this->scopeConfigMock = $context->getScopeConfig();
+        $this->customerSessionMock = $arguments['customerSession'];
+        $this->customerViewHelperMock = $arguments['customerViewHelper'];
+        $this->helper = $this->objectManagerHelper->getObject($className, $arguments);
     }
 
     public function testIsEnabled()
     {
-        $this->_scopeConfig->expects($this->once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
 
-        $this->assertTrue(is_string($this->_helper->isEnabled()));
+        $this->assertTrue(is_string($this->helper->isEnabled()));
     }
 
     public function testIsNotEnabled()
     {
-        $this->_scopeConfig->expects($this->once())
+        $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
-        $this->assertTrue(null === $this->_helper->isEnabled());
+        $this->assertTrue(null === $this->helper->isEnabled());
     }
 
     public function testGetUserNameNotLoggedIn()
     {
-        $this->_customerSession->expects($this->once())
+        $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertEmpty($this->_helper->getUserName());
+        $this->assertEmpty($this->helper->getUserName());
     }
 
     public function testGetUserName()
     {
-        $this->_customerSession->expects($this->once())
+        $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $customerDataObject = $this->getMockBuilder('\Magento\Customer\Model\Data\Customer')
+        $customerDataObject = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_customerSession->expects($this->once())
+        $this->customerSessionMock->expects($this->once())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customerDataObject));
+            ->willReturn($customerDataObject);
 
-        $this->_customerViewHelper->expects($this->once())
+        $this->customerViewHelperMock->expects($this->once())
             ->method('getCustomerName')
-            ->will($this->returnValue(' customer name '));
+            ->willReturn(' customer name ');
 
-        $this->assertEquals('customer name', $this->_helper->getUserName());
+        $this->assertEquals('customer name', $this->helper->getUserName());
     }
 
     public function testGetUserEmailNotLoggedIn()
     {
-        $this->_customerSession->expects($this->once())
+        $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertEmpty($this->_helper->getUserEmail());
+        $this->assertEmpty($this->helper->getUserEmail());
     }
 
     public function testGetUserEmail()
     {
-        $this->_customerSession->expects($this->once())
+        $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $customerDataObject = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customerDataObject = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $customerDataObject->expects($this->once())
             ->method('getEmail')
-            ->will($this->returnValue('customer@email.com'));
+            ->willReturn('customer@email.com');
 
-        $this->_customerSession->expects($this->once())
+        $this->customerSessionMock->expects($this->once())
             ->method('getCustomerDataObject')
-            ->will($this->returnValue($customerDataObject));
+            ->willReturn($customerDataObject);
 
-        $this->assertEquals('customer@email.com', $this->_helper->getUserEmail());
+        $this->assertEquals('customer@email.com', $this->helper->getUserEmail());
+    }
+
+    public function testGetPostValue()
+    {
+        $postData = ['name' => 'Some Name', 'email' => 'Some Email'];
+
+        $dataPersistorMock = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
+            ->getMockForAbstractClass();
+        $dataPersistorMock->expects($this->once())
+            ->method('get')
+            ->with('contact_us')
+            ->willReturn($postData);
+        $dataPersistorMock->expects($this->once())
+            ->method('clear')
+            ->with('contact_us');
+
+        $this->objectManagerHelper->setBackwardCompatibleProperty($this->helper, 'dataPersistor', $dataPersistorMock);
+
+        $this->assertSame($postData['name'], $this->helper->getPostValue('name'));
+        $this->assertSame($postData['email'], $this->helper->getPostValue('email'));
     }
 }

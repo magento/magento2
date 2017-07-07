@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogWidget\Test\Unit\Model;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\CatalogWidget\Model\Rule
      */
@@ -22,14 +24,14 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->combineFactory = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\CombineFactory')
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->combineFactory = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\CombineFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->rule = $objectManagerHelper->getObject(
-            'Magento\CatalogWidget\Model\Rule',
+        $this->rule = $this->objectManager->getObject(
+            \Magento\CatalogWidget\Model\Rule::class,
             [
                 'conditionsFactory' => $this->combineFactory
             ]
@@ -38,7 +40,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConditionsInstance()
     {
-        $condition = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\Combine')
+        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();

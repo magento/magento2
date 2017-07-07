@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,7 +18,7 @@
             <group id="account_share" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Account Sharing Options</label>
                 <hide_in_single_store_mode>1</hide_in_single_store_mode>
-                <field id="scope" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="scope" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Share Customer Accounts</label>
                     <backend_model>Magento\Customer\Model\Config\Share</backend_model>
                     <source_model>Magento\Customer\Model\Config\Share</source_model>
@@ -30,14 +30,14 @@
                     <label>Enable Automatic Assignment to Customer Group</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="tax_calculation_address_type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="tax_calculation_address_type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Tax Calculation Based On</label>
                     <source_model>Magento\Customer\Model\Config\Source\Address\Type</source_model>
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
                 </field>
-                <field id="default_group" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="default_group" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Group</label>
                     <source_model>Magento\Customer\Model\Config\Source\Group</source_model>
                 </field>
@@ -81,20 +81,20 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault</backend_model>
                 </field>
-                <field id="vat_frontend_visibility" translate="label comment" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="vat_frontend_visibility" translate="label comment" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Show VAT Number on Storefront</label>
                     <comment>To show VAT number on Storefront, set Show VAT Number on Storefront option to Yes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Email Domain</label>
                 </field>
-                <field id="email_template" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_template" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Welcome Email</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="email_no_password_template" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_no_password_template" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Welcome Email Without Password</label>
                     <comment><![CDATA[
                         This email will be sent instead of the Default Welcome Email, if a customer was created without password. <br /><br />
@@ -102,20 +102,20 @@
                     ]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="email_identity" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_identity" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="confirm" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="confirm" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Require Emails Confirmation</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="email_confirmation_template" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_confirmation_template" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Confirmation Link Email</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Welcome Email</label>
                     <comment><![CDATA[
                         This email will be sent instead of the Default Welcome Email, after account confirmation. <br /><br />
@@ -130,35 +130,72 @@
             </group>
             <group id="password" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Password Options</label>
-                <field id="forgot_email_template" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="forgot_email_template" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Forgot Email Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="remind_email_template" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="remind_email_template" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Remind Email Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="reset_password_template" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="reset_password_template" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Reset Password Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="forgot_email_identity" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="forgot_email_identity" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Password Template Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="reset_link_expiration_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Recovery Link Expiration Period (days)</label>
+                <field id="reset_link_expiration_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Recovery Link Expiration Period (hours)</label>
                     <comment>Please enter a number 1 or greater in this field.</comment>
                     <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
                     <backend_model>Magento\Customer\Model\Config\Backend\Password\Link\Expirationperiod</backend_model>
                 </field>
+                <field id="required_character_classes_number" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Number of Required Character Classes</label>
+                    <comment>Number of different character classes required in password: Lowercase, Uppercase, Digits, Special Characters.</comment>
+                    <validate>required-entry validate-digits validate-digits-range digits-range-1-4</validate>
+                </field>
+                <field id="minimum_password_length" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Minimum Password Length</label>
+                    <comment>Please enter a number 1 or greater in this field.</comment>
+                    <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
+                </field>
+                <field id="lockout_failures" translate="label comment" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Maximum Login Failures to Lockout Account</label>
+                    <comment>Use 0 to disable account locking.</comment>
+                    <frontend_class>required-entry validate-digits</frontend_class>
+                </field>
+                <field id="lockout_threshold" translate="label" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Lockout Time (minutes)</label>
+                    <comment>Account will be unlocked after provided time.</comment>
+                    <frontend_class>required-entry validate-digits</frontend_class>
+                </field>
+                <field id="autocomplete_on_storefront" type="select" translate="label" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enable Autocomplete on login/forgot password forms</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="account_information" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Account Information Options</label>
+                <field id="change_email_template" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Change Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="change_email_and_password_template" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Change Email and Password Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
             </group>
             <group id="address" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Name and Address Options</label>
-                <field id="street_lines" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="street_lines" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Number of Lines in a Street Address</label>
                     <backend_model>Magento\Customer\Model\Config\Backend\Address\Street</backend_model>
                     <comment>Leave empty for default (2). Valid range: 1-4</comment>
@@ -208,10 +245,25 @@
                     <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Customer</backend_model>
                 </field>
+                <field id="telephone_show" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Telephone</label>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
+                </field>
+                <field id="company_show" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Company</label>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
+                </field>
+                <field id="fax_show" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Fax</label>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
+                </field>
             </group>
             <group id="startup" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Login Options</label>
-                <field id="redirect_dashboard" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="redirect_dashboard" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Redirect Customer to Account Dashboard after Logging in</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Customer will stay on the current page if "No" is selected.</comment>
@@ -219,16 +271,16 @@
             </group>
             <group id="address_templates" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Address Templates</label>
-                <field id="text" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="text" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Text</label>
                 </field>
-                <field id="oneline" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="oneline" type="textarea" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Text One Line</label>
                 </field>
-                <field id="html" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="html" type="textarea" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>HTML</label>
                 </field>
-                <field id="pdf" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="pdf" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>PDF</label>
                 </field>
             </group>
@@ -245,12 +297,6 @@
                 <field id="validate_vat_number" translate="button_label" sortOrder="62" showInDefault="1" showInWebsite="1" showInStore="0">
                     <button_label>Validate VAT Number</button_label>
                     <frontend_model>Magento\Customer\Block\Adminhtml\System\Config\Validatevat</frontend_model>
-                </field>
-            </group>
-            <group id="restriction">
-                <field id="autocomplete_on_storefront" type="select" translate="label" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enable Autocomplete on login/forgot password forms</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>

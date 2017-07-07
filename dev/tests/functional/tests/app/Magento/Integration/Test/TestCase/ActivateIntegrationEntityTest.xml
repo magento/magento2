@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Integration\Test\TestCase\ActivateIntegrationEntityTest" summary="Activate Integration" ticketId="MAGETWO-26119">
         <variation name="ActivateIntegrationEntityTestVariation1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="integration/dataset" xsi:type="string">default_with_all_resources</data>
             <data name="resourceDepth" xsi:type="number">1</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationResourcesPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationTokensPopup" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessActivationMessage" />
+            <data name="issue" xsi:type="string">MAGETWO-66745: Magento\Integration\Test\TestCase\ActivateIntegrationEntityTest with ActivateIntegrationEntityTestVariation1 fails randomly</data>
         </variation>
     </testCase>
 </config>

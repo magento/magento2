@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
@@ -20,7 +20,7 @@ class Delete extends TermController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($id) {
             try {
-                $model = $this->_objectManager->create('Magento\Search\Model\Query');
+                $model = $this->_objectManager->create(\Magento\Search\Model\Query::class);
                 $model->setId($id);
                 $model->delete();
                 $this->messageManager->addSuccess(__('You deleted the search.'));

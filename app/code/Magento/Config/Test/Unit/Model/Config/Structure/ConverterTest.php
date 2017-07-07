@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
@@ -15,7 +15,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $factoryMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Mapper\Factory',
+            \Magento\Config\Model\Config\Structure\Mapper\Factory::class,
             [],
             [],
             '',
@@ -24,7 +24,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $mapperMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Mapper\Dependencies',
+            \Magento\Config\Model\Config\Structure\Mapper\Dependencies::class,
             [],
             [],
             '',

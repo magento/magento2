@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,11 +40,11 @@ class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filterMock = $this->getMock(
-            '\Magento\Catalog\Model\Layer\Filter\AbstractFilter', [], [], '', false
+            \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class, [], [], '', false
         );
         $this->filters = [$this->filterMock];
-        $this->layerMock = $this->getMock('\Magento\Catalog\Model\Layer', [], [], '', false);
-        $this->stateMock = $this->getMock('\Magento\Catalog\Model\Layer\State', [], [], '', false);
+        $this->layerMock = $this->getMock(\Magento\Catalog\Model\Layer::class, [], [], '', false);
+        $this->stateMock = $this->getMock(\Magento\Catalog\Model\Layer\State::class, [], [], '', false);
         $this->model = new AvailabilityFlag();
     }
 

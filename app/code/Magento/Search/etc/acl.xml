@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,8 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_Backend::marketing_seo">
-                        <resource id="Magento_Search::search" title="Search Terms" sortOrder="10" />
+                        <resource id="Magento_Search::search" title="Search Terms" translate="title" sortOrder="10" />
+                        <resource id="Magento_Search::synonyms" title="Search Synonyms" translate="title" sortOrder="20" />
                     </resource>
                 </resource>
             </resource>

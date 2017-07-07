@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -26,17 +26,21 @@
         .items-total {
             float: left;
             margin: 0 @indent__s;
+
             .count {
                 font-weight: @font-weight__bold;
             }
         }
+
         .subtotal {
-            margin: 0 @indent__s;
+            margin: 0 @indent__s @indent__s;
             text-align: right;
+
             .label {
                 &:extend(.abs-colon all);
             }
         }
+
         .amount {
             .price-wrapper {
                 &:first-child {
@@ -47,8 +51,10 @@
                 }
             }
         }
+
         .subtitle {
             display: none;
+
             &.empty {
                 display: block;
                 font-size: 14px;
@@ -56,23 +62,28 @@
                 text-align: center;
             }
         }
+
         .text {
             &.empty {
                 text-align: center;
             }
         }
+
         .block-content {
             > .actions {
                 margin-top: 15px;
                 text-align: center;
+
                 > .primary {
                     margin: 0 @indent__s 15px;
+
                     .action {
                         &.primary {
                             &:extend(.abs-button-l all);
                             display: block;
                             margin-bottom: 15px;
                             width: 100%;
+
                             &:last-child {
                                 margin-bottom: 0;
                             }
@@ -81,6 +92,7 @@
                 }
             }
         }
+
         .block-category-link,
         .block-product-link,
         .block-cms-link,
@@ -92,8 +104,8 @@
 
     .minicart-wrapper {
         .lib-dropdown(
-        @_toggle-selector: ~".action.showcart",
-        @_options-selector: ~".block-minicart",
+        @_toggle-selector: ~'.action.showcart',
+        @_options-selector: ~'.block-minicart',
         @_dropdown-toggle-icon-content: @icon-cart,
         @_dropdown-toggle-active-icon-content: @icon-cart,
         @_dropdown-list-item-padding: false,
@@ -106,28 +118,36 @@
         @_icon-font-color-active: @minicart-icons-color
         );
         float: right;
+
         .block-minicart {
             .lib-css(padding, 25px @minicart__padding-horizontal);
             right: 0;
             width: 320px;
+            z-index: 101;
+
             .block-title {
                 display: none;
             }
+
             &:after {
                 left: auto;
                 right: 25px;
             }
+
             &:before {
                 left: auto;
                 right: 26px;
             }
         }
+
         .product {
             .actions {
                 float: right;
                 margin: -24px 0 0;
                 text-align: right;
-                > .primary, > .secondary {
+
+                > .primary,
+                > .secondary {
                     display: inline;
                 }
             }
@@ -148,11 +168,14 @@
                 top: 0;
                 width: 40px;
             }
+
             &.showcart {
                 white-space: nowrap;
+
                 .text {
                     &:extend(.abs-visually-hidden all);
                 }
+
                 .counter.qty {
                     .lib-css(background, @active__color);
                     .lib-css(color, @page__background-color);
@@ -166,20 +189,24 @@
                     padding: 0 3px;
                     text-align: center;
                     white-space: normal;
+
                     &.empty {
                         display: none;
                     }
+
                     .loader {
                         > img {
                             .lib-css(max-width, @minicart-qty__height);
                         }
                     }
                 }
+
                 .counter-label {
                     &:extend(.abs-visually-hidden all);
                 }
             }
         }
+
         .minicart-widgets {
             margin-top: 15px;
         }
@@ -196,35 +223,44 @@
 
     .minicart-items {
         .lib-list-reset-styles();
+
         .product-item {
             padding: @indent__base 0;
+
             &:not(:first-child) {
                 .lib-css(border-top, 1px solid @minicart__border-color);
             }
+
             &:first-child {
                 padding-top: 0;
             }
+
             > .product {
                 &:extend(.abs-add-clearfix all);
             }
         }
+
         .product-image-wrapper {
             &:extend(.abs-reset-image-wrapper all);
         }
+
         .product-item-pricing {
             .label {
                 display: inline-block;
                 width: 4.5rem;
             }
         }
+
         .price-minicart {
             margin-bottom: @indent__xs;
         }
+
         .product {
             > .product-item-photo,
             > .product-image-container {
                 float: left;
             }
+
             .toggle {
                 .lib-icon-font(
                 @_icon-font-content: @icon-down,
@@ -236,12 +272,14 @@
                 );
                 cursor: pointer;
                 position: relative;
+
                 &:after {
                     position: static;
                     right: @indent__base;
                     top: 0;
                 }
             }
+
             &.active {
                 > .toggle {
                     .lib-icon-font-symbol(
@@ -251,32 +289,40 @@
                 }
             }
         }
+
         .product-item-name {
             font-weight: @font-weight__regular;
             margin: 0 0 @indent__s;
+
             a {
                 .lib-css(color, @link__color);
             }
         }
+
         .product-item-details {
             padding-left: 88px;
+
             .price {
                 font-weight: @font-weight__bold;
             }
+
             .price-including-tax,
             .price-excluding-tax {
                 margin: @indent__xs 0 0;
             }
+
             .weee[data-label] {
                 .lib-font-size(11);
                 .label {
                     &:extend(.abs-no-display all);
                 }
             }
+
             .details-qty {
                 margin-top: @indent__s;
             }
         }
+
         .product.options {
             .tooltip.toggle {
                 .lib-icon-font(
@@ -287,29 +333,35 @@
                 @_icon-font-margin: -3px 0 0 7px,
                 @_icon-font-position: after
                 );
+
                 .details {
                     display: none;
                 }
             }
         }
+
         .details-qty,
         .price-minicart {
             .label {
                 &:extend(.abs-colon all);
             }
         }
+
         .item-qty {
             margin-right: @indent__s;
             text-align: center;
             width: 40px;
         }
+
         .update-cart-item {
             .lib-font-size(11);
             vertical-align: top;
         }
+
         .subtitle {
             display: none;
         }
+
         .action {
             &.edit,
             &.delete {
@@ -323,6 +375,7 @@
                 @_icon-font-color-active: @color-gray19
                 );
             }
+
             &.delete {
                 .lib-icon-font-symbol(
                 @_icon-font-content: @icon-trash

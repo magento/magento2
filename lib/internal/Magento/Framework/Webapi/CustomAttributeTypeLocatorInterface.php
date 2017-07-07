@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ interface CustomAttributeTypeLocatorInterface
      *
      * @param string $attributeCode
      * @param string $serviceClass
-     * @return string|null
+     * @return string
      */
     public function getType($attributeCode, $serviceClass);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
@@ -38,6 +38,7 @@ class Minification implements ResolverInterface
         $this->fallback = $fallback;
         $this->minification = $minification;
     }
+
     /**
      * Get path of file after using fallback rules
      *
@@ -51,6 +52,7 @@ class Minification implements ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
+        $file = $this->minification->addMinifiedSign($file);
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
         if (!$path && $file != ($newFile = $this->minification->removeMinifiedSign($file))) {
             $path = $this->fallback->resolve($type, $newFile, $area, $theme, $locale, $module);

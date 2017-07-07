@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,13 +12,13 @@
 $_gridPopupBlock = $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildBlock('grid');
 $_gridPopupBlock->setRowClickCallback('function(){}');
 ?>
-<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"[data-grid-id=<?php /* @escapeNotVerified */ echo $_gridPopupBlock->getId() ?>]"}}'>
+<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"[data-grid-id=<?= /* @escapeNotVerified */ $_gridPopupBlock->getId() ?>]"}}'>
     <div class="no-products-message">
-        <?php /* @escapeNotVerified */ echo __('There are no grouped products.')?>
+        <?= /* @escapeNotVerified */ __('There are no grouped products.') ?>
     </div>
-    <?php echo $block->getChildHtml('list'); ?>
+    <?= $block->getChildHtml('list') ?>
     <div data-role="add-product-dialog" class="no-display">
-        <?php echo $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid');?>
+        <?= $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid') ?>
     </div>
     <button type="button" data-role="add-product">Add Products to Group</button>
 </div>

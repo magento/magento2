@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,28 +13,28 @@
 ?>
 <?php if ($block->displayBoth()):?>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo __('Subtotal (Excl. Tax)') ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+        <?= /* @escapeNotVerified */ __('Subtotal (Excl. Tax)') ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getTotal()->getValueExclTax()) ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo __('Subtotal (Incl. Tax)') ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+        <?= /* @escapeNotVerified */ __('Subtotal (Incl. Tax)') ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getTotal()->getValueInclTax()) ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
 <?php else : ?>
 <tr class="row-totals">
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>">
-        <?php /* @escapeNotVerified */ echo $block->getTotal()->getTitle() ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>">
+        <?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?>
     </td>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getStyle() ?>" class="admin__total-amount">
-        <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getTotal()->getValue()) ?>
+    <td style="<?= /* @escapeNotVerified */ $block->getStyle() ?>" class="admin__total-amount">
+        <?= /* @escapeNotVerified */ $block->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>
 <?php endif;?>

@@ -2,7 +2,7 @@
 /**
  * Test configuration of Online Shipping carriers
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -21,7 +21,7 @@ class CarrierConfigFilesTest extends \PHPUnit_Framework_TestCase
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Config:etc/system.xsd');
         $this->_reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Config\Model\Config\Structure\Reader',
+            \Magento\Config\Model\Config\Structure\Reader::class,
             ['perFileSchema' => $schemaFile, 'isValidated' => true]
         );
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -27,6 +28,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -47,6 +49,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -67,8 +70,30 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_10_dollar</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">110</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">110</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_fixed_100_dollar_buy_all">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="use_default" xsi:type="string">true</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">default_qty_1</item>
                         </item>
                     </item>
                 </item>
@@ -87,6 +112,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">Simple Product</item>
                         </item>
@@ -95,9 +121,9 @@
             </field>
             <field name="qty" xsi:type="string">1</field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">756</item>
+                <item name="price" xsi:type="string">755</item>
                 <item name="qty" xsi:type="string">1</item>
-                <item name="subtotal" xsi:type="string">756</item>
+                <item name="subtotal" xsi:type="string">755</item>
             </field>
         </dataset>
 
@@ -107,6 +133,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -114,6 +141,7 @@
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">Radio Button Option</item>
                         <item name="type" xsi:type="string">Radio Buttons</item>
+                        <item name="frontend_type" xsi:type="string">Radio Buttons</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -128,6 +156,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -172,11 +201,11 @@
                     </item>
                     <item name="9" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_10</item>
-                        <item name="value" xsi:type="string">12/12/2015</item>
+                        <item name="value" xsi:type="string">12/12/2017</item>
                     </item>
                     <item name="10" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_11</item>
-                        <item name="value" xsi:type="string">12/12/2015/12/30/AM</item>
+                        <item name="value" xsi:type="string">12/12/2017/12/30/AM</item>
                     </item>
                     <item name="11" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_12</item>
@@ -192,6 +221,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -206,12 +236,44 @@
             </field>
         </dataset>
 
+        <dataset name="bundle_with_custom_options_3">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">product_10_dollar</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_1</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">100</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">100</item>
+                <item name="subItemPrice" xsi:type="string">10</item>
+            </field>
+        </dataset>
+
         <dataset name="bundle_all_types_bundle_fixed_and_custom_options">
             <field name="options" xsi:type="array">
                 <item name="bundle_options" xsi:type="array">
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -219,6 +281,7 @@
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">Radio Button Option</item>
                         <item name="type" xsi:type="string">Radio Buttons</item>
+                        <item name="frontend_type" xsi:type="string">Radio Buttons</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -226,6 +289,7 @@
                     <item name="2" xsi:type="array">
                         <item name="title" xsi:type="string">Checkbox Option</item>
                         <item name="type" xsi:type="string">Checkbox</item>
+                        <item name="frontend_type" xsi:type="string">Checkbox</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -233,6 +297,7 @@
                     <item name="3" xsi:type="array">
                         <item name="title" xsi:type="string">Multiple Select Option</item>
                         <item name="type" xsi:type="string">Multiple</item>
+                        <item name="frontend_type" xsi:type="string">Multiple</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -265,11 +330,11 @@
                     </item>
                     <item name="7" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_7</item>
-                        <item name="value" xsi:type="string">12/12/2015</item>
+                        <item name="value" xsi:type="string">12/12/2017</item>
                     </item>
                     <item name="8" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_8</item>
-                        <item name="value" xsi:type="string">12/12/2015/12/30/AM</item>
+                        <item name="value" xsi:type="string">12/12/2017/12/30/AM</item>
                     </item>
                     <item name="9" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_9</item>
@@ -285,6 +350,7 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -292,6 +358,7 @@
                     <item name="1" xsi:type="array">
                         <item name="title" xsi:type="string">Radio Button Option</item>
                         <item name="type" xsi:type="string">Radio Buttons</item>
+                        <item name="frontend_type" xsi:type="string">Radio Buttons</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -299,6 +366,7 @@
                     <item name="2" xsi:type="array">
                         <item name="title" xsi:type="string">Checkbox Option</item>
                         <item name="type" xsi:type="string">Checkbox</item>
+                        <item name="frontend_type" xsi:type="string">Checkbox</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -306,6 +374,7 @@
                     <item name="3" xsi:type="array">
                         <item name="title" xsi:type="string">Multiple Select Option</item>
                         <item name="type" xsi:type="string">Multiple</item>
+                        <item name="frontend_type" xsi:type="string">Multiple</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">product_100_dollar</item>
                         </item>
@@ -320,9 +389,75 @@
                     <item name="0" xsi:type="array">
                         <item name="title" xsi:type="string">Drop-down Option</item>
                         <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
                         <item name="value" xsi:type="array">
                             <item name="name" xsi:type="string">Test simple product</item>
                         </item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="one_required_option_with_one_item">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Hidden</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">Simple Product</item>
+                            <item name="qty" xsi:type="string">3</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="configuredPrice" xsi:type="string">1680</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_low_stock_fixed">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">low_stock_product</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">756</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">756</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_required_three_fixed_options_with_qty">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="frontend_type" xsi:type="string">Drop-down</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">Test simple product</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="default_with_one_simple_product_and_custom_option">
+            <field name="options" xsi:type="array">
+                <item name="custom_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">attribute_key_0</item>
+                        <item name="value" xsi:type="string">option_key_0</item>
                     </item>
                 </item>
             </field>

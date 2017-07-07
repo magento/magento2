@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
@@ -13,7 +13,7 @@ class ScoreBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         /** @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder $builder */
-        $builder = (new ObjectManager($this))->getObject('Magento\Framework\Search\Adapter\Mysql\ScoreBuilder');
+        $builder = (new ObjectManager($this))->getObject(\Magento\Framework\Search\Adapter\Mysql\ScoreBuilder::class);
 
         $builder->startQuery(); // start one query
 

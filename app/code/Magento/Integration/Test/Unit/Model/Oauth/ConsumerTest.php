@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\Oauth;
@@ -10,6 +10,7 @@ use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
 
 /**
  * Test for \Magento\Integration\Model\Oauth\Consumer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsumerTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,17 +64,17 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
      */
     protected $validDataArray;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock(
-            'Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             ['getEventDispatcher'],
             [],
             '',
             false
         );
         $eventManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false,
@@ -86,7 +87,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($eventManagerMock));
 
         $this->registryMock = $this->getMock(
-            'Magento\Framework\Registry',
+            \Magento\Framework\Registry::class,
             [],
             [],
             '',
@@ -98,7 +99,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->urlValidator = new UrlValidator();
 
         $this->oauthDataMock = $this->getMock(
-            'Magento\Integration\Helper\Oauth\Data',
+            \Magento\Integration\Helper\Oauth\Data::class,
             ['getConsumerExpirationPeriod'],
             [],
             '',
@@ -109,8 +110,8 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
 
         $this->resourceMock = $this->getMock(
-            'Magento\Integration\Model\ResourceModel\Oauth\Consumer',
-            ['getTimeInSecondsSinceCreation', 'getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries'],
+            \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class,
+            ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries'],
             [],
             '',
             false,
@@ -118,7 +119,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             true
         );
         $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\AbstractDb',
+            \Magento\Framework\Data\Collection\AbstractDb::class,
             [],
             [],
             '',
@@ -215,21 +216,33 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConsumerExpirationPeriodValid()
     {
-        $this->resourceMock->expects($this->once())
-            ->method('getTimeInSecondsSinceCreation')
-            ->will($this->returnValue(30));
+        $dateHelperMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dateHelperMock->expects($this->at(0))->method('gmtTimestamp')->willReturn(time());
+        $dateHelperMock->expects($this->at(1))->method('gmtTimestamp')->willReturn(time() - 100);
 
-        $this->consumerModel->setCreatedAt(time());
+        $dateHelper = new \ReflectionProperty(\Magento\Integration\Model\Oauth\Consumer::class, '_dateHelper');
+        $dateHelper->setAccessible(true);
+        $dateHelper->setValue($this->consumerModel, $dateHelperMock);
+
+        $this->consumerModel->setUpdatedAt(time());
         $this->assertTrue($this->consumerModel->isValidForTokenExchange());
     }
 
     public function testGetConsumerExpirationPeriodExpired()
     {
-        $this->resourceMock->expects($this->once())
-            ->method('getTimeInSecondsSinceCreation')
-            ->will($this->returnValue(400));
+        $dateHelperMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dateHelperMock->expects($this->at(0))->method('gmtTimestamp')->willReturn(time());
+        $dateHelperMock->expects($this->at(1))->method('gmtTimestamp')->willReturn(time() - 1000);
 
-        $this->consumerModel->setCreatedAt(time());
+        $dateHelper = new \ReflectionProperty(\Magento\Integration\Model\Oauth\Consumer::class, '_dateHelper');
+        $dateHelper->setAccessible(true);
+        $dateHelper->setValue($this->consumerModel, $dateHelperMock);
+
+        $this->consumerModel->setUpdatedAt(time());
         $this->assertFalse($this->consumerModel->isValidForTokenExchange());
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -24,8 +24,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>
@@ -52,8 +52,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="payments_pro_hosted_solution_fr">payments_pro_hosted_solution_fr</argument>
                 <argument name="express_checkout_other">express_checkout_other</argument>
@@ -73,14 +73,25 @@
                 </predicate>
             </event>
         </events>
+        <events selector="[data-enable='in-context-api']">
+            <event value="0" name="deactivate-in-context-api"/>
+            <event value="1" name="activate-in-context-api"/>
+        </events>
         <relation target="wps_other">
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="paypal/express/mark-disable" event="deactivate-rule">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
                 <argument name="wps_other">wps_other</argument>
             </rule>
+            <rule type="inContextEnable" event="activate-rule"/>
+            <rule type="inContextDisable" event="deactivate-rule"/>
+            <rule type="inContextShowMerchantId" event="activate-rule"/>
+            <rule type="inContextHideMerchantId" event="deactivate-rule"/>
+            <rule type="inContextActivate" event="activate-in-context-api"/>
+            <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
+            <rule type="inContextDisableConditional" event=":load"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>

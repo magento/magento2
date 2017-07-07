@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CmsUrlRewrite\Test\Unit\Plugin\Cms\Model\ResourceModel;
@@ -30,39 +30,30 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected $cmsPageResourceMock;
 
-    /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->closureMock = function () {
-            return 'URL Rewrite Result';
-        };
-
-        $this->urlPersistMock = $this->getMockBuilder('Magento\UrlRewrite\Model\UrlPersistInterface')
+        $this->urlPersistMock = $this->getMockBuilder(\Magento\UrlRewrite\Model\UrlPersistInterface::class)
             ->getMockForAbstractClass();
 
-        $this->cmsPageMock = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $this->cmsPageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cmsPageResourceMock = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
+        $this->cmsPageResourceMock = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->pageObject = $objectManager->getObject(
-            'Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page',
+            \Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page::class,
             [
                 'urlPersist' => $this->urlPersistMock
             ]
         );
     }
 
-    public function testAroundDeletePositive()
+    public function testAfterDeletePositive()
     {
         $productId = 100;
 
@@ -83,17 +74,17 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->assertEquals(
-            'URL Rewrite Result',
-            $this->pageObject->aroundDelete(
+        $this->assertSame(
+            $this->cmsPageResourceMock,
+            $this->pageObject->afterDelete(
                 $this->cmsPageResourceMock,
-                $this->closureMock,
+                $this->cmsPageResourceMock,
                 $this->cmsPageMock
             )
         );
     }
 
-    public function testAroundDeleteNegative()
+    public function testAfterDeleteNegative()
     {
         $this->cmsPageMock->expects($this->once())
             ->method('isDeleted')
@@ -102,11 +93,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->urlPersistMock->expects($this->never())
             ->method('deleteByData');
 
-        $this->assertEquals(
-            'URL Rewrite Result',
-            $this->pageObject->aroundDelete(
+        $this->assertSame(
+            $this->cmsPageResourceMock,
+            $this->pageObject->afterDelete(
                 $this->cmsPageResourceMock,
-                $this->closureMock,
+                $this->cmsPageResourceMock,
                 $this->cmsPageMock
             )
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,7 +47,7 @@ class Services extends \Magento\Backend\Block\Template
         $this->setChild(
             'import_services',
             $this->getLayout()->createBlock(
-                'Magento\Framework\View\Element\Html\Select'
+                \Magento\Framework\View\Element\Html\Select::class
             )->setOptions(
                 $this->_srcCurrencyFactory->create()->toOptionArray()
             )->setId(

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -19,19 +19,23 @@
         .admin__field-control {
             &:extend(.abs-clearfix all);
         }
+
         .boundary {
             float: left;
             width: 125px;
         }
+
         .boundary-upper {
             margin-left: @boundary__margin;
             position: relative;
+
             &:before {
                 content: '»';
                 left: -(@boundary__margin / @boundary__ratio);
                 position: absolute;
                 top: 25%;
             }
+
             label {
                 .lib-visibility-hidden();
                 display: block;

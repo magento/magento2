@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Observer;
@@ -16,13 +16,13 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class)
             ->getArea('crontab')
             ->load(\Magento\Framework\App\Area::PART_CONFIG);
-        $request = Bootstrap::getObjectManager()->create('Magento\Framework\App\Console\Request');
+        $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\Console\Request::class);
         $request->setParams(['group' => 'default', 'standaloneProcessStarted' => '0']);
         $this->_model = Bootstrap::getObjectManager()
-            ->create('Magento\Cron\Observer\ProcessCronQueueObserver', ['request' => $request]);
+            ->create(\Magento\Cron\Observer\ProcessCronQueueObserver::class, ['request' => $request]);
         $this->_model->execute(new \Magento\Framework\Event\Observer());
     }
 
@@ -32,7 +32,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     public function testDispatchScheduled()
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cron\Model\ResourceModel\Schedule\Collection'
+            \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
         );
         $collection->addFieldToFilter('status', \Magento\Cron\Model\Schedule::STATUS_PENDING);
         $this->assertGreaterThan(0, $collection->count(), 'Cron has failed to schedule tasks for itself for future.');
@@ -41,7 +41,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     public function testDispatchNoFailed()
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cron\Model\ResourceModel\Schedule\Collection'
+            \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
         );
         $collection->addFieldToFilter('status', \Magento\Cron\Model\Schedule::STATUS_ERROR);
         foreach ($collection as $item) {

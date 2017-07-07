@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,20 +11,20 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::marketing">
                     <resource id="Magento_Backend::marketing_communications">
-                        <resource id="Magento_Newsletter::template" title="Newsletter Template" sortOrder="20" />
-                        <resource id="Magento_Newsletter::queue" title="Newsletter Queue" sortOrder="30"/>
-                        <resource id="Magento_Newsletter::subscriber" title="Newsletter Subscribers" sortOrder="40"/>
+                        <resource id="Magento_Newsletter::template" title="Newsletter Template" translate="title" sortOrder="20" />
+                        <resource id="Magento_Newsletter::queue" title="Newsletter Queue" translate="title" sortOrder="30"/>
+                        <resource id="Magento_Newsletter::subscriber" title="Newsletter Subscribers" translate="title" sortOrder="40"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Reports::report">
                     <resource id="Magento_Reports::report_marketing">
-                        <resource id="Magento_Newsletter::problem" title="Newsletter Problem Reports" sortOrder="40"/>
+                        <resource id="Magento_Newsletter::problem" title="Newsletter Problem Reports" translate="title" sortOrder="40"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Newsletter::newsletter" title="Newsletter Section" />
+                            <resource id="Magento_Newsletter::newsletter" title="Newsletter Section" translate="title" />
                         </resource>
                     </resource>
                 </resource>

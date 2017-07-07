@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class ConfigFixtureTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = $this->getMock(
-            'Magento\TestFramework\Annotation\ConfigFixture',
+            \Magento\TestFramework\Annotation\ConfigFixture::class,
             ['_getConfigValue', '_setConfigValue']
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml;
@@ -27,6 +27,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * Test redirection to startup page after success password recovering posting
      *
      * @covers \Magento\User\Controller\Adminhtml\Auth\Forgotpassword::execute
+     * @magentoDbIsolation enabled
      */
     public function testForgotpasswordAction()
     {
@@ -35,7 +36,34 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertRedirect(
             $this->equalTo(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Backend\Helper\Data'
+                    \Magento\Backend\Helper\Data::class
+                )->getHomePageUrl()
+            )
+        );
+    }
+
+    /**
+     * Test email sending for forgotPassword action
+     *
+     * @magentoAdminConfigFixture admin/emails/forgot_email_template admin_emails_forgot_email_template
+     * @magentoAdminConfigFixture admin/emails/forgot_email_identity general
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     */
+    public function testEmailSendForgotPasswordAction()
+    {
+        $transportBuilderMock = $this->prepareEmailMock(
+            1,
+            'admin_emails_forgot_email_template',
+            'general'
+        );
+        $this->addMockToClass($transportBuilderMock, \Magento\User\Model\User::class);
+
+        $this->getRequest()->setPostValue('email', 'adminUser@example.com');
+        $this->dispatch('backend/admin/auth/forgotpassword');
+        $this->assertRedirect(
+            $this->equalTo(
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    \Magento\Backend\Helper\Data::class
                 )->getHomePageUrl()
             )
         );
@@ -52,13 +80,13 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var $user \Magento\User\Model\User */
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\User\Model\User'
+            \Magento\User\Model\User::class
         )->loadByUsername(
             'dummy_username'
         );
         $this->assertNotEmpty($user->getId(), 'Broken fixture');
         $resetPasswordToken = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\User\Helper\Data'
+            \Magento\User\Helper\Data::class
         )->generateResetPasswordLinkToken();
         $user->changeResetPasswordLinkToken($resetPasswordToken);
         $user->save();
@@ -98,12 +126,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $user \Magento\User\Model\User */
-        $user = $objectManager->create('Magento\User\Model\User');
+        $user = $objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername('dummy_username');
         $this->assertNotEmpty($user->getId(), 'Broken fixture');
 
         /** @var \Magento\User\Helper\Data $helper */
-        $helper = $objectManager->get('Magento\User\Helper\Data');
+        $helper = $objectManager->get(\Magento\User\Helper\Data::class);
 
         $resetPasswordToken = $helper->generateResetPasswordLinkToken();
         $user->changeResetPasswordLinkToken($resetPasswordToken);
@@ -127,7 +155,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/auth/resetpasswordpost');
 
         /** @var \Magento\Backend\Helper\Data $backendHelper */
-        $backendHelper = $objectManager->get('Magento\Backend\Helper\Data');
+        $backendHelper = $objectManager->get(\Magento\Backend\Helper\Data::class);
         if ($isPasswordChanged) {
             $this->assertRedirect($this->equalTo($backendHelper->getHomePageUrl()));
         } else {
@@ -137,12 +165,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         }
 
         /** @var $user \Magento\User\Model\User */
-        $user = $objectManager->create('Magento\User\Model\User');
+        $user = $objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername('dummy_username');
 
         if ($isPasswordChanged) {
             /** @var \Magento\Framework\Encryption\EncryptorInterface $encryptor */
-            $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+            $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
             $this->assertTrue($encryptor->validateHash($password, $user->getPassword()));
         } else {
             $this->assertEquals($oldPassword, $user->getPassword());
@@ -178,7 +206,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Backend\Helper\Data $backendHelper */
-        $backendHelper = $objectManager->get('Magento\Backend\Helper\Data');
+        $backendHelper = $objectManager->get(\Magento\Backend\Helper\Data::class);
 
         $this->assertRedirect($this->equalTo($backendHelper->getHomePageUrl()));
     }
@@ -192,12 +220,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $user = $objectManager->create('Magento\User\Model\User');
+        $user = $objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername('dummy_username');
         $resetPasswordToken = null;
         if ($user->getId()) {
             /** @var \Magento\User\Helper\Data $userHelper */
-            $userHelper = $objectManager->get('Magento\User\Helper\Data');
+            $userHelper = $objectManager->get(\Magento\User\Helper\Data::class);
 
             $resetPasswordToken = $userHelper->generateResetPasswordLinkToken();
             $user->changeResetPasswordLinkToken($resetPasswordToken);
@@ -227,5 +255,87 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect();
+    }
+
+    /**
+     * Prepare email mock to test emails
+     *
+     * @param int $occurrenceNumber
+     * @param string $templateId
+     * @param string $sender
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
+    {
+        $transportMock = $this->getMock(
+            \Magento\Framework\Mail\TransportInterface::class,
+            ['sendMessage']
+        );
+        $transportMock->expects($this->exactly($occurrenceNumber))
+            ->method('sendMessage');
+        $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setTemplateModel',
+                    'addTo',
+                    'setFrom',
+                    'setTemplateIdentifier',
+                    'setTemplateVars',
+                    'setTemplateOptions',
+                    'getTransport'
+                ]
+            )
+            ->getMock();
+        $transportBuilderMock->method('setTemplateIdentifier')
+            ->with($templateId)
+            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateModel')
+            ->with(\Magento\Email\Model\BackendTemplate::class)
+            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateOptions')
+            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateVars')
+            ->willReturnSelf();
+        $transportBuilderMock->method('setFrom')
+            ->with($sender)
+            ->willReturnSelf();
+        $transportBuilderMock->method('addTo')
+            ->willReturnSelf();
+        $transportBuilderMock->expects($this->exactly($occurrenceNumber))
+            ->method('getTransport')
+            ->willReturn($transportMock);
+
+        return $transportBuilderMock;
+    }
+
+    /**
+     * Add mocked object to environment
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param string $originalClassName
+     */
+    protected function addMockToClass(
+        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        $originalClassName
+    ) {
+        $userMock = $this->_objectManager->create(
+            $originalClassName,
+            ['transportBuilder' => $transportBuilderMock]
+        );
+        $factoryMock = $this->getMockBuilder(\Magento\User\Model\UserFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'create'
+                ]
+            )
+            ->getMock();
+        $factoryMock->method('create')
+            ->willReturn($userMock);
+        $this->_objectManager->addSharedInstance(
+            $factoryMock,
+            \Magento\User\Model\UserFactory::class
+        );
     }
 }

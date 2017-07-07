@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,9 +29,9 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup SUT
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\Framework\Webapi\Rest\Request', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\Webapi\Rest\Request::class, [], [], '', false);
         $this->processor = new FieldsFilter($this->requestMock);
         $this->sampleResponseValue = [
             'customer' => [
@@ -48,7 +48,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
                         ],
                     'firstname' => 'Jane',
                     'lastname' => 'Doe',
-                    'email' => 'jdoe@ebay.com',
+                    'email' => 'jdoe@example.com',
                     'default_billing' => '1',
                     'default_shipping' => '1',
                     'created_at' => '2014-05-27 18:59:43',
@@ -134,7 +134,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'customer' => [
                     'id' => '1',
-                    'email' => 'jdoe@ebay.com',
+                    'email' => 'jdoe@example.com',
                 ],
             'addresses' => [
                     0 => [
@@ -170,7 +170,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'customer' => [
                     'id' => '1',
-                    'email' => 'jdoe@ebay.com',
+                    'email' => 'jdoe@example.com',
                 ],
             'addresses' => [
                     0 => [

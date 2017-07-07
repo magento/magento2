@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Cms\Test\TestCase\UpdateCmsPageEntityTest" summary="Update Cms Page" ticketId="MAGETWO-25186">
         <variation name="UpdateCmsPageEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S3, to_maintain:yes</data>
             <data name="cms/data/title" xsi:type="string">CmsPageEdited%isolation%</data>
-            <data name="cms/data/is_active" xsi:type="string">Disabled</data>
+            <data name="cms/data/is_active" xsi:type="string">No</data>
             <data name="cms/data/content/content" xsi:type="string">cms_page_text_content_after_edit</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageDisabledOnFrontend" />
         </variation>
         <variation name="UpdateCmsPageEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S1, to_maintain:yes</data>
             <data name="cms/data/title" xsi:type="string">CmsPageEdited%isolation%</data>
             <data name="cms/data/identifier" xsi:type="string">cms_page_url_edited_%isolation%</data>
             <data name="cms/data/content_heading" xsi:type="string">Content Heading TextEdited</data>
             <data name="cms/data/content/content" xsi:type="string">cms_page_text_content_after_edit</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
         </variation>
     </testCase>

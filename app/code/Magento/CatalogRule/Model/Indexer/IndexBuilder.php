@@ -1,23 +1,31 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class IndexBuilder
 {
     const SECONDS_IN_DAY = 86400;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * CatalogRuleGroupWebsite columns list
@@ -152,7 +160,9 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Catalog rule indexing failed. See details in exception log.")
+            );
         }
     }
 
@@ -186,7 +196,9 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Catalog rule indexing failed. See details in exception log.")
+            );
         }
     }
 
@@ -211,7 +223,7 @@ class IndexBuilder
      */
     protected function cleanByIds($productIds)
     {
-        $this->connection->deleteFromSelect(
+        $query = $this->connection->deleteFromSelect(
             $this->connection
                 ->select()
                 ->from($this->resource->getTableName('catalogrule_product'), 'product_id')
@@ -219,14 +231,16 @@ class IndexBuilder
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product')
         );
+        $this->connection->query($query);
 
-        $this->connection->deleteFromSelect(
+        $query = $this->connection->deleteFromSelect(
             $this->connection->select()
                 ->from($this->resource->getTableName('catalogrule_product_price'), 'product_id')
                 ->distinct()
                 ->where('product_id IN (?)', $productIds),
             $this->resource->getTableName('catalogrule_product_price')
         );
+        $this->connection->query($query);
     }
 
     /**
@@ -239,7 +253,7 @@ class IndexBuilder
     protected function applyRule(Rule $rule, $product)
     {
         $ruleId = $rule->getId();
-        $productId = $product->getId();
+        $productEntityId = $product->getId();
         $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
 
         if (!$rule->validate($product)) {
@@ -250,7 +264,7 @@ class IndexBuilder
             $this->resource->getTableName('catalogrule_product'),
             [
                 $this->connection->quoteInto('rule_id = ?', $ruleId),
-                $this->connection->quoteInto('product_id = ?', $productId)
+                $this->connection->quoteInto('product_id = ?', $productEntityId)
             ]
         );
 
@@ -262,8 +276,6 @@ class IndexBuilder
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();
-        $subActionOperator = $rule->getSubIsEnable() ? $rule->getSubSimpleAction() : '';
-        $subActionAmount = $rule->getSubDiscountAmount();
 
         $rows = [];
         try {
@@ -275,13 +287,11 @@ class IndexBuilder
                         'to_time' => $toTime,
                         'website_id' => $websiteId,
                         'customer_group_id' => $customerGroupId,
-                        'product_id' => $productId,
+                        'product_id' => $productEntityId,
                         'action_operator' => $actionOperator,
                         'action_amount' => $actionAmount,
                         'action_stop' => $actionStop,
                         'sort_order' => $sortOrder,
-                        'sub_simple_action' => $subActionOperator,
-                        'sub_discount_amount' => $subActionAmount,
                     ];
 
                     if (count($rows) == $this->batchCount) {
@@ -356,8 +366,6 @@ class IndexBuilder
         $sortOrder = (int)$rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
-        $subActionOperator = $rule->getSubIsEnable() ? $rule->getSubSimpleAction() : '';
-        $subActionAmount = $rule->getSubDiscountAmount();
         $actionStop = $rule->getStopRulesProcessing();
 
         $rows = [];
@@ -379,8 +387,6 @@ class IndexBuilder
                         'action_amount' => $actionAmount,
                         'action_stop' => $actionStop,
                         'sort_order' => $sortOrder,
-                        'sub_simple_action' => $subActionOperator,
-                        'sub_discount_amount' => $subActionAmount,
                     ];
 
                     if (count($rows) == $this->batchCount) {
@@ -410,14 +416,12 @@ class IndexBuilder
         $fromDate = mktime(0, 0, 0, date('m'), date('d') - 1);
         $toDate = mktime(0, 0, 0, date('m'), date('d') + 1);
 
-        $productId = $product ? $product->getId() : null;
-
         /**
          * Update products rules prices per each website separately
          * because of max join limit in mysql
          */
         foreach ($this->storeManager->getWebsites() as $website) {
-            $productsStmt = $this->getRuleProductsStmt($website->getId(), $productId);
+            $productsStmt = $this->getRuleProductsStmt($website->getId(), $product);
 
             $dayPrices = [];
             $stopFlags = [];
@@ -439,6 +443,8 @@ class IndexBuilder
                     }
                 }
 
+                $ruleData['from_time'] = $this->roundTime($ruleData['from_time']);
+                $ruleData['to_time'] = $this->roundTime($ruleData['to_time']);
                 /**
                  * Build prices for each day
                  */
@@ -567,11 +573,11 @@ class IndexBuilder
 
     /**
      * @param int $websiteId
-     * @param int|null $productId
+     * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getRuleProductsStmt($websiteId, $productId = null)
+    protected function getRuleProductsStmt($websiteId, Product $product = null)
     {
         /**
          * Sort order is important
@@ -589,8 +595,8 @@ class IndexBuilder
             ['rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id']
         );
 
-        if ($productId !== null) {
-            $select->where('rp.product_id=?', $productId);
+        if ($product && $product->getEntityId()) {
+            $select->where('rp.product_id=?', $product->getEntityId());
         }
 
         /**
@@ -600,7 +606,13 @@ class IndexBuilder
         $priceTable = $priceAttr->getBackend()->getTable();
         $attributeId = $priceAttr->getId();
 
-        $joinCondition = '%1$s.entity_id=rp.product_id AND (%1$s.attribute_id='
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $select->join(
+            ['e' => $this->getTable('catalog_product_entity')],
+            sprintf('e.entity_id = rp.product_id'),
+            []
+        );
+        $joinCondition = '%1$s.' . $linkField . '=e.' . $linkField . ' AND (%1$s.attribute_id='
             . $attributeId
             . ') and %1$s.store_id=%2$s';
 
@@ -708,5 +720,30 @@ class IndexBuilder
     protected function critical($e)
     {
         $this->logger->critical($e);
+    }
+
+    /**
+     * @param int $timeStamp
+     * @return int
+     */
+    private function roundTime($timeStamp)
+    {
+        if (is_numeric($timeStamp) && $timeStamp != 0) {
+            $timeStamp = $this->dateTime->timestamp($this->dateTime->date('Y-m-d 00:00:00', $timeStamp));
+        }
+
+        return $timeStamp;
+    }
+
+    /**
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

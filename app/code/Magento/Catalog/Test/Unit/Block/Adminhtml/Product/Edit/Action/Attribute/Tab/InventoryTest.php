@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
@@ -45,27 +45,27 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->contextMock = $this->getMock(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             ['getRequest'],
             [],
             '',
             false
         );
         $this->backordersMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Source\Backorders',
+            \Magento\CatalogInventory\Model\Source\Backorders::class,
             [],
             [],
             '',
             false
         );
         $this->stockConfigurationMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockConfigurationInterface',
+            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
             [],
             '',
             false
         );
         $this->requestMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             ['getParam'],
             '',
             false
@@ -76,7 +76,7 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->requestMock));
 
         $this->inventory = $objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory',
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Inventory::class,
             [
                 'context' => $this->contextMock,
                 'backorders' => $this->backordersMock,
@@ -176,5 +176,15 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
     public function testIsHidden()
     {
         $this->assertFalse($this->inventory->isHidden());
+    }
+
+    /**
+     * Run test isEnabled method
+     *
+     * @return void
+     */
+    public function testIsEnabled()
+    {
+        $this->assertEquals(true, $this->inventory->isAvailable('field'));
     }
 }

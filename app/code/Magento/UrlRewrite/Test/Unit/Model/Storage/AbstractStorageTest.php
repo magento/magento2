@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
@@ -24,14 +24,14 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlRewriteFactory = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory')
+        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->dataObjectHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->storage = $this->getMockForAbstractClass(
-            'Magento\UrlRewrite\Model\Storage\AbstractStorage',
+            \Magento\UrlRewrite\Model\Storage\AbstractStorage::class,
             [$this->urlRewriteFactory, $this->dataObjectHelper],
             '',
             true,
@@ -53,7 +53,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
-            ->with($urlRewrites[0], $rows[0], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with($urlRewrites[0], $rows[0], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(0))
@@ -62,7 +62,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->at(1))
             ->method('populateWithArray')
-            ->with($urlRewrites[1], $rows[1], '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with($urlRewrites[1], $rows[1], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->at(1))
@@ -97,7 +97,7 @@ class AbstractStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($urlRewrite, $row, '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+            ->with($urlRewrite, $row, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->will($this->returnSelf());
 
         $this->urlRewriteFactory->expects($this->any())

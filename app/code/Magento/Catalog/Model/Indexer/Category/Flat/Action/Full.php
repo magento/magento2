@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
@@ -68,12 +68,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                 $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
                 $data = [];
                 foreach ($categories[$store->getRootCategoryId()] as $category) {
-                    if (!isset($attributesData[$category['entity_id']])) {
+                    if (!isset($attributesData[$category[$this->categoryMetadata->getLinkField()]])) {
                         continue;
                     }
                     $category['store_id'] = $store->getId();
                     $data[] = $this->prepareValuesToInsert(
-                        array_merge($category, $attributesData[$category['entity_id']])
+                        array_merge($category, $attributesData[$category[$this->categoryMetadata->getLinkField()]])
                     );
                 }
                 $this->connection->insertMultiple(

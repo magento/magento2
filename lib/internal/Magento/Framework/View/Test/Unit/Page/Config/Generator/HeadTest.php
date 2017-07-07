@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,16 +33,16 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->title = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->title = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->headGenerator = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Page\Config\Generator\Head',
+            \Magento\Framework\View\Page\Config\Generator\Head::class,
             [
                 'pageConfig' => $this->pageConfigMock,
             ]
@@ -51,15 +51,15 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $generatorContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Context')
+        $generatorContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
-        $structureMock = $this->getMockBuilder('Magento\Framework\View\Page\Config\Structure')
+        $structureMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+        $readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $readerContextMock->expects($this->any())

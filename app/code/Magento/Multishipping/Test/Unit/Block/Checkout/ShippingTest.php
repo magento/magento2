@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,14 +42,20 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $this->scopeConfigMock = $this->getMock(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->multiShippingMock =
-            $this->getMock('Magento\Multishipping\Model\Checkout\Type\Multishipping', [], [], '', false);
+            $this->getMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class, [], [], '', false);
         $this->priceCurrencyMock =
-            $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface', [], [], '', false);
-        $this->taxHelperMock = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
+            $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class, [], [], '', false);
+        $this->taxHelperMock = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
         $this->model = $objectManager->getObject(
-            'Magento\Multishipping\Block\Checkout\Shipping',
+            \Magento\Multishipping\Block\Checkout\Shipping::class,
             [
                 'multishipping' => $this->multiShippingMock,
                 'scopeConfig' => $this->scopeConfigMock,
@@ -61,7 +67,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddresses()
     {
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->multiShippingMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())
             ->method('getAllShippingAddresses')->will($this->returnValue(['expected array']));
@@ -71,7 +77,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressShippingMethod()
     {
         $addressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['getShippingMethod', '__wakeup'],
             [],
             '',
@@ -85,7 +91,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingRates()
     {
         $addressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['getGroupedAllShippingRates', '__wakeup'],
             [],
             '',
@@ -101,8 +107,10 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $carrierCode = 'some carrier code';
         $name = 'some name';
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->with('carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)->will($this->returnValue($name));
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
+            'carriers/' . $carrierCode . '/title',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )->will($this->returnValue($name));
 
         $this->assertEquals($name, $this->model->getCarrierName($carrierCode));
     }
@@ -110,8 +118,10 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetCarrierNameWithEmptyName()
     {
         $carrierCode = 'some carrier code';
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->with('carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)->will($this->returnValue(null));
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
+            'carriers/' . $carrierCode . '/title',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )->will($this->returnValue(null));
 
         $this->assertEquals($carrierCode, $this->model->getCarrierName($carrierCode));
     }
@@ -119,14 +129,14 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingPrice()
     {
         $addressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['getQuote', '__wakeup'],
             [],
             '',
             false
         );
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $price = 100;
         $flag = true;
         $shippingPrice = 11.11;

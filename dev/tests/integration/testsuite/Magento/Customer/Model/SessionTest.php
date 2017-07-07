@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -20,7 +20,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Session'
+            \Magento\Customer\Model\Session::class
         );
     }
 
@@ -40,7 +40,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $fixtureCustomerId = 1;
 
         /** @var \Magento\Customer\Model\Session $customerSession */
-        $customerSession = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $customerSession = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
         $customerSession->loginById($fixtureCustomerId);
 
         $customerData = $customerSession->getCustomerData();

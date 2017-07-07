@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,13 +23,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $factory;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->factory = $objectManager->getObject(
-            'Magento\Framework\Controller\Router\Route\Factory',
+            \Magento\Framework\Controller\Router\Route\Factory::class,
             [
                 'objectManager' => $this->objectManager,
             ]
@@ -45,7 +45,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $routeClass = 'router';
         $paramRoute = 'route';
 
-        $router = $this->getMockBuilder('Magento\Framework\App\RouterInterface')
+        $router = $this->getMockBuilder(\Magento\Framework\App\RouterInterface::class)
             ->setMockClassName($routeClass)
             ->getMock();
 
@@ -57,7 +57,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->factory->createRoute($routeClass, $paramRoute);
 
         $this->assertInstanceOf($routeClass, $result);
-        $this->assertInstanceOf('Magento\Framework\App\RouterInterface', $result);
+        $this->assertInstanceOf(\Magento\Framework\App\RouterInterface::class, $result);
     }
 
     /**

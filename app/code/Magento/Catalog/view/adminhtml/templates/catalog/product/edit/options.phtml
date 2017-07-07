@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@
 <div class="fieldset-wrapper" id="product-custom-options-wrapper" data-block="product-custom-options">
     <div class="fieldset-wrapper-title">
         <strong class="title">
-            <span><?php /* @escapeNotVerified */ echo __('Custom Options') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Custom Options') ?></span>
         </strong>
     </div>
     <div class="fieldset-wrapper-content" id="product-custom-options-content" data-role="product-custom-options-content">
@@ -20,19 +20,19 @@
             <div class="messages">
                 <div class="message message-error" id="dynamic-price-warning" style="display: none;">
                     <div class="message-inner">
-                        <div class="message-content"><?php /* @escapeNotVerified */ echo __('We can\'t save custom-defined options for bundles with dynamic pricing.') ?></div>
+                        <div class="message-content"><?= /* @escapeNotVerified */ __('We can\'t save custom-defined options for bundles with dynamic pricing.') ?></div>
                     </div>
                 </div>
             </div>
 
             <div id="product_options_container" class="sortable-wrapper">
                 <div id="product_options_container_top"></div>
-                <?php echo $block->getOptionsBoxHtml() ?>
+                <?= $block->getOptionsBoxHtml() ?>
             </div>
 
             <div class="actions">
-                <?php echo $block->getChildHtml('import_button') ?>
-                <?php echo $block->getAddButtonHtml() ?>
+                <?= $block->getChildHtml('import_button') ?>
+                <?= $block->getAddButtonHtml() ?>
             </div>
         </fieldset>
     </div>

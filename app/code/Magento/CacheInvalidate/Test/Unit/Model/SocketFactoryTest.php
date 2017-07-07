@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
 class SocketFactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testCreate()
     {
         $factory = new \Magento\CacheInvalidate\Model\SocketFactory();
-        $this->assertInstanceOf('\Zend\Http\Client\Adapter\Socket', $factory->create());
+        $this->assertInstanceOf(\Zend\Http\Client\Adapter\Socket::class, $factory->create());
     }
 }

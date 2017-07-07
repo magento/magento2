@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Rss;
@@ -42,21 +42,21 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->categoryLayer = $this->getMock(
-            'Magento\Catalog\Model\Layer\Category',
+            \Magento\Catalog\Model\Layer\Category::class,
             ['setStore', '__wakeup'],
             [],
             '',
             false
         );
         $this->collectionFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->visibility = $this->getMock(
-            'Magento\Catalog\Model\Product\Visibility',
+            \Magento\Catalog\Model\Product\Visibility::class,
             [
                 'getVisibleInCatalogIds',
                 '__wakeup'
@@ -67,7 +67,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
@@ -78,7 +78,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         /** @var \Magento\Catalog\Model\Rss\Category model */
         $this->model = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Rss\Category',
+            \Magento\Catalog\Model\Rss\Category::class,
             [
                 'layerResolver' => $layerResolver,
                 'collectionFactory' => $this->collectionFactory,
@@ -101,7 +101,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getVisibleInCatalogIds')
             ->will($this->returnValue($visibleInCatalogIds));
         $products = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
                 'setStoreId',
                 'addAttributeToSort',
@@ -115,7 +115,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resourceCollection = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection',
+            \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection::class,
             [
                 'addAttributeToSelect',
                 'addAttributeToFilter',
@@ -165,7 +165,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($products));
         $category = $this->getMock(
-            'Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             [
                 'getResourceCollection',
                 'getChildren',
@@ -186,7 +186,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getProductCollection')
             ->will($this->returnValue($products));
         $layer = $this->getMock(
-            'Magento\Catalog\Model\Layer',
+            \Magento\Catalog\Model\Layer::class,
             [
                 'setCurrentCategory',
                 'prepareProductCollection',
@@ -206,7 +206,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($products));
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();

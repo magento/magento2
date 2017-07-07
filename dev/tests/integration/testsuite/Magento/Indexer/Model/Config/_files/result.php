@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,9 +8,10 @@ return [
     'catalogsearch_fulltext' =>
         [
             'indexer_id' => 'catalogsearch_fulltext',
+            'shared_index' => null,
             'primary' => 'first',
             'view_id' => 'catalogsearch_fulltext',
-            'action_class' => 'Magento\\CatalogSearch\\Model\\Indexer\\Fulltext',
+            'action_class' => \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
             'title' => __('Catalog Search'),
             'description' => __('Rebuild Catalog product fulltext search index'),
             'fieldsets' =>
@@ -18,7 +19,7 @@ return [
                     [
                         'source' => 'MagentoModule\\ServiceClassOrRepositoryClass',
                         'name' => 'first',
-                        'provider' => 'Magento\\Indexer\\Model\\Fieldset\\ProductFieldset',
+                        'provider' => \Magento\Indexer\Model\Fieldset\ProductFieldset::class,
                         'fields' =>
                             [
                                 'title_alias' =>
@@ -30,13 +31,13 @@ return [
                                         'type' => 'searchable',
                                         'filters' =>
                                             [
-                                                0 => 'Magento\\Framework\\Search\\Index\\Filter\\LowercaseFilter',
+                                                0 => \Magento\Framework\Search\Index\Filter\LowercaseFilter::class,
                                             ],
                                     ],
                                 'identifier' =>
                                     [
                                         'name' => 'identifier',
-                                        'handler' => 'Magento\\Framework\\Search\\Index\\Handler',
+                                        'handler' => \Magento\Framework\Search\Index\Handler::class,
                                         'origin' => 'identifier',
                                         'dataType' => null,
                                         'type' => 'filterable',
@@ -73,7 +74,7 @@ return [
                             ],
                     ],
                 ],
-            'saveHandler' => 'Magento\\Cms\\Model\\Indexer\\StoreResource',
-            'structure' => 'Magento\\Cms\\Model\\Indexer\\IndexStructure',
+            'saveHandler' => \Magento\Cms\Model\Indexer\StoreResource::class,
+            'structure' => \Magento\Cms\Model\Indexer\IndexStructure::class,
         ],
 ];

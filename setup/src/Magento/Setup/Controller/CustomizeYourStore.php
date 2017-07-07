@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -50,7 +50,7 @@ class CustomizeYourStore extends AbstractActionController
         $sampleDataDeployed = $this->moduleList->has('Magento_SampleData');
         if ($sampleDataDeployed) {
             /** @var \Magento\Framework\Setup\SampleData\State $sampleData */
-            $sampleData = $this->objectManagerProvider->get()->get('Magento\Framework\Setup\SampleData\State');
+            $sampleData = $this->objectManagerProvider->get()->get(\Magento\Framework\Setup\SampleData\State::class);
             $isSampleDataInstalled = $sampleData->isInstalled();
             $isSampleDataErrorInstallation = $sampleData->hasError();
         } else {

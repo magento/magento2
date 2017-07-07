@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class Products extends Tab
     public function getBestsellersGrid()
     {
         return $this->blockFactory->create(
-            '\Magento\Backend\Test\Block\Dashboard\Tab\Products\Ordered',
+            \Magento\Backend\Test\Block\Dashboard\Tab\Products\Ordered::class,
             ['element' => $this->browser->find($this->orderedProductsGrid)]
         );
     }

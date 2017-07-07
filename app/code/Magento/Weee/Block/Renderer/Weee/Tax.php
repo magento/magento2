@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -96,13 +96,11 @@ class Tax extends \Magento\Backend\Block\Widget implements \Magento\Framework\Da
     protected function _prepareLayout()
     {
         $this->addChild(
-            'add_button',
-            'Magento\Backend\Block\Widget\Button',
+            'add_button', \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Add Tax'), 'data_attribute' => ['action' => 'add-fpt-item'], 'class' => 'add']
         );
         $this->addChild(
-            'delete_button',
-            'Magento\Backend\Block\Widget\Button',
+            'delete_button', \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Delete Tax'),
                 'data_attribute' => ['action' => 'delete-fpt-item'],

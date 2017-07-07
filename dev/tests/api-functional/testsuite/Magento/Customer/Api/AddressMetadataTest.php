@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,7 +68,7 @@ class AddressMetadataTest extends WebapiAbstract
                     AttributeMetadata::VALIDATION_RULES => [],
                     AttributeMetadata::VISIBLE => true,
                     AttributeMetadata::REQUIRED => false,
-                    AttributeMetadata::DATA_MODEL => 'Magento\Customer\Model\Attribute\Data\Postcode',
+                    AttributeMetadata::DATA_MODEL => \Magento\Customer\Model\Attribute\Data\Postcode::class,
                     AttributeMetadata::OPTIONS => [],
                     AttributeMetadata::FRONTEND_CLASS => '',
                     AttributeMetadata::USER_DEFINED => false,
@@ -270,7 +270,7 @@ class AddressMetadataTest extends WebapiAbstract
         parent::tearDownAfterClass();
         /** @var \Magento\Customer\Model\Attribute $attribute */
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Attribute'
+            \Magento\Customer\Model\Attribute::class
         );
         foreach (['custom_attribute1', 'custom_attribute2'] as $attributeCode) {
             $attribute->loadByCode('customer_address', $attributeCode);

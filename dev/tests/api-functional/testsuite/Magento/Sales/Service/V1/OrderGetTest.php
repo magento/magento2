@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -38,7 +38,17 @@ class OrderGetTest extends WebapiAbstract
             'customer_is_guest' => '1',
             'increment_id' => self::ORDER_INCREMENT_ID,
         ];
-        $expectedPayments = ['method' => 'checkmo'];
+        $expectedPayments = [
+            'method' => 'checkmo',
+            'additional_information' => [
+                0 => '11122', // last transaction id
+                // metadata
+                1 => json_encode([
+                    'type' => 'free',
+                    'fraudulent' => false
+                ])
+            ]
+        ];
         $expectedBillingAddressNotEmpty = [
             'city',
             'postcode',
@@ -49,9 +59,16 @@ class OrderGetTest extends WebapiAbstract
             'country_id',
             'firstname',
         ];
+        $expectedShippingAddress = [
+            'address_type' => 'shipping',
+            'city' => 'Los Angeles',
+            'email' => 'customer@null.com',
+            'postcode' => '11111',
+            'region' => 'CA'
+        ];
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
 
         $serviceInfo = [
@@ -80,6 +97,22 @@ class OrderGetTest extends WebapiAbstract
         $this->assertArrayHasKey('billing_address', $result);
         foreach ($expectedBillingAddressNotEmpty as $field) {
             $this->assertArrayHasKey($field, $result['billing_address']);
+        }
+
+        self::assertArrayHasKey('extension_attributes', $result);
+        self::assertArrayHasKey('shipping_assignments', $result['extension_attributes']);
+
+        $shippingAssignments = $result['extension_attributes']['shipping_assignments'];
+        self::assertCount(1, $shippingAssignments);
+        $shippingAddress = $shippingAssignments[0]['shipping']['address'];
+        foreach ($expectedShippingAddress as $key => $value) {
+            self::assertArrayHasKey($key, $shippingAddress);
+            self::assertEquals($value, $shippingAddress[$key]);
+        }
+
+        //check that nullable fields were marked as optional and were not sent
+        foreach ($result as $value) {
+            $this->assertNotNull($value);
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
@@ -32,7 +32,7 @@ class Edit extends \Magento\Email\Controller\Adminhtml\Email\Template
 
         $this->_addContent(
             $this->_view->getLayout()->createBlock(
-                'Magento\Email\Block\Adminhtml\Template\Edit',
+                \Magento\Email\Block\Adminhtml\Template\Edit::class,
                 'template_edit'
             )->setEditMode(
                 (bool)$this->getRequest()->getParam('id')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -33,6 +33,7 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
         $resultPage->addBreadcrumb(__('Manage Customers'), __('Manage Customers'));
 
         $this->_getSession()->unsCustomerData();
+        $this->_getSession()->unsCustomerFormData();
 
         return $resultPage;
     }

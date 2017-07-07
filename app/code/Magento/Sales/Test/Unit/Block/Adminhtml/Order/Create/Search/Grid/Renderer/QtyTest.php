@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
@@ -26,10 +26,10 @@ class QtyTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->rowMock = $this->getMock('Magento\Framework\DataObject', ['getTypeId', 'getIndex'], [], '', false);
-        $this->typeConfigMock = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
+        $this->rowMock = $this->getMock(\Magento\Framework\DataObject::class, ['getTypeId', 'getIndex'], [], '', false);
+        $this->typeConfigMock = $this->getMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
         $this->renderer = $helper->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty',
+            \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty::class,
             ['typeConfig' => $this->typeConfigMock]
         );
     }
@@ -49,7 +49,7 @@ class QtyTest extends \PHPUnit_Framework_TestCase
         );
         $this->rowMock->expects($this->once())->method('getTypeId')->will($this->returnValue('id'));
         $columnMock = $this->getMock(
-            'Magento\Backend\Block\Widget\Grid\Column',
+            \Magento\Backend\Block\Widget\Grid\Column::class,
             ['getInlineCss', 'getId'],
             [],
             '',

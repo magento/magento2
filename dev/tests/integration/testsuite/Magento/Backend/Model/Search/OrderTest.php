@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function testLoad($query, $limit, $start, $expectedResult)
     {
         /** @var $order \Magento\Sales\Model\Order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $orderIdByIncrementId = [];
         foreach (['100000001', '100000002', '100000003'] as $incrementId) {
             $orderIdByIncrementId[$incrementId] = $order->loadByIncrementId($incrementId)->getId();
@@ -30,7 +30,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         /** Preconditions */
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Backend\Model\Search\Order $orderSearch */
-        $orderSearch = $objectManager->create('Magento\Backend\Model\Search\Order');
+        $orderSearch = $objectManager->create(\Magento\Backend\Model\Search\Order::class);
         $orderSearch->setQuery($query);
         $orderSearch->setLimit($limit);
         $orderSearch->setStart($start);

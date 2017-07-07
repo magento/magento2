@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,17 +27,19 @@ class CombineTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
-            'Magento\CatalogWidget\Model\Rule\Condition\Combine'
+            \Magento\CatalogWidget\Model\Rule\Condition\Combine::class
         );
 
-        $this->conditionFactory = $this->getMockBuilder('\Magento\CatalogWidget\Model\Rule\Condition\ProductFactory')
-            ->setMethods(['create'])
+        $this->conditionFactory = $this->getMockBuilder(
+            \Magento\CatalogWidget\Model\Rule\Condition\ProductFactory::class
+        )->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $arguments['conditionFactory'] = $this->conditionFactory;
+        $arguments['excludedAttributes'] = ['excluded_attribute'];
 
         $this->condition = $objectManagerHelper->getObject(
-            'Magento\CatalogWidget\Model\Rule\Condition\Combine',
+            \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
             $arguments
         );
     }
@@ -46,7 +48,8 @@ class CombineTest extends \PHPUnit_Framework_TestCase
     {
         $expectedOptions = [
             ['value' => '', 'label' => __('Please choose a condition to add.')],
-            ['value' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine', 'label' => __('Conditions Combination')],
+            ['value' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
+                'label' => __('Conditions Combination')],
             ['label' => __('Product Attribute'), 'value' => [
                 ['value' => 'Magento\CatalogWidget\Model\Rule\Condition\Product|sku', 'label' => 'SKU'],
                 ['value' => 'Magento\CatalogWidget\Model\Rule\Condition\Product|category', 'label' => 'Category'],
@@ -56,8 +59,9 @@ class CombineTest extends \PHPUnit_Framework_TestCase
         $attributeOptions = [
             'sku' => 'SKU',
             'category' => 'Category',
+            'excluded_attribute' => 'Excluded attribute',
         ];
-        $productCondition = $this->getMockBuilder('\Magento\CatalogWidget\Model\Rule\Condition\Product')
+        $productCondition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Product::class)
             ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,13 +76,13 @@ class CombineTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectValidatedAttributes()
     {
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $condition = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\Combine')
-            ->disableOriginalConstructor()->setMethods(['addToCollection'])
+        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
+            ->disableOriginalConstructor()->setMethods(['collectValidatedAttributes'])
             ->getMock();
-        $condition->expects($this->any())->method('addToCollection')->with($collection)
+        $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)
             ->will($this->returnSelf());
 
         $this->condition->setConditions([$condition]);

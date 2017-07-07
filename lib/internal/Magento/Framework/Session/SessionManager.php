@@ -2,7 +2,7 @@
 /**
  * Magento session manager
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -188,6 +188,7 @@ class SessionManager implements SessionManagerInterface
             $this->setSessionId($this->sidResolver->getSid($this));
             session_start();
             $this->validator->validate($this);
+            $this->renewCookie();
 
             register_shutdown_function([$this, 'writeClose']);
 
@@ -195,6 +196,35 @@ class SessionManager implements SessionManagerInterface
             \Magento\Framework\Profiler::stop('session_start');
         }
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
+        return $this;
+    }
+
+    /**
+     * Renew session cookie to prolong session
+     *
+     * @return $this
+     */
+    private function renewCookie()
+    {
+        if (!$this->getCookieLifetime()) {
+            return $this;
+        }
+        $cookieValue = $this->cookieManager->getCookie($this->getName());
+        if ($cookieValue) {
+            $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
+            $metadata->setPath($this->sessionConfig->getCookiePath());
+            $metadata->setDomain($this->sessionConfig->getCookieDomain());
+            $metadata->setDuration($this->sessionConfig->getCookieLifetime());
+            $metadata->setSecure($this->sessionConfig->getCookieSecure());
+            $metadata->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+
+            $this->cookieManager->setPublicCookie(
+                $this->getName(),
+                $cookieValue,
+                $metadata
+            );
+        }
+
         return $this;
     }
 
@@ -238,7 +268,7 @@ class SessionManager implements SessionManagerInterface
     public function getData($key = '', $clear = false)
     {
         $data = $this->storage->getData($key);
-        if ($clear && $data) {
+        if ($clear && isset($data)) {
             $this->storage->unsetData($key);
         }
         return $data;
@@ -298,6 +328,7 @@ class SessionManager implements SessionManagerInterface
             return;
         }
 
+        session_regenerate_id(true);
         session_destroy();
         if ($options['send_expire_cookie']) {
             $this->expireSessionCookie();
@@ -470,7 +501,7 @@ class SessionManager implements SessionManagerInterface
             return $this;
         }
         if ($this->isSessionExists()) {
-            session_regenerate_id(true);
+            session_regenerate_id(false);
         } else {
             session_start();
         }

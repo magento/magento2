@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Observer;
@@ -28,7 +28,7 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit_Framework_TestCase
         $this->initMocks();
 
         $this->model = $helper->getObject(
-            'Magento\SalesRule\Observer\AddSalesRuleNameToOrderObserver',
+            \Magento\SalesRule\Observer\AddSalesRuleNameToOrderObserver::class,
             [
                 'ruleFactory' => $this->ruleFactory,
                 'coupon' => $this->couponMock,
@@ -39,7 +39,7 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit_Framework_TestCase
     protected function initMocks()
     {
         $this->couponMock = $this->getMock(
-            '\Magento\SalesRule\Model\Coupon',
+            \Magento\SalesRule\Model\Coupon::class,
             [
                 '__wakeup',
                 'save',
@@ -55,14 +55,14 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->ruleFactory = $this->getMock('Magento\SalesRule\Model\RuleFactory', ['create'], [], '', false);
+        $this->ruleFactory = $this->getMock(\Magento\SalesRule\Model\RuleFactory::class, ['create'], [], '', false);
     }
 
     public function testAddSalesRuleNameToOrderWithoutCouponCode()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getOrder'], [], '', false);
+        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, ['getOrder'], [], '', false);
         $order = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             ['setCouponRuleName', 'getCouponCode', '__wakeup'],
             [],
             '',
@@ -81,9 +81,9 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAddSalesRuleNameToOrderWithoutRule()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getOrder'], [], '', false);
+        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, ['getOrder'], [], '', false);
         $order = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             ['setCouponRuleName', 'getCouponCode', '__wakeup'],
             [],
             '',
@@ -106,10 +106,10 @@ class AddSalesRuleNameToOrderObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testAddSalesRuleNameToOrder()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getOrder'], [], '', false);
-        $rule = $this->getMock('Magento\SalesRule\Model\Rule', ['load', 'getName', '__wakeup'], [], '', false);
+        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, ['getOrder'], [], '', false);
+        $rule = $this->getMock(\Magento\SalesRule\Model\Rule::class, ['load', 'getName', '__wakeup'], [], '', false);
         $order = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             ['setCouponRuleName', 'getCouponCode', '__wakeup'],
             [],
             '',

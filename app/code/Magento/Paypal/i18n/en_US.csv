@@ -1,78 +1,25 @@
-Custom,Custom
-Close,Close
-Cancel,Cancel
-Back,Back
-Price,Price
+"Billing Agreements","Billing Agreements"
 ID,ID
-Configure,Configure
-No,No
-Qty,Qty
-Subtotal,Subtotal
-"Incl. Tax","Incl. Tax"
-Edit,Edit
-"--Please Select--","--Please Select--"
-Customer,Customer
+Email,Email
 "First Name","First Name"
 "Last Name","Last Name"
-Email,Email
-"-- Please Select --","-- Please Select --"
-Yes,Yes
-Status,Status
-Enabled,Enabled
-"Sort Order","Sort Order"
-Title,Title
-"Are you sure you want to do this?","Are you sure you want to do this?"
-Order,Order
-View,View
-Active,Active
-Position,Position
-Dynamic,Dynamic
-N/A,N/A
-Canceled,Canceled
-"General Information","General Information"
-Static,Static
-"Advanced Settings","Advanced Settings"
-"Learn More","Learn More"
-"Start Date","Start Date"
-"Product Name","Product Name"
-"3D Secure Card Validation","3D Secure Card Validation"
-"Merchant Liability","Merchant Liability"
-"Billing Information","Billing Information"
-"Shipping Information","Shipping Information"
-"Shipping Method","Shipping Method"
-"Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
-"Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>.","Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href=""%1"">click here</a>."
-Password,Password
-Continue,Continue
-"Order #","Order #"
-Login,Login
-"Shipping Address","Shipping Address"
-"Payment Method","Payment Method"
-"Place Order","Place Order"
-"Sorry, no quotes are available for this order at this time.","Sorry, no quotes are available for this order at this time."
-Sales,Sales
-Created,Created
-Display,Display
-User,User
-Daily,Daily
-Date,Date
-"Order Total","Order Total"
-Never,Never
-Updated,Updated
-Reports,Reports
-"Order Status","Order Status"
-"View Order","View Order"
-Event,Event
-"Please Select","Please Select"
-"Submitting order information...","Submitting order information..."
-Authorization,Authorization
-"You notified customer about invoice #%1.","You notified customer about invoice #%1."
-"Note: %1","Note: %1"
-"IPN ""%1""","IPN ""%1"""
-"Billing Agreements","Billing Agreements"
 "Reference ID","Reference ID"
-"Billing Agreement # ","Billing Agreement # "
+Status,Status
+Created,Created
+N/A,N/A
+Updated,Updated
+Back,Back
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Cancel,Cancel
+"Billing Agreement #%1","Billing Agreement #%1"
+"General Information","General Information"
 "Related Orders","Related Orders"
+Order,Order
+Purchased,Purchased
+"Bill-to Name","Bill-to Name"
+"Ship-to Name","Ship-to Name"
+"Order Total","Order Total"
+"Purchase Point","Purchase Point"
 "Billing Agreement View","Billing Agreement View"
 "View Transaction Details","View Transaction Details"
 "Reference Information","Reference Information"
@@ -84,55 +31,63 @@ Authorization,Authorization
 button_label,button_label
 sandbox_button_label,sandbox_button_label
 Help,Help
-"There is already another PayPal solution enabled. Enable this solution instead?","There is already another PayPal solution enabled. Enable this solution instead?"
-"The following error(s) occured:","The following error(s) occured:"
-"Some PayPal solutions conflict.","Some PayPal solutions conflict."
-"PayPal Express Checkout is not enabled.","PayPal Express Checkout is not enabled."
-"Please re-enable the previously enabled payment solutions.","Please re-enable the previously enabled payment solutions."
+Configure,Configure
+Close,Close
+"Learn More","Learn More"
 "View Demo","View Demo"
 "See terms","See terms"
 "You will be redirected to the PayPal website.","You will be redirected to the PayPal website."
-"Would you like to sign a billing agreement ' 'to streamline further purchases with PayPal?","Would you like to sign a billing agreement ' 'to streamline further purchases with PayPal?"
 "You will be redirected to the PayPal website when you place an order.","You will be redirected to the PayPal website when you place an order."
-"Click here if you are not redirected within 10 seconds.","Click here if you are not redirected within 10 seconds."
-"You will be redirected to the PayPal website in a few seconds.","You will be redirected to the PayPal website in a few seconds."
-"You canceled the billing agreement.","You canceled the billing agreement."
-"We could not cancel the billing agreement.","We could not cancel the billing agreement."
-"You deleted the billing agreement.","You deleted the billing agreement."
-"We could not delete the billing agreement.","We could not delete the billing agreement."
+"Incl. Tax","Incl. Tax"
+"Billing Information","Billing Information"
+"Shipping Information","Shipping Information"
+"Would you like to sign a billing agreement to streamline further purchases with PayPal?","Would you like to sign a billing agreement to streamline further purchases with PayPal?"
+"Invalid block type","Invalid block type"
 "Please specify the correct billing agreement ID and try again.","Please specify the correct billing agreement ID and try again."
+"You canceled the billing agreement.","You canceled the billing agreement."
+"We can\'t cancel the billing agreement.","We can\'t cancel the billing agreement."
+"You deleted the billing agreement.","You deleted the billing agreement."
+"We can\'t delete the billing agreement.","We can\'t delete the billing agreement."
+Reports,Reports
+Sales,Sales
 "View Transaction","View Transaction"
 "We found nothing to fetch because of an empty configuration.","We found nothing to fetch because of an empty configuration."
-"We fetched %1 report rows from '%2@%3'.","We fetched %1 report rows from '%2@%3'."
-"We couldn't fetch reports from '%1@%2'.","We couldn't fetch reports from '%1@%2'."
-"We couldn't start the billing agreement wizard.","We couldn't start the billing agreement wizard."
-"The billing agreement ""%1"" has been created.","The billing agreement ""%1"" has been created."
-"We couldn't finish the billing agreement wizard.","We couldn't finish the billing agreement wizard."
+"We fetched %1 report rows from ""%2@%3.""","We fetched %1 report rows from ""%2@%3."""
+"We can\'t fetch reports from ""%1@%2.""","We can\'t fetch reports from ""%1@%2."""
 "The billing agreement ""%1"" has been canceled.","The billing agreement ""%1"" has been canceled."
-"We couldn't cancel the billing agreement.","We couldn't cancel the billing agreement."
-"To proceed to Checkout, please log in using your email address.","To proceed to Checkout, please log in using your email address."
-"We can't start Express Checkout.","We can't start Express Checkout."
+"The billing agreement ""%1"" has been created.","The billing agreement ""%1"" has been created."
+"We couldn\'t finish the billing agreement wizard.","We couldn\'t finish the billing agreement wizard."
+"We can\'t start the billing agreement wizard.","We can\'t start the billing agreement wizard."
+"Billing Agreement # %1","Billing Agreement # %1"
+"We can\'t initialize Express Checkout.","We can\'t initialize Express Checkout."
+"PayPal Express Checkout Token does not exist.","PayPal Express Checkout Token does not exist."
+"A wrong PayPal Express Checkout Token is specified.","A wrong PayPal Express Checkout Token is specified."
 "Express Checkout and Order have been canceled.","Express Checkout and Order have been canceled."
 "Express Checkout has been canceled.","Express Checkout has been canceled."
 "Unable to cancel Express Checkout","Unable to cancel Express Checkout"
-"We can't process Express Checkout approval.","We can't process Express Checkout approval."
-"We can't initialize Express Checkout review.","We can't initialize Express Checkout review."
-"We can't update shipping method.","We can't update shipping method."
-"We can't place the order.","We can't place the order."
-"We can't initialize Express Checkout.","We can't initialize Express Checkout."
-"PayPal Express Checkout Token does not exist.","PayPal Express Checkout Token does not exist."
-"A wrong PayPal Express Checkout Token is specified.","A wrong PayPal Express Checkout Token is specified."
+"Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
+"We can\'t place the order.","We can\'t place the order."
+"We can\'t process Express Checkout approval.","We can\'t process Express Checkout approval."
+"We can\'t initialize Express Checkout review.","We can\'t initialize Express Checkout review."
+"We can\'t update shipping method.","We can\'t update shipping method."
+"We can\'t start Express Checkout.","We can\'t start Express Checkout."
+"To check out, please sign in with your email address.","To check out, please sign in with your email address."
+"Sorry, but something went wrong","Sorry, but something went wrong"
 "Your payment has been declined. Please try again.","Your payment has been declined. Please try again."
-"We can't contact the PayPal gateway.","We can't contact the PayPal gateway."
-"PayPal response hasn't required fields.","PayPal response hasn't required fields."
+"Requested payment method does not match with order.","Requested payment method does not match with order."
+"Error processing payment, please try again later.","Error processing payment, please try again later."
+"Payment Gateway is unreachable at the moment. Please use another payment option.","Payment Gateway is unreachable at the moment. Please use another payment option."
+"PayPal response hasn\'t required fields.","PayPal response hasn\'t required fields."
 "Something went wrong while processing your order.","Something went wrong while processing your order."
 "PayPal gateway has rejected request. %1","PayPal gateway has rejected request. %1"
-"PayPal gateway rejected the request. %1","PayPal gateway rejected the request. %1"
-"I'm sorry - but we were not able to process your payment. Please try another payment method or contact us so we can assist you.","I'm sorry - but we were not able to process your payment. Please try another payment method or contact us so we can assist you."
-"I'm sorry - but we are not able to complete your transaction. Please contact us so we can assist you.","I'm sorry - but we are not able to complete your transaction. Please contact us so we can assist you."
+"The PayPal gateway rejected the request. %1","The PayPal gateway rejected the request. %1"
+"I\'m sorry - but we were not able to process your payment. Please try another payment method or contact us so we can assist you.","I\'m sorry - but we were not able to process your payment. Please try another payment method or contact us so we can assist you."
+"I\'m sorry - but we are not able to complete your transaction. Please contact us so we can assist you.","I\'m sorry - but we are not able to complete your transaction. Please contact us so we can assist you."
 "The payment method code is not set.","The payment method code is not set."
 "The reference ID is not set.","The reference ID is not set."
 "Unable to save Billing Agreement:","Unable to save Billing Agreement:"
+Active,Active
+Canceled,Canceled
 "The customer ID is not set.","The customer ID is not set."
 "The Billing Agreement status is not set.","The Billing Agreement status is not set."
 "The PayPal certificate does not exist.","The PayPal certificate does not exist."
@@ -144,28 +99,35 @@ Help,Help
 "Payments by PayPal (150 X 40)","Payments by PayPal (150 X 40)"
 "Shop now using (150 X 60)","Shop now using (150 X 60)"
 "Shop now using (150 X 40)","Shop now using (150 X 40)"
+Dynamic,Dynamic
+Static,Static
 Shortcut,Shortcut
 "Acceptance Mark Image","Acceptance Mark Image"
+Authorization,Authorization
 Sale,Sale
+Yes,Yes
+No,No
 "For Virtual Quotes Only","For Virtual Quotes Only"
 Auto,Auto
 "Ask Customer","Ask Customer"
+Never,Never
 "IPN (Instant Payment Notification) Only","IPN (Instant Payment Notification) Only"
 "API Signature","API Signature"
 "API Certificate","API Certificate"
 "The ordering amount of %1 is pending approval on the payment gateway.","The ordering amount of %1 is pending approval on the payment gateway."
 "Ordered amount of %1","Ordered amount of %1"
-"We'll authorize the amount of %1 as soon as the payment gateway approves it.","We'll authorize the amount of %1 as soon as the payment gateway approves it."
+"We\'ll authorize the amount of %1 as soon as the payment gateway approves it.","We\'ll authorize the amount of %1 as soon as the payment gateway approves it."
 "The authorized amount is %1.","The authorized amount is %1."
 "The maximum number of child authorizations is reached.","The maximum number of child authorizations is reached."
-"PayPal can't process orders with a zero balance due. ' 'To finish your purchase, please go through the standard checkout process.","PayPal can\'t process orders with a zero balance due. ' 'To finish your purchase, please go through the standard checkout process."
-"Payer is not identified.","Payer is not identified."
+"PayPal can\'t process orders with a zero balance due. To finish your purchase, please go through the standard checkout process.","PayPal can\'t process orders with a zero balance due. To finish your purchase, please go through the standard checkout process."
+"A payer is not identified.","A payer is not identified."
+"Cannot get secure form URL from PayPal","Cannot get secure form URL from PayPal"
 "Last Transaction ID","Last Transaction ID"
-"This customer did not include a confirmed address.","This customer did not include a confirmed address."
+"This customer didn\'t include a confirmed address.","This customer didn\'t include a confirmed address."
 "The payment is authorized but not settled.","The payment is authorized but not settled."
-"The payment eCheck is not yet cleared.","The payment eCheck is not yet cleared."
-"The merchant holds a non-U.S. account and does not have a withdrawal mechanism.","The merchant holds a non-U.S. account and does not have a withdrawal mechanism."
-"The payment currency does not match any of the merchant's balances currency.","The payment currency does not match any of the merchant's balances currency."
+"The payment eCheck is not cleared.","The payment eCheck is not cleared."
+"The merchant holds a non-U.S. account and doesn\'t have a withdrawal mechanism.","The merchant holds a non-U.S. account and doesn\'t have a withdrawal mechanism."
+"The payment currency doesn\'t match any of the merchant\'s balances currency.","The payment currency doesn\'t match any of the merchant\'s balances currency."
 "The payment is pending while it is being reviewed by PayPal for risk.","The payment is pending while it is being reviewed by PayPal for risk."
 "The payment is pending because it was made to an email address that is not yet registered or confirmed.","The payment is pending because it was made to an email address that is not yet registered or confirmed."
 "The merchant account is not yet verified.","The merchant account is not yet verified."
@@ -198,8 +160,11 @@ Auto,Auto
 "Last Correlation ID","Last Correlation ID"
 "Address Verification System Response","Address Verification System Response"
 "CVV2 Check Result by PayPal","CVV2 Check Result by PayPal"
-"Buyer's Tax ID","Buyer's Tax ID"
-"Buyer's Tax ID Type","Buyer's Tax ID Type"
+"AVS Street Match","AVS Street Match"
+"AVS zip","AVS zip"
+"International AVS response","International AVS response"
+"Buyer\'s Tax ID","Buyer\'s Tax ID"
+"Buyer\'s Tax ID Type","Buyer\'s Tax ID Type"
 Chargeback,Chargeback
 Complaint,Complaint
 Dispute,Dispute
@@ -207,7 +172,7 @@ Dispute,Dispute
 "Matched Address only (no ZIP) International","Matched Address only (no ZIP) International"
 "No Details matched","No Details matched"
 "No Details matched. International","No Details matched. International"
-"Exact Match. Address and nine-digit ZIP code","Exact Match. Address and nine-digit ZIP code"
+"Exact Match.","Exact Match."
 "Exact Match. Address and Postal Code. International","Exact Match. Address and Postal Code. International"
 "Exact Match. Address and Postal Code. UK-specific","Exact Match. Address and Postal Code. UK-specific"
 "N/A. Not allowed for MOTO (Internet/Phone) transactions","N/A. Not allowed for MOTO (Internet/Phone) transactions"
@@ -218,8 +183,8 @@ Dispute,Dispute
 "N/A. Retry","N/A. Retry"
 "N/A. Service not Supported","N/A. Service not Supported"
 "N/A. Unavailable","N/A. Unavailable"
-"Matched whole nine-didgit ZIP (no Address)","Matched whole nine-didgit ZIP (no Address)"
-"Yes. Matched Address and five-didgit ZIP","Yes. Matched Address and five-didgit ZIP"
+"Matched whole nine-digit ZIP (no Address)","Matched whole nine-digit ZIP (no Address)"
+"Yes. Matched Address and five-digit ZIP","Yes. Matched Address and five-digit ZIP"
 "All the address information matched","All the address information matched"
 "None of the address information matched","None of the address information matched"
 "Part of the address information matched","Part of the address information matched"
@@ -234,29 +199,24 @@ Dispute,Dispute
 "Matched (CVV2)","Matched (CVV2)"
 "N/A. The merchant has not implemented CVV2 code handling","N/A. The merchant has not implemented CVV2 code handling"
 "N/A. Merchant has indicated that CVV2 is not present on card","N/A. Merchant has indicated that CVV2 is not present on card"
-"Authenticated, Good Result","Authenticated, Good Result"
-"Authenticated, Bad Result","Authenticated, Bad Result"
-"Attempted Authentication, Good Result","Attempted Authentication, Good Result"
-"Attempted Authentication, Bad Result","Attempted Authentication, Bad Result"
-"No Liability Shift","No Liability Shift"
-"Issuer Liability","Issuer Liability"
 CNPJ,CNPJ
 CPF,CPF
+"Note: %1","Note: %1"
 "IPN ""%1"". Case type ""%2"". Case ID ""%3"" %4","IPN ""%1"". Case type ""%2"". Case ID ""%3"" %4"
 "IPN ""%1"". A dispute has been resolved and closed. %2 Transaction amount %3.","IPN ""%1"". A dispute has been resolved and closed. %2 Transaction amount %3."
+"You notified customer about invoice #%1.","You notified customer about invoice #%1."
 "IPN ""%1"". %2 Transaction amount %3. Transaction ID: ""%4""","IPN ""%1"". %2 Transaction amount %3. Transaction ID: ""%4"""
 "You notified customer about creditmemo #%1.","You notified customer about creditmemo #%1."
-"Created billing agreement #%1.","Created billing agreement #%1."
-"We couldn't create a billing agreement for this order.","We couldn't create a billing agreement for this order."
+"IPN ""%1""","IPN ""%1"""
 "Payflow PNREF: #%1.","Payflow PNREF: #%1."
-"Fetch transaction details method does not exists in Payflow","Fetch transaction details method does not exists in Payflow"
+"Unable to fetch transaction details.","Unable to fetch transaction details."
+"Invalid method %1::%2","Invalid method %1::%2"
+"Transaction has been declined","Transaction has been declined"
+"Error processing payment. Please try again later.","Error processing payment. Please try again later."
 "We cannot send the new order email.","We cannot send the new order email."
 "You cannot void a verification transaction.","You cannot void a verification transaction."
-"Payment transactions disallow storing objects.","Payment transactions disallow storing objects."
-"You need to enter a transaction ID.","You need to enter a transaction ID."
-"This operation requires an existing transaction object.","This operation requires an existing transaction object."
 "You need an authorization transaction to void.","You need an authorization transaction to void."
-"We can't issue a refund transaction because there is no capture transaction.","We can't issue a refund transaction because there is no capture transaction."
+"We can\'t issue a refund transaction because there is no capture transaction.","We can\'t issue a refund transaction because there is no capture transaction."
 "We cannot create a target file for reading reports.","We cannot create a target file for reading reports."
 "Report Date","Report Date"
 "Merchant Account","Merchant Account"
@@ -265,100 +225,104 @@ CPF,CPF
 "PayPal Reference ID","PayPal Reference ID"
 "PayPal Reference ID Type","PayPal Reference ID Type"
 "Event Code","Event Code"
+Event,Event
+"Start Date","Start Date"
 "Finish Date","Finish Date"
 "Debit or Credit","Debit or Credit"
 "Gross Amount","Gross Amount"
 "Fee Debit or Credit","Fee Debit or Credit"
 "Fee Amount","Fee Amount"
+Custom,Custom
 "Order ID","Order ID"
-"Subscription ID","Subscription ID"
 "Preapproved Payment ID","Preapproved Payment ID"
+"Subscription ID","Subscription ID"
 Credit,Credit
 Debit,Debit
-"General: received payment of a type not belonging to the other T00xx categories","General: received payment of a type not belonging to the other T00xx categories"
-"Mass Pay Payment","Mass Pay Payment"
-"Subscription Payment, either payment sent or payment received","Subscription Payment, either payment sent or payment received"
-"Preapproved Payment (BillUser API), either sent or received","Preapproved Payment (BillUser API), either sent or received"
-"eBay Auction Payment","eBay Auction Payment"
-"Direct Payment API","Direct Payment API"
-"Express Checkout APIs","Express Checkout APIs"
-"Website Payments Standard Payment","Website Payments Standard Payment"
-"Postage Payment to either USPS or UPS","Postage Payment to either USPS or UPS"
-"Gift Certificate Payment: purchase of Gift Certificate","Gift Certificate Payment: purchase of Gift Certificate"
-"Auction Payment other than through eBay","Auction Payment other than through eBay"
-"Mobile Payment (made via a mobile phone)","Mobile Payment (made via a mobile phone)"
-"Virtual Terminal Payment","Virtual Terminal Payment"
-"General: non-payment fee of a type not belonging to the other T01xx categories","General: non-payment fee of a type not belonging to the other T01xx categories"
-"Fee: Web Site Payments Pro Account Monthly","Fee: Web Site Payments Pro Account Monthly"
-"Fee: Foreign ACH Withdrawal","Fee: Foreign ACH Withdrawal"
-"Fee: WorldLink Check Withdrawal","Fee: WorldLink Check Withdrawal"
-"Fee: Mass Pay Request","Fee: Mass Pay Request"
-"General Currency Conversion","General Currency Conversion"
-"User-initiated Currency Conversion","User-initiated Currency Conversion"
-"Currency Conversion required to cover negative balance","Currency Conversion required to cover negative balance"
-"General Funding of PayPal Account ","General Funding of PayPal Account "
-"PayPal Balance Manager function of PayPal account","PayPal Balance Manager function of PayPal account"
-"ACH Funding for Funds Recovery from Account Balance","ACH Funding for Funds Recovery from Account Balance"
-"EFT Funding (German banking)","EFT Funding (German banking)"
-"General Withdrawal from PayPal Account","General Withdrawal from PayPal Account"
-AutoSweep,AutoSweep
-"General: Use of PayPal account for purchasing as well as receiving payments","General: Use of PayPal account for purchasing as well as receiving payments"
-"Virtual PayPal Debit Card Transaction","Virtual PayPal Debit Card Transaction"
-"PayPal Debit Card Withdrawal from ATM","PayPal Debit Card Withdrawal from ATM"
-"Hidden Virtual PayPal Debit Card Transaction","Hidden Virtual PayPal Debit Card Transaction"
-"PayPal Debit Card Cash Advance","PayPal Debit Card Cash Advance"
-"General: Withdrawal from PayPal Account","General: Withdrawal from PayPal Account"
-"General (Purchase with a credit card)","General (Purchase with a credit card)"
-"Negative Balance","Negative Balance"
-"General: bonus of a type not belonging to the other T08xx categories","General: bonus of a type not belonging to the other T08xx categories"
-"Debit Card Cash Back","Debit Card Cash Back"
-"Merchant Referral Bonus","Merchant Referral Bonus"
-"Balance Manager Account Bonus","Balance Manager Account Bonus"
-"PayPal Buyer Warranty Bonus","PayPal Buyer Warranty Bonus"
-"PayPal Protection Bonus","PayPal Protection Bonus"
-"Bonus for first ACH Use","Bonus for first ACH Use"
-"General Redemption","General Redemption"
-"Gift Certificate Redemption","Gift Certificate Redemption"
-"Points Incentive Redemption","Points Incentive Redemption"
-"Coupon Redemption","Coupon Redemption"
-"Reward Voucher Redemption","Reward Voucher Redemption"
-"General. Product no longer supported","General. Product no longer supported"
-"General: reversal of a type not belonging to the other T11xx categories","General: reversal of a type not belonging to the other T11xx categories"
-"ACH Withdrawal","ACH Withdrawal"
-"Debit Card Transaction","Debit Card Transaction"
-"Reversal of Points Usage","Reversal of Points Usage"
-"ACH Deposit (Reversal)","ACH Deposit (Reversal)"
-"Reversal of General Account Hold","Reversal of General Account Hold"
-"Account-to-Account Payment, initiated by PayPal","Account-to-Account Payment, initiated by PayPal"
-"Payment Refund initiated by merchant","Payment Refund initiated by merchant"
-"Fee Reversal","Fee Reversal"
-"Hold for Dispute Investigation","Hold for Dispute Investigation"
-"Reversal of hold for Dispute Investigation","Reversal of hold for Dispute Investigation"
-"General: adjustment of a type not belonging to the other T12xx categories","General: adjustment of a type not belonging to the other T12xx categories"
-Reversal,Reversal
-Charge-off,Charge-off
-Incentive,Incentive
-"Reimbursement of Chargeback","Reimbursement of Chargeback"
-"General (Authorization)","General (Authorization)"
-Reauthorization,Reauthorization
-Void,Void
-"General (Dividend)","General (Dividend)"
-"General: temporary hold of a type not belonging to the other T15xx categories","General: temporary hold of a type not belonging to the other T15xx categories"
-"Open Authorization","Open Authorization"
 "ACH Deposit (Hold for Dispute or Other Investigation)","ACH Deposit (Hold for Dispute or Other Investigation)"
+"ACH Deposit (Reversal)","ACH Deposit (Reversal)"
+"ACH Funding for Funds Recovery from Account Balance","ACH Funding for Funds Recovery from Account Balance"
+"ACH Withdrawal","ACH Withdrawal"
+"Account-to-Account Payment, initiated by PayPal","Account-to-Account Payment, initiated by PayPal"
+"Auction Payment other than through eBay","Auction Payment other than through eBay"
+AutoSweep,AutoSweep
 "Available Balance","Available Balance"
-Funding,Funding
-"General: Withdrawal to Non-Bank Entity","General: Withdrawal to Non-Bank Entity"
-"WorldLink Withdrawal","WorldLink Withdrawal"
+"Balance Manager Account Bonus","Balance Manager Account Bonus"
+"Bonus for first ACH Use","Bonus for first ACH Use"
 "Buyer Credit Payment","Buyer Credit Payment"
-"General Adjustment without businessrelated event","General Adjustment without businessrelated event"
+Charge-off,Charge-off
+"Coupon Redemption","Coupon Redemption"
+"Currency Conversion required to cover negative balance","Currency Conversion required to cover negative balance"
+"Debit Card Cash Back","Debit Card Cash Back"
+"Debit Card Transaction","Debit Card Transaction"
+"Direct Payment API","Direct Payment API"
+"EFT Funding (German banking)","EFT Funding (German banking)"
+"Express Checkout APIs","Express Checkout APIs"
+"Fee Reversal","Fee Reversal"
+"Fee: Foreign ACH Withdrawal","Fee: Foreign ACH Withdrawal"
+"Fee: Mass Pay Request","Fee: Mass Pay Request"
+"Fee: Web Site Payments Pro Account Monthly","Fee: Web Site Payments Pro Account Monthly"
+"Fee: WorldLink Check Withdrawal","Fee: WorldLink Check Withdrawal"
+Funding,Funding
+"General (Authorization)","General (Authorization)"
+"General (Dividend)","General (Dividend)"
 "General (Funds Transfer from PayPal Account to Another)","General (Funds Transfer from PayPal Account to Another)"
-"Settlement Consolidation","Settlement Consolidation"
+"General (Purchase with a credit card)","General (Purchase with a credit card)"
+"General Adjustment without businessrelated event","General Adjustment without businessrelated event"
+"General Currency Conversion","General Currency Conversion"
+"General Funding of PayPal Account ","General Funding of PayPal Account "
+"General Redemption","General Redemption"
+"General Withdrawal from PayPal Account","General Withdrawal from PayPal Account"
+"General. Product no longer supported","General. Product no longer supported"
+"General: Use of PayPal account for purchasing as well as receiving payments","General: Use of PayPal account for purchasing as well as receiving payments"
+"General: Withdrawal from PayPal Account","General: Withdrawal from PayPal Account"
+"General: Withdrawal to Non-Bank Entity","General: Withdrawal to Non-Bank Entity"
+"General: adjustment of a type not belonging to the other T12xx categories","General: adjustment of a type not belonging to the other T12xx categories"
+"General: bonus of a type not belonging to the other T08xx categories","General: bonus of a type not belonging to the other T08xx categories"
 "General: event not yet categorized","General: event not yet categorized"
+"General: non-payment fee of a type not belonging to the other T01xx categories","General: non-payment fee of a type not belonging to the other T01xx categories"
+"General: received payment of a type not belonging to the other T00xx categories","General: received payment of a type not belonging to the other T00xx categories"
+"General: reversal of a type not belonging to the other T11xx categories","General: reversal of a type not belonging to the other T11xx categories"
+"General: temporary hold of a type not belonging to the other T15xx categories","General: temporary hold of a type not belonging to the other T15xx categories"
+"Gift Certificate Payment: purchase of Gift Certificate","Gift Certificate Payment: purchase of Gift Certificate"
+"Gift Certificate Redemption","Gift Certificate Redemption"
+"Hidden Virtual PayPal Debit Card Transaction","Hidden Virtual PayPal Debit Card Transaction"
+"Hold for Dispute Investigation","Hold for Dispute Investigation"
+Incentive,Incentive
+"Mass Pay Payment","Mass Pay Payment"
+"Merchant Referral Bonus","Merchant Referral Bonus"
+"Mobile Payment (made via a mobile phone)","Mobile Payment (made via a mobile phone)"
+"Negative Balance","Negative Balance"
+"Open Authorization","Open Authorization"
+"PayPal Balance Manager function of PayPal account","PayPal Balance Manager function of PayPal account"
+"PayPal Buyer Warranty Bonus","PayPal Buyer Warranty Bonus"
+"PayPal Debit Card Cash Advance","PayPal Debit Card Cash Advance"
+"PayPal Debit Card Withdrawal from ATM","PayPal Debit Card Withdrawal from ATM"
+"PayPal Protection Bonus","PayPal Protection Bonus"
+"Payment Refund initiated by merchant","Payment Refund initiated by merchant"
+"Points Incentive Redemption","Points Incentive Redemption"
+"Postage Payment to either USPS or UPS","Postage Payment to either USPS or UPS"
+"Preapproved Payment (BillUser API, either sent or received","Preapproved Payment (BillUser API, either sent or received"
+Reauthorization,Reauthorization
+"Reimbursement of Chargeback","Reimbursement of Chargeback"
+Reversal,Reversal
+"Reversal of General Account Hold","Reversal of General Account Hold"
+"Reversal of Points Usage","Reversal of Points Usage"
+"Reversal of hold for Dispute Investigation","Reversal of hold for Dispute Investigation"
+"Reward Voucher Redemption","Reward Voucher Redemption"
+"Settlement Consolidation","Settlement Consolidation"
+"Subscription Payment, either payment sent or payment received","Subscription Payment, either payment sent or payment received"
+"User-initiated Currency Conversion","User-initiated Currency Conversion"
+"Virtual PayPal Debit Card Transaction","Virtual PayPal Debit Card Transaction"
+"Virtual Terminal Payment","Virtual Terminal Payment"
+Void,Void
+"WorldLink Withdrawal","WorldLink Withdrawal"
+"eBay Auction Payment","eBay Auction Payment"
 "The PayPal certificate file is empty.","The PayPal certificate file is empty."
 "Header (center)","Header (center)"
 "Sidebar (right)","Sidebar (right)"
 "Near PayPal Credit checkout button","Near PayPal Credit checkout button"
+"--Please Select--","--Please Select--"
+Daily,Daily
 "Every 3 days","Every 3 days"
 "Every 7 days","Every 7 days"
 "Every 10 days","Every 10 days"
@@ -366,188 +330,192 @@ Funding,Funding
 "Every 30 days","Every 30 days"
 "Every 40 days","Every 40 days"
 "No Logo","No Logo"
+"Yes (PayPal recommends this option)","Yes (PayPal recommends this option)"
+"Created billing agreement #%1.","Created billing agreement #%1."
+"We can\'t create a billing agreement for this order.","We can\'t create a billing agreement for this order."
 "Pending PayPal","Pending PayPal"
+"PayPal Reversed","PayPal Reversed"
+"PayPal Canceled Reversal","PayPal Canceled Reversal"
+Error,Error
 "Billing Agreement","Billing Agreement"
+"Please Select","Please Select"
+Customer,Customer
 "Created At","Created At"
 "Updated At","Updated At"
-"-- Please Select Billing Agreement--","-- Please Select Billing Agreement--"
+ending,ending
+expires,expires
 "Not sure what PayPal payment method to use? Click ","Not sure what PayPal payment method to use? Click "
-"here","here"
+here,here
 " to learn more."," to learn more."
 "Important: ","Important: "
 "To use PayPal Payments Advanced, you must configure  your PayPal Payments Advanced account on the PayPal website.","To use PayPal Payments Advanced, you must configure  your PayPal Payments Advanced account on the PayPal website."
 "Once you log into your PayPal Advanced account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below","Once you log into your PayPal Advanced account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below"
 "To use PayPal Payflow Link, you must configure your PayPal Payflow Link account on the PayPal website.","To use PayPal Payflow Link, you must configure your PayPal Payflow Link account on the PayPal website."
 "Once you log into your PayPal Payflow Link account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below","Once you log into your PayPal Payflow Link account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below"
+"Credit Card Type","Credit Card Type"
+"Credit Card Number","Credit Card Number"
+"Expiration Date","Expiration Date"
+"Card Verification Number","Card Verification Number"
+"Billing Agreement # ","Billing Agreement # "
 "Agreement Information","Agreement Information"
 "Reference ID:","Reference ID:"
 Status:,Status:
 Created:,Created:
 Updated:,Updated:
 "Payment Method:","Payment Method:"
+"Order #","Order #"
+Date,Date
 "Ship To","Ship To"
+"Order Status","Order Status"
+"View Order","View Order"
 "Back to Billing Agreements","Back to Billing Agreements"
+"Payment Method","Payment Method"
+View,View
 "There are no billing agreements yet.","There are no billing agreements yet."
 "New Billing Agreement","New Billing Agreement"
 "You will be redirected to the payment system website.","You will be redirected to the payment system website."
+"-- Please Select --","-- Please Select --"
 Create...,Create...
+"Your credit card will be charged for","Your credit card will be charged for"
 "Your billing agreement # is: ","Your billing agreement # is: "
-"Review Order","Review Order"
+"Shipping Method","Shipping Method"
 "Please select a shipping method...","Please select a shipping method..."
 "Update Shipping Method","Update Shipping Method"
+"Sorry, no quotes are available for this order right now.","Sorry, no quotes are available for this order right now."
+"Shipping Address","Shipping Address"
+Edit,Edit
+"Buy now with PayPal","Buy now with PayPal"
 "Edit Payment Information","Edit Payment Information"
 "Items in Your Shopping Cart","Items in Your Shopping Cart"
 "Edit Shopping Cart","Edit Shopping Cart"
+"Place Order","Place Order"
+"Submitting order information...","Submitting order information..."
+Item,Item
+Price,Price
+Qty,Qty
+Subtotal,Subtotal
 "Please update order data to get shipping methods and rates","Please update order data to get shipping methods and rates"
+or,or
 "Checkout with PayPal","Checkout with PayPal"
 "Please do not refresh the page until you complete payment.","Please do not refresh the page until you complete payment."
 "You will be required to enter your payment details after you place an order.","You will be required to enter your payment details after you place an order."
+Continue,Continue
 "Additional Options","Additional Options"
+"-- Please Select Billing Agreement--","-- Please Select Billing Agreement--"
 "Acceptance Mark","Acceptance Mark"
 "What is PayPal?","What is PayPal?"
+"Sign a billing agreement to streamline further purchases  with PayPal.","Sign a billing agreement to streamline further purchases  with PayPal."
 "Sign a billing agreement to streamline further purchases with PayPal.","Sign a billing agreement to streamline further purchases with PayPal."
-Schedule,Schedule
-Size,Size
+"Continue to PayPal","Continue to PayPal"
+"Save credit card info for future use.","Save credit card info for future use."
 "Sorry, something went wrong.","Sorry, something went wrong."
 "Sorry, something went wrong. Please try again later.","Sorry, something went wrong. Please try again later."
-"Test Mode","Test Mode"
-"Payment Action","Payment Action"
-"3D Secure","3D Secure"
-"Severe 3D Secure Card Validation","Severe 3D Secure Card Validation"
-"Severe Validation Removes Chargeback Liability on Merchant","Severe Validation Removes Chargeback Liability on Merchant"
-"Debug Mode","Debug Mode"
-"Sandbox Mode","Sandbox Mode"
-1,1
+"PayPal Section","PayPal Section"
+"PayPal Settlement","PayPal Settlement"
+Fetch,Fetch
+Actions,Actions
+Manage,Manage
+"Place Order Using Billing Agreements","Place Order Using Billing Agreements"
 "Merchant Location","Merchant Location"
 "Merchant Country","Merchant Country"
 "If not specified, Default Country from General Config will be used","If not specified, Default Country from General Config will be used"
-"Website Payments Pro (Includes Express Checkout)","Website Payments Pro (Includes Express Checkout)"
-"Accept payments with a completely customizable checkout.","Accept payments with a completely customizable checkout."
-"Required PayPal Settings","Required PayPal Settings"
-"Website Payments Pro and Express Checkout","Website Payments Pro and Express Checkout"
-"Enable this Solution","Enable this Solution"
-"Advertise PayPal Credit","Advertise PayPal Credit"
 "
-                            <a href=""https://financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
-                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
-                                            from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                                            Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
-                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                                            or more. <a href=""https://financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                        ","
-                            <a href=""https://financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
-                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
-                                            from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                                            Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
-                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                                            or more. <a href=""https://financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                        "
-"Home Page","Home Page"
-"Catalog Category Page","Catalog Category Page"
-"Catalog Product Page","Catalog Product Page"
-"Checkout Cart Page","Checkout Cart Page"
-"Basic Settings - PayPal Website Payments Pro","Basic Settings - PayPal Website Payments Pro"
-"It is recommended to set this value to ""Debit or Credit Card"" per store views.","It is recommended to set this value to ""Debit or Credit Card"" per store views."
-"Credit Card Settings","Credit Card Settings"
-"Allowed Credit Card Types","Allowed Credit Card Types"
-"
-                            3D Secure validation is required for Maestro cards. Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.
-                        ","
-                            3D Secure validation is required for Maestro cards. Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.
-                        "
-"Payment Applicable From","Payment Applicable From"
-"Countries Payment Applicable From","Countries Payment Applicable From"
-"Enable SSL verification","Enable SSL verification"
-"Transfer Cart Line Items","Transfer Cart Line Items"
-"Require CVV Entry","Require CVV Entry"
-"If empty, a default value will be used. Custom URL may be provided by CardinalCommerce agreement.","If empty, a default value will be used. Custom URL may be provided by CardinalCommerce agreement."
-"PayPal Billing Agreement Settings","PayPal Billing Agreement Settings"
-"Settlement Report Settings","Settlement Report Settings"
-"Frontend Experience Settings","Frontend Experience Settings"
-"Basic Settings - PayPal Express Checkout","Basic Settings - PayPal Express Checkout"
-"Website Payments Standard","Website Payments Standard"
-"Accept credit card and PayPal payments securely.","Accept credit card and PayPal payments securely."
-"Basic Settings - PayPal Website Payments Standard","Basic Settings - PayPal Website Payments Standard"
-"It is recommended to set this value to ""PayPal"" per store views.","It is recommended to set this value to ""PayPal"" per store views."
-"Summary Text for Aggregated Cart","Summary Text for Aggregated Cart"
-"Uses store frontend name by default.","Uses store frontend name by default."
-"Payflow Pro","Payflow Pro"
-"Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.","Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site."
-Partner,Partner
-Vendor,Vendor
-"Use Proxy","Use Proxy"
-"Proxy Host","Proxy Host"
-"Proxy Port","Proxy Port"
-"Basic Settings - PayPal Payflow Pro","Basic Settings - PayPal Payflow Pro"
-"
-                            Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.
-                        ","
-                            Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.
-                        "
-"Severe validation removes chargeback liability on merchant.","Severe validation removes chargeback liability on merchant."
-"A value is required for live mode. Refer to your CardinalCommerce agreement.","A value is required for live mode. Refer to your CardinalCommerce agreement."
-"Payflow Link (Includes Express Checkout)","Payflow Link (Includes Express Checkout)"
-"Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site.","Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site."
-"Payflow Link and Express Checkout","Payflow Link and Express Checkout"
-"Email Associated with PayPal Merchant Account (Optional)","Email Associated with PayPal Merchant Account (Optional)"
-"If you do not have multiple users set up on your account, please re-enter your Vendor/Merchant Login here.","If you do not have multiple users set up on your account, please re-enter your Vendor/Merchant Login here."
-"Enable Payflow Link","Enable Payflow Link"
-"Enable Express Checkout","Enable Express Checkout"
-"
-                            <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
-                        <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
-                        from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                        Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
-                        The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                        or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                        ","
-                            <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
-                        <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
-                        from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                        Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
-                        The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                        or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                        "
-"Basic Settings - PayPal Payflow Link","Basic Settings - PayPal Payflow Link"
-"CVV Entry is Editable","CVV Entry is Editable"
-"Send Email Confirmation","Send Email Confirmation"
-"URL method for Cancel URL and Return URL","URL method for Cancel URL and Return URL"
+                    PayPal All-in-One Payment Solutions&nbsp;&nbsp;<i>Accept and process credit cards and PayPal payments.</i>
+                ","
+                    PayPal All-in-One Payment Solutions&nbsp;&nbsp;<i>Accept and process credit cards and PayPal payments.</i>
+                "
+"Choose a secure bundled payment solution for your business.","Choose a secure bundled payment solution for your business."
+"Payments Pro and Express Checkout","Payments Pro and Express Checkout"
+"Basic Settings - PayPal Payments Pro","Basic Settings - PayPal Payments Pro"
+"PayPal Payment Gateways","PayPal Payment Gateways"
+"Process payments using your own internet merchant account.","Process payments using your own internet merchant account."
+"PayPal Express Checkout","PayPal Express Checkout"
+"Add another payment method to your existing solution or as a stand-alone option.","Add another payment method to your existing solution or as a stand-alone option."
+1,1
+"Accept payments with a completely customizable checkout page.","Accept payments with a completely customizable checkout page."
+"PayPal Payment Solutions","PayPal Payment Solutions"
 "Express Checkout","Express Checkout"
 "Add PayPal as an additional payment method to your checkout page.","Add PayPal as an additional payment method to your checkout page."
+"Required PayPal Settings","Required PayPal Settings"
 "Email Associated with PayPal Merchant Account","Email Associated with PayPal Merchant Account"
 "
-                                <a href=""http://www.magentocommerce.com/paypal"">Start accepting payments via PayPal!</a>
-                            ","
-                                <a href=""http://www.magentocommerce.com/paypal"">Start accepting payments via PayPal!</a>
-                            "
+                        <a href=""http://www.magentocommerce.com/paypal"">Start accepting payments via PayPal!</a>
+                    ","
+                        <a href=""http://www.magentocommerce.com/paypal"">Start accepting payments via PayPal!</a>
+                    "
 "Don't have a PayPal account? Simply enter your email address.","Don't have a PayPal account? Simply enter your email address."
 "API Authentication Methods","API Authentication Methods"
 "API Username","API Username"
 "API Password","API Password"
 "Get Credentials from PayPal","Get Credentials from PayPal"
-"Sandbox Credentials","Sandbox Credentials"
+"Sandbox Mode","Sandbox Mode"
 "API Uses Proxy","API Uses Proxy"
+"Proxy Host","Proxy Host"
+"Proxy Port","Proxy Port"
+"Enable this Solution","Enable this Solution"
+"Enable In-Context Checkout Experience","Enable In-Context Checkout Experience"
+"
+                    See PayPal Feature Support details and list of supported regions
+                    <a href=""https://developer.paypal.com/docs/classic/express-checkout/in-context/"" target=""_blank"">here</a>.
+                ","
+                    See PayPal Feature Support details and list of supported regions
+                    <a href=""https://developer.paypal.com/docs/classic/express-checkout/in-context/"" target=""_blank"">here</a>.
+                "
+"Merchant Account ID","Merchant Account ID"
 "Enable PayPal Credit","Enable PayPal Credit"
 "PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
                         <a href=""https:/www.paypal.com/webapps/mpp/promotional-financing"" target=""_blank"">Learn More</a>
-                        ","PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
+                ","PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
                         <a href=""https:/www.paypal.com/webapps/mpp/promotional-financing"" target=""_blank"">Learn More</a>
-                        "
+                "
+"Advertise PayPal Credit","Advertise PayPal Credit"
+"
+                    <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                        <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                        from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                        Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
+                        The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                        or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
+                ","
+                    <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                        <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                        from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                        Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
+                        The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                        or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
+                "
 "Publisher ID","Publisher ID"
 "Required to display a banner","Required to display a banner"
 "Get Publisher ID from PayPal","Get Publisher ID from PayPal"
-"It is recommended to set this value to ""Magento_Paypal"" per store views.","It is recommended to set this value to ""Magento_Paypal"" per store views."
-"Shortcut on Shopping Cart","Shortcut on Shopping Cart"
-"Also affects mini-shopping cart.","Also affects mini-shopping cart."
-"Shortcut on Product View","Shortcut on Product View"
+"Home Page","Home Page"
+Display,Display
+Position,Position
+Size,Size
+"Catalog Category Page","Catalog Category Page"
+"Catalog Product Page","Catalog Product Page"
+"Checkout Cart Page","Checkout Cart Page"
+"Basic Settings - PayPal Express Checkout","Basic Settings - PayPal Express Checkout"
+Title,Title
+"It is recommended to set this value to ""PayPal"" per store views.","It is recommended to set this value to ""PayPal"" per store views."
+"Sort Order","Sort Order"
+"Payment Action","Payment Action"
+"Display on Product Details Page","Display on Product Details Page"
 "Authorization Honor Period (days)","Authorization Honor Period (days)"
 "Specifies what the Authorization Honor Period is on the merchant’s PayPal account. It must mirror the setting in PayPal.","Specifies what the Authorization Honor Period is on the merchant’s PayPal account. It must mirror the setting in PayPal."
 "Order Valid Period (days)","Order Valid Period (days)"
 "Specifies what the Order Valid Period is on the merchant’s PayPal account. It must mirror the setting in PayPal.","Specifies what the Order Valid Period is on the merchant’s PayPal account. It must mirror the setting in PayPal."
 "Number of Child Authorizations","Number of Child Authorizations"
 "The default number of child authorizations in your PayPal account is 1. To do multiple authorizations please contact PayPal to request an increase.","The default number of child authorizations in your PayPal account is 1. To do multiple authorizations please contact PayPal to request an increase."
+"Advanced Settings","Advanced Settings"
+"Display on Shopping Cart","Display on Shopping Cart"
+"Also affects mini-shopping cart.","Also affects mini-shopping cart."
+"Payment Applicable From","Payment Applicable From"
+"Countries Payment Applicable From","Countries Payment Applicable From"
+"Debug Mode","Debug Mode"
+"Enable SSL verification","Enable SSL verification"
+"Transfer Cart Line Items","Transfer Cart Line Items"
 "Transfer Shipping Options","Transfer Shipping Options"
 "If this option is enabled, customer can change shipping address and shipping method on PayPal website. In live mode works via HTTPS protocol only.","If this option is enabled, customer can change shipping address and shipping method on PayPal website. In live mode works via HTTPS protocol only."
 "Notice that PayPal can handle up to 10 shipping options. That is why Magento will transfer only first 10 cheapest shipping options if there are more than 10 available.","Notice that PayPal can handle up to 10 shipping options. That is why Magento will transfer only first 10 cheapest shipping options if there are more than 10 available."
@@ -559,137 +527,156 @@ Vendor,Vendor
 "Billing Agreement Signup","Billing Agreement Signup"
 "Whether to create a billing agreement, if there are no active billing agreements available.","Whether to create a billing agreement, if there are no active billing agreements available."
 "
-                                Merchants need to apply to PayPal for enabling billing agreements feature. Do not enable this option until PayPal confirms that billing agreements are enabled for your merchant account.
-                            ","
-                                Merchants need to apply to PayPal for enabling billing agreements feature. Do not enable this option until PayPal confirms that billing agreements are enabled for your merchant account.
-                            "
+                        Merchants need to apply to PayPal for enabling billing agreements feature. Do not enable this option until PayPal confirms that billing agreements are enabled for your merchant account.
+                    ","
+                        Merchants need to apply to PayPal for enabling billing agreements feature. Do not enable this option until PayPal confirms that billing agreements are enabled for your merchant account.
+                    "
 "Skip Order Review Step","Skip Order Review Step"
+"PayPal Billing Agreement Settings","PayPal Billing Agreement Settings"
+Enabled,Enabled
 "
-                                    Will appear as a payment option only for customers who have at least one active billing agreement.
-                                ","
-                                    Will appear as a payment option only for customers who have at least one active billing agreement.
-                                "
+                            Will appear as a payment option only for customers who have at least one active billing agreement.
+                        ","
+                            Will appear as a payment option only for customers who have at least one active billing agreement.
+                        "
 "Allow in Billing Agreement Wizard","Allow in Billing Agreement Wizard"
+"Settlement Report Settings","Settlement Report Settings"
 "SFTP Credentials","SFTP Credentials"
+Login,Login
+Password,Password
 "Custom Endpoint Hostname or IP-Address","Custom Endpoint Hostname or IP-Address"
 "By default it is ""reports.paypal.com"".","By default it is ""reports.paypal.com""."
 "Use colon to specify port. For example: ""test.example.com:5224"".","Use colon to specify port. For example: ""test.example.com:5224""."
 "Custom Path","Custom Path"
 "Scheduled Fetching","Scheduled Fetching"
 "Enable Automatic Fetching","Enable Automatic Fetching"
+Schedule,Schedule
 "PayPal retains reports for 45 days.","PayPal retains reports for 45 days."
 "Time of Day","Time of Day"
+"Frontend Experience Settings","Frontend Experience Settings"
 "PayPal Product Logo","PayPal Product Logo"
 "Displays on catalog pages and homepage.","Displays on catalog pages and homepage."
 "PayPal Merchant Pages Style","PayPal Merchant Pages Style"
 "Page Style","Page Style"
 "
-                                    Allowable values: ""paypal"", ""primary"" (default), your_custom_value (a custom payment page style from your merchant account profile).
-                                ","
-                                    Allowable values: ""paypal"", ""primary"" (default), your_custom_value (a custom payment page style from your merchant account profile).
-                                "
+                            Allowable values: ""paypal"", ""primary"" (default), your_custom_value (a custom payment page style from your merchant account profile).
+                        ","
+                            Allowable values: ""paypal"", ""primary"" (default), your_custom_value (a custom payment page style from your merchant account profile).
+                        "
 "Header Image URL","Header Image URL"
 "
-                                    The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.
-                                ","
-                                    The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.
-                                "
+                            The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.
+                        ","
+                            The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.
+                        "
 "Header Background Color","Header Background Color"
 "
-                                    The background color for the header of the checkout page. Case-insensitive six-character HTML hexadecimal color code in ASCII.
-                                ","
-                                    The background color for the header of the checkout page. Case-insensitive six-character HTML hexadecimal color code in ASCII.
-                                "
+                            The background color for the header of the checkout page. Case-insensitive six-character HTML hexadecimal color code in ASCII.
+                        ","
+                            The background color for the header of the checkout page. Case-insensitive six-character HTML hexadecimal color code in ASCII.
+                        "
 "Header Border Color","Header Border Color"
 "2-pixel perimeter around the header space.","2-pixel perimeter around the header space."
 "Page Background Color","Page Background Color"
 "
-                                    The background color for the checkout page around the header and payment form.
-                                ","
-                                    The background color for the checkout page around the header and payment form.
-                                "
+                            The background color for the checkout page around the header and payment form.
+                        ","
+                            The background color for the checkout page around the header and payment form.
+                        "
+"Payments Advanced (Includes Express Checkout)","Payments Advanced (Includes Express Checkout)"
+"Accept payments with a PCI-compliant checkout that keeps customers on your site.","Accept payments with a PCI-compliant checkout that keeps customers on your site."
+"Payments Advanced and Express Checkout","Payments Advanced and Express Checkout"
+Partner,Partner
+Vendor,Vendor
+User,User
+"PayPal recommends that you set up an additional User on your account at manager.paypal.com","PayPal recommends that you set up an additional User on your account at manager.paypal.com"
+"PayPal recommends you set up an additional User on your account at manager.paypal.com, instead of entering your admin username and password here. This will enhance your security and prevent service interruptions if you later change your password. If you do not want to set up an additional User, you can re-enter your Merchant Login here.","PayPal recommends you set up an additional User on your account at manager.paypal.com, instead of entering your admin username and password here. This will enhance your security and prevent service interruptions if you later change your password. If you do not want to set up an additional User, you can re-enter your Merchant Login here."
+"Test Mode","Test Mode"
+"Use Proxy","Use Proxy"
+"
+                    <a href=""https://financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                                            from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                                            Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
+                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                                            or more. <a href=""https://financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
+                ","
+                    <a href=""https://financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                                            from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                                            Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
+                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                                            or more. <a href=""https://financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
+                "
+"Basic Settings - PayPal Payments Advanced","Basic Settings - PayPal Payments Advanced"
+"It is recommended to set this value to ""Debit or Credit Card"" per store views.","It is recommended to set this value to ""Debit or Credit Card"" per store views."
+"CVV Entry is Editable","CVV Entry is Editable"
+"Require CVV Entry","Require CVV Entry"
+"Send Email Confirmation","Send Email Confirmation"
+"URL method for Cancel URL and Return URL","URL method for Cancel URL and Return URL"
+"Payflow Link (Includes Express Checkout)","Payflow Link (Includes Express Checkout)"
+"Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site.","Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site."
+"Payflow Link and Express Checkout","Payflow Link and Express Checkout"
+"Email Associated with PayPal Merchant Account (Optional)","Email Associated with PayPal Merchant Account (Optional)"
+"If you do not have multiple users set up on your account, please re-enter your Vendor/Merchant Login here.","If you do not have multiple users set up on your account, please re-enter your Vendor/Merchant Login here."
+"Enable Payflow Link","Enable Payflow Link"
+"Enable Express Checkout","Enable Express Checkout"
+"Basic Settings - PayPal Payflow Link","Basic Settings - PayPal Payflow Link"
 "Website Payments Pro Hosted Solution","Website Payments Pro Hosted Solution"
 "Accept payments with a PCI compliant checkout that keeps customers on your site.","Accept payments with a PCI compliant checkout that keeps customers on your site."
 "Payments Pro Hosted Solution","Payments Pro Hosted Solution"
 "
-                            <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                    <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
                             <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
                             from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
                             Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
                             The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                             or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                        ","
-                            <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                ","
+                    <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
                             <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
                             from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
                             Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
                             The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                             or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                        "
+                "
 "Basic Settings - PayPal Payments Pro Hosted Solution","Basic Settings - PayPal Payments Pro Hosted Solution"
 "Display Express Checkout in the Payment Information step","Display Express Checkout in the Payment Information step"
+"Website Payments Pro Hosted Solution and Express Checkout","Website Payments Pro Hosted Solution and Express Checkout"
+"Basic Settings - PayPal Website Payments Pro Hosted Solution","Basic Settings - PayPal Website Payments Pro Hosted Solution"
+"Payflow Pro","Payflow Pro"
+"Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.","Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site."
+"Basic Settings - PayPal Payflow Pro","Basic Settings - PayPal Payflow Pro"
+"Credit Card Settings","Credit Card Settings"
+"Allowed Credit Card Types","Allowed Credit Card Types"
 "
-                    PayPal All-in-One Payment Solutions&nbsp;&nbsp;<i>Accept and process credit cards and PayPal payments.</i>
+                    Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.
                 ","
-                    PayPal All-in-One Payment Solutions&nbsp;&nbsp;<i>Accept and process credit cards and PayPal payments.</i>
+                    Supporting of American Express cards require additional agreement. Learn more at <a href=""http://www.paypal.com/amexupdate"">http://www.paypal.com/amexupdate</a>.
                 "
-"Choose a secure bundled payment solution for your business.","Choose a secure bundled payment solution for your business."
-"PayPal Express Checkout","PayPal Express Checkout"
-"Add another payment method to your existing solution or as a stand-alone option.","Add another payment method to your existing solution or as a stand-alone option."
-"Payments Advanced (Includes Express Checkout)","Payments Advanced (Includes Express Checkout)"
-"Accept payments with a PCI-compliant checkout that keeps customers on your site.","Accept payments with a PCI-compliant checkout that keeps customers on your site."
-"Payments Advanced and Express Checkout","Payments Advanced and Express Checkout"
-"PayPal recommends that you set up an additional User on your account at manager.paypal.com","PayPal recommends that you set up an additional User on your account at manager.paypal.com"
-"PayPal recommends you set up an additional User on your account at manager.paypal.com, instead of entering your admin username and password here. This will enhance your security and prevent service interruptions if you later change your password. If you do not want to set up an additional User, you can re-enter your Merchant Login here.","PayPal recommends you set up an additional User on your account at manager.paypal.com, instead of entering your admin username and password here. This will enhance your security and prevent service interruptions if you later change your password. If you do not want to set up an additional User, you can re-enter your Merchant Login here."
-"
-                                <a href=""https://financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
-                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
-                                            from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                                            Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
-                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                                            or more. <a href=""https://financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                            ","
-                                <a href=""https://financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
-                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
-                                            from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                                            Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
-                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                                            or more. <a href=""https://financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                            "
-"Basic Settings - PayPal Payments Advanced","Basic Settings - PayPal Payments Advanced"
-"Payments Pro (Includes Express Checkout)","Payments Pro (Includes Express Checkout)"
-"Payments Pro and Express Checkout","Payments Pro and Express Checkout"
-"Basic Settings - PayPal Payments Pro","Basic Settings - PayPal Payments Pro"
-"Payments Standard","Payments Standard"
-"Basic Settings - PayPal Payments Standard","Basic Settings - PayPal Payments Standard"
-"PayPal Payment Gateways","PayPal Payment Gateways"
-"Process payments using your own internet merchant account.","Process payments using your own internet merchant account."
+"CVV and AVS Settings","CVV and AVS Settings"
+"Reject Transaction if:","Reject Transaction if:"
+"AVS Street Does Not Match","AVS Street Does Not Match"
+"AVS Zip Does Not Match","AVS Zip Does Not Match"
+"Card Issuer Is Outside The United States","Card Issuer Is Outside The United States"
+"Card Security Code Does Not Match","Card Security Code Does Not Match"
 "Payflow Pro (Includes Express Checkout)","Payflow Pro (Includes Express Checkout)"
 "Payflow Pro and Express Checkout","Payflow Pro and Express Checkout"
 "
-                                <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                    <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
+                                <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                                from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                                Use PayPal’ s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
+                                The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                                or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
+                ","
+                    <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
                                 <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
                                 from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
                                 Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
                                 The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                                 or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                            ","
-                                <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
-                                <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
-                                from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                                Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
-                                The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
-                                or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
-                            "
-"Accept credit cards, debit cards and PayPal payments securely.","Accept credit cards, debit cards and PayPal payments securely."
-"Accept payments with a completely customizable checkout page.","Accept payments with a completely customizable checkout page."
-"Website Payments Pro Hosted Solution (Includes Express Checkout)","Website Payments Pro Hosted Solution (Includes Express Checkout)"
-"Website Payments Pro Hosted Solution and Express Checkout","Website Payments Pro Hosted Solution and Express Checkout"
-"Basic Settings - PayPal Website Payments Pro Hosted Solution","Basic Settings - PayPal Website Payments Pro Hosted Solution"
-"PayPal Payment Solutions","PayPal Payment Solutions"
-"Display on Product Details Page","Display on Product Details Page"
-verified,verified
-unverified,unverified
-Eligible,Eligible
-Ineligible,Inligible
-"PayPal Express Checkout","PayPal Express Checkout"
+                "
+"payflowpro","Payflow Pro"
+"Payments Pro","Payments Pro"
+"Website Payments Pro","Website Payments Pro"

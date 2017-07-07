@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,6 +18,6 @@
     <referenceBlock name="sales.order.grid.export" remove="true"/>
     <referenceBlock name="sales.order.grid.massaction" remove="true"/>
     <container name="root">
-        <block class="Magento\Backend\Block\Widget\Grid\Container" name="sales_order.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+        <block class="Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab\Orders" name="sales_order.grid.container"/>
     </container>
 </layout>

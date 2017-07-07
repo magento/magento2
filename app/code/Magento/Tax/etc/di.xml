@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,7 +43,7 @@
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface" type="Magento\Tax\Model\Sales\Order\Tax" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsInterface" type="Magento\Tax\Model\Sales\Order\Details" />
     <preference for="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface" type="Magento\Sales\Model\Order\Tax\Item" />
-    <preference for="Magento\Tax\Api\TaxClassManagementInterface" type="\Magento\Tax\Model\TaxClass\Management" />
+    <preference for="Magento\Tax\Api\TaxClassManagementInterface" type="Magento\Tax\Model\TaxClass\Management" />
     <preference for="Magento\Tax\Api\TaxClassRepositoryInterface" type="Magento\Tax\Model\TaxClass\Repository" />
     <preference for="Magento\Tax\Api\Data\TaxClassInterface" type="Magento\Tax\Model\ClassModel" />
     <preference for="Magento\Tax\Api\Data\TaxRuleInterface" type="Magento\Tax\Model\Calculation\Rule" />
@@ -54,7 +54,7 @@
     <preference for="Magento\Tax\Api\Data\TaxRateInterface" type="Magento\Tax\Model\Calculation\Rate" />
     <preference for="Magento\Tax\Api\Data\QuoteDetailsInterface" type="Magento\Tax\Model\Sales\Quote\QuoteDetails" />
     <preference for="Magento\Tax\Api\Data\QuoteDetailsItemInterface" type="Magento\Tax\Model\Sales\Quote\ItemDetails" />
-    <preference for="Magento\Tax\Api\Data\TaxClassKeyInterface" type="\Magento\Tax\Model\TaxClass\Key" />
+    <preference for="Magento\Tax\Api\Data\TaxClassKeyInterface" type="Magento\Tax\Model\TaxClass\Key" />
     <preference for="Magento\Tax\Api\Data\AppliedTaxInterface" type="Magento\Tax\Model\TaxDetails\AppliedTax" />
     <preference for="Magento\Tax\Api\Data\AppliedTaxRateInterface" type="Magento\Tax\Model\TaxDetails\AppliedTaxRate" />
     <preference for="Magento\Tax\Api\Data\TaxDetailsInterface" type="Magento\Tax\Model\TaxDetails\TaxDetails" />
@@ -85,4 +85,87 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    <type name="Magento\Tax\Model\TaxRuleRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\TaxRuleCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Model\Calculation\RateRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRateFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRateFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="tax_calculation_rate_id" xsi:type="string">main_table.tax_calculation_rate_id</item>
+                <item name="tax_country_id" xsi:type="string">main_table.tax_country_id</item>
+                <item name="tax_region_id" xsi:type="string">main_table.tax_region_id</item>
+                <item name="code" xsi:type="string">main_table.code</item>
+                <item name="rate" xsi:type="string">main_table.rate</item>
+                <item name="zip_is_range" xsi:type="string">main_table.zip_is_range</item>
+                <item name="zip_from" xsi:type="string">main_table.zip_from</item>
+                <item name="zip_to" xsi:type="string">main_table.zip_to</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRuleJoinProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\JoinProcessor">
+        <arguments>
+            <argument name="customJoins" xsi:type="array">
+                <item name="rate.tax_calculation_rate_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\Rate</item>
+                <item name="ctc.customer_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CustomerTaxClass</item>
+                <item name="ptc.product_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\ProductTaxClass</item>
+                <item name="cd.customer_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CalculationData</item>
+                <item name="cd.product_tax_class_id" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\JoinProcessor\CalculationData</item>
+            </argument>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
+                <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
+                <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
+                <item name="tax_calculation_rate_id" xsi:type="string">rate.tax_calculation_rate_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRuleSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
+                <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
+                <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
+                <item name="tax_calculation_rate_id" xsi:type="string">rate.tax_calculation_rate_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRuleFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="id" xsi:type="string">tax_calculation_rule_id</item>
+                <item name="tax_rate_ids" xsi:type="string">tax_calculation_rate_id</item>
+                <item name="customer_tax_class_ids" xsi:type="string">cd.customer_tax_class_id</item>
+                <item name="product_tax_class_ids" xsi:type="string">cd.product_tax_class_id</item>
+                <item name="tax_calculation_rate_id" xsi:type="string">rate.tax_calculation_rate_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Tax\Model\Api\SearchCriteria\TaxRuleCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="joins" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRuleJoinProcessor</item>
+                <item name="filters" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRuleFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Tax\Model\Api\SearchCriteria\CollectionProcessor\TaxRuleSortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

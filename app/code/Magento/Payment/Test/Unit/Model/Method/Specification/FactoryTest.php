@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Method\Specification;
@@ -22,18 +22,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->factory = $objectManagerHelper->getObject(
-            'Magento\Payment\Model\Method\Specification\Factory',
+            \Magento\Payment\Model\Method\Specification\Factory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }
 
     public function testCreateMethod()
     {
-        $className = 'Magento\Payment\Model\Method\SpecificationInterface';
+        $className = \Magento\Payment\Model\Method\SpecificationInterface::class;
         $methodMock = $this->getMock($className);
         $this->objectManagerMock->expects(
             $this->once()

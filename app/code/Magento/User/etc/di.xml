@@ -1,21 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\User\Model\ResourceModel\User">
-        <arguments>
-            <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorization\Model\Role">
         <plugin name="updateRoleUsersAcl" type="Magento\User\Model\Plugin\AuthorizationRole" sortOrder="20"/>
     </type>
     <preference for="Magento\User\Api\Data\UserInterface" type="Magento\User\Model\User" />
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="UnlockAdminAccountCommand" xsi:type="object">Magento\User\Console\UnlockAdminAccountCommand</item>

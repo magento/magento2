@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Share Wishlist" button.
  * 6. Perform all assertions.
  *
- * @group Wishlist_(CS)
+ * @group Wishlist
  * @ZephyrId MAGETWO-23394
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -35,7 +35,6 @@ class ShareWishlistEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -110,11 +109,11 @@ class ShareWishlistEntityTest extends Injectable
     ) {
         //Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $this->objectManager->create(
-            'Magento\Wishlist\Test\TestStep\AddProductsToWishlistStep',
+            \Magento\Wishlist\Test\TestStep\AddProductsToWishlistStep::class,
             ['products' => [$product]]
         )->run();
         $this->wishlistIndex->getMessagesBlock()->waitSuccessMessage();

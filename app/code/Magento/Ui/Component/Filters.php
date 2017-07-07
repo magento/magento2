@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
- * Class Filters
+ * @api
  */
 class Filters extends AbstractComponent implements ObserverInterface
 {
@@ -54,7 +54,6 @@ class Filters extends AbstractComponent implements ObserverInterface
         parent::__construct($context, $components, $data);
         $this->uiComponentFactory = $uiComponentFactory;
     }
-
 
     /**
      * Get component name

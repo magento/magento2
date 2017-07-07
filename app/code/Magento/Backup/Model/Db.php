@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model;
@@ -8,7 +8,7 @@ namespace Magento\Backup\Model;
 /**
  * Database backup model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
 {

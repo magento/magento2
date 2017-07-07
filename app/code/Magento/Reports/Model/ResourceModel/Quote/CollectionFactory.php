@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\ResourceModel\Quote;
@@ -34,7 +34,7 @@ class CollectionFactory implements \Magento\Reports\Model\ResourceModel\Quote\Co
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Reports\Model\ResourceModel\\Quote\\Collection'
+        $instanceName = \Magento\Reports\Model\ResourceModel\Quote\Collection::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

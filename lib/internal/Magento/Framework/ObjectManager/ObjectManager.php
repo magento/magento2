@@ -7,7 +7,7 @@
  *
  * Intentionally contains multiple concerns for best performance
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager;
@@ -27,7 +27,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     protected $_sharedInstances = [];
 
     /**
-     * @var Config\Config
+     * @var ConfigInterface
      */
     protected $_config;
 
@@ -41,7 +41,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
         $this->_config = $config;
         $this->_factory = $factory;
         $this->_sharedInstances = &$sharedInstances;
-        $this->_sharedInstances['Magento\Framework\ObjectManagerInterface'] = $this;
+        $this->_sharedInstances[\Magento\Framework\ObjectManagerInterface::class] = $this;
     }
 
     /**
@@ -75,6 +75,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 
     /**
      * Configure di instance
+     * Note: All arguments should be pre-processed (sort order, translations, etc) before passing to method configure.
      *
      * @param array $configuration
      * @return void

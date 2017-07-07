@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\View\Design\FileResolution\Fallback;
@@ -20,11 +20,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Simple implements Fallback\ResolverInterface
 {
     /**
-     * Root directory
+     * Directory read factory
      *
-     * @var ReadInterface
+     * @var ReadFactory
      */
-    protected $rootDirectory;
+    protected $readFactory;
 
     /**
      * Fallback factory
@@ -34,14 +34,17 @@ class Simple implements Fallback\ResolverInterface
     protected $rulePool;
 
     /**
-     * Constructor
-     *
-     * @param Filesystem $filesystem
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
+     * @param ReadFactory $readFactory
      * @param RulePool $rulePool
      */
-    public function __construct(Filesystem $filesystem, RulePool $rulePool)
+    public function __construct(ReadFactory $readFactory, RulePool $rulePool)
     {
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
         $this->rulePool = $rulePool;
     }
 
@@ -50,7 +53,6 @@ class Simple implements Fallback\ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
-        self::assertFilePathFormat($file);
 
         $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
         foreach ($params as $key => $param) {
@@ -81,6 +83,34 @@ class Simple implements Fallback\ResolverInterface
     }
 
     /**
+     * Validate the file path to be secured
+     *
+     * @param string $fileName
+     * @param string $filePath
+     * @return bool
+     */
+    private function checkFilePathAccess($fileName, $filePath)
+    {
+        // Check if file name not contains any references '/./', '/../'
+        if (strpos(str_replace('\\', '/', $fileName), './') === false) {
+            return true;
+        }
+
+        $realPath = realpath($filePath);
+        $directoryWeb = $this->readFactory->create(
+            $this->getDirectoryList()->getPath(DirectoryList::LIB_WEB)
+        );
+        $fileRead = $this->readFactory->create($realPath);
+
+        // Check if file path starts with web lib directory path
+        if (strpos($fileRead->getAbsolutePath(), $directoryWeb->getAbsolutePath()) === 0) {
+            return true;
+        }
+
+        throw new \InvalidArgumentException("File path '{$filePath}' is forbidden for security reasons.");
+    }
+
+    /**
      * Get path of file after using fallback rules
      *
      * @param RuleInterface $fallbackRule
@@ -90,12 +120,28 @@ class Simple implements Fallback\ResolverInterface
      */
     protected function resolveFile(RuleInterface $fallbackRule, $file, array $params = [])
     {
+        $params['file'] = $file;
         foreach ($fallbackRule->getPatternDirs($params) as $dir) {
             $path = "{$dir}/{$file}";
-            if ($this->rootDirectory->isExist($this->rootDirectory->getRelativePath($path))) {
+            $dirRead = $this->readFactory->create($dir);
+            if ($dirRead->isExist($file) && $this->checkFilePathAccess($file, $path)) {
                 return $path;
             }
         }
         return false;
+    }
+
+    /**
+     * Retrieve directory list object
+     *
+     * @return DirectoryList
+     */
+    protected function getDirectoryList()
+    {
+        if (null === $this->directoryList) {
+            $this->directoryList = \Magento\Framework\App\ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 }

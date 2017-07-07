@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,8 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
      */
     protected function _prepareLayout()
     {
-        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')->setId('productAlerts');
+        $accordion = $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Widget\Accordion::class)->setId('productAlerts');
         /* @var $accordion \Magento\Backend\Block\Widget\Accordion */
 
         $alertPriceAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
@@ -35,9 +36,9 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
             $accordion->addItem(
                 'price',
                 [
-                    'title' => __('We saved the price alert subscription.'),
+                    'title' => __('Price Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
-                        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price'
+                        \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price::class
                     )->toHtml() . '<br />',
                     'open' => true
                 ]
@@ -47,9 +48,9 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
             $accordion->addItem(
                 'stock',
                 [
-                    'title' => __('We saved the stock notification.'),
+                    'title' => __('Stock Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
-                        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock'
+                        \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock::class
                     ),
                     'open' => true
                 ]

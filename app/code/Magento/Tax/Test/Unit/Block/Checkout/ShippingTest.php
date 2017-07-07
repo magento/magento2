@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Block\Checkout;
@@ -20,12 +20,12 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $checkoutSession = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $checkoutSession = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
         $checkoutSession->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
 
         $this->model = $objectManager->getObject(
-            'Magento\Tax\Block\Checkout\Shipping',
+            \Magento\Tax\Block\Checkout\Shipping::class,
             ['checkoutSession' => $checkoutSession]
         );
     }
@@ -37,7 +37,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     public function testDisplayShipping($shippingMethod, $expectedResult)
     {
-        $addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', ['getShippingMethod'], [], '', false);
+        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, ['getShippingMethod'], [], '', false);
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
 

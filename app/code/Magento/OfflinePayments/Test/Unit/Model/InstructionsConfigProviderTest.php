@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
@@ -28,21 +28,21 @@ class InstructionsConfigProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->methodOneMock = $this->getMock(
-            'Magento\Payment\Model\Method\AbstractMethod',
+            \Magento\Payment\Model\Method\AbstractMethod::class,
             ['isAvailable', 'getInstructions'],
             [],
             '',
             false
         );
         $this->methodTwoMock = $this->getMock(
-            'Magento\Payment\Model\Method\AbstractMethod',
+            \Magento\Payment\Model\Method\AbstractMethod::class,
             ['isAvailable', 'getInstructions'],
             [],
             '',
             false
         );
 
-        $paymentHelperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+        $paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
         $paymentHelperMock->expects($this->exactly(2))
             ->method('getMethodInstance')
             ->willReturnMap([
@@ -50,7 +50,7 @@ class InstructionsConfigProviderTest extends \PHPUnit_Framework_TestCase
                 [Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE, $this->methodTwoMock],
             ]);
 
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper');
+        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);

@@ -1,15 +1,18 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/* eslint-disable no-undef */
-// jscs:disable jsDoc
+/* global $break $ $$ FORM_KEY */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'mage/template',
     'uiRegistry',
+    'jquery/colorpicker/js/colorpicker',
     'prototype',
     'jquery/ui'
 ], function (jQuery, mageTemplate, rg) {
@@ -24,6 +27,13 @@ define([
                 rendered: 0,
                 isReadOnly: config.isReadOnly,
                 template: mageTemplate('#swatch-visual-row-template'),
+
+                /**
+                 * Add new option using template
+                 *
+                 * @param {Object} data
+                 * @param {Object} render
+                 */
                 add: function (data, render) {
                     var isNewOption = false,
                         element;
@@ -43,9 +53,6 @@ define([
                         data.intype = swatchOptionVisualDefaultInputType;
                     }
 
-                    if (!this.totalItems) {
-                        data.checked = 'checked';
-                    }
                     element = this.template({
                         data: data
                     });
@@ -61,18 +68,35 @@ define([
                         this.render();
                     }
                 },
+
+                /**
+                 * ColorPicker initialization process
+                 */
                 initColorPicker: function () {
                     var element = this,
                         hiddenColorPicker = !jQuery(element).data('colorpickerId');
 
                     jQuery(this).ColorPicker({
+
+                        /**
+                         * ColorPicker onShow action
+                         */
                         onShow: function () {
                             var color = jQuery(element).parent().parent().prev().prev('input').val(),
-                                menu = jQuery(this).parents('.swatch_submenu_container');
+                                menu = jQuery(this).parents('.swatch_sub-menu_container');
 
                             menu.hide();
                             jQuery(element).ColorPickerSetColor(color);
                         },
+
+                        /**
+                         * ColorPicker onSubmit action
+                         *
+                         * @param {String} hsb
+                         * @param {String} hex
+                         * @param {String} rgb
+                         * @param {String} el
+                         */
                         onSubmit: function (hsb, hex, rgb, el) {
                             var container = jQuery(el).parent().parent().prev();
 
@@ -87,6 +111,12 @@ define([
                         jQuery(this).ColorPickerShow();
                     }
                 },
+
+                /**
+                 * Remove action
+                 *
+                 * @param {Object} event
+                 */
                 remove: function (event) {
                     var element = $(Event.findElement(event, 'tr')),
                         elementFlags; // !!! Button already have table parent in safari
@@ -115,22 +145,50 @@ define([
                         this.updateItemsCountField();
                     }
                 },
+
+                /**
+                 * Update items count field
+                 */
                 updateItemsCountField: function () {
                     $('swatch-visual-option-count-check').value = this.totalItems > 0 ? '1' : '';
                 },
+
+                /**
+                 * Enable delete button for new option
+                 *
+                 * @param {String} id
+                 */
                 enableNewOptionDeleteButton: function (id) {
                     $$('#delete_button_swatch_container_' + id + ' button').each(function (button) {
                         button.enable();
                         button.removeClassName('disabled');
                     });
                 },
+
+                /**
+                 * Bind remove button
+                 */
                 bindRemoveButtons: function () {
                     jQuery('#swatch-visual-options-panel').on('click', '.delete-option', this.remove.bind(this));
                 },
+
+                /**
+                 * Render options
+                 */
                 render: function () {
                     Element.insert($$('[data-role=swatch-visual-options-container]')[0], this.elements);
                     this.elements = '';
                 },
+
+                /**
+                 * Render elements with delay (performance fix)
+                 *
+                 * @param {Object} data
+                 * @param {Number} from
+                 * @param {Number} step
+                 * @param {Number} delay
+                 * @returns {Boolean}
+                 */
                 renderWithDelay: function (data, from, step, delay) {
                     var arrayLength = data.length,
                         len;
@@ -149,6 +207,10 @@ define([
                     }
                     setTimeout(this.renderWithDelay.bind(this, data, from, step, delay), delay);
                 },
+
+                /**
+                 * Ignore validate action
+                 */
                 ignoreValidate: function () {
                     var ignore = '.ignore-validate input, ' +
                         '.ignore-validate select, ' +
@@ -185,12 +247,12 @@ define([
             var element = jQuery(event.target);
 
             if (
-                element.parents('.swatch_submenu_container').length === 1 ||
-                element.next('div.swatch_submenu_container').length === 1
+                element.parents('.swatch_sub-menu_container').length === 1 ||
+                element.next('div.swatch_sub-menu_container').length === 1
             ) {
                 return true;
             }
-            jQuery('.swatch_submenu_container').hide();
+            jQuery('.swatch_sub-menu_container').hide();
         });
 
         if (config.isSortable) {
@@ -200,6 +262,10 @@ define([
                     tolerance: 'pointer',
                     cancel: 'input, button',
                     axis: 'y',
+
+                    /**
+                     * Update component
+                     */
                     update: function () {
                         $('[data-role=swatch-visual-options-container] [data-role=order]').each(
                             function (index, element) {
@@ -215,5 +281,131 @@ define([
         window.swatchOptionVisualDefaultInputType = swatchOptionVisualDefaultInputType;
 
         rg.set('swatch-visual-options-panel', swatchVisualOption);
+
+        jQuery(function ($) {
+
+            var swatchComponents = {
+
+                /**
+                 * div wrapper for to hide all evement
+                 */
+                wrapper: null,
+
+                /**
+                 * iframe component to perform file upload without page reload
+                 */
+                iframe: null,
+
+                /**
+                 * form component for upload image
+                 */
+                form: null,
+
+                /**
+                 * Input file component for upload image
+                 */
+                inputFile: null,
+
+                /**
+                 * Create swatch component for upload files
+                 *
+                 * @this {swatchComponents}
+                 * @public
+                 */
+                create: function () {
+                    this.wrapper = $('<div>').css({
+                        display: 'none'
+                    }).appendTo($('body'));
+
+                    this.iframe = $('<iframe />', {
+                        id:  'upload_iframe',
+                        name: 'upload_iframe'
+                    }).appendTo(this.wrapper);
+
+                    this.form = $('<form />', {
+                        id: 'swatch_form_image_upload',
+                        name: 'swatch_form_image_upload',
+                        target: 'upload_iframe',
+                        method: 'post',
+                        enctype: 'multipart/form-data',
+                        class: 'ignore-validate',
+                        action: config.uploadActionUrl
+                    }).appendTo(this.wrapper);
+
+                    this.inputFile = $('<input />', {
+                        type: 'file',
+                        name: 'datafile',
+                        class: 'swatch_option_file'
+                    }).appendTo(this.form);
+
+                    $('<input />', {
+                        type: 'hidden',
+                        name: 'form_key',
+                        value: FORM_KEY
+                    }).appendTo(this.form);
+                }
+            };
+
+            /**
+             * Create swatch components
+             */
+            swatchComponents.create();
+
+            /**
+             * Register event for swatch input[type=file] change
+             */
+            swatchComponents.inputFile.change(function () {
+                var container = $('#' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
+
+                    /**
+                     * @this {iframe}
+                     */
+                    iframeHandler = function () {
+                        var imageParams = $.parseJSON($(this).contents().find('body').html()),
+                            fullMediaUrl = imageParams['swatch_path'] + imageParams['file_path'];
+
+                        container.prev('input').val(imageParams['file_path']);
+                        container.css({
+                            'background-image': 'url(' + fullMediaUrl + ')',
+                            'background-size': 'cover'
+                        });
+                        container.parent().removeClass('unavailable');
+                    };
+
+                swatchComponents.iframe.off('load');
+                swatchComponents.iframe.load(iframeHandler);
+                swatchComponents.form.submit();
+                $(this).val('');
+            });
+
+            /**
+             * Register event for choose "upload image" option
+             */
+            $(document).on('click', '.btn_choose_file_upload', function () {
+                swatchComponents.inputFile.attr('data-called-by', $(this).attr('id'));
+                swatchComponents.inputFile.click();
+            });
+
+            /**
+             * Register event for remove option
+             */
+            $(document).on('click', '.btn_remove_swatch', function () {
+                var optionPanel = $(this).parents().eq(2);
+
+                optionPanel.children('input').val('');
+                optionPanel.children('.swatch_window').css('background', '');
+
+                optionPanel.addClass('unavailable');
+
+                jQuery('.swatch_sub-menu_container').hide();
+            });
+
+            /**
+             * Toggle color upload chooser
+             */
+            $(document).on('click', '.swatch_window', function () {
+                $(this).next('div').toggle();
+            });
+        });
     };
 });

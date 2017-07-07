@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
@@ -42,7 +42,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
             $storeId = (int)$storeId;
         }
 
-        $groupId = $this->_objectManager->get('Magento\Customer\Model\Vat')
+        $groupId = $this->_objectManager->get(\Magento\Customer\Model\Vat::class)
             ->getCustomerGroupIdBasedOnVatNumber(
                 $this->getRequest()->getParam('country'),
                 $result,

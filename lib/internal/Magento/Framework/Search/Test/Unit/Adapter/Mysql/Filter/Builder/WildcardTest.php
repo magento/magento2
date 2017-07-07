@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,12 +31,12 @@ class WildcardTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->requestFilter = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Term')
+        $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
             ->setMethods(['getField', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionManager = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\ConditionManager')
+        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition'])
             ->getMock();
@@ -51,7 +51,7 @@ class WildcardTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->filter = $objectManager->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard',
+            \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard::class,
             [
                 'conditionManager' => $this->conditionManager,
             ]

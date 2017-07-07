@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,6 @@
     <type id="cms_index_defaultindex" label="CMS Home Default Page"/>
     <type id="cms_index_defaultnoroute" label="CMS No-Route Default Page"/>
     <type id="cms_index_index" label="CMS Home Page"/>
-    <type id="cms_index_test" label="CMS Home Page"/>
     <type id="cms_index_nocookies" label="CMS No-Cookies Page"/>
     <type id="cms_index_noroute" label="CMS No-Route Page"/>
     <type id="cms_page_view" label="CMS Pages (All)"/>

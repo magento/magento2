@@ -1,18 +1,21 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="payflow_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
-        <label>Payments Advanced (Includes Express Checkout)</label>
-        <fieldset_css>pp-method-general</fieldset_css>
+        <label>Payments Advanced</label>
+        <fieldset_css>paypal-other-section</fieldset_css>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payments-advanced?partner_id=NB9WWHYEMVUMS</more_url>
-        <comment>Accept payments with a PCI-compliant checkout that keeps customers on your site.</comment>
+        <comment><![CDATA[Accept payments with a PCI-compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_advanced/active</attribute>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-advanced.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="required_settings" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -105,7 +108,14 @@
                     <field id="enable_payflow_advanced"/>
                 </requires>
             </field>
-            <group id="advanced_advertise_bml" showInDefault="1" showInWebsite="1" sortOrder="43" translate="label comment">
+            <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+                <config_path>payment/payflow_express_bml/sort_order</config_path>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
+                <depends>
+                    <field id="enable_express_checkout_bml">1</field>
+                </depends>
+            </field>
+            <group id="advanced_advertise_bml" showInDefault="1" showInWebsite="1" sortOrder="60" translate="label comment">
                 <label>Advertise PayPal Credit</label>
                 <comment>
                     <![CDATA[<a href="https://financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>

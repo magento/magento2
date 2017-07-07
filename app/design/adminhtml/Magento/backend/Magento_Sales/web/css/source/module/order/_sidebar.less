@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -66,7 +66,7 @@
         .icon {
             &:extend(.abs-icon all);
             display: inline-block;
-            font-size: @order-create-sidebar__font-size + 0.1rem;
+            font-size: @order-create-sidebar__font-size + .1rem;
             text-decoration: none;
             vertical-align: middle;
             &:after {
@@ -94,7 +94,7 @@
                 }
             }
             > span {
-                .extend__visually-hidden();
+                &:extend(.abs-visually-hidden all);
             }
         }
         .col-add {
@@ -122,7 +122,7 @@
             text-decoration: none;
         }
         > span {
-            .extend__visually-hidden();
+            &:extend(.abs-visually-hidden all);
         }
     }
 

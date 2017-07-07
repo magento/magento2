@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -45,6 +45,18 @@
             }, 'validation':[]}">
 
             <!-- ko template: 'Magento_Payment/payment/cc-form' --><!-- /ko -->
+
+            <!-- ko if: (isVaultEnabled())-->
+            <div class="field-tooltip-content">
+                <input type="checkbox"
+                       name="vault[is_enabled]"
+                       class="checkbox-inline"
+                       data-bind="attr: {'id': getCode() + '_enable_vault'}, checked: vaultEnabler.isActivePaymentTokenEnabler"/>
+                <label class="label" data-bind="attr: {'for': getCode() + '_enable_vault'}">
+                    <span><!-- ko i18n: 'Save credit card information for future use.'--><!-- /ko --></span>
+                </label>
+            </div>
+            <!-- /ko -->
         </form>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->

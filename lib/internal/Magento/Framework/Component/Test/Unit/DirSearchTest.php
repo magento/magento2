@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Component\Test\Unit;
@@ -32,9 +32,17 @@ class DirSearchTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registrar = $this->getMockForAbstractClass('\Magento\Framework\Component\ComponentRegistrarInterface');
-        $this->readFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
-        $this->dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->registrar = $this->getMockForAbstractClass(
+            \Magento\Framework\Component\ComponentRegistrarInterface::class
+        );
+        $this->readFactory = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->dir->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturnArgument(0);
@@ -98,7 +106,7 @@ class DirSearchTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($actualFiles);
         /** @var \Magento\Framework\Component\ComponentFile $file */
         foreach ($actualFiles as $file) {
-            $this->assertInstanceOf('\Magento\Framework\Component\ComponentFile', $file);
+            $this->assertInstanceOf(\Magento\Framework\Component\ComponentFile::class, $file);
             $this->assertSame($componentType, $file->getComponentType());
         }
         $this->assertCount(2, $actualFiles);

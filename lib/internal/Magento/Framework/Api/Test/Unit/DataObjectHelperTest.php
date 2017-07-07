@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Api\Test\Unit;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\AttributeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -53,33 +54,33 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
      */
     protected $joinProcessorMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->objectFactoryMock = $this->getMockBuilder('Magento\Framework\Api\ObjectFactory')
+        $this->objectFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\ObjectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+        $this->objectProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->methodsMapProcessor = $this->getMockBuilder('Magento\Framework\Reflection\MethodsMap')
+        $this->methodsMapProcessor = $this->getMockBuilder(\Magento\Framework\Reflection\MethodsMap::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attributeValueFactoryMock = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+        $this->attributeValueFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->joinProcessorMock = $this->getMockBuilder('\Magento\Framework\Api\ExtensionAttribute\JoinProcessor')
+        $this->joinProcessorMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttribute\JoinProcessor::class)
             ->setMethods(['extractExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->joinProcessorMock->expects($this->any())
             ->method('extractExtensionAttributes')
             ->willReturnArgument(1);
-        $this->typeProcessor = $this->objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+        $this->typeProcessor = $this->objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class);
 
         $this->dataObjectHelper = $this->objectManager->getObject(
-            'Magento\Framework\Api\DataObjectHelper',
+            \Magento\Framework\Api\DataObjectHelper::class,
             [
                 'objectFactory' => $this->objectFactoryMock,
                 'typeProcessor' => $this->typeProcessor,
@@ -102,7 +103,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Address',
+            \Magento\Customer\Model\Data\Address::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
             ]
@@ -110,7 +111,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Customer\Model\Data\Region $regionDataObject */
         $regionDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Region',
+            \Magento\Customer\Model\Data\Region::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
             ]
@@ -128,21 +129,21 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->methodsMapProcessor->expects($this->at(0))
             ->method('getMethodReturnType')
-            ->with('\Magento\Customer\Api\Data\AddressInterface', 'getStreet')
+            ->with(\Magento\Customer\Api\Data\AddressInterface::class, 'getStreet')
             ->willReturn('string[]');
         $this->methodsMapProcessor->expects($this->at(1))
             ->method('getMethodReturnType')
-            ->with('\Magento\Customer\Api\Data\AddressInterface', 'getRegion')
-            ->willReturn('\Magento\Customer\Api\Data\RegionInterface');
+            ->with(\Magento\Customer\Api\Data\AddressInterface::class, 'getRegion')
+            ->willReturn(\Magento\Customer\Api\Data\RegionInterface::class);
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
-            ->with('\Magento\Customer\Api\Data\RegionInterface', [])
+            ->with(\Magento\Customer\Api\Data\RegionInterface::class, [])
             ->willReturn($regionDataObject);
 
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $data,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
 
         $this->assertEquals($id, $addressDataObject->getId());
@@ -160,24 +161,24 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $customAttributeCode = 'custom_attribute_code_1';
         $customAttributeValue = 'custom_attribute_value_1';
 
-        $attributeMetaDataMock = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $attributeMetaDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMock();
         $attributeMetaDataMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($customAttributeCode);
-        $metadataServiceMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\AddressMetadata')
+        $metadataServiceMock = $this->getMockBuilder(\Magento\Customer\Model\Metadata\AddressMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $metadataServiceMock->expects($this->once())
             ->method('getCustomAttributesMetadata')
-            ->with('Magento\Customer\Model\Data\Address')
+            ->with(\Magento\Customer\Model\Data\Address::class)
             ->willReturn(
                 [$attributeMetaDataMock]
             );
 
         /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Address',
+            \Magento\Customer\Model\Data\Address::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'metadataService' => $metadataServiceMock,
@@ -190,14 +191,14 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             $customAttributeCode => $customAttributeValue,
         ];
 
-        $customAttribute = $this->objectManager->getObject('Magento\Framework\Api\AttributeValue');
+        $customAttribute = $this->objectManager->getObject(\Magento\Framework\Api\AttributeValue::class);
         $this->attributeValueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($customAttribute);
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $data,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
 
         $this->assertEquals($id, $addressDataObject->getId());
@@ -218,24 +219,24 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $customAttributeCode = 'custom_attribute_code_1';
         $customAttributeValue = 'custom_attribute_value_1';
 
-        $attributeMetaDataMock = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $attributeMetaDataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMock();
         $attributeMetaDataMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($customAttributeCode);
-        $metadataServiceMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\AddressMetadata')
+        $metadataServiceMock = $this->getMockBuilder(\Magento\Customer\Model\Metadata\AddressMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $metadataServiceMock->expects($this->once())
             ->method('getCustomAttributesMetadata')
-            ->with('Magento\Customer\Model\Data\Address')
+            ->with(\Magento\Customer\Model\Data\Address::class)
             ->willReturn(
                 [$attributeMetaDataMock]
             );
 
         /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Address',
+            \Magento\Customer\Model\Data\Address::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'metadataService' => $metadataServiceMock,
@@ -253,14 +254,14 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $customAttribute = $this->objectManager->getObject('Magento\Framework\Api\AttributeValue');
+        $customAttribute = $this->objectManager->getObject(\Magento\Framework\Api\AttributeValue::class);
         $this->attributeValueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($customAttribute);
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $data,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
 
         $this->assertEquals($id, $addressDataObject->getId());
@@ -283,7 +284,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Model\Data\Address $addressDataObject */
         $firstAddressDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Address',
+            \Magento\Customer\Model\Data\Address::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
             ]
@@ -291,7 +292,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Customer\Model\Data\Region $regionDataObject */
         $firstRegionDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Region',
+            \Magento\Customer\Model\Data\Region::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
             ]
@@ -310,7 +311,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
         $firstAddressDataObject->setRegion($firstRegionDataObject);
 
         $secondAddressDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Address',
+            \Magento\Customer\Model\Data\Address::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
             ]
@@ -318,7 +319,7 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Customer\Model\Data\Region $regionDataObject */
         $secondRegionDataObject = $this->objectManager->getObject(
-            'Magento\Customer\Model\Data\Region',
+            \Magento\Customer\Model\Data\Region::class,
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
             ]
@@ -342,15 +343,15 @@ class DataObjectHelperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($data2);
         $this->methodsMapProcessor->expects($this->at(0))
             ->method('getMethodReturnType')
-            ->with('Magento\Customer\Model\Data\Address', 'getStreet')
+            ->with(\Magento\Customer\Model\Data\Address::class, 'getStreet')
             ->willReturn('string[]');
         $this->methodsMapProcessor->expects($this->at(1))
             ->method('getMethodReturnType')
-            ->with('Magento\Customer\Model\Data\Address', 'getRegion')
-            ->willReturn('\Magento\Customer\Api\Data\RegionInterface');
+            ->with(\Magento\Customer\Model\Data\Address::class, 'getRegion')
+            ->willReturn(\Magento\Customer\Api\Data\RegionInterface::class);
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
-            ->with('\Magento\Customer\Api\Data\RegionInterface', [])
+            ->with(\Magento\Customer\Api\Data\RegionInterface::class, [])
             ->willReturn($secondRegionDataObject);
 
         $this->dataObjectHelper->mergeDataObjects(

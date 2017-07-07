@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -40,6 +40,7 @@
         .field.qty .qty {
             &:extend(.abs-input-qty all);
         }
+
         .product-image {
             float: left;
             .lib-css(margin-right, @indent__s);
@@ -49,13 +50,16 @@
     .form.giftregistry .fieldset {
         .cart-summary & {
             margin: 25px 0 @indent__xs;
+
             .field {
                 margin: 0 0 @indent__s;
+
                 .control {
                     float: none;
                     width: auto;
                 }
             }
+
             .action.primary {
                 margin-bottom: 0;
                 &:extend(.abs-revert-secondary-color all);
@@ -66,15 +70,18 @@
 
     .form-giftregistry-search {
         margin-bottom: @indent__l*2;
+
         .legend {
             &:extend(.abs-account-title all);
         }
+
         .fields-specific-options {
             .field {
                 &:nth-last-of-type(1) {
                     margin-bottom: 0;
                 }
             }
+
             .datetime-picker {
                 &:extend(.abs-field-date-input all);
             }
@@ -109,22 +116,28 @@
         .block-title {
             &:extend(.abs-block-title all);
         }
+
         .product-image-wrapper {
             &:extend(.abs-reset-image-wrapper all);
         }
+
         .item {
             border-bottom: @border-width__base solid @border-color__base;
         }
+
         .qty {
             .qty {
                 &:extend(.abs-input-qty all);
             }
         }
+
         .col {
             padding: @indent__base 8px @indent__s;
+
             .price-box {
                 display: inline-block;
             }
+
             .price-wrapper {
                 .lib-font-size(18);
                 display: block;
@@ -139,11 +152,13 @@
                 &:extend(.abs-add-clearfix all);
                 margin-bottom: 0;
             }
+
             &-item-photo {
                 display: block;
                 max-width: 65px;
                 padding: @indent__s 0;
             }
+
             &-item-name {
                 display: block;
                 margin: 0 0 @indent__xs;
@@ -164,11 +179,13 @@
             }
             &:extend(.abs-add-clearfix-mobile all);
         }
+
         .field.choice,
         .field.qty {
             display: inline-block;
         }
     }
+
     .form-giftregistry-search {
         .fieldset {
             margin-bottom: 15px;
@@ -218,6 +235,7 @@
                 &:extend(.abs-reset-left-margin-desktop all);
             }
         }
+
         .product {
             &-item-photo {
                 display: table-cell;
@@ -226,6 +244,7 @@
                 vertical-align: top;
                 width: 1%;
             }
+
             &-item-details {
                 display: table-cell;
                 vertical-align: top;
@@ -233,17 +252,21 @@
                 word-break: normal;
             }
         }
+
         .col {
             &.product {
                 width: 48%;
             }
+
             &:not(.product) {
                 text-align: center;
             }
+
             &.price {
                 padding-top: 17px;
             }
         }
+
         .input-text {
             &.qty {
                 margin-top: -4px;

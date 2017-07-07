@@ -1,15 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
+
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\Hostedpro\Request;
+use Magento\Sales\Model\Order;
 
 /**
  * Website Payments Pro Hosted Solution payment gateway model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Hostedpro extends \Magento\Paypal\Model\Direct
+class Hostedpro extends Direct
 {
     /**
      * Button code
@@ -31,17 +37,17 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      *
      * @var string
      */
-    protected $_code = \Magento\Paypal\Model\Config::METHOD_HOSTEDPRO;
+    protected $_code = Config::METHOD_HOSTEDPRO;
 
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Hosted\Pro\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Hosted\Pro\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Hosted\Pro\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Hosted\Pro\Info::class;
 
     /**
      * Availability option
@@ -67,7 +73,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
     /**
      * @var \Magento\Paypal\Model\Hostedpro\RequestFactory
      */
-    protected $_hostedproRequestFactory;
+    protected $hostedproRequestFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -110,7 +116,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->_hostedproRequestFactory = $hostedproRequestFactory;
+        $this->hostedproRequestFactory = $hostedproRequestFactory;
         parent::__construct(
             $context,
             $registry,
@@ -174,18 +180,19 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
     public function initialize($paymentAction, $stateObject)
     {
         switch ($paymentAction) {
-            case \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH:
-            case \Magento\Paypal\Model\Config::PAYMENT_ACTION_SALE:
+            case Config::PAYMENT_ACTION_AUTH:
+            case Config::PAYMENT_ACTION_SALE:
                 $payment = $this->getInfoInstance();
+                /** @var \Magento\Sales\Model\Order $order */
                 $order = $payment->getOrder();
                 $order->setCanSendNewEmailFlag(false);
                 $payment->setAmountAuthorized($order->getTotalDue());
                 $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
 
-                $this->_setPaymentFormUrl($payment);
+                $this->setPaymentFormUrl($payment);
 
-                $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
-                $stateObject->setStatus('pending_payment');
+                $stateObject->setState(Order::STATE_PENDING_PAYMENT);
+                $stateObject->setStatus(Order::STATE_PENDING_PAYMENT);
                 $stateObject->setIsNotified(false);
                 break;
             default:
@@ -200,14 +207,14 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _setPaymentFormUrl(\Magento\Payment\Model\InfoInterface $payment)
+    protected function setPaymentFormUrl(InfoInterface $payment)
     {
-        $request = $this->_buildFormUrlRequest($payment);
-        $response = $this->_sendFormUrlRequest($request);
+        $request = $this->buildFormUrlRequest($payment);
+        $response = $this->sendFormUrlRequest($request);
         if ($response) {
             $payment->setAdditionalInformation('secure_form_url', $response);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Cannot get secure form URL from PayPal'));
+            throw new LocalizedException(__('Cannot get secure form URL from PayPal'));
         }
     }
 
@@ -217,10 +224,10 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return \Magento\Paypal\Model\Hostedpro\Request
      */
-    protected function _buildFormUrlRequest(\Magento\Payment\Model\InfoInterface $payment)
+    protected function buildFormUrlRequest(InfoInterface $payment)
     {
         $order = $payment->getOrder();
-        $request = $this->_buildBasicRequest()->setOrder($order)->setPaymentMethod($this)->setAmount($order);
+        $request = $this->buildBasicRequest()->setOrder($order)->setPaymentMethod($this)->setAmount($order);
 
         return $request;
     }
@@ -231,7 +238,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      * @param \Magento\Paypal\Model\Hostedpro\Request $request
      * @return string|false
      */
-    protected function _sendFormUrlRequest(\Magento\Paypal\Model\Hostedpro\Request $request)
+    protected function sendFormUrlRequest(Request $request)
     {
         $api = $this->_pro->getApi();
         $response = $api->call(self::BM_BUTTON_METHOD, $request->getRequestData());
@@ -247,9 +254,9 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      *
      * @return \Magento\Paypal\Model\Hostedpro\Request
      */
-    protected function _buildBasicRequest()
+    protected function buildBasicRequest()
     {
-        $request = $this->_hostedproRequestFactory->create()->setData(
+        $request = $this->hostedproRequestFactory->create()->setData(
             [
                 'METHOD' => self::BM_BUTTON_METHOD,
                 'BUTTONCODE' => self::BM_BUTTON_CODE,
@@ -267,7 +274,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      */
     public function getReturnUrl($storeId = null)
     {
-        return $this->_getUrl('paypal/hostedpro/return', $storeId);
+        return $this->getUrl('paypal/hostedpro/return', $storeId);
     }
 
     /**
@@ -278,7 +285,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      */
     public function getNotifyUrl($storeId = null)
     {
-        return $this->_getUrl('paypal/ipn', $storeId, false);
+        return $this->getUrl('paypal/ipn', $storeId, false);
     }
 
     /**
@@ -289,7 +296,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      */
     public function getCancelUrl($storeId = null)
     {
-        return $this->_getUrl('paypal/hostedpro/cancel', $storeId);
+        return $this->getUrl('paypal/hostedpro/cancel', $storeId);
     }
 
     /**
@@ -300,12 +307,12 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      * @param bool|null $secure
      * @return string
      */
-    protected function _getUrl($path, $storeId, $secure = null)
+    protected function getUrl($path, $storeId, $secure = null)
     {
         $store = $this->_storeManager->getStore($storeId);
         return $this->_urlBuilder->getUrl(
             $path,
-            ["_store" => $store, "_secure" => $secure === null ? $store->isCurrentlySecure() : $secure]
+            ["_secure" => $secure === null ? $store->isCurrentlySecure() : $secure]
         );
     }
 }

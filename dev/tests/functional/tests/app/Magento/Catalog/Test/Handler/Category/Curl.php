@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -196,10 +196,11 @@ class Curl extends AbstractCurl implements CategoryInterface
 
         $this->prepareAvailableSortBy();
 
-        $diff = array_diff($this->dataUseConfig, array_keys($this->fields['general']));
-        if (!empty($diff)) {
-            $this->fields['use_config'] = $diff;
+        $useConfig = array_diff($this->dataUseConfig, array_keys($this->fields['general']));
+        if (!empty($useConfig)) {
+            $this->fields['use_config'] = $useConfig;
         }
+        unset($this->fields['general']['use_config']);
     }
 
     /**
@@ -250,7 +251,7 @@ class Curl extends AbstractCurl implements CategoryInterface
         $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
-        preg_match('~<option.*value="(\d+)".*>' . preg_quote($landingName) . '</option>~', $response, $matches);
+        preg_match('~\{"value":"(\d+)","label":"' . preg_quote($landingName) . '"\}~', $response, $matches);
         $id = isset($matches[1]) ? (int)$matches[1] : null;
 
         return $id;

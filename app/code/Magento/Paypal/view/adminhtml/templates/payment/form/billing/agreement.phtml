@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,23 +9,23 @@
 ?>
 <?php $code = $block->escapeHtml($block->getMethodCode()) ?>
 <fieldset class="admin__fieldset payment-method form-list"
-          id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display:none;">
+          id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none;">
     <div class="admin__field _required">
         <label class="admin__field-label"
-               for="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id">
-            <span><?php echo $block->escapeHtml(__('Billing Agreement')); ?></span>
+               for="<?= /* @noEscape */ $code ?>_ba_agreement_id">
+            <span><?= $block->escapeHtml(__('Billing Agreement')) ?></span>
         </label>
         <div class="admin__field-control">
-            <select id="<?php /* @noEscape */ echo $code; ?>_ba_agreement_id"
-                    name="payment[<?php echo $block->escapeHtml($block->getTransportName()); ?>]"
+            <select id="<?= /* @noEscape */ $code ?>_ba_agreement_id"
+                    name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]"
                     class="required-entry admin__control-select">
-                <option value=""><?php echo $block->escapeHtml(__('Please Select')); ?></option>
+                <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
                 <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
-                    <option value="<?php echo $block->escapeHtml($id); ?>"
-                        <?php echo ($id == $block->getInfoData($block->getTransportName())) ?
+                    <option value="<?= $block->escapeHtml($id) ?>"
+                        <?= ($id == $block->getInfoData($block->getTransportName())) ?
                             ' selected="selected"' : '';
                         ?>>
-                        <?php echo $block->escapeHtml($referenceId); ?>
+                        <?= $block->escapeHtml($referenceId) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

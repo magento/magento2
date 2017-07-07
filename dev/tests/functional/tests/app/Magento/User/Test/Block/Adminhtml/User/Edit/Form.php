@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,7 @@ class Form extends FormTabs
     public function getRolesGrid()
     {
         return $this->blockFactory->create(
-            'Magento\User\Test\Block\Adminhtml\User\Edit\Tab\Roles',
+            \Magento\User\Test\Block\Adminhtml\User\Edit\Tab\Roles::class,
             ['element' => $this->_rootElement->find('#permissionsUserRolesGrid')]
         );
     }

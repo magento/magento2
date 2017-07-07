@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit;
@@ -25,7 +25,7 @@ class AbstractCriteriaTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->criteria = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Criteria\Sample');
+        $this->criteria = $objectManager->getObject(\Magento\Framework\Data\Test\Unit\Criteria\Sample::class);
     }
 
     /**
@@ -376,7 +376,7 @@ class AbstractCriteriaTest extends \PHPUnit_Framework_TestCase
                 'type' => 'test-type',
                 'result' => [
                     'test-filter-name' => $objectManager->getObject(
-                        'Magento\Framework\DataObject',
+                        \Magento\Framework\DataObject::class,
                         [
                             'data' => [
                                 'name' => 'test-filter-name',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,23 +37,23 @@ class DomTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileResolverMock = $this->getMock('\Magento\Framework\Config\FileResolverInterface');
+        $this->fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
         $this->converterMock = $this->getMock(
-            '\Magento\Framework\ObjectManager\Config\Mapper\Dom',
+            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
             [],
             [],
             '',
             false
         );
         $this->schemaLocatorMock = $this->getMock(
-            '\Magento\Framework\ObjectManager\Config\SchemaLocator',
+            \Magento\Framework\ObjectManager\Config\SchemaLocator::class,
             [],
             [],
             '',
             false
         );
         $this->validationStateMock = $this->getMock(
-            '\Magento\Framework\Config\ValidationStateInterface',
+            \Magento\Framework\Config\ValidationStateInterface::class,
             [],
             [],
             '',

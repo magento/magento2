@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $configMock = $this->getMock('Magento\Catalog\Model\ProductOptions\ConfigInterface');
+        $configMock = $this->getMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
         $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price();
         $config = [
             [
@@ -46,7 +46,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         ];
         $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getImageSizeX', 'getImageSizeY','__wakeup'];
-        $this->valueMock = $this->getMock('Magento\Catalog\Model\Product\Option', $methods, [], '', false);
+        $this->valueMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, $methods, [], '', false);
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\File(
             $configMock,
             $priceConfigMock

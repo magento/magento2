@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\File\Test\Unit\Transfer\Adapter;
@@ -27,13 +27,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->response = $this->getMock(
-            '\Magento\Framework\HTTP\PhpEnvironment\Response',
+            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['setHeader', 'sendHeaders'],
             [],
             '',
             false
         );
-        $this->mime = $this->getMock('Magento\Framework\File\Mime');
+        $this->mime = $this->getMock(\Magento\Framework\File\Mime::class);
         $this->object = new Http($this->response, $this->mime);
     }
 

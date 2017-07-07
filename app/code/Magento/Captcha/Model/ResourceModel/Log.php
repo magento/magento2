@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Model\ResourceModel;
@@ -66,6 +66,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string|null $login
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function logAttempt($login)
     {
@@ -78,7 +79,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'count' => 1,
                     'updated_at' => $this->_coreDate->gmtDate()
                 ],
-                ['count' => new \Zend_Db_Expr('count+1'), 'updated_at']
+                ['count' => new \Zend\Db\Sql\Expression('count+1'), 'updated_at']
             );
         }
         $ip = $this->_remoteAddress->getRemoteAddress();
@@ -91,7 +92,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'count' => 1,
                     'updated_at' => $this->_coreDate->gmtDate()
                 ],
-                ['count' => new \Zend_Db_Expr('count+1'), 'updated_at']
+                ['count' => new \Zend\Db\Sql\Expression('count+1'), 'updated_at']
             );
         }
         return $this;
@@ -102,6 +103,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $login
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteUserAttempts($login)
     {
@@ -126,6 +128,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get count attempts by ip
      *
      * @return null|int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function countAttemptsByRemoteAddress()
     {
@@ -152,6 +155,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $login
      * @return null|int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function countAttemptsByUserLogin($login)
     {
@@ -176,6 +180,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Delete attempts with expired in update_at time
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteOldAttempts()
     {

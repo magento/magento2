@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,10 @@
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method\Form */ ?>
 <?php $_shippingRateGroups = $block->getShippingRates(); ?>
 <?php if ($_shippingRateGroups): ?>
-    <div id="order-shipping-method-choose" style="display:none">
+    <div id="order-shipping-method-choose" class="control" style="display:none">
         <dl class="admin__order-shipment-methods">
         <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-            <dt class="admin__order-shipment-methods-title"><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></dt>
+            <dt class="admin__order-shipment-methods-title"><?= $block->escapeHtml($block->getCarrierName($code)) ?></dt>
             <dd class="admin__order-shipment-methods-options">
                 <ul class="admin__order-shipment-methods-options-list">
                 <?php foreach ($_rates as $_rate): ?>
@@ -23,23 +23,23 @@
                        <?php if ($_rate->getErrorMessage()): ?>
                            <div class="messages">
                                <div class="message message-error error">
-                                   <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
+                                   <div><?= $block->escapeHtml($_rate->getErrorMessage()) ?></div>
                                </div>
                            </div>
                        <?php else: ?>
                             <?php $_checked = $block->isMethodActive($_code) ? 'checked="checked"' : '' ?>
-                            <input <?php /* @escapeNotVerified */ echo $_radioProperty ?> value="<?php /* @escapeNotVerified */ echo $_code ?>"
-                                                                 id="s_method_<?php /* @escapeNotVerified */ echo $_code ?>" <?php /* @escapeNotVerified */ echo $_checked ?>
-                                                                 class="admin__control-radio"/>
-                            <label class="admin__field-label" for="s_method_<?php /* @escapeNotVerified */ echo $_code ?>">
-                                <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                            <input <?= /* @escapeNotVerified */ $_radioProperty ?> value="<?= /* @escapeNotVerified */ $_code ?>"
+                                                                 id="s_method_<?= /* @escapeNotVerified */ $_code ?>" <?= /* @escapeNotVerified */ $_checked ?>
+                                                                 class="admin__control-radio required-entry"/>
+                            <label class="admin__field-label" for="s_method_<?= /* @escapeNotVerified */ $_code ?>">
+                                <?= $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
                                 <strong>
                                     <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
                                     <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
 
-                                    <?php /* @escapeNotVerified */ echo $_excl; ?>
+                                    <?= /* @escapeNotVerified */ $_excl ?>
                                     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                        (<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?> <?php /* @escapeNotVerified */ echo $_incl; ?>)
+                                        (<?= /* @escapeNotVerified */ __('Incl. Tax') ?> <?= /* @escapeNotVerified */ $_incl ?>)
                                     <?php endif; ?>
                                 </strong>
                             </label>
@@ -55,17 +55,17 @@
         <div id="order-shipping-method-info" class="order-shipping-method-info">
             <dl class="admin__order-shipment-methods">
                 <dt class="admin__order-shipment-methods-title">
-                    <?php echo $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?>
+                    <?= $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?>
                 </dt>
                 <dd class="admin__order-shipment-methods-options">
-                    <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                    <?= $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
                     <strong>
                         <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
                         <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
 
-                        <?php /* @escapeNotVerified */ echo $_excl; ?>
+                        <?= /* @escapeNotVerified */ $_excl ?>
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                            (<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?> <?php /* @escapeNotVerified */ echo $_incl; ?>)
+                            (<?= /* @escapeNotVerified */ __('Incl. Tax') ?> <?= /* @escapeNotVerified */ $_incl ?>)
                         <?php endif; ?>
                     </strong>
                 </dd>
@@ -73,7 +73,7 @@
             <a href="#"
                onclick="$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false"
                class="action-default">
-                <span><?php /* @escapeNotVerified */ echo __('Click to change shipping method') ?></span>
+                <span><?= /* @escapeNotVerified */ __('Click to change shipping method') ?></span>
             </a>
         </div>
     <?php else: ?>
@@ -85,18 +85,18 @@ require(['prototype'], function(){
     <?php endif; ?>
 <?php elseif ($block->getIsRateRequest()): ?>
     <div class="order-shipping-method-summary">
-        <strong class="order-shipping-method-not-available"><?php /* @escapeNotVerified */ echo __('Sorry, no quotes are available for this order.') ?></strong>
+        <strong class="order-shipping-method-not-available"><?= /* @escapeNotVerified */ __('Sorry, no quotes are available for this order.') ?></strong>
     </div>
 <?php else: ?>
     <div id="order-shipping-method-summary" class="order-shipping-method-summary">
         <a href="#" onclick="order.loadShippingRates();return false" class="action-default">
-            <span><?php /* @escapeNotVerified */ echo __('Get shipping methods and rates') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Get shipping methods and rates') ?></span>
         </a>
         <input type="hidden" name="order[has_shipping]" value="" class="required-entry" />
     </div>
 <?php endif; ?>
 <div style="display: none;" id="shipping-method-overlay" class="order-methods-overlay">
-    <span><?php /* @escapeNotVerified */ echo __('You don\'t need to select a shipping method.') ?></span>
+    <span><?= /* @escapeNotVerified */ __('You don\'t need to select a shipping method.') ?></span>
 </div>
 <script>
     require(["Magento_Sales/order/create/form"], function(){

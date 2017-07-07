@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,11 +43,17 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->conflictChecker = $this->getMock('Magento\Framework\Module\ConflictChecker', [], [], '', false);
-        $this->dependencyChecker = $this->getMock('Magento\Framework\Module\DependencyChecker', [], [], '', false);
+        $this->loader = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
+        $this->moduleList = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
+        $this->writer = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
+        $this->conflictChecker = $this->getMock(\Magento\Framework\Module\ConflictChecker::class, [], [], '', false);
+        $this->dependencyChecker = $this->getMock(
+            \Magento\Framework\Module\DependencyChecker::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->object = new Status(
             $this->loader,
             $this->moduleList,

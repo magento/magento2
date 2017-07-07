@@ -1,10 +1,10 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Credit memo for your {{var store.getFrontendName()}} order @-->
+<!--@subject {{trans "Credit memo for your %store_name order" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var comment":"Credit Memo Comment",
@@ -26,7 +26,7 @@
             <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
-                {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/') |raw}}
+                {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
             </p>
             <p>
                 {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>.' store_email=$store_email |raw}}

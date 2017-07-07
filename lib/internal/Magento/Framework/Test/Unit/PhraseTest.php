@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -27,7 +27,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->defaultRenderer = Phrase::getRenderer();
-        $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
+        $this->rendererMock = $this->getMockBuilder(\Magento\Framework\Phrase\RendererInterface::class)
             ->getMock();
     }
 
@@ -143,6 +143,6 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultRenderer()
     {
-        $this->assertInstanceOf('Magento\Framework\Phrase\Renderer\Placeholder', Phrase::getRenderer());
+        $this->assertInstanceOf(\Magento\Framework\Phrase\Renderer\Placeholder::class, Phrase::getRenderer());
     }
 }

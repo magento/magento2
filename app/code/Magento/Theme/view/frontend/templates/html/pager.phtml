@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,11 +24,11 @@
         <p class="toolbar-amount">
             <span class="toolbar-number">
             <?php if ($block->getLastPageNum()>1): ?>
-                <?php /* @escapeNotVerified */ echo __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum()) ?>
+                <?= /* @escapeNotVerified */ __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum()) ?>
             <?php elseif ($block->getTotalNum() == 1): ?>
-                <?php /* @escapeNotVerified */ echo __('%1 Item', $block->getTotalNum()) ?>
+                <?= /* @escapeNotVerified */ __('%1 Item', $block->getTotalNum()) ?>
             <?php else: ?>
-                <?php /* @escapeNotVerified */ echo __('%1 Item(s)', $block->getTotalNum()) ?>
+                <?= /* @escapeNotVerified */ __('%1 Item(s)', $block->getTotalNum()) ?>
             <?php endif; ?>
             </span>
         </p>
@@ -36,22 +36,22 @@
 
         <?php if ($block->getLastPageNum()>1): ?>
         <div class="pages">
-            <strong class="label pages-label" id="paging-label"><?php /* @escapeNotVerified */ echo __('Page') ?></strong>
+            <strong class="label pages-label" id="paging-label"><?= /* @escapeNotVerified */ __('Page') ?></strong>
             <ul class="items pages-items" aria-labelledby="paging-label">
             <?php if (!$block->isFirstPage()): ?>
                 <li class="item pages-item-previous">
                     <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : '';?>
-                    <a class="<?php /* @escapeNotVerified */ echo $text ? 'link ' : 'action '?> previous" href="<?php /* @escapeNotVerified */ echo $block->getPreviousPageUrl() ?>" title="<?php /* @escapeNotVerified */ echo $text ? $text : __('Previous') ?>">
-                        <span class="label"><?php /* @escapeNotVerified */ echo __('Page') ?></span>
-                        <span><?php /* @escapeNotVerified */ echo $text ? $text : __('Previous') ?></span>
+                    <a class="<?= /* @escapeNotVerified */ $text ? 'link ' : 'action ' ?> previous" href="<?= /* @escapeNotVerified */ $block->getPreviousPageUrl() ?>" title="<?= /* @escapeNotVerified */ $text ? $text : __('Previous') ?>">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                        <span><?= /* @escapeNotVerified */ $text ? $text : __('Previous') ?></span>
                     </a>
                 </li>
             <?php endif;?>
 
             <?php if ($block->canShowFirst()): ?>
                 <li class="item">
-                    <a class="page first" href="<?php /* @escapeNotVerified */ echo $block->getFirstPageUrl() ?>">
-                        <span class="label"><?php /* @escapeNotVerified */ echo __('Page') ?></span>
+                    <a class="page first" href="<?= /* @escapeNotVerified */ $block->getFirstPageUrl() ?>">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
                         <span>1</span>
                     </a>
                 </li>
@@ -59,7 +59,7 @@
 
             <?php if ($block->canShowPreviousJump()): ?>
                 <li class="item">
-                    <a class="page previous jump" title="" href="<?php /* @escapeNotVerified */ echo $block->getPreviousJumpUrl() ?>">
+                    <a class="page previous jump" title="" href="<?= /* @escapeNotVerified */ $block->getPreviousJumpUrl() ?>">
                         <span>...</span>
                     </a>
                 </li>
@@ -69,15 +69,15 @@
                 <?php if ($block->isPageCurrent($_page)): ?>
                     <li class="item current">
                         <strong class="page">
-                            <span class="label"><?php /* @escapeNotVerified */ echo __('You\'re currently reading page') ?></span>
-                            <span><?php /* @escapeNotVerified */ echo $_page ?></span>
+                            <span class="label"><?= /* @escapeNotVerified */ __('You\'re currently reading page') ?></span>
+                            <span><?= /* @escapeNotVerified */ $_page ?></span>
                         </strong>
                     </li>
                 <?php else: ?>
                     <li class="item">
-                        <a href="<?php /* @escapeNotVerified */ echo $block->getPageUrl($_page) ?>" class="page">
-                            <span class="label"><?php /* @escapeNotVerified */ echo __('Page') ?></span>
-                            <span><?php /* @escapeNotVerified */ echo $_page ?></span>
+                        <a href="<?= /* @escapeNotVerified */ $block->getPageUrl($_page) ?>" class="page">
+                            <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                            <span><?= /* @escapeNotVerified */ $_page ?></span>
                         </a>
                     </li>
                 <?php endif;?>
@@ -85,7 +85,7 @@
 
             <?php if ($block->canShowNextJump()): ?>
                 <li class="item">
-                    <a class="page next jump" title="" href="<?php /* @escapeNotVerified */ echo $block->getNextJumpUrl() ?>">
+                    <a class="page next jump" title="" href="<?= /* @escapeNotVerified */ $block->getNextJumpUrl() ?>">
                         <span>...</span>
                     </a>
                 </li>
@@ -93,9 +93,9 @@
 
             <?php if ($block->canShowLast()): ?>
               <li class="item">
-                  <a class="page last" href="<?php /* @escapeNotVerified */ echo $block->getLastPageUrl() ?>">
-                      <span class="label"><?php /* @escapeNotVerified */ echo __('Page') ?></span>
-                      <span><?php /* @escapeNotVerified */ echo $block->getLastPageNum() ?></span>
+                  <a class="page last" href="<?= /* @escapeNotVerified */ $block->getLastPageUrl() ?>">
+                      <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                      <span><?= /* @escapeNotVerified */ $block->getLastPageNum() ?></span>
                   </a>
               </li>
             <?php endif;?>
@@ -103,9 +103,9 @@
             <?php if (!$block->isLastPage()): ?>
                 <li class="item pages-item-next">
                     <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : '';?>
-                    <a class="<?php /* @escapeNotVerified */ echo $text ? 'link ' : 'action '?> next" href="<?php /* @escapeNotVerified */ echo $block->getNextPageUrl() ?>" title="<?php /* @escapeNotVerified */ echo $text ? $text : __('Next') ?>">
-                        <span class="label"><?php /* @escapeNotVerified */ echo __('Page') ?></span>
-                        <span><?php /* @escapeNotVerified */ echo $text ? $text : __('Next') ?></span>
+                    <a class="<?= /* @escapeNotVerified */ $text ? 'link ' : 'action ' ?> next" href="<?= /* @escapeNotVerified */ $block->getNextPageUrl() ?>" title="<?= /* @escapeNotVerified */ $text ? $text : __('Next') ?>">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                        <span><?= /* @escapeNotVerified */ $text ? $text : __('Next') ?></span>
                     </a>
                 </li>
             <?php endif;?>
@@ -115,16 +115,16 @@
 
     <?php if ($block->isShowPerPage()): ?>
         <div class="limiter">
-            <strong class="limiter-label"><?php /* @escapeNotVerified */ echo __('Show') ?></strong>
+            <strong class="limiter-label"><?= /* @escapeNotVerified */ __('Show') ?></strong>
             <select id="limiter" data-mage-init='{"redirectUrl": {"event":"change"}}' class="limiter-options">
                 <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
-                    <option value="<?php /* @escapeNotVerified */ echo $block->getLimitUrl($_key) ?>"<?php if ($block->isLimitCurrent($_key)): ?>
+                    <option value="<?= /* @escapeNotVerified */ $block->getLimitUrl($_key) ?>"<?php if ($block->isLimitCurrent($_key)): ?>
                         selected="selected"<?php endif ?>>
-                        <?php /* @escapeNotVerified */ echo $_limit ?>
+                        <?= /* @escapeNotVerified */ $_limit ?>
                     </option>
                 <?php endforeach; ?>
             </select>
-            <span class="limiter-text"><?php /* @escapeNotVerified */ echo __('per page') ?></span>
+            <span class="limiter-text"><?= /* @escapeNotVerified */ __('per page') ?></span>
         </div>
     <?php endif ?>
 

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule;
@@ -19,6 +19,11 @@ class ConfigurableProductHandler
 
     /** @var ConfigurableProductsProvider */
     private $configurableProductsProvider;
+
+    /**
+     * @var array
+     */
+    private $childrenProducts = [];
 
     /**
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable
@@ -42,7 +47,10 @@ class ConfigurableProductHandler
     {
         $configurableProductIds = $this->configurableProductsProvider->getIds(array_keys($productIds));
         foreach ($configurableProductIds as $productId) {
-            $subProductIds = $this->configurable->getChildrenIds($productId)[0];
+            if (!isset($this->childrenProducts[$productId])) {
+                $this->childrenProducts[$productId] = $this->configurable->getChildrenIds($productId)[0];
+            }
+            $subProductIds = $this->childrenProducts[$productId];
             $parentValidationResult = isset($productIds[$productId])
                 ? array_filter($productIds[$productId])
                 : [];

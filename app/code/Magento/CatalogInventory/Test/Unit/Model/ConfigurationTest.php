@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model;
@@ -39,16 +39,16 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
+        $this->configMock = $this->getMockBuilder(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->minSaleQtyHelperMock = $this->getMockBuilder('Magento\CatalogInventory\Helper\Minsaleqty')
+        $this->minSaleQtyHelperMock = $this->getMockBuilder(\Magento\CatalogInventory\Helper\Minsaleqty::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Configuration(
@@ -61,17 +61,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultWebsiteId()
     {
-        $id = 1;
-        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $websiteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($id);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($websiteMock);
-        $this->assertEquals($id, $this->model->getDefaultWebsiteId());
+        $this->assertEquals(0, $this->model->getDefaultScopeId());
     }
 
     public function testGetIsQtyTypeIds()

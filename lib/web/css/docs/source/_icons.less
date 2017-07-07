@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -85,60 +85,70 @@
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
 //        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image</th>
+//        <td>-</td>
 //        <td class="vars_value">-</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>A link to an image or sprite, mandatory parameter</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-height</th>
+//        <td>@icon__height</td>
 //        <td class="vars_value">26px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Icon image height</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-width</th>
+//        <td>@icon__width</td>
 //        <td class="vars_value">26px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Icon image width</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-margin</th>
+//        <td>@icon__margin</td>
 //        <td class="vars_value">0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Icon image margin</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-image-vertical-align</th>
+//        <td>@icon__vertical-align</td>
 //        <td class="vars_value">middle</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Icon image vertical align</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-position-x</th>
+//        <td>@icon-image__position-x</td>
 //        <td class="vars_value">0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Horizontal image position</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-position-y</th>
+//        <td>@icon-image__position-y</td>
 //        <td class="vars_value">0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Vertical image position</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-position</th>
+//        <td>@icon__position</td>
 //        <td class="vars_value">before</td>
 //        <td class="vars_value">before | after</td>
 //        <td>Icon image position</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-text-hide</th>
+//        <td>@icon__text-hide</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">true | false</td>
 //        <td>The text in the &lt;span&gt; tag should be hidden</td>
@@ -176,25 +186,29 @@
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
 //        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-position-x</th>
+//        <td>@icon-image__position-x</td>
 //        <td class="vars_value">0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Horizontal starting position of icon image</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-image-position-y</th>
+//        <td>@icon-image__position-y</td>
 //        <td class="vars_value">0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Vertical starting position of icon image</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-position</th>
-//        <td class="vars_value">-</td>
+//        <td>@icon__position</td>
+//        <td class="vars_value">before</td>
 //        <td class="vars_value">before | after</td>
 //        <td>Position of the icon which is set for the element</td>
 //      </tr>
@@ -218,30 +232,35 @@
 //    <table>
 //    <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
 //        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_icon-sprite-position-x</th>
+//        <td>@icon-sprite__position-x</td>
 //        <td class="vars_value">0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>The x coordinate of the desired image on the grid</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-sprite-position-y</th>
+//        <td>@icon-sprite__position-y</td>
 //        <td class="vars_value">0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>The y coordinate of the desired image on the grid</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-sprite-grid</th>
+//        <td>@icon-sprite__grid</td>
 //        <td class="vars_value">26px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>The size of the grid (in pixels) that the individal images are placed on</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-sprite-position</th>
+//        <td>@icon__position</td>
 //        <td class="vars_value">before</td>
 //        <td class="vars_value">before | after</td>
 //        <td>Icon image position</td>
@@ -269,24 +288,28 @@
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
 //        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-width</th>
+//        <td>@icon__width</td>
 //        <td class="vars_value">26px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Icon image width</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-image-height</th>
+//        <td>@icon__height</td>
 //        <td class="vars_value">26px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Icon image height</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-image-position</th>
+//        <td>@icon__position</td>
 //        <td class="vars_value">before</td>
 //        <td class="vars_value">before | after</td>
 //        <td>Icon image position</td>
@@ -314,78 +337,91 @@
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
 //        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-content</th>
+//        <td>-</td>
 //        <td class="vars_value">&nbsp;</td>
 //        <td class="vars_value">'' | icon code | icon variables</td>
 //        <td>Font icon code</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-font</th>
+//        <td>@icon-font</td>
 //        <td class="vars_value">@icons__font-name</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>The icon font</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-size</th>
+//        <td>@icon-font__size</td>
 //        <td class="vars_value">inherit</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Font icon size</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-line-height</th>
+//        <td>@icon-font__line-height</td>
 //        <td class="vars_value">@icon-font__size</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Font icon line height</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-font-color</th>
+//        <td>@icon-font__color</td>
 //        <td class="vars_value">inherit</td>
 //        <td class="vars_value">'' | inherit | color code</td>
 //        <td>Font icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-color-hover</th>
+//        <td>@icon-font__color-hover</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | inherit | color code</td>
 //        <td>Font icon color - hover state</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-color-active</th>
+//        <td>@icon-font__color-active</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | inherit | color code</td>
 //        <td>Font icon color - active state</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-font-margin</th>
+//        <td>@icon-font__margin</td>
 //        <td class="vars_value">@icon__margin</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Font icon margin</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-font-vertical-align</th>
+//        <td>@icon-font__vertical-align</td>
 //        <td class="vars_value" nowrap="nowrap">@icon__vertical-align</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Font icon vertical align</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-font-position</th>
+//        <td>@icon-font__position</td>
 //        <td class="vars_value">@icon__position</td>
 //        <td class="vars_value">before | after</td>
 //        <td>Font icon position</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-text-hide</th>
+//        <td>@icon-font__text-hide</td>
 //        <td class="vars_value">@icon__text-hide</td>
 //        <td class="vars_value">true | false</td>
 //        <td>The text of the element is replaced with the icon(true), or the icon is on the side of the text (false)</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-display</th>
+//        <td>@icon-font__display</td>
 //        <td class="vars_value">inline-block</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>The 'display' property of the icon container</td>
@@ -408,28 +444,33 @@
 }
 
 //  # Change the size of font icon variables
+//
 //  <pre>
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
 //        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-size</th>
+//        <td>@icon-font__size</td>
 //        <td class="vars_value">inherit</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Font icon font size</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_icon-font-line-height</th>
+//        <td>@icon-font__line-height</td>
 //        <td class="vars_value">@icon-font__size</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Font icon line height</td>
 //      </tr>
 //      <tr>
 //        <th>@_icon-font-position</th>
+//        <td>@icon-font__position</td>
 //        <td class="vars_value">before</td>
 //        <td class="vars_value">before | after</td>
 //        <td>Font icon - icon position</td>

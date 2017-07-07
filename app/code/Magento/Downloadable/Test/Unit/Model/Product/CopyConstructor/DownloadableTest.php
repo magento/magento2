@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product\CopyConstructor;
@@ -49,25 +49,25 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->jsonHelperMock = $this->getMock('\Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $this->jsonHelperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $this->_model = new \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable($this->jsonHelperMock);
 
-        $this->_productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->_productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $this->_duplicateMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['setDownloadableData', '__wakeup'],
             [],
             '',
             false
         );
 
-        $this->_linkMock = $this->getMock('\Magento\Downloadable\Model\Link', [], [], '', false);
+        $this->_linkMock = $this->getMock(\Magento\Downloadable\Model\Link::class, [], [], '', false);
 
-        $this->_sampleMock = $this->getMock('\Magento\Downloadable\Model\Sample', [], [], '', false);
+        $this->_sampleMock = $this->getMock(\Magento\Downloadable\Model\Sample::class, [], [], '', false);
 
         $this->_productTypeMock = $this->getMock(
-            '\Magento\Downloadable\Model\Product\Type',
+            \Magento\Downloadable\Model\Product\Type::class,
             [],
             [],
             '',

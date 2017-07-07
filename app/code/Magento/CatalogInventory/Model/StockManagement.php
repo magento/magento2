@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -85,7 +85,7 @@ class StockManagement implements StockManagementInterface
     public function registerProductsSale($items, $websiteId = null)
     {
         //if (!$websiteId) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+            $websiteId = $this->stockConfiguration->getDefaultScopeId();
         //}
         $this->getResource()->beginTransaction();
         $lockedItems = $this->getResource()->lockProductsStock(array_keys($items), $websiteId);
@@ -102,7 +102,7 @@ class StockManagement implements StockManagementInterface
             if (!$stockItem->hasAdminArea()
                 && !$this->stockState->checkQty($productId, $orderedQty, $stockItem->getWebsiteId())
             ) {
-                $this->getResource()->commit();
+                $this->getResource()->rollBack();
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Not all of your products are available in the requested quantity.')
                 );
@@ -133,7 +133,7 @@ class StockManagement implements StockManagementInterface
     public function revertProductsSale($items, $websiteId = null)
     {
         //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         //}
         $this->qtyCounter->correctItemsQty($items, $websiteId, '+');
         return true;
@@ -144,15 +144,15 @@ class StockManagement implements StockManagementInterface
      *
      * @param int $productId
      * @param float $qty
-     * @param int $websiteId
+     * @param int $scopeId
      * @return bool
      */
-    public function backItemQty($productId, $qty, $websiteId = null)
+    public function backItemQty($productId, $qty, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         //}
-        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
         if ($stockItem->getItemId() && $this->stockConfiguration->isQty($this->getProductType($productId))) {
             if ($this->canSubtractQty($stockItem)) {
                 $stockItem->setQty($stockItem->getQty() + $qty);
@@ -180,7 +180,7 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @return Stock
+     * @return ResourceStock
      */
     protected function getResource()
     {

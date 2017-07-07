@@ -2,7 +2,7 @@
 /**
  * Google Optimizer Data Helper
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ namespace Magento\GoogleOptimizer\Helper;
 
 use \Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**

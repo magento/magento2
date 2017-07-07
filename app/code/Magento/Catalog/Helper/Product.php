@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
@@ -251,12 +251,18 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve thumbnail image url
      *
      * @param ModelProduct|\Magento\Framework\DataObject $product
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return string|bool
      */
     public function getThumbnailUrl($product)
     {
-        return '';
+        $url = false;
+        $attribute = $product->getResource()->getAttribute('thumbnail');
+        if (!$product->getThumbnail()) {
+            $url = $this->_assetRepo->getUrl('Magento_Catalog::images/product/placeholder/thumbnail.jpg');
+        } elseif ($attribute) {
+            $url = $attribute->getFrontend()->getUrl($product);
+        }
+        return $url;
     }
 
     /**
@@ -338,8 +344,8 @@ class Product extends \Magento\Framework\Url\Helper\Data
          * @todo specify there all relations for properties depending on input type
          */
         $inputTypes = [
-            'multiselect' => ['backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend'],
-            'boolean' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
+            'multiselect' => ['backend_model' => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class],
+            'boolean' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
         ];
 
         if ($inputType === null) {

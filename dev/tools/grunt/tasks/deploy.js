@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 module.exports = function (grunt) {
@@ -20,7 +20,7 @@ module.exports = function (grunt) {
         ok('"pub/static" is empty.');
 
         log('Deploying Magento application...');
-        deploy = spawn('php', ['bin/magento', 'setup:static-content:deploy']);
+        deploy = spawn('php', ['bin/magento', 'setup:static-content:deploy', '-f']);
 
         deploy.stdout.on('data', function (data) {
             log(data);

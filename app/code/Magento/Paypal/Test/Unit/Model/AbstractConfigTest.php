@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
@@ -8,6 +8,8 @@ namespace Magento\Paypal\Test\Unit\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class AbstractConfigTest
@@ -28,7 +30,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
 
@@ -49,7 +51,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetMethodInstance()
     {
         /** @var $methodInterfaceMock MethodInterface */
-        $methodInterfaceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $this->assertSame($this->config, $this->config->setMethodInstance($methodInterfaceMock));
     }
@@ -64,7 +66,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
     public function setMethodDataProvider()
     {
         /** @var $methodInterfaceMock MethodInterface */
-        $methodInterfaceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInterfaceMock->expects($this->once())
             ->method('getCode')
@@ -290,10 +292,18 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBuildNotationCode()
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('paypal/bncode');
+        $productMetadata = $this->getMock(ProductMetadataInterface::class, [], [], '', false);
+        $productMetadata->expects($this->once())
+            ->method('getEdition')
+            ->will($this->returnValue('SomeEdition'));
 
-        $this->config->getBuildNotationCode();
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->config,
+            'productMetadata',
+            $productMetadata
+        );
+
+        $this->assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
     }
 }

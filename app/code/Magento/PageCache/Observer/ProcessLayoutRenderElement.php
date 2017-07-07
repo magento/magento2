@@ -1,12 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\EntitySpecificHandlesList;
 
 class ProcessLayoutRenderElement implements ObserverInterface
 {
@@ -15,30 +18,58 @@ class ProcessLayoutRenderElement implements ObserverInterface
      *
      * @var \Magento\PageCache\Model\Config
      */
-    protected $_config;
+    private $_config;
 
     /**
      * Is varnish enabled flag
      *
      * @var bool
      */
-    protected $isVarnishEnabled;
+    private $isVarnishEnabled;
 
     /**
      * Is full page cache enabled flag
      *
      * @var bool
      */
-    protected $isFullPageCacheEnabled;
+    private $isFullPageCacheEnabled;
+
+    /**
+     * @var EntitySpecificHandlesList
+     */
+    private $entitySpecificHandlesList;
+
+    /**
+     * @var Base64Json
+     */
+    private $base64jsonSerializer;
+
+    /**
+     * @var Json
+     */
+    private $jsonSerializer;
 
     /**
      * Class constructor
      *
      * @param \Magento\PageCache\Model\Config $config
+     * @param EntitySpecificHandlesList $entitySpecificHandlesList
+     * @param Json $jsonSerializer
+     * @param Base64Json $base64jsonSerializer
      */
-    public function __construct(\Magento\PageCache\Model\Config $config)
-    {
+    public function __construct(
+        \Magento\PageCache\Model\Config $config,
+        EntitySpecificHandlesList $entitySpecificHandlesList = null,
+        Json $jsonSerializer = null,
+        Base64Json $base64jsonSerializer = null
+    ) {
         $this->_config = $config;
+        $this->entitySpecificHandlesList = $entitySpecificHandlesList
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(EntitySpecificHandlesList::class);
+        $this->jsonSerializer = $jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->base64jsonSerializer = $base64jsonSerializer
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
     }
 
     /**
@@ -48,17 +79,23 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * @param \Magento\Framework\View\Layout $layout
      * @return string
      */
-    protected function _wrapEsi(
+    private function _wrapEsi(
         \Magento\Framework\View\Element\AbstractBlock $block,
         \Magento\Framework\View\Layout $layout
     ) {
+        $handles = $layout->getUpdate()->getHandles();
+        $pageSpecificHandles = $this->entitySpecificHandlesList->getHandles();
         $url = $block->getUrl(
             'page_cache/block/esi',
             [
-                'blocks' => json_encode([$block->getNameInLayout()]),
-                'handles' => json_encode($layout->getUpdate()->getHandles())
+                'blocks' => $this->jsonSerializer->serialize([$block->getNameInLayout()]),
+                'handles' => $this->base64jsonSerializer->serialize(
+                    array_values(array_diff($handles, $pageSpecificHandles))
+                )
             ]
         );
+        // Varnish does not support ESI over HTTPS must change to HTTP
+        $url = substr($url, 0, 5) === 'https' ? 'http' . substr($url, 5) : $url;
         return sprintf('<esi:include src="%s" />', $url);
     }
 
@@ -67,7 +104,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
      *
      * @return bool
      */
-    protected function isFullPageCacheEnabled()
+    private function isFullPageCacheEnabled()
     {
         if ($this->isFullPageCacheEnabled === null) {
             $this->isFullPageCacheEnabled = $this->_config->isEnabled();
@@ -80,7 +117,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
      *
      * @return bool
      */
-    protected function isVarnishEnabled()
+    private function isVarnishEnabled()
     {
         if ($this->isVarnishEnabled === null) {
             $this->isVarnishEnabled = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);

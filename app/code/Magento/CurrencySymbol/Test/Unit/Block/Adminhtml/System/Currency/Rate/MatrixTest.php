@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System\Currency\Rate;
@@ -33,12 +33,24 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
         $newRates = ['USD' => ['EUR' => 0.7767, 'UAH' => 20, 'GBP' => 12, 'USD' => 1]];
         $expectedNewRates = ['USD' => ['EUR' => '0.7767', 'UAH' => '20.0000', 'GBP' => '12.0000', 'USD' => '1.0000']];
 
-        $backendSessionMock = $this->getMock('Magento\Backend\Model\Session', ['getRates', 'unsetData'], [], '', false);
+        $backendSessionMock = $this->getMock(
+            \Magento\Backend\Model\Session::class,
+            ['getRates', 'unsetData'],
+            [],
+            '',
+            false
+        );
         $backendSessionMock->expects($this->once())->method('getRates')->willReturn($newRates);
 
-        $currencyFactoryMock = $this->getMock('Magento\Directory\Model\CurrencyFactory', ['create'], [], '', false);
+        $currencyFactoryMock = $this->getMock(
+            \Magento\Directory\Model\CurrencyFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $currencyMock = $this->getMock(
-            'Magento\Directory\Model\Currency',
+            \Magento\Directory\Model\Currency::class,
             ['getConfigAllowCurrencies', 'getConfigBaseCurrencies', 'getCurrencyRates'],
             [],
             '',
@@ -54,7 +66,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
 
         /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
         $layoutMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             [],
             '',
             false,
@@ -65,7 +77,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services */
         $block = $this->objectManagerHelper->getObject(
-            'Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix',
+            \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix::class,
             [
                 'dirCurrencyFactory' => $currencyFactoryMock,
                 'backendSession' => $backendSessionMock

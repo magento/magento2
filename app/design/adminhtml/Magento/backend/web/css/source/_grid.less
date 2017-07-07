@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,10 +7,18 @@
 //  Default Grid
 //  _____________________________________________
 
-//  Number of columns in the grid.
+//
+//  Variables
+//  _____________________________________________
 
+//  Number of columns in the grid
 @grid-columns: 12;
 @grid-gutter-width: 0;
+
+//  Form Fields Grid Sketch grid
+@temp_gutter: 30px;
+@temp_columns: 12;
+
 //
 //  Row
 //  ---------------------------------------------
@@ -62,27 +70,26 @@
     }
 }
 
-
 //
 //  Form Fields Grid Sketch
 //  _____________________________________________
-
-@temp_gutter: 30px;
-@temp_columns: 12;
 
 #mix-grid() {
     .row() {
         .lib-clearer();
         margin-left: ~'-@{temp_gutter}';
     }
+
     .return_length(@_columns-min, @_total: @temp_columns, @mathSymbol: '-') {
         @_part: @_columns-min/@_total;
         @_length: ~'calc( (100%) * @{_part} @{mathSymbol} @{temp_gutter} )';
     }
+
     .width(@_columns-min, @_total: @temp_columns) {
         #mix-grid .return_length(@_columns-min, @_total);
         width: @_length;
     }
+
     .column(@_columns-min, @_total: @temp_columns) {
         #mix-grid .width(@_columns-min, @_total);
         float: left;

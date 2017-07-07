@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
@@ -101,7 +101,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
                 'currency_code' => $currencyCode,
                 'index' => 'price',
                 'sortable' => false,
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
+                'renderer' => \Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency::class,
                 'rate' => $this->getRate($currencyCode),
                 'header_css_class' => 'col-price',
                 'column_css_class' => 'col-price'

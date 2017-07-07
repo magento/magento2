@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,12 +18,12 @@ class FormatTest extends \PHPUnit_Framework_TestCase
      */
     protected $salesRuleCoupon;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->salesRuleCoupon = $this->getMock(
-            'Magento\SalesRule\Helper\Coupon',
+            \Magento\SalesRule\Helper\Coupon::class,
             [],
             [],
             '',
@@ -31,7 +31,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            'Magento\SalesRule\Model\System\Config\Source\Coupon\Format',
+            \Magento\SalesRule\Model\System\Config\Source\Coupon\Format::class,
             [
                 'salesRuleCoupon' => $this->salesRuleCoupon
             ]

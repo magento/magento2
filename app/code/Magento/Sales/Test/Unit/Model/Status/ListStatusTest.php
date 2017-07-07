@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Status;
@@ -36,7 +36,7 @@ class ListStatusTest extends \PHPUnit_Framework_TestCase
         $result = $this->listStatus->addItem($origin, $code, $message, $additionalData);
         $items = $this->listStatus->getItems();
         $this->assertEquals($mockItems, $items);
-        $this->assertInstanceOf('\Magento\Sales\Model\Status\ListStatus', $result);
+        $this->assertInstanceOf(\Magento\Sales\Model\Status\ListStatus::class, $result);
     }
 
     public function testRemovePresentAndAbsentItems()
@@ -60,7 +60,7 @@ class ListStatusTest extends \PHPUnit_Framework_TestCase
         $this->addItems();
         $expected = [];
         $result = $this->listStatus->clear();
-        $this->assertInstanceOf('\Magento\Sales\Model\Status\ListStatus', $result);
+        $this->assertInstanceOf(\Magento\Sales\Model\Status\ListStatus::class, $result);
         $this->assertEquals($expected, $result->getItems());
     }
 

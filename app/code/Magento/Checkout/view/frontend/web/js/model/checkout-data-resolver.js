@@ -1,9 +1,8 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
-/*global alert*/
+
 /**
  * Checkout adapter for customer data storage
  */
@@ -37,99 +36,136 @@ define([
     'use strict';
 
     return {
+
+        /**
+         * Resolve estimation address. Used local storage
+         */
         resolveEstimationAddress: function () {
+            var address;
+
             if (checkoutData.getShippingAddressFromData()) {
-                var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
+                address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             } else {
                 this.resolveShippingAddress();
             }
+
             if (quote.isVirtual()) {
-               if  (checkoutData.getBillingAddressFromData()) {
-                    address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
+                if (checkoutData.getBillingAddressFromData()) {
+                    address = addressConverter.formAddressDataToQuoteAddress(
+                        checkoutData.getBillingAddressFromData()
+                    );
                     selectBillingAddress(address);
                 } else {
-                   this.resolveBillingAddress();
-               }
+                    this.resolveBillingAddress();
+                }
             }
 
         },
 
+        /**
+         * Resolve shipping address. Used local storage
+         */
         resolveShippingAddress: function () {
             var newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
+
             if (newCustomerShippingAddress) {
                 createShippingAddress(newCustomerShippingAddress);
             }
             this.applyShippingAddress();
         },
 
+        /**
+         * Apply resolved estimated address to quote
+         *
+         * @param {Object} isEstimatedAddress
+         */
         applyShippingAddress: function (isEstimatedAddress) {
-            if (addressList().length == 0) {
-                var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
+            var address,
+                shippingAddress,
+                isConvertAddress,
+                addressData,
+                isShippingAddressInitialized;
+
+            if (addressList().length === 0) {
+                address = addressConverter.formAddressDataToQuoteAddress(
+                    checkoutData.getShippingAddressFromData()
+                );
                 selectShippingAddress(address);
             }
-            var shippingAddress = quote.shippingAddress(),
-                isConvertAddress = isEstimatedAddress || false,
-                addressData;
+            shippingAddress = quote.shippingAddress();
+            isConvertAddress = isEstimatedAddress || false;
+
             if (!shippingAddress) {
-                var isShippingAddressInitialized = addressList.some(function (address) {
-                    if (checkoutData.getSelectedShippingAddress() == address.getKey()) {
-                        addressData = isConvertAddress
-                            ? addressConverter.addressToEstimationAddress(address)
-                            : address;
+                isShippingAddressInitialized = addressList.some(function (addressFromList) {
+                    if (checkoutData.getSelectedShippingAddress() == addressFromList.getKey()) { //eslint-disable-line
+                        addressData = isConvertAddress ?
+                            addressConverter.addressToEstimationAddress(addressFromList)
+                            : addressFromList;
                         selectShippingAddress(addressData);
+
                         return true;
                     }
+
                     return false;
                 });
 
                 if (!isShippingAddressInitialized) {
-                    isShippingAddressInitialized = addressList.some(function (address) {
-                        if (address.isDefaultShipping()) {
-                            addressData = isConvertAddress
-                                ? addressConverter.addressToEstimationAddress(address)
-                                : address;
+                    isShippingAddressInitialized = addressList.some(function (addrs) {
+                        if (addrs.isDefaultShipping()) {
+                            addressData = isConvertAddress ?
+                                addressConverter.addressToEstimationAddress(addrs)
+                                : addrs;
                             selectShippingAddress(addressData);
+
                             return true;
                         }
+
                         return false;
                     });
                 }
-                if (!isShippingAddressInitialized && addressList().length == 1) {
-                    addressData = isConvertAddress
-                        ? addressConverter.addressToEstimationAddress(addressList()[0])
+
+                if (!isShippingAddressInitialized && addressList().length === 1) {
+                    addressData = isConvertAddress ?
+                        addressConverter.addressToEstimationAddress(addressList()[0])
                         : addressList()[0];
                     selectShippingAddress(addressData);
                 }
             }
         },
 
+        /**
+         * @param {Object} ratesData
+         */
         resolveShippingRates: function (ratesData) {
-            var selectedShippingRate = checkoutData.getSelectedShippingRate();
-            var availableRate = false;
+            var selectedShippingRate = checkoutData.getSelectedShippingRate(),
+                availableRate = false;
 
-            if (ratesData.length == 1) {
+            if (ratesData.length === 1) {
                 //set shipping rate if we have only one available shipping rate
                 selectShippingMethodAction(ratesData[0]);
+
                 return;
             }
 
             if (quote.shippingMethod()) {
                 availableRate = _.find(ratesData, function (rate) {
-                    return rate.carrier_code == quote.shippingMethod().carrier_code
-                        && rate.method_code == quote.shippingMethod().method_code;
+                    return rate['carrier_code'] == quote.shippingMethod()['carrier_code'] && //eslint-disable-line
+                        rate['method_code'] == quote.shippingMethod()['method_code']; //eslint-disable-line eqeqeq
                 });
             }
 
             if (!availableRate && selectedShippingRate) {
                 availableRate = _.find(ratesData, function (rate) {
-                    return rate.carrier_code + "_" + rate.method_code === selectedShippingRate;
+                    return rate['carrier_code'] + '_' + rate['method_code'] === selectedShippingRate;
                 });
             }
 
             if (!availableRate && window.checkoutConfig.selectedShippingMethod) {
-                availableRate = true;
+                availableRate = window.checkoutConfig.selectedShippingMethod;
                 selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
+
+                return;
             }
 
             //Unset selected shipping method if not available
@@ -140,49 +176,64 @@ define([
             }
         },
 
+        /**
+         * Resolve payment method. Used local storage
+         */
         resolvePaymentMethod: function () {
-            var availablePaymentMethods = paymentService.getAvailablePaymentMethods();
-            var selectedPaymentMethod = checkoutData.getSelectedPaymentMethod();
+            var availablePaymentMethods = paymentService.getAvailablePaymentMethods(),
+                selectedPaymentMethod = checkoutData.getSelectedPaymentMethod();
+
             if (selectedPaymentMethod) {
                 availablePaymentMethods.some(function (payment) {
-                    if (payment.method == selectedPaymentMethod) {
+                    if (payment.method == selectedPaymentMethod) { //eslint-disable-line eqeqeq
                         selectPaymentMethodAction(payment);
                     }
                 });
             }
         },
 
+        /**
+         * Resolve billing address. Used local storage
+         */
         resolveBillingAddress: function () {
             var selectedBillingAddress = checkoutData.getSelectedBillingAddress(),
-                newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress(),
-                shippingAddress = quote.shippingAddress();
+                newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
 
             if (selectedBillingAddress) {
-                if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) {
+                if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) { //eslint-disable-line
                     selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));
                 } else {
                     addressList.some(function (address) {
-                        if (selectedBillingAddress == address.getKey()) {
+                        if (selectedBillingAddress == address.getKey()) { //eslint-disable-line eqeqeq
                             selectBillingAddress(address);
                         }
                     });
                 }
             } else {
-                this.applyBillingAddress()
+                this.applyBillingAddress();
             }
         },
+
+        /**
+         * Apply resolved billing address to quote
+         */
         applyBillingAddress: function () {
+            var shippingAddress;
+
             if (quote.billingAddress()) {
                 selectBillingAddress(quote.billingAddress());
+
                 return;
             }
-            var shippingAddress = quote.shippingAddress();
-            if (shippingAddress
-                && shippingAddress.canUseForBilling()
-                && (shippingAddress.isDefaultShipping() || !quote.isVirtual())) {
+            shippingAddress = quote.shippingAddress();
+
+            if (shippingAddress &&
+                shippingAddress.canUseForBilling() &&
+                (shippingAddress.isDefaultShipping() || !quote.isVirtual())
+            ) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
             }
         }
-    }
+    };
 });

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\ObjectManager;
 
 class CheckContactUsFormObserver implements ObserverInterface
 {
@@ -33,6 +35,11 @@ class CheckContactUsFormObserver implements ObserverInterface
      * @var CaptchaStringResolver
      */
     protected $captchaStringResolver;
+
+    /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
 
     /**
      * @param \Magento\Captcha\Helper\Data $helper
@@ -70,9 +77,25 @@ class CheckContactUsFormObserver implements ObserverInterface
             $controller = $observer->getControllerAction();
             if (!$captcha->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))) {
                 $this->messageManager->addError(__('Incorrect CAPTCHA.'));
+                $this->getDataPersistor()->set($formId, $controller->getRequest()->getPostValue());
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->redirect->redirect($controller->getResponse(), 'contact/index/index');
             }
         }
+    }
+
+    /**
+     * Get Data Persistor
+     *
+     * @return DataPersistorInterface
+     */
+    private function getDataPersistor()
+    {
+        if ($this->dataPersistor === null) {
+            $this->dataPersistor = ObjectManager::getInstance()
+                ->get(DataPersistorInterface::class);
+        }
+
+        return $this->dataPersistor;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block;
@@ -26,13 +26,13 @@ class SectionConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $this->sectionConfig = $this->getMock('Magento\Framework\Config\DataInterface');
-        $this->encoder = $this->getMock('Magento\Framework\Json\EncoderInterface');
+        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->sectionConfig = $this->getMock(\Magento\Framework\Config\DataInterface::class);
+        $this->encoder = $this->getMock(\Magento\Framework\Json\EncoderInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\Customer\Block\SectionConfig',
+            \Magento\Customer\Block\SectionConfig::class,
             [
                 'context' => $this->context,
                 'sectionConfig' => $this->sectionConfig

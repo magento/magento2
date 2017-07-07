@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url\Test\Unit;
@@ -16,7 +16,7 @@ class DecoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDecode()
     {
-        $urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
+        $urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
         /** @var $urlBuilderMock \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
         $decoder = new Decoder($urlBuilderMock);
         $encoder = new Encoder();

@@ -1,14 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Filesystem\Io;
-
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Sftp client interface
@@ -18,11 +14,10 @@ use Magento\Framework\Filesystem\DriverInterface;
 class Sftp extends AbstractIo
 {
     const REMOTE_TIMEOUT = 10;
-
     const SSH2_PORT = 22;
 
     /**
-     * @var \Net_SFTP $_connection
+     * @var \phpseclib\Net\SFTP $_connection
      */
     protected $_connection = null;
 
@@ -48,9 +43,11 @@ class Sftp extends AbstractIo
             $host = $args['host'];
             $port = self::SSH2_PORT;
         }
-        $this->_connection = new \Net_SFTP($host, $port, $args['timeout']);
+        $this->_connection = new \phpseclib\Net\SFTP($host, $port, $args['timeout']);
         if (!$this->_connection->login($args['username'], $args['password'])) {
-            throw new \Exception(sprintf("Unable to open SFTP connection as %s@%s", $args['username'], $args['host']));
+            throw new \Exception(
+                sprintf("Unable to open SFTP connection as %s@%s", $args['username'], $args['host'])
+            );
         }
     }
 
@@ -78,7 +75,7 @@ class Sftp extends AbstractIo
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true)
+    public function mkdir($dir, $mode = 0777, $recursive = true)
     {
         if ($recursive) {
             $no_errors = true;
@@ -170,7 +167,7 @@ class Sftp extends AbstractIo
      */
     public function read($filename, $destination = null)
     {
-        if (is_null($destination)) {
+        if ($destination === null) {
             $destination = false;
         }
         return $this->_connection->get($filename, $destination);
@@ -186,7 +183,7 @@ class Sftp extends AbstractIo
      */
     public function write($filename, $source, $mode = null)
     {
-        $mode = is_readable($source) ? NET_SFTP_LOCAL_FILE : NET_SFTP_STRING;
+        $mode = is_readable($source) ? \phpseclib\Net\SFTP::SOURCE_LOCAL_FILE : \phpseclib\Net\SFTP::SOURCE_STRING;
         return $this->_connection->put($filename, $source, $mode);
     }
 
@@ -241,7 +238,7 @@ class Sftp extends AbstractIo
         $currentWorkingDir = $this->pwd();
         $result = [];
         foreach ($list as $name) {
-            $result[] = ['text' => $name, 'id' => "{$currentWorkingDir}{$name}"];
+            $result[] = ['text' => $name, 'id' => "{$currentWorkingDir}/{$name}"];
         }
         return $result;
     }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Abstract model with custom attributes support.
@@ -19,7 +20,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     * @var ExtensionAttributesFactory
      */
     protected $extensionAttributesFactory;
 
@@ -46,7 +47,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -55,7 +56,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -183,7 +184,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     {
         if (is_array($key)) {
             $key = $this->filterCustomAttributes($key);
-        } else if ($key == self::CUSTOM_ATTRIBUTES) {
+        } elseif ($key == self::CUSTOM_ATTRIBUTES) {
             $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
             $value = $filteredData[self::CUSTOM_ATTRIBUTES];
         }
@@ -253,12 +254,18 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $data = parent::getData($key, $index);
             if ($data === null) {
                 /** Try to find necessary data in custom attributes */
-                $data = parent::getData(self::CUSTOM_ATTRIBUTES . "/{$key}", $index);
+                $data = isset($this->_data[self::CUSTOM_ATTRIBUTES][$key])
+                    ? $this->_data[self::CUSTOM_ATTRIBUTES][$key]
+                    : null;
                 if ($data instanceof \Magento\Framework\Api\AttributeValue) {
                     $data = $data->getValue();
                 }
+                if (null !== $index && isset($data[$index])) {
+                    return $data[$index];
+                }
             }
         }
+
         return $data;
     }
 
@@ -327,5 +334,24 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     protected function _getExtensionAttributes()
     {
         return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(parent::__sleep(), ['extensionAttributesFactory', 'customAttributeFactory']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->extensionAttributesFactory = $objectManager->get(ExtensionAttributesFactory::class);
+        $this->customAttributeFactory = $objectManager->get(AttributeValueFactory::class);
     }
 }

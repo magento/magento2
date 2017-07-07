@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Catalog\Block\Product\View\Options\Type;
 
 /**
  * Product options text type block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Block\Product\View\Options\Type;
-
 class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**
@@ -30,20 +29,20 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $this->setSkipJsReloadPrice(1);
         // Remove inline prototype onclick and onchange events
 
-        if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN ||
-            $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE
+        if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN ||
+            $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE
         ) {
             $require = $_option->getIsRequire() ? ' required' : '';
             $extraParams = '';
             $select = $this->getLayout()->createBlock(
-                'Magento\Framework\View\Element\Html\Select'
+                \Magento\Framework\View\Element\Html\Select::class
             )->setData(
                 [
                     'id' => 'select_' . $_option->getId(),
                     'class' => $require . ' product-custom-option admin__control-select'
                 ]
             );
-            if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN) {
+            if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN) {
                 $select->setName('options[' . $_option->getid() . ']')->addOption('', __('-- Please Select --'));
             } else {
                 $select->setName('options[' . $_option->getid() . '][]');
@@ -63,12 +62,13 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     ['price' => $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false)]
                 );
             }
-            if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE) {
+            if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE) {
                 $extraParams = ' multiple="multiple"';
             }
             if (!$this->getSkipJsReloadPrice()) {
                 $extraParams .= ' onchange="opConfig.reloadPrice()"';
             }
+            $extraParams .= ' data-selector="' . $select->getName() . '"';
             $select->setExtraParams($extraParams);
 
             if ($configValue) {
@@ -78,14 +78,14 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             return $select->getHtml();
         }
 
-        if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO ||
-            $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX
+        if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO ||
+            $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX
         ) {
             $selectHtml = '<div class="options-list nested" id="options-' . $_option->getId() . '-list">';
             $require = $_option->getIsRequire() ? ' required' : '';
             $arraySign = '';
             switch ($_option->getType()) {
-                case \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO:
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO:
                     $type = 'radio';
                     $class = 'radio admin__control-radio';
                     if (!$_option->getIsRequire()) {
@@ -97,6 +97,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                             ' product-custom-option" name="options[' .
                             $_option->getId() .
                             ']"' .
+                            ' data-selector="options[' . $_option->getId() . ']"' .
                             ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"') .
                             ' value="" checked="checked" /><label class="label admin__field-label" for="options_' .
                             $_option->getId() .
@@ -104,7 +105,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                             __('None') . '</span></label></div>';
                     }
                     break;
-                case \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX:
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX:
                     $type = 'checkbox';
                     $class = 'checkbox admin__control-checkbox';
                     $arraySign = '[]';
@@ -128,6 +129,11 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     $checked = $configValue == $htmlValue ? 'checked' : '';
                 }
 
+                $dataSelector = 'options[' . $_option->getId() . ']';
+                if ($arraySign) {
+                    $dataSelector .= '[' . $htmlValue . ']';
+                }
+
                 $selectHtml .= '<div class="field choice admin__field admin__field-option' .
                     $require .
                     '">' .
@@ -142,7 +148,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     ' name="options[' .
                     $_option->getId() .
                     ']' .
-                    (!empty($arraySign) ? '[' . $htmlValue . ']' : '') .
+                    $arraySign .
                     '" id="options_' .
                     $_option->getId() .
                     '_' .
@@ -151,6 +157,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     $htmlValue .
                     '" ' .
                     $checked .
+                    ' data-selector="' . $dataSelector . '"' .
                     ' price="' .
                     $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false) .
                     '" />' .

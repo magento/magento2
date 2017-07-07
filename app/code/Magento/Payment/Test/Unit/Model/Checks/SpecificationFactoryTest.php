@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,22 +20,22 @@ class SpecificationFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_compositeFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_compositeFactory = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\CompositeFactory'
+            \Magento\Payment\Model\Checks\CompositeFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
     }
 
     public function testCreate()
     {
         $specification = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\SpecificationInterface'
+            \Magento\Payment\Model\Checks\SpecificationInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $specificationMapping = [self::SPECIFICATION_KEY => $specification];
 
         $expectedComposite = $this->getMockBuilder(
-            'Magento\Payment\Model\Checks\Composite'
+            \Magento\Payment\Model\Checks\Composite::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $modelFactory = new SpecificationFactory($this->_compositeFactory, $specificationMapping);
         $this->_compositeFactory->expects($this->once())->method('create')->with(

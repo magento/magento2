@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ angular.module('complete-backup', ['ngStorage'])
         if ($localStorage.backupInfo) {
             $scope.backupInfoPassed = $localStorage.backupInfo;
         }
-
+        
         $scope.type = $state.current.type;
 
         $scope.progressCounter = BACKUPCOUNTER;
@@ -111,13 +111,20 @@ angular.module('complete-backup', ['ngStorage'])
                     $scope.files = files;
                     $scope.updateOnProcessed($scope.create.responseType);
                     $scope.stopProgress();
+                    $scope.disableMeintenanceMode();
                 },
                 fail: function() {
                     $scope.requestFailedHandler($scope.create);
+                    $scope.disableMeintenanceMode();
                 }
             }
         };
 
+        $scope.disableMeintenanceMode = function() {
+            $http.post('index.php/maintenance/index', {'disable' : true}).success(function(data) {
+            });
+        };
+        
         $scope.isCompleted = function() {
             return $scope.maintenance.processed
                 && $scope.check.processed

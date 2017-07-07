@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 ?>
 <li class="item link compare" data-bind="scope: 'compareProducts'" data-role="compare-products-link">
-    <a class="action compare no-display" title="<?php /* @escapeNotVerified */ echo __('Compare Products') ?>"
+    <a class="action compare no-display" title="<?= /* @escapeNotVerified */ __('Compare Products') ?>"
        data-bind="attr: {'href': compareProducts().listUrl}, css: {'no-display': !compareProducts().count}"
     >
-        <?php /* @escapeNotVerified */ echo __('Compare Products') ?>
+        <?= /* @escapeNotVerified */ __('Compare Products') ?>
         <span class="counter qty" data-bind="text: compareProducts().countCaption"></span>
     </a>
 </li>
 <script type="text/x-magento-init">
-{"[data-role=compare-products-link]": {"Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>}}
+{"[data-role=compare-products-link]": {"Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout() ?>}}
 </script>

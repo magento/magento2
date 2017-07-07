@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,10 +9,13 @@
     <group id="express_checkout" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
         <label>Express Checkout</label>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-        <fieldset_css>pp-method-express</fieldset_css>
+        <fieldset_css>paypal-other-section</fieldset_css>
         <comment>Add PayPal as an additional payment method to your checkout page.</comment>
         <attribute type="activity_path">payment/paypal_express/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-express-checkout?partner_id=NB9WWHYEMVUMS</more_url>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-express-checkout.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="express_checkout_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -20,7 +23,8 @@
                 <label>Express Checkout</label>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
                 <field id="business_account" translate="label comment tooltip" showInDefault="1" showInWebsite="1" sortOrder="5">
-                    <label>Email Associated with PayPal Merchant Account</label>
+                    <label>Email Associated with PayPal Merchant Account (Optional)</label>
+                    <frontend_class>not-required</frontend_class>
                     <comment>
                         <![CDATA[<a href="http://www.magentocommerce.com/paypal">Start accepting payments via PayPal!</a>]]>
                     </comment>
@@ -66,16 +70,31 @@
                     </depends>
                 </field>
                 <field id="api_wizard" translate="button_label attribute sandbox_button_label" sortOrder="70" showInDefault="1" showInWebsite="1">
-                    <button_label>Get Credentials from PayPal</button_label>
-                    <button_url>
-                        <![CDATA[https://www.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]>
-                    </button_url>
+
+                    <attribute type="button_label">Get Credentials from PayPal</attribute>
+                    <attribute type="button_url">
+                        <![CDATA[https://www.paypal.com/webapps/merchantboarding/webflow/externalpartnerflow]]>
+                    </attribute>
+
                     <attribute type="sandbox_button_label">Sandbox Credentials</attribute>
                     <attribute type="sandbox_button_url">
-                        <![CDATA[https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_login-api-run]]>
+                        <![CDATA[https://www.sandbox.paypal.com/webapps/merchantboarding/webflow/externalpartnerflow]]>
                     </attribute>
+
+                    <!-- partnerId -->
+                    <attribute type="partner_id">NB9WWHYEMVUMS</attribute>
+                    <!-- partnerLogoUrl -->
+                    <attribute type="partner_logo_url">Magento_Backend/web/images/logo-magento.png</attribute>
+                    <!-- receiveCredentials -->
+                    <attribute type="receive_credentials">FALSE</attribute>
+                    <!-- showPermissions -->
+                    <attribute type="show_permissions">FALSE</attribute>
+                    <!-- displayMode -->
+                    <attribute type="display_mode">embedded</attribute>
+                    <!-- productIntentID -->
+                    <attribute type="product_intent_id">pp_express</attribute>
+
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\ApiWizard</frontend_model>
-                    <label/>
                     <attribute type="shared">1</attribute>
                 </field>
                 <field id="sandbox_flag" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1">
@@ -116,9 +135,30 @@
                     <group id="express_checkout_required_express_checkout"/>
                 </requires>
             </field>
-
-
-            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1">
+            <field id="enable_in_context_checkout" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1">
+                <label>Enable In-Context Checkout Experience</label>
+                <comment>
+                    <![CDATA[See PayPal Feature Support details and list of supported regions
+                    <a href="https://developer.paypal.com/docs/classic/express-checkout/in-context/" target="_blank">here</a>.]]>
+                </comment>
+                <config_path>payment/paypal_express/in_context</config_path>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\InContextApi</frontend_model>
+                <requires>
+                    <field id="enable_express_checkout"/>
+                </requires>
+            </field>
+            <field id="merchant_id" translate="label" type="text" sortOrder="22" showInDefault="1" showInWebsite="1">
+                <label>Merchant Account ID</label>
+                <tooltip>You can look up your merchant ID by logging into https://www.paypal.com/. Click the profile icon on the top right side of the page and then select Profile and settings in the Business Profile menu. (If you do not see the profile icon at the top of the page, click Profile, which appears in the top menu when the My Account tab is selected.) Click My business info on the left, and the Merchant account ID is displayed in the list of profile items on the right.</tooltip>
+                <config_path>payment/paypal_express/merchant_id</config_path>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\MerchantId</frontend_model>
+                <depends>
+                    <field id="enable_in_context_checkout">1</field>
+                </depends>
+                <validate>required-entry</validate>
+            </field>
+            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="1" showInWebsite="1">
                 <label>Enable PayPal Credit</label>
                 <comment><![CDATA[PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
@@ -130,6 +170,16 @@
                 <requires>
                     <field id="enable_express_checkout"/>
                 </requires>
+            </field>
+            <field id="express_checkout_bml_sort_order" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sort Order PayPal Credit</label>
+                <config_path>payment/paypal_express_bml/sort_order</config_path>
+                <frontend_class>validate-number</frontend_class>
+                <attribute type="shared">1</attribute>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlApiSortOrder</frontend_model>
+                <depends>
+                    <field id="enable_express_checkout_bml">1</field>
+                </depends>
             </field>
             <group id="advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="30">
                 <label>Advertise PayPal Credit</label>
@@ -269,7 +319,7 @@
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
             <field id="title" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Title</label>
-                <comment>It is recommended to set this value to "Magento_Paypal" per store views.</comment>
+                <comment>It is recommended to set this value to "PayPal" per store views.</comment>
                 <config_path>payment/paypal_express/title</config_path>
                 <attribute type="shared">1</attribute>
             </field>

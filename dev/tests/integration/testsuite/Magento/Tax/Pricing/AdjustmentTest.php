@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,9 +18,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Tax\Model\Config $config */
-        $config = $objectManager->get('Magento\Tax\Model\Config');
+        $config = $objectManager->get(\Magento\Tax\Model\Config::class);
         /** @var \Magento\Tax\Pricing\Adjustment $model */
-        $model = $objectManager->create('Magento\Tax\Pricing\Adjustment');
+        $model = $objectManager->create(\Magento\Tax\Pricing\Adjustment::class);
         $config->setNeedUseShippingExcludeTax($isShippingPriceExcludeTax);
         // Run tested method
         $result = $model->isIncludedInBasePrice();
@@ -83,7 +83,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         // Instantiate objects
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Tax\Pricing\Adjustment $model */
-        $model = $objectManager->create('Magento\Tax\Pricing\Adjustment');
+        $model = $objectManager->create(\Magento\Tax\Pricing\Adjustment::class);
         // Run tested method
         $result = $model->isIncludedInDisplayPrice();
         // Check expectations

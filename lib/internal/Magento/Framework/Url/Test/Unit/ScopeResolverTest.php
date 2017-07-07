@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Url\Test\Unit;
@@ -17,12 +17,14 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected $_object;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->scopeResolverMock = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')->getMock();
+        $this->scopeResolverMock = $this->getMockBuilder(
+            \Magento\Framework\App\ScopeResolverInterface::class
+        )->getMock();
         $this->_object = $objectManager->getObject(
-            'Magento\Framework\Url\ScopeResolver',
+            \Magento\Framework\Url\ScopeResolver::class,
             ['scopeResolver' => $this->scopeResolverMock]
         );
     }
@@ -33,7 +35,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetScope($scopeId)
     {
-        $scopeMock = $this->getMockBuilder('Magento\Framework\Url\ScopeInterface')->getMock();
+        $scopeMock = $this->getMockBuilder(\Magento\Framework\Url\ScopeInterface::class)->getMock();
         $this->scopeResolverMock->expects(
             $this->at(0)
         )->method(

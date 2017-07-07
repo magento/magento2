@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 ?>
-<legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Order Totals') ?></span></legend>
+<legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Order Totals') ?></span></legend>
 <br>
 
 <table class="admin__table-secondary data-table">
     <tbody>
-        <?php /* @escapeNotVerified */ echo $block->renderTotals(); ?>
-        <?php /* @escapeNotVerified */ echo $block->renderTotals('footer'); ?>
+        <?= /* @escapeNotVerified */ $block->renderTotals() ?>
+        <?= /* @escapeNotVerified */ $block->renderTotals('footer') ?>
     </tbody>
 </table>
 
@@ -22,17 +22,17 @@
         <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]"
                value="1"<?php if ($block->getNoteNotify()): ?> checked="checked"<?php endif; ?>
                class="admin__control-checkbox"/>
-        <label for="notify_customer" class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Append Comments') ?></label>
+        <label for="notify_customer" class="admin__field-label"><?= /* @escapeNotVerified */ __('Append Comments') ?></label>
     </div>
     <?php if ($block->canSendNewOrderConfirmationEmail()): ?>
     <div class="admin__field admin__field-option field-email-order-confirmation">
         <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"
                class="admin__control-checkbox"/>
-        <label for="send_confirmation" class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Email Order Confirmation') ?></label>
+        <label for="send_confirmation" class="admin__field-label"><?= /* @escapeNotVerified */ __('Email Order Confirmation') ?></label>
     </div>
     <?php endif; ?>
     <div class="actions">
-        <?php echo $block->getButtonHtml(__('Submit Order'), 'order.submit()', 'save primary'); ?>
+        <?= $block->getButtonHtml(__('Submit Order'), 'order.submit()', 'save primary') ?>
     </div>
 </div>
 

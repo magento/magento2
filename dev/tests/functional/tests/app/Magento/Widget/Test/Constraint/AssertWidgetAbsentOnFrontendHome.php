@@ -1,39 +1,40 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**
- * Check that created widget does NOT displayed on frontend on Home page
+ * Check that created widget does NOT displayed on frontend on Home page.
  */
 class AssertWidgetAbsentOnFrontendHome extends AbstractConstraint
 {
     /**
-     * Assert that created widget is absent on frontend on Home page
+     * Assert that created widget is absent on frontend on Home page.
      *
      * @param CmsIndex $cmsIndex
      * @param Widget $widget
-     * @param AdminCache $adminCache
+     * @param Cache $cache
+     * @param array $caches [optional]
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
         Widget $widget,
-        AdminCache $adminCache
+        Cache $cache,
+        array $caches = []
     ) {
         // Flush cache
-        $adminCache->open();
-        $adminCache->getActionsBlock()->flushMagentoCache();
-        $adminCache->getMessagesBlock()->waitSuccessMessage();
-
+        if (!in_array('Invalidated', $caches)) {
+            $cache->flush();
+        }
         $cmsIndex->open();
         $widgetText = $widget->getParameters()['anchor_text'];
         \PHPUnit_Framework_Assert::assertFalse(
@@ -43,7 +44,7 @@ class AssertWidgetAbsentOnFrontendHome extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      * @return string

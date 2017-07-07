@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Entity;
 /**
  * Entity type model
  *
+ * @api
  * @method \Magento\Eav\Model\ResourceModel\Entity\Type _getResource()
  * @method \Magento\Eav\Model\ResourceModel\Entity\Type getResource()
  * @method \Magento\Eav\Model\Entity\Type setEntityTypeCode(string $value)
@@ -34,7 +35,7 @@ namespace Magento\Eav\Model\Entity;
  * @method \Magento\Eav\Model\Entity\Type setAdditionalAttributeTable(string $value)
  * @method \Magento\Eav\Model\Entity\Type setEntityAttributeCollection(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Type extends \Magento\Framework\Model\AbstractModel
 {
@@ -117,7 +118,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Type');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Type::class);
     }
 
     /**
@@ -278,7 +279,11 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     public function getEntityTable()
     {
-        return isset($this->_data['entity_table']) ? $this->_data['entity_table'] : null;
+        if (isset($this->_data['entity_table'])) {
+            return $this->getResource()->getTable($this->_data['entity_table']);
+        }
+
+        return null;
     }
 
     /**
@@ -377,6 +382,6 @@ class Type extends \Magento\Framework\Model\AbstractModel
         if ($collection) {
             return $collection;
         }
-        return 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection';
+        return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class;
     }
 }

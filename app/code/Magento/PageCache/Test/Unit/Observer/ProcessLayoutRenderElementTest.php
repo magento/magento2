@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,56 +9,67 @@
 
 namespace Magento\PageCache\Test\Unit\Observer;
 
+use Magento\Framework\View\EntitySpecificHandlesList;
+
 class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\PageCache\Observer\ProcessLayoutRenderElement */
-    protected $_model;
+    private $_model;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|EntitySpecificHandlesList */
+    private $entitySpecificHandlesListMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
-    protected $_configMock;
+    private $_configMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\AbstractBlock */
-    protected $_blockMock;
+    private $_blockMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout */
-    protected $_layoutMock;
+    private $_layoutMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
-    protected $_observerMock;
+    private $_observerMock;
 
     /** @var \Magento\Framework\DataObject */
-    protected $_transport;
+    private $_transport;
 
     /**
      * Set up all mocks and data for test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_configMock = $this->getMock(
-            'Magento\PageCache\Model\Config',
+            \Magento\PageCache\Model\Config::class,
             ['getType', 'isEnabled'],
             [],
             '',
             false
         );
+        $this->entitySpecificHandlesListMock = $this->getMock(EntitySpecificHandlesList::class, [], [], '', false);
 
-        $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement($this->_configMock);
+        $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement(
+            $this->_configMock,
+            $this->entitySpecificHandlesListMock,
+            new \Magento\Framework\Serialize\Serializer\Json(),
+            new \Magento\Framework\Serialize\Serializer\Base64Json()
+        );
         $this->_observerMock = $this->getMock(
-            'Magento\Framework\Event\Observer',
+            \Magento\Framework\Event\Observer::class,
             ['getEvent'],
             [],
             '',
             false
         );
         $this->_layoutMock = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['isCacheable', 'getBlock', 'getUpdate', 'getHandles'],
             [],
             '',
             false
         );
         $this->_blockMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\AbstractBlock',
+            \Magento\Framework\View\Element\AbstractBlock::class,
             [],
             '',
             false,
@@ -85,7 +96,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
         $expectedOutput
     ) {
         $eventMock = $this->getMock(
-            'Magento\Framework\Event',
+            \Magento\Framework\Event::class,
             ['getLayout', 'getElementName', 'getTransport'],
             [],
             '',
@@ -114,7 +125,11 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
 
             $this->_layoutMock->expects($this->any())
                 ->method('getHandles')
-                ->will($this->returnValue([]));
+                ->will($this->returnValue(['default', 'catalog_product_view', 'catalog_product_view_id_1']));
+
+            $this->entitySpecificHandlesListMock->expects($this->any())
+                ->method('getHandles')
+                ->will($this->returnValue(['catalog_product_view_id_1']));
 
             $this->_layoutMock->expects($this->once())
                 ->method('getBlock')
@@ -127,7 +142,8 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue($blockTtl));
                 $this->_blockMock->expects($this->any())
                     ->method('getUrl')
-                    ->will($this->returnValue('page_cache/block/wrapesi/with/handles/and/other/stuff'));
+                    ->with('page_cache/block/esi', ['blocks' => '[null]', 'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='])
+                    ->will($this->returnValue('page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='));
             }
             if ($scopeIsPrivate) {
                 $this->_blockMock->expects($this->once())
@@ -139,6 +155,69 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             }
             $this->_configMock->expects($this->any())->method('getType')->will($this->returnValue($varnishIsEnabled));
         }
+        $this->_model->execute($this->_observerMock);
+
+        $this->assertEquals($expectedOutput, $this->_transport['output']);
+    }
+
+    public function testExecuteWithBase64Encode()
+    {
+        $expectedOutput = '<esi:include src="page_cache/block/wrapesi/with/handles/YW5kL290aGVyL3N0dWZm" />';
+        $eventMock = $this->getMock(
+            'Magento\Framework\Event',
+            ['getLayout', 'getElementName', 'getTransport'],
+            [],
+            '',
+            false
+        );
+        $expectedUrl = 'page_cache/block/wrapesi/with/handles/' . base64_encode('and/other/stuff');
+
+        $this->_observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
+        $eventMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->_layoutMock));
+        $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+
+        $eventMock->expects($this->once())
+                ->method('getElementName')
+                ->will($this->returnValue('blockName'));
+
+        $eventMock->expects($this->once())
+                ->method('getTransport')
+                ->will($this->returnValue($this->_transport));
+
+        $this->_layoutMock->expects($this->once())
+                ->method('isCacheable')
+                ->will($this->returnValue(true));
+
+        $this->_layoutMock->expects($this->any())
+                ->method('getUpdate')
+                ->will($this->returnSelf());
+
+        $this->_layoutMock->expects($this->any())
+                ->method('getHandles')
+                ->will($this->returnValue([]));
+
+        $this->_layoutMock->expects($this->once())
+                ->method('getBlock')
+                ->will($this->returnValue($this->_blockMock));
+
+        $this->entitySpecificHandlesListMock->expects($this->any())
+            ->method('getHandles')
+            ->will($this->returnValue(['catalog_product_view_id_1']));
+
+        $this->_blockMock->expects($this->once())
+            ->method('getData')
+            ->with('ttl')
+            ->will($this->returnValue(100));
+        $this->_blockMock->expects($this->any())
+            ->method('getUrl')
+            ->will($this->returnValue($expectedUrl));
+
+        $this->_blockMock->expects($this->once())
+            ->method('getNameInLayout')
+            ->will($this->returnValue('testBlockName'));
+
+        $this->_configMock->expects($this->any())->method('getType')->will($this->returnValue(true));
+
         $this->_model->execute($this->_observerMock);
 
         $this->assertEquals($expectedOutput, $this->_transport['output']);
@@ -157,7 +236,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                 true,
                 false,
                 360,
-                '<esi:include src="page_cache/block/wrapesi/with/handles/and/other/stuff" />',
+                '<esi:include src="page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==" />',
             ],
             'full_page type and Varnish enabled, public scope, ttl is not set' => [
                 true,

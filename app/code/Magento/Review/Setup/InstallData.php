@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $installer = $setup;
-        
+
         //Fill table review/review_entity
         $reviewEntityCodes = [
             \Magento\Review\Model\Review::ENTITY_PRODUCT_CODE,
@@ -31,7 +31,7 @@ class InstallData implements InstallDataInterface
         foreach ($reviewEntityCodes as $entityCode) {
             $installer->getConnection()->insert($installer->getTable('review_entity'), ['entity_code' => $entityCode]);
         }
-        
+
         //Fill table review/review_entity
         $reviewStatuses = [
             \Magento\Review\Model\Review::STATUS_APPROVED => 'Approved',
@@ -42,7 +42,7 @@ class InstallData implements InstallDataInterface
             $bind = ['status_id' => $k, 'status_code' => $v];
             $installer->getConnection()->insertForce($installer->getTable('review_status'), $bind);
         }
-        
+
         $data = [
             \Magento\Review\Model\Rating::ENTITY_PRODUCT_CODE => [
                 ['rating_code' => 'Quality', 'position' => 0],
@@ -52,17 +52,17 @@ class InstallData implements InstallDataInterface
             \Magento\Review\Model\Rating::ENTITY_PRODUCT_REVIEW_CODE => [],
             \Magento\Review\Model\Rating::ENTITY_REVIEW_CODE => [],
         ];
-        
+
         foreach ($data as $entityCode => $ratings) {
             //Fill table rating/rating_entity
             $installer->getConnection()->insert($installer->getTable('rating_entity'), ['entity_code' => $entityCode]);
             $entityId = $installer->getConnection()->lastInsertId($installer->getTable('rating_entity'));
-        
+
             foreach ($ratings as $bind) {
                 //Fill table rating/rating
                 $bind['entity_id'] = $entityId;
                 $installer->getConnection()->insert($installer->getTable('rating'), $bind);
-        
+
                 //Fill table rating/rating_option
                 $ratingId = $installer->getConnection()->lastInsertId($installer->getTable('rating'));
                 $optionData = [];
@@ -72,6 +72,5 @@ class InstallData implements InstallDataInterface
                 $installer->getConnection()->insertMultiple($installer->getTable('rating_option'), $optionData);
             }
         }
-        
     }
 }

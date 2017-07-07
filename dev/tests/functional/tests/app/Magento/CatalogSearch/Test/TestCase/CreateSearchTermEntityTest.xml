@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,14 +10,12 @@
         <variation name="CreateSearchTermEntityTestVariation1">
             <data name="searchTerm/data/query_text/value" xsi:type="string">catalogProductSimple::sku</data>
             <data name="searchTerm/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
-            <data name="searchTerm/data/synonym_for" xsi:type="string">Search Term Synonym %isolation%</data>
             <data name="searchTerm/data/redirect" xsi:type="string">http://example.com/</data>
             <data name="searchTerm/data/display_in_terms" xsi:type="string">No</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessSaveMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermInGrid" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermForm" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermOnFrontend" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSynonymOnFrontend" />
         </variation>
     </testCase>
 </config>

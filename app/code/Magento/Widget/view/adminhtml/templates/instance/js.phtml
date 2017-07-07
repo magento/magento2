@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -8,22 +8,19 @@
 require([
     'jquery',
     'mage/template',
-    'prototype'
-], function(jQuery, mageTemplate){
+], function($, mageTemplate){
 
 setSettings = function(urlTemplate, codeElement, themeElement) {
     var url;
 
-    if (!jQuery('#edit_form').valid()) {
+    if (!$('#edit_form').valid()) {
         return false;
     }
-    codeElement = $F(codeElement);
-    themeElement = $F(themeElement);
 
     url = mageTemplate(urlTemplate, {
         data: {
-            'code': codeElement,
-            'theme_id': themeElement
+            'code': $('#' + codeElement).val(),
+            'theme_id': $('#' + themeElement).val()
         }
     });
 

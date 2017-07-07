@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
@@ -43,7 +43,7 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
         return [
             'name' => '__construct',
             'parameters' => [
-                ['name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManagerInterface'],
+                ['name' => 'objectManager', 'type' => '\\' . \Magento\Framework\ObjectManagerInterface::class],
                 ['name' => 'instanceName', 'defaultValue' => $this->getSourceClassName()],
             ],
             'body' => "\$this->_objectManager = \$objectManager;\n\$this->_instanceName = \$instanceName;",

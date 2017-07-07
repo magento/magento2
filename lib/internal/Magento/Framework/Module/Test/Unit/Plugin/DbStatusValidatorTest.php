@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit\Plugin;
@@ -24,16 +24,6 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dbUpdaterMock;
-
-    /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $subjectMock;
 
     /**
@@ -53,20 +43,16 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cacheMock = $this->getMock('\Magento\Framework\Cache\FrontendInterface');
-        $this->_dbUpdaterMock = $this->getMock('\Magento\Framework\Module\Updater', [], [], '', false);
-        $this->closureMock = function () {
-            return 'Expected';
-        };
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->subjectMock = $this->getMock('Magento\Framework\App\FrontController', [], [], '', false);
-        $moduleList = $this->getMockForAbstractClass('\Magento\Framework\Module\ModuleListInterface');
+        $this->_cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->subjectMock = $this->getMock(\Magento\Framework\App\FrontController::class, [], [], '', false);
+        $moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $moduleList->expects($this->any())
             ->method('getNames')
             ->will($this->returnValue(['Module_One', 'Module_Two']));
 
-        $this->moduleManager = $this->getMock('\Magento\Framework\Module\Manager', [], [], '', false);
-        $this->dbVersionInfoMock = $this->getMock('\Magento\Framework\Module\DbVersionInfo', [], [], '', false);
+        $this->moduleManager = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
+        $this->dbVersionInfoMock = $this->getMock(\Magento\Framework\Module\DbVersionInfo::class, [], [], '', false);
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
             $this->dbVersionInfoMock
@@ -91,8 +77,8 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($returnMap));
 
         $this->assertEquals(
-            'Expected',
-            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            null,
+            $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
 
@@ -107,8 +93,8 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         $this->moduleManager->expects($this->never())
             ->method('isDbDataUpToDate');
         $this->assertEquals(
-            'Expected',
-            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            null,
+            $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
 
@@ -131,7 +117,7 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getDbVersionErrors')
             ->will($this->returnValue($dbVersionErrors));
 
-        $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock);
+        $this->_model->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
     /**

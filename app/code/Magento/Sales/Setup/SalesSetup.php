@@ -1,23 +1,46 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
- * Setup Model of Sales Module
+ * Sales module setup class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
  */
-class SalesSetup extends \Magento\Eav\Setup\EavSetup
+class SalesSetup extends EavSetup
 {
+    /**
+     * This should be set explicitly
+     */
+    const ORDER_ENTITY_TYPE_ID = 5;
+
+    /**
+     * This should be set explicitly
+     */
+    const INVOICE_PRODUCT_ENTITY_TYPE_ID = 6;
+
+    /**
+     * This should be set explicitly
+     */
+    const CREDITMEMO_PRODUCT_ENTITY_TYPE_ID = 7;
+
+    /**
+     * This should be set explicitly
+     */
+    const SHIPMENT_PRODUCT_ENTITY_TYPE_ID = 8;
+
     /**
      * @var ScopeConfigInterface
      */
@@ -29,6 +52,13 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     protected $encryptor;
 
     /**
+     * @var string
+     */
+    private static $connectionName = 'sales';
+
+    /**
+     * Constructor
+     *
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -85,8 +115,12 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _flatTableExist($table)
     {
-        $tablesList = $this->getSetup()->getConnection()->listTables();
-        return in_array(strtoupper($this->getSetup()->getTable($table)), array_map('strtoupper', $tablesList));
+        $tablesList = $this->getConnection()
+            ->listTables();
+        return in_array(
+            strtoupper($this->getTable($table)),
+            array_map('strtoupper', $tablesList)
+        );
     }
 
     /**
@@ -123,13 +157,14 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _addFlatAttribute($table, $attribute, $attr)
     {
-        $tableInfo = $this->getSetup()->getConnection()->describeTable($this->getSetup()->getTable($table));
+        $tableInfo = $this->getConnection()
+            ->describeTable($this->getTable($table));
         if (isset($tableInfo[$attribute])) {
             return $this;
         }
         $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-        $this->getSetup()->getConnection()->addColumn(
-            $this->getSetup()->getTable($table),
+        $this->getConnection()->addColumn(
+            $this->getTable($table),
             $attribute,
             $columnDefinition
         );
@@ -149,8 +184,8 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         if (in_array($entityTypeId, $this->_flatEntitiesGrid) && !empty($attr['grid'])) {
             $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-            $this->getSetup()->getConnection()->addColumn(
-                $this->getSetup()->getTable($table . '_grid'),
+            $this->getConnection()->addColumn(
+                $this->getTable($table . '_grid'),
                 $attribute,
                 $columnDefinition
             );
@@ -214,30 +249,34 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         $entities = [
             'order' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order',
+                'entity_type_id' => self::ORDER_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order::class,
                 'table' => 'sales_order',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'invoice' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Invoice',
+                'entity_type_id' => self::INVOICE_PRODUCT_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Invoice::class,
                 'table' => 'sales_invoice',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'creditmemo' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Creditmemo',
+                'entity_type_id' => self::CREDITMEMO_PRODUCT_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class,
                 'table' => 'sales_creditmemo',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'shipment' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Shipment',
+                'entity_type_id' => self::SHIPMENT_PRODUCT_ENTITY_TYPE_ID,
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Shipment::class,
                 'table' => 'sales_shipment',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
@@ -261,5 +300,75 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     public function getEncryptor()
     {
         return $this->encryptor;
+    }
+
+    /**
+     * Get sales connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+        return $this->getSetup()->getConnection(self::$connectionName);
+    }
+
+    /**
+     * Get table name
+     *
+     * @param string $table
+     * @return string
+     */
+    public function getTable($table)
+    {
+        return $this->getSetup()->getTable($table, self::$connectionName);
+    }
+
+    /**
+     * Update entity types
+     *
+     * @return void
+     */
+    public function updateEntityTypes()
+    {
+        $this->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $this->updateEntityType(
+            \Magento\Sales\Model\Order::ENTITY,
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'invoice',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order::class
+        );
+        $this->updateEntityType(
+            'invoice',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'creditmemo',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
+        );
+        $this->updateEntityType(
+            'creditmemo',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
+        $this->updateEntityType(
+            'shipment',
+            'entity_model',
+            \Magento\Sales\Model\ResourceModel\Order\Shipment::class
+        );
+        $this->updateEntityType(
+            'shipment',
+            'increment_model',
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
+        );
     }
 }

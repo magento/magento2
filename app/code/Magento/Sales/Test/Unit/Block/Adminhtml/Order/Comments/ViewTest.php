@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Comments;
@@ -19,12 +19,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adminHelperMock = $this->getMockBuilder('Magento\Sales\Helper\Admin')
+        $this->adminHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Admin::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->commentsView = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\Comments\View',
+            \Magento\Sales\Block\Adminhtml\Order\Comments\View::class,
             [
                 'adminHelper' => $this->adminHelperMock
             ]

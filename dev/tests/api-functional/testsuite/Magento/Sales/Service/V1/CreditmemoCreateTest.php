@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class CreditmemoCreateTest extends WebapiAbstract
     public function testInvoke()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $orderCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Collection');
+        $orderCollection = $this->objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
         $order = $orderCollection->getFirstItem();
 
 //        $order = $this->objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,15 +10,15 @@
         <section id="catalog">
             <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Recently Viewed/Compared Products</label>
-                <field id="scope" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="scope" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Show for Current</label>
                     <source_model>Magento\Config\Model\Config\Source\Reports\Scope</source_model>
                     <hide_in_single_store_mode>1</hide_in_single_store_mode>
                 </field>
-                <field id="viewed_count" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="viewed_count" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Recently Viewed Products Count</label>
                 </field>
-                <field id="compared_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="compared_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Recently Compared Products Count</label>
                 </field>
             </group>
@@ -29,11 +29,11 @@
             <resource>Magento_Reports::reports</resource>
             <group id="dashboard" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Dashboard</label>
-                <field id="ytd_start" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="ytd_start" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Year-To-Date Starts</label>
                     <frontend_model>Magento\Reports\Block\Adminhtml\Config\Form\Field\YtdStart</frontend_model>
                 </field>
-                <field id="mtd_start" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="mtd_start" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Current Month Starts</label>
                     <frontend_model>Magento\Reports\Block\Adminhtml\Config\Form\Field\MtdStart</frontend_model>
                     <comment>Select day of the month.</comment>

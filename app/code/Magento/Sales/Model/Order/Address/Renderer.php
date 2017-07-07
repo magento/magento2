@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Address;
 
 /**
  * Class Renderer used for formatting an order address
+ * @api
  */
 class Renderer
 {
@@ -48,6 +49,7 @@ class Renderer
      */
     public function format(Address $address, $type)
     {
+        $this->addressConfig->setStore($address->getOrder()->getStoreId());
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
             return null;

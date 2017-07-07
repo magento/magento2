@@ -1,43 +1,42 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <address>
-    <!-- ko foreach: {
+    <each args="{
         data: formatPreviews([
-            "prefix firstname middlename lastname suffix",
-            "company",
-            "street_container",
+            'prefix firstname middlename lastname suffix',
+            'company',
+            'street',
             {
-                items: "city region_id postcode",
-                separator: $t(", ")
+                items: 'city region_id postcode',
+                separator: ', '
             },
-            "country_id",
+            'country_id',
             {
-                items: "telephone",
-                prefix: $t("T: ")
-            },
-            {
-                items: "fax",
-                prefix: $t("F: ")
+                items: 'telephone',
+                prefix: 'T: '
             },
             {
-                items: "vat_id",
-                prefix: $t("VAT: ")
+                items: 'fax',
+                prefix: 'F: '
+            },
+            {
+                items: 'vat_id',
+                prefix: 'VAT: '
             }
         ]),
-        as: 'preview' 
-    } -->
+        as: '$preview'}"
+    >
 
-        <!-- ko if: $parent.hasPreview(preview) -->
-            <span data-bind="text: $parent.buildPreview(preview)"></span><br>
-        <!-- /ko -->
-    
-    <!-- /ko -->
+        <if args="$parent.hasPreview($preview)">
+            <span text="$parent.buildPreview($preview)"/><br>
+        </if>
+    </each>
 
-    <!-- ko if: noPreview -->
-        <span data-bind="text: label"></span><br>
-    <!-- /ko -->
+    <if args="noPreview">
+        <span text="label"/><br />
+    </if>
 </address>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,6 +84,7 @@ class Observer
     /**
      * @param mixed $schedule
      * @return void
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function scheduledUpdateCurrencyRates($schedule)
@@ -113,6 +114,7 @@ class Observer
                 $errors = $importModel->getMessages();
             } catch (\Exception $e) {
                 $importWarnings[] = __('FATAL ERROR:') . ' ' . __('We can\'t initialize the import model.');
+                throw $e;
             }
         } else {
             $importWarnings[] = __('FATAL ERROR:') . ' ' . __('Please specify the correct Import Service.');

@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\View\Page\Config;
 
 use Magento\Developer\Model\Config\Source\WorkflowType;
+use Magento\Framework\App\State;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Factory class for \Magento\Framework\View\Page\Config\RendererInterface
+ *
+ * @api
  */
 class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactory
 {
@@ -58,7 +61,9 @@ class RendererFactory extends \Magento\Framework\View\Page\Config\RendererFactor
      */
     public function create(array $data = [])
     {
-        $renderer = $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH, ScopeInterface::SCOPE_STORE);
+        $renderer = $this->objectManager->get(State::class)->getMode() === State::MODE_PRODUCTION ?
+            WorkflowType::SERVER_SIDE_COMPILATION :
+            $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH, ScopeInterface::SCOPE_STORE);
 
         return $this->objectManager->create(
             $this->rendererTypes[$renderer],

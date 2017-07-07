@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="theme" sortOrder="10">
+        <settings>
+            <label translate="true">Default Theme</label>
+        </settings>
+        <field name="theme_theme_id" sortOrder="10" formElement="select">
+            <settings>
+                <notice translate="true">If no value is specified, the system default is used. The system default may be modified by third party extensions.</notice>
+                <dataType>text</dataType>
+                <label translate="true">Applied Theme</label>
+                <dataScope>theme_theme_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Framework\View\Design\Theme\Label"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset name="desing_rule" sortOrder="20">
+        <settings>
+            <label translate="true">Design Rule</label>
+        </settings>
+        <container name="theme_ua_regexp" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="Magento_Backend/dynamic-rows/grid">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="fallbackResetTpl" xsi:type="string">Magento_Backend/form/element/helper/fallback-reset-link</item>
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="recordTemplate" xsi:type="string">record</item>
+                    <item name="deleteButtonLabel" xsi:type="string">Remove</item>
+                    <item name="addButtonLabel" xsi:type="string">Add New User Agent Rule</item>
+                    <item name="deleteProperty" xsi:type="boolean">false</item>
+                    <item name="dndConfig" xsi:type="array">
+                        <item name="enabled" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">User Agent Rules</item>
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="showFallbackReset" xsi:type="boolean">false</item>
+                    </item>
+                </argument>
+                <field name="search_string" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <showFallbackReset>false</showFallbackReset>
+                        <dataType>text</dataType>
+                        <label>Search String</label>
+                        <dataScope>search</dataScope>
+                    </settings>
+                </field>
+                <field name="theme" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <showFallbackReset>false</showFallbackReset>
+                        <dataType>text</dataType>
+                        <label>Theme Name</label>
+                        <dataScope>value</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Magento\Theme\Model\Design\Theme\Label"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete" sortOrder="50">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <additionalClasses>
+                            <class name="data-grid-actions-cell">true</class>
+                        </additionalClasses>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </container>
+    </fieldset>
+    <fieldset name="other_settings">
+        <fieldset name="pagination">
+            <settings>
+                <level>1</level>
+                <collapsible>true</collapsible>
+                <label translate="true">Pagination</label>
+            </settings>
+            <field name="pagination_pagination_frame" formElement="input">
+                <settings>
+                    <notice translate="true">How many links to display at once.</notice>
+                    <validation>
+                        <rule name="validate-digits" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>number</dataType>
+                    <label translate="true">Pagination Frame</label>
+                    <dataScope>pagination_pagination_frame</dataScope>
+                </settings>
+            </field>
+            <field name="pagination_pagination_frame_skip" formElement="input">
+                <settings>
+                    <notice translate="true">If current frame position does not cover utmost pages, it renders the link to current position plus/minus this value.</notice>
+                    <validation>
+                        <rule name="validate-digits" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>number</dataType>
+                    <label translate="true">Pagination Frame Skip</label>
+                    <dataScope>pagination_pagination_frame_skip</dataScope>
+                </settings>
+            </field>
+            <field name="pagination_anchor_text_for_previous" formElement="input">
+                <settings>
+                    <notice translate="true">Alternative text for the previous pages link in the pagination menu. If empty, the default arrow image is used.</notice>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Anchor Text for Previous</label>
+                    <dataScope>pagination_anchor_text_for_previous</dataScope>
+                </settings>
+            </field>
+            <field name="pagination_anchor_text_for_next" formElement="input">
+                <settings>
+                    <notice translate="true">Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used.</notice>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Anchor Text for Next</label>
+                    <dataScope>pagination_anchor_text_for_next</dataScope>
+                </settings>
+            </field>
+        </fieldset>
+    </fieldset>
+</form>

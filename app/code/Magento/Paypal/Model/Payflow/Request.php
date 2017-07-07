@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow;
@@ -53,7 +53,7 @@ class Request extends \Magento\Framework\DataObject
                 return isset($this->_data[$key]);
         }
         throw new \Magento\Framework\Exception\LocalizedException(
-            __("Invalid method %1::%2(%3)", get_class($this), $method, print_r($args, 1))
+            __("Invalid method %1::%2", get_class($this), $method)
         );
     }
 }

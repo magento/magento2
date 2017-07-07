@@ -3,7 +3,7 @@
  * Backend System Configuration reader.
  * Retrieves system configuration form layout from system.xml files. Merges configuration and caches it.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure;
@@ -14,6 +14,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
  * Class Reader
+ * @api
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -57,7 +58,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         CompilerInterface $compiler,
         $fileName = 'system.xml',
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {
         $this->compiler = $compiler;

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
 
     const UPDATED_AT = 'updated_at';
 
-    const STORE_ID = 'store_id';
     /**#@-*/
 
     /**
@@ -82,21 +81,6 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setName($name);
-
-    /**
-     * Product store id
-     *
-     * @return int|null
-     */
-    public function getStoreId();
-
-    /**
-     * Set product store id
-     *
-     * @param int $storeId
-     * @return $this
-     */
-    public function setStoreId($storeId);
 
     /**
      * Product attribute set id

@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
-use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+
+use \Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use \Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Abstract Resource Collection
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
-    implements SourceProviderInterface
+abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
      * Model name
@@ -169,9 +170,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     }
 
     /**
-     * Init collection select
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     protected function _initSelect()
     {
@@ -233,12 +232,11 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
                     $column = $field;
                 }
 
-                if ($alias !== null && in_array(
-                    $alias,
-                    $columnsToSelect
-                ) ||
+                if ($alias !== null &&
+                    in_array($alias, $columnsToSelect) ||
                     // If field already joined from another table
-                    $alias === null && isset($alias, $columnsToSelect)
+                    $alias === null &&
+                    isset($alias, $columnsToSelect)
                 ) {
                     continue;
                 }
@@ -460,7 +458,9 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     public function getResource()
     {
         if (empty($this->_resource)) {
-            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create($this->getResourceModelName());
+            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create(
+                $this->getResourceModelName()
+            );
         }
         return $this->_resource;
     }
@@ -593,5 +593,26 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
             $item->save();
         }
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_resource', '_eventManager']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
     }
 }

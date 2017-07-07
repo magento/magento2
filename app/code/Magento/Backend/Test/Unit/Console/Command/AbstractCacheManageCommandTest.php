@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,9 +16,9 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
     /** @var  \Magento\Framework\Event\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
     protected $eventManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->eventManagerMock = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         parent::setUp();

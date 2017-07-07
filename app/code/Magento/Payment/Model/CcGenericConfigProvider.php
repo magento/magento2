@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -8,6 +8,13 @@ namespace Magento\Payment\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
+/**
+ * Default implementation of credits card configuration provider.
+ * Use this class to register payment method that supports credit cards.
+ * Direct injection as a dependency or extending of this class is not recommended.
+ *
+ * @api
+ */
 class CcGenericConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -51,8 +58,6 @@ class CcGenericConfigProvider implements ConfigProviderInterface
                             'months' => [$methodCode => $this->getCcMonths()],
                             'years' => [$methodCode => $this->getCcYears()],
                             'hasVerification' => [$methodCode => $this->hasVerification($methodCode)],
-                            'hasSsCardType' => [$methodCode => $this->hasSsCardType($methodCode)],
-                            'ssStartYears' => [$methodCode => $this->getSsStartYears()],
                             'cvvImageUrl' => [$methodCode => $this->getCvvImageUrl()]
                         ]
                     ]
@@ -66,6 +71,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Solo/switch card start years
      *
      * @return array
+     * @deprecated unused
      */
     protected function getSsStartYears()
     {
@@ -144,6 +150,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      *
      * @param string $methodCode
      * @return bool
+     * @deprecated unused
      */
     protected function hasSsCardType($methodCode)
     {

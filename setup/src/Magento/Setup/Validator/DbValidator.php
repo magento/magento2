@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class DbValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param ConnectionFactory $connectionFactory
      */
     public function __construct(ConnectionFactory $connectionFactory)
@@ -103,7 +103,30 @@ class DbValidator
             }
         }
 
-        return $this->checkDatabasePrivileges($connection, $dbName);
+        return $this->checkDatabaseName($connection, $dbName) && $this->checkDatabasePrivileges($connection, $dbName);
+    }
+
+    /**
+     * Checks if specified database exists and visible to current user
+     *
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string $dbName
+     * @return bool
+     * @throws \Magento\Setup\Exception
+     */
+    private function checkDatabaseName(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $dbName)
+    {
+        $query = "SHOW DATABASES";
+        $accessibleDbs = $connection->query($query)->fetchAll(\PDO::FETCH_COLUMN, 0);
+        foreach ($accessibleDbs as $accessibleDbName) {
+            if ($dbName == $accessibleDbName) {
+                return true;
+            }
+        }
+        throw new \Magento\Setup\Exception(
+            "Database '{$dbName}' does not exist "
+            ."or specified database server user does not have privileges to access this database."
+        );
     }
 
     /**
@@ -123,7 +146,6 @@ class DbValidator
             'DELETE',
             'CREATE',
             'DROP',
-            'REFERENCES',
             'INDEX',
             'ALTER',
             'CREATE TEMPORARY TABLES',
@@ -133,7 +155,6 @@ class DbValidator
             'SHOW VIEW',
             'CREATE ROUTINE',
             'ALTER ROUTINE',
-            'EVENT',
             'TRIGGER'
         ];
 
@@ -154,7 +175,7 @@ class DbValidator
         }
 
         $errorMessage = 'Database user does not have enough privileges. Please make sure '
-            . implode(', ', $requiredPrivileges) . " privileges are granted to table '$dbName'.";
+            . implode(', ', $requiredPrivileges) . " privileges are granted to table '{$dbName}'.";
         throw new \Magento\Setup\Exception($errorMessage);
     }
 

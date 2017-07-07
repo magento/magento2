@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Block\Cart;
@@ -27,19 +27,19 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
     /** @var array  */
     protected $jsLayout = ['root' => 'node'];
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
-        $this->jsonEncoderMock = $this->getMock('Magento\Framework\Json\Encoder', [], [], '', false);
+        $this->context = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
+        $this->jsonEncoderMock = $this->getMock(\Magento\Framework\Json\Encoder::class, [], [], '', false);
         $this->compositeConfigProvider = $this->getMock(
-            'Magento\GiftMessage\Model\CompositeConfigProvider',
+            \Magento\GiftMessage\Model\CompositeConfigProvider::class,
             [],
             [],
             '',
             false
         );
         $this->layoutProcessorMock = $this->getMockForAbstractClass(
-            'Magento\Checkout\Block\Checkout\LayoutProcessorInterface',
+            \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class,
             [],
             '',
             false

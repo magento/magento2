@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
@@ -8,6 +8,8 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
 /**
  * Grid widget massaction block
  *
+ * @api
+ * @deprecated in favour of UI component implementation
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -66,7 +68,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function _construct()
     {
         parent::_construct();
-        $this->setErrorText($this->escapeJsQuote(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('Please select items.')));
     }
 
     /**
@@ -88,7 +90,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function addItem($itemId, array $item)
     {
         $this->_items[$itemId] = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Massaction\Item'
+            \Magento\Backend\Block\Widget\Grid\Massaction\Item::class
         )->setData(
             $item
         )->setMassaction(
@@ -272,7 +274,14 @@ class Extended extends \Magento\Backend\Block\Widget
 
         /** @var \Magento\Framework\Data\Collection $allIdsCollection */
         $allIdsCollection = clone $this->getParentBlock()->getCollection();
-        $gridIds = $allIdsCollection->clear()->setPageSize(0)->getAllIds();
+        
+        if ($this->getMassactionIdField()) {
+            $massActionIdField = $this->getMassactionIdField();
+        } else {
+            $massActionIdField = $this->getParentBlock()->getMassactionIdField();
+        }
+        
+        $gridIds = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
 
         if (!empty($gridIds)) {
             return join(",", $gridIds);

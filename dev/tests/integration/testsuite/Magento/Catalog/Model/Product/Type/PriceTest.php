@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -20,7 +20,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Type\Price'
+            \Magento\Catalog\Model\Product\Type\Price::class
         );
     }
 
@@ -31,11 +31,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFinalPrice()
     {
-        /** @var $product Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
 
         // regular & tier prices
@@ -56,10 +55,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFormatedPrice()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $this->assertEquals('<span class="price">$10.00</span>', $this->_model->getFormatedPrice($product));
     }
@@ -99,10 +98,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         /** @var $option \Magento\Catalog\Model\Product\Option */
         foreach ($product->getOptions() as $option) {
             switch ($option->getGroupByType()) {
-                case \Magento\Catalog\Model\Product\Option::OPTION_GROUP_DATE:
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE:
                     $value = ['year' => 2013, 'month' => 8, 'day' => 9, 'hour' => 13, 'minute' => 35];
                     break;
-                case \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT:
+                case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT:
                     $value = key($option->getValues());
                     break;
                 default:

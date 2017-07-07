@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
@@ -16,7 +16,7 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
     public function execute()
     {
         $itemId = $this->getRequest()->getParam('item_id');
-        $model = $this->_objectManager->create('Magento\Store\Model\Website');
+        $model = $this->_objectManager->create(\Magento\Store\Model\Website::class);
         $model->load($itemId);
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
@@ -42,7 +42,7 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to delete website. Please, try again later.'));
+            $this->messageManager->addException($e, __('Unable to delete the website. Please try again later.'));
         }
         return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
     }

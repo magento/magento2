@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -20,5 +20,14 @@
             %customer_name=$customer_name
         }}
     </span>
+    <label data-bind="i18n: 'This is test data', attr: {for: 'more-test-data-'}"></label>
+    <label data-bind="attr: {for: 'more-test-data-' + $parent.getCode()}"><span data-bind="i18n: 'This is test data at right side of attr'"></span></label>
+    <label data-bind="i18n: 'This is \' test \' data', attr: {for: 'more-test-data-' + $parent.getCode()}"></label>
+    <label data-bind="i18n: 'This is \" test \" data', attr: {for: 'more-test-data-' + $parent.getCode()}"></label>
+    <label data-bind="i18n: 'This is test data with a quote after''"></label>
+    <label data-bind="i18n: 'This is test data with space after ' ' "></label>
+    <label data-bind="i18n: ''"></label>
+    <label data-bind="i18n: '\''"></label>
+    <label data-bind="i18n: '\\\\ '"></label>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -19,6 +19,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="taxRule/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataset/rate_0" xsi:type="string">US-CA-Rate_1</data>
             <data name="taxRule/data/tax_rate/dataset/rate_1" xsi:type="string">US-NY-Rate_1</data>
@@ -60,6 +61,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation5" summary="Create Tax Rule with New and Existing Tax Rate, Customer Tax Class, Product Tax Class" ticketId="MAGETWO-12438">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="taxRule/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataset/rate_0" xsi:type="string">US-CA-*-Rate 1</data>
             <data name="taxRule/data/tax_rate/dataset/rate_1" xsi:type="string">us_ny_rate_8_1</data>
@@ -67,7 +69,6 @@
             <data name="taxRule/data/tax_customer_class/dataset/class_1" xsi:type="string">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataset/class_0" xsi:type="string">taxable_goods</data>
             <data name="taxRule/data/tax_product_class/dataset/class_1" xsi:type="string">product_tax_class</data>
-            <data name="tag" xsi:type="string">bamboo_plan:end_to_end,test_type:acceptance_test, stable:no</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleSuccessSaveMessage" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleInGrid" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleForm" />

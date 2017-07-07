@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Backend\Test\Constraint;
 use Magento\Backend\Test\Fixture\GlobalSearch;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 
 /**
  * Class AssertGlobalSearchOrderId
@@ -21,9 +22,10 @@ class AssertGlobalSearchOrderId extends AbstractConstraint
      *
      * @param Dashboard $dashboard
      * @param GlobalSearch $search
+     * @param OrderIndex $orderIndex
      * @return void
      */
-    public function processAssert(Dashboard $dashboard, GlobalSearch $search)
+    public function processAssert(Dashboard $dashboard, GlobalSearch $search, OrderIndex $orderIndex)
     {
         $order = $search->getDataFieldConfig('query')['source']->getEntity();
         $orderId = "Order #" . $order->getId();
@@ -31,6 +33,19 @@ class AssertGlobalSearchOrderId extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertTrue(
             $isVisibleInResult,
             'Order Id ' . $order->getId() . ' is absent in search results'
+        );
+
+        $dashboard->getAdminPanelHeader()->navigateToGrid("Orders");
+        $isOrderGridVisible = $orderIndex->getSalesOrderGrid()->isVisible();
+
+        \PHPUnit_Framework_Assert::assertTrue(
+            $isOrderGridVisible,
+            'Order grid is not visible'
+        );
+        \PHPUnit_Framework_Assert::assertContains(
+            (string) $order->getId(),
+            $orderIndex->getSalesOrderGrid()->getAllIds(),
+            'Order grid does not have ' . $order->getId()  . ' in search results'
         );
     }
 

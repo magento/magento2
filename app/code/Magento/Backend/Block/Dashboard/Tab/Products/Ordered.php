@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Products;
@@ -70,7 +70,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
         }
 
         $collection = $this->_collectionFactory->create()->setModel(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         )->addStoreFilter(
             $storeId
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
@@ -48,7 +48,7 @@ interface WriteInterface extends ReadInterface
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null);
 
     /**
-     * Creates symlink on a file and places it to destination
+     * Creates symlink on a file or directory and places it to destination
      *
      * @param string $path
      * @param string $destination

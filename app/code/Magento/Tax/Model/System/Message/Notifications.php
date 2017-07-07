@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\System\Message;
@@ -14,6 +14,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Store manager object
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @deprecated
      */
     protected $storeManager;
 
@@ -29,39 +30,52 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      */
     protected $taxConfig;
 
-    /*
+    /**
      * Stores with invalid display settings
      *
      * @var array
+     * @deprecated
+     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors
      */
     protected $storesWithInvalidDisplaySettings;
 
-    /*
+    /**
      * Websites with invalid discount settings
      *
      * @var array
+     * @deprecated
+     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors
      */
     protected $storesWithInvalidDiscountSettings;
+
+    /**
+     * @var NotificationInterface[]
+     */
+    private $notifications = [];
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param NotificationInterface[] $notifications
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Tax\Model\Config $taxConfig
+        \Magento\Tax\Model\Config $taxConfig,
+        $notifications = []
     ) {
         $this->storeManager = $storeManager;
         $this->urlBuilder = $urlBuilder;
         $this->taxConfig = $taxConfig;
+        $this->notifications = $notifications;
     }
 
     /**
      * Retrieve unique message identity
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getIdentity()
     {
@@ -69,43 +83,49 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
-     * Check if tax calculation type and price display settings are compatible
-     *
-     * Invalid settings if
-     *      Tax Calculation Method Based On 'Total' or 'Row'
-     *      and at least one Price Display Settings has 'Including and Excluding Tax' value
-     *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
-     * @return bool
+     * {@inheritdoc}
      */
-    public function checkDisplaySettings($store = null)
+    public function isDisplayed()
     {
-        if ($this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE) {
-            return true;
+        foreach ($this->notifications as $notification) {
+            if ($notification->isDisplayed()) {
+                return true;
+            }
         }
-        return $this->taxConfig->getPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
-        && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
-        && !$this->taxConfig->displayCartPricesBoth($store)
-        && !$this->taxConfig->displayCartSubtotalBoth($store)
-        && !$this->taxConfig->displayCartShippingBoth($store)
-        && !$this->taxConfig->displaySalesPricesBoth($store)
-        && !$this->taxConfig->displaySalesSubtotalBoth($store)
-        && !$this->taxConfig->displaySalesShippingBoth($store);
+        return false;
     }
 
     /**
-     * Check if tax discount settings are compatible
-     *
-     * Matrix for invalid discount settings is as follows:
-     *      Before Discount / Excluding Tax
-     *      Before Discount / Including Tax
-     *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
-     * @return bool
+     * {@inheritdoc}
      */
-    public function checkDiscountSettings($store = null)
+    public function getText()
     {
-        return $this->taxConfig->applyTaxAfterDiscount($store);
+        $messageDetails = '';
+
+        foreach ($this->notifications as $notification) {
+            $messageDetails .= $notification->getText();
+        }
+
+        $messageDetails .= '<p>';
+        $messageDetails .= __('Please see <a href="%1">documentation</a> for more details. ', $this->getInfoUrl());
+        $messageDetails .= __(
+            'Click here to go to <a href="%1">Tax Configuration</a> and change your settings.',
+            $this->getManageUrl()
+        );
+        $messageDetails .= '</p>';
+
+        return $messageDetails;
+    }
+
+    /**
+     * Retrieve message severity
+     *
+     * @return int
+     * @codeCoverageIgnore
+     */
+    public function getSeverity()
+    {
+        return self::SEVERITY_CRITICAL;
     }
 
     /**
@@ -129,10 +149,55 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
     }
 
     /**
+     * Check if tax calculation type and price display settings are compatible
+     *
+     * Invalid settings if
+     *      Tax Calculation Method Based On 'Total' or 'Row'
+     *      and at least one Price Display Settings has 'Including and Excluding Tax' value
+     *
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @return bool
+     * @deprecated
+     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkSettings
+     */
+    public function checkDisplaySettings($store = null)
+    {
+        if ($this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE) {
+            return true;
+        }
+        return $this->taxConfig->getPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
+            && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
+            && !$this->taxConfig->displayCartPricesBoth($store)
+            && !$this->taxConfig->displayCartSubtotalBoth($store)
+            && !$this->taxConfig->displayCartShippingBoth($store)
+            && !$this->taxConfig->displaySalesPricesBoth($store)
+            && !$this->taxConfig->displaySalesSubtotalBoth($store)
+            && !$this->taxConfig->displaySalesShippingBoth($store);
+    }
+
+    /**
+     * Check if tax discount settings are compatible
+     *
+     * Matrix for invalid discount settings is as follows:
+     *      Before Discount / Excluding Tax
+     *      Before Discount / Including Tax
+     *
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @return bool
+     * @deprecated
+     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkSettings
+     */
+    public function checkDiscountSettings($store = null)
+    {
+        return $this->taxConfig->applyTaxAfterDiscount($store);
+    }
+
+    /**
      * Get URL to ignore tax notifications
      *
      * @param string $section
      * @return string
+     * @deprecated
      */
     public function getIgnoreTaxNotificationUrl($section)
     {
@@ -144,6 +209,8 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Return true if settings are wrong for default store.
      *
      * @return array
+     * @deprecated
+     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::getStoresWithWrongSettings
      */
     public function getStoresWithWrongDisplaySettings()
     {
@@ -163,6 +230,8 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Return true if settings are wrong for default store.
      *
      * @return array
+     * @deprecated
+     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::getStoresWithWrongSettings
      */
     public function getStoresWithWrongDiscountSettings()
     {
@@ -175,95 +244,5 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
             }
         }
         return $storeNames;
-    }
-
-    /**
-     * Check whether notification is displayed
-     * Checks if any of these settings are being ignored or valid:
-     *      1. Wrong discount settings
-     *      2. Wrong display settings
-     *
-     * @return bool
-     */
-    public function isDisplayed()
-    {
-        // Check if we are ignoring all notifications
-        if ($this->taxConfig->isWrongDisplaySettingsIgnored() && $this->taxConfig->isWrongDiscountSettingsIgnored()) {
-            return false;
-        }
-
-        $this->storesWithInvalidDisplaySettings = $this->getStoresWithWrongDisplaySettings();
-        $this->storesWithInvalidDiscountSettings = $this->getStoresWithWrongDiscountSettings();
-
-        // Check if we have valid tax notifications
-        if ((!empty($this->storesWithInvalidDisplaySettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored())
-            || (!empty($this->storesWithInvalidDiscountSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored())
-            ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Build message text
-     * Determine which notification and data to display
-     *
-     * @return string
-     */
-    public function getText()
-    {
-        $messageDetails = '';
-
-        if (!empty($this->storesWithInvalidDisplaySettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored()) {
-            $messageDetails .= '<strong>';
-            $messageDetails .= __('Warning tax configuration can result in rounding errors. ');
-            $messageDetails .= '</strong><p>';
-            $messageDetails .= __('Store(s) affected: ');
-            $messageDetails .= implode(', ', $this->storesWithInvalidDisplaySettings);
-            $messageDetails .= '</p><p>';
-            $messageDetails .= __(
-                'Click on the link to <a href="%1">ignore this notification</a>',
-                $this->getIgnoreTaxNotificationUrl('price_display')
-            );
-            $messageDetails .= "</p>";
-        }
-
-        if (!empty($this->storesWithInvalidDiscountSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored()) {
-            $messageDetails .= '<strong>';
-            $messageDetails .= __(
-                'Warning tax discount configuration might result in different discounts
-                                than a customer might expect. '
-            );
-            $messageDetails .= '</strong><p>';
-            $messageDetails .= __('Store(s) affected: ');
-            $messageDetails .= implode(', ', $this->storesWithInvalidDiscountSettings);
-            $messageDetails .= '</p><p>';
-            $messageDetails .= __(
-                'Click on the link to <a href="%1">ignore this notification</a>',
-                $this->getIgnoreTaxNotificationUrl('discount')
-            );
-            $messageDetails .= "</p>";
-        }
-
-        $messageDetails .= '<p>';
-        $messageDetails .= __('Please see <a href="%1">documentation</a> for more details. ', $this->getInfoUrl());
-        $messageDetails .= __(
-            'Click here to go to <a href="%1">Tax Configuration</a> and change your settings.',
-            $this->getManageUrl()
-        );
-        $messageDetails .= '</p>';
-
-        return $messageDetails;
-    }
-
-    /**
-     * Retrieve message severity
-     *
-     * @return int
-     */
-    public function getSeverity()
-    {
-        return self::SEVERITY_CRITICAL;
     }
 }

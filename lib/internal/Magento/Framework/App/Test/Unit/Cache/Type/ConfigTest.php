@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
@@ -22,14 +22,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $cacheFrontendPoolMock = $this->getMockBuilder('Magento\Framework\App\Cache\Type\FrontendPool')
+        $cacheFrontendPoolMock = $this->getMockBuilder(\Magento\Framework\App\Cache\Type\FrontendPool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Framework\App\Cache\Type\Config',
+            \Magento\Framework\App\Cache\Type\Config::class,
             ['cacheFrontendPool' => $cacheFrontendPoolMock]
         );
-        $this->frontendMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
+        $this->frontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
         $cacheFrontendPoolMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER)
@@ -58,8 +58,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['test', ['record_id'], 111],
             ['load', ['record_id'], '111'],
             ['remove', ['record_id'], true],
-            ['getBackend', [], $this->getMock('Zend_Cache_Backend')],
-            ['getLowLevelFrontend', [], $this->getMock('Zend_Cache_Core')],
+            ['getBackend', [], $this->getMock(\Zend_Cache_Backend::class)],
+            ['getLowLevelFrontend', [], $this->getMock(\Zend_Cache_Core::class)],
         ];
     }
 

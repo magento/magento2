@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Review\Block\Adminhtml\Rating\Detailed $block */
+
 ?>
 <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
     <?php foreach ($block->getRating() as $_rating): ?>
     <div class="admin__field admin__field-rating">
-        <label class="admin__field-label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
+        <label class="admin__field-label"><span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
         <?php $_iterator = 1; ?>
         <?php $_options = ($_rating->getRatingOptions()) ? $_rating->getRatingOptions() : $_rating->getOptions() ?>
         <div class="admin__field-control" data-widget="ratingControl">
         <?php foreach (array_reverse($_options) as $_option): ?>
-            <input type="radio" name="ratings[<?php /* @escapeNotVerified */ echo($_rating->getVoteId()) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>" value="<?php /* @escapeNotVerified */ echo $_option->getId() ?>" <?php if ($block->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
-            <label for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>">&#9733;</label>
+            <input type="radio" name="ratings[<?= $block->escapeHtmlAttr($_rating->getVoteId() ? $_rating->getVoteId() : $_rating->getId()) ?>]" id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>" value="<?= $block->escapeHtmlAttr($_option->getId()) ?>" <?php if ($block->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
+            <label for="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>">&#9733;</label>
         <?php $_iterator++ ?>
         <?php endforeach; ?>
         </div>
@@ -35,5 +37,5 @@ require([
 });
 </script>
 <?php else: ?>
-    <?php /* @escapeNotVerified */ echo __("Rating isn't Available") ?>
+    <?= $block->escapeHtml(__("Rating isn't Available")) ?>
 <?php endif; ?>

@@ -1,27 +1,43 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true*/
-/*global define*/
-define(['jquery'], function($) {
-    "use strict";
+
+define(['jquery'], function ($) {
+    'use strict';
+
     var captchaList = [];
+
     return {
+        /**
+         * @param {Object} captcha
+         */
         add: function (captcha) {
             captchaList.push(captcha);
         },
-        getCaptchaByFormId: function(formId) {
+
+        /**
+         * @param {String} formId
+         * @return {Object}
+         */
+        getCaptchaByFormId: function (formId) {
             var captcha = null;
-            $.each(captchaList, function(key, item) {
+
+            $.each(captchaList, function (key, item) {
                 if (formId === item.formId) {
                     captcha = item;
+
                     return false;
                 }
             });
+
             return captcha;
         },
-        getCaptchaList: function() {
+
+        /**
+         * @return {Array}
+         */
+        getCaptchaList: function () {
             return captchaList;
         }
     };

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -41,16 +41,6 @@ body {
     }
 }
 
-//  Scroll bar appearing compensation
-@media (min-width: @window__min-width) {
-  html {
-    width: 100vw;
-  }
-  body {
-    overflow-x: hidden;
-  }
-}
-
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .page-layout-admin-2columns-left {
         .page-columns {
@@ -59,6 +49,7 @@ body {
                 #mix-grid .width(9,12);
                 float: right;
             }
+
             .side-col {
                 #mix-grid .column(3,12);
             }

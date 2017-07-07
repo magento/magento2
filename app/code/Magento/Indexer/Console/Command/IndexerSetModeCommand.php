@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Console\Command;
@@ -48,6 +48,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
 
         $indexers = $this->getIndexers($input);
 
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         foreach ($indexers as $indexer) {
             try {
                 $previousStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
@@ -63,13 +64,17 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
                 }
             } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage() . PHP_EOL);
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . " indexer process unknown error:" . PHP_EOL);
                 $output->writeln($e->getMessage() . PHP_EOL);
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
         }
 
-        return $this;
+        return $returnValue;
     }
 
     /**

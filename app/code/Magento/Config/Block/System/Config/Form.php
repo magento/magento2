@@ -1,15 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config;
+
+use Magento\Config\App\Config\Type\System;
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 
 /**
  * System config form block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @api
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -97,6 +106,24 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_fieldFactory;
 
     /**
+     * @var SettingChecker
+     */
+    private $settingChecker;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $appConfig;
+
+    /**
+     * Checks visibility status of form elements on Stores > Settings > Configuration page in Admin Panel
+     * by their paths in the system.xml structure.
+     *
+     * @var ElementVisibilityInterface
+     */
+    private $elementVisibility;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -127,6 +154,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             self::SCOPE_WEBSITES => __('[WEBSITE]'),
             self::SCOPE_STORES => __('[STORE VIEW]'),
         ];
+    }
+
+    /**
+     * @deprecated
+     * @return SettingChecker
+     */
+    private function getSettingChecker()
+    {
+        if ($this->settingChecker === null) {
+            $this->settingChecker = ObjectManager::getInstance()->get(SettingChecker::class);
+        }
+        return $this->settingChecker;
     }
 
     /**
@@ -235,7 +274,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getDependence()
     {
         if (!$this->getChildBlock('element_dependence')) {
-            $this->addChild('element_dependence', 'Magento\Backend\Block\Widget\Form\Element\Dependence');
+            $this->addChild('element_dependence', \Magento\Backend\Block\Widget\Form\Element\Dependence::class);
         }
         return $this->getChildBlock('element_dependence');
     }
@@ -304,16 +343,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldPrefix = '',
         $labelPrefix = ''
     ) {
-        $inherit = true;
-        $data = null;
-        if (array_key_exists($path, $this->_configData)) {
-            $data = $this->_configData[$path];
-            $inherit = false;
-        } elseif ($field->getConfigPath() !== null) {
-            $data = $this->getConfigValue($field->getConfigPath());
-        } else {
-            $data = $this->getConfigValue($path);
-        }
+        $inherit = !array_key_exists($path, $this->_configData);
+        $data = $this->getFieldData($field, $path);
+
         $fieldRendererClass = $field->getFrontendModel();
         if ($fieldRendererClass) {
             $fieldRenderer = $this->_layout->getBlockSingleton($fieldRendererClass);
@@ -327,26 +359,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $elementName = $this->_generateElementName($field->getPath(), $fieldPrefix);
         $elementId = $this->_generateElementId($field->getPath($fieldPrefix));
 
-        if ($field->hasBackendModel()) {
-            $backendModel = $field->getBackendModel();
-            $backendModel->setPath(
-                $path
-            )->setValue(
-                $data
-            )->setWebsite(
-                $this->getWebsiteCode()
-            )->setStore(
-                $this->getStoreCode()
-            )->afterLoad();
-            $data = $backendModel->getValue();
-        }
-
         $dependencies = $field->getDependencies($fieldPrefix, $this->getStoreCode());
         $this->_populateDependenciesBlock($dependencies, $elementId, $elementName);
 
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
+        $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
+            ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),
@@ -364,7 +384,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'scope_id' => $this->getScopeId(),
                 'scope_label' => $this->getScopeLabel($field),
                 'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
-                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite())
+                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
+                'can_restore_to_default' => $this->isCanRestoreToDefault($field->canRestore()),
+                'disabled' => $isReadOnly,
+                'is_disable_inheritance' => $isReadOnly
             ]
         );
         $field->populateInput($formField);
@@ -379,6 +402,73 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $formField->setValues($field->getOptions());
         }
         $formField->setRenderer($fieldRenderer);
+    }
+
+    /**
+     * Get data of field by path
+     *
+     * @param \Magento\Config\Model\Config\Structure\Element\Field $field
+     * @param string $path
+     * @return mixed|null|string
+     */
+    private function getFieldData(\Magento\Config\Model\Config\Structure\Element\Field $field, $path)
+    {
+        $data = $this->getAppConfigDataValue($path);
+
+        $placeholderValue = $this->getSettingChecker()->getPlaceholderValue(
+            $path,
+            $this->getScope(),
+            $this->getStringScopeCode()
+        );
+
+        if ($placeholderValue) {
+            $data = $placeholderValue;
+        }
+        if ($data === null) {
+            if (array_key_exists($path, $this->_configData)) {
+                $data = $this->_configData[$path];
+
+                if ($field->hasBackendModel()) {
+                    $backendModel = $field->getBackendModel();
+                    $backendModel->setPath($path)
+                        ->setValue($data)
+                        ->setWebsite($this->getWebsiteCode())
+                        ->setStore($this->getStoreCode())
+                        ->afterLoad();
+                    $data = $backendModel->getValue();
+                }
+            } elseif ($field->getConfigPath() !== null) {
+                $data = $this->getConfigValue($field->getConfigPath());
+            } else {
+                $data = $this->getConfigValue($path);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retrieve Scope string code
+     *
+     * @return string
+     */
+    private function getStringScopeCode()
+    {
+        $scopeCode = $this->getData('scope_string_code');
+
+        if (null === $scopeCode) {
+            if ($this->getStoreCode()) {
+                $scopeCode = $this->_storeManager->getStore($this->getStoreCode())->getCode();
+            } elseif ($this->getWebsiteCode()) {
+                $scopeCode = $this->_storeManager->getWebsite($this->getWebsiteCode())->getCode();
+            } else {
+                $scopeCode = '';
+            }
+
+            $this->setData('scope_string_code', $scopeCode);
+        }
+
+        return $scopeCode;
     }
 
     /**
@@ -506,6 +596,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Check if can use restore value
+     *
+     * @param int $fieldValue
+     * @return bool
+     */
+    public function isCanRestoreToDefault($fieldValue)
+    {
+        if ($this->getScope() == self::SCOPE_DEFAULT && $fieldValue) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Retrieve current scope
      *
      * @return string
@@ -597,9 +701,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getAdditionalElementTypes()
     {
         return [
-            'allowspecific' => 'Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific',
-            'image' => 'Magento\Config\Block\System\Config\Form\Field\Image',
-            'file' => 'Magento\Config\Block\System\Config\Form\Field\File'
+            'allowspecific' => \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
+            'image' => \Magento\Config\Block\System\Config\Form\Field\Image::class,
+            'file' => \Magento\Config\Block\System\Config\Form\Field\File::class
         ];
     }
 
@@ -607,6 +711,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
      * to getBlala() methods to be later set from controller with setters
      */
+
     /**
      * Enter description here...
      *
@@ -675,5 +780,56 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             return $requiresClass;
         }
         return $requiresClass;
+    }
+
+    /**
+     * Retrieve Deployment Configuration object.
+     *
+     * @deprecated
+     * @return DeploymentConfig
+     */
+    private function getAppConfig()
+    {
+        if ($this->appConfig === null) {
+            $this->appConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
+        }
+        return $this->appConfig;
+    }
+
+    /**
+     * Retrieve deployment config data value by path
+     *
+     * @param string $path
+     * @return null|string
+     */
+    private function getAppConfigDataValue($path)
+    {
+        $appConfig = $this->getAppConfig()->get(System::CONFIG_TYPE);
+        $scope = $this->getScope();
+        $scopeCode = $this->getStringScopeCode();
+
+        if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $data = new DataObject(isset($appConfig[$scope]) ? $appConfig[$scope] : []);
+        } else {
+            $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
+        }
+        return $data->getData($path);
+    }
+
+    /**
+     * Gets instance of ElementVisibilityInterface.
+     *
+     * @return ElementVisibilityInterface
+     * @deprecated Added to not break backward compatibility of the constructor signature
+     *             by injecting the new dependency directly.
+     *             The method can be removed in a future major release, when constructor signature can be changed.
+     */
+    public function getElementVisibility()
+    {
+        if (null === $this->elementVisibility) {
+            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
+        }
+
+        return $this->elementVisibility;
     }
 }

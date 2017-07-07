@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,12 +33,12 @@ $_fullInfo  = $block->getFullTaxInfo();
             <?php foreach ($rates as $rate): ?>
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                 <?php if (!is_null($rate['percent'])): ?>
-                    <td class="label"><?php /* @escapeNotVerified */ echo $rate['title']; ?> (<?php echo (float)$rate['percent']; ?>%)<br /></td>
+                    <td class="label"><?= /* @escapeNotVerified */ $rate['title'] ?> (<?= (float)$rate['percent'] ?>%)<br /></td>
                 <?php else: ?>
-                    <td class="label"><?php /* @escapeNotVerified */ echo $rate['title']; ?><br /></td>
+                    <td class="label"><?= /* @escapeNotVerified */ $rate['title'] ?><br /></td>
                 <?php endif; ?>
                 <?php if ($isFirst): ?>
-                    <td rowspan="<?php echo count($rates); ?>"><?php /* @escapeNotVerified */ echo $block->displayAmount($amount, $baseAmount); ?></td>
+                    <td rowspan="<?= count($rates) ?>"><?= /* @escapeNotVerified */ $block->displayAmount($amount, $baseAmount) ?></td>
                 <?php endif; ?>
             </tr>
             <?php
@@ -58,11 +58,11 @@ $_fullInfo  = $block->getFullTaxInfo();
 
             <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
                 <?php if (!is_null($info['percent'])): ?>
-                    <td class="label"><?php echo $block->escapeHtml($info['title']); ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
+                    <td class="label"><?= $block->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br /></td>
                 <?php else: ?>
-                    <td class="label"><?php echo $block->escapeHtml($info['title']); ?><br /></td>
+                    <td class="label"><?= $block->escapeHtml($info['title']) ?><br /></td>
                 <?php endif; ?>
-                    <td><?php /* @escapeNotVerified */ echo $block->displayAmount($amount, $baseAmount); ?></td>
+                    <td><?= /* @escapeNotVerified */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>
             <?php
                 $isFirst = 0;
@@ -79,13 +79,13 @@ $_fullInfo  = $block->getFullTaxInfo();
     <td class="label">
         <div class="summary-collapse">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <?php /* @escapeNotVerified */ echo __('Total Tax') ?>
+            <?= /* @escapeNotVerified */ __('Total Tax') ?>
         <?php else: ?>
-            <?php /* @escapeNotVerified */ echo __('Tax') ?>
+            <?= /* @escapeNotVerified */ __('Tax') ?>
         <?php endif;?>
         </div>
     </td>
     <td>
-        <?php /* @escapeNotVerified */ echo $block->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()); ?>
+        <?= /* @escapeNotVerified */ $block->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()) ?>
     </td>
 </tr>

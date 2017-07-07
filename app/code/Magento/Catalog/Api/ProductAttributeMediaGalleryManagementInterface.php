@@ -2,7 +2,7 @@
 /**
  * Product Media Attribute Write Service
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -19,7 +19,6 @@ interface ProductAttributeMediaGalleryManagementInterface
      *
      * @param string $sku
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
-     * @param int $storeId
      * @return int gallery entry ID
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -27,8 +26,7 @@ interface ProductAttributeMediaGalleryManagementInterface
      */
     public function create(
         $sku,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry,
-        $storeId = 0
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
     );
 
     /**
@@ -36,15 +34,13 @@ interface ProductAttributeMediaGalleryManagementInterface
      *
      * @param string $sku
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
-     * @param int $storeId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
     public function update(
         $sku,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry,
-        $storeId = 0
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry
     );
 
     /**

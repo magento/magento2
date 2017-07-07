@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,6 +31,35 @@ class Register extends Form
     protected $customerAttribute = "[name='%s']";
 
     /**
+     * Locator for password error
+     *
+     * @var string
+     */
+    protected $passwordError = "#password-error";
+
+    /**
+     * Locator for password confirmation error
+     *
+     * @var string
+     */
+    protected $passwordConfirmationError = "#password-confirmation-error";
+
+    /**
+     * Fixture mapping.
+     *
+     * @param array|null $fields
+     * @param string|null $parent
+     * @return array
+     */
+    protected function dataMapping(array $fields = null, $parent = null)
+    {
+        if (isset($fields['website_id'])) {
+            unset($fields['website_id']);
+        }
+        return parent::dataMapping($fields, $parent);
+    }
+
+    /**
      * Create new customer account and fill billing address if it exists
      *
      * @param FixtureInterface $fixture
@@ -43,5 +72,27 @@ class Register extends Form
             $this->fill($address);
         }
         $this->_rootElement->find($this->submit, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Get password error on new customer registration form.
+     *
+     * @return string
+     *
+     */
+    public function getPasswordError()
+    {
+        return $this->_rootElement->find($this->passwordError, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Get password confirmation error on new customer registration form.
+     *
+     * @return string
+     *
+     */
+    public function getPasswordConfirmationError()
+    {
+        return $this->_rootElement->find($this->passwordConfirmationError, Locator::SELECTOR_CSS)->getText();
     }
 }

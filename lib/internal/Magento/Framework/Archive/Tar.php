@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,7 +84,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @return string
      */
-    final protected static function _getFormatParseHeader()
+    protected static function _getFormatParseHeader()
     {
         return 'a100name/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/a1type/a100symlink/a6magic/a2version/' .
             'a32uname/a32gname/a8devmajor/a8devminor/a155prefix/a12closer';
@@ -404,7 +404,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
             if (in_array($header['type'], ["0", chr(0), ''])) {
                 if (!file_exists($dirname)) {
-                    $mkdirResult = @mkdir($dirname, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
+                    $mkdirResult = @mkdir($dirname, 0777, true);
 
                     if (false === $mkdirResult) {
                         throw new \Magento\Framework\Exception\LocalizedException(

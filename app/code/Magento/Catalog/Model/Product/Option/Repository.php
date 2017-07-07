@@ -1,16 +1,32 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Option;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
 {
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\OptionFactory
+     */
+    protected $optionFactory;
+
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
@@ -22,23 +38,47 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     protected $optionResource;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @var HydratorPool
+     */
+    protected $hydratorPool;
+
+    /**
      * @var Converter
      */
     protected $converter;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
      * @param Converter $converter
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory|null $collectionFactory
+     * @param \Magento\Catalog\Model\Product\OptionFactory|null $optionFactory
+     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
-        \Magento\Catalog\Model\Product\Option\Converter $converter
+        \Magento\Catalog\Model\Product\Option\Converter $converter,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory = null,
+        \Magento\Catalog\Model\Product\OptionFactory $optionFactory = null,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
         $this->converter = $converter;
+        $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class);
+        $this->optionFactory = $optionFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\Product\OptionFactory::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\EntityManager\MetadataPool::class);
     }
 
     /**
@@ -47,7 +87,19 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     public function getList($sku)
     {
         $product = $this->productRepository->get($sku, true);
-        return $product->getOptions();
+        return $product->getOptions() ?: [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductOptions(ProductInterface $product, $requiredOnly = false)
+    {
+        return $this->collectionFactory->create()->getProductOptions(
+            $product->getEntityId(),
+            $product->getStoreId(),
+            $requiredOnly
+        );
     }
 
     /**
@@ -75,48 +127,56 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     /**
      * {@inheritdoc}
      */
+    public function duplicate(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        \Magento\Catalog\Api\Data\ProductInterface $duplicate
+    ) {
+        $hydrator = $this->getHydratorPool()->getHydrator(ProductInterface::class);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        return $this->optionResource->duplicate(
+            $this->optionFactory->create([]),
+            $hydrator->extract($product)[$metadata->getLinkField()],
+            $hydrator->extract($duplicate)[$metadata->getLinkField()]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        $sku = $option->getProductSku();
-        $product = $this->productRepository->get($sku, true);
-        $optionData = $this->converter->toArray($option);
+        $productSku = $option->getProductSku();
+        if (!$productSku) {
+            throw new CouldNotSaveException(__('ProductSku should be specified'));
+        }
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->productRepository->get($productSku);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $option->setData('product_id', $product->getData($metadata->getLinkField()));
+        $option->setData('store_id', $product->getStoreId());
+
         if ($option->getOptionId()) {
-            if (!$product->getOptionById($option->getOptionId())) {
+            $options = $product->getOptions();
+            if (!$options) {
+                $options = $this->getProductOptions($product);
+            }
+
+            $persistedOption = array_filter($options, function ($iOption) use ($option) {
+                return $option->getOptionId() == $iOption->getOptionId();
+            });
+            $persistedOption = reset($persistedOption);
+
+            if (!$persistedOption) {
                 throw new NoSuchEntityException();
             }
-            $originalValues = $product->getOptionById($option->getOptionId())->getValues();
-            if (!empty($optionData['values'])) {
-                $optionData['values'] = $this->markRemovedValues($optionData['values'], $originalValues);
+            $originalValues = $persistedOption->getValues();
+            $newValues = $option->getData('values');
+            if ($newValues) {
+                $newValues = $this->markRemovedValues($newValues, $originalValues);
+                $option->setData('values', $newValues);
             }
         }
-
-        unset($optionData['product_sku']);
-
-        $product->setProductOptions([$optionData]);
-        $existingOptions = $product->getOptions();
-        try {
-            $this->productRepository->save($product, true);
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save product option'));
-        }
-
-        $product = $this->productRepository->get($sku, true);
-        if (!$option->getOptionId()) {
-            $currentOptions = $product->getOptions();
-            if ($existingOptions == null) {
-                $newID = array_keys($currentOptions);
-            } else {
-                $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
-            }
-
-            if (empty($newID)) {
-                throw new CouldNotSaveException(__('Could not save product option'));
-            }
-            $newID = current($newID);
-        } else {
-            $newID = $option->getOptionId();
-        }
-        $option = $this->get($sku, $newID);
+        $option->save();
         return $option;
     }
 
@@ -168,5 +228,18 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         }
 
         return $newValues;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\HydratorPool
+     * @deprecated
+     */
+    private function getHydratorPool()
+    {
+        if (null === $this->hydratorPool) {
+            $this->hydratorPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\HydratorPool::class);
+        }
+        return $this->hydratorPool;
     }
 }

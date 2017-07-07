@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ class ComponentRegistrarTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->object = new ComponentRegistrar();
     }
@@ -45,11 +45,11 @@ class ComponentRegistrarTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage 'test_module_one' component already exists
+     * @expectedExceptionMessageRegExp /Module 'test_module_one' from '\w+' has been already defined in '\w+'./
      */
     public function testRegistrarWithExceptionForModules()
     {
-        ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_one", "some/path/name/one");
+        ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_one", "some/path/name/onemore");
     }
 
     public function testGetPath()

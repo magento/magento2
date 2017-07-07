@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,6 +15,10 @@
             <email />
             <endpoint />
             <identity_link_url />
+            <current_password>
+                <selector>[name='current_password']</selector>
+                <strategy>css selector</strategy>
+            </current_password>
             <key>
                 <selector>[name="consumer_key"]</selector>
             </key>

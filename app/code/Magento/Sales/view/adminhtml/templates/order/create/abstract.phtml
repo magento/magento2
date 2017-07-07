@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,10 +9,10 @@
 ?>
 
 <div class="admin__page-section-title">
-    <span class="title"><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></span>
+    <span class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></span>
     <?php if($block->getButtonsHtml()): ?>
-        <div class="actions"><?php echo $block->getButtonsHtml() ?></div>
+        <div class="actions"><?= $block->getButtonsHtml() ?></div>
     <?php endif; ?>
 </div>
 
-<?php echo $block->getChildHtml('', true) ?>
+<?= $block->getChildHtml('', true) ?>

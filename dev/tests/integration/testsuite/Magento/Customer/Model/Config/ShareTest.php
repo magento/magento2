@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Config;
@@ -15,7 +15,7 @@ class ShareTest extends \PHPUnit_Framework_TestCase
     public function testGetSharedWebsiteIds()
     {
         /** @var Share $share */
-        $share = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Share');
+        $share = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Config\Share::class);
 
         $websiteIds = $share->getSharedWebsiteIds(42);
 
@@ -29,10 +29,12 @@ class ShareTest extends \PHPUnit_Framework_TestCase
     public function testGetSharedWebsiteIdsMultipleSites()
     {
         /** @var Share $share */
-        $share = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Share');
+        $share = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Config\Share::class);
         $expectedIds = [1];
         /** @var \Magento\Store\Model\Website $website */
-        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Website');
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Store\Model\Website::class
+        );
         $expectedIds[] = $website->load('secondwebsite')->getId();
         $expectedIds[] = $website->load('thirdwebsite')->getId();
 

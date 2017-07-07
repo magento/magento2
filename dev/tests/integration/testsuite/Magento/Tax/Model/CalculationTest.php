@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
@@ -50,12 +50,14 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->create('Magento\Tax\Model\Calculation');
+        $this->_model = $this->_objectManager->create(\Magento\Tax\Model\Calculation::class);
         $this->customerRepository = $this->_objectManager->create(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
-        $this->addressRepository = $this->_objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
-        $this->groupRepository = $this->_objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
+        $this->addressRepository = $this->_objectManager->create(
+            \Magento\Customer\Api\AddressRepositoryInterface::class
+        );
+        $this->groupRepository = $this->_objectManager->create(\Magento\Customer\Api\GroupRepositoryInterface::class);
     }
 
     public function testDefaultCustomerTaxClass()

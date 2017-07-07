@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Dependency;
@@ -208,7 +208,6 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-
 
     /**
      * Make some fake filepath to correspond to the class name

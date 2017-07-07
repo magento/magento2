@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store\Edit\Form;
@@ -121,6 +121,18 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
             ]
         );
 
+        $fieldset->addField(
+            'group_code',
+            'text',
+            [
+                'name' => 'group[code]',
+                'label' => __('Code'),
+                'value' => $groupModel->getCode(),
+                'required' => true,
+                'disabled' => $groupModel->isReadOnly()
+            ]
+        );
+
         $categories = $this->_category->toOptionArray();
 
         $fieldset->addField(
@@ -135,11 +147,12 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
                 'disabled' => $groupModel->isReadOnly()
             ]
         );
-
         if ($this->_coreRegistry->registry('store_action') == 'edit') {
-            $stores = $this->_storeFactory->create()->getCollection()->addGroupFilter(
-                $groupModel->getId()
-            )->toOptionArray();
+            $storeActive = 1;
+            $stores = $this->_storeFactory->create()->getCollection()
+                ->addGroupFilter($groupModel->getId())
+                ->addStatusFilter($storeActive)
+                ->toOptionArray();
             $fieldset->addField(
                 'group_default_store_id',
                 'select',

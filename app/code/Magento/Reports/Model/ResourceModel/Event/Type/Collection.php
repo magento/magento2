@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Event\Type;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -20,7 +23,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\Event\Type', 'Magento\Reports\Model\ResourceModel\Event\Type');
+        $this->_init(\Magento\Reports\Model\Event\Type::class, \Magento\Reports\Model\ResourceModel\Event\Type::class);
     }
 
     /**

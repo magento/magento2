@@ -1,13 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-$autoloader = new \Magento\Framework\TestFramework\Unit\Autoloader\ExtensionGeneratorAutoloader(
-    new \Magento\Framework\Code\Generator\Io(
-        new \Magento\Framework\Filesystem\Driver\File(),
-        TESTS_TEMP_DIR . '/var/generation'
-    )
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesGenerator;
+use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesInterfaceGenerator;
+use Magento\Framework\TestFramework\Unit\Autoloader\FactoryGenerator;
+use Magento\Framework\TestFramework\Unit\Autoloader\GeneratedClassesAutoloader;
+
+$generatorIo = new Io(
+    new File(),
+    TESTS_TEMP_DIR . '/' . DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_CODE][DirectoryList::PATH]
 );
-spl_autoload_register([$autoloader, 'load']);
+$generatedCodeAutoloader = new GeneratedClassesAutoloader(
+    [
+        new ExtensionAttributesGenerator(),
+        new ExtensionAttributesInterfaceGenerator(),
+        new FactoryGenerator(),
+    ],
+    $generatorIo
+);
+spl_autoload_register([$generatedCodeAutoloader, 'load']);

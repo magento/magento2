@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\Test\Unit\SaveHandler;
@@ -65,7 +65,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     public function testCheckConnection()
     {
         $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['isTableExists'],
             [],
             '',
@@ -82,7 +82,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         );
 
         $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -94,7 +94,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
@@ -106,7 +106,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     public function testCheckConnectionNoConnection()
     {
         $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -118,7 +118,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
@@ -130,7 +130,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     public function testCheckConnectionNoTable()
     {
         $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['isTableExists'],
             [],
             '',
@@ -147,7 +147,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         );
 
         $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -159,7 +159,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new \Magento\Framework\Session\SaveHandler\DbTable($resource);
 
-        $method = new \ReflectionMethod('Magento\Framework\Session\SaveHandler\DbTable', 'checkConnection');
+        $method = new \ReflectionMethod(\Magento\Framework\Session\SaveHandler\DbTable::class, 'checkConnection');
         $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
@@ -184,7 +184,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     protected function _prepareResourceMock($connection)
     {
         $resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -205,7 +205,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     protected function _prepareMockForRead($isDataEncoded)
     {
         $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'from', 'where', 'fetchOne', 'isTableExists'],
             [],
             '',
@@ -285,7 +285,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     protected function _prepareMockForWrite($sessionExists)
     {
         $connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'from', 'where', 'fetchOne', 'update', 'insert', 'isTableExists'],
             [],
             '',

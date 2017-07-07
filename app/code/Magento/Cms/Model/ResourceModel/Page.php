@@ -1,62 +1,80 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Cms\Model\ResourceModel;
+
+use Magento\Cms\Model\Page as CmsPage;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * Cms page mysql resource
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Page extends AbstractDb
 {
     /**
      * Store model
      *
-     * @var null|\Magento\Store\Model\Store
+     * @var null|Store
      */
     protected $_store = null;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    protected $_date;
-
-    /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param DateTime $dateTime
+     * @param EntityManager $entityManager
+     * @param MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Context $context,
+        StoreManagerInterface $storeManager,
+        DateTime $dateTime,
+        EntityManager $entityManager,
+        MetadataPool $metadataPool,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
+        $this->entityManager = $entityManager;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -70,28 +88,21 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Process page data before deleting
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     * @inheritDoc
      */
-    protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
+    public function getConnection()
     {
-        $condition = ['page_id = ?' => (int)$object->getId()];
-
-        $this->getConnection()->delete($this->getTable('cms_page_store'), $condition);
-
-        return parent::_beforeDelete($object);
+        return $this->metadataPool->getMetadata(PageInterface::class)->getEntityConnection();
     }
 
     /**
      * Process page data before saving
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         /*
          * For two attributes which represent timestamp data in DB
@@ -100,99 +111,69 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          * type NULL so in DB they will be empty and not some default value
          */
         foreach (['custom_theme_from', 'custom_theme_to'] as $field) {
-            $value = !$object->getData($field) ? null : $object->getData($field);
-            $object->setData($field, $this->dateTime->formatDate($value));
+            $value = !$object->getData($field) ? null : $this->dateTime->formatDate($object->getData($field));
+            $object->setData($field, $value);
         }
 
         if (!$this->isValidPageIdentifier($object)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The page URL key contains capital letters or disallowed symbols.')
             );
         }
 
         if ($this->isNumericPageIdentifier($object)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The page URL key cannot be made of only numbers.')
             );
         }
-
-        if ($object->isObjectNew() && !$object->hasCreationTime()) {
-            $object->setCreationTime($this->_date->gmtDate());
-        }
-
-        $object->setUpdateTime($this->_date->gmtDate());
-
         return parent::_beforeSave($object);
     }
 
     /**
-     * Assign page to store views
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return $this
+     * @param AbstractModel $object
+     * @param string $value
+     * @param string|null $field
+     * @return bool|int|string
+     * @throws LocalizedException
+     * @throws \Exception
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    private function getPageId(AbstractModel $object, $value, $field = null)
     {
-        $oldStores = $this->lookupStoreIds($object->getId());
-        $newStores = (array)$object->getStores();
-        if (empty($newStores)) {
-            $newStores = (array)$object->getStoreId();
-        }
-        $table = $this->getTable('cms_page_store');
-        $insert = array_diff($newStores, $oldStores);
-        $delete = array_diff($oldStores, $newStores);
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
 
-        if ($delete) {
-            $where = ['page_id = ?' => (int)$object->getId(), 'store_id IN (?)' => $delete];
-
-            $this->getConnection()->delete($table, $where);
-        }
-
-        if ($insert) {
-            $data = [];
-
-            foreach ($insert as $storeId) {
-                $data[] = ['page_id' => (int)$object->getId(), 'store_id' => (int)$storeId];
-            }
-
-            $this->getConnection()->insertMultiple($table, $data);
-        }
-
-        return parent::_afterSave($object);
-    }
-
-    /**
-     * Load an object using 'identifier' field if there's no field specified and value is not numeric
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @param mixed $value
-     * @param string $field
-     * @return $this
-     */
-    public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
-    {
-        if (!is_numeric($value) && is_null($field)) {
+        if (!is_numeric($value) && $field === null) {
             $field = 'identifier';
+        } elseif (!$field) {
+            $field = $entityMetadata->getIdentifierField();
         }
 
-        return parent::load($object, $value, $field);
+        $pageId = $value;
+        if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
+            $select = $this->_getLoadSelect($field, $value, $object);
+            $select->reset(Select::COLUMNS)
+                ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
+                ->limit(1);
+            $result = $this->getConnection()->fetchCol($select);
+            $pageId = count($result) ? $result[0] : false;
+        }
+        return $pageId;
     }
 
     /**
-     * Perform operations after object load
+     * Load an object
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param CmsPage|AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
      * @return $this
      */
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    public function load(AbstractModel $object, $value, $field = null)
     {
-        if ($object->getId()) {
-            $stores = $this->lookupStoreIds($object->getId());
-
-            $object->setData('store_id', $stores);
+        $pageId = $this->getPageId($object, $value, $field);
+        if ($pageId) {
+            $this->entityManager->load($object, $pageId);
         }
-
-        return parent::_afterLoad($object);
+        return $this;
     }
 
     /**
@@ -200,30 +181,30 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Cms\Model\Page $object
-     * @return \Magento\Framework\DB\Select
+     * @param CmsPage|AbstractModel $object
+     * @return Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+        $linkField = $entityMetadata->getLinkField();
+
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId()) {
-            $storeIds = [\Magento\Store\Model\Store::DEFAULT_STORE_ID, (int)$object->getStoreId()];
+            $storeIds = [
+                Store::DEFAULT_STORE_ID,
+                (int)$object->getStoreId(),
+            ];
             $select->join(
                 ['cms_page_store' => $this->getTable('cms_page_store')],
-                $this->getMainTable() . '.page_id = cms_page_store.page_id',
+                $this->getMainTable() . '.' . $linkField . ' = cms_page_store.' . $linkField,
                 []
-            )->where(
-                'is_active = ?',
-                1
-            )->where(
-                'cms_page_store.store_id IN (?)',
-                $storeIds
-            )->order(
-                'cms_page_store.store_id DESC'
-            )->limit(
-                1
-            );
+            )
+                ->where('is_active = ?', 1)
+                ->where('cms_page_store.store_id IN (?)', $storeIds)
+                ->order('cms_page_store.store_id DESC')
+                ->limit(1);
         }
 
         return $select;
@@ -235,25 +216,24 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $identifier
      * @param int|array $store
      * @param int $isActive
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     protected function _getLoadByIdentifierSelect($identifier, $store, $isActive = null)
     {
-        $select = $this->getConnection()->select()->from(
-            ['cp' => $this->getMainTable()]
-        )->join(
-            ['cps' => $this->getTable('cms_page_store')],
-            'cp.page_id = cps.page_id',
-            []
-        )->where(
-            'cp.identifier = ?',
-            $identifier
-        )->where(
-            'cps.store_id IN (?)',
-            $store
-        );
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+        $linkField = $entityMetadata->getLinkField();
 
-        if (!is_null($isActive)) {
+        $select = $this->getConnection()->select()
+            ->from(['cp' => $this->getMainTable()])
+            ->join(
+                ['cps' => $this->getTable('cms_page_store')],
+                'cp.' . $linkField . ' = cps.' . $linkField,
+                []
+            )
+            ->where('cp.identifier = ?', $identifier)
+            ->where('cps.store_id IN (?)', $store);
+
+        if ($isActive !== null) {
             $select->where('cp.is_active = ?', $isActive);
         }
 
@@ -263,10 +243,10 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      *  Check whether page identifier is numeric
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return bool
      */
-    protected function isNumericPageIdentifier(\Magento\Framework\Model\AbstractModel $object)
+    protected function isNumericPageIdentifier(AbstractModel $object)
     {
         return preg_match('/^[0-9]+$/', $object->getData('identifier'));
     }
@@ -274,10 +254,10 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      *  Check whether page identifier is valid
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return bool
      */
-    protected function isValidPageIdentifier(\Magento\Framework\Model\AbstractModel $object)
+    protected function isValidPageIdentifier(AbstractModel $object)
     {
         return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
     }
@@ -292,9 +272,14 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function checkIdentifier($identifier, $storeId)
     {
-        $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId];
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+
+        $stores = [Store::DEFAULT_STORE_ID, $storeId];
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores, 1);
-        $select->reset(\Magento\Framework\DB\Select::COLUMNS)->columns('cp.page_id')->order('cps.store_id DESC')->limit(1);
+        $select->reset(Select::COLUMNS)
+            ->columns('cp.' . $entityMetadata->getIdentifierField())
+            ->order('cps.store_id DESC')
+            ->limit(1);
 
         return $this->getConnection()->fetchOne($select);
     }
@@ -307,13 +292,16 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getCmsPageTitleByIdentifier($identifier)
     {
-        $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
+        $stores = [Store::DEFAULT_STORE_ID];
         if ($this->_store) {
             $stores[] = (int)$this->getStore()->getId();
         }
 
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores);
-        $select->reset(\Magento\Framework\DB\Select::COLUMNS)->columns('cp.title')->order('cps.store_id DESC')->limit(1);
+        $select->reset(Select::COLUMNS)
+            ->columns('cp.title')
+            ->order('cps.store_id DESC')
+            ->limit(1);
 
         return $this->getConnection()->fetchOne($select);
     }
@@ -327,12 +315,13 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getCmsPageTitleById($id)
     {
         $connection = $this->getConnection();
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
 
-        $select = $connection->select()->from($this->getMainTable(), 'title')->where('page_id = :page_id');
+        $select = $connection->select()
+            ->from($this->getMainTable(), 'title')
+            ->where($entityMetadata->getIdentifierField() . ' = :page_id');
 
-        $binds = ['page_id' => (int)$id];
-
-        return $connection->fetchOne($select, $binds);
+        return $connection->fetchOne($select, ['page_id' => (int)$id]);
     }
 
     /**
@@ -344,12 +333,13 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getCmsPageIdentifierById($id)
     {
         $connection = $this->getConnection();
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
 
-        $select = $connection->select()->from($this->getMainTable(), 'identifier')->where('page_id = :page_id');
+        $select = $connection->select()
+            ->from($this->getMainTable(), 'identifier')
+            ->where($entityMetadata->getIdentifierField() . ' = :page_id');
 
-        $binds = ['page_id' => (int)$id];
-
-        return $connection->fetchOne($select, $binds);
+        return $connection->fetchOne($select, ['page_id' => (int)$id]);
     }
 
     /**
@@ -362,21 +352,25 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
 
-        $select = $connection->select()->from(
-            $this->getTable('cms_page_store'),
-            'store_id'
-        )->where(
-            'page_id = ?',
-            (int)$pageId
-        );
+        $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
+        $linkField = $entityMetadata->getLinkField();
 
-        return $connection->fetchCol($select);
+        $select = $connection->select()
+            ->from(['cps' => $this->getTable('cms_page_store')], 'store_id')
+            ->join(
+                ['cp' => $this->getMainTable()],
+                'cps.' . $linkField . ' = cp.' . $linkField,
+                []
+            )
+            ->where('cp.' . $entityMetadata->getIdentifierField() . ' = :page_id');
+
+        return $connection->fetchCol($select, ['page_id' => (int)$pageId]);
     }
 
     /**
      * Set store model
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @return $this
      */
     public function setStore($store)
@@ -388,10 +382,28 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve store model
      *
-     * @return \Magento\Store\Model\Store
+     * @return Store
      */
     public function getStore()
     {
         return $this->_storeManager->getStore($this->_store);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save(AbstractModel $object)
+    {
+        $this->entityManager->save($object);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->entityManager->delete($object);
+        return $this;
     }
 }

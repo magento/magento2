@@ -1,22 +1,26 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
+<div style="display: none;" css="stickyClass" afterRender="setStickyNode">
+    <span class="data-grid-cap-left" afterRender="setLeftCap"/>
+    <span class="data-grid-cap-right" afterRender="setRightCap"/>
+    
+    <div afterRender="setStickyToolbarNode">
+        <div class="admin__data-grid-header">
+            <div class="admin__data-grid-header-row">
+                <scope args="requestChild('listing_massaction')" render=""/>
+                <scope args="requestChild('listing_paging')" render="totalTmpl"/>
+                <each args="getRegion('dataGridFilters')" render=" $data.stickyTmpl || getTemplate()"/>
+                <div class="admin__data-grid-actions-wrap" each="getRegion('dataGridActions')" render=""/>
+                <scope args="requestChild('listing_paging')" render=""/>
+            </div>
+        </div>
 
-<div data-bind='visible: visible' class='sticky-header'>
-    <span class="data-grid-cap-left"></span>
-    <span class="data-grid-cap-right"></span>
-    <!-- ko if: enableToolbar -->
-        <!-- ko scope: toolbar -->
-            <!-- ko template: $data.stickyTmpl || getTemplate() --><!-- /ko -->
-        <!-- /ko -->
-    <!-- /ko -->
+        <scope args="requestChild('listing_filters_chips')" render="$data.stickyTmpl || getTemplate()"/>
 
-    <!-- ko if: enableHeader -->
-        <!-- ko scope: listing -->
-            <!-- ko template: $data.stickyTmpl || getTemplate() --><!-- /ko -->
-        <!-- /ko -->
-    <!-- /ko -->
+        <scope args="columnsProvider" render="stickyTmpl"/>
+    </div>
 </div>

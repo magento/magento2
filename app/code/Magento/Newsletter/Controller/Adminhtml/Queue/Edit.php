@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
@@ -32,7 +32,9 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
      */
     public function execute()
     {
-        $this->_coreRegistry->register('current_queue', $this->_objectManager->get('Magento\Newsletter\Model\Queue'));
+        $this->_coreRegistry->register('current_queue', $this->_objectManager->get(
+            \Magento\Newsletter\Model\Queue::class
+        ));
 
         $id = $this->getRequest()->getParam('id');
         $templateId = $this->getRequest()->getParam('template_id');
@@ -40,7 +42,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
         if ($id) {
             $queue = $this->_coreRegistry->registry('current_queue')->load($id);
         } elseif ($templateId) {
-            $template = $this->_objectManager->create('Magento\Newsletter\Model\Template')->load($templateId);
+            $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class)->load($templateId);
             $queue = $this->_coreRegistry->registry('current_queue')->setTemplateId($template->getId());
         }
 

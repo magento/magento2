@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -57,5 +57,12 @@
                 </allowed_resources>
             </media_storage_configuration>
         </system>
+        <design>
+            <watermark>
+                <image_position>stretch</image_position>
+                <small_image_position>stretch</small_image_position>
+                <thumbnail_position>stretch</thumbnail_position>
+            </watermark>
+        </design>
     </default>
 </config>

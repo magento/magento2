@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 /**
  * CatalogWidget Rule Product Condition data model
@@ -12,6 +11,7 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 
 /**
  * Class Product
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -112,6 +112,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function addToCollection($collection)
     {
         $attribute = $this->getAttributeObject();
+
+        if ($collection->isEnabledFlat()) {
+            $alias = array_keys($collection->getSelect()->getPart('from'))[0];
+            $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.' . $attribute->getAttributeCode();
+            return $this;
+        }
+
         if ('category_ids' == $attribute->getAttributeCode() || $attribute->isStatic()) {
             return $this;
         }
@@ -148,7 +155,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $collection->addAttributeToSelect($attribute->getAttributeCode(), 'inner');
                 break;
             default:
-                $alias = 'at_'. md5($this->getId()) . $attribute->getAttributeCode();
+                $alias = 'at_' . md5($this->getId()) . $attribute->getAttributeCode();
                 $collection->getSelect()->join(
                     [$alias => $collection->getTable('catalog_product_index_eav')],
                     "($alias.entity_id = e.entity_id) AND ($alias.store_id = $storeId)" .
@@ -157,7 +164,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 );
         }
 
-        $this->joinedAttributes[$attribute->getAttributeCode()] = $alias;
+        $this->joinedAttributes[$attribute->getAttributeCode()] = $alias . '.value';
 
         return $this;
     }
@@ -204,20 +211,24 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getMappedSqlField()
     {
         $result = '';
-        if ($this->getAttribute() == 'category_ids') {
+        if (in_array($this->getAttribute(), ['category_ids', 'sku'])) {
             $result = parent::getMappedSqlField();
+        } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
+            $result = $this->joinedAttributes[$this->getAttribute()];
         } elseif ($this->getAttributeObject()->isStatic()) {
             $result = $this->getAttributeObject()->getAttributeCode();
-        } elseif ($this->getAttributeObject()->isScopeGlobal()) {
-            if (isset($this->joinedAttributes[$this->getAttribute()])) {
-                $result = $this->joinedAttributes[$this->getAttribute()] . '.value';
-            } else {
-                $result = parent::getMappedSqlField();
-            }
         } elseif ($this->getValueParsed()) {
             $result = 'e.entity_id';
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collectValidatedAttributes($productCollection)
+    {
+        return $this->addToCollection($productCollection);
     }
 }

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -37,7 +37,7 @@
 //  ---------------------------------------------
 
 .form-row {
-    .extend__clearer();
+    &:extend(.abs-clearer all);
     margin-bottom: 2.2rem;
 
     .form-row {
@@ -53,6 +53,7 @@
 
         &.required {
             position: relative;
+
             &:after {
                 color: @color-required;
                 content: '*';
@@ -70,6 +71,7 @@
             &:before {
                 top: .1rem + @form-el__indent-top;
             }
+
             &:after {
                 top: .1rem + @form-el__indent-top + .4rem;
             }
@@ -77,6 +79,7 @@
     }
     &.form-row-text {
         padding-top: .6rem;
+
         .action-sign-out {
             font-size: 1.2rem;
             margin-left: @indent__s;
@@ -120,12 +123,15 @@ textarea:not([disabled]) {
     border: 1px solid @form-el__border-color;
     color: @form-el__color;
     padding: @form-el__padding-top @form-el__padding-side @form-el__padding-bottom;
+
     &:hover {
         border-color: @form-el__hover__border-color;
     }
+
     &:focus {
         border-color: @form-el__focus__border-color;
     }
+
     &:required {
         box-shadow: none;
     }
@@ -160,8 +166,8 @@ textarea:not([disabled]) {
 .form-el-insider {
     border-radius: @form-el__border-radius;
     display: table-cell;
-    vertical-align: top;
     padding: @form-el__padding-top + .08em @form-el__padding-side @form-el__padding-bottom 0;
+    vertical-align: top;
 }
 
 //

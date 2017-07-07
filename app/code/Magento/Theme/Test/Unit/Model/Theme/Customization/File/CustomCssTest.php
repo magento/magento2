@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Customization\File;
@@ -32,16 +32,16 @@ class CustomCssTest extends \PHPUnit_Framework_TestCase
     /**
      * Initialize testable object
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->customizationPath = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Customization\Path')
+        $this->customizationPath = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Customization\Path::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactory = $this->getMockBuilder('Magento\Framework\View\Design\Theme\FileFactory')
+        $this->fileFactory = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -58,7 +58,7 @@ class CustomCssTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareFile()
     {
-        $file = $this->getMockBuilder('Magento\Framework\View\Design\Theme\FileInterface')
+        $file = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
             ->setMethods(
                 [
                     'delete',
@@ -101,7 +101,7 @@ class CustomCssTest extends \PHPUnit_Framework_TestCase
 
         /** @var $file \Magento\Framework\View\Design\Theme\FileInterface */
         $this->assertInstanceOf(
-            'Magento\Theme\Model\Theme\Customization\File\CustomCss',
+            \Magento\Theme\Model\Theme\Customization\File\CustomCss::class,
             $this->object->prepareFile($file)
         );
     }

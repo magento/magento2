@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\System\Config;
@@ -19,7 +19,7 @@ abstract class Validatevat extends \Magento\Backend\App\Action
      */
     protected function _validate()
     {
-        return $this->_objectManager->get('Magento\Customer\Model\Vat')
+        return $this->_objectManager->get(\Magento\Customer\Model\Vat::class)
             ->checkVatNumber(
                 $this->getRequest()->getParam('country'),
                 $this->getRequest()->getParam('vat')

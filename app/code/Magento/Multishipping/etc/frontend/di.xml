@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -41,5 +41,8 @@
     </type>
     <type name="Magento\Checkout\Model\Cart">
         <plugin name="multishipping_session_mapper" type="Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart">
+        <plugin name="multishipping_clear_addresses" type="Magento\Multishipping\Model\Cart\Controller\CartPlugin" />
     </type>
 </config>

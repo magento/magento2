@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
@@ -8,7 +8,7 @@ namespace Magento\Payment\Model\Method;
 /**
  * Interface for payment methods config
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @deprectated This interface has no semantic meaning and all it implementations has no joint points.
  */
 interface ConfigInterface extends \Magento\Payment\Gateway\ConfigInterface
 {

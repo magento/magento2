@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,11 +28,11 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->priceCollection = $this->getMock('Magento\Framework\Pricing\Price\Collection', [], [], '', false);
+        $this->priceCollection = $this->getMock(\Magento\Framework\Pricing\Price\Collection::class, [], [], '', false);
         $this->adjustmentCollection = $this->getMock(
-            'Magento\Framework\Pricing\Adjustment\Collection',
+            \Magento\Framework\Pricing\Adjustment\Collection::class,
             [],
             [],
             '',

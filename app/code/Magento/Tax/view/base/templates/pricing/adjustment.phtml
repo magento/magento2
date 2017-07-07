@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,10 +11,10 @@
 <?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
 
 <?php if ($block->displayBothPrices()): ?>
-    <span id="<?php /* @escapeNotVerified */ echo $block->buildIdWithPrefix('price-excluding-tax-') ?>"
-          data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>"
-          data-price-amount="<?php /* @escapeNotVerified */ echo $block->getRawAmount() ?>"
+    <span id="<?= /* @escapeNotVerified */ $block->buildIdWithPrefix('price-excluding-tax-') ?>"
+          data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>"
+          data-price-amount="<?= /* @escapeNotVerified */ $block->getRawAmount() ?>"
           data-price-type="basePrice"
           class="price-wrapper price-excluding-tax">
-        <span class="price"><?php /* @escapeNotVerified */ echo $block->getDisplayAmountExclTax() ?></span></span>
+        <span class="price"><?= /* @escapeNotVerified */ $block->getDisplayAmountExclTax() ?></span></span>
 <?php endif; ?>

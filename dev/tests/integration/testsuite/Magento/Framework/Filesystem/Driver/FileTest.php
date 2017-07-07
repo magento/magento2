@@ -2,10 +2,12 @@
 /**
  * Test for \Magento\Framework\Filesystem\Driver\File
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Driver;
+
+use Magento\Framework\Filesystem\DriverInterface;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,5 +67,17 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testReadDirectoryRecursivelyFailure()
     {
         $this->driver->readDirectoryRecursively($this->getTestPath('not-existing-directory'));
+    }
+
+    public function testCreateDirectory()
+    {
+        $generatedPath = $this->getTestPath('generated/roo/bar/baz/foo');
+        $generatedPathBase = $this->getTestPath('generated');
+        // Delete the generated directory if it already exists
+        if (is_dir($generatedPath)) {
+            $this->assertTrue($this->driver->deleteDirectory($generatedPathBase));
+        }
+        $this->assertTrue($this->driver->createDirectory($generatedPath));
+        $this->assertTrue(is_dir($generatedPath));
     }
 }

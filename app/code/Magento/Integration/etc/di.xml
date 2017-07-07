@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,6 +14,8 @@
     <preference for="Magento\Framework\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>
     <preference for="Magento\Integration\Api\CustomerTokenServiceInterface" type="Magento\Integration\Model\CustomerTokenService" />
     <preference for="Magento\Integration\Api\AdminTokenServiceInterface" type="Magento\Integration\Model\AdminTokenService" />
+    <preference for="Magento\Integration\Model\Oauth\Token\RequestLog\ReaderInterface" type="Magento\Integration\Model\ResourceModel\Oauth\Token\RequestLog" />
+    <preference for="Magento\Integration\Model\Oauth\Token\RequestLog\WriterInterface" type="Magento\Integration\Model\ResourceModel\Oauth\Token\RequestLog" />
     <type name="Magento\Integration\Model\Oauth\Nonce\Generator">
         <arguments>
             <argument name="date" xsi:type="object">Magento\Framework\Stdlib\DateTime\DateTime\Proxy</argument>

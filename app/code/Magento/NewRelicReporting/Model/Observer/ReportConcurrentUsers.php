@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Observer;
@@ -45,18 +45,12 @@ class ReportConcurrentUsers implements ObserverInterface
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @param Config $config
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\NewRelicReporting\Model\UsersFactory $usersFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         Config $config,
@@ -64,8 +58,7 @@ class ReportConcurrentUsers implements ObserverInterface
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\NewRelicReporting\Model\UsersFactory $usersFactory,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder
     ) {
         $this->config = $config;
         $this->customerSession = $customerSession;
@@ -73,7 +66,6 @@ class ReportConcurrentUsers implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->usersFactory = $usersFactory;
         $this->jsonEncoder = $jsonEncoder;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -99,7 +91,6 @@ class ReportConcurrentUsers implements ObserverInterface
                 $modelData = [
                     'type' => 'user_action',
                     'action' => $this->jsonEncoder->encode($jsonData),
-                    'updated_at' => $this->dateTime->formatDate(true),
                 ];
 
                 /** @var \Magento\NewRelicReporting\Model\Users $usersModel */

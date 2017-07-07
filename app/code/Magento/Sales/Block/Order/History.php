@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
 
+use \Magento\Framework\App\ObjectManager;
+use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
+
 /**
  * Sales order history block
+ *
+ * @api
  */
 class History extends \Magento\Framework\View\Element\Template
 {
@@ -32,6 +37,11 @@ class History extends \Magento\Framework\View\Element\Template
 
     /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
     protected $orders;
+
+    /**
+     * @var CollectionFactoryInterface
+     */
+    private $orderCollectionFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -63,6 +73,19 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return CollectionFactoryInterface
+     *
+     * @deprecated
+     */
+    private function getOrderCollectionFactory()
+    {
+        if ($this->orderCollectionFactory === null) {
+            $this->orderCollectionFactory = ObjectManager::getInstance()->get(CollectionFactoryInterface::class);
+        }
+        return $this->orderCollectionFactory;
+    }
+
+    /**
      * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getOrders()
@@ -71,11 +94,8 @@ class History extends \Magento\Framework\View\Element\Template
             return false;
         }
         if (!$this->orders) {
-            $this->orders = $this->_orderCollectionFactory->create()->addFieldToSelect(
+            $this->orders = $this->getOrderCollectionFactory()->create($customerId)->addFieldToSelect(
                 '*'
-            )->addFieldToFilter(
-                'customer_id',
-                $customerId
             )->addFieldToFilter(
                 'status',
                 ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
@@ -95,7 +115,7 @@ class History extends \Magento\Framework\View\Element\Template
         parent::_prepareLayout();
         if ($this->getOrders()) {
             $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
+                \Magento\Theme\Block\Html\Pager::class,
                 'sales.order.history.pager'
             )->setCollection(
                 $this->getOrders()

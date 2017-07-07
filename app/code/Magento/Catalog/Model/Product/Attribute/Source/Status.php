@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
@@ -11,6 +11,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Product status functionality model
+ *
+ * @api
  */
 class Status extends AbstractSource implements SourceInterface, OptionSourceInterface
 {
@@ -95,13 +97,14 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $attributeId = $this->getAttribute()->getId();
         $attributeTable = $this->getAttribute()->getBackend()->getTable();
+        $linkField = $this->getAttribute()->getEntity()->getLinkField();
 
         if ($this->getAttribute()->isScopeGlobal()) {
             $tableName = $attributeCode . '_t';
 
             $collection->getSelect()->joinLeft(
                 [$tableName => $attributeTable],
-                "e.entity_id={$tableName}.entity_id" .
+                "e.{$linkField}={$tableName}.{$linkField}" .
                 " AND {$tableName}.attribute_id='{$attributeId}'" .
                 " AND {$tableName}.store_id='0'",
                 []
@@ -114,13 +117,13 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
 
             $collection->getSelect()->joinLeft(
                 [$valueTable1 => $attributeTable],
-                "e.entity_id={$valueTable1}.entity_id" .
+                "e.{$linkField}={$valueTable1}.{$linkField}" .
                 " AND {$valueTable1}.attribute_id='{$attributeId}'" .
                 " AND {$valueTable1}.store_id='0'",
                 []
             )->joinLeft(
                 [$valueTable2 => $attributeTable],
-                "e.entity_id={$valueTable2}.entity_id" .
+                "e.{$linkField}={$valueTable2}.{$linkField}" .
                 " AND {$valueTable2}.attribute_id='{$attributeId}'" .
                 " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
                 []

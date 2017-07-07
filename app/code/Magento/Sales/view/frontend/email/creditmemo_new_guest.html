@@ -1,10 +1,10 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Credit memo for your {{var store.getFrontendName()}} order @-->
+<!--@subject {{trans "Credit memo for your %store_name order" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var comment":"Credit Memo Comment",
@@ -34,7 +34,7 @@
     </tr>
     <tr class="email-summary">
         <td>
-            <h1>{{trans "Your Credit Memo #%creditmemo_id for Order #%order_id" creditmemo_id=$creditmemo.increment_id order_id=$order.incrh1ent_id}}</h1>
+            <h1>{{trans "Your Credit Memo #%creditmemo_id for Order #%order_id" creditmemo_id=$creditmemo.increment_id order_id=$order.increment_id}}</h1>
         </td>
     </tr>
     <tr class="email-information">

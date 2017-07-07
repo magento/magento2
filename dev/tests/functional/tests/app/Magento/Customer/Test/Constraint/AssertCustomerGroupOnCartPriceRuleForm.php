@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Tab\RuleInformation;
+use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\RuleInformation;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteNew;
 
@@ -32,10 +32,10 @@ class AssertCustomerGroupOnCartPriceRuleForm extends AbstractConstraint
     ) {
         $promoQuoteIndex->open();
         $promoQuoteIndex->getGridPageActions()->addNew();
-        $promoQuoteNew->getSalesRuleForm()->openTab('rule_information');
+        $promoQuoteNew->getSalesRuleForm()->openSection('rule_information');
 
         /** @var RuleInformation $ruleInformationTab */
-        $ruleInformationTab = $promoQuoteNew->getSalesRuleForm()->getTab('rule_information');
+        $ruleInformationTab = $promoQuoteNew->getSalesRuleForm()->getSection('rule_information');
         \PHPUnit_Framework_Assert::assertTrue(
             $ruleInformationTab->isVisibleCustomerGroup($customerGroup),
             "Customer group {$customerGroup->getCustomerGroupCode()} not in cart price rule page."

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
@@ -29,12 +29,12 @@ class ComplexTypeStrategyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_typeProcessor = $this->getMockBuilder(
-            'Magento\Framework\Reflection\TypeProcessor'
+            \Magento\Framework\Reflection\TypeProcessor::class
         )->setMethods(
             ['getTypeData']
         )->disableOriginalConstructor()->getMock();
         $this->_wsdl = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Wsdl'
+            \Magento\Webapi\Model\Soap\Wsdl::class
         )->setMethods(
             ['toDomDocument', 'getTypes', 'getSchema']
         )->disableOriginalConstructor()->getMock();
@@ -82,7 +82,7 @@ class ComplexTypeStrategyTest extends \PHPUnit_Framework_TestCase
 
         $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue(new \DOMDocument()));
 
-        $schemaMock = $this->getMock('DOMElement', [], ['a']);
+        $schemaMock = $this->getMock(\DOMElement::class, [], ['a']);
         $schemaMock->expects($this->any())->method('appendChild');
         $this->_wsdl->expects($this->any())->method('getSchema')->will($this->returnValue($schemaMock));
 
@@ -228,7 +228,7 @@ class ComplexTypeStrategyTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue(new \DOMDocument()));
-        $schemaMock = $this->getMock('DOMElement', [], ['a']);
+        $schemaMock = $this->getMock(\DOMElement::class, [], ['a']);
         $schemaMock->expects($this->any())->method('appendChild');
         $this->_wsdl->expects($this->any())->method('getSchema')->will($this->returnValue($schemaMock));
         $this->_typeProcessor->expects(

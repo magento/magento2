@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Helper;
@@ -14,7 +14,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_shell = $this->getMock('Magento\Framework\Shell', ['execute'], [], '', false);
+        $this->_shell = $this->getMock(\Magento\Framework\Shell::class, ['execute'], [], '', false);
     }
 
     public function testGetRealMemoryUsageUnix()

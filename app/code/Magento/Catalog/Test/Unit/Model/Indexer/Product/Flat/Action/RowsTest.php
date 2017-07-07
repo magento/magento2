@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,35 +57,36 @@ class RowsTest extends \PHPUnit_Framework_TestCase
      */
     protected $_flatTableBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $this->_connection = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->_resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->_connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->_resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->will($this->returnValue($this->_connection));
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->_store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
         $this->_storeManager->expects($this->any())->method('getStores')->will(
             $this->returnValue([$this->_store])
         );
         $this->_productIndexerHelper = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer', [], [], '', false
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class, [], [], '', false
         );
         $this->_flatItemEraser = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser', [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser::class, [], [], '', false
         );
         $this->_flatItemWriter = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer', [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer::class, [], [], '', false
         );
         $this->_flatTableBuilder = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder', [], [], '', false
+            \Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class, [], [], '', false
         );
 
-        $this->_model = $objectManager->getObject('Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows', [
+        $this->_model = $objectManager->getObject(
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows::class, [
             'resource' => $this->_resource,
             'storeManager' => $this->_storeManager,
             'productHelper' => $this->_productIndexerHelper,
@@ -94,6 +95,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             'flatTableBuilder' => $this->_flatTableBuilder
         ]);
     }
+
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Bad value was supplied.

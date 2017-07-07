@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Customer;
@@ -27,10 +27,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage(
-            $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory')
+            $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock(),
-            $this->getMockBuilder('Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory')
+            $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock(),
             $this->_getModelDependencies()
@@ -50,12 +50,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->setMethods(['from'])
             ->getMock();
         $select->expects($this->any())->method('from')->will($this->returnCallback([$this, 'validateFrom']));
-        $customerCollection = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $customerCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'removeAttributeToSelect', 'getResource', 'getSelect'])
             ->getMock();
@@ -66,7 +66,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $customerCollection->expects($this->once())->method('getSelect')->will($this->returnValue($select));
 
-        $byPagesIterator = $this->getMock('stdClass', ['iterate']);
+        $byPagesIterator = $this->getMock(\stdClass::class, ['iterate']);
         $byPagesIterator->expects($this->once())
             ->method('iterate')
             ->will($this->returnCallback([$this, 'iterate']));

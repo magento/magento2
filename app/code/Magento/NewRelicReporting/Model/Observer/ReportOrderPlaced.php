@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Observer;
@@ -25,23 +25,15 @@ class ReportOrderPlaced implements ObserverInterface
     protected $ordersFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @param Config $config
      * @param \Magento\NewRelicReporting\Model\OrdersFactory $ordersFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         Config $config,
-        \Magento\NewRelicReporting\Model\OrdersFactory $ordersFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\NewRelicReporting\Model\OrdersFactory $ordersFactory
     ) {
         $this->config = $config;
         $this->ordersFactory = $ordersFactory;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -65,7 +57,6 @@ class ReportOrderPlaced implements ObserverInterface
                 'total' => $order->getGrandTotal(),
                 'total_base' => $order->getBaseGrandTotal(),
                 'item_count' => $itemCount,
-                'updated_at' => $this->dateTime->formatDate(true)
             ];
 
             /** @var \Magento\NewRelicReporting\Model\Orders $orderModel */

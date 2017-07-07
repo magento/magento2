@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -397,7 +397,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const KEY_PRODUCT_OPTION = 'product_option';
 
-
     /**
      * Gets the additional data for the order item.
      *
@@ -457,21 +456,21 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the base discount tax compensation amount for the order item.
      *
-     * @return float Base discount tax compensation amount.
+     * @return float|null Base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base discount tax compensation invoiced for the order item.
      *
-     * @return float Base discount tax compensation invoiced.
+     * @return float|null Base discount tax compensation invoiced.
      */
     public function getBaseDiscountTaxCompensationInvoiced();
 
     /**
      * Gets the base discount tax compensation refunded for the order item.
      *
-     * @return float Base discount tax compensation refunded.
+     * @return float|null Base discount tax compensation refunded.
      */
     public function getBaseDiscountTaxCompensationRefunded();
 
@@ -738,28 +737,28 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the discount tax compensation amount for the order item.
      *
-     * @return float Discount tax compensation amount.
+     * @return float|null Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the discount tax compensation canceled for the order item.
      *
-     * @return float Discount tax compensation canceled.
+     * @return float|null Discount tax compensation canceled.
      */
     public function getDiscountTaxCompensationCanceled();
 
     /**
      * Gets the discount tax compensation invoiced for the order item.
      *
-     * @return float Discount tax compensation invoiced.
+     * @return float|null Discount tax compensation invoiced.
      */
     public function getDiscountTaxCompensationInvoiced();
 
     /**
      * Gets the discount tax compensation refunded for the order item.
      *
-     * @return float Discount tax compensation refunded.
+     * @return float|null Discount tax compensation refunded.
      */
     public function getDiscountTaxCompensationRefunded();
 

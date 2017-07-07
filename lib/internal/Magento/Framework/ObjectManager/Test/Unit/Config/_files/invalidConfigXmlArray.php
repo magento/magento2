@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -155,5 +155,86 @@ return [
             "Element 'argument': Duplicate key-sequence ['same_param_name'] in key identity-constraint"
                 . " 'argumentName'.\nLine: 6\n"
         ],
-    ]
+    ],
+    'sorted_object_list_with_invalid_sortOrder_attribute_value' => [
+        '<?xml version="1.0"?>
+        <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <type name="Some_Name">
+                <arguments>
+                    <argument name="sorted_object_list" xsi:type="array">
+                        <item name="someObject" xsi:type="object" sortOrder="false">Some_Class_Name</item>
+                    </argument>
+                </arguments>
+            </type>
+        </config>',
+        [
+            "Element 'item', attribute 'sortOrder': 'false' is not a valid value of the atomic type 'xs:integer'." .
+            "\nLine: 6\n"
+        ],
+    ],
+    'virtualtype with empty_name' => [
+        '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <virtualType name="" type="TypeName" shared="true"/>
+        </config>',
+        [
+            "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '' is not accepted by the pattern '" .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': '' is not a valid value of the atomic type 'phpClassName'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
+            "invalid or something strange happend." .
+            "\nLine: 2\n",
+        ],
+    ],
+    'virtualtype with empty_type' => [
+        '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <virtualType name="Name" type="" shared="true"/>
+        </config>',
+        [
+            "Element 'virtualType', attribute 'type': [facet 'pattern'] The value '' is not accepted by the pattern '" .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'type': '' is not a valid value of the atomic type 'phpClassName'." .
+            "\nLine: 2\n",
+        ],
+    ],
+    'virtualtype with invalid_type' => [
+        '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <virtualType name="777Digits\\IsNotAllowed" type="TypeName" shared="true"/>
+        </config>',
+        [
+            "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '777Digits\\IsNotAllowed' " .
+            "is not accepted by the pattern '" .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': '777Digits\\IsNotAllowed' " .
+            "is not a valid value of the atomic type 'phpClassName'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
+            "invalid or something strange happend." .
+            "\nLine: 2\n",
+        ],
+    ],
+    'virtualtype with digits_and_prefix_slash' => [
+        '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <virtualType name="\\777Digits\\IsNotAllowed" type="TypeName" shared="true"/>
+        </config>',
+        [
+            "Element 'virtualType', attribute 'name': [facet 'pattern'] The value '\\777Digits\\IsNotAllowed' " .
+            "is not accepted by the pattern '" .
+            "(\\\\?[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)" .
+            "(\\\\[a-zA-Z_\x7f-\xc3\xbf][a-zA-Z0-9_\x7f-\xc3\xbf]*)*'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': '\\777Digits\\IsNotAllowed' " .
+            "is not a valid value of the atomic type 'phpClassName'." .
+            "\nLine: 2\n",
+            "Element 'virtualType', attribute 'name': Warning: No precomputed value available, the value was either " .
+            "invalid or something strange happend." .
+            "\nLine: 2\n",
+        ],
+    ],
 ];

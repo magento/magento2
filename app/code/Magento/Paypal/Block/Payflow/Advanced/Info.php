@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Payflow Advanced infoblock
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Paypal\Block\Payflow\Advanced;
 
+/**
+ * @deprecated This class should not be used because parent class can handle client calls.
+ *             Class was not removed for backward compatibility.
+ * @see \Magento\Paypal\Block\Payment\Info
+ */
 class Info extends \Magento\Paypal\Block\Payflow\Link\Info
 {
+
 }

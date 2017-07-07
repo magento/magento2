@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -68,32 +68,36 @@
     right: 0;
     top: 0;
     z-index: 999;
+
     & *,
     &:after,
     &:before {
         box-sizing: inherit;
     }
+
     &.ngdialog-disabled-animation * {
         -webkit-animation: none !important;
         animation: none !important;
     }
+
     &.ngdialog-closing {
         .ngdialog-overlay {
-            -webkit-backface-visibility: hidden;
             -webkit-animation: ngdialog-fadeout .5s;
+            -webkit-backface-visibility: hidden;
             animation: ngdialog-fadeout .5s;
         }
+
         .ngdialog-content {
-             -webkit-backface-visibility: hidden;
-             -webkit-animation: ngdialog-fadeout .5s;
-             animation: ngdialog-fadeout .5s;
+            -webkit-animation: ngdialog-fadeout .5s;
+            -webkit-backface-visibility: hidden;
+            animation: ngdialog-fadeout .5s;
         }
     }
 }
 
 .ngdialog-overlay {
-    -webkit-backface-visibility: hidden;
     -webkit-animation: ngdialog-fadein .5s;
+    -webkit-backface-visibility: hidden;
     animation: ngdialog-fadein .5s;
     background: rgba(0, 0, 0, .4);
     bottom: 0;
@@ -104,8 +108,8 @@
 }
 
 .ngdialog-content {
-    -webkit-backface-visibility: hidden;
     -webkit-animation: ngdialog-fadein .5s;
+    -webkit-backface-visibility: hidden;
     animation: ngdialog-fadein .5s;
 }
 

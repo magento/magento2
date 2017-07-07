@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,29 +9,29 @@
     <system>
         <section id="system">
             <group id="cron" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Cron (Scheduled Tasks) - all the times are in minutes</label>
-                <comment>For correct URLs generated during cron runs please make sure that Web &gt; Secure and Unsecure Base URLs are explicitly set.</comment>
+                <label>Cron (Scheduled Tasks)</label>
+                <comment>For correct URLs generated during cron runs please make sure that Web &gt; Secure and Unsecure Base URLs are explicitly set. All the times are in minutes.</comment>
                 <group id="template" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Cron configuration options for group: </label>
-                    <field id="schedule_generate_every" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="schedule_generate_every" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Generate Schedules Every</label>
                     </field>
-                    <field id="schedule_ahead_for" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="schedule_ahead_for" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Schedule Ahead for</label>
                     </field>
-                    <field id="schedule_lifetime" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="schedule_lifetime" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Missed if Not Run Within</label>
                     </field>
-                    <field id="history_cleanup_every" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="history_cleanup_every" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>History Cleanup Every</label>
                     </field>
-                    <field id="history_success_lifetime" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="history_success_lifetime" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Success History Lifetime</label>
                     </field>
-                    <field id="history_failure_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="history_failure_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Failure History Lifetime</label>
                     </field>
-                    <field id="use_separate_process" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="use_separate_process" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Use Separate Process</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>

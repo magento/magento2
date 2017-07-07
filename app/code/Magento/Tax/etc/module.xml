@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,6 +9,7 @@
     <module name="Magento_Tax" setup_version="2.0.1">
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Checkout"/>
             <module name="Magento_Customer"/>
             <module name="Magento_User"/>
         </sequence>

@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Test class for \Magento\User\Model\ResourceModel\User testing
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +20,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\User\Model\User|\PHPUnit_framework_MockObject_MockObject */
     protected $userMock;
-
-    /** @var \Magento\Framework\Acl\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $aclCacheMock;
 
     /** @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
@@ -41,57 +42,61 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
     protected $roleMock;
 
+    /**
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $aclDataCacheMock;
+
     protected function setUp()
     {
-        $this->userMock = $this->getMockBuilder('Magento\User\Model\User')
+        $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->aclCacheMock = $this->getMockBuilder('Magento\Framework\Acl\CacheInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->roleFactoryMock = $this->getMockBuilder('Magento\Authorization\Model\RoleFactory')
+        $this->roleFactoryMock = $this->getMockBuilder(\Magento\Authorization\Model\RoleFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->roleMock = $this->getMockBuilder('Magento\Authorization\Model\Role')
+        $this->roleMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-
-        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
+        $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->dbAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->dbAdapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->aclDataCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\User\Model\ResourceModel\User',
+            \Magento\User\Model\ResourceModel\User::class,
             [
                 'resource' => $this->resourceMock,
-                'aclCache' => $this->aclCacheMock,
                 'roleFactory' => $this->roleFactoryMock,
-                'dateTime' => $this->dateTimeMock
+                'dateTime' => $this->dateTimeMock,
+                'aclDataCache' => $this->aclDataCacheMock,
             ]
         );
     }
@@ -112,7 +117,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update');
 
-        $this->assertInstanceOf('Magento\User\Model\ResourceModel\User', $this->model->recordLogin($this->userMock));
+        $this->assertInstanceOf(
+            \Magento\User\Model\ResourceModel\User::class,
+            $this->model->recordLogin($this->userMock)
+        );
     }
 
     public function testLoadByUsername()
@@ -126,7 +134,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($returnData, $this->model->loadByUsername('user1'));
     }
-
 
     public function testHasAssigned2Role()
     {
@@ -144,7 +151,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testHasAssigned2RolePassAnObject()
     {
-        $methodUserMock = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+        $methodUserMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUserId'])
             ->getMock();
@@ -193,7 +200,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('from')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturn($this->selectMock);
-        $this->selectMock->expects($this->once())->method('where')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn([1, 2, 3]);
         $this->assertEquals([1, 2, 3], $this->model->getRoles($this->userMock));
     }
@@ -206,7 +213,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('from')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturn($this->selectMock);
-        $this->selectMock->expects($this->once())->method('where')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn(false);
         $this->assertEquals([], $this->model->getRoles($this->userMock));
     }
@@ -215,7 +222,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->resourceMock->expects($this->never())->method('getConnection');
         $this->assertInstanceOf(
-            'Magento\User\Model\ResourceModel\User',
+            \Magento\User\Model\ResourceModel\User::class,
             $this->model->saveExtra($this->userMock, [1, 2, 3])
         );
     }
@@ -227,7 +234,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update');
         $this->assertInstanceOf(
-            'Magento\User\Model\ResourceModel\User',
+            \Magento\User\Model\ResourceModel\User::class,
             $this->model->saveExtra($this->userMock, [1, 2, 3])
         );
     }
@@ -315,7 +322,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteFromRole()
     {
-        $methodUserMock = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+        $methodUserMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUserId', 'getRoleId'])
             ->getMock();
@@ -327,14 +334,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->dbAdapterMock->expects($this->once())->method('delete');
 
         $this->assertInstanceOf(
-            '\Magento\User\Model\ResourceModel\User',
+            \Magento\User\Model\ResourceModel\User::class,
             $this->model->deleteFromRole($methodUserMock)
         );
     }
 
     public function testRoleUserExists()
     {
-        $methodUserMock = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+        $methodUserMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUserId', 'getRoleId'])
             ->getMock();
@@ -390,39 +397,110 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testInitUniqueFields()
     {
         $this->assertInstanceOf(
-            '\Magento\User\Model\ResourceModel\User',
+            \Magento\User\Model\ResourceModel\User::class,
             $this->invokeMethod($this->model, '_initUniqueFields', [])
-        );
-    }
-
-    public function testBeforeSave()
-    {
-        $this->userMock->expects($this->once())->method('isObjectNew')->willReturn(true);
-
-        $this->assertInstanceOf(
-            '\Magento\User\Model\ResourceModel\User',
-            $this->invokeMethod($this->model, '_beforeSave', [$this->userMock])
         );
     }
 
     public function testAfterSave()
     {
         $roleId = 123;
-        $methodUserMock = $this->getMockBuilder('\Magento\User\Model\User')
+        $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasRoleId', 'getRoleId'])
+            ->setMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
             ->getMock();
         $methodUserMock->expects($this->once())->method('hasRoleId')->willReturn(true);
         $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
+        $extraData = ['user', 'extra', 'data'];
+
+        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with(json_encode($extraData))
+            ->will($this->returnValue($extraData));
+
+        $methodUserMock->expects($this->once())
+            ->method('getExtra')
+            ->will($this->returnValue(json_encode($extraData)));
+
+        $methodUserMock->expects($this->once())
+            ->method('setExtra')
+            ->with($extraData);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
+
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($this->roleMock);
         $this->roleMock->expects($this->once())->method('load')->willReturn($this->roleMock);
         $this->roleMock->expects($this->atLeastOnce())->method('getId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('describeTable')->willReturn([1, 2, 3]);
+        $this->aclDataCacheMock->expects($this->once())->method('clean');
+        $this->assertInstanceOf(
+            \Magento\User\Model\ResourceModel\User::class,
+            $this->invokeMethod($this->model, '_afterSave', [$methodUserMock])
+        );
+    }
+
+    public function testAfterLoad()
+    {
+        $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getExtra', 'setExtra'])
+            ->getMock();
+        $extraData = ['user', 'extra', 'data'];
+
+        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with(json_encode($extraData))
+            ->will($this->returnValue($extraData));
+
+        $methodUserMock->expects($this->exactly(2))
+            ->method('getExtra')
+            ->will($this->returnValue(json_encode($extraData)));
+
+        $methodUserMock->expects($this->once())
+            ->method('setExtra')
+            ->with($extraData);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
 
         $this->assertInstanceOf(
-            '\Magento\User\Model\ResourceModel\User',
-            $this->invokeMethod($this->model, '_afterSave', [$methodUserMock])
+            \Magento\User\Model\ResourceModel\User::class,
+            $this->invokeMethod($this->model, '_afterLoad', [$methodUserMock])
+        );
+    }
+
+    public function testAfterLoadNoExtra()
+    {
+        $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getExtra', 'setExtra'])
+            ->getMock();
+        $extraData = null;
+
+        $serializerMock = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
+        $serializerMock->expects($this->never())
+            ->method('unserialize');
+
+        $methodUserMock->expects($this->exactly(1))
+            ->method('getExtra')
+            ->will($this->returnValue($extraData));
+
+        $methodUserMock->expects($this->never())
+            ->method('setExtra');
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $serializerMock);
+
+        $this->assertInstanceOf(
+            \Magento\User\Model\ResourceModel\User::class,
+            $this->invokeMethod($this->model, '_afterLoad', [$methodUserMock])
         );
     }
 

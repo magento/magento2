@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CheckoutOnepage" mca="checkout" module="Magento_Checkout">
+        <block name="authenticationPopupBlock" class="Magento\Customer\Test\Block\Account\AuthenticationPopup" locator=".block-authentication" strategy="css selector" />
+        <block name="authenticationWrapperBlock" class="Magento\Customer\Test\Block\Account\AuthenticationWrapper" locator="[data-block='authentication']" strategy="css selector" />
         <block name="loginBlock" class="Magento\Checkout\Test\Block\Onepage\Login" locator="[data-role='email-with-possible-login']" strategy="css selector" />
+        <block name="linksBlock" class="Magento\Theme\Test\Block\Links" locator=".header .links" strategy="css selector" />
         <block name="shippingBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping" locator="#checkout-step-shipping" strategy="css selector" />
+        <block name="shippingAddressPopupBlock" class="Magento\Checkout\Test\Block\Onepage\ShippingPopup" locator="#opc-new-shipping-address" strategy="css selector" />
         <block name="shippingMethodBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping\Method" locator="#checkout-step-shipping_method" strategy="css selector" />
         <block name="paymentBlock" class="Magento\Checkout\Test\Block\Onepage\Payment" locator="#checkout-step-payment" strategy="css selector" />
+        <block name="paymentBlock">
+            <render name="default" class="Magento\Payment\Test\Block\Form\PaymentCc" />
+        </block>
+        <block name="discountCodesBlock" class="Magento\Checkout\Test\Block\Onepage\Payment\DiscountCodes" locator=".discount-code" strategy="css selector" />
         <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator=".opc-block-summary" strategy="css selector" />
-        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator=".page.messages" strategy="css selector" />
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="//*[@id='checkout']//div[@data-role='checkout-messages' and .//div]" strategy="xpath" />
+        <block name="customAddressBlock" class="Magento\Checkout\Test\Block\Onepage\CustomAddress" locator=".checkout-billing-address" strategy="css selector" />
     </page>
 </config>

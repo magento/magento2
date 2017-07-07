@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,20 +20,20 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\View\File\Factory($this->_objectManager);
     }
 
     public function testCreate()
     {
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $file = new \Magento\Framework\View\File(__FILE__, 'Fixture_Module', $theme);
         $isBase = true;
         $this->_objectManager
             ->expects($this->once())
             ->method('create')
             ->with(
-                'Magento\Framework\View\File',
+                \Magento\Framework\View\File::class,
                 $this->identicalTo([
                     'filename' => __FILE__,
                     'module' => 'Fixture_Module',

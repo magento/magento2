@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element;
@@ -16,7 +16,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $formKeyMock = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey')
+        $formKeyMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey::class)
             ->setMethods(['getFormKey'])->disableOriginalConstructor()->getMock();
 
         $formKeyMock->expects($this->any())
@@ -24,7 +24,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('form_key'));
 
         $this->formKeyElement = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\FormKey',
+            \Magento\Framework\View\Element\FormKey::class,
             ['formKey' => $formKeyMock]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test;
@@ -17,8 +17,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $shell = $this->getMock('\Magento\Framework\Shell', [], [], '', false);
-        $autoloadWrapper = $this->getMockBuilder('Magento\Framework\Autoload\ClassLoaderWrapper')
+        $shell = $this->getMock(\Magento\Framework\Shell::class, [], [], '', false);
+        $autoloadWrapper = $this->getMockBuilder(\Magento\Framework\Autoload\ClassLoaderWrapper::class)
             ->disableOriginalConstructor()->getMock();
         $tempDir = '/temp/dir';
         $appMode = \Magento\Framework\App\State::MODE_DEVELOPER;

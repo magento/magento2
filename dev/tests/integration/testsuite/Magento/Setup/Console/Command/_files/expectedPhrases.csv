@@ -17,3 +17,4 @@
 "string with placeholder in single quotes '%1'","string with placeholder in single quotes '%1'"
 "string with escaped ""double quotes""","string with escaped ""double quotes"""
 "string with placeholder in escaped double quotes ""%1""","string with placeholder in escaped double quotes ""%1"""
+"string that's got an unclosed single quote in it","string that's got an unclosed single quote in it"

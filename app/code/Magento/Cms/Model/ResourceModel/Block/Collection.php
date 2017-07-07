@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\ResourceModel\Block;
 
+use Magento\Cms\Api\Data\BlockInterface;
 use \Magento\Cms\Model\ResourceModel\AbstractCollection;
 
 /**
@@ -24,7 +25,9 @@ class Collection extends AbstractCollection
      */
     protected function _afterLoad()
     {
-        $this->performAfterLoad('cms_block_store', 'block_id');
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+
+        $this->performAfterLoad('cms_block_store', $entityMetadata->getLinkField());
 
         return parent::_afterLoad();
     }
@@ -36,8 +39,9 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Block', 'Magento\Cms\Model\ResourceModel\Block');
+        $this->_init(\Magento\Cms\Model\Block::class, \Magento\Cms\Model\ResourceModel\Block::class);
         $this->_map['fields']['store'] = 'store_table.store_id';
+        $this->_map['fields']['block_id'] = 'main_table.block_id';
     }
 
     /**
@@ -71,6 +75,7 @@ class Collection extends AbstractCollection
      */
     protected function _renderFiltersBefore()
     {
-        $this->joinStoreRelationTable('cms_block_store', 'block_id');
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        $this->joinStoreRelationTable('cms_block_store', $entityMetadata->getLinkField());
     }
 }

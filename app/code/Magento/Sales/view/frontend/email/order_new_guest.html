@@ -1,20 +1,21 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject Your {{var store.getFrontendName()}} order confirmation @-->
+<!--@subject {{trans "Your %store_name order confirmation" store_name=$store.getFrontendName()}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var order.getEmailCustomerNote()":"Email Order Note",
 "var order.getBillingAddress().getName()":"Guest Customer Name",
-"var order.getCreatedAtFormatted(1)":"Order Created At (datetime)",
+"var order.getCreatedAtFormatted(2)":"Order Created At (datetime)",
 "var order.increment_id":"Order Id",
 "layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.getShippingDescription()":"Shipping Description"
+"var order.getShippingDescription()":"Shipping Description",
+"var shipping_msg":"Shipping message"
 } @-->
 {{template config_path="design/email/header_template"}}
 
@@ -35,7 +36,7 @@
     <tr class="email-summary">
         <td>
             <h1>{{trans 'Your Order <span class="no-link">#%increment_id</span>' increment_id=$order.increment_id |raw}}</h1>
-            <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$order.getCreatedAtFormatted(1) |raw}}</p>
+            <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$order.getCreatedAtFormatted(2) |raw}}</p>
         </td>
     </tr>
     <tr class="email-information">
@@ -71,6 +72,9 @@
                     <td class="method-info">
                         <h3>{{trans "Shipping Method"}}</h3>
                         <p>{{var order.getShippingDescription()}}</p>
+                        {{if shipping_msg}}
+                        <p>{{var shipping_msg}}</p>
+                        {{/if}}
                     </td>
                     {{/depend}}
                 </tr>

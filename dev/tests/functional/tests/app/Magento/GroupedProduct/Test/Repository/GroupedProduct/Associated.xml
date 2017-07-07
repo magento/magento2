@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -25,6 +25,20 @@
             <field name="products" xsi:type="array">
                 <item name="0" xsi:type="string">catalogProductSimple::default</item>
                 <item name="1" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+            </field>
+        </dataset>
+
+        <dataset name="one_simple_product">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
             </field>
         </dataset>
 
@@ -67,6 +81,27 @@
             <field name="products" xsi:type="array">
                 <item name="0" xsi:type="string">catalogProductSimple::withSpecialPrice</item>
                 <item name="1" xsi:type="string">catalogProductSimple::withSpecialPrice</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_product_with_special_price">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::with_special_price_from_to_dates</item>
+                <item name="1" xsi:type="string">catalogProductSimple::with_special_price_from_to_dates</item>
             </field>
         </dataset>
 
@@ -116,6 +151,34 @@
                 <item name="0" xsi:type="string">catalogProductSimple::default</item>
                 <item name="1" xsi:type="string">catalogProductSimple::product_40_dollar</item>
                 <item name="2" xsi:type="string">catalogProductSimple::product_100_dollar</item>
+            </field>
+        </dataset>
+
+        <dataset name="three_simple_products_buy_all">
+            <field name="assigned_products" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">3</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="id" xsi:type="string">%id%</item>
+                    <item name="name" xsi:type="string">%item1_simple::getProductName%</item>
+                    <item name="position" xsi:type="string">%position%</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+            </field>
+            <field name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default_qty_3</item>
+                <item name="1" xsi:type="string">catalogProductSimple::default_qty_1</item>
+                <item name="2" xsi:type="string">catalogProductSimple::default_qty_2</item>
             </field>
         </dataset>
 

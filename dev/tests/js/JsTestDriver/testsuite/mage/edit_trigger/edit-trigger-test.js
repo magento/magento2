@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 EditTriggerTest = TestCase('EditTriggerTest');
@@ -69,17 +69,17 @@ EditTriggerTest.prototype.testDestroy = function() {
     var editTrigger = jQuery('body').editTrigger(),
         editProcessed = false,
         mousemoveProcessed = false;
-    
+
     $('body')
         .on('edit.editTrigger', function() {editProcessed = true;})
         .on('mousemove.editTrigger', function() {mousemoveProcessed = true;});
-    
-    editTrigger.editTrigger('destroy');    
+
+    editTrigger.editTrigger('destroy');
     assertEquals(false, !!editTrigger.data('mageEditTrigger'));
 
     $('body').trigger('edit.editTrigger');
     assertEquals(false, editProcessed);
-    
+
     $('body').trigger('mousemove.editTrigger');
     assertEquals(false, mousemoveProcessed);
 };

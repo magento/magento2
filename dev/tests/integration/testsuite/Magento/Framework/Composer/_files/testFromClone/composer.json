@@ -8,7 +8,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "php": "~5.5.22|~5.6.0|~7.0.0",
         "zendframework/zend-stdlib": "2.4.0",
         "zendframework/zend-code": "2.4.0",
         "zendframework/zend-server": "2.4.0",
@@ -34,7 +34,7 @@
         "composer/composer": "1.0.0-alpha9",
         "monolog/monolog": "1.11.0",
         "oyejorge/less.php": "1.7.0.3",
-        "tubalmartin/cssmin": "2.4.8-p4",
+        "tubalmartin/cssmin": "2.4.8-p6",
         "magento/magento-composer-installer": "*",
         "phpseclib/phpseclib": "~0.3",
         "symfony/console": "~2.3",

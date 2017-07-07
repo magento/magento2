@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib;
@@ -8,6 +8,7 @@ namespace Magento\Framework\Stdlib;
 /**
  * Class ArrayUtils
  *
+ * @api
  */
 class ArrayUtils
 {
@@ -122,5 +123,85 @@ class ArrayUtils
         if ($isSkipped && $element instanceof \Magento\Framework\DataObject) {
             $element->setData($key, $value);
         }
+    }
+
+    /**
+     * Expands multidimensional array into flat structure.
+     *
+     * Example:
+     *
+     * ```php
+     *  [
+     *      'default' => [
+     *          'web' => 2
+     *      ]
+     *  ]
+     * ```
+     *
+     * Expands to:
+     *
+     * ```php
+     *  [
+     *      'default/web' => 2,
+     *  ]
+     * ```
+     *
+     * @param array $data The data to be flatten
+     * @param string $path The leading path
+     * @param string $separator The path parts separator
+     * @return array
+     */
+    public function flatten(array $data, $path = '', $separator = '/')
+    {
+        $result = [];
+        $path = $path ? $path . $separator : '';
+
+        foreach ($data as $key => $value) {
+            $fullPath = $path . $key;
+
+            if (!is_array($value)) {
+                $result[$fullPath] = $value;
+
+                continue;
+            }
+
+            $result = array_merge(
+                $result,
+                $this->flatten($value, $fullPath, $separator)
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Search for array differences recursively.
+     *
+     * @param array $originalArray The array to compare from
+     * @param array $newArray The array to compare with
+     * @return array Diff array
+     */
+    public function recursiveDiff(array $originalArray, array $newArray)
+    {
+        $diff = [];
+
+        foreach ($originalArray as $key => $value) {
+            if (array_key_exists($key, $newArray)) {
+                if (is_array($value)) {
+                    $valueDiff = $this->recursiveDiff($value, $newArray[$key]);
+                    if (count($valueDiff)) {
+                        $diff[$key] = $valueDiff;
+                    }
+                } else {
+                    if ($value != $newArray[$key]) {
+                        $diff[$key] = $value;
+                    }
+                }
+            } else {
+                $diff[$key] = $value;
+            }
+        }
+
+        return $diff;
     }
 }

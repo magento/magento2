@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Helper;
@@ -17,7 +17,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Developer\Helper\Data'
+            \Magento\Developer\Helper\Data::class
         );
     }
 
@@ -38,7 +38,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\TestFramework\Request $request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setServer(new Parameters(['REMOTE_ADDR' => '192.168.0.1']));
 
         $this->assertTrue($this->helper->isDevAllowed());
@@ -53,7 +53,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\TestFramework\Request $request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setServer(new Parameters(['REMOTE_ADDR' => '192.168.0.3']));
 
         $this->assertFalse($this->helper->isDevAllowed());

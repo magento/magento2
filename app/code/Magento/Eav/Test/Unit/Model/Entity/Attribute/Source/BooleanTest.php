@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
+use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class BooleanTest extends \PHPUnit_Framework_TestCase
@@ -17,16 +18,16 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject('Magento\Eav\Model\Entity\Attribute\Source\Boolean');
+        $this->_model = $objectManager->getObject(\Magento\Eav\Model\Entity\Attribute\Source\Boolean::class);
     }
 
     public function testGetFlatColumns()
     {
         $abstractAttributeMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getAttributeCode', '__wakeup'],
             [],
             '',
@@ -67,7 +68,14 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
         $attributeMock = $this->getAttributeMock();
         $attributeMock->expects($this->any())->method('isScopeGlobal')->will($this->returnValue($isScopeGlobal));
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $entity = $this->getMockBuilder(AbstractEntity::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLinkField'])
+            ->getMockForAbstractClass();
+        $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
+        $attributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
+
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
 
         $collectionMock = $this->getCollectionMock();
         $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($selectMock));
@@ -157,10 +165,10 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     {
         $collectionMethods = ['getSelect', 'getStoreId', 'getConnection'];
         $collectionMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\Collection\AbstractCollection', $collectionMethods, [], '', false
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class, $collectionMethods, [], '', false
         );
 
-        $connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\Pdo\Mysql', ['method'], [], '', false);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['method'], [], '', false);
 
         $collectionMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $collectionMock->expects($this->any())->method('getStoreId')->will($this->returnValue('12'));
@@ -173,11 +181,21 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
      */
     protected function getAttributeMock()
     {
-        $attributeMockMethods = ['getAttributeCode', 'getId', 'getBackend', 'isScopeGlobal', '__wakeup'];
+        $attributeMockMethods = ['getAttributeCode', 'getId', 'getBackend', 'isScopeGlobal', '__wakeup' , 'getEntity'];
         $attributeMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute', $attributeMockMethods, [], '', false
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            $attributeMockMethods,
+            [],
+            '',
+            false
         );
-        $backendMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend', [], [], '', false);
+        $backendMock = $this->getMock(
+            \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
         $attributeMock->expects($this->any())->method('getId')->will($this->returnValue('123'));

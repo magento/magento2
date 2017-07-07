@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Store\Model\Store\StoresConfig
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,10 +37,10 @@ class StoresConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeOne = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->_storeTwo = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->_config = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_storeOne = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->_storeTwo = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_config = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_model = new \Magento\Store\Model\StoresConfig(
             $this->_storeManager,

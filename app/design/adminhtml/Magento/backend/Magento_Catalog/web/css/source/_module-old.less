@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -11,6 +11,7 @@
 .category-content {
     .ui-tabs-panel .fieldset {
         padding-top: 40px;
+
         .legend {
             display: none;
         }
@@ -28,15 +29,18 @@
             .addon {
                 display: block;
                 position: relative;
+
                 input[type="text"] {
                     border-width: 1px;
                 }
+
                 .addafter {
                     display: block;
                     border: 0;
                     height: auto;
                     width: auto;
                 }
+
                 input:focus ~ .addafter {
                     box-shadow: none;
                 }
@@ -52,10 +56,19 @@
         background: #fff;
         display: block;
         margin-top: 5px;
+
         .label {
             float: none;
             padding: 0;
             width: auto;
+        }
+    }
+
+    .field-price  {
+        label {
+            &.mage-error {
+                position: static;
+            }
         }
     }
 
@@ -65,17 +78,100 @@
     .field-msrp,
     .field-cost,
     .field-gift_wrapping_price {
-        .control {
-            .addon > input {
-                padding-left: 23px;
-            }
-            .addafter {
-                > strong {
-                    left: 5px;
-                    position: absolute;
-                    top: 3px;
+        &:not(.field-weight) {
+            .addon {
+                .lib-vendor-prefix-display(inline-flex);
+                .lib-vendor-prefix-flex-direction(row);
+                color: #303030;
+                display: inline-flex;
+                flex-flow: row nowrap;
+                margin: 0 0 35px;
+                position: relative;
+                width: 100%;
+                z-index: 1;
+
+                &._update-attributes-disabled {
+                    background: #f4f4f4;
+                    border-color: #d6d6d6;
+
+                    .addafter {
+                        strong {
+                            opacity: .5;
+                        }
+                    }
+                }
+
+                input[type="text"] {
+                    border: solid #adadad;
+                    border-width: 1px 1px 1px 0;
+
+                    &[disabled] {
+                        + .addafter {
+                            border-color: #d0d0d0;
+                        }
+
+                        &.mage-error {
+                            + .addafter {
+                                border-color: #eb8d8d !important;
+                            }
+                        }
+                    }
+                }
+
+                .addafter {
+                    border: solid #adadad;
+                    border-width: 1px 0 1px 1px;
                 }
             }
+        }
+
+        ._update-attributes-disabled {
+            .admin__control-text {
+                background: none;
+            }
+        }
+
+        .admin__control-text {
+            .lib-css(appearance, none, 1);
+            .lib-vendor-prefix-flex-basis(auto);
+            .lib-vendor-prefix-flex-grow(1);
+            .lib-vendor-prefix-flex-shrink(1);
+            background: none;
+            border: 0;
+        }
+
+        .control {
+            .admin__control-text {
+                &[disabled] {
+                    background: none;
+                }
+            }
+        }
+
+        .addafter {
+            .lib-vendor-prefix-flex-basis(auto);
+            .lib-vendor-prefix-flex-grow(0);
+            .lib-vendor-prefix-flex-shrink(0);
+            .lib-vendor-prefix-order(0);
+            position: relative;
+            z-index: 0;
+
+            strong {
+                padding-top: 4px;
+                position: relative;
+                vertical-align: top;
+                z-index: 1;
+
+                + strong {
+                    padding-left: 0;
+                }
+            }
+        }
+
+        .attribute-change-checkbox {
+            left: 0;
+            position: absolute;
+            top: 35px;
         }
     }
 
@@ -105,6 +201,7 @@
         .fields-group-2 {
             .control {
                 padding-right: 27px;
+
                 .addafter + .addafter {
                     border-width: 1px 1px 1px 0;
                     border-style: solid;
@@ -113,9 +210,11 @@
                     position: absolute;
                     top: 0;
                 }
+
                 .addafter strong {
                     line-height: 31px;
                 }
+
                 > input:focus + .addafter + .addafter {
                     border-color: #007bdb;
                 }
@@ -134,6 +233,7 @@
     .field.choice {
         display: block;
         margin: 3px 0 0;
+
         .label {
             padding-top: 1px;
         }

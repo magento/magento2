@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -35,6 +35,12 @@ define([
             enableExpress:  '[data-enable="express"]',
 
             /**
+             * An attribute of the element responsible for the activation of the
+             * PayPal Express In-Context Checkout Experience (data attribute)
+             */
+            enableInContextPayPal: '[data-enable="in-context-api"]',
+
+            /**
              * An attribute of the element responsible for the activation of the Payflow Bml (data attribute)
              */
             enableBml:      '[data-enable="bml"]',
@@ -43,6 +49,21 @@ define([
              * An attribute of the element responsible for the activation of the PayPal Bml (data attribute)
              */
             enableBmlPayPal:      '[data-enable="bml-api"]',
+
+            /**
+             * An attribute of the element responsible for the visibility of the PayPal Merchant Id (data attribute)
+             */
+            dependsMerchantId:  '[data-enable="merchant-id"]',
+
+            /**
+             * An attribute of the element responsible for the visibility of the Payflow Bml Sort Order (data attribute)
+             */
+            dependsBmlSortOrder:    '[data-enable="bml-sort-order"]',
+
+            /**
+             * An attribute of the element responsible for the visibility of the PayPal Bml Sort Order (data attribute)
+             */
+            dependsBmlApiSortOrder:    '[data-enable="bml-api-sort-order"]',
 
             /**
              * Templates element selectors
@@ -148,8 +169,12 @@ define([
                                 buttonConfiguration: this.buttonConfiguration,
                                 enableButton: this.enableButton,
                                 enableExpress: this.enableExpress,
+                                enableInContextPayPal: this.enableInContextPayPal,
                                 enableBml: this.enableBml,
                                 enableBmlPayPal: this.enableBmlPayPal,
+                                dependsMerchantId: this.dependsMerchantId,
+                                dependsBmlSortOrder: this.dependsBmlSortOrder,
+                                dependsBmlApiSortOrder: this.dependsBmlApiSortOrder,
                                 solutionsElements: this.solutionsElements,
                                 argument: instance.argument
                             }

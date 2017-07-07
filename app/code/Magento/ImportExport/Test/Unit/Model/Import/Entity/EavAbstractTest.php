@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,35 +63,35 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
         parent::setUp();
 
         $this->_string = new \Magento\Framework\Stdlib\StringUtils();
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_importFactory = $this->getMock(
-            'Magento\ImportExport\Model\ImportFactory',
+            \Magento\ImportExport\Model\ImportFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->_resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->_resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\ResourceModel\Helper',
+            \Magento\ImportExport\Model\ResourceModel\Helper::class,
             [],
             [],
             '',
             false
         );
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->_collectionFactory = $this->getMock(
-            'Magento\ImportExport\Model\Export\Factory',
+            \Magento\ImportExport\Model\Export\Factory::class,
             [],
             [],
             '',
             false
         );
-        $this->_eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->_eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\Entity\AbstractEav',
+            \Magento\ImportExport\Model\Import\Entity\AbstractEav::class,
             [
                 $this->_string,
                 $scopeConfig,

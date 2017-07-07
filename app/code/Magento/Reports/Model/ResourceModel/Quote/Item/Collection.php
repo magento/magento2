@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\ResourceConnection;
  * Collection of Magento\Quote\Model\Quote\Item
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -86,9 +87,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Quote\Item', 'Magento\Quote\Model\ResourceModel\Quote\Item');
+        $this->_init(\Magento\Quote\Model\Quote\Item::class, \Magento\Quote\Model\ResourceModel\Quote\Item::class);
     }
-
 
     /**
      * Prepare select query for products in carts report
@@ -177,23 +177,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $productAttrPrice = $this->productResource->getAttribute('price');
         $productAttrPriceId = (int)$productAttrPrice->getAttributeId();
 
+        $linkField = $this->productResource->getEntity()->getLinkField();
         $select = clone $this->productResource->getSelect();
         $select->reset();
         $select->from(
-            ['main_table' => $this->getTable('catalog_product_entity')]
+            ['main_table' => $this->getTable('catalog_product_entity')],
+            ['main_table.entity_id', 'main_table.*']
         )->useStraightJoin(
             true
         )->joinInner(
             ['product_name' => $productAttrName->getBackend()->getTable()],
-            'product_name.entity_id = main_table.entity_id'
+            "product_name.{$linkField} = main_table.{$linkField}"
             . ' AND product_name.attribute_id = ' . $productAttrNameId
             . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             ['name' => 'product_name.value']
         )->joinInner(
             ['product_price' => $productAttrPrice->getBackend()->getTable()],
-            "product_price.entity_id = main_table.entity_id AND product_price.attribute_id = {$productAttrPriceId}",
+            "product_price.{$linkField} = main_table.{$linkField}"
+            ." AND product_price.attribute_id = {$productAttrPriceId}",
             ['price' => new \Zend_Db_Expr('product_price.value')]
-        )->where('main_table.entity_id IN (?)', $productIds);
+        )->where("main_table.entity_id IN (?)", $productIds);
 
         $productData = $productConnection->fetchAssoc($select);
         return $productData;

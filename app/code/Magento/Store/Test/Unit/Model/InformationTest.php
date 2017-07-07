@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,7 +58,7 @@ class InformationTest extends \PHPUnit_Framework_TestCase
             Information::XML_PATH_STORE_INFO_VAT_NUMBER => '123456789',
         ];
 
-        $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $this->store->expects($this->any())
             ->method('getConfig')
@@ -66,7 +66,7 @@ class InformationTest extends \PHPUnit_Framework_TestCase
                 return isset($mockData[$path]) ? $mockData[$path] : null;
             });
 
-        $this->renderer = $this->getMockBuilder('Magento\Store\Model\Address\Renderer')
+        $this->renderer = $this->getMockBuilder(\Magento\Store\Model\Address\Renderer::class)
             ->disableOriginalConstructor()
             ->setMethods(['format'])
             ->getMock();
@@ -77,18 +77,18 @@ class InformationTest extends \PHPUnit_Framework_TestCase
                 return implode("\n", $storeInfo->getData());
             });
 
-        $region = $this->getMock('Magento\Framework\DataObject', ['load', 'getName']);
+        $region = $this->getMock(\Magento\Framework\DataObject::class, ['load', 'getName']);
         $region->expects($this->once())->method('load')->willReturnSelf();
         $region->expects($this->once())->method('getName')->willReturn('Rohan');
 
-        $this->regionFactory = $this->getMock('Magento\Directory\Model\RegionFactory', [], [], '', false);
+        $this->regionFactory = $this->getMock(\Magento\Directory\Model\RegionFactory::class, [], [], '', false);
         $this->regionFactory->expects($this->once())->method('create')->willReturn($region);
 
-        $country = $this->getMock('Magento\Framework\DataObject', ['loadByCode', 'getName']);
+        $country = $this->getMock(\Magento\Framework\DataObject::class, ['loadByCode', 'getName']);
         $country->expects($this->once())->method('loadByCode')->with('ED')->willReturnSelf();
         $country->expects($this->once())->method('getName')->willReturn('Edoras');
 
-        $this->countryFactory = $this->getMock('Magento\Directory\Model\CountryFactory', [], [], '', false);
+        $this->countryFactory = $this->getMock(\Magento\Directory\Model\CountryFactory::class, [], [], '', false);
         $this->countryFactory->expects($this->once())->method('create')->willReturn($country);
 
         $this->model = new Information(

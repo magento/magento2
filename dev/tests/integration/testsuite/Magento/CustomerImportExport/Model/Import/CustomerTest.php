@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CustomerImportExport\Model\Import\Customer');
+            ->create(\Magento\CustomerImportExport\Model\Import\Customer::class);
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
 
         $propertyAccessor = new \ReflectionProperty($this->_model, 'errorMessageTemplates');
@@ -63,7 +63,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $this->directoryWrite = $filesystem
             ->getDirectoryWrite(DirectoryList::ROOT);
     }
@@ -86,7 +86,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Customer\Collection'
+            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
         $customersCollection->addAttributeToSelect('firstname', 'inner')->addAttributeToSelect('lastname', 'inner');
 
@@ -113,7 +113,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $existingCustomer = $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->registry(
                 '_fixture/Magento_ImportExport_Customer'
             );
@@ -155,7 +155,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         /** @var $customerCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Customer\Collection'
+            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
         $this->assertEquals(3, $customerCollection->count(), 'Count of existing customers are invalid');
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
@@ -18,11 +18,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->response = $this->getMock(
-            'Magento\Framework\HTTP\PhpEnvironment\Response',
+            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['getHeaders', 'send', 'clearHeader']
         );
         $this->headers = $this->getMock(
-            'Zend\Http\Headers',
+            \Zend\Http\Headers::class,
             ['has', 'get', 'current', 'removeHeader']
         );
     }
@@ -111,7 +111,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testClearHeaderIfHeaderExistsAndWasFound()
     {
         $response = $this->response = $this->getMock(
-            'Magento\Framework\HTTP\PhpEnvironment\Response',
+            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['getHeaders', 'send']
         );
 
@@ -146,7 +146,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testClearHeaderAndHeaderNotExists()
     {
         $response = $this->response = $this->getMock(
-            'Magento\Framework\HTTP\PhpEnvironment\Response',
+            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['getHeaders', 'send']
         );
 
@@ -195,7 +195,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\App\Response\Http $response */
         $response = $this->getMock(
-            'Magento\Framework\HTTP\PhpEnvironment\Response',
+            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['setHeader', 'setHttpResponseCode', 'sendHeaders'],
             [],
             '',

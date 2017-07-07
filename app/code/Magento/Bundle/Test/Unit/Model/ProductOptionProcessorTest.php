@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model;
@@ -41,7 +41,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataObject = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->dataObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods([
                 'getBundleOption',
                 'getBundleOptionQty',
@@ -50,7 +50,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dataObjectFactory = $this->getMockBuilder('Magento\Framework\DataObject\Factory')
+        $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,12 +59,12 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->dataObject);
 
         $this->bundleOption = $this->getMockBuilder(
-            'Magento\Bundle\Api\Data\BundleOptionInterface'
+            \Magento\Bundle\Api\Data\BundleOptionInterface::class
         )
             ->getMockForAbstractClass();
 
         $this->bundleOptionInterfaceFactory = $this->getMockBuilder(
-            'Magento\Bundle\Api\Data\BundleOptionInterfaceFactory'
+            \Magento\Bundle\Api\Data\BundleOptionInterfaceFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -88,14 +88,12 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $options,
         $requestData
     ) {
-        $productOptionMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductOptionInterface')
+        $productOptionMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
-        $productOptionExtensionMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductOptionExtensionInterface')
-            ->setMethods([
-                'getBundleOptions',
-            ])
-            ->getMockForAbstractClass();
+        $productOptionExtensionMock = $this->getMockBuilder(
+            \Magento\Catalog\Api\Data\ProductOptionExtensionInterface::class
+        )->setMethods(['getBundleOptions'])->getMockForAbstractClass();
 
         $productOptionMock->expects($this->any())
             ->method('getExtensionAttributes')
@@ -121,7 +119,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         /** @var \Magento\Bundle\Model\BundleOption $option */
-        $option = $objectManager->getObject('Magento\Bundle\Model\BundleOption');
+        $option = $objectManager->getObject(\Magento\Bundle\Model\BundleOption::class);
         $option->setOptionId(1);
         $option->setOptionQty(1);
         $option->setOptionSelections(['selection']);

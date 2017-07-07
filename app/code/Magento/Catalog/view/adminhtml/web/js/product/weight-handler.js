@@ -1,8 +1,11 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery'
 ], function ($) {
@@ -10,14 +13,20 @@ define([
 
     return {
 
-        $weightSwitcher: $('[data-role=weight-switcher]'),
-        $weight: $('#weight'),
+        /**
+         * Get weight
+         * @returns {*|jQuery|HTMLElement}
+         */
+        $weight: function () {
+            return $('#weight');
+        },
 
         /**
-         * Hide weight switcher
+         * Weight Switcher
+         * @returns {*|jQuery|HTMLElement}
          */
-        hideWeightSwitcher: function () {
-            this.$weightSwitcher.hide();
+        $weightSwitcher: function () {
+            return $('[data-role=weight-switcher]');
         },
 
         /**
@@ -25,21 +34,21 @@ define([
          * @returns {*}
          */
         isLocked: function () {
-            return this.$weight.is('[data-locked]');
+            return this.$weight().is('[data-locked]');
         },
 
         /**
          * Disabled
          */
         disabled: function () {
-            this.$weight.addClass('ignore-validate').prop('disabled', true);
+            this.$weight().addClass('ignore-validate').prop('disabled', true);
         },
 
         /**
          * Enabled
          */
         enabled: function () {
-            this.$weight.removeClass('ignore-validate').prop('disabled', false);
+            this.$weight().removeClass('ignore-validate').prop('disabled', false);
         },
 
         /**
@@ -47,23 +56,38 @@ define([
          * @returns {*}
          */
         switchWeight: function () {
-            return this.productHasWeight() ? this.enabled() : this.disabled();
+            return this.productHasWeightBySwitcher() ? this.enabled() : this.disabled();
+        },
+
+        /**
+         * Hide weight switcher
+         */
+        hideWeightSwitcher: function () {
+            this.$weightSwitcher().hide();
+        },
+
+        /**
+         * Has weight swither
+         * @returns {*}
+         */
+        hasWeightSwither: function () {
+            return this.$weightSwitcher().is(':visible');
+        },
+
+        /**
+         * Has weight
+         * @returns {*}
+         */
+        hasWeight: function () {
+            return this.$weight.is(':visible');
         },
 
         /**
          * Product has weight
          * @returns {Bool}
          */
-        productHasWeight: function () {
-            return $('input:checked', this.$weightSwitcher).val() === '1';
-        },
-
-        /**
-         * Notify product weight is changed
-         * @returns {*|jQuery}
-         */
-        notifyProductWeightIsChanged: function () {
-            return $('input:checked', this.$weightSwitcher).trigger('change');
+        productHasWeightBySwitcher: function () {
+            return $('input:checked', this.$weightSwitcher()).val() === '1';
         },
 
         /**
@@ -71,9 +95,10 @@ define([
          * @param {String} data
          */
         change: function (data) {
-            var value = data !== undefined ? +data : !this.productHasWeight();
+            var value = data !== undefined ? +data : !this.productHasWeightBySwitcher();
 
-            $('input[value=' + value + ']', this.$weightSwitcher).prop('checked', true);
+            $('input[value=' + value + ']', this.$weightSwitcher()).prop('checked', true);
+            this.switchWeight();
         },
 
         /**
@@ -81,14 +106,17 @@ define([
          */
         'Magento_Catalog/js/product/weight-handler': function () {
             this.bindAll();
-            this.switchWeight();
+
+            if (this.hasWeightSwither()) {
+                this.switchWeight();
+            }
         },
 
         /**
          * Bind all
          */
         bindAll: function () {
-            this.$weightSwitcher.find('input').on('change', this.switchWeight.bind(this));
+            this.$weightSwitcher().find('input').on('change', this.switchWeight.bind(this));
         }
     };
 });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App\Action\Plugin;
@@ -64,6 +64,11 @@ class Authentication
     protected $resultRedirectFactory;
 
     /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     */
+    protected $formKeyValidator;
+
+    /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Framework\App\ResponseInterface $response
@@ -72,6 +77,7 @@ class Authentication
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\BackendAppList $backendAppList
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
@@ -81,7 +87,8 @@ class Authentication
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Backend\App\BackendAppList $backendAppList
+        \Magento\Backend\App\BackendAppList $backendAppList,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
     ) {
         $this->_auth = $auth;
         $this->_url = $url;
@@ -91,11 +98,12 @@ class Authentication
         $this->backendUrl = $backendUrl;
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->backendAppList = $backendAppList;
+        $this->formKeyValidator = $formKeyValidator;
     }
 
     /**
      * @param \Magento\Backend\App\AbstractAction $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return mixed
@@ -144,8 +152,17 @@ class Authentication
     protected function _processNotLoggedInUser(\Magento\Framework\App\RequestInterface $request)
     {
         $isRedirectNeeded = false;
-        if ($request->getPost('login') && $this->_performLogin($request)) {
-            $isRedirectNeeded = $this->_redirectIfNeededAfterLogin($request);
+        if ($request->getPost('login')) {
+            if ($this->formKeyValidator->validate($request)) {
+                if ($this->_performLogin($request)) {
+                    $isRedirectNeeded = $this->_redirectIfNeededAfterLogin($request);
+                }
+            } else {
+                $this->_actionFlag->set('', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH, true);
+                $this->_response->setRedirect($this->_url->getCurrentUrl());
+                $this->messageManager->addError(__('Invalid Form Key. Please refresh the page.'));
+                $isRedirectNeeded = true;
+            }
         }
         if (!$isRedirectNeeded && !$request->isForwarded()) {
             if ($request->getParam('isIframe')) {

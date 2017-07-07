@@ -3,7 +3,7 @@
  * @category    Magento
  * @package     Magento_CatalogInventory
  * @subpackage  unit_tests
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,10 +21,10 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     protected $_indexerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_indexerMock = $this->getMock(
-            '\Magento\CatalogInventory\Model\Indexer\Stock\Processor',
+            \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class,
             [],
             [],
             '',
@@ -39,9 +39,9 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave(array $data)
     {
-        $subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
+        $subjectMock = $this->getMock(\Magento\Store\Model\ResourceModel\Group::class, [], [], '', false);
         $objectMock = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
+            \Magento\Framework\Model\AbstractModel::class,
             ['getId', 'dataHasChangedFor', '__wakeup'],
             [],
             '',

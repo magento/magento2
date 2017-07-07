@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="checkout.cart.methods">
-            <block class="Magento\Multishipping\Block\Checkout\Link" name="checkout.cart.methods.multishipping" template="checkout/link.phtml"/>
+            <block class="Magento\Multishipping\Block\Checkout\Link" name="checkout.cart.methods.multishipping" template="Magento_Multishipping::checkout/link.phtml"/>
         </referenceContainer>
     </body>
 </page>

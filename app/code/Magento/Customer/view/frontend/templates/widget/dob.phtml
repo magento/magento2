@@ -1,46 +1,39 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/**
-USAGE:
+/** @var \Magento\Customer\Block\Widget\Dob $block */
 
-Simple:
-
-<?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
+/*
+<?= $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
    ->setDate($block->getCustomer()->getDob())
    ->toHtml() ?>
 
 For checkout/onepage/billing.phtml:
 
-<?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
+<?= $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
    ->setDate($block->getCustomer()->getDob())
    ->setFieldIdFormat('billing:%s')
    ->setFieldNameFormat('billing[%s]')
    ->toHtml() ?>
 
-NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css
-      Alternatively we could calculate widths automatically using block input parameters.
+NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css. Alternatively we could calculate widths
+automatically using block input parameters.
 */
 
-/**
- * @see \Magento\Customer\Block\Widget\Dob
- */
-?>
-<?php
 $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
-<div class="<?php /* @escapeNotVerified */ echo $fieldCssClass; ?>">
-    <label class="label" for="<?php echo $block->getHtmlId()?>"><span><?php /* @escapeNotVerified */ echo $block->getLabel() ?></span></label>
+<div class="<?= $block->escapeHtmlAttr($fieldCssClass) ?>">
+    <label class="label" for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"><span><?= $block->escapeHtml($block->getLabel()) ?></span></label>
     <div class="control customer-dob">
-        <?php echo $block->getFieldHtml(); ?>
+        <?= $block->getFieldHtml() ?>
         <?php if ($_message = $block->getAdditionalDescription()) : ?>
-            <div class="note"><?php /* @escapeNotVerified */ echo $_message; ?></div>
+            <div class="note"><?= $block->escapeHtml($_message) ?></div>
         <?php endif; ?>
     </div>
 </div>

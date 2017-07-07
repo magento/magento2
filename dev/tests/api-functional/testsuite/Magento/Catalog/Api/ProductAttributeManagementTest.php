@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -130,7 +130,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
 
         //Assign attribute to attribute set
         /** @var \Magento\Eav\Model\AttributeManagement $attributeManagement */
-        $attributeManagement = Bootstrap::getObjectManager()->get('Magento\Eav\Model\AttributeManagement');
+        $attributeManagement = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\AttributeManagement::class);
         $attributeManagement->assign(
             \Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE,
             $payload['attributeSetId'],

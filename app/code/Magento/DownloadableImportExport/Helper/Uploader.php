@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\DownloadableImportExport\Helper;
@@ -93,7 +93,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
         $destinationDir = "downloadable/files/" . $type;
         $destinationPath = $dirAddon . $DS . $this->mediaDirectory->getRelativePath($destinationDir);
 
-        $this->mediaDirectory->create($destinationDir);
+        $this->mediaDirectory->create($destinationPath);
         if (!$this->fileUploader->setDestDir($destinationPath)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('File directory \'%1\' is not writable.', $destinationPath)

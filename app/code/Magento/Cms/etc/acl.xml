@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,18 +11,18 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::content">
                     <resource id="Magento_Backend::content_elements">
-                        <resource id="Magento_Cms::page" title="Pages" sortOrder="10">
-                            <resource id="Magento_Cms::save" title="Save Page" sortOrder="10" />
-                            <resource id="Magento_Cms::page_delete" title="Delete Page" sortOrder="20" />
+                        <resource id="Magento_Cms::page" title="Pages" translate="title" sortOrder="10">
+                            <resource id="Magento_Cms::save" title="Save Page" translate="title" sortOrder="10" />
+                            <resource id="Magento_Cms::page_delete" title="Delete Page" translate="title" sortOrder="20" />
                         </resource>
-                        <resource id="Magento_Cms::block" title="Blocks" sortOrder="30" />
-                        <resource id="Magento_Cms::media_gallery" title="Media Gallery" sortOrder="70" />
+                        <resource id="Magento_Cms::block" title="Blocks" translate="title" sortOrder="30" />
+                        <resource id="Magento_Cms::media_gallery" title="Media Gallery" translate="title" sortOrder="70" />
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Cms::config_cms" title="Content Management" />
+                            <resource id="Magento_Cms::config_cms" title="Content Management" translate="title" />
                         </resource>
                     </resource>
                 </resource>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
@@ -24,9 +24,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_importConfig = $this->getMock(
-            'Magento\Directory\Model\Currency\Import\Config',
+            \Magento\Directory\Model\Currency\Import\Config::class,
             [],
             [],
             '',
@@ -40,7 +40,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $expectedResult = $this->getMock('Magento\Directory\Model\Currency\Import\ImportInterface');
+        $expectedResult = $this->getMock(\Magento\Directory\Model\Currency\Import\ImportInterface::class);
         $this->_importConfig->expects(
             $this->once()
         )->method(

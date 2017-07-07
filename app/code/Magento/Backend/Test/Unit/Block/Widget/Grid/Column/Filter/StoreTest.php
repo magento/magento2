@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,13 +27,13 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock('Magento\Backend\Block\Context', [], [], '', false);
-        $this->helper = $this->getMock('Magento\Framework\DB\Helper', [], [], '', false);
-        $this->store = $this->getMock('Magento\Store\Model\System\Store', [], [], '', false);
+        $this->context = $this->getMock(\Magento\Backend\Block\Context::class, [], [], '', false);
+        $this->helper = $this->getMock(\Magento\Framework\DB\Helper::class, [], [], '', false);
+        $this->store = $this->getMock(\Magento\Store\Model\System\Store::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->store = $this->objectManagerHelper->getObject(
-            'Magento\Backend\Block\Widget\Grid\Column\Filter\Store',
+            \Magento\Backend\Block\Widget\Grid\Column\Filter\Store::class,
             [
                 'context' => $this->context,
                 'resourceHelper' => $this->helper,

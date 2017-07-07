@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Console\Command;
@@ -87,47 +87,49 @@ class SourceThemeDeployCommand extends Command
     {
         parent::configure();
         $this->setDescription('Collects and publishes source files for theme.')
-            ->setDefinition([
-                new InputArgument(
-                    self::FILE_ARGUMENT,
-                    InputArgument::IS_ARRAY,
-                    'Files to pre-process (file should be specified without extension)',
-                    ['css/styles-m', 'css/styles-l']
-                ),
-                new InputOption(
-                    self::TYPE_ARGUMENT,
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Type of source files: [less]',
-                    'less'
-                ),
-                new InputOption(
-                    self::LOCALE_OPTION,
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Locale: [en_US]',
-                    'en_US'
-                ),
-                new InputOption(
-                    self::AREA_OPTION,
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Area: [frontend|adminhtml]',
-                    'frontend'
-                ),
-                new InputOption(
-                    self::THEME_OPTION,
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Theme: [Vendor/theme]',
-                    'Magento/luma'
-                ),
+            ->setDefinition(
+                [
+                    new InputArgument(
+                        self::FILE_ARGUMENT,
+                        InputArgument::IS_ARRAY,
+                        'Files to pre-process (file should be specified without extension)',
+                        ['css/styles-m', 'css/styles-l']
+                    ),
+                    new InputOption(
+                        self::TYPE_ARGUMENT,
+                        null,
+                        InputOption::VALUE_REQUIRED,
+                        'Type of source files: [less]',
+                        'less'
+                    ),
+                    new InputOption(
+                        self::LOCALE_OPTION,
+                        null,
+                        InputOption::VALUE_REQUIRED,
+                        'Locale: [en_US]',
+                        'en_US'
+                    ),
+                    new InputOption(
+                        self::AREA_OPTION,
+                        null,
+                        InputOption::VALUE_REQUIRED,
+                        'Area: [frontend|adminhtml]',
+                        'frontend'
+                    ),
+                    new InputOption(
+                        self::THEME_OPTION,
+                        null,
+                        InputOption::VALUE_REQUIRED,
+                        'Theme: [Vendor/theme]',
+                        'Magento/luma'
+                    ),
 
-            ]);
+                ]
+            );
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -144,6 +146,14 @@ class SourceThemeDeployCommand extends Command
                 $locale . ' argument has invalid value, please run info:language:list for list of available locales'
             );
         }
+
+        if (!preg_match('#^[\w\-]+\/[\w\-]+$#', $theme)) {
+            throw new \InvalidArgumentException(
+                'Value "' . $theme . '" of the option "' . self::THEME_OPTION .
+                '" has invalid format. The format should be "Vendor/theme".'
+            );
+        }
+
         $message = sprintf(
             '<info>Processed Area: %s, Locale: %s, Theme: %s, File type: %s.</info>',
             $area,
@@ -164,7 +174,14 @@ class SourceThemeDeployCommand extends Command
                 ]
             );
 
-            $this->assetPublisher->publish($asset);
+            try {
+                $this->assetPublisher->publish($asset);
+            } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {
+                throw new \InvalidArgumentException(
+                    'Verify entered values of the argument and options. ' . $e->getMessage()
+                );
+            }
+
             $output->writeln('<comment>-> ' . $asset->getFilePath() . '</comment>');
         }
 

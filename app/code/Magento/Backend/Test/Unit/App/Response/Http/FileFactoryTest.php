@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\App\Response\Http;
@@ -36,7 +36,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_responseMock = $this->getMock(
-            'Magento\Framework\App\Response\Http',
+            \Magento\Framework\App\Response\Http::class,
             ['setRedirect', '__wakeup'],
             [],
             '',
@@ -50,16 +50,16 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_responseMock)
         );
         $this->_sessionMock = $this->getMock(
-            'Magento\Backend\Model\Session',
+            \Magento\Backend\Model\Session::class,
             ['setIsUrlNotice'],
             [],
             '',
             false
         );
-        $this->_backendUrl = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
-        $this->_authMock = $this->getMock('Magento\Backend\Model\Auth', [], [], '', false);
+        $this->_backendUrl = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
+        $this->_authMock = $this->getMock(\Magento\Backend\Model\Auth::class, [], [], '', false);
         $this->_model = $helper->getObject(
-            'Magento\Backend\App\Response\Http\FileFactory',
+            \Magento\Backend\App\Response\Http\FileFactory::class,
             [
                 'response' => $this->_responseMock,
                 'auth' => $this->_authMock,
@@ -72,7 +72,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $authStorageMock = $this->getMock(
-            'Magento\Backend\Model\Auth\Session',
+            \Magento\Backend\Model\Auth\Session::class,
             ['isFirstPageAfterLogin', 'processLogout', 'processLogin'],
             [],
             '',

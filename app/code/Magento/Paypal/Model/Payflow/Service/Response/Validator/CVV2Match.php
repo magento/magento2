@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
+use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class CVV2Match
  */
-class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
+class CVV2Match implements ValidatorInterface
 {
     /**
      * Result of the card security code (CVV2) check
@@ -29,31 +30,32 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
      */
     const ERROR_MESSAGE = 'Card security code does not match.';
 
-    /** Values of the response */
+    /**#@+ Values of the response */
     const RESPONSE_YES = 'y';
 
     const RESPONSE_NO = 'n';
 
     const RESPONSE_NOT_SUPPORTED = 'x';
-    /**  */
+    /**#@-*/
 
-    /** Validation settings payments */
+    /**#@+ Validation settings payments */
     const CONFIG_ON = 1;
 
     const CONFIG_OFF = 0;
 
     const CONFIG_NAME = 'avs_security_code';
-    /**  */
+    /**#@-*/
 
     /**
      * Validate data
      *
      * @param DataObject $response
+     * @param Transparent $transparentModel
      * @return bool
      */
-    public function validate(DataObject $response)
+    public function validate(DataObject $response, Transparent $transparentModel)
     {
-        if ($this->isValidationOff()) {
+        if ($transparentModel->getConfig()->getValue(static::CONFIG_NAME) === static::CONFIG_OFF) {
             return true;
         }
 
@@ -72,16 +74,6 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
 
         $response->setRespmsg(static::ERROR_MESSAGE);
         return false;
-    }
-
-    /**
-     * Check whether validation is enabled
-     *
-     * @return bool
-     */
-    protected function isValidationOff()
-    {
-        return $this->getConfig()->getValue(static::CONFIG_NAME) == static::CONFIG_OFF;
     }
 
     /**

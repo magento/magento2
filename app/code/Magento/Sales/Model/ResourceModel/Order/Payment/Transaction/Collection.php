@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Payment\Transaction;
@@ -79,8 +79,8 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
     protected function _construct()
     {
         $this->_init(
-            'Magento\Sales\Model\Order\Payment\Transaction',
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction'
+            \Magento\Sales\Model\Order\Payment\Transaction::class,
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class
         );
         $this->addFilterToMap('created_at', 'main_table.created_at');
         parent::_construct();

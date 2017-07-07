@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
 /**
  * Adminhtml sales order create search products block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -179,7 +180,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'name',
             [
                 'header' => __('Product'),
-                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Product',
+                'renderer' => \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Product::class,
                 'index' => 'name'
             ]
         );
@@ -193,7 +194,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
                 'rate' => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
                 'index' => 'price',
-                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Price'
+                'renderer' => \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Price::class
             ]
         );
 
@@ -205,7 +206,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'name' => 'in_products',
                 'values' => $this->_getSelectedProducts(),
                 'index' => 'entity_id',
-                'sortable' => false
+                'sortable' => false,
+                'header_css_class' => 'col-select',
+                'column_css_class' => 'col-select'
             ]
         );
 
@@ -215,7 +218,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'filter' => false,
                 'sortable' => false,
                 'header' => __('Quantity'),
-                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty',
+                'renderer' => \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty::class,
                 'name' => 'qty',
                 'inline_css' => 'qty',
                 'type' => 'input',

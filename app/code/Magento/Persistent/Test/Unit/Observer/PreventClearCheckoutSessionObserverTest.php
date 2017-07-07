@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,12 +52,12 @@ class PreventClearCheckoutSessionObserverTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $eventMethods = ['getControllerAction', 'dispatch', '__wakeUp'];
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->eventMock = $this->getMock('Magento\Framework\Event', $eventMethods, [], '', false);
-        $this->actionMock = $this->getMock('Magento\Persistent\Controller\Index', [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->sessionHelperMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
+        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->eventMock = $this->getMock(\Magento\Framework\Event::class, $eventMethods, [], '', false);
+        $this->actionMock = $this->getMock(\Magento\Persistent\Controller\Index::class, [], [], '', false);
         $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($this->eventMock));
         $this->model = new \Magento\Persistent\Observer\PreventClearCheckoutSessionObserver(
             $this->sessionHelperMock,

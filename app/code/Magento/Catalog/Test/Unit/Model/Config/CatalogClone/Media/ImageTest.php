@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Config\CatalogClone\Media;
@@ -38,18 +38,18 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eavConfig = $this->getMockBuilder('Magento\Eav\Model\Config')
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attributeCollection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attributeCollectionFactory = $this->getMockBuilder(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -58,13 +58,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->attributeCollection)
         );
 
-        $this->attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
+        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\Catalog\Model\Config\CatalogClone\Media\Image',
+            \Magento\Catalog\Model\Config\CatalogClone\Media\Image::class,
             [
                 'eavConfig' => $this->eavConfig,
                 'attributeCollectionFactory' => $this->attributeCollectionFactory
@@ -76,13 +76,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $entityTypeId = 3;
         /** @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject $entityType */
-        $entityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $entityType = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityType->expects($this->once())->method('getId')->will($this->returnValue($entityTypeId));
 
         /** @var AbstractFrontend|\PHPUnit_Framework_MockObject_MockObject $frontend */
-        $frontend = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend')
+        $frontend = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
             ->setMethods(['getLabel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

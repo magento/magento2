@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Oauth\Helper;
@@ -144,10 +144,10 @@ class Request
      */
     protected function _processHeader($authHeaderValue, &$protocolParams)
     {
-        if ($authHeaderValue && 'oauth' === strtolower(substr($authHeaderValue, 0, 5))) {
-            $authHeaderValue = substr($authHeaderValue, 6);
-            // ignore 'OAuth ' at the beginning
-
+        $oauthValuePosition = stripos(($authHeaderValue ? $authHeaderValue : ''), 'oauth ');
+        if ($authHeaderValue && $oauthValuePosition !== false) {
+            // Ignore anything before and including 'OAuth ' (trailing values validated later)
+            $authHeaderValue = substr($authHeaderValue, $oauthValuePosition + 6);
             foreach (explode(',', $authHeaderValue) as $paramStr) {
                 $nameAndValue = explode('=', trim($paramStr), 2);
 
@@ -200,7 +200,7 @@ class Request
             $responseCode = self::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof \Magento\Framework\Oauth\OauthInputException) {
             $responseCode = self::HTTP_BAD_REQUEST;
-            if ($errorMsg == \Magento\Framework\Oauth\OauthInputException::DEFAULT_MESSAGE) {
+            if ($errorMsg == 'One or more input exceptions have occurred.') {
                 $errorMsg = $exception->getAggregatedErrorMessage();
             }
         } else {

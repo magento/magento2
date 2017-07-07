@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**
@@ -19,9 +19,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $elementFactory \Magento\Framework\Data\Form\ElementFactory */
-        $elementFactory = $objectManager->create('Magento\Framework\Data\Form\ElementFactory');
-        $this->imageElement = $elementFactory->create('Magento\Framework\Data\Form\Element\Image', []);
-        $form = $objectManager->create('Magento\Framework\Data\Form');
+        $elementFactory = $objectManager->create(\Magento\Framework\Data\Form\ElementFactory::class);
+        $this->imageElement = $elementFactory->create(\Magento\Framework\Data\Form\Element\Image::class, []);
+        $form = $objectManager->create(\Magento\Framework\Data\Form::class);
         $this->imageElement->setForm($form);
     }
 

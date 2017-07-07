@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,8 +29,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $layout \Magento\Framework\View\Layout */
-        $layout = $this->objectManager->create('Magento\Framework\View\LayoutInterface');
-        $this->block = $layout->createBlock('Magento\Integration\Block\Adminhtml\Integration\Edit\Form');
+        $layout = $this->objectManager->create(\Magento\Framework\View\LayoutInterface::class);
+        $this->block = $layout->createBlock(\Magento\Integration\Block\Adminhtml\Integration\Edit\Form::class);
     }
 
     /**
@@ -51,7 +51,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlWithIntegrationData()
     {
         /** @var \Magento\Framework\Registry $coreRegistry */
-        $coreRegistry = $this->objectManager->get('\Magento\Framework\Registry');
+        $coreRegistry = $this->objectManager->get(\Magento\Framework\Registry::class);
         $coreRegistry->unregister(Integration::REGISTRY_KEY_CURRENT_INTEGRATION);
         $id = 'idValue';
         $integrationData = [

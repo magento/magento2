@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme;
@@ -15,12 +15,12 @@ class TabAbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab',
+            \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab::class,
             [
-                $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false),
-                $this->getMock('Magento\Framework\Registry', [], [], '', false),
-                $this->getMock('Magento\Framework\Data\FormFactory', [], [], '', false),
-                $this->getMock('Magento\Framework\ObjectManagerInterface'),
+                $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false),
+                $this->getMock(\Magento\Framework\Registry::class, [], [], '', false),
+                $this->getMock(\Magento\Framework\Data\FormFactory::class, [], [], '', false),
+                $this->getMock(\Magento\Framework\ObjectManagerInterface::class),
             ],
             '',
             true,
@@ -51,7 +51,7 @@ class TabAbstractTest extends \PHPUnit_Framework_TestCase
     public function testCanShowTab($isVirtual, $themeId, $result)
     {
         $themeMock = $this->getMock(
-            'Magento\Theme\Model\Theme',
+            \Magento\Theme\Model\Theme::class,
             ['isVirtual', 'getId', '__wakeup'],
             [],
             '',

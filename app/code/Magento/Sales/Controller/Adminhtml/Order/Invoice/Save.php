@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -20,6 +20,13 @@ use Magento\Sales\Model\Service\InvoiceService;
  */
 class Save extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
     /**
      * @var InvoiceSender
      */
@@ -67,14 +74,6 @@ class Save extends \Magento\Backend\App\Action
         $this->shipmentFactory = $shipmentFactory;
         $this->invoiceService = $invoiceService;
         parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**
@@ -126,14 +125,14 @@ class Save extends \Magento\Backend\App\Action
         $orderId = $this->getRequest()->getParam('order_id');
 
         if (!empty($data['comment_text'])) {
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($data['comment_text']);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setCommentText($data['comment_text']);
         }
 
         try {
             $invoiceData = $this->getRequest()->getParam('invoice', []);
             $invoiceItems = isset($invoiceData['items']) ? $invoiceData['items'] : [];
             /** @var \Magento\Sales\Model\Order $order */
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
             if (!$order->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('The order no longer exists.'));
             }
@@ -177,7 +176,7 @@ class Save extends \Magento\Backend\App\Action
             $invoice->getOrder()->setIsInProcess(true);
 
             $transactionSave = $this->_objectManager->create(
-                'Magento\Framework\DB\Transaction'
+                \Magento\Framework\DB\Transaction::class
             )->addObject(
                 $invoice
             )->addObject(
@@ -211,7 +210,7 @@ class Save extends \Magento\Backend\App\Action
                     $this->invoiceSender->send($invoice);
                 }
             } catch (\Exception $e) {
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addError(__('We can\'t send the invoice email right now.'));
             }
             if ($shipment) {
@@ -220,17 +219,17 @@ class Save extends \Magento\Backend\App\Action
                         $this->shipmentSender->send($shipment);
                     }
                 } catch (\Exception $e) {
-                    $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                    $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                     $this->messageManager->addError(__('We can\'t send the shipment right now.'));
                 }
             }
-            $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t save the invoice right now.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         return $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);
     }

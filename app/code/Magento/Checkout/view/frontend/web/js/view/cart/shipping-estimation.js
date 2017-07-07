@@ -1,9 +1,7 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
 define(
     [
         'jquery',
@@ -18,7 +16,7 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'mage/validation'
     ],
-    function(
+    function (
         $,
         Component,
         selectShippingAddress,
@@ -31,6 +29,7 @@ define(
         checkoutDataResolver
     ) {
         'use strict';
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/cart/shipping-estimation'
@@ -43,18 +42,27 @@ define(
             initialize: function () {
                 this._super();
                 registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var address, estimatedAddress;
+
                     checkoutDataResolver.resolveEstimationAddress();
-                    var address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress(),
-                        estimatedAddress;
+                    address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress();
+
                     if (address) {
-                        estimatedAddress = address.isEditable()
-                            ? addressConverter.quoteAddressToFormAddressData(address)
-                            : addressConverter.quoteAddressToFormAddressData(addressConverter.addressToEstimationAddress(address));
+                        estimatedAddress = address.isEditable() ?
+                            addressConverter.quoteAddressToFormAddressData(address) :
+                            {
+                                // only the following fields must be used by estimation form data provider
+                                'country_id': address.countryId,
+                                region: address.region,
+                                'region_id': address.regionId,
+                                postcode: address.postcode
+                            };
                         checkoutProvider.set(
                             'shippingAddress',
                             $.extend({}, checkoutProvider.get('shippingAddress'), estimatedAddress)
                         );
                     }
+
                     if (!quote.isVirtual()) {
                         checkoutProvider.on('shippingAddress', function (shippingAddressData) {
                             checkoutData.setShippingAddressFromData(shippingAddressData);
@@ -65,16 +73,24 @@ define(
                         });
                     }
                 });
-            },
 
+                return this;
+            },
 
             /**
              * @override
              */
-            initElement: function(element) {
+            initElement: function (element) {
+                this._super();
+
                 if (element.index === 'address-fieldsets') {
                     shippingRatesValidator.bindChangeHandlers(element.elems(), true, 500);
+                    element.elems.subscribe(function (elems) {
+                        shippingRatesValidator.doElementBinding(elems[elems.length - 1], true, 500);
+                    });
                 }
+
+                return this;
             },
 
             /**
@@ -83,6 +99,7 @@ define(
              */
             getEstimationInfo: function () {
                 var addressData = null;
+
                 this.source.set('params.invalid', false);
                 this.source.trigger('shippingAddress.data.validate');
 

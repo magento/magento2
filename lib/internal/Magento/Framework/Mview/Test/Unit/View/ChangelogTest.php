@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Test\Unit\View;
@@ -26,10 +26,10 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
 
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -44,10 +44,10 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function testInstanceOf()
     {
         $resourceMock =
-            $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false, false);
+            $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false, false);
         $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(true));
         $model = new \Magento\Framework\Mview\View\Changelog($resourceMock);
-        $this->assertInstanceOf('\Magento\Framework\Mview\View\ChangelogInterface', $model);
+        $this->assertInstanceOf(\Magento\Framework\Mview\View\ChangelogInterface::class, $model);
     }
 
     /**
@@ -57,7 +57,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function testCheckConnectionException()
     {
         $resourceMock =
-            $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false, false);
+            $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false, false);
         $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(null));
         $model = new \Magento\Framework\Mview\View\Changelog($resourceMock);
         $model->setViewId('ViewIdTest');
@@ -168,7 +168,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->mockIsTableExists($changelogTableName, false);
         $this->mockGetTableName();
 
-        $tableMock = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false, false);
+        $tableMock = $this->getMock(\Magento\Framework\DB\Ddl\Table::class, [], [], '', false, false);
         $tableMock->expects($this->exactly(2))
             ->method('addColumn')
             ->will($this->returnSelf());
@@ -185,13 +185,13 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->model->create();
     }
 
-    public function testCreateWithException()
+    public function testCreateWithExistingTable()
     {
         $changelogTableName = 'viewIdtest_cl';
         $this->mockIsTableExists($changelogTableName, true);
         $this->mockGetTableName();
 
-        $this->setExpectedException('Exception', "Table {$changelogTableName} already exist");
+        $this->connectionMock->expects($this->never())->method('createTable');
         $this->model->setViewId('viewIdtest');
         $this->model->create();
     }
@@ -202,7 +202,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->mockIsTableExists($changelogTableName, true);
         $this->mockGetTableName();
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false, false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false, false);
         $selectMock->expects($this->once())
             ->method('distinct')
             ->with(true)

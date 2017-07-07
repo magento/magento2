@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column\Status;
@@ -24,18 +24,18 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\Status\Options',
+            \Magento\Sales\Ui\Component\Listing\Column\Status\Options::class,
             ['collectionFactory' => $this->collectionFactoryMock]
         );
     }
@@ -43,7 +43,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $collectionMock =
-            $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
+            $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Status\Collection::class, [], [], '', false);
         $options = ['options'];
 
         $this->collectionFactoryMock->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend;
@@ -20,14 +20,14 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_collection = $this->getMock(
-            'MongoCollection',
+            \MongoCollection::class,
             ['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'],
             [],
             '',
             false
         );
         $this->_model = $this->getMock(
-            'Magento\Framework\Cache\Backend\MongoDb',
+            \Magento\Framework\Cache\Backend\MongoDb::class,
             ['_getCollection'],
             [],
             '',

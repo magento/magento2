@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Product\Index;
@@ -19,6 +19,7 @@ namespace Magento\Reports\Model\Product\Index;
  * @method \Magento\Reports\Model\Product\Index\Viewed setAddedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
 {
@@ -36,7 +37,7 @@ class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\ResourceModel\Product\Index\Viewed');
+        $this->_init(\Magento\Reports\Model\ResourceModel\Product\Index\Viewed::class);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Payflow\Link;
@@ -58,15 +58,21 @@ class IframeTest extends \PHPUnit_Framework_TestCase
 
     public function prepare()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
-        $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['getQuote'], [], '', false);
-        $this->hssHelperMock = $this->getMock('Magento\Paypal\Helper\Hss', [], [], '', false);
-        $this->paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', ['getPayment', '__wakeup'], [], '', false);
-        $this->paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
-        $this->reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $this->orderFactoryMock = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['getQuote'], [], '', false);
+        $this->hssHelperMock = $this->getMock(\Magento\Paypal\Helper\Hss::class, [], [], '', false);
+        $this->paymentDataMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, ['getPayment', '__wakeup'], [], '', false);
+        $this->paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
+        $this->reader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
+        $this->readFactory = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
@@ -103,7 +109,7 @@ class IframeTest extends \PHPUnit_Framework_TestCase
         $this->prepare();
 
         $expected = 'https://live.url';
-        $methodInstance = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInstance = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstance->expects($this->exactly(2))
             ->method('getConfigData')
@@ -132,7 +138,7 @@ class IframeTest extends \PHPUnit_Framework_TestCase
         $this->prepare();
 
         $expected = 'https://test.url';
-        $methodInstance = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInstance = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstance->expects($this->exactly(2))
             ->method('getConfigData')

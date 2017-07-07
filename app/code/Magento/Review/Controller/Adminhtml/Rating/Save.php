@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
@@ -23,7 +23,7 @@ class Save extends RatingController
         if ($this->getRequest()->getPostValue()) {
             try {
                 /** @var \Magento\Review\Model\Rating $ratingModel */
-                $ratingModel = $this->_objectManager->create('Magento\Review\Model\Rating');
+                $ratingModel = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
                 $stores = $this->getRequest()->getParam('stores');
                 $position = (int)$this->getRequest()->getParam('position');
                 $stores[] = 0;
@@ -43,7 +43,7 @@ class Save extends RatingController
                 if (is_array($options)) {
                     $i = 1;
                     foreach ($options as $key => $optionCode) {
-                        $optionModel = $this->_objectManager->create('Magento\Review\Model\Rating\Option');
+                        $optionModel = $this->_objectManager->create(\Magento\Review\Model\Rating\Option::class);
                         if (!preg_match("/^add_([0-9]*?)$/", $key)) {
                             $optionModel->setId($key);
                         }
@@ -58,10 +58,10 @@ class Save extends RatingController
                 }
 
                 $this->messageManager->addSuccess(__('You saved the rating.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setRatingData(false);
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setRatingData(false);
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_objectManager->get('Magento\Backend\Model\Session')
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)
                     ->setRatingData($this->getRequest()->getPostValue());
                 $resultRedirect->setPath('review/rating/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return $resultRedirect;

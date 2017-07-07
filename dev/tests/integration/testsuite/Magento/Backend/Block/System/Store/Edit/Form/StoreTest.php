@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store\Edit\Form;
@@ -23,20 +23,20 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $registryData = [
             'store_type' => 'store',
             'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Store\Model\Store'
+                \Magento\Store\Model\Store::class
             ),
             'store_action' => 'add',
         ];
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         foreach ($registryData as $key => $value) {
-            $objectManager->get('Magento\Framework\Registry')->register($key, $value);
+            $objectManager->get(\Magento\Framework\Registry::class)->register($key, $value);
         }
 
         /** @var $layout \Magento\Framework\View\Layout */
-        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
+        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
 
-        $this->_block = $layout->createBlock('Magento\Backend\Block\System\Store\Edit\Form\Store');
+        $this->_block = $layout->createBlock(\Magento\Backend\Block\System\Store\Edit\Form\Store::class);
 
         $this->_block->toHtml();
     }
@@ -45,9 +45,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->unregister('store_type');
-        $objectManager->get('Magento\Framework\Registry')->unregister('store_data');
-        $objectManager->get('Magento\Framework\Registry')->unregister('store_action');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('store_type');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('store_data');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('store_action');
     }
 
     public function testPrepareForm()

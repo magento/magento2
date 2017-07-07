@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,21 +24,21 @@ class ChildrenCategoriesProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->category = $this->getMockBuilder('Magento\Catalog\Model\Category')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPath', 'getResourceCollection', 'getResource', 'getLevel', '__wakeup', 'isObjectNew'])
             ->getMock();
         $categoryCollection = $this->getMockBuilder(
-            'Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection'
+            \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection::class
         )->disableOriginalConstructor()->setMethods(['addAttributeToSelect', 'addIdFilter'])->getMock();
         $this->category->expects($this->any())->method('getPath')->willReturn('category-path');
         $this->category->expects($this->any())->method('getResourceCollection')->willReturn($categoryCollection);
         $categoryCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
         $categoryCollection->expects($this->any())->method('addIdFilter')->with(['id'])->willReturnSelf();
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()->setMethods(['from', 'where', 'deleteFromSelect'])->getMock();
-        $this->connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $categoryResource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category')
+        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $categoryResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
             ->disableOriginalConstructor()->getMock();
         $this->category->expects($this->any())->method('getResource')->willReturn($categoryResource);
         $categoryResource->expects($this->any())->method('getConnection')->willReturn($this->connection);
@@ -47,7 +47,7 @@ class ChildrenCategoriesProviderTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->any())->method('from')->willReturnSelf();
 
         $this->childrenCategoriesProvider = (new ObjectManager($this))->getObject(
-            'Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider'
+            \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider::class
         );
     }
 

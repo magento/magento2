@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
 
 /**
  * An abstraction for static view file (or resource) that may be embedded to a web page
+ *
+ * @api
  */
 interface AssetInterface
 {
@@ -23,4 +25,11 @@ interface AssetInterface
      * @return string
      */
     public function getContentType();
+
+    /**
+     * Retrieve source content type
+     *
+     * @return string
+     */
+    public function getSourceContentType();
 }

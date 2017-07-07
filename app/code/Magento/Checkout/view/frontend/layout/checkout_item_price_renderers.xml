@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.unit" template="item/price/unit.phtml"/>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.row" template="item/price/row.phtml"/>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.excl" template="onepage/review/item/price/unit_excl_tax.phtml"/>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.incl" template="onepage/review/item/price/unit_incl_tax.phtml"/>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.excl" template="onepage/review/item/price/row_excl_tax.phtml"/>
-        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.incl" template="onepage/review/item/price/row_incl_tax.phtml"/>
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.unit" template="Magento_Checkout::item/price/unit.phtml"/>
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.item.price.row" template="Magento_Checkout::item/price/row.phtml"/>
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.excl" template="Magento_Checkout::onepage/review/item/price/unit_excl_tax.phtml"/>
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.incl" template="Magento_Checkout::onepage/review/item/price/unit_incl_tax.phtml"/>
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.excl" template="Magento_Checkout::onepage/review/item/price/row_excl_tax.phtml"/>
+        <block class="Magento\Checkout\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.incl" template="Magento_Checkout::onepage/review/item/price/row_incl_tax.phtml"/>
     </body>
 </page>

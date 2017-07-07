@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,39 +56,39 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
      */
     protected $context;
 
-    public function setUp()
+    protected function setUp()
     {
         $reportTypes = [
-            'sales' => 'Magento\Sales\Model\ResourceModel\Report\Order'
+            'sales' => \Magento\Sales\Model\ResourceModel\Report\Order::class
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->resultRedirectFactory = $this->getMock(
-            'Magento\Backend\Model\View\Result\RedirectFactory',
+            \Magento\Backend\Model\View\Result\RedirectFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
+        $this->resultRedirect = $this->getMock(\Magento\Backend\Model\View\Result\Redirect::class, [], [], '', false);
 
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
         $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse'],
             [],
             '',
             false
         );
 
-        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
+        $this->messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
 
-        $this->order = $this->getMock('Magento\Sales\Model\ResourceModel\Report\Order', [], [], '', false);
+        $this->order = $this->getMock(\Magento\Sales\Model\ResourceModel\Report\Order::class, [], [], '', false);
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
 
-        $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $this->context = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
@@ -98,7 +98,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirectFactory);
 
         $this->refreshStatisticsController = $objectManagerHelper->getObject(
-            'Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics',
+            \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics::class,
             [
                 'context' => $this->context,
                 'reportTypes' => $reportTypes
@@ -118,7 +118,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->with('Magento\Sales\Model\ResourceModel\Report\Order')
+            ->with(\Magento\Sales\Model\ResourceModel\Report\Order::class)
             ->willReturn($this->order);
 
         $this->resultRedirect->expects($this->once())
@@ -127,7 +127,7 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->refreshStatisticsController->execute()
         );
     }

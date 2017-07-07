@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ namespace Magento\Directory\Block;
 
 use Magento\Framework\Locale\Bundle\CurrencyBundle as CurrencyBundle;
 
+/**
+ * @api
+ */
 class Currency extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -111,7 +114,7 @@ class Currency extends \Magento\Framework\View\Element\Template
      */
     public function getSwitchCurrencyPostData($code)
     {
-        return $this->_postDataHelper->getPostData($this->getSwitchUrl(), ['currency' => $code]);
+        return $this->_postDataHelper->getPostData($this->escapeUrl($this->getSwitchUrl()), ['currency' => $code]);
     }
 
     /**

@@ -1,36 +1,45 @@
-Back,Back
-Name,Name
-Enabled,Enabled
-"* Required Fields","* Required Fields"
-Message:,Message:
-"Email to a Friend","Email to a Friend"
-"Email Address","Email Address"
-"Email Templates","Email Templates"
-Name:,Name:
-"Email Address:","Email Address:"
-Sender:,Sender:
-Email:,Email:
-Recipient:,Recipient:
-"Add Recipient","Add Recipient"
-"Send Email","Send Email"
-"You can't send messages more than %1 times an hour.","You can't send messages more than %1 times an hour."
+"Page not found.","Page not found."
+"You can\'t send messages more than %1 times an hour.","You can\'t send messages more than %1 times an hour."
 "The link to a friend was sent.","The link to a friend was sent."
 "We found some problems with the data.","We found some problems with the data."
 "Some emails were not sent.","Some emails were not sent."
-"You've met your limit of %1 sends in an hour.","You've met your limit of %1 sends in an hour."
-"The sender name cannot be empty.","The sender name cannot be empty."
+"You\'ve met your limit of %1 sends in an hour.","You\'ve met your limit of %1 sends in an hour."
+"Please enter a sender name.","Please enter a sender name."
 "Invalid Sender Email","Invalid Sender Email"
-"The message cannot be empty.","The message cannot be empty."
-"At least one recipient must be specified.","At least one recipient must be specified."
+"Please enter a message.","Please enter a message."
+"Please specify at least one recipient.","Please specify at least one recipient."
 "Please enter a correct recipient email address.","Please enter a correct recipient email address."
 "No more than %1 emails can be sent at a time.","No more than %1 emails can be sent at a time."
-"Please define a correct Cookie instance.","Please define a correct Cookie instance."
-"Please define a correct Product instance.","Please define a correct Product instance."
+"Please define a correct product instance.","Please define a correct product instance."
 "Invalid Sender Information","Invalid Sender Information"
-"Please define the correct Sender information.","Please define the correct Sender information."
-"Remove Email","Remove Email"
+"Please define the correct sender information.","Please define the correct sender information."
+"IP Address","IP Address"
+"Cookie (unsafe)","Cookie (unsafe)"
+"No Product Exception.","No Product Exception."
+"No Category Exception.","No Category Exception."
+"Some error","Some error"
+"Localized Exception.","Localized Exception."
+Exception.,Exception.
+"Remove Recipent","Remove Recipent"
+Remove,Remove
+Name,Name
+Email,Email
+"* Required Fields","* Required Fields"
+Sender,Sender
+Message,Message
+Invitee,Invitee
 "Maximum %1 email addresses allowed.","Maximum %1 email addresses allowed."
+"Add Invitee","Add Invitee"
+"Send Email","Send Email"
+Back,Back
+"%name,","%name,"
+"%sender_name wants to share this product with you:","%sender_name wants to share this product with you:"
+"Message from %sender_name:","Message from %sender_name:"
+"Email to a Friend","Email to a Friend"
+"Email Templates","Email Templates"
+Enabled,Enabled
 "Select Email Template","Select Email Template"
+"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
 "Allow for Guests","Allow for Guests"
 "Max Recipients","Max Recipients"
 "Max Products Sent in 1 Hour","Max Products Sent in 1 Hour"

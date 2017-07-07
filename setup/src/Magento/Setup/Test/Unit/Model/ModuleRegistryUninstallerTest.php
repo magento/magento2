@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -43,13 +43,13 @@ class ModuleRegistryUninstallerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $this->dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
-        $dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->writer = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
+        $this->loader = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
+        $this->dataSetup = $this->getMock(\Magento\Setup\Module\DataSetup::class, [], [], '', false);
+        $dataSetupFactory = $this->getMock(\Magento\Setup\Module\DataSetupFactory::class, [], [], '', false);
         $dataSetupFactory->expects($this->any())->method('create')->willReturn($this->dataSetup);
-        $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
+        $this->output = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
         $this->moduleRegistryUninstaller = new ModuleRegistryUninstaller(
             $dataSetupFactory,
             $this->deploymentConfig,

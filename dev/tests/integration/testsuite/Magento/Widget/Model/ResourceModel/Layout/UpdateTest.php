@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\ResourceModel\Layout;
@@ -15,7 +15,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\ResourceModel\Layout\Update'
+            \Magento\Widget\Model\ResourceModel\Layout\Update::class
         );
     }
 
@@ -26,14 +26,14 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\ThemeInterface'
+            \Magento\Framework\View\Design\ThemeInterface::class
         );
         $theme->load('Test Theme', 'theme_title');
         $result = $this->_resourceModel->fetchUpdatesByHandle(
             'test_handle',
             $theme,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()
         );
         $this->assertEquals('not_temporary', $result);
@@ -46,10 +46,12 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     public function testSaveAfterClearCache()
     {
         /** @var $appCache \Magento\Framework\App\Cache */
-        $appCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
+        $appCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\Cache::class
+        );
         /** @var \Magento\Framework\App\Cache\Type\Layout $layoutCache */
         $layoutCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Cache\Type\Layout'
+            \Magento\Framework\App\Cache\Type\Layout::class
         );
 
         $this->assertNotEmpty($appCache->load('APPLICATION_FIXTURE'));
@@ -57,7 +59,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
 
         /** @var $layoutUpdate \Magento\Widget\Model\Layout\Update */
         $layoutUpdate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Layout\Update'
+            \Magento\Widget\Model\Layout\Update::class
         );
         $layoutUpdate->setHasDataChanges(true);
         $this->_resourceModel->save($layoutUpdate);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,27 +40,27 @@ class DefaultOrderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->layoutMock = $this->getMockBuilder('\Magento\Framework\View\Layout')
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBlock'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
-            'Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder',
+            \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder::class,
             [
                 'context' => $this->objectManager->getObject(
-                        'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                         ['layout' => $this->layoutMock]
                     )
             ]
         );
 
-        $this->priceRenderBlock = $this->getMockBuilder('\Magento\Backend\Block\Template')
+        $this->priceRenderBlock = $this->getMockBuilder(\Magento\Backend\Block\Template::class)
             ->disableOriginalConstructor()
             ->setMethods(['setItem', 'toHtml'])
             ->getMock();
 
-        $this->itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $this->itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();

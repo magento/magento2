@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click Update Changes.
  * 6. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28540
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,7 +38,6 @@ class MoveShoppingCartProductsOnOrderPageTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -135,12 +134,12 @@ class MoveShoppingCartProductsOnOrderPageTest extends Injectable
         //Preconditions
         // Create product
         $product = $this->objectManager->create(
-            '\Magento\Catalog\Test\TestStep\CreateProductStep',
+            \Magento\Catalog\Test\TestStep\CreateProductStep::class,
             ['product' => $product]
         )->run()['product'];
         // Login under customer
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -32,7 +32,9 @@ class ShipmentGetTest extends WebapiAbstract
     public function testShipmentGet()
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
+        $shipmentCollection = $this->objectManager->get(
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class
+        );
         $shipment = $shipmentCollection->getFirstItem();
         $shipment->load($shipment->getId());
         $serviceInfo = [
@@ -58,14 +60,14 @@ class ShipmentGetTest extends WebapiAbstract
                 $this->assertEquals($shipment->getData($key), $value, $key);
             }
         }
-        $shipmentItem = $this->objectManager->get('Magento\Sales\Model\Order\Shipment\Item');
+        $shipmentItem = $this->objectManager->get(\Magento\Sales\Model\Order\Shipment\Item::class);
         foreach ($result['items'] as $item) {
             $shipmentItem->load($item['entity_id']);
             foreach ($item as $key => $value) {
                 $this->assertEquals($shipmentItem->getData($key), $value, $key);
             }
         }
-        $shipmentTrack = $this->objectManager->get('Magento\Sales\Model\Order\Shipment\Track');
+        $shipmentTrack = $this->objectManager->get(\Magento\Sales\Model\Order\Shipment\Track::class);
         foreach ($result['tracks'] as $item) {
             $shipmentTrack->load($item['entity_id']);
             foreach ($item as $key => $value) {

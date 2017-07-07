@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testScopeConfigMethods($method, $path, $configValue, $expectedValue)
     {
-        $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
             ->will($this->returnValue($configValue));
 
-        $taxData = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
+        $taxData = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
 
         /** @var \Magento\Weee\Model\Config */
         $model = new Config($scopeConfigMock, $taxData);

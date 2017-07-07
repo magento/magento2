@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
@@ -12,6 +12,13 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
  */
 abstract class Wishlist extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
     /**
      * Wishlist we're working with.
      *
@@ -40,27 +47,19 @@ abstract class Wishlist extends \Magento\Backend\App\Action
         }
 
         /* @var $wishlistItem \Magento\Wishlist\Model\Item */
-        $wishlistItem = $this->_objectManager->create('Magento\Wishlist\Model\Item')->loadWithOptions($wishlistItemId);
+        $wishlistItem = $this->_objectManager->create(
+            \Magento\Wishlist\Model\Item::class
+        )->loadWithOptions($wishlistItemId);
 
         if (!$wishlistItem->getWishlistId()) {
             throw new CoreException(__('Please load Wish List item.'));
         }
 
-        $this->_wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')
+        $this->_wishlist = $this->_objectManager->create(\Magento\Wishlist\Model\Wishlist::class)
             ->load($wishlistItem->getWishlistId());
 
         $this->_wishlistItem = $wishlistItem;
 
         return $this;
-    }
-
-    /**
-     * Check the permission to Manage Customers
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }

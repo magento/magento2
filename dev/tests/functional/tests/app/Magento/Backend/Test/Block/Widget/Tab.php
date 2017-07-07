@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Magento\Mtf\Block\Form as AbstractForm;
-use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Ui\Test\Block\Adminhtml\AbstractContainer;
 use Magento\Mtf\Client\Locator;
 
 /**
@@ -15,7 +14,7 @@ use Magento\Mtf\Client\Locator;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Tab extends AbstractForm
+class Tab extends AbstractContainer
 {
     /**
      * Field with Mage error.
@@ -37,46 +36,6 @@ class Tab extends AbstractForm
      * @var string
      */
     protected $mageErrorText = './/label[contains(@class,"error")]';
-
-    /**
-     * Fill data to fields on tab.
-     *
-     * @param array $fields
-     * @param SimpleElement|null $element
-     * @return $this
-     */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
-    {
-        $data = $this->dataMapping($fields);
-        $this->_fill($data, $element);
-
-        return $this;
-    }
-
-    /**
-     * Get data of tab.
-     *
-     * @param array|null $fields
-     * @param SimpleElement|null $element
-     * @return array
-     */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
-    {
-        $data = $this->dataMapping($fields);
-        return $this->_getData($data, $element);
-    }
-
-    /**
-     * Update data to fields on tab.
-     *
-     * @param array $fields
-     * @param SimpleElement|null $element
-     * @return void
-     */
-    public function updateFormTab(array $fields, SimpleElement $element = null)
-    {
-        $this->fillFormTab($fields, $element);
-    }
 
     /**
      * Get array of label => js error text.

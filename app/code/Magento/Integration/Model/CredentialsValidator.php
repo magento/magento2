@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,10 +25,10 @@ class CredentialsValidator
     {
         $exception = new InputException();
         if (!is_string($username) || strlen($username) == 0) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'username']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'username']));
         }
         if (!is_string($password) || strlen($password) == 0) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'password']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'password']));
         }
         if ($exception->wasErrorAdded()) {
             throw $exception;

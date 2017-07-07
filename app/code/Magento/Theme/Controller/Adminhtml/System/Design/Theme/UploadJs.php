@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+/**
+ * Class UploadJs
+ * @depecated
+ */
 class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**
@@ -18,11 +22,11 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     {
         $themeId = $this->getRequest()->getParam('id');
         /** @var $serviceModel \Magento\Theme\Model\Uploader\Service */
-        $serviceModel = $this->_objectManager->get('Magento\Theme\Model\Uploader\Service');
+        $serviceModel = $this->_objectManager->get(\Magento\Theme\Model\Uploader\Service::class);
         /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
-        $themeFactory = $this->_objectManager->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
+        $themeFactory = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
         /** @var $jsService \Magento\Framework\View\Design\Theme\Customization\File\Js */
-        $jsService = $this->_objectManager->get('Magento\Framework\View\Design\Theme\Customization\File\Js');
+        $jsService = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\Customization\File\Js::class);
         try {
             $theme = $themeFactory->create($themeId);
             if (!$theme) {
@@ -39,7 +43,7 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 
             /** @var $customization \Magento\Framework\View\Design\Theme\Customization */
             $customization = $this->_objectManager->create(
-                'Magento\Framework\View\Design\Theme\CustomizationInterface',
+                \Magento\Framework\View\Design\Theme\CustomizationInterface::class,
                 ['theme' => $theme]
             );
             $customJsFiles = $customization->getFilesByType(
@@ -50,10 +54,10 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => __('We can\'t upload the JS file right now.')];
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
         );
     }
 }

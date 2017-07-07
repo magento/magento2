@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
@@ -52,6 +52,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
+     * @deprecated
      * @see \Magento\Framework\Message\ManagerInterface::addErrorMessage
      */
     public function addError($message, $group = null);
@@ -62,6 +63,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
+     * @deprecated
      * @see \Magento\Framework\Message\ManagerInterface::addWarningMessage
      */
     public function addWarning($message, $group = null);
@@ -72,6 +74,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
+     * @deprecated
      * @see \Magento\Framework\Message\ManagerInterface::addNoticeMessage
      */
     public function addNotice($message, $group = null);
@@ -82,6 +85,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
+     * @deprecated
      * @see \Magento\Framework\Message\ManagerInterface::addSuccessMessage
      */
     public function addSuccess($message, $group = null);
@@ -178,6 +182,8 @@ interface ManagerInterface
      * @param string $alternativeText
      * @param string|null $group
      * @return ManagerInterface
+     * @deprecated
+     * @see \Magento\Framework\Message\ManagerInterface::addExceptionMessage
      */
     public function addException(\Exception $exception, $alternativeText, $group = null);
 

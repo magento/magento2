@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation\Rate;
@@ -33,6 +33,7 @@ class Converter
         $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
         $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
     }
+
     /**
      * Convert a tax rate data object to an array of associated titles
      *
@@ -71,7 +72,7 @@ class Converter
             'tax_postcode' => $taxRate->getTaxPostcode(),
             'code' => $taxRate->getCode(),
             'rate' => $taxRate->getRate(),
-            'zip_is_range' => $returnNumericLogic?0:false,
+            'zip_is_range' => $returnNumericLogic ? 0 : false,
         ];
 
         if ($taxRateFormData['tax_region_id'] === '0') {
@@ -79,7 +80,7 @@ class Converter
         }
 
         if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
-            $taxRateFormData['zip_is_range'] = $returnNumericLogic?1:true;
+            $taxRateFormData['zip_is_range'] = $returnNumericLogic ? 1 : true;
             $taxRateFormData['zip_from'] = $taxRate->getZipFrom();
             $taxRateFormData['zip_to'] = $taxRate->getZipTo();
         }
@@ -108,7 +109,6 @@ class Converter
 
         return $taxRateFormData;
     }
-
 
     /**
      * Convert an array to a tax rate data object

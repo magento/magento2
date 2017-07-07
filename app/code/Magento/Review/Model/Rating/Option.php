@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Model\Rating;
 
 /**
  * Rating option model
+ *
+ * @api
  *
  * @method \Magento\Review\Model\ResourceModel\Rating\Option _getResource()
  * @method \Magento\Review\Model\ResourceModel\Rating\Option getResource()
@@ -29,7 +31,7 @@ class Option extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Rating\Option');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating\Option::class);
     }
 
     /**

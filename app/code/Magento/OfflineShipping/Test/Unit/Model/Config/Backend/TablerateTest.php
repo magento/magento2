@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\Config\Backend;
@@ -20,20 +20,21 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->tableateFactoryMock =
-            $this->getMockBuilder('Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory')
+            $this->getMockBuilder(\Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $helper->getObject('\Magento\OfflineShipping\Model\Config\Backend\Tablerate', [
-            'tablerateFactory' => $this->tableateFactoryMock
-        ]);
+        $this->model = $helper->getObject(
+            \Magento\OfflineShipping\Model\Config\Backend\Tablerate::class,
+            ['tablerateFactory' => $this->tableateFactoryMock]
+        );
     }
 
     public function testAfterSave()
     {
-        $tablerateMock = $this->getMockBuilder('Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate')
+        $tablerateMock = $this->getMockBuilder(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate::class)
             ->disableOriginalConstructor()
             ->setMethods(['uploadAndImport'])
             ->getMock();

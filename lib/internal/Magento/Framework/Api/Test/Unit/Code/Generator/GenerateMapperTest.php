@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
@@ -21,7 +21,7 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ioObjectMock = $this->getMock(
-            '\Magento\Framework\Code\Generator\Io',
+            \Magento\Framework\Code\Generator\Io::class,
             [],
             [],
             '',
@@ -36,23 +36,22 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
     {
         require_once __DIR__ . '/Sample.php';
         $model = $this->getMock(
-            'Magento\Framework\Api\Code\Generator\Mapper',
+            \Magento\Framework\Api\Code\Generator\Mapper::class,
             [
                 '_validateData'
             ],
-            [
-                '\Magento\Framework\Api\Code\Generator\Sample',
+            [\Magento\Framework\Api\Code\Generator\Sample::class,
                 null,
                 $this->ioObjectMock,
                 null,
                 null,
-                $this->getMock('Magento\Framework\Filesystem\FileResolver')
+                $this->getMock(\Magento\Framework\Filesystem\FileResolver::class)
             ]
         );
         $sampleMapperCode = file_get_contents(__DIR__ . '/_files/SampleMapper.txt');
         $this->ioObjectMock->expects($this->once())
             ->method('generateResultFileName')
-            ->with('\Magento\Framework\Api\Code\Generator\SampleMapper')
+            ->with('\\' . \Magento\Framework\Api\Code\Generator\SampleMapper::class)
             ->will($this->returnValue('SampleMapper.php'));
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')

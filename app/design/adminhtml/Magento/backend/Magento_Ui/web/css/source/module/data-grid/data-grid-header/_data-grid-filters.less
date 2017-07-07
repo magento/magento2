@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -49,15 +49,19 @@
     max-width: 45.5rem;
     position: relative;
     width: 35%;
+
     :-ms-input-placeholder {
         font-style: italic;
     }
+
     ::-webkit-input-placeholder {
         font-style: italic;
     }
+
     ::-moz-placeholder {
         font-style: italic;
     }
+
     //  Submit/search icon
     .action-submit {
         .action-reset();
@@ -65,39 +69,47 @@
         position: absolute;
         right: 0;
         top: 1px;
+
         &:active {
             .scale();
         }
+
         &:hover {
             &:before {
                 color: darken(@text__color, 10%);
             }
         }
+
         &:focus {
             ._keyfocus & {
                 box-shadow: @focus__box-shadow;
             }
         }
+
         &:before {
             &:extend(.abs-icon all);
             content: @icon-search__content;
             font-size: @data-grid-search-action__size;
             transition: @smooth__color;
         }
+
         > span {
             .hidden();
         }
     }
+
     .action-menu {
-        z-index: @data-grid-search-menu__z-index;
         max-height: 3.85rem * @data-grid-search-control-action-menu-item__quantity; // ToDo UI: change static item height
         overflow-y: auto;
+        z-index: @data-grid-search-menu__z-index;
     }
+
     .action-menu-item {
         &._selected {
             background-color: @data-grid-search-menu-item__background-color;
         }
     }
+
     .data-grid-search-label {
         display: none;
     }
@@ -112,12 +124,14 @@
 .data-grid-filters-action-wrap {
     float: left;
     padding-left: @indent__base;
+
     .action-default {
         font-size: @data-grid-filters__font-size;
         margin-bottom: 1rem;
         padding-left: @data-grid-filters-action__padding-left;
         padding-right: @data-grid-filters-action__padding-right;
         padding-top: @action__padding-top + .1rem;
+
         &._active {
             background-color: @data-grid-filters__background-color;
             border-bottom-color: @data-grid-filters__background-color;
@@ -128,6 +142,7 @@
             padding-top: @action__padding-top + .2rem;
             position: relative;
             z-index: @data-grid-header__z-index - 19;
+
             &:after {
                 background-color: @data-grid-filters-action__active__color;
                 bottom: 100%;
@@ -138,6 +153,7 @@
                 right: -1px;
             }
         }
+
         &:before {
             &:extend(.abs-icon all);
             color: @action-dropdown__color;
@@ -149,8 +165,17 @@
             vertical-align: top;
         }
     }
+
     .filters-active {
         display: none;
+    }
+}
+
+.admin__action-grid-select {
+    .admin__control-select {
+        margin: -.5rem .5rem 0 0;
+        padding-bottom: .6rem;
+        padding-top: .6rem;
     }
 }
 
@@ -163,6 +188,7 @@
     clear: both;
     font-size: @data-grid-filters__font-size;
     transition: opacity .3s ease;
+
     &._show {
         .appearing__on();
         border-bottom: 1px solid @data-grid-filters-action__active__border-color;
@@ -172,11 +198,13 @@
         position: relative;
         top: -1px;
         z-index: @data-grid-header__z-index - 20;
+
         .admin__data-grid-filters-footer,
         .admin__data-grid-filters {
             display: block;
         }
     }
+
     //  Field labels
     .admin__form-field-legend,
     .admin__form-field-label {
@@ -185,6 +213,7 @@
         margin: 0 0 .3rem;
         text-align: left;
     }
+
     //  First level field
     .admin__form-field {
         display: inline-block;
@@ -194,6 +223,7 @@
         padding-right: @data-grid-filters-fieldset__inner-side / 2;
         vertical-align: top;
         width: ~'calc(100% / @{data-grid-filters-fieldset__columns} - 4px)';
+
         //  Inner fields
         .admin__form-field {
             display: block;
@@ -202,9 +232,11 @@
             padding-left: 0;
             padding-right: 0;
             width: auto;
+
             &:last-child {
                 margin-bottom: 0;
             }
+
             //  Inner field labels
             .admin__form-field-label {
                 border: @field-control__border-width solid transparent;
@@ -217,6 +249,7 @@
                 padding-top: @field-control__padding-top;
                 width: @data-grid-filters-label__width;
             }
+
             .admin__form-field-control {
                 margin-left: @data-grid-filters-label__width;
             }
@@ -229,12 +262,21 @@
     .admin__action-multiselect {
         font-size: @data-grid-filters__font-size;
     }
+
     .admin__control-select {
-        padding-top: @action__padding-top - .1rem;
         height: @action__height;
+        padding-top: @action__padding-top - .1rem;
     }
+
+    .admin__action-multiselect {
+        &:before {
+            height: @action__height;
+            width: @action__height;
+        }
+    }
+
     //  Date control
-    .admin__control-text.hasDatepicker,
+    .admin__control-text._has-datepicker,
     .admin__control-select {
         width: 100%;
     }
@@ -257,10 +299,12 @@
     &:extend(.abs-clearfix all);
     display: none;
     font-size: @font-size__base;
+
     .admin__footer-main-actions {
         margin-left: 25%;
         text-align: right;
     }
+
     .admin__footer-secondary-actions {
         float: left;
         width: 50%;
@@ -281,11 +325,13 @@
     padding-bottom: .8rem;
     padding-top: 1.1rem;
     width: 100%;
+
     &._show {
         display: table;
         position: relative;
         top: -1px;
         z-index: 3;
+
         + .admin__data-grid-filters-wrap {
             &._show {
                 margin-top: -(@data-grid-filters-current__margin-borrom + .1rem);
@@ -312,6 +358,7 @@
 
 .admin__current-filters-list {
     margin-bottom: 0;
+
     > li {
         display: inline-block;
         font-weight: @font-weight__semibold;
@@ -319,20 +366,24 @@
         padding-right: @data-grid-filters-current-action-remove__size + 1rem;
         position: relative;
     }
+
     .action-remove {
         .action-reset();
         line-height: 1;
         position: absolute;
         right: 0;
         top: 1px;
+
         &:hover {
             &:before {
                 color: @data-grid-filters-current-action-remove__hover__background-color;
             }
         }
+
         &:active {
             .scale();
         }
+
         &:before {
             &:extend(.abs-icon all);
             color: @data-grid-filters-current-action-remove__background-color;
@@ -340,6 +391,7 @@
             font-size: @data-grid-filters-current-action-remove__size;
             transition: @smooth__color;
         }
+
         > span {
             .hidden();
         }

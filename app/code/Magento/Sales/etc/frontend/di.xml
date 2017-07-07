@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Sales\Controller\AbstractController\OrderLoaderInterface" type="\Magento\Sales\Controller\AbstractController\OrderLoader" />
-    <preference for="Magento\Sales\Controller\AbstractController\OrderViewAuthorizationInterface" type="\Magento\Sales\Controller\AbstractController\OrderViewAuthorization" />
+    <preference for="Magento\Sales\Controller\AbstractController\OrderLoaderInterface" type="Magento\Sales\Controller\AbstractController\OrderLoader" />
+    <preference for="Magento\Sales\Controller\AbstractController\OrderViewAuthorizationInterface" type="Magento\Sales\Controller\AbstractController\OrderViewAuthorization" />
     <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">

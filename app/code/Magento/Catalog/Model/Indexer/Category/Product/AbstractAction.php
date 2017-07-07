@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,17 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class AbstractAction
+ *
+ * @api
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractAction
 {
     /**
@@ -88,19 +97,38 @@ abstract class AbstractAction
     protected $connection;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @var string
+     */
+    protected $tempTreeIndexTableName;
+
+    /**
+     * @var QueryGenerator
+     */
+    private $queryGenerator;
+
+    /**
+     * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
+     * @param QueryGenerator $queryGenerator
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $config
+        \Magento\Catalog\Model\Config $config,
+        QueryGenerator $queryGenerator = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->config = $config;
+        $this->queryGenerator = $queryGenerator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(QueryGenerator::class);
     }
 
     /**
@@ -139,6 +167,9 @@ abstract class AbstractAction
 
     /**
      * Return main index table name
+     *
+     * This table should be used on frontend(clients)
+     * The name is switched between 'catalog_category_product_index' and 'catalog_category_product_index_replica'
      *
      * @return string
      */
@@ -201,6 +232,8 @@ abstract class AbstractAction
 
             $rootPath = $this->getPathFromCategoryId($store->getRootCategoryId());
 
+            $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $linkField = $metadata->getLinkField();
             $select = $this->connection->select()->from(
                 ['cc' => $this->getTable('catalog_category_entity')],
                 []
@@ -213,26 +246,30 @@ abstract class AbstractAction
                 'cpw.product_id = ccp.product_id',
                 []
             )->joinInner(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                'ccp.product_id = cpe.entity_id',
+                []
+            )->joinInner(
                 ['cpsd' => $this->getTable('catalog_product_entity_int')],
-                'cpsd.entity_id = ccp.product_id AND cpsd.store_id = 0' .
+                'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0' .
                 ' AND cpsd.attribute_id = ' .
                 $statusAttributeId,
                 []
             )->joinLeft(
                 ['cpss' => $this->getTable('catalog_product_entity_int')],
-                'cpss.entity_id = ccp.product_id AND cpss.attribute_id = cpsd.attribute_id' .
+                'cpss.' . $linkField . ' = cpe.' . $linkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
                 ' AND cpss.store_id = ' .
                 $store->getId(),
                 []
             )->joinInner(
                 ['cpvd' => $this->getTable('catalog_product_entity_int')],
-                'cpvd.entity_id = ccp.product_id AND cpvd.store_id = 0' .
+                'cpvd.' . $linkField . ' = cpe.' . $linkField . ' AND cpvd.store_id = 0' .
                 ' AND cpvd.attribute_id = ' .
                 $visibilityAttributeId,
                 []
             )->joinLeft(
                 ['cpvs' => $this->getTable('catalog_product_entity_int')],
-                'cpvs.entity_id = ccp.product_id AND cpvs.attribute_id = cpvd.attribute_id' .
+                'cpvs.' . $linkField . ' = cpe.' . $linkField . ' AND cpvs.attribute_id = cpvd.attribute_id' .
                 ' AND cpvs.store_id = ' .
                 $store->getId(),
                 []
@@ -288,15 +325,26 @@ abstract class AbstractAction
      * @param int $range
      * @return \Magento\Framework\DB\Select[]
      */
-    protected function prepareSelectsByRange(\Magento\Framework\DB\Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
-    {
-        return $this->isRangingNeeded() ? $this->connection->selectsByRange(
-            $field,
-            $select,
-            $range
-        ) : [
-            $select
-        ];
+    protected function prepareSelectsByRange(
+        \Magento\Framework\DB\Select $select,
+        $field,
+        $range = self::RANGE_CATEGORY_STEP
+    ) {
+        if ($this->isRangingNeeded()) {
+            $iterator = $this->queryGenerator->generate(
+                $field,
+                $select,
+                $range,
+                \Magento\Framework\DB\Query\BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
+            );
+
+            $queries = [];
+            foreach ($iterator as $query) {
+                $queries[] = $query;
+            }
+            return $queries;
+        }
+        return [$select];
     }
 
     /**
@@ -336,6 +384,7 @@ abstract class AbstractAction
      *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\DB\Select
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function createAnchorSelect(\Magento\Store\Model\Store $store)
     {
@@ -350,21 +399,31 @@ abstract class AbstractAction
         )->getId();
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
+
+        $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
+
+        $productMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $categoryMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $productLinkField = $productMetadata->getLinkField();
+        $categoryLinkField = $categoryMetadata->getLinkField();
+
         return $this->connection->select()->from(
             ['cc' => $this->getTable('catalog_category_entity')],
             []
         )->joinInner(
-            ['cc2' => $this->getTable('catalog_category_entity')],
-            'cc2.path LIKE ' . $this->connection->getConcatSql(
-                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
-            ) . ' AND cc.entity_id NOT IN (' . implode(
+            ['cc2' => $temporaryTreeTable],
+            'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (' . implode(
                 ',',
                 $rootCatIds
             ) . ')',
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
-            'ccp.category_id = cc2.entity_id',
+            'ccp.category_id = cc2.child_id',
+            []
+        )->joinInner(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            'ccp.product_id = cpe.entity_id',
             []
         )->joinInner(
             ['cpw' => $this->getTable('catalog_product_website')],
@@ -372,34 +431,36 @@ abstract class AbstractAction
             []
         )->joinInner(
             ['cpsd' => $this->getTable('catalog_product_entity_int')],
-            'cpsd.entity_id = ccp.product_id AND cpsd.store_id = 0' . ' AND cpsd.attribute_id = ' . $statusAttributeId,
+            'cpsd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpsd.store_id = 0'
+                . ' AND cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],
-            'cpss.entity_id = ccp.product_id AND cpss.attribute_id = cpsd.attribute_id' .
+            'cpss.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
             ' AND cpss.store_id = ' .
             $store->getId(),
             []
         )->joinInner(
             ['cpvd' => $this->getTable('catalog_product_entity_int')],
-            'cpvd.entity_id = ccp.product_id AND cpvd.store_id = 0' .
+            'cpvd.' . $productLinkField . ' = cpe. ' . $productLinkField . ' AND cpvd.store_id = 0' .
             ' AND cpvd.attribute_id = ' .
             $visibilityAttributeId,
             []
         )->joinLeft(
             ['cpvs' => $this->getTable('catalog_product_entity_int')],
-            'cpvs.entity_id = ccp.product_id AND cpvs.attribute_id = cpvd.attribute_id ' .
-            'AND cpvs.store_id = ' .
+            'cpvs.' . $productLinkField . ' = cpe.' . $productLinkField .
+            ' AND cpvs.attribute_id = cpvd.attribute_id ' . 'AND cpvs.store_id = ' .
             $store->getId(),
             []
         )->joinInner(
             ['ccad' => $this->getTable('catalog_category_entity_int')],
-            'ccad.entity_id = cc.entity_id AND ccad.store_id = 0' . ' AND ccad.attribute_id = ' . $isAnchorAttributeId,
+            'ccad.' . $categoryLinkField . ' = cc.' . $categoryLinkField . ' AND ccad.store_id = 0' .
+            ' AND ccad.attribute_id = ' . $isAnchorAttributeId,
             []
         )->joinLeft(
             ['ccas' => $this->getTable('catalog_category_entity_int')],
-            'ccas.entity_id = cc.entity_id AND ccas.attribute_id = ccad.attribute_id' .
-            ' AND ccas.store_id = ' .
+            'ccas.' . $categoryLinkField . ' = cc.' . $categoryLinkField
+            . ' AND ccas.attribute_id = ccad.attribute_id AND ccas.store_id = ' .
             $store->getId(),
             []
         )->where(
@@ -427,6 +488,92 @@ abstract class AbstractAction
                 'store_id' => new \Zend_Db_Expr($store->getId()),
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
             ]
+        );
+    }
+
+    /**
+     * Get temporary table name for concurrent indexing in persistent connection
+     * Temp table name is NOT shared between action instances and each action has it's own temp tree index
+     *
+     * @return string
+     */
+    protected function getTemporaryTreeIndexTableName()
+    {
+        if (empty($this->tempTreeIndexTableName)) {
+            $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
+                . '_'
+                . substr(md5(time() . rand(0, 999999999)), 0, 8);
+        }
+
+        return $this->tempTreeIndexTableName;
+    }
+
+    /**
+     * Build and populate the temporary category tree index table
+     *
+     * Returns the name of the temporary table to use in queries.
+     *
+     * @return string
+     */
+    protected function makeTempCategoryTreeIndex()
+    {
+        // Note: this temporary table is per-connection, so won't conflict by prefix.
+        $temporaryName = $this->getTemporaryTreeIndexTableName();
+
+        $temporaryTable = $this->connection->newTable($temporaryName);
+        $temporaryTable->addColumn(
+            'parent_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'unsigned' => true]
+        );
+        $temporaryTable->addColumn(
+            'child_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'unsigned' => true]
+        );
+        // Each entry will be unique.
+        $temporaryTable->addIndex(
+            'idx_primary',
+            ['parent_id', 'child_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY]
+        );
+
+        // Drop the temporary table in case it already exists on this (persistent?) connection.
+        $this->connection->dropTemporaryTable($temporaryName);
+        $this->connection->createTemporaryTable($temporaryTable);
+
+        $this->fillTempCategoryTreeIndex($temporaryName);
+
+        return $temporaryName;
+    }
+
+    /**
+     * Populate the temporary category tree index table
+     *
+     * @param string $temporaryName
+     */
+    protected function fillTempCategoryTreeIndex($temporaryName)
+    {
+        // This finds all children (cc2) that descend from a parent (cc) by path.
+        // For example, cc.path may be '1/2', and cc2.path may be '1/2/3/4/5'.
+        $temporarySelect = $this->connection->select()->from(
+            ['cc' => $this->getTable('catalog_category_entity')],
+            ['parent_id' => 'entity_id']
+        )->joinInner(
+            ['cc2' => $this->getTable('catalog_category_entity')],
+            'cc2.path LIKE ' . $this->connection->getConcatSql(
+                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
+            ),
+            ['child_id' => 'entity_id']
+        );
+
+        $this->connection->query(
+            $temporarySelect->insertFromSelect(
+                $temporaryName,
+                ['parent_id', 'child_id']
+            )
         );
     }
 
@@ -484,6 +631,9 @@ abstract class AbstractAction
                 'visibility'
             )->getId();
 
+            $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $linkField = $metadata->getLinkField();
+
             $select = $this->connection->select()->from(
                 ['cp' => $this->getTable('catalog_product_entity')],
                 []
@@ -493,25 +643,25 @@ abstract class AbstractAction
                 []
             )->joinInner(
                 ['cpsd' => $this->getTable('catalog_product_entity_int')],
-                'cpsd.entity_id = cp.entity_id AND cpsd.store_id = 0' .
+                'cpsd.' . $linkField . ' = cp.' . $linkField . ' AND cpsd.store_id = 0' .
                 ' AND cpsd.attribute_id = ' .
                 $statusAttributeId,
                 []
             )->joinLeft(
                 ['cpss' => $this->getTable('catalog_product_entity_int')],
-                'cpss.entity_id = cp.entity_id AND cpss.attribute_id = cpsd.attribute_id' .
+                'cpss.' . $linkField . ' = cp.' . $linkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
                 ' AND cpss.store_id = ' .
                 $store->getId(),
                 []
             )->joinInner(
                 ['cpvd' => $this->getTable('catalog_product_entity_int')],
-                'cpvd.entity_id = cp.entity_id AND cpvd.store_id = 0' .
+                'cpvd.' . $linkField . ' = cp.' . $linkField . ' AND cpvd.store_id = 0' .
                 ' AND cpvd.attribute_id = ' .
                 $visibilityAttributeId,
                 []
             )->joinLeft(
                 ['cpvs' => $this->getTable('catalog_product_entity_int')],
-                'cpvs.entity_id = cp.entity_id AND cpvs.attribute_id = cpvd.attribute_id ' .
+                'cpvs.' . $linkField . ' = cp.' . $linkField . ' AND cpvs.attribute_id = cpvd.attribute_id ' .
                 ' AND cpvs.store_id = ' .
                 $store->getId(),
                 []
@@ -593,5 +743,17 @@ abstract class AbstractAction
                 );
             }
         }
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

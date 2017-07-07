@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Service\V1;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Store view service
@@ -22,6 +24,11 @@ class StoreViewService
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $connection;
+
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param Config $eavConfig
@@ -79,11 +86,33 @@ class StoreViewService
         if (!$attribute) {
             throw new \InvalidArgumentException(sprintf('Cannot retrieve attribute for entity type "%s"', $entityType));
         }
+        $linkFieldName = $attribute->getEntity()->getLinkField();
+        if (!$linkFieldName) {
+            $linkFieldName = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        }
         $select = $this->connection->select()
-            ->from($attribute->getBackendTable(), 'store_id')
-            ->where('attribute_id = ?', $attribute->getId())
-            ->where('entity_id = ?', $entityId);
+            ->from(['e' => $attribute->getEntity()->getEntityTable()], [])
+            ->join(
+                ['e_attr' => $attribute->getBackendTable()],
+                "e.{$linkFieldName} = e_attr.{$linkFieldName}",
+                'store_id'
+            )->where('e_attr.attribute_id = ?', $attribute->getId())
+            ->where('e.entity_id = ?', $entityId);
 
         return in_array($storeId, $this->connection->fetchCol($select));
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

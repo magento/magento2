@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Config\Source;
@@ -27,11 +27,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->categoryCollection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category\Collection')
+        $this->categoryCollection = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->category = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
             ->setMethods(['getName', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -40,7 +42,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject $categoryCollectionFactory
          */
         $categoryCollectionFactory =
-            $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category\CollectionFactory')
+            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -49,9 +51,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $helper = new ObjectManager($this);
-        $this->model = $helper->getObject('Magento\Catalog\Model\Config\Source\Category', [
-                'categoryCollectionFactory' => $categoryCollectionFactory
-            ]);
+        $this->model = $helper->getObject(
+            \Magento\Catalog\Model\Config\Source\Category::class,
+            ['categoryCollectionFactory' => $categoryCollectionFactory]
+        );
     }
 
     public function testToOptionArray()

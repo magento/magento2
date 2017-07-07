@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -28,10 +28,12 @@
                     }
                 }
             }
+
             th,
             td {
                 border: 0;
             }
+
             .mark {
                 font-weight: @font-weight__regular;
                 text-align: right;
@@ -41,7 +43,7 @@
 }
 
 //
-//    Mobile
+//  Mobile
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
@@ -49,27 +51,33 @@
         border-top: @table__border-width @table__border-style @table__border-color;
         .lib-table-overflow();
         position: relative; // To hide unnecessary horizontal scrollbar in Safari
+
         .table:not(.totals):not(.cart):not(.table-comparison) {
             .lib-table-responsive();
+
             tbody {
                 > tr {
                     > td:first-child {
                         padding-top: 15px;
                     }
+
                     > td:last-child {
                         border-bottom: @table__border-width @table__border-style @table__border-color;
                         padding-bottom: 15px;
                     }
+
                     > td.col.qty {
                         text-align: left;
                     }
                 }
             }
+
             &.additional-attributes {
                 tbody {
                     th {
                         &:extend(.abs-no-display-s all);
                     }
+
                     td {
                         &:last-child {
                             border: none;
@@ -79,11 +87,14 @@
                 }
             }
         }
+
         .table:not(.totals):not(.table-comparison) {
             tfoot {
                 display: block;
+
                 tr {
                     display: block;
+
                     &:extend(.abs-add-clearfix-mobile all);
                     &:first-child {
                         th,
@@ -92,24 +103,46 @@
                         }
                     }
                 }
+
                 .mark {
                     box-sizing: border-box;
                     float: left;
                     text-align: left;
                     width: 70%;
                 }
+
                 .amount {
                     box-sizing: border-box;
                     float: left;
                     text-align: right;
                     width: 30%;
                 }
+
                 .grand.totals {
                     .lib-font-size(16);
                     .amount {
                         padding-bottom: @indent__s;
                     }
                 }
+            }
+        }
+    }
+
+    .data-table-definition-list {
+        thead {
+            display: none;
+        }
+
+        tbody th {
+            padding-bottom: 0;
+        }
+
+        tbody {
+            th,
+            td {
+                display: block;
+                padding-left: 0;
+                padding-right: 0;
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml;
@@ -27,7 +27,9 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndNew()
     {
         $this->getRequest()->setPostValue(['back' => 'new']);
-        $this->dispatch('backend/catalog/product/save/id/1');
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
@@ -41,10 +43,16 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndDuplicate()
     {
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
-        $this->dispatch('backend/catalog/product/save/id/1');
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(
-            $this->logicalNot($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/id/1/'))
+            $this->logicalNot(
+                $this->stringStartsWith(
+                    'http://localhost/index.php/backend/catalog/product/edit/id/' . $product->getEntityId() . '/'
+                )
+            )
         );
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
@@ -92,18 +100,20 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     public function testEditAction()
     {
-        $this->dispatch('backend/catalog/product/edit/id/1');
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('#save-split-button', 1, $body, '"Save" button isn\'t present on Edit Product page');
+        $this->assertSelectCount('#save-button', 1, $body, '"Save" button isn\'t present on Edit Product page');
         $this->assertSelectCount(
-            '#save-split-button-new-button',
+            '#save_and_new',
             1,
             $body,
             '"Save & New" button isn\'t present on Edit Product page'
         );
         $this->assertSelectCount(
-            '#save-split-button-duplicate-button',
+            '#save_and_duplicate',
             1,
             $body,
             '"Save & Duplicate" button isn\'t present on Edit Product page'

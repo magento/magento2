@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
@@ -28,6 +28,8 @@ use Magento\ProductAlert\Model\ResourceModel\Stock\Customer\Collection;
  * @method \Magento\ProductAlert\Model\Stock setStatus(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Stock extends \Magento\Framework\Model\AbstractModel
 {
@@ -61,7 +63,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\ResourceModel\Stock');
+        $this->_init(\Magento\ProductAlert\Model\ResourceModel\Stock::class);
     }
 
     /**

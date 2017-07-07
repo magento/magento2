@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,21 +58,29 @@ class ValidatorFile extends Validator
     protected $product;
 
     /**
+     * @var \Magento\Framework\Validator\File\IsImage
+     */
+    protected $isImageValidator;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
+     * @param \Magento\Framework\Validator\File\IsImage $isImageValidator
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\File\Size $fileSize,
-        \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
+        \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
+        \Magento\Framework\Validator\File\IsImage $isImageValidator
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->filesystem = $filesystem;
         $this->httpFactory = $httpFactory;
+        $this->isImageValidator = $isImageValidator;
         parent::__construct($scopeConfig, $filesystem, $fileSize);
     }
 
@@ -169,8 +177,15 @@ class ValidatorFile extends Validator
             $_height = 0;
 
             if ($tmpDirectory->isReadable($tmpDirectory->getRelativePath($fileInfo['tmp_name']))) {
-                $imageSize = getimagesize($fileInfo['tmp_name']);
-                if ($imageSize) {
+                if (filesize($fileInfo['tmp_name'])) {
+                    if ($this->isImageValidator->isValid($fileInfo['tmp_name'])) {
+                        $imageSize = getimagesize($fileInfo['tmp_name']);
+                    }
+                } else {
+                    throw new LocalizedException(__('The file is empty. Please choose another one'));
+                }
+
+                if (!empty($imageSize)) {
                     $_width = $imageSize[0];
                     $_height = $imageSize[1];
                 }

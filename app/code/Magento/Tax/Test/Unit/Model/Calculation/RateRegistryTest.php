@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,18 +32,18 @@ class RateRegistryTest extends \PHPUnit_Framework_TestCase
 
     const TAX_RATE_ID = 1;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->rateModelFactoryMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\RateFactory')
+        $this->rateModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RateFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rateRegistry = $objectManager->getObject(
-            'Magento\Tax\Model\Calculation\RateRegistry',
+            \Magento\Tax\Model\Calculation\RateRegistry::class,
             ['taxModelRateFactory' => $this->rateModelFactoryMock]
         );
-        $this->rateModelMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Rate')
+        $this->rateModelMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Rate::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

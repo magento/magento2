@@ -1,89 +1,16 @@
-ID,ID
-Apply,Apply
-No,No
-Subtotal,Subtotal
-Discount,Discount
-Uses,Uses
-Delete,Delete
-Yes,Yes
-"Web Site","Web Site"
-Status,Status
-"Save and Continue Edit","Save and Continue Edit"
-Description,Description
-Catalog,Catalog
-Actions,Actions
-Rule,Rule
-"Start on","Start on"
-"End on","End on"
-Active,Active
-"This rule no longer exists.","This rule no longer exists."
-"General Information","General Information"
-Websites,Websites
+"Cart Price Rules","Cart Price Rules"
 "Add New Rule","Add New Rule"
-"Edit Rule '%1'","Edit Rule '%1'"
-"New Rule","New Rule"
-"Rule Information","Rule Information"
-"Discount Amount","Discount Amount"
-"Stop Further Rules Processing","Stop Further Rules Processing"
-Conditions,Conditions
-"Rule Name","Rule Name"
-Inactive,Inactive
-"Customer Groups","Customer Groups"
-"From Date","From Date"
-"To Date","To Date"
-Priority,Priority
-Promotions,Promotions
-"Edit Rule","Edit Rule"
-"The rule has been saved.","The rule has been saved."
-"An error occurred while saving the rule data. Please review the log and try again.","An error occurred while saving the rule data. Please review the log and try again."
-"The rule has been deleted.","The rule has been deleted."
-"An error occurred while deleting the rule. Please review the log and try again.","An error occurred while deleting the rule. Please review the log and try again."
-"Update the Product","Update the Product"
-"To Fixed Value","To Fixed Value"
-"To Percentage","To Percentage"
-"By Fixed value","By Fixed value"
-"By Percentage","By Percentage"
-"Update product's %1 %2: %3","Update product's %1 %2: %3"
-"Conditions Combination","Conditions Combination"
-"Product Attribute","Product Attribute"
-"Shipping Method","Shipping Method"
-"Payment Method","Payment Method"
-Created,Created
-Alphanumeric,Alphanumeric
+Delete,Delete
+"Are you sure you want to delete this?","Are you sure you want to delete this?"
+Reset,Reset
+"Save and Continue Edit","Save and Continue Edit"
+Save,Save
+Actions,Actions
+"Apply the rule only to cart items matching the following conditions (leave blank for all items).","Apply the rule only to cart items matching the following conditions (leave blank for all items)."
 "Apply To","Apply To"
-"is one of","is one of"
-"is not one of","is not one of"
-"equals or greater than","equals or greater than"
-"equals or less than","equals or less than"
-"greater than","greater than"
-"less than","less than"
-Alphabetical,Alphabetical
-Numeric,Numeric
-Generate,Generate
-Auto,Auto
-Coupon,Coupon
-"Shopping Cart Price Rule","Shopping Cart Price Rule"
-"Coupon Code","Coupon Code"
-is,is
-"is not","is not"
-CSV,CSV
-"Excel XML","Excel XML"
-"Total Weight","Total Weight"
-"Discount (%1)","Discount (%1)"
-"Store View Specific Labels","Store View Specific Labels"
-"Shopping Cart Price Rules","Shopping Cart Price Rules"
-"Update prices using the following information","Update prices using the following information"
-"Percent of product price discount","Percent of product price discount"
-"Fixed amount discount","Fixed amount discount"
-"Fixed amount discount for whole cart","Fixed amount discount for whole cart"
-"Buy X get Y free (discount amount is Y)","Buy X get Y free (discount amount is Y)"
-"Maximum Qty Discount is Applied To","Maximum Qty Discount is Applied To"
-"Discount Qty Step (Buy X)","Discount Qty Step (Buy X)"
-"Apply to Shipping Amount","Apply to Shipping Amount"
-"Apply the rule only to cart items matching the following conditions ' '(leave blank for all items).","Apply the rule only to cart items matching the following conditions ' '(leave blank for all items)."
+Conditions,Conditions
 "Apply the rule only if the following conditions are met (leave blank for all products).","Apply the rule only if the following conditions are met (leave blank for all products)."
 "Manage Coupon Codes","Manage Coupon Codes"
-"Coupons Information","Coupons Information"
 "Coupon Qty","Coupon Qty"
 "Code Length","Code Length"
 "Excluding prefix, suffix and separators.","Excluding prefix, suffix and separators."
@@ -92,32 +19,68 @@ CSV,CSV
 "Code Suffix","Code Suffix"
 "Dash Every X Characters","Dash Every X Characters"
 "If empty no separation.","If empty no separation."
+Generate,Generate
+"Coupon Code","Coupon Code"
+Created,Created
+Uses,Uses
+No,No
+Yes,Yes
 "Times Used","Times Used"
+CSV,CSV
+"Excel XML","Excel XML"
 "Are you sure you want to delete the selected coupon(s)?","Are you sure you want to delete the selected coupon(s)?"
 Labels,Labels
-"Default Label","Default Label"
-"Default Rule Label for All Store Views","Default Rule Label for All Store Views"
-"Use Auto Generation","Use Auto Generation"
-"If you select and save the rule you will be able to generate multiple coupon codes.","If you select and save the rule you will be able to generate multiple coupon codes."
-"Uses per Coupon","Uses per Coupon"
-"Uses per Customer","Uses per Customer"
-"Public In RSS Feed","Public In RSS Feed"
-"Cart Price Rules","Cart Price Rules"
+"Store View Specific Labels","Store View Specific Labels"
+ID,ID
+Rule,Rule
+Start,Start
+End,End
+Status,Status
+"%1 - Discounts and Coupons","%1 - Discounts and Coupons"
+Coupons/Discounts,Coupons/Discounts
+Promotions,Promotions
+"You deleted the rule.","You deleted the rule."
+"We can\'t delete the rule right now. Please review the log and try again.","We can\'t delete the rule right now. Please review the log and try again."
+"We can\'t find a rule to delete.","We can\'t find a rule to delete."
+"This rule no longer exists.","This rule no longer exists."
+"Edit Rule","Edit Rule"
+"New Rule","New Rule"
 "New Cart Price Rule","New Cart Price Rule"
-"The wrong rule is specified.","The wrong rule is specified."
-"We can't find a rule to delete.","We can't find a rule to delete."
 "Rule is not defined","Rule is not defined"
 "Invalid data provided","Invalid data provided"
 "%1 coupon(s) have been generated.","%1 coupon(s) have been generated."
 "Something went wrong while generating coupons. Please review the log and try again.","Something went wrong while generating coupons. Please review the log and try again."
+Catalog,Catalog
+"The wrong rule is specified.","The wrong rule is specified."
+"You saved the rule.","You saved the rule."
+"Something went wrong while saving the rule data. Please review the error log.","Something went wrong while saving the rule data. Please review the error log."
+Alphanumeric,Alphanumeric
+Alphabetical,Alphabetical
+Numeric,Numeric
 "We cannot create the requested Coupon Qty. Please check your settings and try again.","We cannot create the requested Coupon Qty. Please check your settings and try again."
-"%1 Shopping Cart Price Rules based on ""%2"" attribute have been disabled.","%1 Shopping Cart Price Rules based on ""%2"" attribute have been disabled."
+"Specified rule does not allow coupons","Specified rule does not allow coupons"
+"Specified rule only allows auto generated coupons","Specified rule only allows auto generated coupons"
+"Specified rule does not allow auto generated coupons","Specified rule does not allow auto generated coupons"
+"Error occurred when saving coupon: %1","Error occurred when saving coupon: %1"
+"Discount (%1)","Discount (%1)"
+Discount,Discount
 "Coupon with the same code","Coupon with the same code"
 "No Coupon","No Coupon"
 "Specific Coupon","Specific Coupon"
-"Can't acquire coupon.","Can't acquire coupon."
+Auto,Auto
+"Can\'t acquire coupon.","Can\'t acquire coupon."
+"Update the Product","Update the Product"
 "Special Price","Special Price"
+"To Fixed Value","To Fixed Value"
+"To Percentage","To Percentage"
+"By Fixed value","By Fixed value"
+"By Percentage","By Percentage"
+"Update product's %1 %2: %3","Update product's %1 %2: %3"
+Subtotal,Subtotal
 "Total Items Quantity","Total Items Quantity"
+"Total Weight","Total Weight"
+"Payment Method","Payment Method"
+"Shipping Method","Shipping Method"
 "Shipping Postcode","Shipping Postcode"
 "Shipping Region","Shipping Region"
 "Shipping State/Province","Shipping State/Province"
@@ -129,20 +92,73 @@ Labels,Labels
 "Quantity in cart","Quantity in cart"
 "Price in cart","Price in cart"
 "Row total in cart","Row total in cart"
+"Conditions Combination","Conditions Combination"
 "Cart Item Attribute","Cart Item Attribute"
+"Product Attribute","Product Attribute"
 FOUND,FOUND
 "NOT FOUND","NOT FOUND"
 "If an item is %1 in the cart with %2 of these conditions true:","If an item is %1 in the cart with %2 of these conditions true:"
 "total quantity","total quantity"
 "total amount","total amount"
+is,is
+"is not","is not"
+"equals or greater than","equals or greater than"
+"equals or less than","equals or less than"
+"greater than","greater than"
+"less than","less than"
+"is one of","is one of"
+"is not one of","is not one of"
 "If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:","If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:"
-"Item totals are not set for the rule.","Item totals are not set for the rule."
-"Auto Generated Specific Coupon Codes","Auto Generated Specific Coupon Codes"
-"Usage limit enforced for logged in customers only.","Usage limit enforced for logged in customers only."
-"Error occurred when saving coupon: %1","Error occurred when saving coupon: %1"
+"Percent of product price discount","Percent of product price discount"
+"Fixed amount discount","Fixed amount discount"
+"Fixed amount discount for whole cart","Fixed amount discount for whole cart"
+"Buy X get Y free (discount amount is Y)","Buy X get Y free (discount amount is Y)"
+Active,Active
+Inactive,Inactive
+"Specified rule does not allow automatic coupon generation","Specified rule does not allow automatic coupon generation"
 "Error occurred when generating coupons: %1","Error occurred when generating coupons: %1"
 "Some coupons are invalid.","Some coupons are invalid."
-"Specified rule does not allow automatic coupon generation","Specified rule does not allow automatic coupon generation"
-"Specified rule does not allow coupons","Specified rule does not allow coupons"
-"Specified rule only allows auto generated coupons","Specified rule only allows auto generated coupons"
-"Specified rule does not allow auto generated coupons","Specified rule does not allow auto generated coupons"
+"Item totals are not set for the rule.","Item totals are not set for the rule."
+"%1 Cart Price Rules based on ""%2"" attribute have been disabled.","%1 Cart Price Rules based on ""%2"" attribute have been disabled."
+"To test exception","To test exception"
+"Apply Discount Code","Apply Discount Code"
+"Enter discount code","Enter discount code"
+"Apply Discount","Apply Discount"
+"Cancel coupon","Cancel coupon"
+"Your coupon was successfully removed.","Your coupon was successfully removed."
+"Your coupon was successfully applied.","Your coupon was successfully applied."
+Promotion,Promotion
+"Auto Generated Specific Coupon Codes","Auto Generated Specific Coupon Codes"
+"Web Site","Web Site"
+Priority,Priority
+"Cart Price Rule","Cart Price Rule"
+Back,Back
+"Rule Information","Rule Information"
+"Rule Name","Rule Name"
+Description,Description
+Websites,Websites
+"Customer Groups","Customer Groups"
+Coupon,Coupon
+"Use Auto Generation","Use Auto Generation"
+"
+                        If you select and save the rule you will be able to generate multiple coupon codes.
+                    ","
+                        If you select and save the rule you will be able to generate multiple coupon codes.
+                    "
+"Uses per Coupon","Uses per Coupon"
+"Uses per Customer","Uses per Customer"
+"
+                        Usage limit enforced for logged in customers only.
+                    ","
+                        Usage limit enforced for logged in customers only.
+                    "
+From,From
+To,To
+"Public In RSS Feed","Public In RSS Feed"
+Apply,Apply
+"Discount Amount","Discount Amount"
+"Maximum Qty Discount is Applied To","Maximum Qty Discount is Applied To"
+"Discount Qty Step (Buy X)","Discount Qty Step (Buy X)"
+"Apply to Shipping Amount","Apply to Shipping Amount"
+"Discard subsequent rules","Discard subsequent rules"
+"Default Rule Label for All Store Views","Default Rule Label for All Store Views"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Noroute;
@@ -40,32 +40,31 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->resultPageMock = $this->getMockBuilder('\Magento\Framework\View\Result\Page')
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardFactoryMock = $this->getMockBuilder('\Magento\Framework\Controller\Result\ForwardFactory')
+        $this->forwardFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Forward')
+        $this->forwardMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->forwardFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->_cmsHelperMock = $this->getMock('Magento\Cms\Helper\Page', [], [], '', false);
+        $scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->_cmsHelperMock = $this->getMock(\Magento\Cms\Helper\Page::class, [], [], '', false);
         $valueMap = [
-            [
-                'Magento\Framework\App\Config\ScopeConfigInterface',
+            [\Magento\Framework\App\Config\ScopeConfigInterface::class,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $scopeConfigMock,
             ],
-            ['Magento\Cms\Helper\Page', $this->_cmsHelperMock],
+            [\Magento\Cms\Helper\Page::class, $this->_cmsHelperMock],
         ];
         $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
         $scopeConfigMock->expects(
@@ -78,7 +77,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('pageId')
         );
         $this->_controller = $helper->getObject(
-            'Magento\Cms\Controller\Noroute\Index',
+            \Magento\Cms\Controller\Noroute\Index::class,
             ['response' => $responseMock, 'objectManager' => $objectManagerMock, 'request' => $this->_requestMock,
             'resultForwardFactory' => $this->forwardFactoryMock
             ]

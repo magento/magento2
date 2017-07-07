@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Store\Test\TestCase\UpdateStoreEntityTest" summary="Update Store View" ticketId="MAGETWO-27786">
         <variation name="UpdateStoreEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="storeInitial/dataset" xsi:type="string">custom</data>
             <data name="store/data/group_id/dataset" xsi:type="string">default</data>
             <data name="store/data/name" xsi:type="string">storename_updated%isolation%</data>
@@ -18,6 +19,12 @@
             <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreBackend" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreFrontend" />
+        </variation>
+        <variation name="UpdateStoreEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="storeInitial/dataset" xsi:type="string">default</data>
+            <data name="store/data/name" xsi:type="string">storename_updated%isolation%</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
         </variation>
     </testCase>
 </config>

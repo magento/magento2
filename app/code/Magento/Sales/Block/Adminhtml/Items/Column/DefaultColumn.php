@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Items\Column;
@@ -13,6 +13,7 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 /**
  * Adminhtml sales order column renderer
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems

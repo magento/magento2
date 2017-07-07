@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
@@ -17,9 +17,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $block \Magento\Backend\Block\Widget\Container */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Backend\Block\Widget\Container',
+            \Magento\Backend\Block\Widget\Container::class,
             '',
             [
                 'data' => [
@@ -76,10 +76,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Backend\Block\Widget\Container */
-        $block = $layout->createBlock('Magento\Backend\Block\Widget\Container', $blockName);
+        $block = $layout->createBlock(\Magento\Backend\Block\Widget\Container::class, $blockName);
         foreach ($titles as $id => $title) {
             $block->addButton($id, ['title' => $title], 0, 0, 'header');
         }

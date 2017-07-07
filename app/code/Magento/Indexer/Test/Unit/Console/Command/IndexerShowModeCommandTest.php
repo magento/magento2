@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
@@ -30,11 +30,11 @@ class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteAll()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne->expects($this->once())->method('isScheduled')->willReturn(true);
-        $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerTwo = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
         $indexerTwo->expects($this->once())->method('isScheduled')->willReturn(false);
         $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne, $indexerTwo]);
@@ -54,13 +54,13 @@ class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteWithIndex()
     {
         $this->configureAdminArea();
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne->expects($this->once())->method('isScheduled')->willReturn(true);
-        $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerTwo = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
         $indexerTwo->expects($this->once())->method('isScheduled')->willReturn(false);
-        $indexerThree = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerThree = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerThree->expects($this->never())->method('getTitle')->willReturn('Title_indexer3');
         $indexerThree->expects($this->never())->method('isScheduled')->willReturn(false);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,44 +11,44 @@
 <?php  $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
     <?php if ($_order->getTracksCollection()->count()) : ?>
-        <?php echo $block->getChildHtml('track-all-link') ?>
+        <?= $block->getChildHtml('track-all-link') ?>
     <?php endif; ?>
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintAllShipmentsUrl($_order) ?>"
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintAllShipmentsUrl($_order) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print All Shipments') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Print All Shipments') ?></span>
     </a>
 </div>
 <?php foreach ($_order->getShipmentsCollection() as $_shipment): ?>
 <div class="order-title">
-    <strong><?php /* @escapeNotVerified */ echo __('Shipment #') ?><?php /* @escapeNotVerified */ echo $_shipment->getIncrementId(); ?></strong>
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintShipmentUrl($_shipment) ?>"
+    <strong><?= /* @escapeNotVerified */ __('Shipment #') ?><?= /* @escapeNotVerified */ $_shipment->getIncrementId() ?></strong>
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintShipmentUrl($_shipment) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print Shipment') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Print Shipment') ?></span>
     </a>
     <a href="#"
-       data-mage-init='{"popupWindow": {"windowURL":"<?php /* @escapeNotVerified */ echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>","windowName":"trackshipment","width":800,"height":600,"top":0,"left":0,"resizable":1,"scrollbars":1}}'
-       title="<?php /* @escapeNotVerified */ echo __('Track this shipment') ?>"
+       data-mage-init='{"popupWindow": {"windowURL":"<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_shipment) ?>","windowName":"trackshipment","width":800,"height":600,"top":0,"left":0,"resizable":1,"scrollbars":1}}'
+       title="<?= /* @escapeNotVerified */ __('Track this shipment') ?>"
        class="action track">
-        <span><?php /* @escapeNotVerified */ echo __('Track this shipment') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Track this shipment') ?></span>
     </a>
 </div>
 <?php $tracks = $_shipment->getTracksCollection(); ?>
 <?php  if ($tracks->count()): ?>
-    <dl class="order-tracking" id="my-tracking-table-<?php /* @escapeNotVerified */ echo $_shipment->getId(); ?>">
+    <dl class="order-tracking" id="my-tracking-table-<?= /* @escapeNotVerified */ $_shipment->getId() ?>">
         <dt class="tracking-title">
-            <?php /* @escapeNotVerified */ echo __('Tracking Number(s):') ?>
+            <?= /* @escapeNotVerified */ __('Tracking Number(s):') ?>
         </dt>
         <dd class="tracking-content">
             <?php
             $i = 1;
             $_size = $tracks->count();
             foreach ($tracks as $track): ?>
-                <?php if ($track->isCustom()): ?><?php echo $block->escapeHtml($track->getNumber()) ?><?php else: ?><a
+                <?php if ($track->isCustom()): ?><?= $block->escapeHtml($track->getNumber()) ?><?php else: ?><a
                     href="#"
-                    data-mage-init='{"popupWindow": {"windowURL":"<?php /* @escapeNotVerified */ echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
-                    class="action track"><span><?php echo $block->escapeHtml($track->getNumber()) ?></span>
+                    data-mage-init='{"popupWindow": {"windowURL":"<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
+                    class="action track"><span><?= $block->escapeHtml($track->getNumber()) ?></span>
                     </a><?php endif; ?><?php if ($i != $_size): ?>, <?php endif; ?>
                 <?php $i++;
             endforeach; ?>
@@ -56,13 +56,13 @@
     </dl>
 <?php  endif; ?>
 <div class="table-wrapper order-items-shipment">
-    <table class="data table table-order-items shipment" id="my-shipment-table-<?php /* @escapeNotVerified */ echo $_shipment->getId(); ?>">
-        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Shipped') ?></caption>
+    <table class="data table table-order-items shipment" id="my-shipment-table-<?= /* @escapeNotVerified */ $_shipment->getId() ?>">
+        <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items Shipped') ?></caption>
         <thead>
             <tr>
-                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty Shipped') ?></th>
+                <th class="col name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                <th class="col sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th class="col qty"><?= /* @escapeNotVerified */ __('Qty Shipped') ?></th>
             </tr>
         </thead>
         <?php $_items = $_shipment->getAllItems(); ?>
@@ -72,10 +72,10 @@
     continue;
 } ?>
         <tbody>
-            <?php echo $block->getItemHtml($_item) ?>
+            <?= $block->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
     </table>
 </div>
-<?php echo $block->getCommentsHtml($_shipment)?>
+<?= $block->getCommentsHtml($_shipment) ?>
 <?php endforeach; ?>

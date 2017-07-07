@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -19,6 +19,7 @@ return [
             'title' => __('Indexer public name'),
             'description' => __('Indexer public description'),
             'primary' => null,
+            'shared_index' => null,
             'fieldsets' => []
         ],
         'test_indexer' => [
@@ -28,6 +29,7 @@ return [
             'title' => '',
             'description' => '',
             'primary' => null,
+            'shared_index' => null,
         ],
     ]
 ];

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             $tierPrice = $form->getElement('tier_price');
             if ($tierPrice) {
                 $tierPrice->setRenderer(
-                    $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier')
+                    $this->getLayout()->createBlock(\Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier::class)
                 );
             }
 
@@ -65,7 +65,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             ) && $isWrapped
             ) {
                 $attributeCreate = $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Create'
+                    \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Create::class
                 );
 
                 $attributeCreate->getConfig()->setAttributeGroupCode(
@@ -85,7 +85,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
                 );
 
                 $attributeSearch = $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
+                    \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search::class
                 )->setGroupId(
                     $group->getId()
                 )->setGroupCode(
@@ -138,12 +138,12 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
     protected function _getAdditionalElementTypes()
     {
         $result = [
-            'price' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price',
-            'weight' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
-            'gallery' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery',
-            'image' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image',
-            'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean',
-            'textarea' => 'Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg',
+            'price' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price::class,
+            'weight' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::class,
+            'gallery' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery::class,
+            'image' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image::class,
+            'boolean' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean::class,
+            'textarea' => \Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg::class,
         ];
 
         $response = new \Magento\Framework\DataObject();

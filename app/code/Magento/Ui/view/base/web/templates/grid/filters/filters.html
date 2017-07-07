@@ -1,65 +1,35 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div class="data-grid-filters-actions-wrap" data-bind="collapsible: {openClass: false, closeOnOuter: false}">
+<div class="data-grid-filters-actions-wrap" collapsible="openClass: false, closeOnOuter: false">
     <div class="data-grid-filters-action-wrap">
-        <button
-            class="action-default"
-            data-action="grid-filter-expand"
-            data-bind="
-                click: $collapsible.toggle,
-                attr: {
-                    disabled: !hasVisible(),
-                    'title': $t('Filters')
-                },
-                css: {
-                    _active: hasVisible() && $collapsible.opened()
-                }"
-        >
-            <span data-bind="i18n: 'Filters'"></span>
-        </button>
+        <button class="action-default" data-action="grid-filter-expand" disable="!hasVisible()" translate="'Filters'"
+            css="_active: hasVisible() && $collapsible.opened()"
+            toggleCollapsible/>
     </div>
 </div>
 
-<!-- ko scope: chips -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
-<!-- /ko -->
+<scope args="chips" render=""/>
 
-<div
-    class="admin__data-grid-filters-wrap"
-    data-bind="css: { _show: hasVisible() && $collapsible.opened() }"
-    data-part="filter-form">
-
+<div class="admin__data-grid-filters-wrap" data-part="filter-form" css="_show: hasVisible() && $collapsible.opened()">
     <fieldset class="admin__fieldset admin__data-grid-filters">
         <legend class="admin__filters-legend">
-            <span data-bind="i18n: 'Advanced filter'"></span>
+            <span translate="'Advanced filter'"/>
         </legend>
-        <!-- ko foreach: getRanges() -->
-            <fieldset class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data), template: getTemplate()"></fieldset>
-        <!-- /ko -->
-        <!-- ko foreach: getPlain() -->
-            <div class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data), template: getTemplate()"></div>
-        <!-- /ko -->
+        <fieldset class="admin__form-field" outereach="getRanges()" visible="$parent.isFilterVisible($data)" render=""/>
+        <div class="admin__form-field" outereach="getPlain()" visible="$parent.isFilterVisible($data)" render=""/>
     </fieldset>
 
     <div class="admin__data-grid-filters-footer">
         <div class="admin__footer-main-actions">
-            <button
-                class="action-tertiary"
-                type="button"
-                data-action="grid-filter-cancel"
-                data-bind="click: $data.cancel.bind($data), closeCollapsible">
-                <span data-bind="i18n: 'Cancel'"></span>
+            <button class="action-tertiary" type="button" data-action="grid-filter-cancel" click="cancel" closeCollapsible>
+                <span translate="'Cancel'"/>
             </button>
-            <button
-                class="action-secondary"
-                type="button"
-                data-action="grid-filter-apply"
-                data-bind="click: $data.apply.bind($data), closeCollapsible">
-                <span data-bind="i18n: 'Apply Filters'"></span>
+            <button class="action-secondary" type="button" data-action="grid-filter-apply" click="apply" closeCollapsible>
+                <span translate="'Apply Filters'"/>
             </button>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api\Data;
@@ -14,8 +14,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface StockInterface extends ExtensibleDataInterface
 {
     const STOCK_ID = 'stock_id';
-
-    const WEBSITE_ID = 'website_id';
 
     const STOCK_NAME = 'stock_name';
 
@@ -33,21 +31,6 @@ interface StockInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setStockId($stockId);
-
-    /**
-     * Retrieve website identifier
-     *
-     * @return int
-     */
-    public function getWebsiteId();
-
-    /**
-     * Retrieve website identifier
-     *
-     * @param int $websiteId
-     * @return $this
-     */
-    public function setWebsiteId($websiteId);
 
     /**
      * Retrieve stock name

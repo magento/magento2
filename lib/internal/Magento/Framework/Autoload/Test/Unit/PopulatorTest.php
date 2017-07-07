@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Autoload\Test\Unit;
@@ -14,9 +14,9 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject */
     protected $mockDirectoryList;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->mockDirectoryList = $this->getMockBuilder('\Magento\Framework\App\Filesystem\DirectoryList')
+        $this->mockDirectoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -27,26 +27,20 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
 
     public function testPopulateMappings()
     {
-        $mockAutoloader = $this->getMockBuilder('\Magento\Framework\Autoload\AutoloaderInterface')
+        $mockAutoloader = $this->getMockBuilder(\Magento\Framework\Autoload\AutoloaderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockAutoloader->expects($this->at(0))
+        $mockAutoloader->expects($this->once())
             ->method('addPsr4')
             ->with(
                 'Magento\\',
-                [DirectoryList::GENERATION . '/Magento/'],
+                [DirectoryList::GENERATED_CODE . '/Magento/'],
                 true
             );
-        $mockAutoloader->expects($this->at(1))
+        $mockAutoloader->expects($this->once())
             ->method('addPsr0')
-            ->with('Cm_', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(2))
-            ->method('addPsr0')
-            ->with('Credis_', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(3))
-            ->method('addPsr0')
-            ->with('', [DirectoryList::GENERATION]);
+            ->with('', [DirectoryList::GENERATED_CODE]);
 
         Populator::populateMappings($mockAutoloader, $this->mockDirectoryList);
     }

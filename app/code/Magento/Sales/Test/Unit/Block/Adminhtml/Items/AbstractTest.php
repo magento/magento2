@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Items;
@@ -17,9 +17,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemRenderer()
     {
-        $renderer = $this->getMock('Magento\Framework\View\Element\AbstractBlock', [], [], '', false);
+        $renderer = $this->getMock(\Magento\Framework\View\Element\AbstractBlock::class, [], [], '', false);
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock', 'getGroupChildNames', '__wakeup'],
             [],
             '',
@@ -47,10 +47,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $block = $this->_objectManager->getObject(
-            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            \Magento\Sales\Block\Adminhtml\Items\AbstractItems::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                     ['layout' => $layout]
                 )
             ]
@@ -65,9 +65,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $renderer = $this->getMock('StdClass');
+        $renderer = $this->getMock(\StdClass::class);
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock', '__wakeup'],
             [],
             '',
@@ -95,10 +95,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $block = $this->_objectManager->getObject(
-            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            \Magento\Sales\Block\Adminhtml\Items\AbstractItems::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                     ['layout' => $layout]
                 )
             ]

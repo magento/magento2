@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -10,6 +10,8 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 /**
  * Class Addresses
  * Multishipping checkout choose item addresses block
+ *
+ * @api
  */
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -109,7 +111,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getAddressesHtmlSelect($item, $index)
     {
-        $select = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
+        $select = $this->getLayout()->createBlock(\Magento\Framework\View\Element\Html\Select::class)
             ->setName('ship[' . $index . '][' . $item->getQuoteItemId() . '][address]')
             ->setId('ship_' . $index . '_' . $item->getQuoteItemId() . '_address')
             ->setValue($item->getCustomerAddressId())

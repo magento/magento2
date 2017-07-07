@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -36,14 +36,17 @@
     float: right;
     line-height: 1;
     position: relative;
+
     &.active {
         z-index: @notifications-action-menu__z-index; // Should be over global search when active
+
         .notifications-action {
             border-color: @action-dropdown__active__border-color;
             box-shadow: @component__box-shadow__base;
+
             &:after {
-                border: none;
                 background-color: @action-dropdown__background-color;
+                border: none;
                 content: '';
                 display: block;
                 height: @component__shadow-size__base + 1;
@@ -56,6 +59,7 @@
             }
         }
     }
+
     //  Notifications dropdown
     .admin__action-dropdown-menu {
         padding: 1rem 0 0;
@@ -67,21 +71,25 @@
     color: @notifications-action__color;
     height: @page-header-action__height;
     padding: @notifications-action__padding-top @notifications-action__padding-side @notifications-action__padding-bottom;
+
     &:after {
         display: none;
     }
+
     &:before {
         &:extend(.abs-icon all);
         content: @icon-notification-02__content;
         font-size: @notifications-action-icon__size;
         margin-right: 0;
     }
+
     &:active {
         &:before {
             position: relative;
             top: 1px;
         }
     }
+
     .notifications-counter {
         background-color: @notifications-counter__background-color;
         border-radius: 1em;
@@ -103,24 +111,30 @@
     padding: @notifications-entry__padding-top @notifications-action__padding-side .8rem;
     position: relative;
     transition: @smooth__background-color;
+
     &:hover {
         background-color: @notifications-entry__hover__background-color;
     }
+
     &.notifications-entry-last {
         margin: 0 @notifications-action__padding-side;
         padding: .3rem 0 1.3rem;
         text-align: center;
+
         &:hover {
             background-color: transparent;
         }
     }
+
     + .notifications-entry-last {
         border-top: 1px solid @color-light-gray;
         padding-bottom: .6rem;
     }
+
     //  Case with cutted message description
     ._cutted {
         cursor: pointer;
+
         .notifications-entry-description-start {
             &:after {
                 content: '...';
@@ -146,6 +160,7 @@
 
 .notifications-entry-description-end {
     display: none;
+
     &._show {
         display: inline;
     }
@@ -163,17 +178,20 @@
     position: absolute;
     right: 0;
     top: .6rem;
+
     &:before {
         &:extend(.abs-icon all);
         color: @notifications-close__color;
         content: @icon-remove-small__content;
         .transition(color);
     }
+
     &:hover {
         &:before {
             color: darken(@notifications-close__color, 10%);
         }
     }
+
     &:active {
         transform: scale(.95);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,12 +9,17 @@ namespace Magento\Customer\Controller\Ajax;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Login controller
  *
  * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Login extends \Magento\Framework\App\Action\Action
 {
@@ -44,6 +49,16 @@ class Login extends \Magento\Framework\App\Action\Action
     protected $resultRawFactory;
 
     /**
+     * @var AccountRedirect
+     */
+    protected $accountRedirect;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * Initialize Login controller
      *
      * @param \Magento\Framework\App\Action\Context $context
@@ -70,11 +85,61 @@ class Login extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get account redirect.
+     * For release backward compatibility.
+     *
+     * @deprecated
+     * @return AccountRedirect
+     */
+    protected function getAccountRedirect()
+    {
+        if (!is_object($this->accountRedirect)) {
+            $this->accountRedirect = ObjectManager::getInstance()->get(AccountRedirect::class);
+        }
+        return $this->accountRedirect;
+    }
+
+    /**
+     * Account redirect setter for unit tests.
+     *
+     * @deprecated
+     * @param AccountRedirect $value
+     * @return void
+     */
+    public function setAccountRedirect($value)
+    {
+        $this->accountRedirect = $value;
+    }
+
+    /**
+     * @deprecated
+     * @return ScopeConfigInterface
+     */
+    protected function getScopeConfig()
+    {
+        if (!is_object($this->scopeConfig)) {
+            $this->scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        }
+        return $this->scopeConfig;
+    }
+
+    /**
+     * @deprecated
+     * @param ScopeConfigInterface $value
+     * @return void
+     */
+    public function setScopeConfig($value)
+    {
+        $this->scopeConfig = $value;
+    }
+
+    /**
      * Login registered users and initiate a session.
      *
      * Expects a POST. ex for JSON {"username":"user@magento.com", "password":"userpassword"}
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -103,12 +168,22 @@ class Login extends \Magento\Framework\App\Action\Action
             );
             $this->customerSession->setCustomerDataAsLoggedIn($customer);
             $this->customerSession->regenerateId();
+            $redirectRoute = $this->getAccountRedirect()->getRedirectCookie();
+            if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectRoute) {
+                $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
+                $this->getAccountRedirect()->clearRedirectCookie();
+            }
         } catch (EmailNotConfirmedException $e) {
             $response = [
                 'errors' => true,
                 'message' => $e->getMessage()
             ];
         } catch (InvalidEmailOrPasswordException $e) {
+            $response = [
+                'errors' => true,
+                'message' => $e->getMessage()
+            ];
+        } catch (LocalizedException $e) {
             $response = [
                 'errors' => true,
                 'message' => $e->getMessage()

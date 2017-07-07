@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -48,6 +48,7 @@
                 <case_sensitive>0</case_sensitive>
                 <shown_to_logged_in_user>
                     <contact_us>1</contact_us>
+                    <user_edit>1</user_edit>
                 </shown_to_logged_in_user>
                 <always_for>
                     <user_create>1</user_create>
@@ -85,6 +86,9 @@
                     <contact_us>
                         <label>Contact Us</label>
                     </contact_us>
+                    <user_edit>
+                        <label>Change password</label>
+                    </user_edit>
                 </areas>
             </frontend>
             <backend>

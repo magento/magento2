@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
@@ -31,6 +31,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'de_AT', /*German (Austria)*/
         'de_CH', /*German (Switzerland)*/
         'de_DE', /*German (Germany)*/
+        'de_LU', /*German (Luxembourg)*/
         'el_GR', /*Greek (Greece)*/
         'en_AU', /*English (Australian)*/
         'en_CA', /*English (Canadian)*/
@@ -50,8 +51,11 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'fa_IR', /*Persian (Iran)*/
         'fi_FI', /*Finnish (Finland)*/
         'fil_PH', /*Filipino (Philippines)*/
+        'fr_BE', /*French (Belgium)*/
         'fr_CA', /*French (Canada)*/
+        'fr_CH', /*French (Switzerland)*/
         'fr_FR', /*French (France)*/
+        'fr_LU', /*French (Luxembourg)*/
         'gu_IN', /*Gujarati (India)*/
         'he_IL', /*Hebrew (Israel)*/
         'hi_IN', /*Hindi (India)*/
@@ -71,6 +75,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'mk_MK', /*Macedonian (Macedonia)*/
         'mn_Cyrl_MN', /*Mongolian (Mongolia)*/
         'ms_Latn_MY', /*Malaysian (Malaysia)*/
+        'nl_BE', /*Dutch (Belgium)*/
         'nl_NL', /*Dutch (Netherlands)*/
         'nb_NO', /*Norwegian BokmГ_l (Norway)*/
         'nn_NO', /*Norwegian Nynorsk (Norway)*/

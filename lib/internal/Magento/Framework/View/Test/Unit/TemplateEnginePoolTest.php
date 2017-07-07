@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit;
@@ -21,13 +21,13 @@ class TemplateEnginePoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factory = $this->getMock('Magento\Framework\View\TemplateEngineFactory', [], [], '', false);
+        $this->_factory = $this->getMock(\Magento\Framework\View\TemplateEngineFactory::class, [], [], '', false);
         $this->_model = new TemplateEnginePool($this->_factory);
     }
 
     public function testGet()
     {
-        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
+        $engine = $this->getMock(\Magento\Framework\View\TemplateEngineInterface::class);
         $this->_factory->expects($this->once())->method('create')->with('test')->will($this->returnValue($engine));
         $this->assertSame($engine, $this->_model->get('test'));
         // Make sure factory is invoked only once and the same instance is returned afterwards

@@ -1,12 +1,18 @@
 <?php
 /**
- *  Application state flags
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+/**
+ * Application state flags.
+ * Can be used to retrieve current application mode and current area.
+ *
+ * Note: Area code communication and emulation will be removed from this class.
+ *
+ * @api
+ */
 class State
 {
     /**
@@ -55,6 +61,11 @@ class State
      * @var bool
      */
     protected $_isAreaCodeEmulated = false;
+
+    /**
+     * @var AreaList
+     */
+    private $areaList;
 
     /**#@+
      * Application modes
@@ -118,6 +129,8 @@ class State
      */
     public function setAreaCode($code)
     {
+        $this->checkAreaCode($code);
+
         if (isset($this->_areaCode)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 new \Magento\Framework\Phrase('Area code is already set')
@@ -164,6 +177,8 @@ class State
      */
     public function emulateAreaCode($areaCode, $callback, $params = [])
     {
+        $this->checkAreaCode($areaCode);
+
         $currentArea = $this->_areaCode;
         $this->_areaCode = $areaCode;
         $this->_isAreaCodeEmulated = true;
@@ -177,5 +192,41 @@ class State
         $this->_areaCode = $currentArea;
         $this->_isAreaCodeEmulated = false;
         return $result;
+    }
+
+    /**
+     * Check that area code exists
+     *
+     * @param string $areaCode
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     */
+    private function checkAreaCode($areaCode)
+    {
+        $areaCodes = array_merge(
+            [Area::AREA_GLOBAL],
+            $this->getAreaListInstance()->getCodes()
+        );
+
+        if (!in_array($areaCode, $areaCodes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Area code "%1" does not exist', [$areaCode])
+            );
+        }
+    }
+
+    /**
+     * Get Instance of AreaList
+     *
+     * @return AreaList
+     * @deprecated
+     */
+    private function getAreaListInstance()
+    {
+        if ($this->areaList === null) {
+            $this->areaList = ObjectManager::getInstance()->get(AreaList::class);
+        }
+
+        return $this->areaList;
     }
 }

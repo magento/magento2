@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -229,51 +229,45 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      */
     protected function _registerTransaction()
     {
-        try {
-            // Handle payment_status
-            $paymentStatus = $this->_filterPaymentStatus($this->getRequestData('payment_status'));
-            switch ($paymentStatus) {
-                // paid
-                case Info::PAYMENTSTATUS_COMPLETED:
-                    $this->_registerPaymentCapture(true);
-                    break;
-                    // the holded payment was denied on paypal side
-                case Info::PAYMENTSTATUS_DENIED:
-                    $this->_registerPaymentDenial();
-                    break;
-                    // customer attempted to pay via bank account, but failed
-                case Info::PAYMENTSTATUS_FAILED:
-                    // cancel order
-                    $this->_registerPaymentFailure();
-                    break;
-                    // payment was obtained, but money were not captured yet
-                case Info::PAYMENTSTATUS_PENDING:
-                    $this->_registerPaymentPending();
-                    break;
-                case Info::PAYMENTSTATUS_PROCESSED:
-                    $this->_registerMasspaymentsSuccess();
-                    break;
-                case Info::PAYMENTSTATUS_REVERSED:
-                    //break is intentionally omitted
-                case Info::PAYMENTSTATUS_UNREVERSED:
-                    $this->_registerPaymentReversal();
-                    break;
-                case Info::PAYMENTSTATUS_REFUNDED:
-                    $this->_registerPaymentRefund();
-                    break;
-                    // authorization expire/void
-                case Info::PAYMENTSTATUS_EXPIRED:
-                    // break is intentionally omitted
-                case Info::PAYMENTSTATUS_VOIDED:
-                    $this->_registerPaymentVoid();
-                    break;
-                default:
-                    throw new Exception("Cannot handle payment status '{$paymentStatus}'.");
-            }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $comment = $this->_createIpnComment(__('Note: %1', $e->getMessage()), true);
-            $comment->save();
-            throw $e;
+        // Handle payment_status
+        $paymentStatus = $this->_filterPaymentStatus($this->getRequestData('payment_status'));
+        switch ($paymentStatus) {
+            // paid
+            case Info::PAYMENTSTATUS_COMPLETED:
+                $this->_registerPaymentCapture(true);
+                break;
+                // the holded payment was denied on paypal side
+            case Info::PAYMENTSTATUS_DENIED:
+                $this->_registerPaymentDenial();
+                break;
+                // customer attempted to pay via bank account, but failed
+            case Info::PAYMENTSTATUS_FAILED:
+                // cancel order
+                $this->_registerPaymentFailure();
+                break;
+                // payment was obtained, but money were not captured yet
+            case Info::PAYMENTSTATUS_PENDING:
+                $this->_registerPaymentPending();
+                break;
+            case Info::PAYMENTSTATUS_PROCESSED:
+                $this->_registerMasspaymentsSuccess();
+                break;
+            case Info::PAYMENTSTATUS_REVERSED:
+                //break is intentionally omitted
+            case Info::PAYMENTSTATUS_UNREVERSED:
+                $this->_registerPaymentReversal();
+                break;
+            case Info::PAYMENTSTATUS_REFUNDED:
+                $this->_registerPaymentRefund();
+                break;
+                // authorization expire/void
+            case Info::PAYMENTSTATUS_EXPIRED:
+                // break is intentionally omitted
+            case Info::PAYMENTSTATUS_VOIDED:
+                $this->_registerPaymentVoid();
+                break;
+            default:
+                throw new Exception("Cannot handle payment status '{$paymentStatus}'.");
         }
     }
 
@@ -331,18 +325,25 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * Process denied payment notification
      *
      * @return void
+     * @throws Exception
      */
     protected function _registerPaymentDenial()
     {
-        $this->_importPaymentInformation();
-        $this->_order->getPayment()->setTransactionId(
-            $this->getRequestData('txn_id')
-        )->setNotificationResult(
-            true
-        )->setIsTransactionClosed(
-            true
-        )->deny(false);
-        $this->_order->save();
+        try {
+            $this->_importPaymentInformation();
+            $this->_order->getPayment()->setTransactionId(
+                $this->getRequestData('txn_id')
+            )->setNotificationResult(
+                true
+            )->setIsTransactionClosed(
+                true
+            )->deny(false);
+            $this->_order->save();
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            if ($e->getMessage() != __('We cannot cancel this order.')) {
+                throw $e;
+            }
+        }
     }
 
     /**

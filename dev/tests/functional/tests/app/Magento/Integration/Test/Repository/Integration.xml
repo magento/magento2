@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,7 @@
             <field name="name" xsi:type="string">default_integration_%isolation%</field>
             <field name="email" xsi:type="string">test_%isolation%@example.com</field>
             <field name="resource_access" xsi:type="string">All</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
         </dataset>
 
         <dataset name="default_active">
@@ -18,12 +19,14 @@
             <field name="email" xsi:type="string">Integration_%isolation%@example.com</field>
             <field name="resource_access" xsi:type="string">All</field>
             <field name="status" xsi:type="string">Active</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
         </dataset>
 
         <dataset name="default_with_all_resources">
             <field name="name" xsi:type="string">default_integration_%isolation%</field>
             <field name="email" xsi:type="string">test_%isolation%@example.com</field>
             <field name="resource_access" xsi:type="string">All</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
             <field name="resources" xsi:type="array">
                 <item name="0" xsi:type="string">Dashboard</item>
                 <item name="1" xsi:type="string">Sales</item>

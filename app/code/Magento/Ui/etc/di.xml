@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,12 +13,16 @@
     <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
     <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
-    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\User\Model\Authorization\AdminSessionUserContext"/>
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
     <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
+    <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
     <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
     <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
+    <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
+    <preference for="Magento\Ui\Config\ConverterInterface" type="Magento\Ui\Config\Converter\Composite"/>
+    <preference for="Magento\Ui\Config\Argument\ParserInterface" type="Magento\Ui\Config\Argument\Parser\Composite"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">
@@ -87,6 +91,58 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Ui\Config\Reader\Definition">
+        <arguments>
+            <argument name="fileName" xsi:type="string">etc/definition.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Ui\Config\Converter</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Ui\Config\Reader\FileResolver</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Ui\Config\Reader\Definition\SchemaLocator</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/components/(.*)/argument" xsi:type="string">name</item>
+                <item name="/components/(.*)/argument(/item)+" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Config\Reader\DefinitionMap">
+        <arguments>
+            <argument name="fileName" xsi:type="string">etc/definition.map.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Ui\Config\Reader\DefinitionMap\Converter</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Ui\Config\Reader\FileResolver</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Ui\Config\Reader\DefinitionMap\SchemaLocator</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/components/component" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Ui\Config\Definition\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Ui\Config\Reader\Definition</argument>
+            <argument name="cacheId" xsi:type="string">ui_component_definition_data_new</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Ui\Config\DefinitionMap\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Ui\Config\Reader\DefinitionMap</argument>
+            <argument name="cacheId" xsi:type="string">ui_component_definition_map_data</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Ui\Config\Converter">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Ui\Config\Reader\DefinitionMap</argument>
+            <argument name="parser" xsi:type="object">Magento\Ui\Config\Argument\Parser\Composite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Config\Reader">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Ui\Config\Converter</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Ui\Config\Reader\FileResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Config\Reader\Dom">
+        <arguments>
+            <argument name="schemaLocator" xsi:type="object">Magento\Ui\Config\Reader\SchemaLocator</argument>
+        </arguments>
+    </type>
     <type name="Magento\Ui\Model\Manager">
         <arguments>
             <argument name="domMerger" xsi:type="object">uiConfigurationDomMerger</argument>
@@ -161,6 +217,27 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Layout\Generic">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
+                    <item name="panelComponentName" xsi:type="string">fieldset</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Component\Layout\Tabs">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="arrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Framework\Data\Argument\Interpreter\ArrayType</argument>
@@ -181,7 +258,7 @@
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
                 <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
-                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
+                <item name="url" xsi:type="object">Magento\Ui\Config\Argument\Parser\Url</item>
             </argument>
             <argument name="discriminator" xsi:type="string">xsi:type</argument>
         </arguments>
@@ -259,4 +336,94 @@
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideThemeFiltered</argument>
         </arguments>
     </virtualType>
+    <virtualType name="uiComponentConfigFactory" type="Magento\Framework\Config\DataInterfaceFactory">
+        <arguments>
+            <argument xsi:type="string" name="instanceName">Magento\Ui\Config\Data</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Layout\Reader\UiComponent">
+        <arguments>
+            <argument name="uiConfigFactory" xsi:type="object">uiComponentConfigFactory</argument>
+        </arguments>
+    </type>
+    <virtualType name="uiComponentMapFactory" type="Magento\Framework\Config\DataInterfaceFactory">
+        <arguments>
+            <argument xsi:type="string" name="instanceName">Magento\Ui\Config\Data</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponentFactory">
+        <arguments>
+            <argument name="componentChildFactories" xsi:type="array">
+                <item name="Magento\Ui\Component\HtmlContent" xsi:type="object">Magento\Framework\View\Element\UiComponent\Factory\HtmlContentFactory\Proxy</item>
+            </argument>
+            <argument name="configFactory" xsi:type="object">uiComponentConfigFactory</argument>
+            <argument name="definitionData" xsi:type="object">Magento\Ui\Config\Reader\Definition\Data</argument>
+            <argument name="componentManager" xsi:type="object">Magento\Ui\Model\Manager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Config\Argument\Parser\ArrayType">
+        <arguments>
+            <argument name="itemParser" xsi:type="object">Magento\Ui\Config\Argument\Parser\Composite\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Config\Argument\Parser\ConfigurableObjectType">
+        <arguments>
+            <argument name="argumentParser" xsi:type="object">Magento\Ui\Config\Argument\Parser\Composite\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Config\Argument\Parser\Composite">
+        <arguments>
+            <argument name="parsers" xsi:type="array">
+                <item name="array" xsi:type="object">Magento\Ui\Config\Argument\Parser\ArrayType</item>
+                <item name="configurableObject" xsi:type="object">Magento\Ui\Config\Argument\Parser\ConfigurableObjectType</item>
+                <item name="xpath" xsi:type="object">Magento\Ui\Config\Argument\Parser\XpathType</item>
+                <item name="converter" xsi:type="object">Magento\Ui\Config\Argument\Parser\ConverterType</item>
+            </argument>
+            <argument name="discriminator" xsi:type="string">xsi:type</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Ui\Config\Converter\Item\Proxy" type="Magento\Ui\Config\ConverterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Ui\Config\Converter\Item</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Ui\Config\Converter\Buttons\Proxy" type="Magento\Ui\Config\ConverterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Ui\Config\Converter\Buttons</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Ui\Config\Converter\Actions\Proxy" type="Magento\Ui\Config\ConverterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Ui\Config\Converter\Actions</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Ui\Config\Converter\StorageConfig\Proxy" type="Magento\Ui\Config\ConverterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Ui\Config\Converter\StorageConfig</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Ui\Config\Converter\Composite">
+        <arguments>
+            <argument name="converters" xsi:type="array">
+                <item name="item" xsi:type="object">Magento\Ui\Config\Converter\Item\Proxy</item>
+                <item name="url" xsi:type="object">Magento\Ui\Config\Converter\Url</item>
+                <item name="deps" xsi:type="object">Magento\Ui\Config\Converter\Deps</item>
+                <item name="buttons" xsi:type="object">Magento\Ui\Config\Converter\Buttons\Proxy</item>
+                <item name="storageConfig" xsi:type="object">Magento\Ui\Config\Converter\StorageConfig\Proxy</item>
+                <item name="communication" xsi:type="object">Magento\Ui\Config\Converter\Communication</item>
+                <item name="htmlContent" xsi:type="object">Magento\Ui\Config\Converter\HtmlContent</item>
+                <item name="additionalClasses" xsi:type="object">Magento\Ui\Config\Converter\AdditionalClasses</item>
+                <item name="options" xsi:type="object">Magento\Ui\Config\Converter\Options</item>
+                <item name="actions" xsi:type="object">Magento\Ui\Config\Converter\Actions\Proxy</item>
+            </argument>
+            <argument name="discriminator" xsi:type="string">type</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="environment" xsi:type="array">
+                <item name="dev/js/session_storage_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -42,29 +42,29 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filter = $this->getMockBuilder(
-            'Magento\Framework\Filter\FilterManager'
+            \Magento\Framework\Filter\FilterManager::class
         )->disableOriginalConstructor()->setMethods(
             ['translitUrl']
         )->getMock();
 
         $this->urlFinder = $this->getMockBuilder(
-            'Magento\UrlRewrite\Model\UrlFinderInterface'
+            \Magento\UrlRewrite\Model\UrlFinderInterface::class
         )->disableOriginalConstructor()->getMock();
 
         $this->url = $this->getMockBuilder(
-            'Magento\Framework\Url'
+            \Magento\Framework\Url::class
         )->disableOriginalConstructor()->setMethods(
             ['setScope', 'getUrl']
         )->getMock();
 
-        $this->sidResolver = $this->getMock('Magento\Framework\Session\SidResolverInterface');
+        $this->sidResolver = $this->getMock(\Magento\Framework\Session\SidResolverInterface::class);
 
-        $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $urlFactory = $this->getMockBuilder('\Magento\Framework\UrlFactory')
+        $urlFactory = $this->getMockBuilder(\Magento\Framework\UrlFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $urlFactory->method('create')
@@ -72,7 +72,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Catalog\Model\Product\Url',
+            \Magento\Catalog\Model\Product\Url::class,
             [
                 'filter' => $this->filter,
                 'catalogCategory' => $this->catalogCategory,
@@ -130,7 +130,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $productUrlKey
     ) {
         $product = $this->getMockBuilder(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         )->disableOriginalConstructor()->setMethods(
             ['getStoreId', 'getEntityId', 'getId', 'getUrlKey', 'setRequestPath', 'hasUrlDataObject', 'getRequestPath',
                 'getCategoryId', 'getDoNotUseCategoryId', '__wakeup', ]

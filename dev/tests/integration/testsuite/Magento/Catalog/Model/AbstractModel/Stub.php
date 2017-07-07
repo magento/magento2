@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\AbstractModel;
@@ -14,7 +14,7 @@ abstract class Stub extends \Magento\Catalog\Model\AbstractModel implements \Mag
      */
     public function getStoreId()
     {
-        return $this->getData(self::STORE_ID);
+        return $this->getData(\Magento\Catalog\Model\Product::STORE_ID);
     }
 
     /**
@@ -25,6 +25,6 @@ abstract class Stub extends \Magento\Catalog\Model\AbstractModel implements \Mag
      */
     public function setStoreId($storeId)
     {
-        return $this->setData(self::STORE_ID, $storeId);
+        return $this->setData(\Magento\Catalog\Model\Product::STORE_ID, $storeId);
     }
 }

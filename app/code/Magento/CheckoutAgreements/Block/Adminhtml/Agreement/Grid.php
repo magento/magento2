@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
@@ -78,10 +78,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn(
-                'store_id',
+                'stores',
                 [
                     'header' => __('Store View'),
-                    'index' => 'store_id',
+                    'index' => 'stores',
                     'type' => 'store',
                     'store_all' => true,
                     'store_view' => true,

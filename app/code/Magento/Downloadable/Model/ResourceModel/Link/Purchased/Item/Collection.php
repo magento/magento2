@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item;
@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item;
 /**
  * Downloadable links purchased items resource collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -20,8 +20,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Downloadable\Model\Link\Purchased\Item',
-            'Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item'
+            \Magento\Downloadable\Model\Link\Purchased\Item::class,
+            \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item::class
         );
     }
 }

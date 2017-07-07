@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 /**
  * Class AbstractSenderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,7 +77,7 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
     public function stepMockSetup()
     {
         $this->senderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
+            \Magento\Sales\Model\Order\Email\Sender::class,
             ['send', 'sendCopyTo'],
             [],
             '',
@@ -83,14 +85,14 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->senderBuilderFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\SenderBuilderFactory',
+            \Magento\Sales\Model\Order\Email\SenderBuilderFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->templateContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\Template',
+            \Magento\Sales\Model\Order\Email\Container\Template::class,
             ['setTemplateVars'],
             [],
             '',
@@ -98,7 +100,7 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->storeMock = $this->getMock(
-            '\Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['getStoreId', '__wakeup'],
             [],
             '',
@@ -106,7 +108,7 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->orderMock = $this->getMock(
-            '\Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 'getStore', 'getBillingAddress', 'getPayment',
                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
@@ -121,7 +123,7 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
         $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
+            \Magento\Payment\Model\Info::class,
             [],
             [],
             '',
@@ -131,17 +133,17 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
             ->method('getPayment')
             ->will($this->returnValue($paymentInfoMock));
 
-        $this->addressRenderer = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
-        $this->addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
+        $this->addressRenderer = $this->getMock(\Magento\Sales\Model\Order\Address\Renderer::class, [], [], '', false);
+        $this->addressMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
 
-        $this->paymentHelper = $this->getMock('\Magento\Payment\Helper\Data', ['getInfoBlockHtml'], [], '', false);
+        $this->paymentHelper = $this->getMock(\Magento\Payment\Helper\Data::class, ['getInfoBlockHtml'], [], '', false);
         $this->paymentHelper->expects($this->any())
             ->method('getInfoBlockHtml')
             ->will($this->returnValue('payment'));
 
         $this->globalConfig = $this->getMock(
-            'Magento\Framework\App\Config',
+            \Magento\Framework\App\Config::class,
             ['getValue'],
             [],
             '',
@@ -149,7 +151,7 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->loggerMock = $this->getMock(
-            '\Psr\Log\LoggerInterface',
+            \Psr\Log\LoggerInterface::class,
             [],
             [],
             '',
@@ -170,7 +172,6 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
                 ->method('getShippingAddress')
                 ->will($this->returnValue($billingAddress));
         }
-
     }
 
     public function stepSendWithoutSendCopy()
@@ -202,7 +203,7 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
     ) {
         $senderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
+            \Magento\Sales\Model\Order\Email\Sender::class,
             ['send', 'sendCopyTo'],
             [],
             '',

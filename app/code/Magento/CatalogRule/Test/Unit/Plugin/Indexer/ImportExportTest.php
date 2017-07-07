@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,17 +34,17 @@ class ImportExportTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ruleProductProcessor = $this->getMock(
-            'Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
             ['isIndexerScheduled', 'markIndexerAsInvalid'],
             [],
             '',
             false
         );
         $this->ruleProductProcessor->expects($this->once())->method('isIndexerScheduled')->willReturn(false);
-        $this->subject = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
+        $this->subject = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
 
         $this->plugin = (new ObjectManager($this))->getObject(
-            'Magento\CatalogRule\Plugin\Indexer\ImportExport',
+            \Magento\CatalogRule\Plugin\Indexer\ImportExport::class,
             [
                 'ruleProductProcessor' => $this->ruleProductProcessor,
             ]

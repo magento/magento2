@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
+        <css src="jquery/jstree/themes/default/style.css"/>
         <css src="css/styles-old.css"/>
         <css src="css/styles.css"/>
     </head>
@@ -28,7 +29,7 @@
         <move element="page.title" before="-" destination="header.inner.left" />
         <move element="user" before="-" destination="header.inner.right" />
         <move element="notification.messages" after="user" destination="header.inner.right" />
-        <move element="global.search" after="notification.messages" destination="header.inner.right" />
+        <move element="global.search" destination="header.inner.right" />
 
     </body>
 </page>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Review\Test\TestCase\CreateProductReviewFrontendEntityTest" summary="Create Frontend Product Review" ticketId="MAGETWO-25519">
-        <variation name="CreateProductReviewFrontendEntityTestVariation1">
-            <data name="description" xsi:type="string">Create product review with rating</data>
+        <variation name="CreateProductReviewFrontendEntityTestVariation1" summary="Create product review with rating">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="review/data/type" xsi:type="string">Guest</data>
             <data name="review/data/nickname" xsi:type="string">name_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_%isolation%</data>
@@ -22,12 +22,12 @@
             <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
         </variation>
         <variation name="CreateProductReviewFrontendEntityTestVariation2" summary="Add Product Review from Customer's Prospective" ticketId="MAGETWO-12403">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="review/data/type" xsi:type="string">Guest</data>
             <data name="review/data/nickname" xsi:type="string">name_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_%isolation%</data>
             <data name="review/data/detail" xsi:type="string">review_%isolation%</data>
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Review\Test\Constraint\AssertReviewCreationSuccessMessage" />
             <constraint name="Magento\Review\Test\Constraint\AssertProductReviewIsAbsentOnProductPage" />
             <constraint name="Magento\Review\Test\Constraint\AssertProductReviewForm" />

@@ -1,51 +1,54 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\Controller\Result;
 
+use Magento\PageCache\Model\Config;
+use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Registry;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Magento\PageCache\Model\Cache\Type as CacheType;
 
 /**
  * Plugin for processing builtin cache
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BuiltinPlugin
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var Config
      */
-    protected $config;
+    private $config;
 
     /**
-     * @var \Magento\Framework\App\PageCache\Kernel
+     * @var Kernel
      */
-    protected $kernel;
+    private $kernel;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var AppState
      */
-    protected $state;
+    private $state;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $registry;
+    private $registry;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\PageCache\Model\Config $config
-     * @param \Magento\Framework\App\PageCache\Kernel $kernel
-     * @param \Magento\Framework\App\State $state
-     * @param \Magento\Framework\Registry $registry
+     * @param Config $config
+     * @param Kernel $kernel
+     * @param AppState $state
+     * @param Registry $registry
      */
-    public function __construct(
-        \Magento\PageCache\Model\Config $config,
-        \Magento\Framework\App\PageCache\Kernel $kernel,
-        \Magento\Framework\App\State $state,
-        \Magento\Framework\Registry $registry
-    ) {
+    public function __construct(Config $config, Kernel $kernel, AppState $state, Registry $registry)
+    {
         $this->config = $config;
         $this->kernel = $kernel;
         $this->state = $state;
@@ -53,41 +56,45 @@ class BuiltinPlugin
     }
 
     /**
-     * @param \Magento\Framework\Controller\ResultInterface $subject
-     * @param callable $proceed
+     * Perform result postprocessing
+     *
+     * @param ResultInterface $subject
+     * @param ResultInterface $result
      * @param ResponseHttp $response
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRenderResult(
-        \Magento\Framework\Controller\ResultInterface $subject,
-        \Closure $proceed,
-        ResponseHttp $response
-    ) {
-        $result = $proceed($response);
+    public function afterRenderResult(ResultInterface $subject, ResultInterface $result, ResponseHttp $response)
+    {
         $usePlugin = $this->registry->registry('use_page_cache_plugin');
-        if (!$usePlugin || !$this->config->isEnabled()
-            || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN
-        ) {
+
+        if (!$usePlugin || !$this->config->isEnabled() || $this->config->getType() != Config::BUILT_IN) {
             return $result;
         }
 
-        if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            $cacheControl = $response->getHeader('Cache-Control')->getFieldValue();
-            $response->setHeader('X-Magento-Cache-Control', $cacheControl);
+        if ($this->state->getMode() == AppState::MODE_DEVELOPER) {
+            $cacheControlHeader = $response->getHeader('Cache-Control');
+
+            if ($cacheControlHeader instanceof HttpHeaderInterface) {
+                $response->setHeader('X-Magento-Cache-Control', $cacheControlHeader->getFieldValue());
+            }
+
             $response->setHeader('X-Magento-Cache-Debug', 'MISS', true);
         }
 
         $tagsHeader = $response->getHeader('X-Magento-Tags');
         $tags = [];
+
         if ($tagsHeader) {
             $tags = explode(',', $tagsHeader->getFieldValue());
             $response->clearHeader('X-Magento-Tags');
         }
-        $tags = array_unique(array_merge($tags, [\Magento\PageCache\Model\Cache\Type::CACHE_TAG]));
-        $response->setHeader('X-Magento-Tags', implode(',', $tags));
 
+        $tags = array_unique(array_merge($tags, [CacheType::CACHE_TAG]));
+        $response->setHeader('X-Magento-Tags', implode(',', $tags));
         $this->kernel->process($response);
+
         return $result;
     }
 }

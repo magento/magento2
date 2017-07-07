@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block;
@@ -10,9 +10,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function testViewedProductsWidget()
     {
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Widget\Instance'
+            \Magento\Widget\Model\Widget\Instance::class
         );
-        $config = $model->setType('Magento\Reports\Block\Product\Widget\Viewed')->getWidgetConfigAsArray();
+        $config = $model->setType(\Magento\Reports\Block\Product\Widget\Viewed::class)->getWidgetConfigAsArray();
 
         $this->assertArrayHasKey('parameters', $config);
         $templates = $config['parameters'];
@@ -43,9 +43,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function testComparedProductsWidget()
     {
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Widget\Instance'
+            \Magento\Widget\Model\Widget\Instance::class
         );
-        $config = $model->setType('Magento\Reports\Block\Product\Widget\Compared')->getWidgetConfigAsArray();
+        $config = $model->setType(\Magento\Reports\Block\Product\Widget\Compared::class)->getWidgetConfigAsArray();
 
         $this->assertArrayHasKey('parameters', $config);
         $templates = $config['parameters'];

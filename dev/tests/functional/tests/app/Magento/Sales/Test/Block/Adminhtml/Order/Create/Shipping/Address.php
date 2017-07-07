@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Shipping;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Adminhtml sales order create shipping address block.
@@ -30,11 +31,25 @@ class Address extends Form
     protected $sameAsBilling = '#order-shipping_same_as_billing';
 
     /**
+     * Wait element.
+     *
+     * @var string
+     */
+    private $waitElement = '.loading-mask';
+
+    /**
      * Shipping address title selector.
      *
      * @var string
      */
     protected $title = 'legend';
+
+    /**
+     * Sales order create account information block.
+     *
+     * @var string
+     */
+    private $accountInformationBlock = '#order-form_account';
 
     /**
      * Check the 'Same as billing address' checkbox in shipping address.
@@ -43,7 +58,8 @@ class Address extends Form
      */
     public function setSameAsBillingShippingAddress()
     {
-        $this->_rootElement->find($this->title)->click();
+        $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->hover();
+        $this->browser->find($this->accountInformationBlock)->hover();
         $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->setValue('Yes');
     }
 
@@ -54,7 +70,8 @@ class Address extends Form
      */
     public function uncheckSameAsBillingShippingAddress()
     {
-        $this->_rootElement->find($this->title)->click();
+        $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->hover();
+        $this->browser->find($this->accountInformationBlock)->hover();
         $this->_rootElement->find($this->sameAsBilling, Locator::SELECTOR_CSS, 'checkbox')->setValue('No');
         $this->waitLoader();
     }
@@ -82,8 +99,45 @@ class Address extends Form
     protected function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    /**
+     * Fill specified form data.
+     *
+     * @param array $fields
+     * @param SimpleElement $element
+     * @return void
+     * @throws \Exception
+     */
+    protected function _fill(array $fields, SimpleElement $element = null)
+    {
+        $context = ($element === null) ? $this->_rootElement : $element;
+        foreach ($fields as $name => $field) {
+            $this->waitFormLoading();
+            $element = $this->getElement($context, $field);
+            if (!$element->isDisabled()) {
+                $element->setValue($field['value']);
+            } else {
+                throw new \Exception("Unable to set value to field '$name' as it's disabled.");
+            }
+        }
+    }
+
+    /**
+     * Wait for form loading.
+     *
+     * @return void
+     */
+    private function waitFormLoading()
+    {
+        $this->_rootElement->click();
+        $this->browser->waitUntil(
+            function () {
+                return $this->browser->find($this->waitElement)->isVisible() ? null : true;
+            }
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,14 +29,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 8. Save Custom variable using correspond saveActions.
  * 9. Perform all assertions.
  *
- * @group Variables_(PS)
+ * @group Variables
  * @ZephyrId MAGETWO-26104
  */
 class UpdateCustomVariableEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -65,55 +64,46 @@ class UpdateCustomVariableEntityTest extends Injectable
      *
      * @param SystemVariableIndex $systemVariableIndex
      * @param SystemVariableNew $systemVariableNew
-     * @param SystemVariable $customVariableOrigin
-     * @param FixtureFactory $factory
-     * @return array
+     * @return void
      */
     public function __inject(
         SystemVariableIndex $systemVariableIndex,
-        SystemVariableNew $systemVariableNew,
-        SystemVariable $customVariableOrigin,
-        FixtureFactory $factory
+        SystemVariableNew $systemVariableNew
     ) {
         $this->systemVariableIndexPage = $systemVariableIndex;
         $this->systemVariableNewPage = $systemVariableNew;
-
-        $customVariableOrigin->persist();
-
-        // TODO: Move store creation to "__prepare" method after fix bug MAGETWO-29331
-        $storeOrigin = $factory->createByCode('store', ['dataset' => 'custom']);
-        $storeOrigin->persist();
-        $this->store = $storeOrigin;
-
-        return [
-            'customVariableOrigin' => $customVariableOrigin,
-            'storeOrigin' => $storeOrigin
-        ];
     }
 
     /**
      * Update Custom System Variable Entity test.
      *
+     * @param FixtureFactory $fixtureFactory
      * @param SystemVariable $customVariable
      * @param SystemVariable $customVariableOrigin
-     * @param Store $storeOrigin
      * @param string $saveAction
-     * @return void
+     * @return array
      */
     public function test(
+        FixtureFactory $fixtureFactory,
         SystemVariable $customVariable,
         SystemVariable $customVariableOrigin,
-        Store $storeOrigin,
         $saveAction
     ) {
+        $this->store = $fixtureFactory->createByCode('store', ['dataset' => 'custom']);
+        $this->store->persist();
+        $customVariableOrigin->persist();
         $filter = ['code' => $customVariableOrigin->getCode()];
 
         // Steps
         $this->systemVariableIndexPage->open();
         $this->systemVariableIndexPage->getSystemVariableGrid()->searchAndOpen($filter);
-        $this->systemVariableNewPage->getFormPageActions()->selectStoreView($storeOrigin->getData('name'));
+        $this->systemVariableNewPage->getFormPageActions()->selectStoreView($this->store->getData('name'));
         $this->systemVariableNewPage->getSystemVariableForm()->fill($customVariable);
         $this->systemVariableNewPage->getFormPageActions()->$saveAction();
+        return [
+            'storeOrigin' => $this->store,
+            'customVariableOrigin' => $customVariableOrigin
+        ];
     }
 
     /**
@@ -123,14 +113,13 @@ class UpdateCustomVariableEntityTest extends Injectable
      */
     public function tearDown()
     {
-        // TODO: Move store clean up to "tearDownAfterClass" method after fix bug MAGETWO-29331
         if ($this->store !== null) {
-            $storeIndex = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreIndex');
+            $storeIndex = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreIndex::class);
             $storeIndex->open();
             $storeIndex->getStoreGrid()->searchAndOpen(['store_title' => $this->store->getName()]);
-            $storeNew = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreNew');
+            $storeNew = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreNew::class);
             $storeNew->getFormPageActions()->delete();
-            $storeDelete = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreDelete');
+            $storeDelete = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreDelete::class);
             $storeDelete->getStoreForm()->fillForm(['create_backup' => 'No']);
             $storeDelete->getFormPageActions()->delete();
         }

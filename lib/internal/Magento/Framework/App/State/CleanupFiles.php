@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,10 @@ class CleanupFiles
      */
     public function clearCodeGeneratedClasses()
     {
-        return array_merge($this->emptyDir(DirectoryList::GENERATION), $this->emptyDir(DirectoryList::DI));
+        return array_merge(
+            $this->emptyDir(DirectoryList::GENERATED_CODE),
+            $this->emptyDir(DirectoryList::GENERATED_METADATA)
+        );
     }
 
     /**

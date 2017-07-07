@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,22 +10,25 @@
  */
 ?>
 <div class="pp-buttons-container">
-    <button onclick="javascript:window.open(
-            '<?php echo $block->escapeUrl($block->getButtonUrl()); ?>',
-            'apiwizard',
-            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
-            'left=100, top=100, width=380, height=470'
-        ); return false;"
-            class="scalable" type="button" id="<?php echo $block->escapeHtml($block->getHtmlId()); ?>">
-        <span><span><span><?php echo $block->escapeHtml($block->getButtonLabel()); ?></span></span></span>
-    </button>
-    <button onclick="javascript:window.open(
-            '<?php echo $block->escapeUrl($block->getSandboxButtonUrl()); ?>',
-            'apiwizard',
-            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
-            'left=100, top=100, width=380, height=470'
-        ); return false;"
-            class="scalable" type="button" id="<?php echo $block->escapeHtml($block->getSandboxHtmlId()); ?>">
-        <span><span><span><?php echo $block->escapeHtml($block->getSandboxButtonLabel()); ?></span></span></span>
-    </button>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        <script>
+            (function(d, s, id){
+                var js, ref = d.getElementsByTagName(s)[0];
+                if (!d.getElementById(id)){
+                    js = d.createElement(s); js.id = id; js.async = true;
+                    js.src = "https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js";
+                    ref.parentNode.insertBefore(js, ref); }
+            }(document, "script", "paypal-js"));
+        </script>
+
+        <a class="action-default"
+           data-paypal-button="true"
+           href="<?= /* @noEscape */ $block->escapeUrl($block->getButtonUrl() . '?' . $block->getQuery()) ?>"
+           target="PPFrame"><?= $block->escapeHtml($block->getButtonLabel()) ?></a>
+
+        <a class="action-default"
+           data-paypal-button="true"
+           href="<?= /* @noEscape */ $block->escapeUrl($block->getSandboxButtonUrl(). '?' . $block->getQuery()) ?>"
+           target="PPFrame"><?= $block->escapeHtml($block->getSandboxButtonLabel()) ?></a>
+    </div>
 </div>

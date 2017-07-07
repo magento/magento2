@@ -1,19 +1,55 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
 
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
+use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * Class Generic
  */
 class Generic implements LayoutInterface
 {
+    const CONFIG_JS_COMPONENT = 'component';
+    const CONFIG_COMPONENT_NAME = 'componentName';
+    const CONFIG_PANEL_COMPONENT = 'panelComponentName';
+
+    /**
+     * @var UiComponentInterface
+     */
+    protected $component;
+
+    /**
+     * @var string
+     */
+    protected $namespace;
+
+    /**
+     * @var UiComponentFactory
+     */
+    protected $uiComponentFactory;
+
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * @param UiComponentFactory $uiComponentFactory
+     * @param array $data
+     */
+    public function __construct(UiComponentFactory $uiComponentFactory, $data = [])
+    {
+        $this->uiComponentFactory = $uiComponentFactory;
+        $this->data = $data;
+    }
+
     /**
      * Generate Java Script configuration element
      *
@@ -22,6 +58,17 @@ class Generic implements LayoutInterface
      */
     public function build(UiComponentInterface $component)
     {
+        $this->component = $component;
+        $this->namespace = $component->getContext()->getNamespace();
+
+        $this->component->getContext()->addComponentDefinition(
+            $this->getConfig(self::CONFIG_COMPONENT_NAME),
+            [
+                'component' => $this->getConfig(self::CONFIG_JS_COMPONENT),
+                'extends' => $this->namespace
+            ]
+        );
+
         $children = [];
         $context = $component->getContext();
         $this->addChildren($children, $component, $component->getName());
@@ -58,6 +105,10 @@ class Generic implements LayoutInterface
                 if ($child instanceof DataSourceInterface) {
                     continue;
                 }
+                if ($child->getData('wrapper')) {
+                    $this->addWrappedBlock($child, $childrenNode);
+                    continue;
+                }
                 self::addChildren($childrenNode, $child, $child->getComponentName());
             }
         }
@@ -82,5 +133,73 @@ class Generic implements LayoutInterface
             }
             $topNode[$component->getName()] = $nodeData;
         }
+    }
+
+    /**
+     * Add wrapped layout block
+     *
+     * @param BlockWrapperInterface $childComponent
+     * @param array $childrenNode
+     * @return $this
+     */
+    protected function addWrappedBlock(BlockWrapperInterface $childComponent, array &$childrenNode)
+    {
+        if (!($childComponent->getData('wrapper/canShow') && $childComponent->getData('wrapper/componentType'))) {
+            return $this;
+        }
+
+        $name = $childComponent->getName();
+        $panelComponent = $this->createChildFormComponent($childComponent, $name);
+        $childrenNode[$name] = [
+            'type' => $panelComponent->getComponentName(),
+            'dataScope' => $name,
+            'config' => $childComponent->getConfiguration(),
+            'children' => [
+                $name => [
+                    'type' => $childComponent->getComponentName(),
+                    'dataScope' => $name,
+                    'config' => [
+                        'content' => $childComponent->render()
+                    ],
+                ]
+            ],
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Create child of form
+     *
+     * @param UiComponentInterface $childComponent
+     * @param string $name
+     * @return UiComponentInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function createChildFormComponent(UiComponentInterface $childComponent, $name)
+    {
+        $panelComponent = $this->uiComponentFactory->create(
+            $name,
+            $childComponent->getData('wrapper/componentType'),
+            [
+                'context' => $this->component->getContext(),
+                'components' => [$childComponent->getName() => $childComponent]
+            ]
+        );
+        $panelComponent->prepare();
+        $this->component->addComponent($name, $panelComponent);
+
+        return $panelComponent;
+    }
+
+    /**
+     * Get config by name
+     *
+     * @param string $name
+     * @return mixed
+     */
+    protected function getConfig($name)
+    {
+        return isset($this->data['config'][$name]) ? $this->data['config'][$name] : null;
     }
 }

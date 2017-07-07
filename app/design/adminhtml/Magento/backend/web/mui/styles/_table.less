@@ -1,71 +1,7 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
-
-//
-//  Tables
-//  --------------------------------------
-
-table:not(.data-grid .admin__control-table) {
-    > caption {
-        margin-bottom: 5px;
-    }
-
-    thead {
-        a {
-            display: block;
-            label {
-                cursor: pointer;
-            }
-        }
-    }
-
-    th {
-        background: transparent;
-        font-size: 14px;
-        padding: 6px 10px;
-        text-align: center;
-    }
-
-    td {
-        padding: 6px 10px 7px;
-        vertical-align: top;
-    }
-
-    tbody {
-        tr {
-            td {
-                padding-top: 12px;
-                &:first-child {
-                    input[type="checkbox"] {
-                        margin: 0;
-                    }
-                }
-            }
-            &:last-child th,
-            &:last-child td {
-                border-bottom-width: 1px;
-            }
-        }
-    }
-
-    .dropdown-menu li {
-        padding: 7px 15px;
-        line-height: 14px;
-        cursor: pointer;
-    }
-
-    th.required {
-        &:extend(.validation-symbol all);
-    }
-
-    .col-draggable .draggable-handle {
-        float: left;
-        position: relative;
-        top: 0;
-    }
-}
 
 //
 //  Table Filters
@@ -75,18 +11,22 @@ table:not(.data-grid .admin__control-table) {
     input.input-text {
         width: 99%;
         margin-right: 0;
+
         &::-webkit-input-placeholder {
             color: @grid-filters-placeholder-color !important;
             text-transform: lowercase;
         }
+
         &::-moz-placeholder {
             color: @grid-filters-placeholder-color!important;
             text-transform: lowercase;
         }
+
         &:-moz-placeholder {
             color: @grid-filters-placeholder-color !important;
             text-transform: lowercase;
         }
+
         &:-ms-input-placeholder {
             color: @grid-filters-placeholder-color !important;
             text-transform: lowercase;
@@ -112,6 +52,7 @@ table:not(.data-grid .admin__control-table) {
         &:nth-child(odd):hover th,
         &:nth-child(odd):hover td {
             cursor: pointer;
+
             &.empty-text {
                 cursor: default;
             }
@@ -255,6 +196,7 @@ table:not(.data-grid .admin__control-table) {
 
     .col-position.editable {
         white-space: nowrap;
+
         .input-text {
             margin: -7px 5px 0;
             width: 70%;
@@ -324,6 +266,7 @@ td.col-type {
                 background: @data-table-td-background-color-odd;
             }
         }
+
         &.odd {
             tr {
                 th,
@@ -332,6 +275,7 @@ td.col-type {
                 }
             }
         }
+
         &.even {
             tr {
                 th,
@@ -356,6 +300,7 @@ td.col-type {
             td {
                 vertical-align: top;
             }
+
             &:hover tr {
                 th,
                 td {
@@ -388,29 +333,35 @@ td.col-type {
 
     .col-actions .actions-split {
         margin-top: 4px;
+
         [class^='action-'] {
             background: none;
             border: 1px solid #c8c3b5;
             padding: 3px 5px;
             color: #bbb3a6;
             font-size: 12px;
+
             &:first-child {
                 border-right: 0;
             }
         }
+
         .dropdown-menu {
             margin-top: -1px;
+
             a {
                 display: block;
                 color: #333;
                 text-decoration: none;
             }
         }
+
         &.active .action-toggle {
             position: relative;
             border-bottom-right-radius: 0;
             box-shadow: none;
             background: #fff;
+
             &:after {
                 position: absolute;
                 top: 100%;
@@ -422,6 +373,7 @@ td.col-type {
                 content: '';
                 z-index: 2;
             }
+
             .dropdown-menu {
                 border-top-right-radius: 0;
             }
@@ -444,10 +396,12 @@ td.col-type {
 
     .col-file {
         white-space: nowrap;
+
         input,
         .input-text {
             margin: 0 5px;
             width: 40%;
+
             &:first-child {
                 margin-left: 0;
             }
@@ -487,24 +441,29 @@ td.col-type {
     line-height: 28px;
     padding: 10px 15px;
     position: relative;
+
     + .grid {
         padding-top: 5px;
     }
+
     .export,
     .filter-actions {
         float: right;
         margin-left: 10px;
         vertical-align: top;
     }
+
     .import {
         display: block;
         vertical-align: top;
     }
+
     .action-reset {
         .lib-button-as-link();
         margin: 6px 10px 0 0;
         vertical-align: top;
     }
+
     .import,
     .export {
         .label {
@@ -512,6 +471,7 @@ td.col-type {
             vertical-align: inherit;
         }
     }
+
     .import,
     .export,
     .filter-actions {
@@ -519,16 +479,19 @@ td.col-type {
             vertical-align: inherit;
         }
     }
+
     .filter {
         .date {
             float: left;
             margin: 0 15px 0 0;
             position: relative;
+
             .ui-datepicker-trigger {
                 &:before {
                     color: @color-middle;
                     top: 1px;
                 }
+
                 &:hover {
                     &:before {
                         color: @color-dark;
@@ -536,13 +499,16 @@ td.col-type {
                 }
             }
         }
+
         .label {
             margin: 0;
         }
-        .hasDatepicker {
+
+        ._has-datepicker {
             margin: 0 5px;
             width: 80px;
         }
+
         .show-by {
             .select {
                 margin-left: 5px;
@@ -551,23 +517,28 @@ td.col-type {
                 width: auto;
             }
         }
+
         &.required {
             &:after {
                 content: '';
             }
+
             .label span {
                 &:extend(.validation-symbol all);
             }
         }
     }
+
     .required {
         &:extend(.validation-symbol all);
     }
+
     img {
         vertical-align: middle;
         height: 22px;
         width: 22px;
     }
+
     .validation-advice {
         background: @validation-background-color;
         border: 1px solid @validation__color;
@@ -578,6 +549,7 @@ td.col-type {
         position: absolute;
         white-space: nowrap;
         z-index: 5;
+
         &:before {
             .arrow(up, 5px, @validation__color);
             content: '';
@@ -587,10 +559,12 @@ td.col-type {
             top: -11px;
         }
     }
+
     input[type="text"].validation-failed {
         border-color: @validation__color;
         box-shadow: 0 0 8px @validation__color-rgba;
     }
+
     .link-feed {
         white-space: nowrap;
     }
@@ -620,28 +594,35 @@ td.col-type {
     line-height: 28px;
     padding: 15px 15px 0;
     &:extend(.add-clearer all);
+
     > .entry-edit {
         float: right;
+
         .field-row {
             display: inline-block;
             vertical-align: top;
         }
+
         .validation-advice {
             display: none !important;
         }
+
         .form-inline {
             display: inline-block;
         }
+
         .label {
             &:extend(.grid-actions .export .label);
             padding: 0;
             width: auto;
         }
+
         .action- {
             &:extend(.grid-actions .export .action-);
             vertical-align: top;
         }
     }
+
     .select.validation-failed {
         border: @validation-border;
         background: @validation-background-color;
@@ -720,12 +701,15 @@ td.col-type {
     .grid-actions + .grid {
         padding-top: 15px;
     }
+
     .grid-actions {
         padding: 10px 0 0;
     }
+
     .grid {
         padding: 0;
     }
+
     .massaction {
         padding: 0;
         border-top: none;

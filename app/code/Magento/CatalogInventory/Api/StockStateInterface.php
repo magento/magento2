@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -13,38 +13,38 @@ interface StockStateInterface
 {
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return bool
      */
-    public function verifyStock($productId, $websiteId = null);
+    public function verifyStock($productId, $scopeId = null);
 
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return bool
      */
-    public function verifyNotification($productId, $websiteId = null);
+    public function verifyNotification($productId, $scopeId = null);
 
     /**
      * @param int $productId
      * @param float $itemQty
      * @param float $qtyToCheck
      * @param float $origQty
-     * @param int $websiteId
+     * @param int $scopeId
      * @return int
      */
-    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $websiteId = null);
+    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null);
 
     /**
      * Check quantity
      *
      * @param int $productId
      * @param float $qty
-     * @param int $websiteId
+     * @param int $scopeId
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return bool
      */
-    public function checkQty($productId, $qty, $websiteId = null);
+    public function checkQty($productId, $qty, $scopeId = null);
 
     /**
      * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions
@@ -52,17 +52,17 @@ interface StockStateInterface
      *
      * @param int $productId
      * @param float $qty
-     * @param int $websiteId
+     * @param int $scopeId
      * @return float
      */
-    public function suggestQty($productId, $qty, $websiteId = null);
+    public function suggestQty($productId, $qty, $scopeId = null);
 
     /**
      * Retrieve stock qty whether product is composite or no
      *
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return float
      */
-    public function getStockQty($productId, $websiteId = null);
+    public function getStockQty($productId, $scopeId = null);
 }

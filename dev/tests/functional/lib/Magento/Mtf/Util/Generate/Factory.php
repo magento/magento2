@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,8 +10,7 @@ use Magento\Framework\App;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class Factory
- * Factory classes generator
+ * Factory classes generator.
  *
  * @deprecated
  */
@@ -25,40 +24,26 @@ class Factory extends AbstractGenerate
     /**
      * @constructor
      * @param ObjectManagerInterface $objectManager
-     * @param Factory\Block $block
-     * @param Factory\Fixture $fixture
-     * @param Factory\Handler $handler
-     * @param Factory\Page $page
-     * @param Factory\Repository $repository
      */
-    public function __construct(
-        ObjectManagerInterface $objectManager,
-        Factory\Block $block,
-        Factory\Fixture $fixture,
-        Factory\Handler $handler,
-        Factory\Page $page,
-        Factory\Repository $repository
-    ) {
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
         $this->objectManager = $objectManager;
-        $this->block = $block;
-        $this->fixture = $fixture;
-        $this->handler = $handler;
-        $this->page = $page;
-        $this->repository = $repository;
     }
 
     /**
-     * Generate Handlers
+     * Generate Handlers.
+     *
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function launch()
     {
-        $this->block->launch();
-        $this->fixture->launch();
-        $this->handler->launch();
-        $this->page->launch();
-        $this->repository->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Block::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Fixture::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Handler::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Page::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Repository::class)->launch();
 
-        return $this->objectManager->get('Magento\Framework\App\ResponseInterface');
+        return $this->objectManager->get(\Magento\Framework\App\ResponseInterface::class);
     }
 
     /**

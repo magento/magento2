@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -14,7 +14,7 @@
             <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
-            <data name="configData" xsi:type="string">display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">total_cat_excl_ship_incl_after_disc_on_excl, display_excluding_including_tax</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">1.00</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">1.10</data>
@@ -29,9 +29,9 @@
             <data name="prices/shipping_excl_tax" xsi:type="string">15.00</data>
             <data name="prices/shipping_incl_tax" xsi:type="string">15.00</data>
             <data name="prices/discount" xsi:type="string">1.50</data>
-            <data name="prices/tax" xsi:type="string">0.3</data>
+            <data name="prices/tax" xsi:type="string">0.15</data>
             <data name="prices/grand_total_excl_tax" xsi:type="string">16.50</data>
-            <data name="prices/grand_total_incl_tax" xsi:type="string">16.80</data>
+            <data name="prices/grand_total_incl_tax" xsi:type="string">16.65</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax" />
         </variation>
     </testCase>

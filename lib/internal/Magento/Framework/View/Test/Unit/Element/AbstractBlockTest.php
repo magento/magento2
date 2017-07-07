@@ -1,15 +1,97 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\Config\View;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\Session\SessionManagerInterface;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var AbstractBlock
+     */
+    private $block;
+
+    /**
+     * @var EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventManagerMock;
+
+    /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
+     * @var CacheStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheStateMock;
+
+    /**
+     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheMock;
+
+    /**
+     * @var SidResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sidResolverMock;
+
+    /**
+     * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionMock;
+
+    /**
+     * @return void
+     */
+    protected function setUp()
+    {
+        $this->eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->cacheStateMock = $this->getMockForAbstractClass(CacheStateInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
+        $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
+        $contextMock = $this->getMock(Context::class, [], [], '', false);
+        $contextMock->expects($this->once())
+            ->method('getEventManager')
+            ->willReturn($this->eventManagerMock);
+        $contextMock->expects($this->once())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
+        $contextMock->expects($this->once())
+            ->method('getCacheState')
+            ->willReturn($this->cacheStateMock);
+        $contextMock->expects($this->once())
+            ->method('getCache')
+            ->willReturn($this->cacheMock);
+        $contextMock->expects($this->once())
+            ->method('getSidResolver')
+            ->willReturn($this->sidResolverMock);
+        $contextMock->expects($this->once())
+            ->method('getSession')
+            ->willReturn($this->sessionMock);
+        $this->block = $this->getMockForAbstractClass(
+            AbstractBlock::class,
+            ['context' => $contextMock]
+        );
+    }
+
     /**
      * @param string $expectedResult
      * @param string $nameInLayout
@@ -18,11 +100,8 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUiId($expectedResult, $nameInLayout, $methodArguments)
     {
-        /** @var $block \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
-        $block = $this->getMockForAbstractClass('Magento\Framework\View\Element\AbstractBlock', [], '', false);
-        $block->setNameInLayout($nameInLayout);
-
-        $this->assertEquals($expectedResult, call_user_func_array([$block, 'getUiId'], $methodArguments));
+        $this->block->setNameInLayout($nameInLayout);
+        $this->assertEquals($expectedResult, call_user_func_array([$this->block, 'getUiId'], $methodArguments));
     }
 
     /**
@@ -57,46 +136,185 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetVar()
     {
-        $this->markTestIncomplete('MAGETWO-11727');
-        $config = $this->getMock('Magento\Framework\Config\View', ['getVarValue'], [], '', false);
+        $config = $this->getMock(View::class, ['getVarValue'], [], '', false);
         $module = uniqid();
-        $config->expects(
-            $this->at(0)
-        )->method(
-            'getVarValue'
-        )->with(
-            'Magento_Theme',
-            'v1'
-        )->will(
-            $this->returnValue('one')
-        );
-        $config->expects($this->at(1))->method('getVarValue')->with($module, 'v2')->will($this->returnValue('two'));
 
-        $configManager = $this->getMock('Magento\Framework\View\ConfigInterface', [], [], '', false);
-        $configManager->expects($this->exactly(2))->method('getViewConfig')->will($this->returnValue($config));
+        $config->expects($this->any())
+            ->method('getVarValue')
+            ->willReturnMap([
+                ['Magento_Theme', 'v1', 'one'],
+                [$module, 'v2', 'two']
+            ]);
 
-        /** @var $block \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
+        $configManager = $this->getMock(ConfigInterface::class, [], [], '', false);
+        $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
+
+        /** @var $block AbstractBlock|\PHPUnit_Framework_MockObject_MockObject */
         $params = ['viewConfig' => $configManager];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $block = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\AbstractBlock',
-            $helper->getConstructArguments('Magento\Framework\View\Element\AbstractBlock', $params),
-            uniqid('Magento\\Theme\\Block\\AbstractBlock\\')
+            AbstractBlock::class,
+            $helper->getConstructArguments(AbstractBlock::class, $params)
         );
+        $block->setData('module_name', 'Magento_Theme');
 
         $this->assertEquals('one', $block->getVar('v1'));
         $this->assertEquals('two', $block->getVar('v2', $module));
     }
 
+    /**
+     * @return void
+     */
     public function testIsScopePrivate()
     {
-        $contextMock = $this->getMock('Magento\Framework\View\Element\Context', [], [], '', false);
-        $block = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\AbstractBlock',
-            ['context' => $contextMock]
-        );
-        $this->assertEquals(false, $block->isScopePrivate());
+        $this->assertFalse($this->block->isScopePrivate());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCacheKey()
+    {
+        $cacheKey = 'testKey';
+        $this->block->setData('cache_key', $cacheKey);
+        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCacheKeyByName()
+    {
+        $nameInLayout = 'testBlock';
+        $this->block->setNameInLayout($nameInLayout);
+        $cacheKey = sha1($nameInLayout);
+        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+    }
+
+    /**
+     * @return void
+     */
+    public function testToHtmlWhenModuleIsDisabled()
+    {
+        $moduleName = 'Test';
+        $this->block->setData('module_name', $moduleName);
+
+        $this->eventManagerMock->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnMap([
+                ['view_block_abstract_to_html_before', ['block' => $this->block]],
+                ['view_block_abstract_to_html_after', ['block' => $this->block]],
+            ]);
+
+        $this->assertSame('', $this->block->toHtml());
+    }
+
+    /**
+     * @param string|bool $cacheLifetime
+     * @param string|bool $dataFromCache
+     * @param string $dataForSaveCache
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsDispatchEvent
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheLoad
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCacheSave
+     * @param string $expectedResult
+     * @return void
+     * @dataProvider getCacheLifetimeDataProvider
+     */
+    public function testGetCacheLifetimeViaToHtml(
+        $cacheLifetime,
+        $dataFromCache,
+        $dataForSaveCache,
+        $expectsDispatchEvent,
+        $expectsCacheLoad,
+        $expectsCacheSave,
+        $expectedResult
+    ) {
+        $moduleName = 'Test';
+        $cacheKey = 'testKey';
+        $this->block->setData('cache_key', $cacheKey);
+        $this->block->setData('module_name', $moduleName);
+        $this->block->setData('cache_lifetime', $cacheLifetime);
+
+        $this->eventManagerMock->expects($expectsDispatchEvent)
+            ->method('dispatch');
+        $this->cacheStateMock->expects($this->any())
+            ->method('isEnabled')
+            ->with(AbstractBlock::CACHE_GROUP)
+            ->willReturn(true);
+        $this->cacheMock->expects($expectsCacheLoad)
+            ->method('load')
+            ->with(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey)
+            ->willReturn($dataFromCache);
+        $this->cacheMock->expects($expectsCacheSave)
+            ->method('save')
+            ->with($dataForSaveCache, AbstractBlock::CACHE_KEY_PREFIX . $cacheKey);
+        $this->sidResolverMock->expects($this->any())
+            ->method('getSessionIdQueryParam')
+            ->with($this->sessionMock)
+            ->willReturn('sessionIdQueryParam');
+        $this->sessionMock->expects($this->any())
+            ->method('getSessionId')
+            ->willReturn('sessionId');
+
+        $this->assertSame($expectedResult, $this->block->toHtml());
+    }
+
+    /**
+     * @return array
+     */
+    public function getCacheLifetimeDataProvider()
+    {
+        return [
+            [
+                'cacheLifetime' => null,
+                'dataFromCache' => 'dataFromCache',
+                'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsCacheLoad' => $this->never(),
+                'expectsCacheSave' => $this->never(),
+                'expectedResult' => '',
+            ],
+            [
+                'cacheLifetime' => false,
+                'dataFromCache' => 'dataFromCache',
+                'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsCacheLoad' => $this->once(),
+                'expectsCacheSave' => $this->never(),
+                'expectedResult' => 'dataFromCache',
+            ],
+            [
+                'cacheLifetime' => 120,
+                'dataFromCache' => 'dataFromCache',
+                'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsCacheLoad' => $this->once(),
+                'expectsCacheSave' => $this->never(),
+                'expectedResult' => 'dataFromCache',
+            ],
+            [
+                'cacheLifetime' => '120string',
+                'dataFromCache' => 'dataFromCache',
+                'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsCacheLoad' => $this->once(),
+                'expectsCacheSave' => $this->never(),
+                'expectedResult' => 'dataFromCache',
+            ],
+            [
+                'cacheLifetime' => 120,
+                'dataFromCache' => false,
+                'dataForSaveCache' => '',
+                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsCacheLoad' => $this->once(),
+                'expectsCacheSave' => $this->once(),
+                'expectedResult' => '',
+            ],
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
@@ -27,8 +27,8 @@ class IndexerInfoCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecute()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerOne->expects($this->once())->method('getId')->willReturn('id_indexerOne');
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);

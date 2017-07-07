@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
@@ -18,12 +18,12 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->setDefaultDesignTheme()->getDesignTheme();
-        $type = 'Magento\Cms\Block\Widget\Page\Link';
+        $type = \Magento\Cms\Block\Widget\Page\Link::class;
         /** @var $model \Magento\Widget\Model\Widget\Instance */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Widget\Instance'
+            \Magento\Widget\Model\Widget\Instance::class
         );
         $code = $model->setType($type)->getWidgetReference('type', $type, 'code');
         $this->getRequest()->setParam('code', $code);

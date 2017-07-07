@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
                     }
                  }';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->partnersModelMock = $this->getPartnersModelMock(
             [
@@ -123,7 +123,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getPartnersBlockMock($methods = null)
     {
-        return $this->getMock('Magento\Marketplace\Block\Partners', $methods, [], '', false);
+        return $this->getMock(\Magento\Marketplace\Block\Partners::class, $methods, [], '', false);
     }
 
     /**
@@ -133,7 +133,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getPartnersModelMock($methods)
     {
-        return $this->getMock('Magento\Marketplace\Model\Partners', $methods, [], '', false);
+        return $this->getMock(\Magento\Marketplace\Model\Partners::class, $methods, [], '', false);
     }
 
     /**
@@ -143,7 +143,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getCurlMock($methods)
     {
-        return $this->getMock('Magento\Framework\HTTP\Client\Curl', $methods, [], '', false);
+        return $this->getMock(\Magento\Framework\HTTP\Client\Curl::class, $methods, [], '', false);
     }
 
     /**
@@ -153,6 +153,6 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getCacheMock($methods)
     {
-        return $this->getMock('Magento\Marketplace\Helper\Cache', $methods, [], '', false);
+        return $this->getMock(\Magento\Marketplace\Helper\Cache::class, $methods, [], '', false);
     }
 }

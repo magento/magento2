@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Search;
@@ -24,18 +24,17 @@ class ReaderPlugin
     /**
      * Merge reader's value with generated
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param \Magento\Framework\Config\ReaderInterface $subject
-     * @param \Closure $proceed
-     * @param string $scope
+     * @param array $result
+     * @param string|null $scope
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRead(
+    public function afterRead(
         \Magento\Framework\Config\ReaderInterface $subject,
-        \Closure $proceed,
+        array $result,
         $scope = null
     ) {
-        $result = $proceed($scope);
         $result = array_merge_recursive($result, $this->requestGenerator->generate());
         return $result;
     }

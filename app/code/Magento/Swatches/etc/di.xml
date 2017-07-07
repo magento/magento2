@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,6 +18,17 @@
     <type name="Magento\LayeredNavigation\Block\Navigation\FilterRenderer">
         <plugin name="swatches_layered_renderer" type="Magento\Swatches\Model\Plugin\FilterRenderer" sortOrder="1" />
     </type>
+    <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
+        <plugin name="add_swatch_attributes_to_configurable" type="Magento\Swatches\Model\Plugin\Configurable" />
+    </type>
+    <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                <item name="swatch_text" xsi:type="string">swatch_text</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Eav\Model\Attribute\FrontendType">
         <arguments>
             <argument name="config" xsi:type="array">
@@ -26,6 +37,47 @@
                     <item name="swatch_visual" xsi:type="string">swatch_visual</item>
                     <item name="swatch_text" xsi:type="string">swatch_text</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="watermark_swatch_image_size" xsi:type="array">
+                    <item name="path" xsi:type="string">design/watermark/swatch_image_size</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
+                </item>
+                <item name="watermark_swatch_image_imageOpacity" xsi:type="array">
+                    <item name="path" xsi:type="string">design/watermark/swatch_image_imageOpacity</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
+                </item>
+                <item name="watermark_swatch_image_image" xsi:type="array">
+                    <item name="path" xsi:type="string">design/watermark/swatch_image_image</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
+                    <item name="backend_model" xsi:type="string">Magento\Theme\Model\Design\Backend\Image</item>
+                    <item name="upload_dir" xsi:type="array">
+                        <item name="config" xsi:type="string">system/filesystem/media</item>
+                        <item name="scope_info" xsi:type="string">1</item>
+                        <item name="value" xsi:type="string">catalog/product/watermark</item>
+                    </item>
+                    <item name="base_url" xsi:type="array">
+                        <item name="type" xsi:type="string">media</item>
+                        <item name="scope_info" xsi:type="string">1</item>
+                        <item name="value" xsi:type="string">catalog/product/watermark</item>
+                    </item>
+                </item>
+                <item name="watermark_swatch_image_position" xsi:type="array">
+                    <item name="path" xsi:type="string">design/watermark/swatch_image_position</item>
+                    <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Swatches\Model\SwatchAttributeCodes">
+        <arguments>
+            <argument name="cacheKey" xsi:type="string">swatch-attribute-list</argument>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="0" xsi:type="const">Magento\Eav\Model\Entity\Attribute::CACHE_TAG</item>
             </argument>
         </arguments>
     </type>

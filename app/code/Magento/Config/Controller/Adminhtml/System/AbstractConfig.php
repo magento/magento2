@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,9 +10,17 @@ use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 
 /**
  * System Configuration Abstract Controller
+ * @api
  */
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Config::config';
+
     /**
      * @var \Magento\Config\Model\Config\Structure
      */
@@ -60,7 +68,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected function _isAllowed()
     {
         $sectionId = $this->_request->getParam('section');
-        return $this->_authorization->isAllowed('Magento_Config::config')
+        return parent::_isAllowed()
             || $this->_configStructure->getElement($sectionId)->isAllowed();
     }
 
@@ -72,8 +80,9 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      */
     protected function _saveState($configState = [])
     {
-        $adminUser = $this->_auth->getUser();
         if (is_array($configState)) {
+            $configState = $this->sanitizeConfigState($configState);
+            $adminUser = $this->_auth->getUser();
             $extra = $adminUser->getExtra();
             if (!is_array($extra)) {
                 $extra = [];
@@ -87,5 +96,26 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
             $adminUser->saveExtra($extra);
         }
         return true;
+    }
+
+    /**
+     * Sanitize config state data
+     *
+     * @param array $configState
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function sanitizeConfigState($configState)
+    {
+        $sectionList = $this->_configStructure->getSectionList();
+        $sanitizedConfigState = $configState;
+        foreach ($configState as $sectionId => $value) {
+            if (array_key_exists($sectionId, $sectionList)) {
+                $sanitizedConfigState[$sectionId] = (bool)$sanitizedConfigState[$sectionId] ? '1' : '0';
+            } else {
+                unset($sanitizedConfigState[$sectionId]);
+            }
+        }
+        return $sanitizedConfigState;
     }
 }

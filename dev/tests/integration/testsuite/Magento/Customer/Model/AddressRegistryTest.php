@@ -2,7 +2,7 @@
 /**
  * Test for \Magento\Customer\Model\AddressRegistry
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\AddressRegistry');
+            ->create(\Magento\Customer\Model\AddressRegistry::class);
     }
 
     /**
@@ -29,7 +29,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $addressId = 1;
         $address = $this->_model->retrieve($addressId);
-        $this->assertInstanceOf('\Magento\Customer\Model\Address', $address);
+        $this->assertInstanceOf(\Magento\Customer\Model\Address::class, $address);
         $this->assertEquals($addressId, $address->getId());
     }
 
@@ -42,12 +42,12 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
         $addressId = 1;
         $addressBeforeDeletion = $this->_model->retrieve($addressId);
         $address2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Address');
+            ->create(\Magento\Customer\Model\Address::class);
         $address2->load($addressId)
             ->delete();
         $addressAfterDeletion = $this->_model->retrieve($addressId);
         $this->assertEquals($addressBeforeDeletion, $addressAfterDeletion);
-        $this->assertInstanceOf('\Magento\Customer\Model\Address', $addressAfterDeletion);
+        $this->assertInstanceOf(\Magento\Customer\Model\Address::class, $addressAfterDeletion);
         $this->assertEquals($addressId, $addressAfterDeletion->getId());
     }
 
@@ -69,7 +69,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $addressId = 1;
         $address = $this->_model->retrieve($addressId);
-        $this->assertInstanceOf('\Magento\Customer\Model\Address', $address);
+        $this->assertInstanceOf(\Magento\Customer\Model\Address::class, $address);
         $address->delete();
         $this->_model->remove($addressId);
         $this->_model->retrieve($addressId);

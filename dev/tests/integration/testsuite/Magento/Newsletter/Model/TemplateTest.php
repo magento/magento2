@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -18,7 +18,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Template'
+            \Magento\Newsletter\Model\Template::class
         );
     }
 
@@ -36,7 +36,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         if ($store != 'default') {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Config\MutableScopeConfigInterface'
+                \Magento\Framework\App\Config\MutableScopeConfigInterface::class
             )->setValue(
                 \Magento\Theme\Model\View\Design::XML_PATH_THEME_ID,
                 $design,
@@ -46,7 +46,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         }
         $this->_model->emulateDesign($store, 'frontend');
         $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
+            \Magento\Framework\App\State::class
         )->emulateAreaCode(
             'frontend',
             [$this->_model, 'getProcessedTemplate']
@@ -79,7 +79,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->_model->emulateDesign('default', $area);
         $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
+            \Magento\Framework\App\State::class
         )->emulateAreaCode(
             $area,
             [$this->_model, 'getProcessedTemplate']

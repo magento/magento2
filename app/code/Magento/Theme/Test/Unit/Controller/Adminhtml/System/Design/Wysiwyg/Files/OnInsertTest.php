@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Wysiwyg\Files;
@@ -22,16 +22,16 @@ class OnInsertTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $response;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
-        $this->storageHelper = $this->getMock('Magento\Theme\Helper\Storage', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', ['setBody'], [], '', false);
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class, [], [], '', false);
+        $this->storageHelper = $this->getMock(\Magento\Theme\Helper\Storage::class, [], [], '', false);
+        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, ['setBody'], [], '', false);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $helper->getObject(
-            'Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\OnInsert',
+            \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\OnInsert::class,
             [
                 'objectManager' => $this->objectManager,
                 'view' => $this->view,
@@ -44,7 +44,7 @@ class OnInsertTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with('Magento\Theme\Helper\Storage')
+            ->with(\Magento\Theme\Helper\Storage::class)
             ->willReturn($this->storageHelper);
         $this->storageHelper
             ->expects($this->once())

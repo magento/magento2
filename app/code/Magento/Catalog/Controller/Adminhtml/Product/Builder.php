@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -9,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg as WysiwygModel;
 use Magento\Framework\App\RequestInterface;
+use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
 
@@ -35,21 +35,32 @@ class Builder
     protected $wysiwygConfig;
 
     /**
+     * @var StoreFactory
+     */
+    protected $storeFactory;
+
+    /**
+     * Constructor
+     *
      * @param ProductFactory $productFactory
      * @param Logger $logger
      * @param Registry $registry
      * @param WysiwygModel\Config $wysiwygConfig
+     * @param StoreFactory|null $storeFactory
      */
     public function __construct(
         ProductFactory $productFactory,
         Logger $logger,
         Registry $registry,
-        WysiwygModel\Config $wysiwygConfig
+        WysiwygModel\Config $wysiwygConfig,
+        StoreFactory $storeFactory = null
     ) {
         $this->productFactory = $productFactory;
         $this->logger = $logger;
         $this->registry = $registry;
         $this->wysiwygConfig = $wysiwygConfig;
+        $this->storeFactory = $storeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreFactory::class);
     }
 
     /**
@@ -64,6 +75,8 @@ class Builder
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->productFactory->create();
         $product->setStoreId($request->getParam('store', 0));
+        $store = $this->storeFactory->create();
+        $store->load($request->getParam('store', 0));
 
         $typeId = $request->getParam('type');
         if (!$productId && $typeId) {
@@ -87,6 +100,7 @@ class Builder
 
         $this->registry->register('product', $product);
         $this->registry->register('current_product', $product);
+        $this->registry->register('current_store', $store);
         $this->wysiwygConfig->setStoreId($request->getParam('store'));
         return $product;
     }

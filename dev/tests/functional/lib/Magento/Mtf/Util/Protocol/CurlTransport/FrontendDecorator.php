@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -117,6 +117,9 @@ class FrontendDecorator implements CurlInterface
      */
     public function write($url, $params = [], $method = CurlInterface::POST, $headers = [])
     {
+        if ($this->formKey) {
+            $params['form_key'] = $this->formKey;
+        }
         $headers = ['Set-Cookie:' . $this->cookies];
         $this->transport->write($url, http_build_query($params), $method, $headers);
     }

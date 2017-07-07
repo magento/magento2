@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -12,6 +12,7 @@ use Magento\Customer\Model\Context;
  * them to be instantiated via the objectManager.
  *
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
@@ -23,12 +24,12 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 $this->assertNotEmpty($module);
                 $this->assertTrue(class_exists($class), "Block class: {$class}");
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\Config\ScopeInterface'
+                    \Magento\Framework\Config\ScopeInterface::class
                 )->setCurrentScope(
                     $area
                 );
                 $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Framework\App\Http\Context'
+                    \Magento\Framework\App\Http\Context::class
                 );
                 $context->setValue(Context::CONTEXT_AUTH, false, false);
                 $context->setValue(
@@ -57,7 +58,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         try {
             /** @var $website \Magento\Store\Model\Website */
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()->setWebsiteId(
                 0
             );
@@ -71,11 +72,12 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                     continue;
                 }
                 $class = new \ReflectionClass($blockClass);
-                if ($class->isAbstract() || !$class->isSubclassOf('Magento\Framework\View\Element\Template')) {
+                if ($class->isAbstract() || !$class->isSubclassOf(\Magento\Framework\View\Element\Template::class)) {
                     continue;
                 }
                 $templateBlocks = $this->_addBlock($module, $blockClass, $class, $templateBlocks);
             }
+            asort($templateBlocks);
             return $templateBlocks;
         } catch (\Exception $e) {
             trigger_error(
@@ -118,13 +120,13 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             $blockClass,
             '_Backend_'
         ) || $class->isSubclassOf(
-            'Magento\Backend\Block\Template'
+            \Magento\Backend\Block\Template::class
         )
         ) {
             $area = 'adminhtml';
         }
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\AreaList'
+            \Magento\Framework\App\AreaList::class
         )->getArea(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->load(

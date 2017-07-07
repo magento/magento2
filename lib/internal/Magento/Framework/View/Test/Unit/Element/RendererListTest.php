@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element;
@@ -31,18 +31,18 @@ class RendererListTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
+        $this->blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
             ->setMethods(['setRenderedBlock', 'getTemplate', 'setTemplate'])->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->setMethods(['getBlock', 'getChildName'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $this->layoutMock->expects($this->any())
             ->method('getBlock')
             ->will($this->returnValue($this->blockMock));
 
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Context::class)
             ->setMethods(['getLayout'])->disableOriginalConstructor()->getMock();
 
         $this->contextMock->expects($this->any())
@@ -50,7 +50,7 @@ class RendererListTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->layoutMock));
 
         $this->renderList = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\RendererList',
+            \Magento\Framework\View\Element\RendererList::class,
             ['context' => $this->contextMock]
         );
     }
@@ -75,12 +75,12 @@ class RendererListTest extends \PHPUnit_Framework_TestCase
 
         /** During the first call cache will be generated */
         $this->assertInstanceOf(
-            '\Magento\Framework\View\Element\BlockInterface',
+            \Magento\Framework\View\Element\BlockInterface::class,
             $this->renderList->getRenderer('type', null, null)
         );
         /** Cached value should be returned during second call */
         $this->assertInstanceOf(
-            '\Magento\Framework\View\Element\BlockInterface',
+            \Magento\Framework\View\Element\BlockInterface::class,
             $this->renderList->getRenderer('type', null, 'renderer_template')
         );
     }
@@ -91,7 +91,7 @@ class RendererListTest extends \PHPUnit_Framework_TestCase
     public function testGetRendererWithException()
     {
         $this->assertInstanceOf(
-            '\Magento\Framework\View\Element\BlockInterface',
+            \Magento\Framework\View\Element\BlockInterface::class,
             $this->renderList->getRenderer(null)
         );
     }

@@ -1,9 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template;
+
+use Magento\Email\Model\Template\Css\Processor;
+use Magento\Email\Model\Template\Filter;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -84,65 +91,64 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
+        $this->string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaper = $this->getMockBuilder('\Magento\Framework\Escaper')
-            ->disableOriginalConstructor()
-            ->enableProxyingToOriginalMethods()
-            ->getMock();
-
-        $this->assetRepo = $this->getMockBuilder('\Magento\Framework\View\Asset\Repository')
+        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->coreVariableFactory = $this->getMockBuilder('\Magento\Variable\Model\VariableFactory')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->coreVariableFactory = $this->getMockBuilder(\Magento\Variable\Model\VariableFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layout = $this->getMockBuilder('\Magento\Framework\View\LayoutInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutFactory = $this->getMockBuilder('\Magento\Framework\View\LayoutFactory')
+        $this->layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->appState = $this->getMockBuilder('\Magento\Framework\App\State')
+        $this->layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->backendUrlBuilder = $this->getMockBuilder('\Magento\Backend\Model\UrlInterface')
+        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->emogrifier = $this->objectManager->getObject('\Pelago\Emogrifier');
+        $this->backendUrlBuilder = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->configVariables = $this->getMockBuilder('Magento\Email\Model\Source\Variables')
+        $this->emogrifier = $this->objectManager->getObject(\Pelago\Emogrifier::class);
+
+        $this->configVariables = $this->getMockBuilder(\Magento\Email\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     /**
      * @param array|null $mockedMethods Methods to mock
-     * @return \Magento\Email\Model\Template\Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @return Filter|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getModel($mockedMethods = null)
     {
-        return $this->getMockBuilder('\Magento\Email\Model\Template\Filter')
+        return $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setConstructorArgs([
                 $this->string,
                 $this->logger,
@@ -252,13 +258,23 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testApplyInlineCss($html, $css, $expectedResults)
     {
         $filter = $this->getModel(['getCssFilesContent']);
+        $cssProcessor = $this->getMockBuilder(Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $reflectionClass = new \ReflectionClass(Filter::class);
+        $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($filter, $cssProcessor);
+        $cssProcessor->expects($this->any())
+            ->method('process')
+            ->willReturnArgument(0);
 
         $filter->expects($this->exactly(count($expectedResults)))
             ->method('getCssFilesContent')
             ->will($this->returnValue($css));
 
         $designParams = [
-            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'area' => Area::AREA_FRONTEND,
             'theme' => 'themeId',
             'locale' => 'localeId',
         ];
@@ -267,6 +283,60 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedResults as $expectedResult) {
             $this->assertContains($expectedResult, $filter->applyInlineCss($html));
         }
+    }
+
+    public function testGetCssFilesContent()
+    {
+        $file = 'css/email.css';
+        $path = Area::AREA_FRONTEND . '/themeId/localeId';
+        $css = 'p{color:black}';
+        $designParams = [
+            'area' => Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $filter = $this->getModel();
+
+        $asset = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $fallbackContext = $this->getMockBuilder(FallbackContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fallbackContext->expects($this->once())
+            ->method('getBaseDirType')
+            ->willReturn(DirectoryList::STATIC_VIEW);
+        $asset->expects($this->atLeastOnce())
+            ->method('getContext')
+            ->willReturn($fallbackContext);
+
+        $asset->expects($this->atLeastOnce())
+            ->method('getPath')
+            ->willReturn($path . DIRECTORY_SEPARATOR . $file);
+        $this->assetRepo->expects($this->once())
+            ->method('createAsset')
+            ->with($file, $designParams)
+            ->willReturn($asset);
+
+        $pubDirectory = $this->getMockBuilder(ReadInterface::class)
+            ->getMockForAbstractClass();
+        $reflectionClass = new \ReflectionClass(Filter::class);
+        $reflectionProperty = $reflectionClass->getProperty('pubDirectory');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($filter, $pubDirectory);
+        $pubDirectory->expects($this->once())
+            ->method('isExist')
+            ->with($path . DIRECTORY_SEPARATOR . $file)
+            ->willReturn(true);
+        $pubDirectory->expects($this->once())
+            ->method('readFile')
+            ->with($path . DIRECTORY_SEPARATOR . $file)
+            ->willReturn($css);
+
+        $filter->setDesignParams($designParams);
+
+        $this->assertEquals($css, $filter->getCssFilesContent([$file]));
     }
 
     /**
@@ -301,7 +371,19 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyInlineCssThrowsExceptionWhenDesignParamsNotSet()
     {
-        $this->getModel()->applyInlineCss('test');
+        $filter = $this->getModel();
+        $cssProcessor = $this->getMockBuilder(Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $reflectionClass = new \ReflectionClass(Filter::class);
+        $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($filter, $cssProcessor);
+        $cssProcessor->expects($this->any())
+            ->method('process')
+            ->willReturnArgument(0);
+
+        $filter->applyInlineCss('test');
     }
 
     /**
@@ -348,7 +430,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
 
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getId')->willReturn(1);
 
@@ -369,7 +454,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = '';
 
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getId')->willReturn(1);
 

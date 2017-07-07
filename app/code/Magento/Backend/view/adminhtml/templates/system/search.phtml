@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,17 +17,29 @@
                     class="search-global-input"
                     id="search-global"
                     name="query"
-                    data-mage-init='<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()))?>'>
+                    data-mage-init='<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()) ?>'>
             <button
                 type="submit"
                 class="search-global-action"
-                title="<?php /* @escapeNotVerified */ echo __('Search') ?>"
+                title="<?= /* @escapeNotVerified */ __('Search') ?>"
                 ></button>
         </div>
     </form>
     <script data-template="search-suggest" type="text/x-magento-template">
         <ul class="search-global-menu">
-        <% if (data.items.length) { %>
+        <li class="item">
+            <a id="searchPreviewProducts" href="<?= /* @escapeNotVerified */ $block->getURL('catalog/product/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Products</a>
+        </li>
+        <li class="item">
+            <a id="searchPreviewOrders" href="<?= /* @escapeNotVerified */ $block->getURL('sales/order/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
+        </li>
+        <li class="item">
+            <a id="searchPreviewCustomers" href="<?= /* @escapeNotVerified */ $block->getURL('customer/index/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
+        </li>
+        <li class="item">
+            <a id="searchPreviewPages" href="<?= /* @escapeNotVerified */ $block->getURL('cms/page/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
+        </li>
+            <% if (data.items.length) { %>
             <% _.each(data.items, function(value){ %>
             <li class="item"
                 <%- data.optionData(value) %>
@@ -40,7 +52,7 @@
         <% } else { %>
             <li>
                 <span class="mage-suggest-no-records">
-                    <?php /* @escapeNotVerified */ echo __('No records found.') ?>
+                    <?= /* @escapeNotVerified */ __('No records found.') ?>
                 </span>
             </li>
         <% } %>

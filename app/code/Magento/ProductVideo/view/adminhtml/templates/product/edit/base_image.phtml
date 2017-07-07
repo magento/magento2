@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -8,31 +8,30 @@
     <div class="add-video-button-container">
         <button
             id="add_video_button"
-            title="<?php /* @escapeNotVerified */ echo $addVideoTitle;?>"
+            title="<?= /* @escapeNotVerified */ $addVideoTitle ?>"
             type="button"
             class="action-secondary"
             onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();"
             data-ui-id="widget-button-1">
-            <span><?php /* @escapeNotVerified */ echo __('Add video') ?></span>
+            <span><?= /* @escapeNotVerified */ __('Add Video') ?></span>
         </button>
     </div>
 </div>
-<div id="<?php /* @escapeNotVerified */ echo $htmlId;?>-container"
+<div id="<?= /* @escapeNotVerified */ $htmlId ?>-container"
      class="images"
      data-mage-init='{"baseImage":{}}'
-     data-max-file-size="<?php /* @escapeNotVerified */ echo $fileMaxSize;?>"
+     data-max-file-size="<?= /* @escapeNotVerified */ $fileMaxSize ?>"
     >
     <div class="image image-placeholder">
-        <input type="file" name="image" data-url="<?php 
-        /* @escapeNotVerified */ echo $uploadUrl;?>" multiple="multiple" />
-        <img class="spacer" src="<?php /* @escapeNotVerified */ echo $spacerImage;?>"/>
-        <p class="image-placeholder-text"><?php /* @escapeNotVerified */ echo $imagePlaceholderText;?></p>
+        <input type="file" name="image" data-url="<?= /* @escapeNotVerified */ $uploadUrl ?>" multiple="multiple" />
+        <img class="spacer" src="<?= /* @escapeNotVerified */ $spacerImage ?>"/>
+        <p class="image-placeholder-text"><?= /* @escapeNotVerified */ $imagePlaceholderText ?></p>
     </div>
-    <script id="<?php /* @escapeNotVerified */ echo $htmlId;?>-template"
+    <script id="<?= /* @escapeNotVerified */ $htmlId ?>-template"
             data-template="image"
             type="text/x-magento-template">
         <div class="image">
-            <img class="spacer" src="<?php /* @escapeNotVerified */ echo $spacerImage;?>"/>
+            <img class="spacer" src="<?= /* @escapeNotVerified */ $spacerImage ?>"/>
             <img
                 class="product-image"
                 src="<%- data.url %>"
@@ -43,25 +42,25 @@
                     type="button"
                     class="action-delete"
                     data-role="delete-button"
-                    title="<?php /* @escapeNotVerified */ echo $deleteImageText;?>">
-                    <span><?php /* @escapeNotVerified */ echo $deleteImageText;?></span>
+                    title="<?= /* @escapeNotVerified */ $deleteImageText ?>">
+                    <span><?= /* @escapeNotVerified */ $deleteImageText ?></span>
                 </button>
                 <button
                     type="button"
                     class="action-make-base"
                     data-role="make-base-button"
-                    title="<?php /* @escapeNotVerified */ echo $makeBaseText;?>">
-                    <span><?php /* @escapeNotVerified */ echo $makeBaseText;?></span>
+                    title="<?= /* @escapeNotVerified */ $makeBaseText ?>">
+                    <span><?= /* @escapeNotVerified */ $makeBaseText ?></span>
                 </button>
                 <div class="draggable-handle"></div>
             </div>
             <div class="image-label"></div>
-            <div class="image-fade"><span><?php /* @escapeNotVerified */ echo $hiddenText;?></span></div>
+            <div class="image-fade"><span><?= /* @escapeNotVerified */ $hiddenText ?></span></div>
         </div>
     </script>
 </div>
 <span class="action-manage-images" data-activate-tab="image-management">
-    <span><?php /* @escapeNotVerified */ echo $imageManagementText;?></span>
+    <span><?= /* @escapeNotVerified */ $imageManagementText ?></span>
 </span>
 <script>
     require([

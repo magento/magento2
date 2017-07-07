@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <price>
+            <selector>[name$='[price]']</selector>
+        </price>
+        <price_type>
+            <selector>[name$='[price_type]']</selector>
+            <input>select</input>
+        </price_type>
+        <sku>
+            <selector>[name$='[sku]']</selector>
+        </sku>
+        <file_extension>
+            <selector>[name$='[file_extension]']</selector>
+        </file_extension>
+        <image_size_x>
+            <selector>[name$='[image_size_x]']</selector>
+        </image_size_x>
+        <image_size_y>
+            <selector>[name$='[image_size_y]']</selector>
+        </image_size_y>
+    </fields>
+</mapping>

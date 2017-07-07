@@ -1,10 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
+/**
+ * Introduced as a facade for presentation related operations.
+ * Later replaced with Magento\Framework\View\Result component
+ *
+ * @api
+ * @deprecated since 2.2.0
+ * @see \Magento\Framework\View\Result\Layout
+ */
 interface ViewInterface
 {
     /**

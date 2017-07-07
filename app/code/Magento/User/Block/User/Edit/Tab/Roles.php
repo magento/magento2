@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Grid\Column;
 
+/**
+ * @api
+ */
 class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -144,19 +147,19 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         //checking if we have this data and we
         //don't need load it through resource model
         if ($user->hasData('roles')) {
-            $uRoles = $user->getData('roles');
+            $userRoles = $user->getData('roles');
         } else {
-            $uRoles = $user->getRoles();
+            $userRoles = $user->getRoles();
         }
 
         if ($json) {
             $jsonRoles = [];
-            foreach ($uRoles as $urid) {
-                $jsonRoles[$urid] = 0;
+            foreach ($userRoles as $roleId) {
+                $jsonRoles[$roleId] = 0;
             }
             return $this->_jsonEncoder->encode((object)$jsonRoles);
         } else {
-            return $uRoles;
+            return $userRoles;
         }
     }
 }

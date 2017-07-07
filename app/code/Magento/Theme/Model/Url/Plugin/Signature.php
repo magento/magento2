@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,7 +47,7 @@ class Signature
      * Append signature to rendered base URL for static view files
      *
      * @param \Magento\Framework\Url\ScopeInterface $subject
-     * @param callable $proceed
+     * @param string $baseUrl
      * @param string $type
      * @param null $secure
      * @return string
@@ -55,13 +55,12 @@ class Signature
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetBaseUrl(
+    public function afterGetBaseUrl(
         \Magento\Framework\Url\ScopeInterface $subject,
-        \Closure $proceed,
+        $baseUrl,
         $type = \Magento\Framework\UrlInterface::URL_TYPE_LINK,
         $secure = null
     ) {
-        $baseUrl = $proceed($type, $secure);
         if ($type == \Magento\Framework\UrlInterface::URL_TYPE_STATIC && $this->isUrlSignatureEnabled()) {
             $baseUrl .= $this->renderUrlSignature() . '/';
         }

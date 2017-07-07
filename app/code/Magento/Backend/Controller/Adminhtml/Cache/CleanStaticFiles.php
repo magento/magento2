@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
@@ -17,7 +17,7 @@ class CleanStaticFiles extends \Magento\Backend\Controller\Adminhtml\Cache
      */
     public function execute()
     {
-        $this->_objectManager->get('Magento\Framework\App\State\CleanupFiles')->clearMaterializedViewFiles();
+        $this->_objectManager->get(\Magento\Framework\App\State\CleanupFiles::class)->clearMaterializedViewFiles();
         $this->_eventManager->dispatch('clean_static_files_cache_after');
         $this->messageManager->addSuccess(__('The static files cache has been cleaned.'));
 

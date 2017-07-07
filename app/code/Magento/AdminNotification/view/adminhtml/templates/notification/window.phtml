@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,20 +12,18 @@
  * @see \Magento\AdminNotification\Block\Window
  */
 ?>
-<div data-mage-init='{"modalPopup": {}}' class="fade critical-notification">
-    <div class="popup popup-<?php /* @escapeNotVerified */ echo preg_replace('#[^a-z0-9]+#', '-', strtolower($block->getSeverityText())) ?>">
-        <div class="popup-inner">
-            <div class="popup-header">
-                <div class="popup-title"><?php /* @escapeNotVerified */ echo $block->getHeaderText(); ?></div>
-            </div>
-            <div class="popup-content">
-                <span><?php /* @escapeNotVerified */ echo $block->getSeverityText();?></span>
-
-                <p class="message-text"><?php /* @escapeNotVerified */ echo $block->getNoticeMessageText(); ?></p>
-
-                <a href="<?php /* @escapeNotVerified */ echo $block->getNoticeMessageUrl(); ?>"><?php /* @escapeNotVerified */ echo $block->getReadDetailsText(); ?></a>
-            </div>
-            <span class="action close" data-dismiss="popup" title="<?php echo $block->escapeHtml(__('Close popup'));?>"><?php /* @escapeNotVerified */ echo __('Close'); ?></span>
-        </div>
-    </div>
-</div>
+<ul class="message-system-list"
+    style="display: none;"
+    data-mage-init='{
+        "Magento_Ui/js/modal/modal": {
+            "autoOpen": true,
+            "buttons": false,
+            "modalClass": "modal-system-messages",
+            "title": "<?= /* @escapeNotVerified */ $block->getHeaderText() ?>"
+        }
+    }'>
+    <li class="message message-warning warning">
+        <?= /* @escapeNotVerified */ $block->getNoticeMessageText() ?><br/>
+        <a href="<?= /* @escapeNotVerified */ $block->getNoticeMessageUrl() ?>"><?= /* @escapeNotVerified */ $block->getReadDetailsText() ?></a>
+    </li>
+</ul>

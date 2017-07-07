@@ -1,42 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * Currency switcher
  *
- * @see \Magento\Directory\Block\Currency
+ * @var \Magento\Directory\Block\Currency $block
  */
+
 ?>
 <?php if ($block->getCurrencyCount() > 1): ?>
 <?php $currencies = $block->getCurrencies(); ?>
 <?php $currentCurrencyCode = $block->getCurrentCurrencyCode(); ?>
-<?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : ''?>
-<div class="switcher currency switcher-currency" id="switcher-currency<?php /* @escapeNotVerified */ echo $id?>">
-    <strong class="label switcher-label"><span><?php /* @escapeNotVerified */ echo __('Currency') ?></span></strong>
+<?php $id = $block->getIdModifier() ? '-' . $block->getIdModifier() : '' ?>
+<div class="switcher currency switcher-currency" id="switcher-currency<?= $block->escapeHtmlAttr($id) ?>">
+    <strong class="label switcher-label"><span><?= $block->escapeHtml(__('Currency')) ?></span></strong>
     <div class="actions dropdown options switcher-options">
-        <div class="action toggle switcher-trigger" id="switcher-currency-trigger<?php /* @escapeNotVerified */ echo $id?>">
-            <strong class="language-<?php echo $block->escapeHtml($block->getCurrentCurrencyCode()) ?>">
-                <span><?php echo $block->escapeHtml($currentCurrencyCode) ?> - <?php echo @$block->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
+        <div class="action toggle switcher-trigger"
+             id="switcher-currency-trigger<?= $block->escapeHtmlAttr($id) ?>"
+             data-mage-init='{"dropdown":{}}'
+             data-toggle="dropdown"
+             data-trigger-keypress-button="true">
+            <strong class="language-<?= $block->escapeHtml($block->getCurrentCurrencyCode()) ?>">
+                <span><?= $block->escapeHtml($currentCurrencyCode) ?> - <?= @$block->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
             </strong>
         </div>
-        <ul class="dropdown switcher-dropdown" data-mage-init='{"dropdownDialog":{
-            "appendTo":"#switcher-currency<?php /* @escapeNotVerified */ echo $id?> > .options",
-            "triggerTarget":"#switcher-currency-trigger<?php /* @escapeNotVerified */ echo $id?>",
-            "closeOnMouseLeave": false,
-            "triggerClass":"active",
-            "parentClass":"active",
-            "buttons":null}}'>
+        <ul class="dropdown switcher-dropdown" data-target="dropdown">
             <?php foreach ($currencies as $_code => $_name): ?>
                 <?php if ($_code != $currentCurrencyCode): ?>
-                    <li class="currency-<?php /* @escapeNotVerified */ echo $_code ?> switcher-option">
-                        <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getSwitchCurrencyPostData($_code); ?>'><?php /* @escapeNotVerified */ echo $_code ?> - <?php /* @escapeNotVerified */ echo $_name ?></a>
+                    <li class="currency-<?= $block->escapeHtmlAttr($_code) ?> switcher-option">
+                        <a href="#" data-post='<?= /* @noEscape */ $block->getSwitchCurrencyPostData($_code) ?>'><?= $block->escapeHtml($_code) ?> - <?= $block->escapeHtml($_name) ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>

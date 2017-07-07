@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
-use Magento\Paypal\Model\BillingAgreementConfigProvider;
-use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Paypal\Model\Billing\AgreementFactory;
+use Magento\Paypal\Model\BillingAgreementConfigProvider;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 
 class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
@@ -24,12 +24,12 @@ class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->currentCustomerMock = $this->getMockBuilder('Magento\Customer\Helper\Session\CurrentCustomer')
+        $this->currentCustomerMock = $this->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)
             ->setMethods(['getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->agreementFactoryMock = $this->getMockBuilder('Magento\Paypal\Model\Billing\AgreementFactory')
+        $this->agreementFactoryMock = $this->getMockBuilder(\Magento\Paypal\Model\Billing\AgreementFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -38,7 +38,6 @@ class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->currentCustomerMock,
             $this->agreementFactoryMock
         );
-
     }
 
     public function testGetConfig()
@@ -63,7 +62,7 @@ class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->currentCustomerMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
 
-        $agreementMock = $this->getMockBuilder('Magento\Paypal\Model\Billing\Agreement')
+        $agreementMock = $this->getMockBuilder(\Magento\Paypal\Model\Billing\Agreement::class)
             ->disableOriginalConstructor()
             ->getMock();
 

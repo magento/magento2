@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,46 +12,43 @@ use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for DeleteProductUrlRewritesEntity
- *
  * Precondition:
  * 1. Sub category is created.
  * 2. Product is created.
  * 3. Product url rewrites is created.
  *
- * Test Flow:
+ * Steps:
  * 1. Login to backend.
  * 2. Navigate to MARKETING > URL Rewrites.
  * 3. Click Redirect from grid.
  * 4. Click 'Delete' button.
  * 5. Perform asserts.
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites
  * @ZephyrId  MAGETWO-23287
  */
 class DeleteProductUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
-     * Url rewrite index page
+     * Url rewrite index page.
      *
      * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
-     * Url rewrite edit page
+     * Url rewrite edit page.
      *
      * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
-     * Prepare pages
+     * Prepare pages.
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
@@ -66,7 +63,7 @@ class DeleteProductUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Delete product url rewrites entity
+     * Delete product url rewrites entity.
      *
      * @param UrlRewrite $productRedirect
      * @return void

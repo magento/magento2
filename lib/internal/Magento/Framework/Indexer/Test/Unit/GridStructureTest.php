@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Test\Unit;
@@ -31,14 +31,16 @@ class GridStructureTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder('Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver')
+        $this->flatScopeResolver = $this->getMockBuilder(
+            \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())
@@ -84,7 +86,7 @@ class GridStructureTest extends \PHPUnit_Framework_TestCase
         $tableName = 'index_table';
         $idxName = 'idxName';
 
-        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->flatScopeResolver->expects($this->once())

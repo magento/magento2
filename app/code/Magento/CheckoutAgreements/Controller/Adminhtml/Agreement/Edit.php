@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
@@ -15,7 +15,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $agreementModel = $this->_objectManager->create('Magento\CheckoutAgreements\Model\Agreement');
+        $agreementModel = $this->_objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
 
         if ($id) {
             $agreementModel->load($id);
@@ -26,7 +26,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
             }
         }
 
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getAgreementData(true);
+        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getAgreementData(true);
         if (!empty($data)) {
             $agreementModel->setData($data);
         }
@@ -38,7 +38,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
             $id ? __('Edit Condition') : __('New Condition')
         )->_addContent(
             $this->_view->getLayout()->createBlock(
-                'Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit'
+                \Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit::class
             )->setData(
                 'action',
                 $this->getUrl('checkout/*/save')

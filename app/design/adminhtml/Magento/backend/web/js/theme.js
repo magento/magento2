@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,10 +14,8 @@ define('globalNavigationScroll', [
         menu = $('.menu-wrapper'),
         content = $('.page-wrapper'),
         menuItems = $('#nav').children('li'),
-        subMenus = menuItems.children(subMenuClass),
         winHeight,
         menuHeight = menu.height(),
-        menuHeightRest = 0,
         menuScrollMax = 0,
         submenuHeight = 0,
         contentHeight,
@@ -28,16 +26,16 @@ define('globalNavigationScroll', [
 
     /**
      * Check if menu is fixed
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     function isMenuFixed() {
-        return (menuHeight < contentHeight) && (contentHeight > winHeight);
+        return menuHeight < contentHeight && contentHeight > winHeight;
     }
 
     /**
      * Check if class exist than add or do nothing
      * @param {jQuery} el
-     * @param $class string
+     * @param {String} $class
      */
     function checkAddClass(el, $class) {
         if (!el.hasClass($class)) {
@@ -48,7 +46,7 @@ define('globalNavigationScroll', [
     /**
      * Check if class exist than remove or do nothing
      * @param {jQuery} el
-     * @param $class string
+     * @param {String} $class
      */
     function checkRemoveClass(el, $class) {
         if (el.hasClass($class)) {
@@ -66,7 +64,6 @@ define('globalNavigationScroll', [
         contentHeight = content.height();
         winTop = win.scrollTop();
         scrollStep = winTop - winTopLast;
-        menuHeightRest = menuHeight - winTop; // is a visible menu height
 
         if (isMenuFixed()) { // fixed menu cases
 
@@ -74,11 +71,11 @@ define('globalNavigationScroll', [
 
             if (menuHeight > winHeight) { // smart scroll cases
 
-                if (winTop > winTopLast) { //  scroll down
+                if (winTop > winTopLast) { //eslint-disable-line max-depth
 
                     menuScrollMax = menuHeight - winHeight;
 
-                    nextTop < (menuScrollMax - scrollStep) ?
+                    nextTop < menuScrollMax - scrollStep ?
                         nextTop += scrollStep : nextTop = menuScrollMax;
 
                     menu.css('top', -nextTop);
@@ -115,7 +112,7 @@ define('globalNavigationScroll', [
         winHeight = win.height();
 
         //  Reset position if fixed and out of smart scroll
-        if ((menuHeight < contentHeight) && (menuHeight <= winHeight)) {
+        if (menuHeight < contentHeight && menuHeight <= winHeight) {
             menu.removeAttr('style');
             menuItems.off();
         }
@@ -123,7 +120,7 @@ define('globalNavigationScroll', [
     });
 
     //  Add event to menuItems to check submenu overlap
-    menuItems.on('click', function (e) {
+    menuItems.on('click', function () {
 
         var submenu = $(this).children(subMenuClass),
             delta,
@@ -164,6 +161,7 @@ define('globalNavigation', [
             overlayTmpl: '<div class="admin__menu-overlay"></div>'
         },
 
+        /** @inheritdoc */
         _create: function () {
             var selectors = this.options.selectors;
 
@@ -175,12 +173,19 @@ define('globalNavigation', [
                 ._bind();
         },
 
+        /**
+         * @return {Object}
+         * @private
+         */
         _initOverlay: function () {
             this.overlay = $(this.options.overlayTmpl).appendTo('body').hide(0);
 
             return this;
         },
 
+        /**
+         * @private
+         */
         _bind: function () {
             var focus = this._focus.bind(this),
                 open = this._open.bind(this),
@@ -195,7 +200,6 @@ define('globalNavigation', [
 
             this.closeActions.on('keydown', keyboard);
         },
-
 
         /**
          * Remove active class from current menu item
@@ -235,6 +239,10 @@ define('globalNavigation', [
                 .removeClass('_active');
         },
 
+        /**
+         * @param {jQuery.Event} e
+         * @private
+         */
         _closeSubmenu: function (e) {
             var selectors = this.options.selectors,
                 currentItem = $(selectors.menu).find(selectors.currentItem);
@@ -244,6 +252,10 @@ define('globalNavigation', [
             currentItem.addClass('_active');
         },
 
+        /**
+         * @param {jQuery.Event} e
+         * @private
+         */
         _open: function (e) {
             var selectors = this.options.selectors,
                 menuItemSelector = selectors.topLevelItem,
@@ -251,7 +263,6 @@ define('globalNavigation', [
                 subMenu = $(selectors.subMenu, menuItem),
                 close = this._closeSubmenu.bind(this),
                 closeBtn = subMenu.find(selectors.closeSubmenuBtn);
-
 
             if (subMenu.length) {
                 e.preventDefault();
@@ -263,14 +274,16 @@ define('globalNavigation', [
 
             subMenu.attr('aria-expanded', 'true');
 
-            //subMenu.css('height', subMenu.find('ul.menu')[0].height() + subMenu.find('strong.submenu-title').height());
-
             closeBtn.on('click', close);
 
             this.overlay.show(0).on('click', close);
             this.menuLinks.last().off('blur');
         },
 
+        /**
+         * @param {jQuery.Event} e
+         * @private
+         */
         _close: function (e) {
             var selectors = this.options.selectors,
                 menuItem = this.menu.find(selectors.topLevelItem + '._show'),
@@ -308,26 +321,28 @@ define('globalSearch', [
             input: '#search-global'
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.field = $(this.options.field);
             this.input = $(this.options.input);
             this._events();
         },
 
+        /**
+         * @private
+         */
         _events: function () {
             var self = this;
 
-            this.input
-                .on('blur.resetGlobalSearchForm', function () {
-                    if (!self.input.val()) {
-                        self.field.removeClass(self.options.fieldActiveClass)
-                    }
-                });
+            this.input.on('blur.resetGlobalSearchForm', function () {
+                if (!self.input.val()) {
+                    self.field.removeClass(self.options.fieldActiveClass);
+                }
+            });
 
-            this.input
-                .on('focus.activateGlobalSearchForm', function () {
-                    self.field.addClass(self.options.fieldActiveClass)
-                });
+            this.input.on('focus.activateGlobalSearchForm', function () {
+                self.field.addClass(self.options.fieldActiveClass);
+            });
         }
     });
 
@@ -347,6 +362,7 @@ define('modalPopup', [
             btnHide: '[data-hide="popup"]'
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.fade = this.element;
             this.popup = $(this.options.popup, this.fade);
@@ -356,6 +372,9 @@ define('modalPopup', [
             this._events();
         },
 
+        /**
+         * @private
+         */
         _events: function () {
             var self = this;
 
@@ -388,6 +407,7 @@ define('useDefault', [
             label: '.use-default-label'
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.el = this.element;
             this.field = $(this.el).closest(this.options.field);
@@ -399,36 +419,48 @@ define('useDefault', [
             this._events();
         },
 
+        /**
+         * @private
+         */
         _events: function () {
             var self = this;
 
-            this.el
-                .on('change.toggleUseDefaultVisibility keyup.toggleUseDefaultVisibility', $.proxy(this._toggleUseDefaultVisibility, this))
-                .trigger('change.toggleUseDefaultVisibility');
+            this.el.on(
+                    'change.toggleUseDefaultVisibility keyup.toggleUseDefaultVisibility',
+                    $.proxy(this._toggleUseDefaultVisibility, this)
+                ).trigger('change.toggleUseDefaultVisibility');
 
-            this.checkbox
-                .on('change.setOrigValue', function () {
-                    if ($(this).prop('checked')) {
-                        self.el
-                            .val(self.origValue)
-                            .trigger('change.toggleUseDefaultVisibility');
+            this.checkboxon('change.setOrigValue', function () {
+                if ($(this).prop('checked')) {
+                    self.el
+                        .val(self.origValue)
+                        .trigger('change.toggleUseDefaultVisibility');
 
-                        $(this).prop('checked', false);
-                    }
-                });
+                    $(this).prop('checked', false);
+                }
+            });
         },
 
+        /**
+         * @private
+         */
         _toggleUseDefaultVisibility: function () {
             var curValue = this.el.val(),
                 origValue = this.origValue;
 
-            this[curValue != origValue ? '_show' : '_hide']();
+            this[curValue != origValue ? '_show' : '_hide'](); //eslint-disable-line eqeqeq
         },
 
+        /**
+         * @private
+         */
         _show: function () {
             this.useDefault.show();
         },
 
+        /**
+         * @private
+         */
         _hide: function () {
             this.useDefault.hide();
         }
@@ -452,6 +484,7 @@ define('loadingPopup', [
             template: null
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.template =
                 '<div class="popup popup-loading">' +
@@ -464,6 +497,9 @@ define('loadingPopup', [
             this._events();
         },
 
+        /**
+         * @private
+         */
         _events: function () {
             var self = this;
 
@@ -476,6 +512,9 @@ define('loadingPopup', [
                 });
         },
 
+        /**
+         * @private
+         */
         _show: function () {
             var options = this.options,
                 timeout = options.timeout;
@@ -487,10 +526,16 @@ define('loadingPopup', [
             }
         },
 
+        /**
+         * @private
+         */
         _hide: function () {
             $('body').trigger('processStop');
         },
 
+        /**
+         * @private
+         */
         _delayedHide: function () {
             this._hide();
 
@@ -517,10 +562,12 @@ define('collapsable', [
             wrapper: '.fieldset-wrapper'
         },
 
+        /** @inheritdoc */
         _create: function () {
             this._events();
         },
 
+        /** @inheritdoc */
         _events: function () {
             var self = this;
 

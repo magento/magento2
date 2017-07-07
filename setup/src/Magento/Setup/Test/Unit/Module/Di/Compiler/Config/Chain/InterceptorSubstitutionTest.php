@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain;
@@ -24,6 +24,36 @@ class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->getOutputConfig(), $modifier->modify($this->getInputConfig()));
     }
 
+    public function testModifyPreferences()
+    {
+        $inputConfig = [
+            'arguments' => [
+                'ClassReplaced' => [],
+                'ClassReplacement' => [],
+                'ClassReplaced\Interceptor' => [],
+                'ClassReplacement\Interceptor' => []
+            ],
+            'preferences' => [
+                'ClassReplaced' => 'ClassReplacement'
+            ],
+            'instanceTypes' => []
+        ];
+
+        $outputConfig = [
+            'arguments' => [
+                'ClassReplaced\Interceptor' => [],
+                'ClassReplacement\Interceptor' => []
+            ],
+            'preferences' => [
+                'ClassReplaced' => 'ClassReplacement\Interceptor',
+                'ClassReplacement' => 'ClassReplacement\Interceptor'
+            ],
+            'instanceTypes' => []
+        ];
+
+        $modifier = new InterceptorSubstitution();
+        $this->assertEquals($outputConfig, $modifier->modify($inputConfig));
+    }
 
     /**
      * Input config

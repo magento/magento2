@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action;
 use Magento\Catalog\Helper\Product\Edit\Action\Attribute as ActionAttribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
+/**
+ * @api
+ */
 class Attribute extends \Magento\Backend\Block\Widget
 {
     /**
@@ -44,7 +47,7 @@ class Attribute extends \Magento\Backend\Block\Widget
     {
         $this->getToolbar()->addChild(
             'back_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Back'),
                 'onclick' => 'setLocation(\'' . $this->getUrl(
@@ -57,7 +60,7 @@ class Attribute extends \Magento\Backend\Block\Widget
 
         $this->getToolbar()->addChild(
             'reset_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Reset'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', ['_current' => true]) . '\')',
@@ -67,7 +70,7 @@ class Attribute extends \Magento\Backend\Block\Widget
 
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save'),
                 'class' => 'save primary',

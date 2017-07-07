@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract class for jobs run by setup:cron:run command
@@ -48,6 +49,10 @@ abstract class AbstractJob
      */
     protected $status;
 
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
 
     /**
      * Constructor
@@ -70,9 +75,9 @@ abstract class AbstractJob
         $this->name = $name;
         $this->params = $params;
 
-        $objectManager = $objectManagerProvider->get();
-        $this->cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $objectManager->get('Magento\Framework\App\Cache');
+        $this->objectManager = $objectManagerProvider->get();
+        $this->cleanupFiles = $this->objectManager->get(\Magento\Framework\App\State\CleanupFiles::class);
+        $this->cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
     }
 
     /**
@@ -102,12 +107,12 @@ abstract class AbstractJob
      */
     protected function performCleanup()
     {
-        $this->status->add('Cleaning generated files...');
+        $this->status->add('Cleaning generated files...', \Psr\Log\LogLevel::INFO);
         $this->cleanupFiles->clearCodeGeneratedFiles();
-        $this->status->add('Complete!');
-        $this->status->add('Clearing cache...');
+        $this->status->add('Complete!', \Psr\Log\LogLevel::INFO);
+        $this->status->add('Clearing cache...', \Psr\Log\LogLevel::INFO);
         $this->cache->clean();
-        $this->status->add('Complete!');
+        $this->status->add('Complete!', \Psr\Log\LogLevel::INFO);
     }
 
     /**

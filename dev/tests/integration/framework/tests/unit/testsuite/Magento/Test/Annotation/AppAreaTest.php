@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Annotation;
@@ -24,8 +24,8 @@ class AppAreaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_testCaseMock = $this->getMock('PHPUnit_Framework_TestCase', [], [], '', false);
-        $this->_applicationMock = $this->getMock('Magento\TestFramework\Application', [], [], '', false);
+        $this->_testCaseMock = $this->getMock(\PHPUnit_Framework_TestCase::class, [], [], '', false);
+        $this->_applicationMock = $this->getMock(\Magento\TestFramework\Application::class, [], [], '', false);
         $this->_object = new \Magento\TestFramework\Annotation\AppArea($this->_applicationMock);
     }
 

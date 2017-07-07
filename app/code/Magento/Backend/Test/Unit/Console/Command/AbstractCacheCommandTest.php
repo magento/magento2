@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,9 +20,9 @@ abstract class AbstractCacheCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected $command;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->cacheManagerMock = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
+        $this->cacheManagerMock = $this->getMock(\Magento\Framework\App\Cache\Manager::class, [], [], '', false);
     }
 
     /**

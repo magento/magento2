@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Review::catalog_reviews_ratings_ratings" title="Rating" module="Magento_Review" sortOrder="60" parent="Magento_Backend::stores_attributes" action="review/rating/" resource="Magento_Review::ratings"/>
-        <add id="Magento_Review::catalog_reviews_ratings_reviews_all" title="Reviews" module="Magento_Review" parent="Magento_Backend::marketing_user_content" sortOrder="10" action="review/product/index" resource="Magento_Review::reviews_all"/>
-    <add id="Magento_Review::report_review" title="Reviews" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report" resource="Magento_Reports::review"/>
-        <add id="Magento_Review::report_review_customer" title="By Customers" sortOrder="10" module="Magento_Review" parent="Magento_Review::report_review" action="reports/report_review/customer" resource="Magento_Reports::review_customer"/>
-        <add id="Magento_Review::report_review_product" title="By Products" sortOrder="20" module="Magento_Review" parent="Magento_Review::report_review" action="reports/report_review/product" resource="Magento_Reports::review_product"/>
+        <add id="Magento_Review::catalog_reviews_ratings_ratings" title="Rating" translate="title" module="Magento_Review" sortOrder="60" parent="Magento_Backend::stores_attributes" action="review/rating/" resource="Magento_Review::ratings"/>
+        <add id="Magento_Review::catalog_reviews_ratings_reviews_all" title="Reviews" translate="title" module="Magento_Review" parent="Magento_Backend::marketing_user_content" sortOrder="10" action="review/product/index" resource="Magento_Review::reviews_all"/>
+    <add id="Magento_Review::report_review" title="Reviews" translate="title" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report" resource="Magento_Reports::review"/>
+        <add id="Magento_Review::report_review_customer" title="By Customers" translate="title" sortOrder="10" module="Magento_Review" parent="Magento_Review::report_review" action="reports/report_review/customer" resource="Magento_Reports::review_customer"/>
+        <add id="Magento_Review::report_review_product" title="By Products" translate="title" sortOrder="20" module="Magento_Review" parent="Magento_Review::report_review" action="reports/report_review/product" resource="Magento_Reports::review_product"/>
     </menu>
 </config>

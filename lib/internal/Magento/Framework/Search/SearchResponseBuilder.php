@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search;
@@ -13,6 +13,7 @@ class SearchResponseBuilder
 {
     /**
      * @var DocumentFactory
+     * @deprecated
      */
     private $documentFactory;
 
@@ -42,22 +43,7 @@ class SearchResponseBuilder
         /** @var \Magento\Framework\Api\Search\SearchResult $searchResult */
         $searchResult = $this->searchResultFactory->create();
 
-        /** @var \Magento\Framework\Api\Search\DocumentInterface[] $documents */
-        $documents = [];
-
-        /** @var \Magento\Framework\Search\Document $responseDocument */
-        foreach ($response as $responseDocument) {
-            $document = $this->documentFactory->create();
-
-            /** @var \Magento\Framework\Search\DocumentField $field */
-            foreach ($responseDocument as $field) {
-                $document->setCustomAttribute($field->getName(), $field->getValue());
-            }
-
-            $document->setId($responseDocument->getId());
-
-            $documents[] = $document;
-        }
+        $documents = iterator_to_array($response);
         $searchResult->setItems($documents);
         $searchResult->setAggregations($response->getAggregations());
         $searchResult->setTotalCount(count($documents));

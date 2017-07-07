@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,26 +26,20 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="url_key" xsi:type="string">simple-product-with-video-%isolation%</field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
-            <field name="image" xsi:type="string">/v/i/video_test.jpg</field>
-            <field name="small_image" xsi:type="string">/v/i/video_test.jpg</field>
-            <field name="swatch_image" xsi:type="string">/v/i/video_test.jpg</field>
-            <field name="thumbnail" xsi:type="string">/v/i/video_test.jpg</field>
             <field name="media_gallery" xsi:type="array">
                 <item name="images" xsi:type="array">
                     <item name="0" xsi:type="array">
-                        <item name="position" xsi:type="number">1</item>
-                        <item name="media_type" xsi:type="string">external-video</item>
-                        <item name="file" xsi:type="string">/v/i/video_test.jpg</item>
                         <item name="video_url" xsi:type="string">https://youtu.be/bpOSxM0rNPM</item>
                         <item name="video_title" xsi:type="string">Some title</item>
-                        <item name="label" xsi:type="string">image1</item>
                     </item>
                 </item>
             </field>
@@ -69,26 +63,20 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="url_key" xsi:type="string">simple-product-with-video-%isolation%</field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>
             </field>
-            <field name="image" xsi:type="string">/v/i/video_test.jpg</field>
-            <field name="small_image" xsi:type="string">/v/i/video_test.jpg</field>
-            <field name="swatch_image" xsi:type="string">/v/i/video_test.jpg</field>
-            <field name="thumbnail" xsi:type="string">/v/i/video_test.jpg</field>
             <field name="media_gallery" xsi:type="array">
                 <item name="images" xsi:type="array">
                     <item name="0" xsi:type="array">
-                        <item name="position" xsi:type="number">1</item>
-                        <item name="media_type" xsi:type="string">external-video</item>
-                        <item name="file" xsi:type="string">/v/i/video_test.jpg</item>
                         <item name="video_url" xsi:type="string">https://vimeo.com/16342611</item>
                         <item name="video_title" xsi:type="string">Some title</item>
-                        <item name="label" xsi:type="string">image1</item>
                     </item>
                 </item>
             </field>

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -32,7 +32,7 @@
 
 //
 //  Order Summary
-// ----------------------------------------------
+//  ---------------------------------------------
 
 .order-details {
     width: 100%;
@@ -76,7 +76,9 @@
 }
 
 //  Remove address and phone number link color on iOS
-.address-details a:extend(.no-link a) {};
+.address-details a {
+    &:extend(.no-link a);
+}
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     //  Stack columns
@@ -88,8 +90,8 @@
             width: auto !important;
 
             h3 {
-                margin-top: 0 !important;
                 margin-bottom: @indent__xs !important;
+                margin-top: 0 !important;
             }
         }
     }
@@ -97,7 +99,7 @@
 
 //
 //  Shipment Tracking
-// ----------------------------------------------
+//  ---------------------------------------------
 
 .shipment-track {
     .lib-table(@table__width, 0);
@@ -124,7 +126,7 @@
 
 //
 //  Items Table
-// ----------------------------------------------
+//  ---------------------------------------------
 
 .email-items {
     .lib-table(@table__width, 0);

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -14,6 +14,7 @@
 .downloadable-form {
     .admin__legend {
         font-size: 1.8rem;
+
         + .note {
             margin-bottom: @indent__l;
         }
@@ -24,6 +25,7 @@
             padding-bottom: 1.3rem;
             vertical-align: top;
         }
+
         tbody {
             tr {
                 &:first-child {
@@ -33,8 +35,10 @@
                 }
             }
         }
+
         td {
             vertical-align: top;
+
             &.col-sort {
                 padding-right: 15px;
                 width: 15px;
@@ -66,17 +70,18 @@
         margin-top: .3rem;
     }
 
-    &.admin__fieldset { // ToDo UI: remove with .admin__scope-old        
+    &.admin__fieldset { // ToDo UI: remove with .admin__scope-old
         .draggable-handle {
             background: none;
             height: inherit;
             line-height: inherit;
         }
     }
-    
+
     .action-delete {
         margin-top: .4rem;
         padding: 0;
+
         &:before {
             color: @color-gray60;
             font-size: 1.8rem;
@@ -90,11 +95,13 @@
 
     .admin__field-file-url {
         padding-left: 2.6rem;
+
         .admin__field-label {
             span {
                 display: none;
             }
         }
+
         .admin__field-label {
             margin-left: -2.6rem;
         }
@@ -110,6 +117,7 @@
         color: @link__color;
         cursor: pointer;
         display: inline-block;
+
         &:hover {
             color: @link__hover__color;
             text-decoration: underline;
@@ -119,13 +127,14 @@
     .file-info-size {
         font-size: 1.2rem;
     }
-    
+
     .note {
         margin-top: .8rem;
     }
 
     &.admin__fieldset { // ToDo UI: remove after admin__scope-old class removal for the product page
         padding: 0;
+
         .admin__control-radio {
             position: absolute;
         }
@@ -135,5 +144,13 @@
 @-moz-document url-prefix() { // Firefox fieldset overflow bug fix: horizontal scroll for the table does not appear
     .downloadable-form {
         display: table-column;
+    }
+}
+
+.admin__dynamic-rows {
+    &.admin__control-table {
+        .file-uploader-filename {
+            max-width: 170px;
+        }
     }
 }

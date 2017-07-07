@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -107,11 +107,11 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         };
 
         if (0 == $order->getTotalItemCount()) {
-            throw new InputException(__('Gift Messages is not applicable for empty order'));
+            throw new InputException(__('Gift Messages are not applicable for empty order'));
         }
 
         if ($order->getIsVirtual()) {
-            throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
+            throw new InvalidTransitionException(__('Gift Messages are not applicable for virtual products'));
         }
         if (!$this->helper->isMessagesAllowed('order', $order, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));

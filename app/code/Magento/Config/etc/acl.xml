@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,17 +11,17 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Config::config" title="Configuration" sortOrder="20">
-                            <resource id="Magento_Config::advanced" title="Advanced Section" sortOrder="90" />
-                            <resource id="Magento_Config::config_admin" title="Advanced Admin Section" sortOrder="100" />
-                            <resource id="Magento_Config::config_design" title="Design Section" sortOrder="40" />
-                            <resource id="Magento_Config::config_general" title="General Section" sortOrder="20" />
-                            <resource id="Magento_Config::config_system" title="System Section" sortOrder="80" />
-                            <resource id="Magento_Config::currency" title="Currency Setup Section" sortOrder="120" />
-                            <resource id="Magento_Config::dev" title="Developer Section" sortOrder="110" />
-                            <resource id="Magento_Config::web" title="Web Section" sortOrder="30" />
-                            <resource id="Magento_Config::trans_email" title="Store Email Addresses Section" sortOrder="100" />
-                            <resource id="Magento_Config::sendfriend" title="Email to a Friend" sortOrder="140" />
+                        <resource id="Magento_Config::config" title="Configuration" translate="title" sortOrder="20">
+                            <resource id="Magento_Config::advanced" title="Advanced Section" translate="title" sortOrder="90" />
+                            <resource id="Magento_Config::config_admin" title="Advanced Admin Section" translate="title" sortOrder="100" />
+                            <resource id="Magento_Config::config_design" title="Design Section" translate="title" sortOrder="40" />
+                            <resource id="Magento_Config::config_general" title="General Section" translate="title" sortOrder="20" />
+                            <resource id="Magento_Config::config_system" title="System Section" translate="title" sortOrder="80" />
+                            <resource id="Magento_Config::currency" title="Currency Setup Section" translate="title" sortOrder="120" />
+                            <resource id="Magento_Config::dev" title="Developer Section" translate="title" sortOrder="110" />
+                            <resource id="Magento_Config::web" title="Web Section" translate="title" sortOrder="30" />
+                            <resource id="Magento_Config::trans_email" title="Store Email Addresses Section" translate="title" sortOrder="100" />
+                            <resource id="Magento_Config::sendfriend" title="Email to a Friend" translate="title" sortOrder="140" />
                         </resource>
                     </resource>
                 </resource>

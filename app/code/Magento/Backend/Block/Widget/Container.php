@@ -2,7 +2,7 @@
 /**
  * Backend container block
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@ namespace Magento\Backend\Block\Widget;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * @api
+ */
 class Container extends \Magento\Backend\Block\Template implements ContainerInterface
 {
     /**#@+

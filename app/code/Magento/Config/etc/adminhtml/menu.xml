@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Config::system_config" title="Configuration" module="Magento_Config" sortOrder="20" parent="Magento_Backend::stores_settings" action="adminhtml/system_config" resource="Magento_Config::config"/>
+        <add id="Magento_Config::system_config" title="Configuration" translate="title" module="Magento_Config" sortOrder="20" parent="Magento_Backend::stores_settings" action="adminhtml/system_config" resource="Magento_Config::config"/>
     </menu>
 </config>

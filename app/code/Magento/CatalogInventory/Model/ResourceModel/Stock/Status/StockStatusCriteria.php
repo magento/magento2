@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,16 +20,16 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
      */
     public function __construct($mapper = '')
     {
-        $this->mapperInterfaceName = $mapper ?: 'Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper';
+        $this->mapperInterfaceName = $mapper ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper::class;
         $this->data['initial_condition'] = true;
     }
 
     /**
      * @inheritdoc
      */
-    public function setWebsiteFilter($website)
+    public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $website;
+        $this->data['website_filter'] = $scope;
     }
 
     /**

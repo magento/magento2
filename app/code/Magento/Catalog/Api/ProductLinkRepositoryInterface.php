@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,14 @@ namespace Magento\Catalog\Api;
  */
 interface ProductLinkRepositoryInterface
 {
+    /**
+     * Get product links list
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     */
+    public function getList(\Magento\Catalog\Api\Data\ProductInterface $product);
+
     /**
      * Save product link
      *

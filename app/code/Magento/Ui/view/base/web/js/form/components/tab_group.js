@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -57,20 +61,19 @@ define([
          * @param {Object} elem
          */
         validate: function (elem) {
-            var source = this.source,
-                result  = elem.delegate('validate'),
-                invalid = false;
+            var result  = elem.delegate('validate'),
+                invalid;
 
-            _.some(result, function (item) {
-                return !item.valid && (invalid = item.target);
+            invalid = _.find(result, function (item) {
+                return !item.valid;
             });
 
-            if (invalid && !source.get('params.invalid')) {
-                source.set('params.invalid', true);
-
+            if (invalid) {
                 elem.activate();
-                invalid.focused(true);
+                invalid.target.focused(true);
             }
+
+            return invalid;
         },
 
         /**
@@ -78,13 +81,9 @@ define([
          * of instance for each element.
          */
         onValidate: function () {
-            var elems;
-
-            elems = this.elems.sortBy(function (elem) {
+            this.elems.sortBy(function (elem) {
                 return !elem.active();
-            });
-
-            elems.forEach(this.validate, this);
+            }).some(this.validate, this);
         }
     });
 });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DataObject\Copy\Config\Data;
@@ -8,7 +8,8 @@ namespace Magento\Framework\DataObject\Copy\Config\Data;
 /**
  * Proxy class for @see \Magento\Framework\DataObject\Copy\Config\Data
  */
-class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data
+class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -47,7 +48,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\DataObject\\Copy\\Config\\Data',
+        $instanceName = \Magento\Framework\DataObject\Copy\Config\Data::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;

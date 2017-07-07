@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,36 +13,48 @@
             <resource>Magento_Backend::currency</resource>
             <group id="options" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Currency Options</label>
-                <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Base Currency</label>
                     <frontend_model>Magento\Directory\Block\Adminhtml\Frontend\Currency\Base</frontend_model>
                     <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Currency\Base</backend_model>
                     <comment>
-                        <![CDATA[Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]>
+                        <![CDATA[Base currency is used for all online payment transactions. The base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]>
                     </comment>
                 </field>
-                <field id="default" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="default" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Display Currency</label>
                     <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Currency\DefaultCurrency</backend_model>
                 </field>
-                <field id="allow" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="allow" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allowed Currencies</label>
                     <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Currency\Allow</backend_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
             </group>
+            <group id="yahoofinance" translate="label" sortOrder="33" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Yahoo Finance Exchange</label>
+                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Connection Timeout in Seconds</label>
+                </field>
+            </group>
+            <group id="fixerio" translate="label" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Fixer.io</label>
+                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Connection Timeout in Seconds</label>
+                </field>
+            </group>
             <group id="webservicex" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Webservicex</label>
-                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="timeout" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Connection Timeout in Seconds</label>
                 </field>
             </group>
             <group id="import" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Scheduled Import Settings</label>
-                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
@@ -50,11 +62,11 @@
                     <label>Error Email Recipient</label>
                     <validate>validate-email</validate>
                 </field>
-                <field id="error_email_identity" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="error_email_identity" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Error Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="error_email_template" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="error_email_template" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Error Email Template</label>
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
@@ -76,7 +88,7 @@
         <section id="system">
             <group id="currency" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Currency</label>
-                <field id="installed" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="installed" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Installed Currencies</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Locale</backend_model>
                     <source_model>Magento\Config\Model\Config\Source\Locale\Currency\All</source_model>
@@ -86,7 +98,7 @@
         </section>
         <section id="general">
             <group id="country">
-                <field id="optional_zip_countries" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="optional_zip_countries" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Zip/Postal Code is Optional for</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
@@ -104,7 +116,7 @@
                 </field>
             </group>
             <group id="locale">
-                <field id="weight_unit" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="weight_unit" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Weight Unit</label>
                     <source_model>Magento\Directory\Model\Config\Source\WeightUnit</source_model>
                 </field>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -122,46 +122,46 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $translateInline = $this->getMock('\Magento\Framework\Translate\InlineInterface', [], [], '', false);
+        $translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class, [], [], '', false);
         $translateInline->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
 
         $context =
-            $this->getMock('Magento\Framework\App\Helper\Context', ['getTranslateInline'], [], '', false);
+            $this->getMock(\Magento\Framework\App\Helper\Context::class, ['getTranslateInline'], [], '', false);
         $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
 
         $this->_string = new \Magento\Framework\Stdlib\StringUtils();
 
         $this->_importFactory = $this->getMock(
-            'Magento\ImportExport\Model\ImportFactory',
+            \Magento\ImportExport\Model\ImportFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->_resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->_resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\ResourceModel\Helper',
+            \Magento\ImportExport\Model\ResourceModel\Helper::class,
             [],
             [],
             '',
             false
         );
         $this->_dataFactory = $this->getMock(
-            'Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory',
+            \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory::class,
             [],
             [],
             '',
             false
         );
         $this->_customerFactory = $this->getMock(
-            'Magento\CustomerImportExport\Model\Import\CustomerFactory',
+            \Magento\CustomerImportExport\Model\Import\CustomerFactory::class,
             [],
             [],
             '',
             false
         );
         $this->_addressFactory = $this->getMock(
-            'Magento\CustomerImportExport\Model\Import\AddressFactory',
+            \Magento\CustomerImportExport\Model\Import\AddressFactory::class,
             [],
             [],
             '',
@@ -169,7 +169,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->errorFactory = $this->getMock(
-            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory',
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory::class,
             ['create'],
             [],
             '',
@@ -177,7 +177,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->error = $this->getMock(
-            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError',
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class,
             ['init'],
             [],
             '',
@@ -188,14 +188,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $this->error->expects($this->any())->method('init')->will($this->returnValue(true));
 
         $this->errorAggregator = $this->getMock(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class,
             ['hasToBeTerminated'],
             [$this->errorFactory],
             '',
             true
         );
 
-        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
     }
 
     /**
@@ -239,7 +239,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $customerEntity = $this->_getCustomerEntityMock(['validateRow']);
         $customerEntity->expects($this->any())->method('validateRow')->will($this->returnValue(true));
 
-        $customerStorage = $this->getMock('stdClass', ['getCustomerId']);
+        $customerStorage = $this->getMock(\stdClass::class, ['getCustomerId']);
         $customerStorage->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
         $addressEntity = $this->_getAddressEntityMock(['validateRow', 'getCustomerStorage']);
@@ -252,7 +252,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($customerStorage)
         );
 
-        $dataSourceMock = $this->getMock('stdClass', ['cleanBunches', 'saveBunch']);
+        $dataSourceMock = $this->getMock(\stdClass::class, ['cleanBunches', 'saveBunch']);
         $dataSourceMock->expects(
             $this->any()
         )->method(
@@ -310,7 +310,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $mockedMethods[] = 'getWebsiteId';
 
         $customerEntity = $this->getMock(
-            'Magento\CustomerImportExport\Model\Import\Customer',
+            \Magento\CustomerImportExport\Model\Import\Customer::class,
             $mockedMethods,
             [],
             '',
@@ -345,7 +345,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $mockedMethods[] = 'getAttributeCollection';
 
         $addressEntity = $this->getMock(
-            'Magento\CustomerImportExport\Model\Import\Address',
+            \Magento\CustomerImportExport\Model\Import\Address::class,
             $mockedMethods,
             [],
             '',
@@ -433,7 +433,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             ->method('validateRow')
             ->will($this->returnValue($validationReturn));
 
-        $customerStorage = $this->getMock('stdClass', ['getCustomerId']);
+        $customerStorage = $this->getMock(\stdClass::class, ['getCustomerId']);
         $customerStorage->expects($this->any())->method('getCustomerId')->will($this->returnValue(true));
         $addressEntity->expects(
             $this->any()
@@ -476,7 +476,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'validateAddressRowParams'])
         );
 
-        $customerStorage = $this->getMock('stdClass', ['getCustomerId']);
+        $customerStorage = $this->getMock(\stdClass::class, ['getCustomerId']);
         $customerStorage->expects($this->any())->method('getCustomerId')->will($this->returnValue(true));
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
@@ -642,7 +642,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $modelUnderTest = $this->_createModelMock($data);
 
         $source = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractSource',
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
             [],
             '',
             false
@@ -654,7 +654,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $modelUnderTest = $this->_getModelMockForPrepareRowForDb();
         $pathToCsvFile = __DIR__ . '/_files/customer_composite_prepare_row_for_db.csv';
-        $directoryMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $directoryMock = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
         $directoryMock->expects($this->any())
             ->method('openFile')->will(
             $this->returnValue(new Read($pathToCsvFile, new File()))

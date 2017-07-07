@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category\Flat;
@@ -77,7 +77,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Category', 'Magento\Catalog\Model\ResourceModel\Category\Flat');
+        $this->_init(
+            \Magento\Catalog\Model\Category::class,
+            \Magento\Catalog\Model\ResourceModel\Category\Flat::class
+        );
     }
 
     /**
@@ -116,7 +119,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $condition = ['in' => $ids];
             }
         }
-        $this->addFieldToFilter('entity_id', $condition);
+        $this->addFieldToFilter('main_table.entity_id', $condition);
         return $this;
     }
 

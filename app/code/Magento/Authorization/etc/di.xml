@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,7 +10,6 @@
     <type name="Magento\Authorization\Model\ResourceModel\Rules">
         <arguments>
             <argument name="rootResource" xsi:type="object">Magento\Framework\Acl\RootResource\Proxy</argument>
-            <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl\Builder">
@@ -24,4 +23,5 @@
             <argument name="aclBuilder" xsi:type="object">Magento\Framework\Acl\Builder\Proxy</argument>
         </arguments>
     </type>
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
 </config>

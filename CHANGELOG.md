@@ -1,3 +1,78 @@
+2.1.0
+=============
+To get detailed information about changes in Magento 2.1.0, please visit [Magento Community Edition (CE) Release Notes](http://devdocs.magento.com/guides/v2.1/release-notes/ReleaseNotes2.1.0CE.html "Magento Community Edition (CE) Release Notes")
+
+2.0.0
+=============
+* Fixed bugs:
+    * Fixed an issue where discount to the shipping amount was not applied during invoice creation
+    * Fixed an issue where inline translations did not work correctly for phrases with special characters
+    * Eliminated multiple escaping in the inline translation pop-up
+    * Fixed an issue where searching in Billing Agreements grid in Admin resulted in an SQL
+    * Fixed the Refresh Lifetime Statistics functionality in Reports
+    * Increased the limit of cookies per domain, according to following recommendations https://tools.ietf.org/html/rfc6265#section-6.1
+    * Fixed filtering by date in grids
+    * Fixed an issue where Totals were not calculated correctly if discount was applied when placing an order from Admin
+    * Fixed filtering of online customers by session Start Time
+    * Fixed an issue where it was impossible to register a customer on the storefront if an attribute with file type was required
+    * Fixed the issues in the Custom Admin URL with https functionality
+    * Fixed an issue where the category storefront URL did not include its parents
+    * Fixed an issue where Product API did not work properly for not default store code
+    * Fixed issues with adding images for a first product in a new attribute set
+    * Fixed an issue where it was impossible to create a credit memo for the order with downloadable product and sales rule applied
+    * Fixed an issue where it was impossible to manually add products to a configurable product
+    * Fixed an issue with custom timezone
+
+2.0.0-rc2
+=============
+* Fixed bugs:
+    * Fixed an issue where video didn’t play on iPad and iPhone
+    * Fixed an issue where Admin panel was not accessible if port was used in URL
+    * Fixed an issue where database name could not be changed after fail during installation process
+    * Fixed an issue where bundle items quantities could not be saved when editing a bundle product in a wishlist on the storefront
+    * Fixed PHP issue which appeared during Text Swatch product attribute creation
+    * Fixed Mini Shopping Cart re-sizing after removing the product
+    * Fixed an issue with negative subtotal during PayPal checkout
+    * Fixed inconsistent credit card validation
+    * Fixed an issue where the Product Gallery did not completely overlay the bottom layer in the full-screen view
+    * Fixed an issue where the Product Gallery could not be easily opened in the full-screen view
+    * Fixed an issue where the “+” icon was displayed on video preview hover
+    * Fixed an issue where video preview was visible under video player
+    * Fixed an issue where 'Admin' was not a required field for the new Swatch
+    * Fixed an issue where shipping and billing country information was not transmitted to PayPal
+    * Fixed an issue with the attribute in configurable products
+    * Fixed a category page load time
+    * Removed space outside the visible area in Admin
+    * Fixed an issue where Magento was stuck in the maintenance mode, if a backup was created when disabling modules via Web Setup Wizard
+    * Fixed session response to be in JSON
+    * Fixed an issue where an out of stock product was displayed on the storefront
+    * Fixed an error which appeared during product import with replace behavior
+    * Fixed an issue were URL rewrites in catalog categories were wrong after URL key for a store view was changed or a category was moved
+    * Fixed an issue where JSON was received instead of normal page when trying to delete a category after reset
+    * Fixed an issue where product API with "all" store code did not work
+    * Fixed the misleading system message about invalid indexers
+    * Fixed an issue where a bundle product created using Web API was not visible on the storefront
+    * Fixed an issue where it was impossible to save more than one configuration for a configurable product with the text swatch attribute
+    * Fixed an issue with the absence of a proper indication about why an image could not be deleted not deleted when it was used in one of the store views
+    * Fixed an issue with data modification in export result file
+    * Fixed an issue with the incorrect behavior of the required check box custom
+    * Fixed an issue where an exception was thrown when trying to install Magento having previously installed and uninstalled it
+    * Fixed an issue where changing the layout of a CMS page caused its design theme to change to Magento Blank
+    * Fixed an issue where CMS pages API did not work with store code
+    * Fixed an issue where CMS blocks API did not work for multiple websites
+    * Fixed an issue where XSS Payload could been saved into Admin Panel
+    * Fixed an issue where an error caused by adding a new swatch attribute persisted after deleting the attribute
+    * Fixed PHP notice which appeared during text swatch product attribute creation
+    * Fixed JS error on credit memo view grid during export to CSV
+    * Fixed an issue where a user was redirected to a blank page when canceling checkout with PayPal Express in Website Payments Pro Hosted Solution
+    * Fixed an issue where it was impossible to checkout if Persistent Shopping Cart is enabled
+    * Fixed an issue where it was impossible to complete the Braintree PayPal Checkout if Street line 2 is empty
+    * Fixed an issue with XSS Payload in website's translation table
+    * Fixed an issue where payment functionality matrix section was suitable only for AbstractMethod specializations, leaving other payment methods without valuable information
+* GitHub issues and requests:
+    * [#2276](https://github.com/magento/magento2/issues/2276) -- Notice: getimagesize(): Read error! in app/code/Magento/Catalog/Model/Product/Image.php on line 949
+    * [#2128](https://github.com/magento/magento2/issues/2128) -- wrong filename on products list
+
 2.0.0-rc
 =============
 * Performance improvements:
@@ -2797,7 +2872,7 @@ Tests:
   * Fixed a 404 error after saving mass update product attributes form
   * Fixed an issue when it was impossible to perform search by all tax classes on the Advanced Search page
   * Fixed an issue when attribute order for configurable product was not preserved after saving product
-  * Fixed an issue with no results for the Product Best Sellers report
+  * Fixed an issue with no results for the Product Bestsellers report
   * Fixed a fatal error when opening tax configuration page in the backend
   * Fixed an error occurring when opening the Tax Zones and Rates page in the backend
   * Fixed a 404 error occurring while searching products on the New Review page

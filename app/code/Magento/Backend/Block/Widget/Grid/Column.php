@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
@@ -10,7 +10,8 @@ use Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter;
 /**
  * Grid column block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Column extends \Magento\Backend\Block\Widget
 {
@@ -48,26 +49,26 @@ class Column extends \Magento\Backend\Block\Widget
      * @var array
      */
     protected $_rendererTypes = [
-        'action' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Action',
-        'button' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Button',
-        'checkbox' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox',
-        'concat' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat',
-        'country' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Country',
-        'currency' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency',
-        'date' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Date',
-        'datetime' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Datetime',
-        'default' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Text',
-        'draggable-handle' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\DraggableHandle',
-        'input' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Input',
-        'massaction' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Massaction',
-        'number' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Number',
-        'options' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Options',
-        'price' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Price',
-        'radio' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio',
-        'select' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Select',
-        'store' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Store',
-        'text' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Longtext',
-        'wrapline' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Wrapline',
+        'action' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action::class,
+        'button' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Button::class,
+        'checkbox' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox::class,
+        'concat' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat::class,
+        'country' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Country::class,
+        'currency' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency::class,
+        'date' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date::class,
+        'datetime' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Datetime::class,
+        'default' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text::class,
+        'draggable-handle' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\DraggableHandle::class,
+        'input' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input::class,
+        'massaction' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Massaction::class,
+        'number' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Number::class,
+        'options' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options::class,
+        'price' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Price::class,
+        'radio' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio::class,
+        'select' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Select::class,
+        'store' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Store::class,
+        'text' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Longtext::class,
+        'wrapline' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Wrapline::class,
     ];
 
     /**
@@ -76,21 +77,21 @@ class Column extends \Magento\Backend\Block\Widget
      * @var array
      */
     protected $_filterTypes = [
-        'datetime' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Datetime',
-        'date' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Date',
-        'range' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Range',
-        'number' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Range',
-        'currency' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Range',
-        'price' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Price',
-        'country' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Country',
-        'options' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Select',
-        'massaction' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Massaction',
-        'checkbox' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Checkbox',
-        'radio' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Radio',
-        'skip-list' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\SkipList',
-        'store' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Store',
-        'theme' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Theme',
-        'default' => 'Magento\Backend\Block\Widget\Grid\Column\Filter\Text',
+        'datetime' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Datetime::class,
+        'date' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Date::class,
+        'range' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Range::class,
+        'number' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Range::class,
+        'currency' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Range::class,
+        'price' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Price::class,
+        'country' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Country::class,
+        'options' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Select::class,
+        'massaction' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Massaction::class,
+        'checkbox' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Checkbox::class,
+        'radio' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Radio::class,
+        'skip-list' => \Magento\Backend\Block\Widget\Grid\Column\Filter\SkipList::class,
+        'store' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Store::class,
+        'theme' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Theme::class,
+        'default' => \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class,
     ];
 
     /**
@@ -447,7 +448,7 @@ class Column extends \Magento\Backend\Block\Widget
      */
     protected function _getFilterByType()
     {
-        $type = strtolower($this->getType());
+        $type = $this->getFilterType() ? strtolower($this->getFilterType()) : strtolower($this->getType());
         $filterClass = isset($this->_filterTypes[$type]) ? $this->_filterTypes[$type] : $this->_filterTypes['default'];
 
         return $filterClass;

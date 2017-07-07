@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,7 +93,7 @@ class IntegrationGrid extends Grid
         $this->_rootElement->find($this->deleteLink)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
         $modal->acceptAlert();
     }
 
@@ -130,7 +130,7 @@ class IntegrationGrid extends Grid
     {
         /** @var ResourcesPopup $resourcesPopup */
         $resourcesPopup = $this->blockFactory->create(
-            'Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\ResourcesPopup',
+            \Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\ResourcesPopup::class,
             ['element' => $this->_rootElement->find($this->resourcesPopupSelector, Locator::SELECTOR_XPATH)]
         );
 
@@ -145,7 +145,7 @@ class IntegrationGrid extends Grid
     public function getTokensPopup()
     {
         $tokensPopup = $this->blockFactory->create(
-            'Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\TokensPopup',
+            \Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\TokensPopup::class,
             ['element' => $this->_rootElement->find($this->tokensPopupSelector, Locator::SELECTOR_XPATH)]
         );
         $this->waitForElementVisible($this->tokensPopupSelector, Locator::SELECTOR_XPATH);

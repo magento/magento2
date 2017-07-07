@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,36 +13,32 @@
     </div>
 
     <div class="fieldset-wrapper-content in collapse" data-collapsed="true" data-bind="attr: {id: id}">
+        <!-- ko template: {
+            name: "ui/grid/paging/paging", data: paging
+            } -->
+        <!-- /ko -->
         <div class="note" data-bind="text: note"></div>
         <table class="data-grid data-grid-configurable">
             <thead>
             <tr>
-                <!-- ko foreach: { data: grid.columns, as: 'column' } -->
-                <th class="data-grid-th" data-bind="text: column"></th>
-                <!-- /ko -->
+                <th repeat="foreach: grid.columns, item: '$column'" class="data-grid-th" data-bind="text: $column"></th>
             </tr>
             </thead>
 
             <tbody>
-            <!-- ko foreach: { data: grid, as: 'product' } -->
-            <tr>
-                <!-- ko foreach: { data: product, as: 'property' } -->
-                <!-- ko if: property && property.preview -->
-                <td class="data-grid-thumbnail-cell">
+            <tr repeat="foreach: grid, item: '$product'">
+                <!-- ko foreach: { data: $product(), as: 'property' } -->
+                <td if="property && property.preview" class="data-grid-thumbnail-cell">
                     <div class="images-uploaded">
                         <img data-bind="attr: {src: property.preview}"/>
                         <span data-bind="text: property.images.length"></span>
                     </div>
                 </td>
-                <!-- /ko -->
-                <!-- ko ifnot: property && property.preview -->
-                <td>
+                <td ifnot="property && property.preview">
                     <span data-bind='text: property'></span>
                 </td>
                 <!-- /ko -->
-                <!-- /ko -->
             </tr>
-            <!-- /ko -->
             </tbody>
         </table>
     </div>

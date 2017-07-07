@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,7 +17,6 @@
         <directory suffix="Test.php">../../../lib/internal/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../lib/internal/*/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../setup/src/*/*/Test/Unit</directory>
-        <directory suffix="Test.php">../../../update/app/code/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../vendor/*/module-*/Test/Unit</directory>
         <directory suffix="Test.php">../../../vendor/*/framework/Test/Unit</directory>
         <directory suffix="Test.php">../../../vendor/*/framework/*/Test/Unit</directory>
@@ -31,16 +30,17 @@
             <directory suffix=".php">../../../app/code/*</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
             <directory suffix=".php">../../../setup/src/*</directory>
-            <directory suffix=".php">../../../update/app/code/*</directory>
             <exclude>
                 <directory>../../../app/code/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/*/Test</directory>
                 <directory>../../../setup/src/*/*/Test</directory>
-                <directory>../../../update/app/code/*/*/Test</directory>
             </exclude>
         </whitelist>
     </filter>
+    <listeners>
+        <listener class="Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager"/>
+    </listeners>
     <logging>
         <!--coverage_html_placeholder
             <log type="coverage-html" target="{{coverage_dir}}/test-reports/coverage" charset="UTF-8" yui="true" highlight="true"/>

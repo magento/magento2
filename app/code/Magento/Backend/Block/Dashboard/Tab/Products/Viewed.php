@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Products;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+
 /**
  * Adminhtml dashboard most viewed products grid
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Viewed extends \Magento\Backend\Block\Dashboard\Grid
@@ -66,8 +69,14 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
         );
 
         $this->setCollection($collection);
+        parent::_prepareCollection();
 
-        return parent::_prepareCollection();
+        /** @var Product $product */
+        foreach ($collection as $product) {
+            $product->setPrice($product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
+        }
+
+        return $this;
     }
 
     /**

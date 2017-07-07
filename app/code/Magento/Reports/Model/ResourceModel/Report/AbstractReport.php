@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Reports\Model\ResourceModel\Report;
 /**
  * Abstract report aggregate resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -41,31 +42,36 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
     protected $_reportsFlagFactory;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
-     * @param string $connectionName
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_logger = $logger;
         $this->_localeDate = $localeDate;
         $this->_reportsFlagFactory = $reportsFlagFactory;
-        $this->dateTime = $dateTime;
         $this->timezoneValidator = $timezoneValidator;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -96,9 +102,8 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
             $this->_getFlag()->setFlagData($value);
         }
 
-        $time = (new \DateTime())->getTimestamp();
         // touch last_update
-        $this->_getFlag()->setLastUpdate($this->dateTime->formatDate($time));
+        $this->_getFlag()->setLastUpdate($this->dateTime->gmtDate());
 
         $this->_getFlag()->save();
 
@@ -384,6 +389,10 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
         if (null === $from) {
             $selectOldest = $connection->select()->from($table, ["MIN({$column})"]);
             $from = $connection->fetchOne($selectOldest);
+            if (null === $from) {
+                $date = new \DateTime();
+                $from = $date->format('Y-m-d H:i:s');
+            }
         }
 
         $periods = $this->_getTZOffsetTransitions(

@@ -2,7 +2,7 @@
 /**
  * Magento validator config factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\PageLayout\Config;
@@ -40,7 +40,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
         $this->configFactory = $configFactory;
         $this->fileCollector = $fileCollector;
         $this->themeCollection = $themeCollection;
-        $this->themeCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
+        $this->themeCollection->setItemObjectClass(\Magento\Theme\Model\Theme\Data::class);
     }
 
     /**

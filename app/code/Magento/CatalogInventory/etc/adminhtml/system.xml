@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,26 +13,26 @@
             <resource>Magento_CatalogInventory::cataloginventory</resource>
             <group id="options" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Stock Options</label>
-                <field id="can_subtract" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="can_subtract" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Decrease Stock When Order is Placed</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="can_back_in_stock" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="can_back_in_stock" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Set Items' Status to be In Stock When Order is Cancelled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="show_out_of_stock" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="show_out_of_stock" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Display Out of Stock Products</label>
                     <comment>Products will still be shown by direct product URLs.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock</backend_model>
                 </field>
-                <field id="stock_threshold_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="stock_threshold_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Only X left Threshold</label>
                     <validate>validate-number</validate>
                 </field>
-                <field id="display_product_stock_status" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Display products availability in stock on Storefront.</label>
+                <field id="display_product_stock_status" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Display Products Availability in Stock on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
@@ -41,33 +41,33 @@
                     <![CDATA[Please note that these settings apply to individual items in the cart, not to the entire cart.]]>
                 </comment>
                 <label>Product Stock Options</label>
-                <field id="manage_stock" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="manage_stock" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Manage Stock</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\Managestock</backend_model>
                     <comment>Changing can take some time due to processing whole catalog.</comment>
                 </field>
-                <field id="backorders" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="backorders" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Backorders</label>
                     <source_model>Magento\CatalogInventory\Model\Source\Backorders</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\Backorders</backend_model>
                     <comment>Changing can take some time due to processing whole catalog.</comment>
                 </field>
-                <field id="max_sale_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="max_sale_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Maximum Qty Allowed in Shopping Cart</label>
                     <validate>validate-number</validate>
                 </field>
-                <field id="min_qty" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="min_qty" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Out-of-Stock Threshold</label>
                     <validate>validate-number</validate>
                     <backend_model>Magento\CatalogInventory\Model\System\Config\Backend\Minqty</backend_model>
                 </field>
-                <field id="min_sale_qty" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="min_sale_qty" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Minimum Qty Allowed in Shopping Cart</label>
                     <frontend_model>Magento\CatalogInventory\Block\Adminhtml\Form\Field\Minsaleqty</frontend_model>
                     <backend_model>Magento\CatalogInventory\Model\System\Config\Backend\Minsaleqty</backend_model>
                 </field>
-                <field id="notify_stock_qty" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="notify_stock_qty" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Notify for Quantity Below</label>
                     <validate>validate-number</validate>
                 </field>
@@ -75,11 +75,11 @@
                     <label>Automatically Return Credit Memo Item to Stock</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enable_qty_increments" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable_qty_increments" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Enable Qty Increments</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="qty_increments" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="qty_increments" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Qty Increments</label>
                     <validate>validate-number validate-greater-than-zero</validate>
                     <backend_model>Magento\CatalogInventory\Model\System\Config\Backend\Qtyincrements</backend_model>

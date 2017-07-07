@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
@@ -46,7 +46,7 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
         $resultRaw = $this->resultRawFactory->create();
         if ($gaData && $gaHash) {
             /** @var $helper \Magento\Backend\Helper\Dashboard\Data */
-            $helper = $this->_objectManager->get('Magento\Backend\Helper\Dashboard\Data');
+            $helper = $this->_objectManager->get(\Magento\Backend\Helper\Dashboard\Data::class);
             $newHash = $helper->getChartDataHash($gaData);
             if (Security::compareStrings($newHash, $gaHash)) {
                 $params = null;
@@ -57,7 +57,7 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
                 if ($params) {
                     try {
                         /** @var $httpClient \Magento\Framework\HTTP\ZendClient */
-                        $httpClient = $this->_objectManager->create('Magento\Framework\HTTP\ZendClient');
+                        $httpClient = $this->_objectManager->create(\Magento\Framework\HTTP\ZendClient::class);
                         $response = $httpClient->setUri(
                             \Magento\Backend\Block\Dashboard\Graph::API_URL
                         )->setParameterGet(
@@ -74,7 +74,7 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
                             ->setContents($response->getBody());
                         return $resultRaw;
                     } catch (\Exception $e) {
-                        $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                        $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                         $error = __('see error log for details');
                         $httpCode = 503;
                     }

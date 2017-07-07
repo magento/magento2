@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Block\Item\Price;
@@ -36,7 +36,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->weeeHelper = $this->getMockBuilder('\Magento\Weee\Helper\Data')
+        $this->weeeHelper = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'isEnabled',
@@ -48,12 +48,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->priceCurrency = $this->getMockBuilder('\Magento\Directory\Model\PriceCurrency')
+        $this->priceCurrency = $this->getMockBuilder(\Magento\Directory\Model\PriceCurrency::class)
             ->disableOriginalConstructor()
             ->setMethods(['format'])
             ->getMock();
 
-        $this->item = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
+        $this->item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 '__wakeup',
@@ -71,6 +71,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 'getBaseWeeeTaxAppliedAmount',
                 'getBaseWeeeTaxInclTax',
                 'getBasePriceInclTax',
+                'getQtyOrdered'
             ])
             ->getMock();
 
@@ -79,7 +80,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::STORE_ID));
 
         $this->renderer = $objectManager->getObject(
-            'Magento\Weee\Block\Item\Price\Renderer',
+            \Magento\Weee\Block\Item\Price\Renderer::class,
             [
                 'weeeHelper' => $this->weeeHelper,
                 'priceCurrency' => $this->priceCurrency,
@@ -314,8 +315,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($baseWeeeTaxExclTax));
 
         $this->item->expects($this->once())
-            ->method('getBasePrice')
+            ->method('getBaseRowTotal')
             ->will($this->returnValue($basePriceExclTax));
+
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->will($this->returnValue(1));
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
@@ -610,8 +615,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($baseWeeeTaxExclTax));
 
         $this->item->expects($this->once())
-            ->method('getBasePrice')
+            ->method('getBaseRowTotal')
             ->will($this->returnValue($basePriceExclTax));
+
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->will($this->returnValue(1));
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
     }
@@ -759,7 +768,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $expectedValue = 97;
 
-        $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -807,7 +816,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $expectedValue = $baseRowTotal + $baseTaxAmount + $baseDiscountTaxCompensationAmount -
             $baseDiscountAmount + $baseWeeeAmount;
 
-        $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [

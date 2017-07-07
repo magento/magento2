@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
     {
         parent::setUp();
 
-        $this->_model = $this->getMockBuilder('Magento\ImportExport\Model\Import\Entity\AbstractEntity')
+        $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(['_saveValidatedBunches', 'getErrorAggregator'])
             ->getMockForAbstractClass();
@@ -51,7 +51,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
     {
         /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
         $source = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractSource',
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
             [],
             '',
             false,

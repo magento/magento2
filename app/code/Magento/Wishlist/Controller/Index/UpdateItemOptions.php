@@ -1,24 +1,30 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @var WishlistProviderInterface
      */
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
@@ -28,21 +34,29 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
     protected $productRepository;
 
     /**
+     * @var Validator
+     */
+    protected $formKeyValidator;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+     * @param Session $customerSession
+     * @param WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        ProductRepositoryInterface $productRepository
+        Session $customerSession,
+        WishlistProviderInterface $wishlistProvider,
+        ProductRepositoryInterface $productRepository,
+        Validator $formKeyValidator
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
-        parent::__construct($context);
         $this->productRepository = $productRepository;
+        $this->formKeyValidator = $formKeyValidator;
+        parent::__construct($context);
     }
 
     /**
@@ -52,9 +66,13 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
      */
     public function execute()
     {
-        $productId = (int)$this->getRequest()->getParam('product');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $resultRedirect->setPath('*/*/');
+        }
+
+        $productId = (int)$this->getRequest()->getParam('product');
         if (!$productId) {
             $resultRedirect->setPath('*/');
             return $resultRedirect;
@@ -75,7 +93,7 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
         try {
             $id = (int)$this->getRequest()->getParam('id');
             /* @var \Magento\Wishlist\Model\Item */
-            $item = $this->_objectManager->create('Magento\Wishlist\Model\Item');
+            $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class);
             $item->load($id);
             $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
             if (!$wishlist) {
@@ -87,13 +105,13 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
 
             $wishlist->updateItem($id, $buyRequest)->save();
 
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+            $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
             $this->_eventManager->dispatch(
                 'wishlist_update_item',
                 ['wishlist' => $wishlist, 'product' => $product, 'item' => $wishlist->getItem($id)]
             );
 
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+            $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
 
             $message = __('%1 has been updated in your Wish List.', $product->getName());
             $this->messageManager->addSuccess($message);
@@ -101,7 +119,7 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t update your Wish List right now.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
         return $resultRedirect;

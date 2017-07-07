@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
@@ -109,17 +113,51 @@ define([
          * Removes specified child from collection.
          *
          * @param {(Object|String)} elem - Child or index of a child to be removed.
+         * @param {Boolean} skipUpdate - skip collection update when element to be destroyed.
+         *
          * @returns {Collection} Chainable.
          */
-        removeChild: function (elem) {
+        removeChild: function (elem, skipUpdate) {
             if (_.isString(elem)) {
                 elem = this.getChild(elem);
             }
 
             if (elem) {
                 utils.remove(this._elems, elem);
-                this._updateCollection();
+
+                if (!skipUpdate) {
+                    this._updateCollection();
+                }
             }
+
+            return this;
+        },
+
+        /**
+         * Destroys collection children with its' elements.
+         */
+        destroyChildren: function () {
+            this.elems.each(function (elem) {
+                elem.destroy(true);
+            });
+
+            this._updateCollection();
+        },
+
+        /**
+         * Clear data. Call method "clear"
+         * in child components
+         *
+         * @returns {Object} Chainable.
+         */
+        clear: function () {
+            var elems = this.elems();
+
+            _.each(elems, function (elem) {
+                if (_.isFunction(elem.clear)) {
+                    elem.clear();
+                }
+            }, this);
 
             return this;
         },
@@ -127,7 +165,7 @@ define([
         /**
          * Checks if specified child exists in collection.
          *
-         * @param {Sring} index - Index of a child.
+         * @param {String} index - Index of a child.
          * @returns {Boolean}
          */
         hasChild: function (index) {
@@ -233,6 +271,14 @@ define([
             grouped = _.groupBy(grouped, 'displayArea');
 
             _.each(grouped, this.updateRegion, this);
+
+            _.each(this.regions, function (items) {
+                var hasObsoleteComponents = items().length && !_.intersection(_elems, items()).length;
+
+                if (hasObsoleteComponents) {
+                    items.removeAll();
+                }
+            });
 
             this.elems(_elems);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Items;
@@ -11,6 +11,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class AbstractItemsTest
  * @package Magento\Sales\Block\Adminhtml\Items
  * TODO refactor me PLEASE
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,13 +30,13 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
+        $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
         $this->stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item',
+            \Magento\CatalogInventory\Model\Stock\Item::class,
             ['getManageStock', '__wakeup'],
             [],
             '',
@@ -49,7 +51,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     public function testGetItemRenderer()
     {
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock', 'getGroupChildNames'],
             [],
             '',
@@ -66,7 +68,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer $renderer */
         $renderer = $this->objectManagerHelper
-            ->getObject('Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer');
+            ->getObject(\Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer::class);
         $renderer->setLayout($layout);
 
         $layout->expects($this->any())
@@ -75,7 +77,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($renderer));
 
         /** @var \Magento\Sales\Block\Adminhtml\Items\AbstractItems $block */
-        $block = $this->objectManagerHelper->getObject('Magento\Sales\Block\Adminhtml\Items\AbstractItems');
+        $block = $this->objectManagerHelper->getObject(\Magento\Sales\Block\Adminhtml\Items\AbstractItems::class);
         $block->setLayout($layout);
 
         $this->assertSame($renderer, $block->getItemRenderer('some-type'));
@@ -88,9 +90,9 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $renderer = $this->getMock('StdClass');
+        $renderer = $this->getMock(\StdClass::class);
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock', '__wakeup'],
             [],
             '',
@@ -107,10 +109,10 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $block = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            \Magento\Sales\Block\Adminhtml\Items\AbstractItems::class,
             [
                 'context' => $this->objectManagerHelper->getObject(
-                    'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                     ['layout' => $layout]
                 )
             ]
@@ -130,7 +132,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         $productId = isset($itemConfig['product_id']) ? $itemConfig['product_id'] : null;
         $manageStock = isset($itemConfig['manage_stock']) ? $itemConfig['manage_stock'] : null;
         $item = $this->getMock(
-            'Magento\Sales\Model\Order\Creditmemo\Item',
+            \Magento\Sales\Model\Order\Creditmemo\Item::class,
             ['hasCanReturnToStock', 'getOrderItem', 'setCanReturnToStock', 'getCanReturnToStock', '__wakeup'],
             [],
             '',
@@ -146,7 +148,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $block = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            \Magento\Sales\Block\Adminhtml\Items\AbstractItems::class,
             $dependencies
         );
         $this->assertSame($result, $block->canReturnItemToStock($item));
@@ -174,14 +176,14 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($itemConfig['has_can_return_to_stock']));
         if (!$itemConfig['has_can_return_to_stock']) {
             $orderItem = $this->getMock(
-                'Magento\Sales\Model\Order\Item',
+                \Magento\Sales\Model\Order\Item::class,
                 ['getProductId', '__wakeup', 'getStore'],
                 [],
                 '',
                 false
             );
 
-            $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+            $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
             $store->expects($this->once())
                 ->method('getWebsiteId')
                 ->will($this->returnValue(10));
@@ -214,7 +216,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 
     public function testCanReturnItemToStockEmpty()
     {
-        $stockConfiguration = $this->getMockBuilder('Magento\CatalogInventory\Model\Configuration')
+        $stockConfiguration = $this->getMockBuilder(\Magento\CatalogInventory\Model\Configuration::class)
             ->disableOriginalConstructor()
             ->setMethods(['canSubtractQty', '__wakeup'])
             ->getMock();
@@ -224,7 +226,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $block = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            \Magento\Sales\Block\Adminhtml\Items\AbstractItems::class,
             [
                 'stockConfiguration' => $stockConfiguration
             ]

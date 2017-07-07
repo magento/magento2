@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,16 +33,16 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
         $this->themeProvider = $this->getMock(
-            'Magento\Framework\View\Design\Theme\ThemeProviderInterface',
+            \Magento\Framework\View\Design\Theme\ThemeProviderInterface::class,
             [],
             [],
             '',
             false
         );
         $this->configData = $this->getMock(
-            'Magento\Framework\App\Config\Value',
+            \Magento\Framework\App\Config\Value::class,
             ['getCollection', 'addFieldToFilter'],
             [],
             '',
@@ -57,7 +57,7 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateIsThemeInUse()
     {
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
         $theme->expects($this->once())->method('getId')->willReturn(6);
         $defaultEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'default', 'scope_id' => 8]);
         $websitesEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'websites', 'scope_id' => 8]);
@@ -72,9 +72,9 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(2))
             ->method('addFieldToFilter')
             ->willReturn([$defaultEntity, $websitesEntity, $storesEntity]);
-        $website = $this->getMock('Magento\Store\Model\Website', ['getName'], [], '', false);
+        $website = $this->getMock(\Magento\Store\Model\Website::class, ['getName'], [], '', false);
         $website->expects($this->once())->method('getName')->willReturn('websiteA');
-        $store = $this->getMock('Magento\Store\Model\Store', ['getName'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getName'], [], '', false);
         $store->expects($this->once())->method('getName')->willReturn('storeA');
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);

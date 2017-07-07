@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model;
@@ -28,6 +28,6 @@ class Debug extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorizenet\Model\ResourceModel\Debug');
+        $this->_init(\Magento\Authorizenet\Model\ResourceModel\Debug::class);
     }
 }

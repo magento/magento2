@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -71,7 +71,7 @@ class BackupCommand extends AbstractSetupCommand
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
-        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
@@ -115,8 +115,10 @@ class BackupCommand extends AbstractSetupCommand
         if (!$this->deploymentConfig->isAvailable()
             && ($input->getOption(self::INPUT_KEY_MEDIA) || $input->getOption(self::INPUT_KEY_DB))) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            // We need exit code higher than 0 here as an indication
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
             $inputOptionProvided = false;
             $output->writeln('<info>Enabling maintenance mode</info>');
@@ -132,6 +134,7 @@ class BackupCommand extends AbstractSetupCommand
                 $inputOptionProvided = true;
             }
             if ($input->getOption(self::INPUT_KEY_DB)) {
+                $this->setAreaCode();
                 $backupHandler->dbBackup($time);
                 $inputOptionProvided = true;
             }
@@ -142,9 +145,27 @@ class BackupCommand extends AbstractSetupCommand
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
+        return $returnValue;
+    }
+
+    /**
+     * Sets area code to start a session for database backup and rollback
+     *
+     * @return void
+     */
+    private function setAreaCode()
+    {
+        $areaCode = 'adminhtml';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
+        $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

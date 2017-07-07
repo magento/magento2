@@ -1,30 +1,34 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Product\Renderer;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Product as CatalogProduct;
+use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Swatches\Helper\Data as SwatchData;
 use Magento\Swatches\Helper\Media;
 use Magento\Swatches\Model\Swatch;
+use Magento\Framework\App\ObjectManager;
+use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Swatch renderer block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
+class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Path to template file with Swatch renderer.
@@ -35,11 +39,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Path to default template file with standard Configurable renderer.
      */
     const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
-
-    /**
-     * When we init media gallery empty image types contain this value.
-     */
-    const EMPTY_IMAGE_VALUE = 'no_selection';
 
     /**
      * Action name for ajax request
@@ -64,9 +63,16 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Indicate if product has one or more Swatch attributes
      *
+     * @deprecated unused
+     *
      * @var boolean
      */
     protected $isProductHasSwatchAttribute;
+
+    /**
+     * @var SwatchAttributesProvider
+     */
+    private $swatchAttributesProvider;
 
     /**
      * @param Context $context
@@ -80,6 +86,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * @param SwatchData $swatchHelper
      * @param Media $swatchMediaHelper
      * @param array $data other data
+     * @param SwatchAttributesProvider $swatchAttributesProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -93,11 +100,13 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         ConfigurableAttributeData $configurableAttributeData,
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
-        array $data = []
+        array $data = [],
+        SwatchAttributesProvider $swatchAttributesProvider = null
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->swatchMediaHelper = $swatchMediaHelper;
-
+        $this->swatchAttributesProvider = $swatchAttributesProvider
+            ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
         parent::__construct(
             $context,
             $arrayUtils,
@@ -112,6 +121,26 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Get Key for caching block content
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return parent::getCacheKey() . '-' . $this->getProduct()->getId();
+    }
+
+    /**
+     * Get block cache life time
+     *
+     * @return int
+     */
+    protected function getCacheLifetime()
+    {
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : 3600;
+    }
+
+    /**
      * Get Swatch config data
      *
      * @return string
@@ -119,7 +148,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     public function getJsonSwatchConfig()
     {
         $attributesData = $this->getSwatchAttributesData();
-        $allOptionIds = $this->getAllOptionsIdsFromAttributeArray($attributesData);
+        $allOptionIds = $this->getConfigurableOptionsIds($attributesData);
         $swatchesData = $this->swatchHelper->getSwatchesByOptionsId($allOptionIds);
 
         $config = [];
@@ -185,12 +214,25 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * @deprecated Method isProductHasSwatchAttribute() is used instead of this.
+     *
      * @codeCoverageIgnore
      * @return void
      */
     protected function initIsProductHasSwatchAttribute()
     {
         $this->isProductHasSwatchAttribute = $this->swatchHelper->isProductHasSwatch($this->getProduct());
+    }
+
+    /**
+     * Check that product has at least one swatch attribute
+     *
+     * @return bool
+     */
+    protected function isProductHasSwatchAttribute()
+    {
+        $swatchAttributes = $this->swatchAttributesProvider->provide($this->getProduct());
+        return count($swatchAttributes) > 0;
     }
 
     /**
@@ -209,9 +251,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         $result = [];
         foreach ($options as $optionId => $label) {
             if (isset($swatchesCollectionArray[$optionId])) {
-                $result[$optionId]['label'] = $label;
                 $result[$optionId] = $this->extractNecessarySwatchData($swatchesCollectionArray[$optionId]);
                 $result[$optionId] = $this->addAdditionalMediaData($result[$optionId], $optionId, $attributeDataArray);
+                $result[$optionId]['label'] = $label;
             }
         }
 
@@ -228,8 +270,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function addAdditionalMediaData(array $swatch, $optionId, array $attributeDataArray)
     {
-        if (
-            isset($attributeDataArray['use_product_image_for_swatch'])
+        if (isset($attributeDataArray['use_product_image_for_swatch'])
             && $attributeDataArray['use_product_image_for_swatch']
         ) {
             $variationMedia = $this->getVariationMedia($attributeDataArray['attribute_code'], $optionId);
@@ -281,6 +322,13 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             [$attributeCode => $optionId]
         );
 
+        if (!$variationProduct) {
+            $variationProduct = $this->swatchHelper->loadFirstVariationWithImage(
+                $this->getProduct(),
+                [$attributeCode => $optionId]
+            );
+        }
+
         $variationMediaArray = [];
         if ($variationProduct) {
             $variationMediaArray = [
@@ -318,52 +366,68 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function isProductHasImage(Product $product, $imageType)
     {
-        return $product->getData($imageType) !== null && $product->getData($imageType) != self::EMPTY_IMAGE_VALUE;
+        return $product->getData($imageType) !== null && $product->getData($imageType) != SwatchData::EMPTY_IMAGE_VALUE;
     }
 
     /**
      * @param array $attributeData
      * @return array
      */
-    protected function getAllOptionsIdsFromAttributeArray(array $attributeData)
+    protected function getConfigurableOptionsIds(array $attributeData)
     {
         $ids = [];
-        foreach ($attributeData as $item) {
-            if (isset($item['options'])) {
-                $ids = array_merge($ids, array_keys($item['options']));
+        foreach ($this->getAllowProducts() as $product) {
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
+            foreach ($this->helper->getAllowAttributes($this->getProduct()) as $attribute) {
+                $productAttribute = $attribute->getProductAttribute();
+                $productAttributeId = $productAttribute->getId();
+                if (isset($attributeData[$productAttributeId])) {
+                    $ids[$product->getData($productAttribute->getAttributeCode())] = 1;
+                }
             }
         }
-        return $ids;
+        return array_keys($ids);
+    }
+
+    /**
+     * Produce and return block's html output
+     *
+     * @return string
+     */
+    public function toHtml()
+    {
+        $this->setTemplate(
+            $this->getRendererTemplate()
+        );
+
+        return parent::toHtml();
     }
 
     /**
      * Return HTML code
      *
-     * @codeCoverageIgnore
      * @return string
      */
     protected function _toHtml()
     {
-        $this->initIsProductHasSwatchAttribute();
-        $this->setTemplate(
-            $this->getRendererTemplate()
-        );
-
         return $this->getHtmlOutput();
     }
 
     /**
-     * @codeCoverageIgnore
+     * Return renderer template
+     *
+     * Template for product with swatches is different from product without swatches
+     *
      * @return string
      */
     protected function getRendererTemplate()
     {
-        return $this->isProductHasSwatchAttribute ?
+        return $this->isProductHasSwatchAttribute() ?
             self::SWATCH_RENDERER_TEMPLATE : self::CONFIGURABLE_RENDERER_TEMPLATE;
     }
 
     /**
-     * @codeCoverageIgnore
+     * @deprecated Now is used _toHtml() directly
      * @return string
      */
     protected function getHtmlOutput()
@@ -376,6 +440,20 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     public function getMediaCallback()
     {
-        return $this->getBaseUrl() . self::MEDIA_CALLBACK_ACTION;
+        return $this->getUrl(self::MEDIA_CALLBACK_ACTION, ['_secure' => $this->getRequest()->isSecure()]);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        if ($this->product instanceof \Magento\Framework\DataObject\IdentityInterface) {
+            return $this->product->getIdentities();
+        } else {
+            return [];
+        }
     }
 }

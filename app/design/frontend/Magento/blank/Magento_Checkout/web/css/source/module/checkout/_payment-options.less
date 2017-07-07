@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -36,10 +36,12 @@
                     }
                 }
             }
+
             &._collapsible {
                 .payment-option-title {
                     cursor: pointer;
                 }
+
                 .payment-option-content {
                     display: none;
                 }
@@ -75,34 +77,35 @@
 
         .credit-card-types {
             padding: 0;
+
             .item {
                 display: inline-block;
                 list-style: none;
                 margin: 0 @indent__xs 0 0;
                 vertical-align: top;
+
                 &._active {
                     font-weight: @font-weight__bold;
+
                     img {
                         -webkit-filter: grayscale(0%);
-                        filter: grayscale(0%);
-                        filter: none;
                     }
                 }
+
                 &._inactive {
-                    opacity: 0.4;
-                    filter: alpha(opacity=40);
+                    opacity: .4;
                 }
+
                 span {
                     display: inline-block;
                     padding-top: 6px;
                     vertical-align: top;
                 }
             }
+
             img {
                 -webkit-filter: grayscale(100%); // For Webkit browsers
                 -webkit-transition: all .6s ease; // Fade to color for Chrome and Safari
-                filter: grayscale(100%);
-                filter: gray; // For IE 6 - 9
             }
         }
 
@@ -110,25 +113,30 @@
             .legend {
                 &:extend(.abs-visually-hidden all);
             }
+
             .fields {
                 > .year {
                     padding-left: @indent__xs;
                 }
+
                 .select {
                     padding-left: @indent__xs;
                     padding-right: @indent__xs;
                 }
             }
+
             .month {
                 .select {
                     width: 140px;
                 }
             }
+
             .year {
                 .select {
                     width: 80px;
                 }
             }
+
             .number {
                 .input-text {
                     width: 225px;
@@ -141,6 +149,7 @@
                     width: auto;
                 }
             }
+
             .cvv {
                 .input-text {
                     width: 55px;

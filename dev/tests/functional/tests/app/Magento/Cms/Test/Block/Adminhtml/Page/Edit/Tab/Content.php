@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $widgetBlock = "./ancestor::body/div[div/div/*[@id='widget_options_form']]";
+    protected $widgetBlock = "//body//aside[div//*[@id='widget_options_form']]";
 
     /**
      * Insert Variable button selector.
@@ -50,14 +50,21 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $content = '#page_content';
+    protected $content = '#cms_page_form_content';
 
     /**
      * Content Heading input locator.
      *
      * @var string
      */
-    protected $contentHeading = '#page_content_heading';
+    protected $contentHeading = '[name="content_heading"]';
+
+    /**
+     * Header locator.
+     *
+     * @var string
+     */
+    protected $header = 'header.page-header';
 
     /**
      * Clicking in content tab 'Insert Variable' button.
@@ -85,7 +92,12 @@ class Content extends Tab
         $context = $element === null ? $this->_rootElement : $element;
         $addWidgetButton = $context->find($this->addWidgetButton);
         if ($addWidgetButton->isVisible()) {
-            $addWidgetButton->click();
+            try {
+                $addWidgetButton->click();
+            } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+                $this->browser->find($this->header)->hover();
+                $addWidgetButton->click();
+            }
         }
     }
 
@@ -97,7 +109,7 @@ class Content extends Tab
     public function getWysiwygConfig()
     {
         return $this->blockFactory->create(
-            'Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config',
+            \Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config::class,
             ['element' => $this->_rootElement->find($this->systemVariableBlock, Locator::SELECTOR_XPATH)]
         );
     }
@@ -110,7 +122,7 @@ class Content extends Tab
     public function getWidgetBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Widget\Test\Block\Adminhtml\WidgetForm',
+            \Magento\Widget\Test\Block\Adminhtml\WidgetForm::class,
             ['element' => $this->_rootElement->find($this->widgetBlock, Locator::SELECTOR_XPATH)]
         );
     }
@@ -122,9 +134,10 @@ class Content extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
-        $element->find($this->content)->setValue($fields['content']['value']['content']);
+        $context = $element === null ? $this->_rootElement : $element;
+        $context->find($this->content)->setValue($fields['content']['value']['content']);
         if (isset($fields['content_heading']['value'])) {
             $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);
         }
@@ -151,11 +164,21 @@ class Content extends Tab
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         return [
             'content' => [],
             'content_heading' => ''
         ];
+    }
+
+    /**
+     * Check if system variables block is visible.
+     *
+     * @return bool
+     */
+    public function isVariablesBlockVisible()
+    {
+        return $this->_rootElement->find($this->systemVariableBlock, Locator::SELECTOR_XPATH)->isVisible();
     }
 }

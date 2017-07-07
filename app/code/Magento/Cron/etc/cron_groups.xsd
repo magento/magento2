@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,7 +26,7 @@
 
     <xs:complexType name="group">
         <xs:sequence>
-            <xs:element name="schedule_generate_every" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="schedule_generate_every" type="scheduled_every_type" minOccurs="0" maxOccurs="1"/>
             <xs:element name="schedule_ahead_for" type="xs:integer" minOccurs="0" maxOccurs="1"/>
             <xs:element name="schedule_lifetime" type="xs:integer" minOccurs="0" maxOccurs="1"/>
             <xs:element name="history_cleanup_every" type="xs:integer" minOccurs="0" maxOccurs="1"/>
@@ -35,6 +35,14 @@
             <xs:element name="use_separate_process" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="id" type="typeId" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="scheduled_every_type">
+        <xs:simpleContent>
+            <xs:extension base="xs:integer">
+                <xs:attribute name="tooltip" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
 
     <xs:simpleType name="typeId">

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,18 +8,18 @@
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-$obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$obectManager->get(
-    'Magento\Framework\View\DesignInterface'
+$objectManager->get(
+    \Magento\Framework\View\DesignInterface::class
 )->setArea(
     'frontend'
 )->setDefaultDesignTheme();
 
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
-$config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
+$config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
 /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-$mediaDirectory = $obectManager->get('Magento\Framework\Filesystem')
+$mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)
     ->getDirectoryWrite(DirectoryList::MEDIA);
 
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
@@ -27,15 +27,13 @@ $mediaDirectory->create($baseTmpMediaPath);
 copy(__DIR__ . '/product_image.png', $mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/product_image.png'));
 
 /** @var $productOne \Magento\Catalog\Model\Product */
-$productOne = $obectManager->create('Magento\Catalog\Model\Product');
-$productOne->setId(
-    1
-)->setTypeId(
+$productOne = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$productOne->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_1'
 )->setName(
@@ -49,7 +47,12 @@ $productOne->setId(
 )->setTaxClassId(
     2
 )->setStockData(
-    ['use_config_manage_stock' => 1, 'qty' => 99, 'is_in_stock' => 1]
+    [
+        'use_config_manage_stock'   => 1,
+        'qty'                       => 99,
+        'is_qty_decimal'            => 0,
+        'is_in_stock'               => 1,
+    ]
 )->setMetaTitle(
     'Simple Product 1 Meta Title'
 )->setMetaKeyword(
@@ -68,15 +71,13 @@ $productOne->setId(
 )->save();
 
 /** @var $productTwo \Magento\Catalog\Model\Product */
-$productTwo = $obectManager->create('Magento\Catalog\Model\Product');
-$productTwo->setId(
-    2
-)->setTypeId(
+$productTwo = $objectManager->create(\Magento\Catalog\Model\Product::class);
+$productTwo->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$obectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_2'
 )->setName(

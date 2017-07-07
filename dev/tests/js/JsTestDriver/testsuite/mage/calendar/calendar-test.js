@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 CalendarTest = TestCase('CalendarTest');
@@ -58,6 +58,18 @@ CalendarTest.prototype.testWithServerTimezoneOffset = function() {
     assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
     calendar.calendar('destroy');
 };
+CalendarTest.prototype.testWithServerTimezoneShift = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var serverTimezoneOffset = 43200,
+        calendar = $('#calendar').calendar({serverTimezoneOffset: serverTimezoneOffset}),
+        currentDate = new Date();
+
+    setTimeout(function () {
+        currentDate.setTime(currentDate.getTime() + (serverTimezoneOffset + currentDate.getTimezoneOffset() * 60) * 1000);
+        assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
+        calendar.calendar('destroy');
+    }, 61000);
+};
 CalendarTest.prototype.testWithoutServerTimezoneOffset = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar(),
@@ -68,18 +80,17 @@ CalendarTest.prototype.testWithoutServerTimezoneOffset = function() {
 CalendarTest.prototype.testInitDateTimePicker = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar();
-    assertEquals(true, calendar.hasClass('hasDatepicker'));
+    assertEquals(true, calendar.hasClass('_has-datepicker'));
     calendar.calendar('destroy');
 };
 CalendarTest.prototype.testDateTimeMapping = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar({dateFormat: 'M/d/yy', timeFormat: 'h:mm a'});
     assertEquals('mm/d/yy', calendar.calendar('option', 'dateFormat'));
-    assertEquals('h:mm tt', calendar.calendar('option', 'timeFormat'));
+    assertEquals('h:mm TT', calendar.calendar('option', 'timeFormat'));
     calendar.calendar('destroy');
-    calendar.calendar({dateFormat: 'MMMM/EEEE/yyyy', timeFormat: 'HH:mm'});
+    calendar.calendar({dateFormat: 'MMMM/EEEE/yyyy'});
     assertEquals('MM/DD/yy', calendar.calendar('option', 'dateFormat'));
-    assertEquals('hh:mm', calendar.calendar('option', 'timeFormat'));
     calendar.calendar('destroy');
 };
 CalendarTest.prototype.testDestroy = function() {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,8 +104,6 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'sku'
         )->addAttributeToSelect(
             'price'
-        )->addStoreFilter(
-            $this->getRequest()->getParam('store')
         )->joinField(
             'position',
             'catalog_category_product',
@@ -114,6 +112,10 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'category_id=' . (int)$this->getRequest()->getParam('id', 0),
             'left'
         );
+        $storeId = (int)$this->getRequest()->getParam('store', 0);
+        if ($storeId > 0) {
+            $collection->addStoreFilter($storeId);
+        }
         $this->setCollection($collection);
 
         if ($this->getCategory()->getProductsReadonly()) {

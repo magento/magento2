@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -11,7 +11,7 @@
                 type="button"
                 class="btn btn-prime"
                 ng-click="nextState()"
-                ng-disabled="checkingInProgress() || hasErrors"
+                ng-disabled="needReCheck || checkingInProgress() || hasErrors"
                 >Next</button>
         </div>
         <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
@@ -35,7 +35,7 @@
 
 <h2 class="page-sub-title">{{$state.current.header}}</h2>
 <div ng-show="$state.is('root.readiness-check-' + $state.current.type)"
-     ng-init="actionFrom='<?php echo $this->actionFrom ?>'" class="accent-box">
+     ng-init="actionFrom='<?= $this->actionFrom ?>'" class="accent-box">
     <p>Let's check your environment for the correct PHP version, PHP extensions, file permissions and compatibility.</p>
     <button
         class="btn btn-large btn-prime"

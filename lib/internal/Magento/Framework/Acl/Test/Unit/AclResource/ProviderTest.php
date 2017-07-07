@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Test\Unit\AclResource;
@@ -22,19 +22,66 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $_treeBuilderMock;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    /**
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $aclDataCacheMock;
+
     protected function setUp()
     {
-        $this->_configReaderMock = $this->getMock('Magento\Framework\Config\ReaderInterface');
+        $this->_configReaderMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->_treeBuilderMock = $this->getMock(
-            'Magento\Framework\Acl\AclResource\TreeBuilder',
+            \Magento\Framework\Acl\AclResource\TreeBuilder::class,
             [],
             [],
             '',
             false
         );
+        $this->serializerMock = $this->getMock(
+            \Magento\Framework\Serialize\Serializer\Json::class,
+            ['serialize', 'unserialize'],
+            [],
+            '',
+            false
+        );
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
+
+        $this->aclDataCacheMock = $this->getMock(
+            \Magento\Framework\Acl\Data\CacheInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->_model = new \Magento\Framework\Acl\AclResource\Provider(
             $this->_configReaderMock,
-            $this->_treeBuilderMock
+            $this->_treeBuilderMock,
+            $this->aclDataCacheMock,
+            $this->serializerMock
         );
     }
 
@@ -43,6 +90,21 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $aclResourceConfig['config']['acl']['resources'] = ['ExpectedValue'];
         $this->_configReaderMock->expects($this->once())->method('read')->will($this->returnValue($aclResourceConfig));
         $this->_treeBuilderMock->expects($this->once())->method('build')->will($this->returnValue('ExpectedResult'));
+        $this->aclDataCacheMock->expects($this->once())->method('save')->with(
+            json_encode('ExpectedResult'),
+            \Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY
+        );
+        $this->assertEquals('ExpectedResult', $this->_model->getAclResources());
+    }
+
+    public function testGetIfAclResourcesExistInCache()
+    {
+        $this->_configReaderMock->expects($this->never())->method('read');
+        $this->_treeBuilderMock->expects($this->never())->method('build');
+        $this->aclDataCacheMock->expects($this->once())
+            ->method('load')
+            ->with(\Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY)
+            ->will($this->returnValue(json_encode('ExpectedResult')));
         $this->assertEquals('ExpectedResult', $this->_model->getAclResources());
     }
 

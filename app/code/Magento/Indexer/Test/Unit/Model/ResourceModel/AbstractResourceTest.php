@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\ResourceModel;
@@ -22,15 +22,15 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_tableStrategyInterface;
 
-
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
-            ->disableOriginalConstructor()
+        $this->_resourceMock = $this->getMockBuilder(
+            \Magento\Framework\App\ResourceConnection::class
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->_tableStrategyInterface = $this->getMock(
-            'Magento\Framework\Indexer\Table\StrategyInterface',
+            \Magento\Framework\Indexer\Table\StrategyInterface::class,
             [],
             [],
             '',
@@ -38,14 +38,14 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
-            '\Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
+            \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub::class,
             [
                 'resource' => $this->_resourceMock,
                 'tableStrategy' => $this->_tableStrategyInterface
             ]
         );
         $this->model = $objectManager->getObject(
-            '\Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
+            \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub::class,
             $arguments
         );
     }
@@ -65,7 +65,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testClearTemporaryIndexTable()
     {
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $connectionMock->expects($this->once())->method('delete')->will($this->returnSelf());
         $this->model->clearTemporaryIndexTable();
@@ -77,8 +77,8 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $resultColumns = [0 => 'column'];
         $describeTable = ['column' => 'column'];
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
 
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
@@ -93,7 +93,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
 
         $this->assertInstanceOf(
-            'Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
+            \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub::class,
             $this->model->syncData()
         );
     }
@@ -104,7 +104,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     public function testSyncDataException()
     {
         $describeTable = ['column' => 'column'];
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
         $connectionMock->expects($this->any())->method('select')->will($this->throwException(new \Exception()));
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
@@ -124,8 +124,8 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $resultColumns = [0 => 'column'];
         $tableColumns = ['column' => 'column'];
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -135,13 +135,13 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 
         if ($readToIndex) {
             $connectionCustomMock = $this->getMock(
-                'Magento\Framework\DB\Adapter\CustomAdapterInterface',
+                \Magento\Framework\DB\Adapter\CustomAdapterInterface::class,
                 ['describeTable', 'query', 'select', 'insertArray'],
                 [],
                 '',
                 false
             );
-            $pdoMock = $this->getMock('Zend_Db_Statement_Pdo', [], [], '', false);
+            $pdoMock = $this->getMock(\Zend_Db_Statement_Pdo::class, [], [], '', false);
             $connectionCustomMock->expects($this->any())->method('query')->will($this->returnValue($selectMock));
             $connectionCustomMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
             $connectionCustomMock->expects($this->any())->method('describeTable')->will(
@@ -158,7 +158,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             $this->_resourceMock->expects($this->any())->method('getConnection')->will(
                 $this->returnValue($connectionMock)
             );
-
         } else {
             $selectMock->expects($this->once())->method('insertFromSelect')->with(
                 $destTable,
@@ -171,7 +170,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             );
         }
         $this->assertInstanceOf(
-            'Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub',
+            \Magento\Indexer\Test\Unit\Model\ResourceModel\AbstractResourceStub::class,
             $this->model->insertFromTable($sourceTable, $destTable, $readToIndex)
         );
     }

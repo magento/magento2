@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogSearch\Test\TestCase\AdvancedSearchEntityTest" summary="Use Advanced Search" ticketId="MAGETWO-24729">
         <variation name="AdvancedSearchEntityTestVariation1" summary="Use Advanced Search to Find the Product" ticketId="MAGETWO-12421">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="products/simple_1" xsi:type="string">Yes</data>
             <data name="products/simple_2" xsi:type="string">-</data>
             <data name="productSearch/data/name" xsi:type="string">abc_dfj</data>
             <data name="productSearch/data/sku" xsi:type="string">abc_dfj</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductsResult" />
         </variation>
         <variation name="AdvancedSearchEntityTestVariation2">
@@ -115,6 +115,11 @@
             <data name="description" xsi:type="string">Negative product search</data>
             <data name="productSearch/data/name" xsi:type="string">Negative_product_search</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchNoResult" />
+        </variation>
+        <variation name="AdvancedSearchEntityTestVariation15" summary="Do Advanced Search without entering data" ticketId="MAGETWO-14859">
+            <data name="issue" xsi:type="string">MAGETWO-18537: "Please specify at least one search term." error message is missed in Advanced Search</data>
+            <data name="productSearch/data/name" xsi:type="string" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchEmptyTerm" />
         </variation>
     </testCase>
 </config>

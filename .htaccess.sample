@@ -1,5 +1,6 @@
 ############################################
-## uncomment the line below to enable developer mode
+## overrides deployment configuration mode value
+## use command bin/magento deploy:mode:set to switch modes
 
 #   SetEnv MAGE_MODE developer
 
@@ -31,8 +32,6 @@
 
     DirectoryIndex index.php
 
-<IfModule mod_php5.c>
-
 ############################################
 ## adjust memory limit
 
@@ -55,8 +54,6 @@
 
     php_flag suhosin.session.cryptua off
 
-</IfModule>
-
 <IfModule mod_security.c>
 ###########################################
 ## disable POST processing to not break multiple image upload
@@ -74,7 +71,7 @@
     # Insert filter on all content
     ###SetOutputFilter DEFLATE
     # Insert filter on selected content types only
-    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json image/svg+xml
 
     # Netscape 4.x has some problems...
     #BrowserMatch ^Mozilla/4 gzip-only-text/html
@@ -101,6 +98,13 @@
     SSLOptions StdEnvVars
 
 </IfModule>
+
+############################################
+## workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
+## Please, set it on virtual host configuration level
+
+##    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+############################################
 
 <IfModule mod_rewrite.c>
 
@@ -156,6 +160,7 @@
 
     AddDefaultCharset Off
     #AddDefaultCharset UTF-8
+    AddType 'text/html; charset=UTF-8' html
 
 <IfModule mod_expires.c>
 
@@ -171,7 +176,7 @@
 
 ###########################################
 ## Deny access to root files to hide sensitive application information
-    RedirectMatch 404 /\.git
+    RedirectMatch 403 /\.git
 
     <Files composer.json>
         order allow,deny
@@ -193,7 +198,7 @@
         order allow,deny
         deny from all
     </Files>
-    <Files .php_cs>
+    <Files .php_cs.dist>
         order allow,deny
         deny from all
     </Files>
@@ -206,10 +211,6 @@
         deny from all
     </Files>
     <Files CONTRIBUTING.md>
-        order allow,deny
-        deny from all
-    </Files>
-    <Files CONTRIBUTOR_LICENSE_AGREEMENT.html>
         order allow,deny
         deny from all
     </Files>
@@ -245,9 +246,52 @@
         order allow,deny
         deny from all
     </Files>
+    <Files magento_umask>
+        order allow,deny
+        deny from all
+    </Files>
+
+# For 404s and 403s that aren't handled by the application, show plain 404 response
+ErrorDocument 404 /pub/errors/404.php
+ErrorDocument 403 /pub/errors/404.php
 
 ################################
 ## If running in cluster environment, uncomment this
 ## http://developer.yahoo.com/performance/rules.html#etags
 
     #FileETag none
+
+# ######################################################################
+# # INTERNET EXPLORER                                                  #
+# ######################################################################
+
+# ----------------------------------------------------------------------
+# | Document modes                                                     |
+# ----------------------------------------------------------------------
+
+# Force Internet Explorer 8/9/10 to render pages in the highest mode
+# available in the various cases when it may not.
+#
+# https://hsivonen.fi/doctype/#ie8
+#
+# (!) Starting with Internet Explorer 11, document modes are deprecated.
+# If your business still relies on older web apps and services that were
+# designed for older versions of Internet Explorer, you might want to
+# consider enabling `Enterprise Mode` throughout your company.
+#
+# https://msdn.microsoft.com/en-us/library/ie/bg182625.aspx#docmode
+# http://blogs.msdn.com/b/ie/archive/2014/04/02/stay-up-to-date-with-enterprise-mode-for-internet-explorer-11.aspx
+
+<IfModule mod_headers.c>
+
+    Header set X-UA-Compatible "IE=edge"
+
+    # `mod_headers` cannot match based on the content-type, however,
+    # the `X-UA-Compatible` response header should be send only for
+    # HTML documents and not for the other resources.
+
+    <FilesMatch "\.(appcache|atom|bbaw|bmp|crx|css|cur|eot|f4[abpv]|flv|geojson|gif|htc|ico|jpe?g|js|json(ld)?|m4[av]|manifest|map|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|topojson|tt[cf]|txt|vcard|vcf|vtt|webapp|web[mp]|webmanifest|woff2?|xloc|xml|xpi)$">
+        Header unset X-UA-Compatible
+    </FilesMatch>
+
+</IfModule>

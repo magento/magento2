@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Frontend;
@@ -23,7 +23,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            '\Magento\Catalog\Model\Product\Attribute\Frontend\Image',
+            \Magento\Catalog\Model\Product\Attribute\Frontend\Image::class,
             ['storeManager' => $this->getMockedStoreManager()]
         );
         $this->model->setAttribute($this->getMockedAttribute());
@@ -34,7 +34,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedProduct()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Product');
+        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product::class);
         $mock = $mockBuilder->setMethods(['getData', 'getStore', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,7 +56,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $mockedStore = $this->getMockedStore();
 
-        $mockBuilder = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface');
+        $mockBuilder = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class);
         $mock = $mockBuilder->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -73,7 +73,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedStore()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Store\Model\Store');
+        $mockBuilder = $this->getMockBuilder(\Magento\Store\Model\Store::class);
         $mock = $mockBuilder->setMethods(['getBaseUrl', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -90,7 +90,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedAttribute()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute');
+        $mockBuilder = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
         $mockBuilder->setMethods(['getAttributeCode', '__wakeup']);
         $mockBuilder->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();

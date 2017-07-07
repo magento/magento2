@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,7 +18,7 @@
                                         <item name="subtotal" xsi:type="array">
                                             <item name="children" xsi:type="array">
                                                 <item name="subtotal.totals" xsi:type="array">
-                                                    <item name="component" xsi:type="string">uiComponent</item>
+                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/checkout/minicart/subtotal/totals</item>
                                                     <item name="config" xsi:type="array">
                                                         <item name="template" xsi:type="string">Magento_Checkout/minicart/subtotal/totals</item>
                                                     </item>

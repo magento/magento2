@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Theme\Model\Design;
 
 class DesignTest extends \PHPUnit_Framework_TestCase
@@ -22,11 +23,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheManager;
-
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registry;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -44,42 +40,42 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resourceCollection;
+    private $serializerMock;
 
     protected function setUp()
     {
-        $context = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')->disableOriginalConstructor()->getMock();
-        $this->localeDate = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
+        $this->localeDate = $this->getMockBuilder(
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+        )->getMock();
+        $this->dateTime = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design')
+        $this->resource = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Design::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Design\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cacheManager = $this->getMockBuilder('Magento\Framework\App\CacheInterface')->getMock();
+        $this->cacheManager = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)->getMock();
 
         $context->expects($this->any())
             ->method('getCacheManager')
             ->willReturn($this->cacheManager);
 
-        /**
-         * @var $context \Magento\Framework\Model\Context
-         */
-        $this->model = new Design(
-            $context,
-            $this->registry,
-            $this->localeDate,
-            $this->dateTime,
-            $this->resource,
-            $this->resourceCollection
+        $this->serializerMock = $this->getMock(SerializerInterface::class);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            Design::class,
+            [
+                'context' => $context,
+                'localeDate' => $this->localeDate,
+                'dateTime' => $this->dateTime,
+                'resource' => $this->resource,
+                'serializer' => $this->serializerMock,
+            ]
         );
     }
 
@@ -115,9 +111,12 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             ->method('loadChange')
             ->with($storeId, $date)
             ->willReturn(false);
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->willReturn('serializedData');
         $this->cacheManager->expects($this->once())
             ->method('save')
-            ->with(serialize([]), $cacheId, [Design::CACHE_TAG], 86400)
+            ->with('serializedData', $cacheId, [Design::CACHE_TAG], 86400)
             ->willReturnSelf();
 
         $this->assertInstanceOf(get_class($this->model), $this->model->loadChange($storeId));
@@ -147,9 +146,16 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->cacheManager->expects($this->once())
             ->method('load')
             ->with($cacheId)
-            ->willReturn(serialize(['test' => 'data']));
+            ->willReturn('serializedData');
+        $data = ['test' => 'data'];
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('serializedData')
+            ->willReturn($data);
 
-        $this->assertInstanceOf(get_class($this->model), $this->model->loadChange($storeId));
+        $change = $this->model->loadChange($storeId);
+        $this->assertInstanceOf(get_class($this->model), $change);
+        $this->assertEquals($data, $change->getData());
     }
 
     /**
@@ -175,7 +181,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangeDesign()
     {
-        $design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
+        $design = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
 
         $this->model->setDesign('test');
         /** @var $design \Magento\Framework\View\DesignInterface */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,10 +19,10 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $timezoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
-        $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
-        $stringMock = $this->getMock('\Magento\Framework\Stdlib\StringUtils', [], [], '', false);
+        $timezoneMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $localeResolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $stringMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, [], [], '', false);
 
         /* testing abstract model through its child */
         $this->model = new Text($timezoneMock, $loggerMock, $localeResolverMock, $stringMock);
@@ -34,7 +34,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntity()
     {
-        $entityMock = $this->getMock('\Magento\Framework\Model\AbstractModel', [], [], '', false);
+        $entityMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, [], [], '', false);
         $this->model->setEntity($entityMock);
         $this->assertEquals($entityMock, $this->model->getEntity());
     }
@@ -95,12 +95,17 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedResult
      * @param array $params
      * @param bool $requestScopeOnly
+     * @param string|null $filter
      * @dataProvider getRequestValueDataProvider
      */
-    public function testGetRequestValue($requestScope, $value, $params, $requestScopeOnly, $expectedResult)
+    public function testGetRequestValue($requestScope, $value, $params, $requestScopeOnly, $expectedResult, $filter)
     {
         $requestMock = $this->getMock(
-            '\Magento\Framework\App\Request\Http', ['getParams', 'getParam'], [], '', false
+            \Magento\Framework\App\Request\Http::class,
+            ['getParams', 'getParam'],
+            [],
+            '',
+            false
         );
         $requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap([
             ['attributeCode', false, $value],
@@ -108,8 +113,17 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         ]));
         $requestMock->expects($this->any())->method('getParams')->will($this->returnValue($params));
 
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock(
+            \Magento\Eav\Model\Attribute::class,
+            ['getInputFilter', 'getAttributeCode'],
+            [],
+            '',
+            false
+        );
         $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
+        if ($filter) {
+            $attributeMock->expects($this->any())->method('getInputFilter')->will($this->returnValue($filter));
+        }
 
         $this->model->setAttribute($attributeMock);
         $this->model->setRequestScope($requestScope);
@@ -129,41 +143,55 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
                 'params' => [],
                 'requestScopeOnly' => true,
                 'expectedResult' => 'value',
+                'filter' => null,
             ],
             [
                 'requestScope' => 'scope/scope',
                 'value' => 'value',
                 'params' => ['scope' => ['scope' => ['attributeCode' => 'data']]],
                 'requestScopeOnly' => true,
-                'expectedResult' => 'data'
+                'expectedResult' => 'data',
+                'filter' => null,
             ],
             [
                 'requestScope' => 'scope/scope',
                 'value' => 'value',
                 'params' => ['scope' => ['scope' => []]],
                 'requestScopeOnly' => true,
-                'expectedResult' => false
+                'expectedResult' => false,
+                'filter' => null,
             ],
             [
                 'requestScope' => 'scope/scope',
                 'value' => 'value',
                 'params' => ['scope'],
                 'requestScopeOnly' => true,
-                'expectedResult' => false
+                'expectedResult' => false,
+                'filter' => null,
             ],
             [
                 'requestScope' => 'scope',
                 'value' => 'value',
                 'params' => ['otherScope' => 1],
                 'requestScopeOnly' => true,
-                'expectedResult' => false
+                'expectedResult' => false,
+                'filter' => null,
             ],
             [
                 'requestScope' => 'scope',
                 'value' => 'value',
                 'params' => ['otherScope' => 1],
                 'requestScopeOnly' => false,
-                'expectedResult' => 'value'
+                'expectedResult' => 'value',
+                'filter' => null,
+            ],
+            [
+                'requestScope' => 'scope',
+                'value' => '1970-01-01',
+                'params' => [],
+                'requestScopeOnly' => false,
+                'expectedResult' => '1970-01-01',
+                'filter' => 'date'
             ]
         ];
     }

@@ -1,12 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 
+use Magento\Backend\Model\Session;
 use Magento\Customer\Controller\RegistryConstants;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class NewsletterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,27 +51,37 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlBuilderMock;
 
+    /**
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $backendSessionMock;
+
     public function setUp()
     {
-        $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
-        $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $this->formFactoryMock = $this->getMock('\Magento\Framework\Data\FormFactory', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->formFactoryMock = $this->getMock(\Magento\Framework\Data\FormFactory::class, [], [], '', false);
         $this->subscriberFactoryMock = $this->getMock(
-            '\Magento\Newsletter\Model\SubscriberFactory',
+            \Magento\Newsletter\Model\SubscriberFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->accountManagementMock = $this->getMock(
-            '\Magento\Customer\Api\AccountManagementInterface',
+            \Magento\Customer\Api\AccountManagementInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->backendSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+            ->setMethods(['getCustomerFormData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
+        $this->contextMock->expects($this->once())->method('getBackendSession')->willReturn($this->backendSessionMock);
 
         $this->model = new \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter(
             $this->contextMock,
@@ -84,28 +101,126 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
     public function testInitForm()
     {
-        $subscriberMock = $this->getMock('\Magento\Newsletter\Model\Subscriber', [], [], '', false);
-        $fieldsetMock = $this->getMock('\Magento\Framework\Data\Form\Element\Fieldset', [], [], '', false);
-        $elementMock = $this->getMock('\Magento\Framework\Data\Form\Element\AbstractElement', [], [], '', false);
+        $customerId = 1;
+
+        $subscriberMock = $this->getMock(\Magento\Newsletter\Model\Subscriber::class, [], [], '', false);
+        $fieldsetMock = $this->getMock(\Magento\Framework\Data\Form\Element\Fieldset::class, [], [], '', false);
+        $elementMock = $this->getMock(
+            \Magento\Framework\Data\Form\Element\Checkbox::class,
+            ['setIsChecked'],
+            [],
+            '',
+            false
+        );
         $formMock = $this->getMock(
-            '\Magento\Framework\Data\Form',
+            \Magento\Framework\Data\Form::class,
             ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl'],
             [],
             '',
             false
         );
-        $this->registryMock->expects($this->atLeastOnce())->method('registry')->willReturn($subscriberMock);
+        $this->registryMock->expects($this->exactly(3))
+            ->method('registry')
+            ->willReturnMap(
+                [
+                    [RegistryConstants::CURRENT_CUSTOMER_ID, $customerId],
+                    ['subscriber', $subscriberMock],
+                ]
+            );
         $this->formFactoryMock->expects($this->once())->method('create')->willReturn($formMock);
         $formMock->expects($this->once())->method('setHtmlIdPrefix')->with('_newsletter');
         $this->subscriberFactoryMock->expects($this->once())->method('create')->willReturn($subscriberMock);
-        $subscriberMock->expects($this->once())->method('loadByCustomerId')->with($subscriberMock)->willReturnSelf();
+        $subscriberMock->expects($this->once())->method('loadByCustomerId')->with($customerId)->willReturnSelf();
         $this->registryMock->expects($this->once())->method('register')->with('subscriber', $subscriberMock);
         $formMock->expects($this->once())->method('addFieldset')->willReturn($fieldsetMock);
-        $this->accountManagementMock->expects($this->once())->method('isReadOnly')->with($subscriberMock)
+        $fieldsetMock->expects($this->once())->method('addField')->willReturn($elementMock);
+        $this->accountManagementMock->expects($this->once())->method('isReadOnly')->with($customerId)
             ->willReturn(false);
         $subscriberMock->expects($this->once())->method('isSubscribed')->willReturn(true);
-        $formMock->expects($this->once())->method('getElement')->willReturn($elementMock);
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')->willReturn('domain.com');
+
+        $this->backendSessionMock->expects($this->once())->method('getCustomerFormData')->willReturn(null);
+
+        $formMock->expects($this->once())
+            ->method('getElement')
+            ->willReturnMap(
+                [
+                    ['subscription', $elementMock],
+                ]
+            );
+
+        $elementMock->expects($this->once())
+            ->method('setIsChecked')
+            ->with(true);
+
+        $this->assertSame($this->model, $this->model->initForm());
+    }
+
+    public function testInitFormWithCustomerFormData()
+    {
+        $customerId = 1;
+
+        $subscriberMock = $this->getMock(\Magento\Newsletter\Model\Subscriber::class, [], [], '', false);
+        $fieldsetMock = $this->getMock(\Magento\Framework\Data\Form\Element\Fieldset::class, [], [], '', false);
+        $elementMock = $this->getMock(
+            \Magento\Framework\Data\Form\Element\Checkbox::class,
+            ['setIsChecked'],
+            [],
+            '',
+            false
+        );
+        $formMock = $this->getMock(
+            \Magento\Framework\Data\Form::class,
+            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl'],
+            [],
+            '',
+            false
+        );
+        $this->registryMock->expects($this->exactly(3))
+            ->method('registry')
+            ->willReturnMap(
+                [
+                    [RegistryConstants::CURRENT_CUSTOMER_ID, $customerId],
+                    ['subscriber', $subscriberMock],
+                ]
+            );
+        $this->formFactoryMock->expects($this->once())->method('create')->willReturn($formMock);
+        $formMock->expects($this->once())->method('setHtmlIdPrefix')->with('_newsletter');
+        $this->subscriberFactoryMock->expects($this->once())->method('create')->willReturn($subscriberMock);
+        $subscriberMock->expects($this->once())->method('loadByCustomerId')->with($customerId)->willReturnSelf();
+        $formMock->expects($this->once())->method('addFieldset')->willReturn($fieldsetMock);
+        $fieldsetMock->expects($this->once())->method('addField')->willReturn($elementMock);
+        $this->accountManagementMock->expects($this->once())->method('isReadOnly')->with($customerId)
+            ->willReturn(false);
+        $subscriberMock->expects($this->once())->method('isSubscribed')->willReturn(false);
+        $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')->willReturn('domain.com');
+
+        $this->backendSessionMock->expects($this->once())
+            ->method('getCustomerFormData')
+            ->willReturn([
+                'customer' => [
+                    'entity_id' => $customerId,
+                ],
+                'subscription' => true,
+            ]);
+
+        $formMock->expects($this->exactly(2))
+            ->method('getElement')
+            ->willReturnMap(
+                [
+                    ['subscription', $elementMock],
+                ]
+            );
+
+        $elementMock->expects($this->exactly(2))
+            ->method('setIsChecked')
+            ->willReturnMap(
+                [
+                    [false],
+                    [true],
+                ]
+            );
+
         $this->assertSame($this->model, $this->model->initForm());
     }
 }

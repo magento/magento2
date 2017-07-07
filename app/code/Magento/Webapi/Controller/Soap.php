@@ -2,12 +2,11 @@
 /**
  * Front controller for WebAPI SOAP area.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\ErrorProcessor;
 use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Response;
@@ -133,9 +132,9 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
                 );
                 $this->_setResponseContentType(self::CONTENT_TYPE_WSDL_REQUEST);
                 $this->_setResponseBody($responseBody);
-            } else if ($this->_isWsdlListRequest()) {
+            } elseif ($this->_isWsdlListRequest()) {
                 $servicesList = [];
-                foreach (array_keys($this->_wsdlGenerator->getListOfServices()) as $serviceName) {
+                foreach ($this->_wsdlGenerator->getListOfServices() as $serviceName) {
                     $servicesList[$serviceName]['wsdl_endpoint'] = $this->_soapServer->getEndpointUri()
                         . '?' . \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_WSDL . '&services=' . $serviceName;
                 }
@@ -169,25 +168,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected function _isWsdlListRequest()
     {
         return $this->_request->getParam(\Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_LIST_WSDL) !== null;
-    }
-
-    /**
-     * Parse the Authorization header and return the access token e.g. Authorization: Bearer <access-token>
-     *
-     * @return string Access token
-     * @throws AuthorizationException
-     */
-    protected function _getAccessToken()
-    {
-        $headers = array_change_key_case(getallheaders(), CASE_UPPER);
-        if (isset($headers['AUTHORIZATION'])) {
-            $token = explode(' ', $headers['AUTHORIZATION']);
-            if (isset($token[1]) && is_string($token[1])) {
-                return $token[1];
-            }
-            throw new AuthorizationException(__('Authentication header format is invalid.'));
-        }
-        throw new AuthorizationException(__('Authentication header is absent.'));
     }
 
     /**

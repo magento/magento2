@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,12 +29,16 @@ class SetupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceModel = $this->getMock('\Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->connection = $this->getMockForAbstractClass('\Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->resourceModel = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->resourceModel->expects($this->any())
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
+        $this->resourceModel->expects($this->any())
+            ->method('getConnectionByName')
+            ->with(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION)
+            ->willReturn($this->connection);
         $this->object = new Setup($this->resourceModel, self::CONNECTION_NAME);
     }
 

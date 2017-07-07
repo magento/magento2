@@ -1,19 +1,22 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Backend\App\Action;
+use Magento\ConfigurableProduct\Model\AttributesListInterface;
 
 class GetAttributes extends Action
 {
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    protected $jsonHelper;
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
      * Store manager
@@ -23,60 +26,37 @@ class GetAttributes extends Action
     protected $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $collectionFactory;
+    protected $jsonHelper;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param AttributesListInterface $attributesList
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        AttributesListInterface $attributesList
     ) {
-        $this->jsonHelper = $jsonHelper;
         $this->storeManager = $storeManager;
-        $this->collectionFactory = $collectionFactory;
+        $this->jsonHelper = $jsonHelper;
+        $this->attributesList = $attributesList;
         parent::__construct($context);
     }
 
     /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
-    }
-
-    /**
-     * Search for attributes by part of attribute's label in admin store
+     * Get attributes
      *
      * @return void
      */
     public function execute()
     {
         $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter(
-            'main_table.attribute_id',
-            $this->getRequest()->getParam('attributes')
-        );
-        $attributes = [];
-        foreach ($collection->getItems() as $attribute) {
-            $attributes[] = [
-                'id' => $attribute->getId(),
-                'label' => $attribute->getFrontendLabel(),
-                'code' => $attribute->getAttributeCode(),
-                'options' => $attribute->getSource()->getAllOptions(false),
-            ];
-        }
+        $attributes = $this->attributesList->getAttributes($this->getRequest()->getParam('attributes'));
         $this->getResponse()->representJson($this->jsonHelper->jsonEncode($attributes));
     }
 }

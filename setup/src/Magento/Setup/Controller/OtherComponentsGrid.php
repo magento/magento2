@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Controller;
 
 use Magento\Composer\InfoCommand;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
@@ -18,25 +16,38 @@ use Zend\View\Model\JsonModel;
 class OtherComponentsGrid extends AbstractActionController
 {
     /**
-     * @var ComposerInformation
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
     /**
-     * @var InfoCommand
+     * @var \Magento\Composer\InfoCommand
      */
     private $infoCommand;
 
     /**
-     * @param ComposerInformation $composerInformation
-     * @param MagentoComposerApplicationFactory $magentoComposerApplicationFactory
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Framework\Composer\MagentoComposerApplicationFactory $magentoComposerApplicationFactory
      */
     public function __construct(
-        ComposerInformation $composerInformation,
-        MagentoComposerApplicationFactory $magentoComposerApplicationFactory
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Framework\Composer\MagentoComposerApplicationFactory $magentoComposerApplicationFactory
     ) {
         $this->composerInformation = $composerInformation;
         $this->infoCommand = $magentoComposerApplicationFactory->createInfoCommand();
+    }
+
+    /**
+     * No index action, return 404 error page
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        $view = new \Zend\View\Model\ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
     }
 
     /**

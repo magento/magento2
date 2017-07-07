@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,22 +50,24 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileResolution = $this->getMock('Magento\Framework\View\Design\FileResolution\Fallback\File', [],
+        $this->_fileResolution = $this->getMock(
+            \Magento\Framework\View\Design\FileResolution\Fallback\File::class, [],
             [], '', false
         );
         $this->_templateFileResolution = $this->getMock(
-            'Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile', [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class, [], [], '', false
         );
         $this->_localeFileResolution = $this->getMock(
-            'Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile', [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile::class, [], [], '', false
         );
         $this->_staticFileResolution = $this->getMock(
-            'Magento\Framework\View\Design\FileResolution\Fallback\StaticFile', [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class, [], [], '', false
         );
         $this->_emailTemplateFileResolution = $this->getMock(
-            'Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile', [], [], '', false
+            \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile::class, [], [], '', false
         );
-        $this->_assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository',
+        $this->_assetRepo = $this->getMock(
+            \Magento\Framework\View\Asset\Repository::class,
             ['extractScope', 'updateDesignParams', 'createAsset'], [], '', false
         );
 
@@ -84,7 +86,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area' => 'some_area',
             'themeModel' => $this->getMock(
-                    'Magento\Framework\View\Design\ThemeInterface', [], [], '', false, false
+                \Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false, false
                 ),
             'module' => 'Some_Module',   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
                                         // but PHPUnit has troubles with passing arguments by reference
@@ -111,7 +113,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area'       => 'some_area',
             'themeModel' => $this->getMock(
-                    'Magento\Framework\View\Design\ThemeInterface', [], [], '', false, false
+                \Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false, false
                 ),
             'module'     => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
                                            // but PHPUnit has troubles with passing arguments by reference
@@ -138,7 +140,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area' => 'some_area',
             'themeModel' => $this->getMock(
-                'Magento\Framework\View\Design\ThemeInterface',
+                \Magento\Framework\View\Design\ThemeInterface::class,
                 [],
                 [],
                 '',
@@ -164,7 +166,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area' => 'some_area',
             'themeModel' => $this->getMock(
-                'Magento\Framework\View\Design\ThemeInterface',
+                \Magento\Framework\View\Design\ThemeInterface::class,
                 [],
                 [],
                 '',
@@ -262,7 +264,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $params = [
             'area'       => 'some_area',
             'themeModel' => $this->getMock(
-                'Magento\Framework\View\Design\ThemeInterface', [], [], '', false, false
+                \Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false, false
             ),
             'module'     => 'Some_Module',
             'locale'     => $locale

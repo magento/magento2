@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SampleData\Console;
@@ -35,8 +35,8 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
     protected function getCommandsClasses()
     {
         return [
-            'Magento\SampleData\Console\Command\SampleDataDeployCommand',
-            'Magento\SampleData\Console\Command\SampleDataRemoveCommand'
+            \Magento\SampleData\Console\Command\SampleDataDeployCommand::class,
+            \Magento\SampleData\Console\Command\SampleDataRemoveCommand::class
         ];
     }
 

@@ -2,19 +2,20 @@
     "name": "magento/module-indexer",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
-        "magento/module-backend": "100.0.0",
-        "magento/module-page-cache": "100.0.0",
-        "magento/framework": "100.0.0"
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magento/module-backend": "100.2.*",
+        "magento/framework": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.0.0",
+    "version": "100.2.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ],
+        "files": [
+            "registration.php"
+        ],
         "psr-4": {
             "Magento\\Indexer\\": ""
         }

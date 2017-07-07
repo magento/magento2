@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote\Item;
@@ -58,26 +58,38 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
-        $this->fetchStrategyMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface'
+        $this->entityFactoryMock = $this->getMock(
+            \Magento\Framework\Data\Collection\EntityFactory::class,
+            [],
+            [],
+            '',
+            false
         );
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $this->fetchStrategyMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+        );
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
 
-        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
 
-        $this->resourceMock = $this->getMock('Magento\Framework\Model\ResourceModel\Db\AbstractDb', [], [], '', false);
+        $this->resourceMock = $this->getMock(
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
         );
 
         $objectManager = new ObjectManager($this);
         $this->collection = $objectManager->getObject(
-            'Magento\Quote\Model\ResourceModel\Quote\Item\Collection',
+            \Magento\Quote\Model\ResourceModel\Quote\Item\Collection::class,
             [
                 'entityFactory' => $this->entityFactoryMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
@@ -90,7 +102,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testInstanceOf()
     {
         $this->assertInstanceOf(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection::class,
             $this->collection
         );
     }

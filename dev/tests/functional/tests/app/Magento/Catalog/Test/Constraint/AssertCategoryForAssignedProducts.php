@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ class AssertCategoryForAssignedProducts extends AbstractConstraint
         foreach ($products as $productFixture) {
             \PHPUnit_Framework_Assert::assertTrue(
                 $categoryView->getListProductBlock()->getProductItem($productFixture)->isVisible(),
-                "Products '{$productFixture->getName()}' not find."
+                "Products '{$productFixture->getName()}' not found in category '{$category->getName()}'."
             );
         }
     }

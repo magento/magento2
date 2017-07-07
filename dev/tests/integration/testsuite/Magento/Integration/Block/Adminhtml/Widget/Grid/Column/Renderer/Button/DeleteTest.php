@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -24,12 +24,12 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\App\Request\Http $request */
-        $request = $objectManager->get('Magento\Framework\App\Request\Http');
+        $request = $objectManager->get(\Magento\Framework\App\Request\Http::class);
         $request->setRouteName('adminhtml')->setControllerName('integration');
         $this->deleteButtonBlock = $objectManager->create(
-            'Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Delete'
+            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button\Delete::class
         );
-        $column = $objectManager->create('Magento\Backend\Block\Widget\Grid\Column');
+        $column = $objectManager->create(\Magento\Backend\Block\Widget\Grid\Column::class);
         $this->deleteButtonBlock->setColumn($column);
     }
 
@@ -69,7 +69,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $integration Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $integration = $objectManager->create(\Magento\Integration\Model\Integration::class);
         return $integration->load('Fixture Integration', 'name');
     }
 }

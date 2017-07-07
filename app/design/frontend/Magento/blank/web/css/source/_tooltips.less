@@ -1,48 +1,65 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-.tooltip.wrapper {
-    .lib-tooltip(
+    .tooltip.wrapper {
+        .lib-tooltip(
         @_tooltip-position: bottom,
-        @_tooltip-selector-content: ~".tooltip.content",
-        @_tooltip-selector-toggle: ~".tooltip.toggle"
-    );
-    .tooltip.content {
-        dl {
-            margin-bottom: 0;
-        }
-        dd {
-            white-space: normal;
-        }
-        .subtitle {
-            display: inline-block;
-            margin-bottom: 15px;
-            font-size: 16px;
-            font-weight: 500;
-        }
-        .label {
-            margin-top: @indent__s;
-            &:first-child {
-                margin-top: 0;
+        @_tooltip-selector-content: ~'.tooltip.content',
+        @_tooltip-selector-toggle: ~'tooltip.toggle'
+        );
+
+        .tooltip.content {
+            dl {
+                margin-bottom: 0;
+            }
+
+            dd {
+                white-space: normal;
+            }
+
+            .subtitle {
+                display: inline-block;
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 15px;
+            }
+
+            .label {
+                margin-top: @indent__s;
+
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+
+            .values {
+                margin: 0;
             }
         }
-        .values {
-            margin: 0;
-        }
+    }
+
+    .ui-tooltip {
+        position: absolute;
+        z-index: 9999;
     }
 }
 
-.ui-tooltip {
-  position: absolute;
-  z-index: 9999;
-}
+//
+//  Mobile
+//  _____________________________________________
 
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .tooltip.wrapper {
+        .tooltip.content {
+            min-width: 10rem;
+        }
+    }
 }

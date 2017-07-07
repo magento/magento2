@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer;
 
+/**
+ * @api
+ */
 class StockFactory
 {
     /**
@@ -21,7 +24,7 @@ class StockFactory
      *
      * @var string
      */
-    protected $_defaultIndexer = 'Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock';
+    protected $_defaultIndexer = \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock::class;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -19,4 +19,20 @@
             <argument name="instanceName" xsi:type="string">Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\GetAttributes">
+        <arguments>
+            <argument name="attributesList" xsi:type="object">Magento\Swatches\Model\AttributesList</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Eav\Attribute">
+        <plugin name="invalidate_caches_after_attribute_save" type="Magento\Swatches\Plugin\Catalog\CacheInvalidate" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute\Validate">
+        <arguments>
+            <argument name="multipleAttributeList" xsi:type="array">
+                <item name="swatch_text" xsi:type="string">optiontext</item>
+                <item name="swatch_visual" xsi:type="string">optionvisual</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

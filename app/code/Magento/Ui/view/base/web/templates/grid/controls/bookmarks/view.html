@@ -1,12 +1,10 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko if: $view().editable -->
-<div
-    class="action-dropdown-menu-item-edit">
+<div class="action-dropdown-menu-item-edit" if="$view().editable">
     <input
         class="admin__control-text"
         data-bind="
@@ -21,53 +19,22 @@
                 27: endEdit.bind($data, $view().index)
             }"
         type="text">
-    <button
-        class="action-submit"
-        data-bind="
-            attr: {
-                title: $t('Save all changes')
-            },
-            click: updateAndSave.bind($data, $view().index)"
-        type="button">
-        <span data-bind="i18n: 'Submit'"></span>
+    <button class="action-submit" type="button" attr="title: $t('Save all changes')" click="updateAndSave.bind($data, $view().index)">
+        <span translate="'Submit'"/>
     </button>
     <div class="action-dropdown-menu-item-actions">
-        <button
-            data-bind="
-                attr: {
-                    title: $t('Delete bookmark')
-                },
-                click: removeView.bind($data, $view().index)"
-            class="action-delete"
-            type="button">
-            <span data-bind="i18n: 'Delete'"></span>
+        <button class="action-delete" type="button" attr="title: $t('Delete bookmark')" click="removeView.bind($data, $view().index)">
+            <span translate="'Delete'"/>
         </button>
     </div>
 </div>
-<!-- /ko -->
 
 <div class="action-dropdown-menu-item">
-    <a
-        class="action-dropdown-menu-link"
-        href=""
-        data-bind="
-            text: $view().label,
-            click: applyView.bind($data, $view().index),
-            closeCollapsible">
-    </a>
+    <a href="" class="action-dropdown-menu-link" text="$view().label" click="applyView.bind($data, $view().index)" closeCollapsible/>
 
-    <!-- ko if: $view().editable -->
-    <div class="action-dropdown-menu-item-actions">
-        <button
-            class="action-edit"
-            data-bind="
-                attr: {
-                    title: $t('Edit bookmark')
-                },
-                click: editView.bind($data, $view().index)"
-            type="button">
-            <span data-bind="i18n: 'Edit'"></span>
+    <div class="action-dropdown-menu-item-actions" if="$view().editable">
+        <button class="action-edit" type="button" attr="title: $t('Edit bookmark')" click="editView.bind($data, $view().index)">
+            <span translate="'Edit'"/>
         </button>
     </div>
-    <!-- /ko -->
 </div>

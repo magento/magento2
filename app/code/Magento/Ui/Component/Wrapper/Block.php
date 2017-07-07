@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Wrapper;
@@ -8,11 +8,12 @@ namespace Magento\Ui\Component\Wrapper;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\AbstractComponent;
+use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
- * Class Block
+ * @deprecated
  */
-class Block extends AbstractComponent
+class Block extends AbstractComponent implements BlockWrapperInterface
 {
     const NAME = 'blockWrapper';
 
@@ -65,5 +66,16 @@ class Block extends AbstractComponent
     public function render()
     {
         return $this->block->toHtml();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfiguration()
+    {
+        return array_merge(
+            (array) $this->block->getData('config'),
+            (array) $this->getData('config')
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,45 +12,41 @@ use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for DeleteCustomUrlRewriteEntity
- *
- * Test Flow:
  * Preconditions:
  * 1. Custom URL Rewrites is created.
  *
  * Steps:
  * 1. Login to backend as Admin.
- * 2. Go to the Marketing->SEO & Search->URL Redirects.
+ * 2. Go to the Marketing > SEO & Search > URL Redirects.
  * 3. Search and open created URL Redirect.
  * 4. Delete Redirect.
  * 5. Perform all assertions.
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites
  * @ZephyrId MAGETWO-26337
  */
 class DeleteCustomUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
-     * Url rewrite index page
+     * Url rewrite index page.
      *
      * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
-     * Url rewrite edit page
+     * Url rewrite edit page.
      *
      * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
@@ -63,7 +59,7 @@ class DeleteCustomUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Delete custom URL Rewrite
+     * Delete custom URL Rewrite.
      *
      * @param UrlRewrite $urlRewrite
      * @return void

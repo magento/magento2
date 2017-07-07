@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml;
@@ -15,6 +15,13 @@ use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
  */
 abstract class Integration extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Integration::integrations';
+
     /** Param Key for extracting integration id from Request */
     const PARAM_INTEGRATION_ID = 'id';
 
@@ -22,6 +29,9 @@ abstract class Integration extends Action
     const PARAM_REAUTHORIZE = 'reauthorize';
 
     const REGISTRY_KEY_CURRENT_INTEGRATION = 'current_integration';
+
+    /** Saved API form data session key */
+    const REGISTRY_KEY_CURRENT_RESOURCE = 'current_resource';
 
     /**
      * @var \Magento\Framework\Registry
@@ -86,16 +96,6 @@ abstract class Integration extends Action
     }
 
     /**
-     * Check ACL.
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Integration::integrations');
-    }
-
-    /**
      * Don't actually redirect if we've got AJAX request - return redirect URL instead.
      *
      * @param string $path
@@ -111,6 +111,23 @@ abstract class Integration extends Action
             return $this;
         } else {
             return parent::_redirect($path, $arguments);
+        }
+    }
+
+    /**
+     * Restore saved form resources
+     *
+     * @return void
+     */
+    protected function restoreResourceAndSaveToRegistry()
+    {
+        $restoredFormData = $this->_getSession()->getIntegrationData();
+        if ($restoredFormData) {
+            $resource = isset($restoredFormData['resource']) ? $restoredFormData['resource'] : [];
+            $this->_registry->register(
+                self::REGISTRY_KEY_CURRENT_RESOURCE,
+                ['all_resources' => $restoredFormData['all_resources'], 'resource' => $resource]
+            );
         }
     }
 }

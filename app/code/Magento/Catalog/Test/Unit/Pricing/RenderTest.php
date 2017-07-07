@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,22 +33,18 @@ class RenderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->getMock('Magento\Framework\Registry', ['registry'], [], '', false);
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class, ['registry'], [], '', false);
 
-        $this->pricingRenderBlock = $this->getMock('Magento\Framework\Pricing\Render', [], [], '', false);
+        $this->pricingRenderBlock = $this->getMock(\Magento\Framework\Pricing\Render::class, [], [], '', false);
 
-        $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
 
-        $eventManager = $this->getMock('Magento\Framework\Event\Test\Unit\ManagerStub', [], [], '', false);
-        $config = $this->getMock('Magento\Store\Model\Store\Config', [], [], '', false);
-        $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $eventManager = $this->getMock(\Magento\Framework\Event\Test\Unit\ManagerStub::class, [], [], '', false);
+        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
         $context->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManager));
-        $context->expects($this->any())
-            ->method('getStoreConfig')
-            ->will($this->returnValue($config));
         $context->expects($this->any())
             ->method('getLayout')
             ->will($this->returnValue($this->layout));
@@ -58,7 +54,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
-            'Magento\Catalog\Pricing\Render',
+            \Magento\Catalog\Pricing\Render::class,
             [
                 'context' => $context,
                 'registry' => $this->registry,
@@ -75,7 +71,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedValue = 'string';
 
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $this->layout->expects($this->any())
             ->method('getBlock')
@@ -104,12 +100,12 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     {
         $expectedValue = 'string';
 
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $this->registry->expects($this->never())
             ->method('registry');
 
-        $block = $this->getMock('Magento\Framework\Pricing\Render', ['getProductItem', 'render'], [], '', false);
+        $block = $this->getMock(\Magento\Framework\Pricing\Render::class, ['getProductItem', 'render'], [], '', false);
 
         $arguments = $this->object->getData();
         $arguments['render_block'] = $this->object;

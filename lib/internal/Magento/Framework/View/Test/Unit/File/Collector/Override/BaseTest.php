@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector\Override;
@@ -45,22 +45,28 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->themeDirectory = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Read',
+            \Magento\Framework\Filesystem\Directory\Read::class,
             ['getAbsolutePath', 'search'],
             [],
             '',
             false
         );
-        $this->pathPatternHelperMock = $this->getMockBuilder('Magento\Framework\View\Helper\PathPattern')
+        $this->pathPatternHelperMock = $this->getMockBuilder(\Magento\Framework\View\Helper\PathPattern::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
-        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->fileFactory = $this->getMock(\Magento\Framework\View\File\Factory::class, [], [], '', false);
+        $this->readDirFactory = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->themeDirectory));
         $this->componentRegistrar = $this->getMockForAbstractClass(
-            'Magento\Framework\Component\ComponentRegistrarInterface'
+            \Magento\Framework\Component\ComponentRegistrarInterface::class
         );
         $this->model = new \Magento\Framework\View\File\Collector\Override\Base(
             $this->fileFactory,
@@ -76,7 +82,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue(''));
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->once())
             ->method('getFullPath')
             ->will($this->returnValue('area/Vendor/theme'));
@@ -93,7 +99,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     public function testGetFiles($files, $filePath, $pathPattern)
     {
         $themePath = 'area/theme/path';
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);
 
         $handlePath = 'design/area/theme/path/%s/override/%s';

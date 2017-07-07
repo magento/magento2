@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Model;
@@ -96,16 +96,17 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
             $store->getCode()
         );
 
-        $countries = $this->directoryHelper->getCountryCollection($store)->addCountryIdFilter($countryId)->load();
-        if ($countries->count() == 0) {
+        $countriesCollection = $this->directoryHelper->getCountryCollection($store)->load();
+        $regions = $this->directoryHelper->getRegionData();
+        $country = $countriesCollection->getItemById($countryId);
+
+        if (!$country) {
             throw new NoSuchEntityException(
                 __(
                     'Requested country is not available.'
                 )
             );
         }
-        $regions = $this->directoryHelper->getRegionData();
-        $country = $countries->getItemById($countryId);
         $countryInfo = $this->setCountryInfo($country, $regions, $storeLocale);
 
         return $countryInfo;
@@ -128,7 +129,6 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         $countryInfo->setThreeLetterAbbreviation($country->getData('iso3_code'));
         $countryInfo->setFullNameLocale($country->getName($storeLocale));
         $countryInfo->setFullNameEnglish($country->getName('en_US'));
-
 
         if (array_key_exists($countryId, $regions)) {
             $regionsInfo = [];

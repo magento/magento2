@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\App\Cache;
+
+use \Magento\Framework\App\CacheInterface;
+use \Magento\Framework\ObjectManager\NoninterceptableInterface;
 
 /**
  * System cache proxy model
  */
-namespace Magento\Framework\App\Cache;
-
-use Magento\Framework\App\CacheInterface;
-
-class Proxy implements CacheInterface
+class Proxy implements
+    CacheInterface,
+    NoninterceptableInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -39,7 +41,7 @@ class Proxy implements CacheInterface
     protected function _getCache()
     {
         if (null == $this->_cache) {
-            $this->_cache = $this->_objectManager->get('Magento\Framework\App\Cache');
+            $this->_cache = $this->_objectManager->get(\Magento\Framework\App\Cache::class);
         }
         return $this->_cache;
     }

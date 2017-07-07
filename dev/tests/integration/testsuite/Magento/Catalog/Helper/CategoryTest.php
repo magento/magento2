@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
+/**
+ * Class CategoryTest
+ * @package Magento\Catalog\Helper
+ *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
+ */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,7 +22,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Helper\Category'
+            \Magento\Catalog\Helper\Category::class
         );
     }
 
@@ -25,7 +32,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             $helperClass = get_class($this->_helper);
             /** @var $objectManager \Magento\TestFramework\ObjectManager */
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-            $objectManager->get('Magento\Framework\Registry')->unregister('_helper/' . $helperClass);
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('_helper/' . $helperClass);
         }
         $this->_helper = null;
     }
@@ -36,7 +43,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCategories()
     {
         $categories = $this->_helper->getStoreCategories();
-        $this->assertInstanceOf('Magento\Framework\Data\Tree\Node\Collection', $categories);
+        $this->assertInstanceOf(\Magento\Framework\Data\Tree\Node\Collection::class, $categories);
         $index = 0;
         $expectedPaths = [
             [3, '1/2/3'],
@@ -48,7 +55,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             [12, '1/2/12'],
         ];
         foreach ($categories as $category) {
-            $this->assertInstanceOf('Magento\Framework\Data\Tree\Node', $category);
+            $this->assertInstanceOf(\Magento\Framework\Data\Tree\Node::class, $category);
             $this->assertEquals($expectedPaths[$index][0], $category->getId());
             $this->assertEquals($expectedPaths[$index][1], $category->getData('path'));
             $index++;
@@ -59,7 +66,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $url = 'http://example.com/';
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             ['data' => ['url' => $url]]
         );
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
@@ -81,7 +88,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $this->assertFalse($this->_helper->canShow($category));
         $category->setId(1);

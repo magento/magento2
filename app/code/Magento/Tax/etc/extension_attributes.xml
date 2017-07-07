@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,5 +13,8 @@
         <attribute code="applied_taxes" type="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[]" />
         <attribute code="item_applied_taxes" type="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[]" />
         <attribute code="converting_from_quote" type="boolean" />
+    </extension_attributes>
+    <extension_attributes for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface">
+        <attribute code="rates" type="Magento\Tax\Api\Data\AppliedTaxRateInterface[]" />
     </extension_attributes>
 </config>

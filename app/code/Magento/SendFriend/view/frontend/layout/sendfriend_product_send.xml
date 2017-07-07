@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,7 +13,9 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\SendFriend\Block\Send" name="sendfriend.send" template="send.phtml"/>
+            <block class="Magento\SendFriend\Block\Send" name="sendfriend.send" template="Magento_SendFriend::send.phtml">
+                <container name="form.additional.info" as="form_additional_info"/>
+            </block>
         </referenceContainer>
     </body>
 </page>

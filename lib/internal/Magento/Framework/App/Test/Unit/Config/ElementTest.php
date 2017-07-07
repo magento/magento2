@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
@@ -33,8 +33,8 @@ class ElementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClassName()
     {
-        $this->assertEquals('Magento\ModuleName\Model\ClassName', $this->model->class_test->getClassName());
-        $this->assertEquals('Magento\ModuleName\Model\ClassName', $this->model->model_test->getClassName());
+        $this->assertEquals(\Magento\ModuleName\Model\ClassName::class, $this->model->class_test->getClassName());
+        $this->assertEquals(\Magento\ModuleName\Model\ClassName::class, $this->model->model_test->getClassName());
         $this->assertFalse($this->model->no_classname_test->getClassName());
     }
 }

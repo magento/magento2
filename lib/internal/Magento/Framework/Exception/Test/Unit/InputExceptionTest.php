@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Exception\Test\Unit;
@@ -20,10 +20,13 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $params = ['fieldName' => 'quantity', 'value' => -100, 'minValue' => 0];
         $inputException = new InputException(
-            new Phrase(InputException::INVALID_FIELD_MIN_VALUE, $params)
+            new Phrase('The %fieldName value of "%value" must be greater than or equal to %minValue.', $params)
         );
 
-        $this->assertEquals(InputException::INVALID_FIELD_MIN_VALUE, $inputException->getRawMessage());
+        $this->assertEquals(
+            'The %fieldName value of "%value" must be greater than or equal to %minValue.',
+            $inputException->getRawMessage()
+        );
         $this->assertStringMatchesFormat('%s greater than or equal to %s', $inputException->getMessage());
         $this->assertEquals(
             'The quantity value of "-100" must be greater than or equal to 0.',
@@ -40,26 +43,29 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $inputException = new InputException();
 
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $inputException->getRawMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getRawMessage());
         $this->assertEquals(
-            InputException::DEFAULT_MESSAGE,
+            'One or more input exceptions have occurred.',
             $inputException->getMessage()
         );
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $inputException->getLogMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getLogMessage());
 
         $this->assertFalse($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
 
         $inputException->addError(
             new Phrase(
-                InputException::INVALID_FIELD_MIN_VALUE,
+                'The %fieldName value of "%value" must be greater than or equal to %minValue.',
                 ['fieldName' => 'weight', 'value' => -100, 'minValue' => 1]
             )
         );
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
 
-        $this->assertEquals(InputException::INVALID_FIELD_MIN_VALUE, $inputException->getRawMessage());
+        $this->assertEquals(
+            'The %fieldName value of "%value" must be greater than or equal to %minValue.',
+            $inputException->getRawMessage()
+        );
         $this->assertEquals(
             'The weight value of "-100" must be greater than or equal to 1.',
             $inputException->getMessage()
@@ -69,21 +75,24 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
             $inputException->getLogMessage()
         );
 
-        $inputException->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => 'name']));
+        $inputException->addError(new Phrase('%fieldName is a required field.', ['fieldName' => 'name']));
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(2, $inputException->getErrors());
 
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $inputException->getRawMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getRawMessage());
         $this->assertEquals(
-            InputException::DEFAULT_MESSAGE,
+            'One or more input exceptions have occurred.',
             $inputException->getMessage()
         );
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $inputException->getLogMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $inputException->getLogMessage());
 
         $errors = $inputException->getErrors();
         $this->assertCount(2, $errors);
 
-        $this->assertEquals(InputException::INVALID_FIELD_MIN_VALUE, $errors[0]->getRawMessage());
+        $this->assertEquals(
+            'The %fieldName value of "%value" must be greater than or equal to %minValue.',
+            $errors[0]->getRawMessage()
+        );
         $this->assertEquals(
             'The weight value of "-100" must be greater than or equal to 1.',
             $errors[0]->getMessage()
@@ -93,7 +102,7 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
             $errors[0]->getLogMessage()
         );
 
-        $this->assertEquals(InputException::REQUIRED_FIELD, $errors[1]->getRawMessage());
+        $this->assertEquals('%fieldName is a required field.', $errors[1]->getRawMessage());
         $this->assertEquals('name is a required field.', $errors[1]->getMessage());
         $this->assertEquals('name is a required field.', $errors[1]->getLogMessage());
     }

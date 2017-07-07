@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,11 @@ namespace Magento\Catalog\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Catalog\Helper\DefaultCategory;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallData implements InstallDataInterface
 {
@@ -21,6 +23,24 @@ class InstallData implements InstallDataInterface
      * @var CategorySetupFactory
      */
     private $categorySetupFactory;
+
+    /**
+     * @var DefaultCategory
+     */
+    private $defaultCategory;
+
+    /**
+     * @deprecated
+     * @return DefaultCategory
+     */
+    private function getDefaultCategory()
+    {
+        if ($this->defaultCategory === null) {
+            $this->defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(DefaultCategory::class);
+        }
+        return $this->defaultCategory;
+    }
 
     /**
      * Init
@@ -42,14 +62,16 @@ class InstallData implements InstallDataInterface
     {
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
+        $defaultCategoryId = $this->getDefaultCategory()->getId();
 
         $categorySetup->installEntities();
         // Create Root Catalog Node
         $categorySetup->createCategory()
-            ->load(1)
-            ->setId(1)
+            ->load($rootCategoryId)
+            ->setId($rootCategoryId)
             ->setStoreId(0)
-            ->setPath('1')
+            ->setPath($rootCategoryId)
             ->setLevel(0)
             ->setPosition(0)
             ->setChildrenCount(0)
@@ -57,17 +79,18 @@ class InstallData implements InstallDataInterface
             ->setInitialSetupFlag(true)
             ->save();
 
+        // Create Default Catalog Node
         $category = $categorySetup->createCategory();
-
-        $categorySetup->createCategory()
+        $category->load($defaultCategoryId)
+            ->setId($defaultCategoryId)
             ->setStoreId(0)
-            ->setPath('1')
+            ->setPath($rootCategoryId . '/' . $defaultCategoryId)
             ->setName('Default Category')
             ->setDisplayMode('PRODUCTS')
-            ->setAttributeSetId($category->getDefaultAttributeSetId())
             ->setIsActive(1)
             ->setLevel(1)
             ->setInitialSetupFlag(true)
+            ->setAttributeSetId($category->getDefaultAttributeSetId())
             ->save();
 
         $data = [
@@ -89,13 +112,13 @@ class InstallData implements InstallDataInterface
         $categorySetup->updateAttributeGroup($entityTypeId, $attributeSetId, $attributeGroupId, 'sort_order', '10');
 
         $groups = [
-            'display' => ['name' => 'Display Settings', 'sort' => 20, 'id' => null],
-            'design' => ['name' => 'Custom Design', 'sort' => 30, 'id' => null],
+            'display' => ['name' => 'Display Settings', 'code' => 'display-settings', 'sort' => 20, 'id' => null],
+            'design' => ['name' => 'Custom Design', 'code' => 'custom-design', 'sort' => 30, 'id' => null],
         ];
 
         foreach ($groups as $k => $groupProp) {
             $categorySetup->addAttributeGroup($entityTypeId, $attributeSetId, $groupProp['name'], $groupProp['sort']);
-            $groups[$k]['id'] = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, $groupProp['name']);
+            $groups[$k]['id'] = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, $groupProp['code']);
         }
 
         // update attributes group and sort
@@ -183,25 +206,25 @@ class InstallData implements InstallDataInterface
         $tabNames = [
             'General' => [
                 'attribute_group_name' => $newGeneralTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newGeneralTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newGeneralTabName),
                 'tab_group_code' => 'basic',
                 'sort_order' => 10,
             ],
             'Images' => [
                 'attribute_group_name' => $newImagesTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newImagesTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newImagesTabName),
                 'tab_group_code' => 'basic',
                 'sort_order' => 20,
             ],
             'Meta Information' => [
                 'attribute_group_name' => $newMetaTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newMetaTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newMetaTabName),
                 'tab_group_code' => 'basic',
                 'sort_order' => 30,
             ],
             'Prices' => [
                 'attribute_group_name' => $newPriceTabName,
-                'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newPriceTabName)),
+                'attribute_group_code' => $categorySetup->convertToAttributeGroupCode($newPriceTabName),
                 'tab_group_code' => 'advanced',
                 'sort_order' => 40,
             ],
@@ -259,7 +282,7 @@ class InstallData implements InstallDataInterface
                 $newGeneralTabName => 100,
                 'is_required' => 0,
                 'default_value' => 1,
-                'frontend_input_renderer' => 'Magento\Framework\Data\Form\Element\Hidden',
+                'frontend_input_renderer' => \Magento\Framework\Data\Form\Element\Hidden::class,
             ],
             //Autosettings tab
             'short_description' => [$autosettingsTabName => 0, 'is_required' => 0],
@@ -305,13 +328,13 @@ class InstallData implements InstallDataInterface
             \Magento\Catalog\Model\Category::ENTITY,
             'custom_design_from',
             'attribute_model',
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
         );
         $categorySetup->updateAttribute(
             \Magento\Catalog\Model\Category::ENTITY,
             'custom_design_from',
             'frontend_model',
-            'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime'
+            \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class
         );
     }
 }

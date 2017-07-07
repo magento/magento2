@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model;
 /**
  * Bundle Option Model
  *
+ * @api
  * @method int getParentId()
  * @method null|\Magento\Catalog\Model\Product[] getSelections()
  * @method Option setParentId(int $value)
@@ -41,7 +42,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Bundle\Model\ResourceModel\Option');
+        $this->_init(\Magento\Bundle\Model\ResourceModel\Option::class);
         parent::_construct();
     }
 
@@ -140,6 +141,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */
@@ -293,5 +295,6 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Observer;
@@ -35,29 +35,21 @@ class ReportConcurrentAdmins implements ObserverInterface
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @param Config $config
      * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
      * @param \Magento\NewRelicReporting\Model\UsersFactory $usersFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         Config $config,
         \Magento\Backend\Model\Auth\Session $backendAuthSession,
         \Magento\NewRelicReporting\Model\UsersFactory $usersFactory,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder
     ) {
         $this->config = $config;
         $this->backendAuthSession = $backendAuthSession;
         $this->usersFactory = $usersFactory;
         $this->jsonEncoder = $jsonEncoder;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -81,7 +73,6 @@ class ReportConcurrentAdmins implements ObserverInterface
                 $modelData = [
                     'type' => 'admin_activity',
                     'action' => $this->jsonEncoder->encode($jsonData),
-                    'updated_at' => $this->dateTime->formatDate(true),
                 ];
 
                 /** @var \Magento\NewRelicReporting\Model\Users $usersModel */

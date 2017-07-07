@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\App\State;
 
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * Example Application State class.
@@ -25,15 +27,28 @@ class State1 extends AbstractState
      *
      * @var string
      */
-    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled';
+    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled, admin_account_sharing_enable, log_to_file';
 
     /**
-     * @construct
-     * @param ObjectManager $objectManager
+     * HTTP CURL Adapter.
+     *
+     * @var CurlTransport
      */
-    public function __construct(ObjectManager $objectManager)
-    {
+    private $curlTransport;
+
+    /**
+     * @param ObjectManager $objectManager
+     * @param CurlTransport $curlTransport
+     * @param array $arguments
+     */
+    public function __construct(
+        ObjectManager $objectManager,
+        CurlTransport $curlTransport,
+        array $arguments = []
+    ) {
+        parent::__construct($objectManager, $arguments);
         $this->objectManager = $objectManager;
+        $this->curlTransport = $curlTransport;
     }
 
     /**
@@ -44,9 +59,11 @@ class State1 extends AbstractState
     public function apply()
     {
         parent::apply();
-        if (file_exists(dirname(dirname(dirname(MTF_BP))) . '/app/etc/config.php')) {
+        $this->curlTransport->write($_ENV['app_frontend_url'], [], CurlInterface::GET);
+        $response = $this->curlTransport->read();
+        if (strpos($response, 'Home Page') !== false) {
             $this->objectManager->create(
-                '\Magento\Config\Test\TestStep\SetupConfigurationStep',
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
                 ['configData' => $this->config]
             )->run();
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Gateway\Http\Converter;
@@ -8,6 +8,11 @@ namespace Magento\Payment\Gateway\Http\Converter;
 use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 
+/**
+ * Class HtmlFormConverter
+ * @package Magento\Payment\Gateway\Http\Converter
+ * @api
+ */
 class HtmlFormConverter implements ConverterInterface
 {
     /**

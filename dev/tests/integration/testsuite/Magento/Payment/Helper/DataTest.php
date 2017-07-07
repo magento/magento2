@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,12 +13,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetInfoBlock()
     {
-        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Payment\Helper\Data');
+        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Payment\Helper\Data::class);
         $paymentInfo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Payment\Model\Info'
+            \Magento\Payment\Model\Info::class
         );
         $paymentInfo->setMethod('checkmo');
         $result = $helper->getInfoBlock($paymentInfo);
-        $this->assertInstanceOf('Magento\OfflinePayments\Block\Info\Checkmo', $result);
+        $this->assertInstanceOf(\Magento\OfflinePayments\Block\Info\Checkmo::class, $result);
     }
 }

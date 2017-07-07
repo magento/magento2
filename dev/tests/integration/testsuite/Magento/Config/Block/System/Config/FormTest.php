@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config;
@@ -9,6 +9,7 @@ use Magento\Framework\App\Cache\State;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FormTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,26 +46,26 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_formFactory = $this->_objectManager->create('Magento\Framework\Data\FormFactory');
+        $this->_formFactory = $this->_objectManager->create(\Magento\Framework\Data\FormFactory::class);
     }
 
     public function testDependenceHtml()
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['area' => 'adminhtml']
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         /** @var $block \Magento\Config\Block\System\Config\Form */
-        $block = $layout->createBlock('Magento\Config\Block\System\Config\Form', 'block');
+        $block = $layout->createBlock(\Magento\Config\Block\System\Config\Form::class, 'block');
 
         /** @var $childBlock \Magento\Framework\View\Element\Text */
-        $childBlock = $layout->addBlock('Magento\Framework\View\Element\Text', 'element_dependence', 'block');
+        $childBlock = $layout->addBlock(\Magento\Framework\View\Element\Text::class, 'element_dependence', 'block');
 
         $expectedValue = 'dependence_html_relations';
         $this->assertNotContains($expectedValue, $block->toHtml());
@@ -92,7 +93,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
@@ -102,9 +103,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Config\Block\System\Config\FormStub */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Config\Block\System\Config\FormStub'
+            \Magento\Config\Block\System\Config\FormStub::class
         );
         $block->setScope(\Magento\Config\Block\System\Config\Form::SCOPE_WEBSITES);
         $block->setStubConfigData($this->_configData);
@@ -189,7 +190,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
@@ -199,9 +200,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Config\Block\System\Config\FormStub */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Config\Block\System\Config\FormStub'
+            \Magento\Config\Block\System\Config\FormStub::class
         );
         $block->setScope(\Magento\Config\Block\System\Config\Form::SCOPE_DEFAULT);
         $block->setStubConfigData($this->_configData);
@@ -251,17 +252,17 @@ class FormTest extends \PHPUnit_Framework_TestCase
             State::PARAM_BAN_CACHE => true,
         ]);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Config\ScopeInterface')
+            ->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class)
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->load(\Magento\Framework\App\Area::PART_CONFIG);
 
         $fileResolverMock = $this->getMockBuilder(
-            'Magento\Framework\App\Config\FileResolver'
+            \Magento\Framework\App\Config\FileResolver::class
         )->disableOriginalConstructor()->getMock();
         $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\FileIteratorFactory'
+            \Magento\Framework\Config\FileIteratorFactory::class
         );
         $fileIterator = $fileIteratorFactory->create(
             [__DIR__ . '/_files/test_section_config.xml']
@@ -271,16 +272,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $structureReader = $objectManager->create(
-            'Magento\Config\Model\Config\Structure\Reader',
+            \Magento\Config\Model\Config\Structure\Reader::class,
             ['fileResolver' => $fileResolverMock]
         );
         $structureData = $objectManager->create(
-            'Magento\Config\Model\Config\Structure\Data',
+            \Magento\Config\Model\Config\Structure\Data::class,
             ['reader' => $structureReader]
         );
         /** @var \Magento\Config\Model\Config\Structure $structure  */
         $structure = $objectManager->create(
-            'Magento\Config\Model\Config\Structure',
+            \Magento\Config\Model\Config\Structure::class,
             ['structureData' => $structureData]
         );
 
@@ -302,19 +303,19 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testInitFormAddsFieldsets()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\ResponseInterface'
+            \Magento\Framework\App\ResponseInterface::class
         )->headersSentThrowsException = false;
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\RequestInterface'
+            \Magento\Framework\App\RequestInterface::class
         )->setParam(
             'section',
             'general'
         );
         /** @var $block \Magento\Config\Block\System\Config\Form */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Config\Block\System\Config\Form'
+            \Magento\Config\Block\System\Config\Form::class
         );
         $block->initForm();
         $expectedIds = [
@@ -354,7 +355,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $elements = $block->getForm()->getElements();
         foreach ($elements as $element) {
             /** @var $element \Magento\Framework\Data\Form\Element\Fieldset */
-            $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Fieldset', $element);
+            $this->assertInstanceOf(
+                \Magento\Framework\Data\Form\Element\Fieldset::class,
+                $element
+            );
             $this->assertArrayHasKey($element->getId(), $expectedIds);
             $fields = $element->getElements();
             $this->assertEquals(count($expectedIds[$element->getId()]), count($fields));

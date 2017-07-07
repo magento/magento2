@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -22,6 +22,7 @@
     margin-right: 1.5rem;
     position: relative;
     width: 1em;
+
     > span {
         ._spinner_transform();
         background-color: @spinner-second-color;
@@ -35,6 +36,7 @@
 
     .ie9 & {
         background: url('@{baseDir}images/ajax-loader.gif') no-repeat center;
+
         > span {
             display: none;
         }
@@ -57,6 +59,7 @@
     top: 40%;
     width: 200px;
     z-index: 1003;
+
     &:after {
         background-image: url('@{baseDir}images/loader-1.gif');
         content: '';
@@ -80,17 +83,20 @@
     right: 0;
     top: 0;
     z-index: 2003;
+
     img {
         display: none;
     }
+
     p {
         margin-top: 118px;
     }
+
     .loader {
-        background: #e5e2dd url('@{baseDir}images/loader-1.gif') no-repeat 50% 30%;
+        background: @color-ivory url('@{baseDir}images/loader-1.gif') no-repeat 50% 30%;
         border-radius: 5px;
         bottom: 0;
-        color: #5e5b56;
+        color: @color-gray34;
         font-size: 14px;
         font-weight: bold;
         height: 160px;

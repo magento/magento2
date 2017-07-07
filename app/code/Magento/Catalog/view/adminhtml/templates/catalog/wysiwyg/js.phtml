@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ var catalogWysiwygEditor = {
                 url: editorUrl,
                 data: {
                     element_id: elementId + '_editor',
-                    store_id: '<?php /* @escapeNotVerified */ echo $block->getStoreId() ?>'
+                    store_id: '<?= /* @escapeNotVerified */ $block->getStoreId() ?>'
                 },
                 showLoader: true,
                 dataType: 'html',
@@ -45,7 +45,7 @@ var catalogWysiwygEditor = {
             this.modal.html(jQuery(data).html());
         } else {
             this.modal = jQuery(data).modal({
-                title: '<?php /* @escapeNotVerified */ echo __('WYSIWYG Editor'); ?>',
+                title: '<?= /* @escapeNotVerified */ __('WYSIWYG Editor') ?>',
                 modalClass: 'magento',
                 type: 'slide',
                 firedElementId: elementId,
@@ -80,6 +80,9 @@ var catalogWysiwygEditor = {
                 }
             }
             tinyMCE.editors[dialogWindow.options.firedElementId].load();
+            if (typeof varienGlobalEvents != undefined) {
+                varienGlobalEvents.fireEvent('tinymceChange');
+            }
         }
         this.closeDialogWindow(dialogWindow);
     },

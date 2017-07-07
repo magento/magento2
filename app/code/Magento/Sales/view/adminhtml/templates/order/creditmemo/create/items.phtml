@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Items to Refund') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Items to Refund') ?></span>
     </div>
 
     <?php if (count($_items)) : ?>
@@ -19,17 +19,17 @@
         <table class="data-table admin__table-primary order-creditmemo-tables">
             <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?php /* @escapeNotVerified */ echo __('Product') ?></span></th>
-                    <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
-                    <th class="col-ordered-qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></th>
+                    <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
+                    <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
+                    <th class="col-ordered-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
                     <?php if ($block->canReturnToStock()) : ?>
-                    <th class="col-return-to-stock"><span><?php /* @escapeNotVerified */ echo __('Return to Stock') ?></span></th>
+                    <th class="col-return-to-stock"><span><?= /* @escapeNotVerified */ __('Return to Stock') ?></span></th>
                     <?php endif; ?>
-                    <th class="col-refund"><span><?php /* @escapeNotVerified */ echo __('Qty to Refund') ?></span></th>
-                    <th class="col-subtotal"><span><?php /* @escapeNotVerified */ echo __('Subtotal') ?></span></th>
-                    <th class="col-tax-amount"><span><?php /* @escapeNotVerified */ echo __('Tax Amount') ?></span></th>
-                    <th class="col-discont"><span><?php /* @escapeNotVerified */ echo __('Discount Amount') ?></span></th>
-                    <th class="col-total last"><span><?php /* @escapeNotVerified */ echo __('Row Total') ?></span></th>
+                    <th class="col-refund"><span><?= /* @escapeNotVerified */ __('Qty to Refund') ?></span></th>
+                    <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
+                    <th class="col-tax-amount"><span><?= /* @escapeNotVerified */ __('Tax Amount') ?></span></th>
+                    <th class="col-discont"><span><?= /* @escapeNotVerified */ __('Discount Amount') ?></span></th>
+                    <th class="col-total last"><span><?= /* @escapeNotVerified */ __('Row Total') ?></span></th>
                 </tr>
             </thead>
             <?php if ($block->canEditQty()): ?>
@@ -37,7 +37,7 @@
                 <tr>
                     <td colspan="3">&nbsp;</td>
                     <td colspan="3">
-                        <?php echo $block->getUpdateButtonHtml() ?>
+                        <?= $block->getUpdateButtonHtml() ?>
                     </td>
                     <td colspan="3" class="last">&nbsp;</td>
                 </tr>
@@ -49,16 +49,16 @@
             } else {
                 $i++;
             } ?>
-                <tbody class="<?php /* @escapeNotVerified */ echo $i%2 ? 'even' : 'odd' ?>">
-                    <?php echo $block->getItemHtml($_item) ?>
-                    <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                <tbody class="<?= /* @escapeNotVerified */ $i%2 ? 'even' : 'odd' ?>">
+                    <?= $block->getItemHtml($_item) ?>
+                    <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                 </tbody>
             <?php endforeach; ?>
         </table>
     </div>
     <?php else : ?>
     <div class="no-items">
-        <?php /* @escapeNotVerified */ echo __('No Items To Refund') ?>
+        <?= /* @escapeNotVerified */ __('No Items To Refund') ?>
     </div>
     <?php endif; ?>
 </section>
@@ -67,40 +67,40 @@
 
 <?php if (!empty($orderTotalBar)): ?>
 <section class="fieldset-wrapper">
-    <?php /* @escapeNotVerified */ echo $orderTotalBar; ?>
+    <?= /* @escapeNotVerified */ $orderTotalBar ?>
 </section>
 <?php endif; ?>
 
 <section class="admin__page-section">
     <input type="hidden" name="creditmemo[do_offline]" id="creditmemo_do_offline" value="0" />
     <div class="admin__page-section-title">
-        <span class="title"><?php /* @escapeNotVerified */ echo __('Order Total') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Order Total') ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Credit Memo Comments') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Credit Memo Comments') ?></span>
             </div>
             <div id="history_form" class="admin__fieldset-wrapper-content">
                 <div class="admin__field">
                     <label class="normal admin__field-label"
                            for="creditmemo_comment_text">
-                        <span><?php /* @escapeNotVerified */ echo __('Comment Text') ?></span></label>
+                        <span><?= /* @escapeNotVerified */ __('Comment Text') ?></span></label>
                     <div class="admin__field-control">
                         <textarea id="creditmemo_comment_text"
                                   class="admin__control-textarea"
                                   name="creditmemo[comment_text]"
                                   rows="3"
-                                  cols="5"><?php /* @escapeNotVerified */ echo $block->getCreditmemo()->getCommentText(); ?></textarea>
+                                  cols="5"><?= /* @escapeNotVerified */ $block->getCreditmemo()->getCommentText() ?></textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class="admin__page-section-item order-totals creditmemo-totals">
             <div class="admin__page-section-item-title">
-                <span class="title"><?php /* @escapeNotVerified */ echo __('Refund Totals') ?></span>
+                <span class="title"><?= /* @escapeNotVerified */ __('Refund Totals') ?></span>
             </div>
-            <?php echo $block->getChildHtml('creditmemo_totals') ?>
+            <?= $block->getChildHtml('creditmemo_totals') ?>
             <div class="order-totals-actions">
                 <div class="field choice admin__field admin__field-option field-append-comments">
                     <input id="notify_customer"
@@ -109,7 +109,7 @@
                            value="1"
                            type="checkbox" />
                     <label for="notify_customer" class="admin__field-label">
-                        <span><?php /* @escapeNotVerified */ echo __('Append Comments') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Append Comments') ?></span>
                     </label>
                 </div>
                 <?php if ($block->canSendCreditmemoEmail()):?>
@@ -120,15 +120,15 @@
                            value="1"
                            type="checkbox" />
                     <label for="send_email" class="admin__field-label">
-                        <span><?php /* @escapeNotVerified */ echo __('Email Copy of Credit Memo') ?></span>
+                        <span><?= /* @escapeNotVerified */ __('Email Copy of Credit Memo') ?></span>
                     </label>
                 </div>
                 <?php endif; ?>
-                <?php echo $block->getChildHtml('submit_before') ?>
+                <?= $block->getChildHtml('submit_before') ?>
                 <div class="actions">
-                    <?php echo $block->getChildHtml('submit_offline') ?>
-                    <?php echo $block->getChildHtml('submit_button') ?>
-                    <?php echo $block->getChildHtml('submit_after') ?>
+                    <?= $block->getChildHtml('submit_offline') ?>
+                    <?= $block->getChildHtml('submit_button') ?>
+                    <?= $block->getChildHtml('submit_after') ?>
                 </div>
             </div>
         </div>

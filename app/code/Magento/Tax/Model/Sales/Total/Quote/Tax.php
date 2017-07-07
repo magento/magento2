@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Calculation;
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
 /**
  * Tax totals calculation model
@@ -47,6 +49,11 @@ class Tax extends CommonTaxCollector
     protected $_discountTaxCompensationes = [];
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Tax\Model\Config $taxConfig
@@ -57,6 +64,7 @@ class Tax extends CommonTaxCollector
      * @param CustomerAddressFactory $customerAddressFactory
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param \Magento\Tax\Helper\Data $taxData
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
@@ -66,10 +74,12 @@ class Tax extends CommonTaxCollector
         \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory,
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
-        \Magento\Tax\Helper\Data $taxData
+        \Magento\Tax\Helper\Data $taxData,
+        Json $serializer = null
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $taxConfig,
             $taxCalculationService,
@@ -240,7 +250,7 @@ class Tax extends CommonTaxCollector
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function processExtraTaxables(Address\Total $total, Array $itemsByType)
+    protected function processExtraTaxables(Address\Total $total, array $itemsByType)
     {
         $extraTaxableDetails = [];
         foreach ($itemsByType as $itemType => $itemTaxDetails) {
@@ -299,8 +309,11 @@ class Tax extends CommonTaxCollector
         $totals = [];
         $store = $quote->getStore();
         $applied = $total->getAppliedTaxes();
+        if (is_string($applied)) {
+            $applied = $this->serializer->unserialize($applied);
+        }
         $amount = $total->getTaxAmount();
-        if ($amount == null) {
+        if ($amount === null) {
             $this->enhanceTotalData($quote, $total);
             $amount = $total->getTaxAmount();
         }
@@ -311,15 +324,13 @@ class Tax extends CommonTaxCollector
             $area = 'taxes';
         }
 
-        if ($amount != 0 || $this->_config->displayCartZeroTax($store)) {
-            $totals[] = [
-                'code' => $this->getCode(),
-                'title' => __('Tax'),
-                'full_info' => $applied ? $applied : [],
-                'value' => $amount,
-                'area' => $area,
-            ];
-        }
+        $totals[] = [
+            'code' => $this->getCode(),
+            'title' => __('Tax'),
+            'full_info' => $applied ? $applied : [],
+            'value' => $amount,
+            'area' => $area,
+        ];
 
         /**
          * Modify subtotal

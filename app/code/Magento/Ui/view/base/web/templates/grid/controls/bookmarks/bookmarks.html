@@ -1,55 +1,24 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-
-<div
-    class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks"
-    data-bind="collapsible"
-    data-role="toolbar-menu-item">
-    <button
-        class="admin__action-dropdown"
-        type="button"
-        data-bind="toggleCollapsible"
-        data-toggle="dropdown"
-        aria-haspopup="true">
-        <span
-            class="admin__action-dropdown-text"
-            data-bind="text: activeView.label"></span>
+<div class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks" collapsible>
+    <button class="admin__action-dropdown" type="button" toggleCollapsible>
+        <span class="admin__action-dropdown-text" text="activeView.label"/>
     </button>
     <ul class="admin__action-dropdown-menu">
-        <li 
-            data-bind="repeat: {
-                foreach: viewsArray,
-                item: '$view'
-            }"
-            data-repeat-bind="
-                css: {
-                    _edit: isEditing($view().index)
-                },
-                outerClick: endEdit.bind($data, $view().index),
-                template: viewTmpl
-            ">
-        </li>
-        <li data-bind="
-                visible: hasChanges,
-                outerClick: hideCustom.bind($data),
-                css: {
-                        _edit: customVisible,
-                        'action-dropdown-menu-action action-dropdown-menu-item-last': !customVisible
-                    }
-                ">
-            <a href=""
-                data-bind="
-                    visible: !customVisible,
-                    click: showCustom,
-                    i18n: 'Save View As...'
-                "></a>
-            <div class="action-dropdown-menu-item-edit" data-bind="visible: customVisible">
-                <input
-                    class="admin__control-text"
+        <repeat args="foreach: viewsArray, item: '$view'">
+            <li css="_edit: isEditing($view().index)" outerClick="endEdit.bind($data, $view().index)" template="viewTmpl"/>
+        </repeat>
+        <li visible="hasChanges" outerClick="hideCustom.bind($data)"
+            css="
+                _edit: customVisible,
+                'action-dropdown-menu-action action-dropdown-menu-item-last': !customVisible">
+            <a href="" visible="!customVisible" click="showCustom" translate="'Save View As...'"/>
+            <div class="action-dropdown-menu-item-edit" visible="customVisible">
+                <input class="admin__control-text" type="text"
                     data-bind="
                         value: customLabel,
                         autoselect,
@@ -57,18 +26,10 @@
                         keyboard: {
                             13: applyCustom.bind($data),
                             27: hideCustom.bind($data)
-                        }"
-                    type="text">
+                        }">
                 <div class="action-dropdown-menu-item-actions">
-                   <button
-                        class="action-submit"
-                        data-bind="
-                            attr: {
-                                title: $t('Save all changes')
-                            },
-                            click: applyCustom"
-                        type="button">
-                        <span data-bind="i18n: 'Submit'"></span>
+                   <button class="action-submit" type="button" click="applyCustom" attr="title: $t('Save all changes')">
+                        <span translate="'Submit'"/>
                     </button>
                 </div>
             </div>

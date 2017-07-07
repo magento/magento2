@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Link\Product;
@@ -8,7 +8,9 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Link\Product;
 /**
  * Catalog product linked products collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -139,7 +141,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             if (!is_array($products)) {
                 $products = [$products];
             }
-            $this->getSelect()->where('links.product_id IN (?)', $products);
+            $identifierField = $this->getProductEntityMetadata()->getIdentifierField();
+            $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products);
             $this->_hasLinkFilter = true;
         }
 
@@ -178,6 +181,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         if ($this->getLinkModel()) {
             $this->_joinLinks();
+            $this->joinProductsToLinks();
         }
         return parent::_beforeLoad();
     }
@@ -197,17 +201,26 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
         ];
         $joinType = 'join';
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
         if ($this->getProduct() && $this->getProduct()->getId()) {
-            $productId = $this->getProduct()->getId();
+            $linkFieldId = $this->getProduct()->getData(
+                $linkField
+            );
             if ($this->_isStrongMode) {
-                $this->getSelect()->where('links.product_id = ?', (int)$productId);
+                $this->getSelect()->where('links.product_id = ?', (int)$linkFieldId);
             } else {
                 $joinType = 'joinLeft';
-                $joinCondition[] = $connection->quoteInto('links.product_id = ?', $productId);
+                $joinCondition[] = $connection->quoteInto('links.product_id = ?', $linkFieldId);
             }
-            $this->addFieldToFilter('entity_id', ['neq' => $productId]);
+            $this->addFieldToFilter(
+                $linkField,
+                ['neq' => $linkFieldId]
+            );
         } elseif ($this->_isStrongMode) {
-            $this->addFieldToFilter('entity_id', ['eq' => -1]);
+            $this->addFieldToFilter(
+                $linkField,
+                ['eq' => -1]
+            );
         }
         if ($this->_hasLinkFilter) {
             $select->{$joinType}(
@@ -329,5 +342,24 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             }
         }
         return $this;
+    }
+
+    /**
+     * Join Product To Links
+     * @return void
+     */
+    private function joinProductsToLinks()
+    {
+        if ($this->_hasLinkFilter) {
+            $metaDataPool = $this->getProductEntityMetadata();
+            $linkField = $metaDataPool->getLinkField();
+            $entityTable = $metaDataPool->getEntityTable();
+            $this->getSelect()
+                ->join(
+                    ['product_entity_table' => $entityTable],
+                    "links.product_id = product_entity_table.$linkField",
+                    []
+                );
+        }
     }
 }

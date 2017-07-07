@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class ConstraintTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_validatorMock = $this->getMockBuilder(
-            'Magento\Framework\Validator\AbstractValidator'
+            \Magento\Framework\Validator\AbstractValidator::class
         )->setMethods(
             ['isValid', 'getMessages']
         )->getMock();
@@ -98,7 +98,9 @@ class ConstraintTest extends \PHPUnit_Framework_TestCase
     public function testSetTranslator()
     {
         /** @var \Magento\Framework\Translate\AbstractAdapter $translator */
-        $translator = $this->getMockBuilder('Magento\Framework\Translate\AdapterInterface')->getMockForAbstractClass();
+        $translator = $this->getMockBuilder(
+            \Magento\Framework\Translate\AdapterInterface::class
+        )->getMockForAbstractClass();
         $this->_constraint->setTranslator($translator);
         $this->assertEquals($translator, $this->_validatorMock->getTranslator());
         $this->assertEquals($translator, $this->_constraint->getTranslator());

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -86,12 +86,12 @@
                             <argument name="header_css_class" xsi:type="string">col-avg-rating</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="last_created">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="created_at">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Last Review</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
-                            <argument name="id" xsi:type="string">last_created</argument>
-                            <argument name="index" xsi:type="string">last_created</argument>
+                            <argument name="id" xsi:type="string">created_at</argument>
+                            <argument name="index" xsi:type="string">created_at</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>

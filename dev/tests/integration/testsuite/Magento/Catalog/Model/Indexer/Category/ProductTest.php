@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category;
@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Category;
 
 /**
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+ * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_products.php
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
@@ -30,19 +31,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
+            \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalog_category_product');
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\ResourceModel\Product'
+            \Magento\Catalog\Model\ResourceModel\Product::class
         );
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
-     * @magentoDbIsolation enabled
+     * @magentoAppArea adminhtml
      */
     public function testReindexAll()
     {
@@ -81,9 +81,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testCategoryMove()
     {
@@ -112,7 +109,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexer->reindexAll();
 
         /**
-         * Move category from $categoryThird to $categorySecond
+         * Move $categoryFourth from $categoryThird to $categorySecond
          */
         $categoryFourth->move($categorySecond->getId(), null);
 
@@ -168,17 +165,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $categorySecond->setIsAnchor(0);
         $categorySecond->save();
 
-        /** @var Category $categoryFifth */
-        $categoryFifth = end($categories);
+        /** @var Category $categoryFourth */
+        $categoryFourth = end($categories);
 
         /** @var Category $categorySixth */
         $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $categorySixth->setName(
             'Category 6'
         )->setPath(
-            $categoryFifth->getPath()
+            $categoryFourth->getPath()
         )->setAvailableSortBy(
             'name'
         )->setDefaultSortBy(
@@ -192,7 +189,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productThird->setCategoryIds([$categorySixth->getId()]);
         $productThird->save();
 
-        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFifth->getId()];
+        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
             $this->assertTrue((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
@@ -211,10 +208,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
 
-        $result = $category->getCollection()->getItems();
+        $result = $category->getCollection()->addAttributeToSelect('name')->getItems();
         $result = array_slice($result, 2);
 
         return array_slice($result, 0, $count);
@@ -228,7 +225,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
 
         $result[] = $product->load(1);

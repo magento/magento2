@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\App;
@@ -36,18 +36,18 @@ class CacheIdentifierPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up data for test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->designExceptionsMock = $this->getMock(
-            'Magento\Framework\View\DesignExceptions',
+            \Magento\Framework\View\DesignExceptions::class,
             ['getThemeByRequest'],
             [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->pageCacheConfigMock = $this->getMock(
-            'Magento\PageCache\Model\Config',
+            \Magento\PageCache\Model\Config::class,
             ['getType', 'isEnabled'],
             [],
             '',
@@ -73,7 +73,7 @@ class CacheIdentifierPluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGetValue($cacheType, $isPageCacheEnabled, $result, $uaException, $expected)
     {
-        $identifierMock = $this->getMock('Magento\Framework\App\PageCache\Identifier', [], [], '', false);
+        $identifierMock = $this->getMock(\Magento\Framework\App\PageCache\Identifier::class, [], [], '', false);
 
         $this->pageCacheConfigMock->expects($this->once())
             ->method('getType')

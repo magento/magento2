@@ -1,15 +1,17 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/* @api */
 define([
-    "jquery",
-    "mage/template",
+    'jquery',
+    'mage/template',
     'Magento_Ui/js/modal/alert',
-    "jquery/ui",
-    "Magento_Payment/js/model/credit-card-validation/validator"
-], function($, mageTemplate, alert){
+    'jquery/ui',
+    'Magento_Payment/js/model/credit-card-validation/validator',
+    'Magento_Checkout/js/model/full-screen-loader'
+], function ($, mageTemplate, alert, ui, validator, fullScreenLoader) {
     'use strict';
 
     $.widget('mage.transparent', {
@@ -20,7 +22,8 @@ define([
             updateSelectorPrefix: '#checkout-',
             updateSelectorSuffix: '-load',
             hiddenFormTmpl:
-                '<form target="<%= data.target %>" action="<%= data.action %>" method="POST" hidden enctype="application/x-www-form-urlencoded" class="no-display">' +
+                '<form target="<%= data.target %>" action="<%= data.action %>" method="POST" ' +
+                'hidden enctype="application/x-www-form-urlencoded" class="no-display">' +
                     '<% _.each(data.inputs, function(val, key){ %>' +
                     '<input value="<%= val %>" name="<%= key %>" type="hidden">' +
                     '<% }); %>' +
@@ -35,7 +38,11 @@ define([
             expireYearLength: 2
         },
 
-        _create: function() {
+        /**
+         * {Function}
+         * @private
+         */
+        _create: function () {
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
 
             if (this.options.context) {
@@ -58,8 +65,8 @@ define([
          * @return {Boolean}
          * @private
          */
-        _validateHandler: function() {
-            return (this.element.validation && this.element.validation('isValid'));
+        _validateHandler: function () {
+            return this.element.validation && this.element.validation('isValid');
         },
 
         /**
@@ -67,10 +74,11 @@ define([
          * @return {Boolean}
          * @private
          */
-        _placeOrderHandler: function() {
+        _placeOrderHandler: function () {
             if (this._validateHandler()) {
                 this._orderSave();
             }
+
             return false;
         },
 
@@ -78,8 +86,9 @@ define([
          * Save order and generate post data for gateway call
          * @private
          */
-        _orderSave: function() {
+        _orderSave: function () {
             var postData = $(this.options.paymentFormSelector).serialize();
+
             if ($(this.options.reviewAgreementForm).length) {
                 postData += '&' + $(this.options.reviewAgreementForm).serialize();
             }
@@ -94,10 +103,28 @@ define([
                 context: this,
                 data: postData,
                 dataType: 'json',
-                beforeSend: function() {this.element.trigger('showAjaxLoader');},
-                success: function(response) {
+
+                /**
+                 * {Function}
+                 */
+                beforeSend: function () {
+                    fullScreenLoader.startLoader();
+                },
+
+                /**
+                 * {Function}
+                 */
+                success: function (response) {
                     var preparedData,
-                        msg;
+                        msg,
+
+                        /**
+                         * {Function}
+                         */
+                        alertActionHandler = function () {
+                            // default action
+                        };
+
                     if (response.success && response[this.options.gateway]) {
                         preparedData = this._preparePaymentData(
                             response[this.options.gateway].fields,
@@ -105,30 +132,46 @@ define([
                         );
                         this._postPaymentToGateway(preparedData);
                     } else {
-                        msg = response.error_messages;
-                        if (typeof (msg) === 'object') {
-                            alert({
-                                content: msg.join("\n")
-                            });
+                        fullScreenLoader.stopLoader(true);
+
+                        msg = response['error_messages'];
+
+                        if (this.options.context) {
+                            this.options.context.clearTimeout().fail();
+                            alertActionHandler = this.options.context.alertActionHandler;
                         }
+
+                        if (typeof msg === 'object') {
+                            msg = msg.join('\n');
+                        }
+
                         if (msg) {
-                            alert({
-                                content: msg
-                            });
+                            alert(
+                                {
+                                    content: msg,
+                                    actions: {
+
+                                        /**
+                                         * {Function}
+                                         */
+                                        always: alertActionHandler
+                                    }
+                                }
+                            );
                         }
                     }
-                }
+                }.bind(this)
             });
         },
 
         /**
          * Post data to gateway for credit card validation
-         * @param data
+         * @param {Object} data
          * @private
          */
-        _postPaymentToGateway: function(data) {
-            var tmpl;
-            var iframeSelector = '[data-container="' + this.options.gateway + '-transparent-iframe"]';
+        _postPaymentToGateway: function (data) {
+            var tmpl,
+                iframeSelector = '[data-container="' + this.options.gateway + '-transparent-iframe"]';
 
             tmpl = this.hiddenFormTmpl({
                 data: {
@@ -142,35 +185,39 @@ define([
 
         /**
          * Add credit card fields to post data for gateway
-         * @param data
-         * @param ccfields
+         * @param {Object} data
+         * @param {Object} ccfields
          * @private
          */
-        _preparePaymentData: function(data, ccfields) {
+        _preparePaymentData: function (data, ccfields) {
+            var preparedata;
+
             if (this.element.find('[data-container="' + this.options.gateway + '-cc-cvv"]').length) {
                 data[ccfields.cccvv] = this.element.find(
                     '[data-container="' + this.options.gateway + '-cc-cvv"]'
                 ).val();
             }
-            var preparedata = this._prepareExpDate();
+            preparedata = this._prepareExpDate();
             data[ccfields.ccexpdate] = preparedata.month + this.options.dateDelim + preparedata.year;
             data[ccfields.ccnum] = this.element.find(
                 '[data-container="' + this.options.gateway + '-cc-number"]'
             ).val();
+
             return data;
         },
 
         /**
          * Grab Month and Year into one
-         * @returns {object}
+         * @returns {Object}
          * @private
          */
-        _prepareExpDate: function() {
+        _prepareExpDate: function () {
             var year = this.element.find('[data-container="' + this.options.gateway + '-cc-year"]').val(),
                 month = parseInt(
                     this.element.find('[data-container="' + this.options.gateway + '-cc-month"]').val(),
                     10
                 );
+
             if (year.length > this.options.expireYearLength) {
                 year = year.substring(year.length - this.options.expireYearLength);
             }
@@ -178,7 +225,10 @@ define([
             if (month < 10) {
                 month = '0' + month;
             }
-            return {month: month, year: year};
+
+            return {
+                month: month, year: year
+            };
         }
     });
 

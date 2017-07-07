@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,18 +22,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var Config */
     protected $config;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $this->urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
         $this->urnResolverMock->expects($this->any())
             ->method('getRealPath')
             ->with('urn:magento:framework:App/Language/package.xsd')
             ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'));
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
-        $domFactoryMock = $this->getMock('Magento\Framework\Config\DomFactory', [], [], '', false);
+        $domFactoryMock = $this->getMock(\Magento\Framework\Config\DomFactory::class, [], [], '', false);
         $domFactoryMock->expects($this->once())
             ->method('createDom')
             ->willReturnCallback(
@@ -57,8 +63,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testConfiguration()
     {
         $this->assertEquals('en_GB', $this->config->getCode());
-        $this->assertEquals('magento', $this->config->getVendor());
-        $this->assertEquals('en_gb', $this->config->getPackage());
+        $this->assertEquals('Magento', $this->config->getVendor());
+        $this->assertEquals('en_GB', $this->config->getPackage());
         $this->assertEquals('100', $this->config->getSortOrder());
         $this->assertEquals(
             [

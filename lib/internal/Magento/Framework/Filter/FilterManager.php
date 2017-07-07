@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
@@ -8,6 +8,7 @@ namespace Magento\Framework\Filter;
 /**
  * Magento Filter Manager
  *
+ * @api
  * @method string email(string $value)
  * @method string money(string $value, $params = array())
  * @method string simple(string $value, $params = array())

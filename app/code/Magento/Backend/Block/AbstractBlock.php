@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
 
 /**
- * Backend abstract block
+ * Base for all admin blocks.
+ *
+ * Avoid using this class. Will be deprecated
+ *
+ * Marked as public API because it is actively used now.
+ * @api
  */
 class AbstractBlock extends \Magento\Framework\View\Element\AbstractBlock
 {

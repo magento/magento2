@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,43 +10,46 @@
 
 <form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
     <fieldset class="admin__fieldset">
-        <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Welcome, please sign in') ?></span></legend><br/>
-        <input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
+        <legend class="admin__legend">
+            <span><?= /* @escapeNotVerified */ __('Welcome, please sign in') ?></span>
+        </legend><br/>
+        <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
         <div class="admin__field _required field-username">
-            <label for="username" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Username') ?></span></label>
+            <label for="username" class="admin__field-label">
+                <span><?= /* @escapeNotVerified */ __('Username') ?></span>
+            </label>
             <div class="admin__field-control">
-                <input
-                    id="username"
-                    class="admin__control-text"
-                    type="text"
-                    name="login[username]"
-                    autofocus
-                    value=""
-                    data-validate="{required:true}"
-                    placeholder="<?php /* @escapeNotVerified */ echo __('user name') ?>"/>
+                <input id="username"
+                       class="admin__control-text"
+                       type="text"
+                       name="login[username]"
+                       autofocus
+                       value=""
+                       data-validate="{required:true}"
+                       placeholder="<?= /* @escapeNotVerified */ __('user name') ?>"
+                       autocomplete="off"
+                    />
             </div>
         </div>
         <div class="admin__field _required field-password">
-            <label for="login" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
+            <label for="login" class="admin__field-label">
+                <span><?= /* @escapeNotVerified */ __('Password') ?></span>
+            </label>
             <div class="admin__field-control">
-                <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
-                <input
-                    id="dummy"
-                    class="admin__control-dummy"
-                    type="text"
-                    name="dummy"/>
-                <input
-                    id="login"
-                    class="admin__control-text"
-                    type="password"
-                    name="login[password]"
-                    data-validate="{required:true}"
-                    value="" placeholder="<?php /* @escapeNotVerified */ echo __('password') ?>" />
+                <input id="login"
+                       class="admin__control-text"
+                       type="password"
+                       name="login[password]"
+                       data-validate="{required:true}"
+                       value=""
+                       placeholder="<?= /* @escapeNotVerified */ __('password') ?>"
+                       autocomplete="new-password"
+                    />
             </div>
         </div>
-        <?php echo $block->getChildHtml('form.additional.info'); ?>
+        <?= $block->getChildHtml('form.additional.info') ?>
         <div class="form-actions">
-            <?php echo $block->getChildHtml('form.buttons'); ?>
+            <?= $block->getChildHtml('form.buttons') ?>
         </div>
     </fieldset>
 </form>

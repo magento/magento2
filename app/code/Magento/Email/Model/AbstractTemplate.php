@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\DataObject;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Information as StoreInformation;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -20,6 +20,7 @@ use Magento\Store\Model\Store;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @api
  */
 abstract class AbstractTemplate extends AbstractModel implements TemplateTypesInterface
 {
@@ -352,7 +353,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
-            throw new \LogicException(__($e->getMessage()), $e);
+            throw new \LogicException(__($e->getMessage()), $e->getCode(), $e);
         }
         if ($isDesignApplied) {
             $this->cancelDesignConfig();
@@ -389,7 +390,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $store
         );
         if ($fileName) {
-            $uploadDir = \Magento\Config\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
+            $uploadDir = \Magento\Email\Model\Design\Backend\Logo::UPLOAD_DIR;
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
                 return $this->storeManager->getStore()->getBaseUrl(
@@ -663,17 +664,16 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Save current design config and replace with design config from specified store
      * Event is not dispatched.
      *
-     * @param int|string $storeId
+     * @param null|bool|int|string $storeId
      * @param string $area
      * @return void
      */
     public function emulateDesign($storeId, $area = self::DEFAULT_DESIGN_AREA)
     {
-        if ($storeId) {
+        if ($storeId !== null && $storeId !== false) {
             // save current design settings
             $this->emulatedDesignConfig = clone $this->getDesignConfig();
-            if (
-                $this->getDesignConfig()->getStore() != $storeId
+            if ($this->getDesignConfig()->getStore() != $storeId
                 || $this->getDesignConfig()->getArea() != $area
             ) {
                 $this->setDesignConfig(['area' => $area, 'store' => $storeId]);

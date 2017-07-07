@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer;
@@ -74,24 +74,24 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = Bootstrap::getObjectManager()->create(
-            'Magento\Indexer\Model\Indexer'
+            \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalogsearch_fulltext');
 
         $this->engine = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\ResourceModel\Engine'
+            \Magento\CatalogSearch\Model\ResourceModel\Engine::class
         );
 
         $this->resourceFulltext = Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\ResourceModel\Fulltext'
+            \Magento\CatalogSearch\Model\ResourceModel\Fulltext::class
         );
 
         $this->queryFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Search\Model\QueryFactory'
+            \Magento\Search\Model\QueryFactory::class
         );
 
         $this->dimension = Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Search\Request\Dimension',
+            \Magento\Framework\Search\Request\Dimension::class,
             ['name' => 'scope', 'value' => '1']
         );
 
@@ -152,7 +152,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product\Action $action */
         $action = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Action'
+            \Magento\Catalog\Model\Product\Action::class
         );
         $action->updateAttributes($productIds, $attrData, 1);
 
@@ -223,7 +223,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         return $product->loadByAttribute('sku', $sku);
     }

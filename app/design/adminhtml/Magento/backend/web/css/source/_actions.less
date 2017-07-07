@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -33,6 +33,7 @@
     padding: @button__padding-top @button__padding-horizontal @button__padding-bottom;
     text-align: center;
     vertical-align: baseline;
+
     &[disabled],
     &.disabled {
         cursor: default;
@@ -57,17 +58,35 @@
     padding-top: .7rem;
     text-decoration: none;
     vertical-align: middle;
+
     &:after {
         color: @color-very-dark-gray;
         content: @icon-delete__content;
     }
+
     &:hover {
         &:after {
             color: @color-very-dark-gray-black2;
         }
     }
+
     > span {
         &:extend(.abs-visually-hidden all);
+    }
+}
+
+.abs-action-button-as-link {
+    .lib-button-as-link(@_margin: false);
+    .lib-css(font-weight, @font-weight__regular);
+    border-radius: 0;
+
+    &:active,
+    &:not(:focus) {
+        box-shadow: none;
+    }
+
+    &:focus {
+        color: @link__hover__color;
     }
 }
 
@@ -98,8 +117,10 @@
 //  Triangle Wrap
 .abs-action-wrap-triangle {
     position: relative;
+
     .action-default {
         width: 100%;
+
         &:before,
         &:after {
             border-style: solid;
@@ -109,16 +130,19 @@
             top: 0;
             width: 0;
         }
+
         &:active,
         &:hover,
         &:focus {
             box-shadow: none;
         }
+
         &:focus {
             ._keyfocus & {
                 box-shadow: @button__hover__box-shadow;
             }
         }
+
         &[disabled],
         &.disabled {
             .ie9 &,
@@ -145,10 +169,12 @@
             left: 100%;
             margin-left: -(@button-triangle__base__size);
         }
+
         &:before {
             border-left-color: @button-triangle__base__border-color;
             right: -1px;
         }
+
         &:hover,
         &:active,
         &:focus {
@@ -156,6 +182,7 @@
                 border-left-color: @button__hover__background-color;
             }
         }
+
         //  Disabled state for IE9, IE10
         &.disabled,
         &[disabled] {
@@ -172,6 +199,7 @@
         &:after {
             border-color: transparent transparent transparent @button-primary__background-color;
         }
+
         &:hover,
         &:active,
         &:focus {
@@ -189,6 +217,7 @@
 
     .action-default {
         text-indent: -(@button-triangle__base__size) / 2;
+
         &:before,
         &:after {
             border-color: transparent @button__background-color transparent transparent;
@@ -196,10 +225,12 @@
             margin-right: -(@button-triangle__base__size);
             right: 100%;
         }
+
         &:before {
             border-right-color: @button-triangle__base__border-color;
             left: -1px;
         }
+
         &:hover,
         &:active,
         &:focus {
@@ -207,6 +238,7 @@
                 border-right-color: @button__hover__background-color;
             }
         }
+
         //  Disabled state for IE9, IE10
         &.disabled,
         &[disabled] {
@@ -223,6 +255,7 @@
         &:after {
             border-color: transparent @button-primary__background-color transparent transparent;
         }
+
         &:hover,
         &:active,
         &:focus {
@@ -244,6 +277,7 @@ button {
     background: @button__background-color;
     border-color: @button__border-color;
     color: @button__color;
+
     &:hover,
     &:active,
     &:focus {
@@ -263,6 +297,7 @@ button {
     border-color: @button-primary__background-color;
     color: @button-primary__color;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
+
     &:hover,
     &:active,
     &:focus {
@@ -272,6 +307,7 @@ button {
         color: @button-primary__color;
         text-decoration: none;
     }
+
     &.disabled,
     &[disabled] {
         cursor: default;
@@ -290,6 +326,7 @@ button {
     border-color: @button-secondary__border-color;
     color: @button-secondary__color;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+
     &:hover,
     &:active,
     &:focus {
@@ -299,6 +336,7 @@ button {
         color: @button-secondary__color;
         text-decoration: none;
     }
+
     &:active {
         background-color: @button-secondary__active__background-color;
     }
@@ -314,6 +352,7 @@ button {
     background-color: transparent;
     border-color: transparent;
     text-shadow: none;
+
     &:active,
     &:hover,
     &:focus {
@@ -325,6 +364,7 @@ button {
 
 .action-tertiary {
     color: @link__color;
+
     &:active,
     &:hover,
     &:focus {
@@ -335,6 +375,7 @@ button {
 
 .action-quaternary {
     color: @text__color;
+
     &:active,
     &:hover,
     &:focus {
@@ -350,19 +391,30 @@ button {
     > span {
         .hidden();
     }
+
     &:extend(.abs-action-reset all);
     &:active {
         .scale();
     }
+
     &:before {
         &:extend(.abs-icon all);
         content: @icon-close-mage__content;
         .transition(color);
     }
+
     &:hover {
         cursor: pointer;
         text-decoration: none;
     }
+}
+
+.action-basic {
+    &:extend(.abs-action-secondary all);
+}
+
+.action-additional {
+    &:extend(.abs-action-button-as-link all);
 }
 
 //
@@ -386,44 +438,54 @@ button {
     position: absolute;
     right: 0;
     top: 100%;
+
     &._active {
         display: block;
     }
+
     > li {
         border: none; // ToDo UI: Should be deleted with old styles
         display: block;
         padding: 0;
         transition: background-color .1s linear;
+
         > a {
             &:hover {
                 text-decoration: none;
             }
         }
+
         &._visible {
             background-color: @action-menu__hover__background-color;
         }
+
         &:hover {
             background-color: @action-menu__hover__background-color;
         }
+
         &:active {
             background-color: darken(@action-menu__hover__background-color, 10%);
         }
+
         &._parent {
             .lib-vendor-prefix-display(flex);
             .lib-vendor-prefix-flex-direction(row);
             display: flex;
             flex-direction: row;
+
             > .action-menu-item {
                 min-width: 100%;
             }
         }
     }
+
     .item,
     .action-menu-item {
+        cursor: pointer;
         display: block;
         padding: .6875em 1em;
-        cursor: pointer;
     }
+
     .action-submenu {
         &:extend(.action-menu all);
         bottom: auto;
@@ -433,14 +495,17 @@ button {
         position: absolute;
         right: auto;
         top: auto;
+
         .ie9 & {
             margin-left: 99%;
             margin-top: -3.5rem;
         }
     }
+
     a {
         &.action-menu-item {
             color: @text__color;
+
             &:focus {
                 background-color: @action-menu__hover__background-color;
                 box-shadow: none;
@@ -458,9 +523,11 @@ button {
     &.primary {
         &:extend(.abs-action-primary all);
     }
+
     &.secondary {
         &:extend(.abs-action-secondary all);
     }
+
     &.tertiary {
         &:extend(.abs-action-tertiary all);
     }

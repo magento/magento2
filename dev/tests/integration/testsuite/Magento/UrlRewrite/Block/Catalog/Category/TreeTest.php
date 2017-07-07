@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Category;
@@ -24,9 +24,9 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_treeBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\UrlRewrite\Block\Catalog\Category\Tree'
+            \Magento\UrlRewrite\Block\Catalog\Category\Tree::class
         );
     }
 
@@ -34,6 +34,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      * Test for method \Magento\UrlRewrite\Block\Catalog\Category\Tree::getTreeArray()
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_products.php
      */
     public function testGetTreeArray()
     {
@@ -63,6 +64,6 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     public function testGetCategoryCollection()
     {
         $collection = $this->_treeBlock->getCategoryCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Collection', $collection);
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Collection::class, $collection);
     }
 }

@@ -2,7 +2,7 @@
 /**
  * Client for invoking REST API
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase\Webapi\Adapter\Rest;
@@ -10,6 +10,7 @@ namespace Magento\TestFramework\TestCase\Webapi\Adapter\Rest;
 class CurlClient
 {
     const EMPTY_REQUEST_BODY = 'Empty body';
+
     /**
      * @var string REST URL base path
      */

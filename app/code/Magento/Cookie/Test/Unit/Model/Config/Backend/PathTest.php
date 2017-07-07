@@ -2,7 +2,7 @@
 /**
  * Unit test for Magento\Cookie\Model\Config\Backend\Path
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,17 +24,19 @@ class PathTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Cookie\Model\Config\Backend\Path */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->validatorMock = $this->getMockBuilder('Magento\Framework\Session\Config\Validator\CookiePathValidator')
+        $this->validatorMock = $this->getMockBuilder(
+            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Module\ModuleResource')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Cookie\Model\Config\Backend\Path',
+        $this->model = $objectManager->getObject(
+            \Magento\Cookie\Model\Config\Backend\Path::class,
             [
                 'configValidator' => $this->validatorMock,
                 'resource' => $this->resourceMock

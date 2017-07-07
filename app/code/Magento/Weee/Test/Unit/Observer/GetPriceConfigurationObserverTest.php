@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,32 +28,32 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
         $weeeObject1 = new \Magento\Framework\DataObject(
             [
                 'code' => 'fpt1',
-                'amount_excl_tax' => '15.0000',
+                'amount' => '15.0000',
             ]
         );
 
         $weeeObject2 = new \Magento\Framework\DataObject(
             [
                 'code' => 'fpt2',
-                'amount_excl_tax' => '16.0000',
+                'amount' => '16.0000',
             ]
         );
 
-        $weeeHelper=$this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
+        $weeeHelper=$this->getMock(\Magento\Weee\Helper\Data::class, [], [], '', false);
         $weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->will($this->returnValue(true));
 
-        $observerObject=$this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observerObject=$this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
             ->will($this->returnValue($configObj));
 
-        $productInstance=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
+        $productInstance=$this->getMock(\Magento\Catalog\Model\Product\Type\Simple::class, [], [], '', false);
 
         $product=$this->getMock(
-            '\Magento\Bundle\Model\Product\Type',
+            \Magento\Bundle\Model\Product\Type::class,
             ['getTypeInstance', 'getTypeId', 'getStoreId'],
             [],
             '',
@@ -69,7 +69,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreId')
             ->will($this->returnValue(null));
 
-        $registry=$this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $registry=$this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
@@ -94,7 +94,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         /** @var \Magento\Weee\Observer\GetPriceConfigurationObserver $weeeObserverObject */
         $weeeObserverObject = $objectManager->getObject(
-            'Magento\Weee\Observer\GetPriceConfigurationObserver',
+            \Magento\Weee\Observer\GetPriceConfigurationObserver::class,
             [
                 'weeeData' => $weeeHelper,
                 'registry' => $registry,

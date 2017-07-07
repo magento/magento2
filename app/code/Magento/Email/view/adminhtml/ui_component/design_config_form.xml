@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="other_settings">
+        <fieldset name="email">
+            <settings>
+                <level>1</level>
+                <collapsible>true</collapsible>
+                <label translate="true">Transactional Emails</label>
+            </settings>
+            <field name="email_logo" formElement="fileUploader">
+                <settings>
+                    <notice translate="true">Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in the width/height fields below.</notice>
+                    <label translate="true">Logo Image</label>
+                    <componentType>fileUploader</componentType>
+                </settings>
+                <formElements>
+                    <fileUploader>
+                        <settings>
+                            <allowedExtensions>jpg jpeg gif png</allowedExtensions>
+                            <maxFileSize>2097152</maxFileSize>
+                            <uploaderConfig>
+                                <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>
+                            </uploaderConfig>
+                        </settings>
+                    </fileUploader>
+                </formElements>
+            </field>
+            <field name="email_logo_alt" formElement="input">
+                <settings>
+                    <validation>
+                        <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>text</dataType>
+                    <label translate="true">Logo Image Alt</label>
+                    <dataScope>email_logo_alt</dataScope>
+                </settings>
+            </field>
+            <field name="email_logo_width" formElement="input">
+                <settings>
+                    <notice translate="true">Necessary only if an image has been uploaded above. Enter number of pixels, without appending "px".</notice>
+                    <validation>
+                        <rule name="validate-digits" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>number</dataType>
+                    <label translate="true">Logo Width</label>
+                    <dataScope>email_logo_width</dataScope>
+                </settings>
+            </field>
+            <field name="email_logo_height" formElement="input">
+                <settings>
+                    <notice translate="true">Necessary only if an image has been uploaded above. Enter image height size in pixels without appending "px".</notice>
+                    <validation>
+                        <rule name="validate-digits" xsi:type="boolean">true</rule>
+                    </validation>
+                    <dataType>number</dataType>
+                    <label translate="true">Logo Height</label>
+                    <dataScope>email_logo_height</dataScope>
+                </settings>
+            </field>
+            <field name="email_header_template" formElement="select">
+                <settings>
+                    <notice translate="true">Email template chosen based on theme fallback, when the "Default" option is selected.</notice>
+                    <dataType>text</dataType>
+                    <label translate="true">Header Template</label>
+                    <dataScope>email_header_template</dataScope>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Email\Template\Header"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <field name="email_footer_template" formElement="select">
+                <settings>
+                    <notice translate="true">Email template chosen based on theme fallback, when the "Default" option is selected.</notice>
+                    <dataType>text</dataType>
+                    <label translate="true">Footer Template</label>
+                    <dataScope>email_footer_template</dataScope>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Magento\Config\Model\Config\Source\Email\Template\Footer"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+        </fieldset>
+    </fieldset>
+</form>

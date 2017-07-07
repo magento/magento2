@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="One page check out with Authorize.Net payment method.">
-        <variation name="OnePageCheckoutAuthorizenetTestVariation1" summary="Check Out as a Guest with Authorize.Net and Offline Shipping method" ticketId="MAGETWO-12832">
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
-            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="One page check out with Authorize.Net Direct Post payment method.">
+        <variation name="OnePageCheckoutAuthorizenetTestVariation1" summary="CheckOut with Authorize.Net Direct Post" ticketId="MAGETWO-59170">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
-            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">156.81</item>
+                <item name="grandTotal" xsi:type="string">15.00</item>
             </data>
-            <data name="payment/method" xsi:type="string">authorizenet</data>
+            <data name="payment/method" xsi:type="string">authorizenet_directpost</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="configData" xsi:type="string">authorizenet</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
     </testCase>
 </config>

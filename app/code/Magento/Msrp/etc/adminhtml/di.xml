@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,4 +9,14 @@
     <type name="Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes">
         <plugin name="bundle_msrp_plugin" type="Magento\Msrp\Plugin\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes"/>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="mrsp" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Msrp\Ui\DataProvider\Product\Form\Modifier\Msrp</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,14 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
  * 3. Click "Reset Filter".
  * 4. Perform all assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28558
  */
 class AbandonedCartsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -89,12 +89,12 @@ class AbandonedCartsReportEntityTest extends Injectable
         $products = $this->createProducts($products);
         $customer->persist();
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $this->addProductsToCart($products);
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
 
@@ -110,7 +110,7 @@ class AbandonedCartsReportEntityTest extends Injectable
     protected function createProducts($products)
     {
         $createProductsStep = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $products]
         );
 
@@ -126,7 +126,7 @@ class AbandonedCartsReportEntityTest extends Injectable
     protected function addProductsToCart(array $products)
     {
         $addProductsToCart = $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => $products]
         );
         $addProductsToCart->run();

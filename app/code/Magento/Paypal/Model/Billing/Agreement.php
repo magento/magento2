@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Billing;
@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Billing Agreement abstract model
  *
+ * @api
  * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement _getResource()
  * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement getResource()
  * @method int getCustomerId()
@@ -28,6 +29,8 @@ use Magento\Sales\Model\Order\Payment;
  * @method \Magento\Paypal\Model\Billing\Agreement setStoreId(int $value)
  * @method string getAgreementLabel()
  * @method \Magento\Paypal\Model\Billing\Agreement setAgreementLabel(string $value)
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
 {
@@ -84,7 +87,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\ResourceModel\Billing\Agreement');
+        $this->_init(\Magento\Paypal\Model\ResourceModel\Billing\Agreement::class);
     }
 
     /**

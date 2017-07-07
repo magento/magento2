@@ -1,6 +1,6 @@
- <!--
+<!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,31 +9,33 @@
         <span class="price" data-bind="text: getFormattedPrice(getRowDisplayPriceExclTax($parents[2]))"></span>
     </span>
 <!-- /ko -->
+
 <!-- ko ifnot: (isDisplayPriceWithWeeeDetails($parents[2])) -->
-    <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(getRowDisplayPriceExclTax($parents[2]))"></span></span>
+    <span class="cart-price">
+        <span class="price" data-bind="text: getFormattedPrice(getRowDisplayPriceExclTax($parents[2]))"></span>
+    </span>
 <!-- /ko -->
 
 <!--ko if:  (getWeeeTaxApplied($parents[2]).length > 0) -->
-<!-- ko ifnot:  (isDisplayPriceWithWeeeDetails($parents[2])) -->
-<span class="cart-tax-info" data-bind ="attr: {'id': 'esubtotal-item-tax-details' + $parents[2].item_id}" style="display: none;"></span>
-<!-- /ko -->
-<!-- ko if:  (isDisplayPriceWithWeeeDetails($parents[2])) -->
-<span class="cart-tax-info" data-bind ="attr: {'id': 'esubtotal-item-tax-details' + $parents[2].item_id}" style="display: none;">
+    <!-- ko ifnot:  (isDisplayPriceWithWeeeDetails($parents[2])) -->
+        <span class="cart-tax-info" data-bind ="attr: {'id': 'esubtotal-item-tax-details' + $parents[2].item_id}" style="display: none;"></span>
+    <!-- /ko -->
+
+    <!-- ko if:  (isDisplayPriceWithWeeeDetails($parents[2])) -->
+        <span class="cart-tax-info" data-bind ="attr: {'id': 'esubtotal-item-tax-details' + $parents[2].item_id}" style="display: none;">
          <!-- ko foreach: getWeeeTaxApplied($parents[2]) -->
             <span class="weee" data-bind="attr:{'data-label':title}">
                 <span class="price" data-bind="text: $parent.getFormattedPrice(row_amount)"></span>
             </span>
          <!-- /ko -->
         </span>
-<!-- /ko -->
+    <!-- /ko -->
 
-<!-- ko if: isDisplayFinalPrice($parents[2]) -->
+    <!-- ko if: isDisplayFinalPrice($parents[2]) -->
         <span class="cart-tax-total" data-bind="mageInit: {taxToggle: {itemTaxId : '#esubtotal-item-tax-details'+$parents[2].item_id}}">
             <span class="weee" data-bind="attr: {'data-label':$t('Total')}">
-                <span class="price" data-bind="text: getFormattedPrice(getFinalRowDisplayPriceExclTax($parents[2]))">
-
-                </span>
+                <span class="price" data-bind="text: getFormattedPrice(getFinalRowDisplayPriceExclTax($parents[2]))"></span>
             </span>
         </span>
-<!-- /ko -->
+    <!-- /ko -->
 <!-- /ko -->

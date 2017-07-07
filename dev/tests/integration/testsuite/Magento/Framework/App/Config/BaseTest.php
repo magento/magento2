@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -14,10 +14,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 <root><key>value</key></root>
 XML;
         $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Config\Base',
+            \Magento\Framework\App\Config\Base::class,
             ['sourceData' => $xml]
         );
 
-        $this->assertInstanceOf('Magento\Framework\App\Config\Element', $config->getNode('key'));
+        $this->assertInstanceOf(\Magento\Framework\App\Config\Element::class, $config->getNode('key'));
     }
 }

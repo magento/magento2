@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,11 +11,11 @@
             <span class="price-wrapper" data-bind="html: cart().subtotal_excl_tax"></span>
         <!-- /ko -->
 
-        <!-- ko if: !display_cart_subtotal_excl_tax && display_subtotal_incl_tax -->
+        <!-- ko if: !display_cart_subtotal_excl_tax && display_cart_subtotal_incl_tax -->
             <span class="price-wrapper" data-bind="html: cart().subtotal_incl_tax"></span>
         <!-- /ko -->
 
-        <!-- ko if: !display_cart_subtotal_excl_tax && !display_subtotal_incl_tax -->
+        <!-- ko if: !display_cart_subtotal_excl_tax && !display_cart_subtotal_incl_tax -->
             <span class="price-wrapper price-including-tax"
                   data-bind="attr: { 'data-label': $t('Incl. Tax') }, html: cart().subtotal_incl_tax">
             </span>

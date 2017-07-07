@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -169,14 +169,14 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the base discount amount for a credit memo item.
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountAmount();
 
     /**
      * Gets the base discount tax compensation amount for a credit memo item.
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -275,7 +275,7 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the discount tax compensation amount for a credit memo item.
      *
-     * @return float Discount tax compensation amount.
+     * @return float|null Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 

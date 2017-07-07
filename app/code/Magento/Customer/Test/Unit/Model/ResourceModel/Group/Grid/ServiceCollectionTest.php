@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,25 +36,25 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var ServiceCollection */
     protected $serviceCollection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->filterBuilder = $this->objectManager->getObject('Magento\Framework\Api\FilterBuilder');
+        $this->filterBuilder = $this->objectManager->getObject(\Magento\Framework\Api\FilterBuilder::class);
         $filterGroupBuilder = $this->objectManager
-            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
+            ->getObject(\Magento\Framework\Api\Search\FilterGroupBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $this->searchCriteriaBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
         $this->sortOrderBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Api\SortOrderBuilder'
+            \Magento\Framework\Api\SortOrderBuilder::class
         );
-        $this->groupRepositoryMock = $this->getMockBuilder('\Magento\Customer\Api\GroupRepositoryInterface')
+        $this->groupRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\GroupRepositoryInterface::class)
             ->getMock();
 
         $this->searchResults = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\SearchResultsInterface',
+            \Magento\Framework\Api\SearchResultsInterface::class,
             ['getTotalCount', 'getItems']
         );
 
@@ -68,7 +68,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->serviceCollection = $this->objectManager
             ->getObject(
-                'Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection',
+                \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class,
                 [
                     'filterBuilder' => $this->filterBuilder,
                     'searchCriteriaBuilder' => $this->searchCriteriaBuilder,

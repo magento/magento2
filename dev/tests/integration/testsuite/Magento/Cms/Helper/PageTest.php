@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Helper;
@@ -20,33 +20,33 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $httpContext = $objectManager->get('Magento\Framework\App\Http\Context');
+        $httpContext = $objectManager->get(\Magento\Framework\App\Http\Context::class);
         $httpContext->setValue(Context::CONTEXT_AUTH, false, false);
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
         $arguments = [
-            'request' => $objectManager->get('Magento\TestFramework\Request'),
-            'response' => $objectManager->get('Magento\TestFramework\Response'),
+            'request' => $objectManager->get(\Magento\TestFramework\Request::class),
+            'response' => $objectManager->get(\Magento\TestFramework\Response::class),
         ];
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Action\Context',
+            \Magento\Framework\App\Action\Context::class,
             $arguments
         );
-        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\Page');
+        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Model\Page::class);
         $page->load('page_design_blank', 'identifier');
         // fixture
         /** @var $pageHelper \Magento\Cms\Helper\Page */
-        $pageHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Helper\Page');
+        $pageHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Helper\Page::class);
         $result = $pageHelper->prepareResultPage(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Framework\App\Test\Unit\Action\Stub\ActionStub',
+                \Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class,
                 ['context' => $context]
             ),
             $page->getId()
         );
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         );
         $this->assertEquals('Magento/blank', $design->getDesignTheme()->getThemePath());
-        $this->assertInstanceOf('Magento\Framework\View\Result\Page', $result);
+        $this->assertInstanceOf(\Magento\Framework\View\Result\Page::class, $result);
     }
 }

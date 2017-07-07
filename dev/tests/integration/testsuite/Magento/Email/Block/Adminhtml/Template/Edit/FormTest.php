@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
@@ -48,16 +48,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->template = $this->objectManager->get('Magento\Email\Model\Template')
+        $this->template = $this->objectManager->get(\Magento\Email\Model\Template::class)
             ->setId(1)
             ->setTemplateType(TemplateTypesInterface::TYPE_HTML);
-        $this->registry = $this->objectManager->get('Magento\Framework\Registry');
+        $this->registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         if ($this->registry->registry('current_email_template') == null) {
             $this->registry->register('current_email_template', $this->template);
         }
-        $this->block = $this->objectManager->create('Magento\Email\Block\Adminhtml\Template\Edit\Form');
+        $this->block = $this->objectManager->create(\Magento\Email\Block\Adminhtml\Template\Edit\Form::class);
         $this->prepareFormMethod = new \ReflectionMethod(
-            'Magento\Email\Block\Adminhtml\Template\Edit\Form',
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
             '_prepareForm'
         );
         $this->prepareFormMethod->setAccessible(true);

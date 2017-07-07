@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,13 +24,13 @@ class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create'],
             [],
             '',
             false
         );
-        $collectionMock = $this->getMock('Magento\Framework\Data\Form\Element\Collection', [], [], '', false);
+        $collectionMock = $this->getMock(\Magento\Framework\Data\Form\Element\Collection::class, [], [], '', false);
         $objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
         $this->_model = new \Magento\Framework\Data\Form\Element\CollectionFactory($objectManagerMock);
     }
@@ -40,6 +40,6 @@ class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Collection', $this->_model->create([]));
+        $this->assertInstanceOf(\Magento\Framework\Data\Form\Element\Collection::class, $this->_model->create([]));
     }
 }

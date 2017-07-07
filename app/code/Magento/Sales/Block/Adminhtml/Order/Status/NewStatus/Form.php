@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Status\NewStatus;
@@ -84,7 +84,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'store_labels_fieldset',
             ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope']
         );
-        $renderer = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset');
+        $renderer = $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset::class
+        );
         $fieldset->setRenderer($renderer);
 
         foreach ($this->_storeManager->getWebsites() as $website) {

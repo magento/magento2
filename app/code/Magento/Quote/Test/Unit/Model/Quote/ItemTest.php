@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,9 +57,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    protected $stockRegistry;
+    private $serializer;
 
     const PRODUCT_ID = 1;
     const PRODUCT_TYPE = 'simple';
@@ -70,16 +73,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->localeFormat = $this->getMockBuilder('Magento\Framework\Locale\FormatInterface')
+        $this->localeFormat = $this->getMockBuilder(\Magento\Framework\Locale\FormatInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->modelContext = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->modelContext = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
 
-        $this->eventDispatcher = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
@@ -88,12 +91,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventDispatcher));
 
-        $this->errorInfos = $this->getMockBuilder('Magento\Sales\Model\Status\ListStatus')
+        $this->errorInfos = $this->getMockBuilder(\Magento\Sales\Model\Status\ListStatus::class)
             ->disableOriginalConstructor()
             ->setMethods(['clear', 'addItem', 'getItems', 'removeItemsByParams'])
             ->getMock();
 
-        $statusListFactory = $this->getMockBuilder('Magento\Sales\Model\Status\ListFactory')
+        $statusListFactory = $this->getMockBuilder(\Magento\Sales\Model\Status\ListFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -102,13 +105,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->errorInfos));
 
-        $this->itemOptionFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\OptionFactory')
+        $this->itemOptionFactory = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\OptionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->compareHelper = $this->getMock(
-            'Magento\Quote\Model\Quote\Item\Compare',
+            \Magento\Quote\Model\Quote\Item\Compare::class,
             [],
             [],
             '',
@@ -116,37 +119,33 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item',
+            \Magento\CatalogInventory\Model\Stock\Item::class,
             ['getIsQtyDecimal', '__wakeup'],
             [],
             '',
             false
         );
 
-        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockItem', '__wakeup'])
-            ->getMock();
-        $this->stockRegistry->expects($this->any())
-            ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
 
         $this->model = $this->objectManagerHelper->getObject(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'localeFormat' => $this->localeFormat,
                 'context' => $this->modelContext,
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
                 'quoteItemCompare' => $this->compareHelper,
-                'stockRegistry' => $this->stockRegistry
+                'serializer' => $this->serializer
             ]
         );
     }
 
     public function testGetAddress()
     {
-        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->setMethods(['getShippingAddress', 'getBillingAddress', 'getStoreId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -175,7 +174,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $idValue = "id_value";
 
-        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->setMethods(['getId', 'getStoreId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -226,7 +225,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $existingQuantity = 2;
         $quantityToAdd = 3;
 
-        $parentItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $parentItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(['addChild', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -272,7 +271,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with($quantityToAdd)
             ->will($this->returnValue($preparedQuantityToAdd));
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIgnoreOldQty', 'getStoreId', '__wakeup'])
             ->getMock();
@@ -370,16 +369,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with('sales_quote_item_set_product', ['product' => $productMock, 'quote_item' => $this->model]);
 
         $isQtyDecimal = true;
-        $this->stockItemMock->expects($this->any())
-            ->method('getStockId')
-            ->will($this->returnValue(99));
         $this->stockItemMock->expects($this->once())
             ->method('getIsQtyDecimal')
             ->will($this->returnValue($isQtyDecimal));
 
         $storeId = 15;
         $customerGroupId = 11;
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStoreId', 'getCustomerGroupId', '__wakeup'])
             ->getMock();
@@ -411,6 +407,18 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($isQtyDecimal, $this->model->getIsQtyDecimal());
     }
 
+    /**
+     * Generate product mock.
+     *
+     * @param int $productId
+     * @param string $productType
+     * @param string $productSku
+     * @param string $productName
+     * @param string $productWeight
+     * @param int $productTaxClassId
+     * @param float $productCost
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function generateProductMock(
         $productId,
         $productType,
@@ -420,7 +428,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $productTaxClassId,
         $productCost
     ) {
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -436,6 +444,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'getTypeInstance',
                     'getStickWithinParent',
                     'getCustomOptions',
+                    'getExtensionAttributes',
                     'toArray',
                     '__wakeup',
                     'getStore',
@@ -464,7 +473,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())
             ->method('getCost')
             ->will($this->returnValue($productCost));
-        $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
         $store->expects($this->any())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));
@@ -472,7 +481,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
-
+        $extensionAttribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+            ->setMethods(['getStockItem'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $extensionAttribute->expects($this->atLeastOnce())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemMock));
+        $productMock->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn($extensionAttribute);
         return $productMock;
     }
 
@@ -505,7 +521,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             self::PRODUCT_COST
         );
 
-        $parentItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $parentItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(['addChild', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -532,7 +548,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             self::PRODUCT_COST
         );
 
-        $parentItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $parentItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(['addChild', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -575,7 +591,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             self::PRODUCT_COST
         );
 
-        $parentItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $parentItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(['addChild', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -618,7 +634,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             self::PRODUCT_COST
         );
 
-        $parentItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $parentItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(['addChild', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -654,7 +670,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompare()
     {
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item',
+        $itemMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Item::class,
             [],
             [],
             '',
@@ -770,6 +787,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             self::PRODUCT_COST
         );
 
+        $this->model->setProduct($productMock);
         $this->model->setProduct($productMock2);
         $this->model->setOptions([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]);
 
@@ -841,9 +859,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($optionMock2, $this->model->getOptionByCode($optionCode2));
     }
 
+    public function testSetOptionsWithNull()
+    {
+        $this->assertEquals($this->model, $this->model->setOptions(null));
+    }
+
     private function createOptionMock($optionCode, $optionData = [])
     {
-        $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->setMethods(['setData', 'setItem', 'getCode', '__wakeup', 'isDeleted', 'getValue', 'getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -867,7 +890,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $optionCode = 1234;
         $optionData = ['product' => 'test', 'code' => $optionCode];
 
-        $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->setMethods(['setData', 'setItem', 'getCode', '__wakeup', 'isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -906,7 +929,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $typeInstanceMock = $this->getMockForAbstractClass(
-            'Magento\Catalog\Model\Product\Type\AbstractType',
+            \Magento\Catalog\Model\Product\Type\AbstractType::class,
             [],
             '',
             false,
@@ -918,7 +941,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
 
-        $optionMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $optionMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
@@ -939,7 +962,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $optionCode = 1234;
 
-        $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->setMethods(['setItem', 'getCode', '__wakeup', 'isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -976,7 +999,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $optionCode = 1234;
 
-        $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->setMethods(['setItem', 'getCode', '__wakeup', 'isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1000,7 +1023,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $optionCode = 1234;
 
-        $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->setMethods(['setItem', 'getCode', '__wakeup', 'isDeleted'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1038,7 +1061,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $optionCode = "info_buyRequest";
         $buyRequestQuantity = 23;
-        $optionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->setMethods(['setItem', 'getCode', '__wakeup', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -1049,9 +1072,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $optionMock->expects($this->exactly(3))
             ->method('getCode')
             ->will($this->returnValue($optionCode));
-        $optionMock->expects($this->once())
+        $optionMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(serialize(['qty' => $buyRequestQuantity])));
+            ->will($this->returnValue('{"qty":23}'));
 
         $this->model->addOption($optionMock);
 
@@ -1062,6 +1085,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quantity));
         $this->model->setQty($quantity);
         $this->assertEquals($quantity, $this->model->getQty());
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturn(json_decode($optionMock->getValue(), true));
         $buyRequest = $this->model->getBuyRequest();
         $this->assertEquals($buyRequestQuantity, $buyRequest->getOriginalQty());
         $this->assertEquals($quantity, $buyRequest->getQty());

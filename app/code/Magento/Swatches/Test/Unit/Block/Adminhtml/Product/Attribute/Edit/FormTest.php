@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testAddValues($values)
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $block = $objectManager->getObject('\Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form');
+        $block = $objectManager->getObject(\Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form::class);
         $block->addValues($values);
     }
 
@@ -50,7 +50,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    'additional_data' => serialize($additionalData),
+                    'additional_data' => json_encode($additionalData),
                     'frontend_input' => 'select',
                 ]
             ],

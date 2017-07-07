@@ -1,11 +1,10 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Variable\Test\Unit\Model\Variable;
-
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -15,10 +14,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $jsPluginSourceUrl = 'js-plugin-source';
         $actionUrl = 'action-url';
-        $assetRepoMock = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $assetRepoMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $urlMock = $this->getMockBuilder('Magento\Backend\Model\UrlInterface')
+        $urlMock = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $assetRepoMock->expects($this->any())
@@ -33,7 +32,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'assetRepo' => $assetRepoMock,
             'url' => $urlMock
         ];
-        $model = (new ObjectManager($this))->getObject('Magento\Variable\Model\Variable\Config', $args);
+        $model = (new ObjectManager($this))->getObject(\Magento\Variable\Model\Variable\Config::class, $args);
 
         $customKey = 'key';
         $customVal = 'val';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -37,18 +37,42 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->backupRollbackFactory = $this->getMock(
-            'Magento\Framework\Setup\BackupRollbackFactory',
+            \Magento\Framework\Setup\BackupRollbackFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->backupRollback = $this->getMock('\Magento\Framework\Setup\BackupRollback', [], [], '', false);
-        $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->backupRollback = $this->getMock(\Magento\Framework\Setup\BackupRollback::class, [], [], '', false);
+        $this->status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
+        $output =
+            $this->getMockForAbstractClass(\Symfony\Component\Console\Output\OutputInterface::class, [], '', false);
+        $this->objectManagerProvider =
+            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
 
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $appState = $this->getMock(
+            \Magento\Framework\App\State::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $configLoader = $this->getMockForAbstractClass(
+            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class,
+            [],
+            '',
+            false
+        );
+        $configLoader->expects($this->any())->method('load')->willReturn([]);
+        $objectManager =
+            $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
+        $objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap([
+                [\Magento\Framework\App\State::class, $appState],
+                [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
+            ]));
+
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->jobDbRollback = new JobDbRollback(

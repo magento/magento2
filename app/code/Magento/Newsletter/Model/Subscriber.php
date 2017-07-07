@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Subscriber model
@@ -32,6 +32,8 @@ use Magento\Framework\Exception\MailException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ *
+ * @api
  */
 class Subscriber extends \Magento\Framework\Model\AbstractModel
 {
@@ -171,7 +173,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Subscriber');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Subscriber::class);
     }
 
     /**
@@ -263,7 +265,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param boolean $scope
      * @return $this
      */
-
     public function setMessagesScope($scope)
     {
         $this->getResource()->setMessagesScope($scope);
@@ -442,6 +443,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->setStatusChanged(true);
 
         try {
+            /* Save model before sending out email */
+            $this->save();
             if ($isConfirmNeed === true
                 && $isOwnSubscribes === false
             ) {
@@ -449,7 +452,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             } else {
                 $this->sendConfirmationSuccessEmail();
             }
-            $this->save();
             return $this->getStatus();
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -541,11 +543,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $sendInformationEmail = false;
         $status = self::STATUS_SUBSCRIBED;
+        $isConfirmNeed = $this->_scopeConfig->getValue(
+            self::XML_PATH_CONFIRMATION_FLAG,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) == 1 ? true : false;
         if ($subscribe) {
             if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
                 == $this->customerAccountManagement->getConfirmationStatus($customerId)
             ) {
                 $status = self::STATUS_UNCONFIRMED;
+            } elseif ($isConfirmNeed) {
+                $status = self::STATUS_NOT_ACTIVE;
             }
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
@@ -580,7 +588,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $sendSubscription = $sendInformationEmail;
         if ($sendSubscription === null xor $sendSubscription) {
             try {
-                if ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
+                if ($isConfirmNeed) {
+                    $this->sendConfirmationRequestEmail();
+                } elseif ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
                     $this->sendUnsubscriptionEmail();
                 } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
                     $this->sendConfirmationSuccessEmail();

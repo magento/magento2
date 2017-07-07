@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,12 +18,15 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
+        $serviceLocatorMock = $this->getMockForAbstractClass(
+            \Zend\ServiceManager\ServiceLocatorInterface::class,
+            ['get']
+        );
         $connectionFactory = new ConnectionFactory($serviceLocatorMock);
         $serviceLocatorMock
             ->expects($this->once())
             ->method('get')
-            ->with('Magento\Setup\Module\ConnectionFactory')
+            ->with(\Magento\Setup\Module\ConnectionFactory::class)
             ->will($this->returnValue($connectionFactory));
         $this->resourceFactory = new ResourceFactory($serviceLocatorMock);
     }
@@ -31,8 +34,8 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $resource = $this->resourceFactory->create(
-            $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false)
+            $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false)
         );
-        $this->assertInstanceOf('Magento\Framework\App\ResourceConnection', $resource);
+        $this->assertInstanceOf(\Magento\Framework\App\ResourceConnection::class, $resource);
     }
 }

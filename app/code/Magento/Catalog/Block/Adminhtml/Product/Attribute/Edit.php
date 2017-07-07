@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
 
 /**
  * Product attribute edit page
+ *
+ * @api
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {

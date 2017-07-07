@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,7 +50,7 @@ class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
         );
         /** @var \Magento\GiftMessage\Test\Block\Adminhtml\Order\View\Form $giftMessageForm */
         $giftMessageForm = $this->blockFactory->create(
-            'Magento\GiftMessage\Test\Block\Adminhtml\Order\View\Form',
+            \Magento\GiftMessage\Test\Block\Adminhtml\Order\View\Form::class,
             ['element' => $this->browser->find($this->giftMessageForm, Locator::SELECTOR_XPATH)]
         );
         $data = $giftMessageForm->getData($giftMessage);

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -88,27 +88,33 @@
         @_popup-actions-toolbar-primary-actions-links-margin-top,
         @_popup-actions-toolbar-secondary-actions-links-margin-top
     );
+
     .popup-header {
         .lib-css(margin, @_popup-header-margin);
+
         .title {
             ._lib-popup-headings(
                 @_popup-title-headings,
                 @_popup-title-headings-level
             );
         }
+
         .lib-css(padding-right, @_popup-icon-font-size)
     }
+
     .popup-content {
         ._lib-popup-height(@_popup-content-height);
         .lib-css(margin, @_popup-content-margin);
     }
+
     .popup-footer {
         .lib-css(margin, @_popup-footer-margin);
     }
+
     .popup-actions {
         .action.close {
             .lib-css(position, @_popup-button-close-position);
-            ._lib-popup-button-close-icon(
+            .lib-popup-button-close-icon(
                 @_popup-button-close-icon,
                 @_popup-icon-font-content,
                 @_popup-icon-font,
@@ -146,6 +152,7 @@
     .lib-css(z-index, @_popup-z-index);
     display: none;
     opacity: 0;
+
     &.active {
         opacity: 1;
     }
@@ -167,9 +174,13 @@
     position: fixed;
     right: 0;
     top: 0;
+
     &.active {
-        opacity: @_overlay-opacity;
-        filter: alpha(opacity=@_overlay-opacity-old);
+        .lib-css(opacity, @_overlay-opacity);
+
+        & when not (@_overlay-opacity-old = false) {
+            filter: alpha(opacity=@_overlay-opacity-old);
+        }
     }
 }
 
@@ -269,7 +280,7 @@
 }
 
 //  Popup close button use icon
-._lib-popup-button-close-icon(
+.lib-popup-button-close-icon(
     @_popup-button-close-icon,
     @_popup-icon-font-content,
     @_popup-icon-font,

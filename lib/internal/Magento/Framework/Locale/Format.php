@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale;
@@ -9,6 +9,11 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
+    /**
+     * @var string
+     */
+    private static $defaultNumberSet = 'latn';
+
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
@@ -40,7 +45,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     }
 
     /**
-     * Returns the first found number from an string
+     * Returns the first found number from a string
      * Parsing depends on given locale (grouping and decimal)
      *
      * Examples for input:
@@ -87,7 +92,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     }
 
     /**
-     * Functions returns array with price formatting info
+     * Returns an array with price formatting info
      *
      * @param string $localeCode Locale code.
      * @param string $currencyCode Currency code.
@@ -104,12 +109,18 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             $currency = $this->_scopeResolver->getScope()->getCurrentCurrency();
         }
         $localeData = (new DataBundle())->get($localeCode);
-        $format = $localeData['NumberElements']['latn']['patterns']['currencyFormat']
-            ?: explode(';', $localeData['NumberPatterns'][1])[0];
-        $decimalSymbol = $localeData['NumberElements']['latn']['symbols']['decimal']
-            ?: $localeData['NumberElements'][0];
-        $groupSymbol = $localeData['NumberElements']['latn']['symbols']['group']
-            ?: $localeData['NumberElements'][1];
+        $defaultSet = $localeData['NumberElements']['default'] ?: self::$defaultNumberSet;
+        $format = $localeData['NumberElements'][$defaultSet]['patterns']['currencyFormat']
+            ?: ($localeData['NumberElements'][self::$defaultNumberSet]['patterns']['currencyFormat']
+                ?: explode(';', $localeData['NumberPatterns'][1])[0]);
+
+        $decimalSymbol = $localeData['NumberElements'][$defaultSet]['symbols']['decimal']
+            ?: ($localeData['NumberElements'][self::$defaultNumberSet]['symbols']['decimal']
+                ?: $localeData['NumberElements'][0]);
+
+        $groupSymbol = $localeData['NumberElements'][$defaultSet]['symbols']['group']
+            ?: ($localeData['NumberElements'][self::$defaultNumberSet]['symbols']['group']
+                ?: $localeData['NumberElements'][1]);
 
         $pos = strpos($format, ';');
         if ($pos !== false) {

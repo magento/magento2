@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -42,6 +42,7 @@
     <action name="rest/*/V1/carts/*/payment-information">
         <section name="cart"/>
         <section name="checkout-data"/>
+        <section name="last-ordered-items"/>
     </action>
     <action name="rest/*/V1/guest-carts/*/payment-information">
         <section name="cart"/>

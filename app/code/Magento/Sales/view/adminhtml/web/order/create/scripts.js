@@ -1,7 +1,8 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     "jquery",
     'Magento_Ui/js/modal/confirm',
@@ -344,6 +345,11 @@ define([
         },
 
         switchPaymentMethod : function(method){
+            jQuery('#edit_form')
+                .off('submitOrder')
+                .on('submitOrder', function(){
+                    jQuery(this).trigger('realOrder');
+                });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -428,7 +434,7 @@ define([
         },
 
         applyCoupon : function(code){
-            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: true});
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
             this.orderItemChanged = false;
         },
 
@@ -533,7 +539,7 @@ define([
                             if (this._isSummarizePrice()) {
                                 productPrice += this.productPriceBase[productId];
                             }
-                            productPrice = parseFloat(productPrice);
+                            productPrice = parseFloat(Math.round(productPrice + "e+2") + "e-2");
                             priceColl.innerHTML = this.currencySymbol + productPrice.toFixed(2);
                             // and set checkbox checked
                             grid.setCheckboxChecked(checkbox, true);
@@ -1152,11 +1158,22 @@ define([
                 jQuery('#edit_form').triggerHandler('save');
             }
             if (this.orderItemChanged) {
-                if (confirm('You have item changes')) {
-                    disableAndSave();
-                } else {
-                    this.itemsUpdate();
-                }
+                var self = this;
+
+                jQuery('#edit_form').trigger('processStop');
+
+                confirm({
+                    content: jQuery.mage.__('You have item changes'),
+                    actions: {
+                        confirm: function() {
+                            jQuery('#edit_form').trigger('processStart');
+                            disableAndSave();
+                        },
+                        cancel: function() {
+                            self.itemsUpdate();
+                        }
+                    }
+                });
             } else {
                 disableAndSave();
             }
@@ -1231,7 +1248,8 @@ define([
                 params.store_id = this.storeId;
             }
 
-            var currentCustomerGroupId = $(parameters.groupIdHtmlId).value;
+            var currentCustomerGroupId = $(parameters.groupIdHtmlId)
+                ? $(parameters.groupIdHtmlId).value : '';
 
             new Ajax.Request(parameters.validateUrl, {
                 parameters: params,
@@ -1387,3 +1405,4 @@ define([
     };
 
 });
+/* jshint ignore:end */

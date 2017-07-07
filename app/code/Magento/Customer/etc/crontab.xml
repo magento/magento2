@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,11 +9,6 @@
     <group id="default">
         <job name="visitor_clean" instance="Magento\Customer\Model\Visitor" method="clean">
             <schedule>0 0 * * *</schedule>
-        </job>
-    </group>
-    <group id="index">
-        <job name="update_last_visit_at" instance="Magento\Customer\Model\Observer\Grid" method="syncCustomerGrid">
-            <schedule>*/5 * * * *</schedule>
         </job>
     </group>
 </config>

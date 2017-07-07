@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,17 +12,13 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Catalog entity abstract model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
-    /**
-     * Store firstly set attributes to filter selected attributes when used specific store_id
-     *
-     * @var array
-     */
-    protected $_attributes = [];
-
     /**
      * Store manager
      *
@@ -61,7 +57,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _getDefaultAttributeModel()
     {
-        return 'Magento\Catalog\Model\ResourceModel\Eav\Attribute';
+        return \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class;
     }
 
     /**
@@ -99,7 +95,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _isCallableAttributeInstance($instance, $method, $args)
     {
         if ($instance instanceof \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-            && ($method == 'beforeSave' || $method = 'afterSave')
+            && ($method == 'beforeSave' || $method == 'afterSave')
         ) {
             $attributeCode = $instance->getAttribute()->getAttributeCode();
             if (isset($args[0]) && $args[0] instanceof \Magento\Framework\DataObject && $args[0]->getData($attributeCode) === false) {
@@ -140,7 +136,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $select = $this->getConnection()
             ->select()
             ->from(['attr_table' => $table], [])
-            ->where("attr_table.{$this->getEntityIdField()} = ?", $object->getId())
+            ->where("attr_table.{$this->getLinkField()} = ?", $object->getData($this->getLinkField()))
             ->where('attr_table.store_id IN (?)', $storeIds);
 
         if ($setId) {
@@ -170,45 +166,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     }
 
     /**
-     * Initialize attribute value for object
-     *
-     * @param \Magento\Catalog\Model\AbstractModel $object
-     * @param array $valueRow
-     * @return $this
-     */
-    protected function _setAttributeValue($object, $valueRow)
-    {
-        $attribute = $this->getAttribute($valueRow['attribute_id']);
-        if ($attribute) {
-            $attributeCode = $attribute->getAttributeCode();
-            $isDefaultStore = $valueRow['store_id'] == $this->getDefaultStoreId();
-            if (isset($this->_attributes[$valueRow['attribute_id']])) {
-                if ($isDefaultStore) {
-                    $object->setAttributeDefaultValue($attributeCode, $valueRow['value']);
-                } else {
-                    $object->setAttributeDefaultValue(
-                        $attributeCode,
-                        $this->_attributes[$valueRow['attribute_id']]['value']
-                    );
-                }
-            } else {
-                $this->_attributes[$valueRow['attribute_id']] = $valueRow;
-            }
-
-            $value = $valueRow['value'];
-            $valueId = $valueRow['value_id'];
-
-            $object->setData($attributeCode, $value);
-            if (!$isDefaultStore) {
-                $object->setExistsStoreValueFlag($attributeCode);
-            }
-            $attribute->getBackend()->setEntityValueId($object, $valueId);
-        }
-
-        return $this;
-    }
-
-    /**
      * Insert or Update attribute data
      *
      * @param \Magento\Catalog\Model\AbstractModel $object
@@ -227,13 +184,14 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * for default store id
          * In this case we clear all not default values
          */
+        $entityIdField = $this->getLinkField();
         if ($this->_storeManager->hasSingleStore()) {
             $storeId = $this->getDefaultStoreId();
             $connection->delete(
                 $table,
                 [
                     'attribute_id = ?' => $attribute->getAttributeId(),
-                    'entity_id = ?' => $object->getEntityId(),
+                    "{$entityIdField} = ?" => $object->getData($entityIdField),
                     'store_id <> ?' => $storeId
                 ]
             );
@@ -243,7 +201,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             [
                 'attribute_id' => $attribute->getAttributeId(),
                 'store_id' => $storeId,
-                'entity_id' => $object->getEntityId(),
+                $entityIdField => $object->getData($entityIdField),
                 'value' => $this->_prepareValueForSave($value, $attribute),
             ]
         );
@@ -296,7 +254,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     ->from($table)
                     ->where('attribute_id = ?', $attribute->getAttributeId())
                     ->where('store_id = ?', $this->getDefaultStoreId())
-                    ->where('entity_id = ?', $object->getEntityId());
+                    ->where($this->getLinkField() . ' = ?', $object->getData($this->getLinkField()));
                 $row = $this->getConnection()->fetchOne($select);
 
                 if (!$row) {
@@ -304,7 +262,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         [
                             'attribute_id' => $attribute->getAttributeId(),
                             'store_id' => $this->getDefaultStoreId(),
-                            'entity_id' => $object->getEntityId(),
+                            $this->getLinkField() => $object->getData($this->getLinkField()),
                             'value' => $this->_prepareValueForSave($value, $attribute),
                         ]
                     );
@@ -345,7 +303,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         $connection = $this->getConnection();
         $table = $attribute->getBackend()->getTable();
-        $entityIdField = $attribute->getBackend()->getEntityIdField();
+        $entityIdField = $this->getLinkField();
         $select = $connection->select()
             ->from($table, 'value_id')
             ->where("$entityIdField = :entity_field_id")
@@ -390,7 +348,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _deleteAttributes($object, $table, $info)
     {
         $connection = $this->getConnection();
-        $entityIdField = $this->getEntityIdField();
+        $entityIdField = $this->getLinkField();
         $globalValues = [];
         $websiteAttributes = [];
         $storeAttributes = [];
@@ -456,6 +414,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _getOrigObject($object)
     {
+        //TODO:
         $className = get_class($object);
         $origObject = $this->_modelFactory->create($className);
         $origObject->setData([]);
@@ -463,19 +422,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $this->load($origObject, $object->getData($this->getEntityIdField()));
 
         return $origObject;
-    }
-
-    /**
-     * Check is attribute value empty
-     *
-     * @param AbstractAttribute $attribute
-     * @param mixed $value
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function _isAttributeValueEmpty(AbstractAttribute $attribute, $value)
-    {
-        return $value === false;
     }
 
     /**
@@ -558,8 +504,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $select = $connection->select()->from(
                 $staticTable,
                 $staticAttributes
+            )->join(
+                ['e' => $this->getTable($this->getEntityTable())],
+                'e.' . $this->getLinkField() . ' = ' . $staticTable . '.' . $this->getLinkField()
             )->where(
-                $this->getEntityIdField() . ' = :entity_id'
+                'e.entity_id = :entity_id'
             );
             $attributesData = $connection->fetchRow($select, ['entity_id' => $entityId]);
         }
@@ -576,8 +525,12 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             foreach ($typedAttributes as $table => $_attributes) {
                 $select = $connection->select()
                     ->from(['default_value' => $table], ['attribute_id'])
-                    ->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where('default_value.entity_id = :entity_id')
+                    ->join(
+                        ['e' => $this->getTable($this->getEntityTable())],
+                        'e.' . $this->getLinkField() . ' = ' . 'default_value.' . $this->getLinkField(),
+                        ''
+                    )->where('default_value.attribute_id IN (?)', array_keys($_attributes))
+                    ->where("e.entity_id = :entity_id")
                     ->where('default_value.store_id = ?', 0);
 
                 $bind = ['entity_id' => $entityId];
@@ -590,7 +543,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     );
                     $joinCondition = [
                         $connection->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
-                        'store_value.entity_id = :entity_id',
+                        "store_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
                         'store_value.store_id = :store_id',
                     ];
 
@@ -613,25 +566,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             }
         }
 
-        if (sizeof($attributesData) == 1) {
+        if (is_array($attributesData) && sizeof($attributesData) == 1) {
             $_data = each($attributesData);
             $attributesData = $_data[1];
         }
 
-        return $attributesData ? $attributesData : false;
-    }
-
-    /**
-     * Reset firstly loaded attributes
-     *
-     * @param \Magento\Framework\DataObject $object
-     * @param integer $entityId
-     * @param array|null $attributes
-     * @return $this
-     */
-    public function load($object, $entityId, $attributes = [])
-    {
-        $this->_attributes = [];
-        return parent::load($object, $entityId, $attributes);
+        return $attributesData === false ? false : $attributesData;
     }
 }

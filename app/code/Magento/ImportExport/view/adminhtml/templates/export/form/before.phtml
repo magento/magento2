@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -44,7 +44,7 @@ require([
          */
         getFilter: function() {
             if ($('entity') && $F('entity')) {
-                var url    = "<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/getFilter') ?>";
+                var url    = "<?= /* @escapeNotVerified */ $block->getUrl('*/*/getFilter') ?>";
                 var entity = $F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
@@ -80,6 +80,9 @@ require([
             var oldAction = form.action;
             var url = oldAction + ((oldAction.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity')
                 + '/file_format/' + $F('file_format');
+            if ($F('fields_enclosure')) {
+                url += '/fields_enclosure/' + $F('fields_enclosure');
+            }
             form.action = url;
             form.submit();
             form.action   = oldAction;

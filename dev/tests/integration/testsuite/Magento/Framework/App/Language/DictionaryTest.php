@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,8 +33,10 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->directoryFactory = $this->objectManager->create('Magento\Framework\Filesystem\Directory\ReadFactory');
-        $this->configFactory = $this->objectManager->create('Magento\Framework\App\Language\ConfigFactory');
+        $this->directoryFactory = $this->objectManager->create(
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class
+        );
+        $this->configFactory = $this->objectManager->create(\Magento\Framework\App\Language\ConfigFactory::class);
     }
 
     /**
@@ -46,7 +48,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
     public function testDictionaryGetter($languageCode, $expectation)
     {
         $this->model = $this->objectManager->create(
-            'Magento\Framework\App\Language\Dictionary',
+            \Magento\Framework\App\Language\Dictionary::class,
             ['directoryReadFactory' => $this->directoryFactory, 'configFactory' => $this->configFactory]
         );
         $result = $this->model->getDictionary($languageCode);

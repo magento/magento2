@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Directory\Model;
 
 /**
  * Region
@@ -17,10 +19,8 @@
  * @method string getDefaultName()
  * @method \Magento\Directory\Model\Region setDefaultName(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Directory\Model;
-
 class Region extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -28,13 +28,13 @@ class Region extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\ResourceModel\Region');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Region::class);
     }
 
     /**
      * Retrieve region name
      *
-     * If name is no declared, then default_name is used
+     * If name is not declared, then default_name is used
      *
      * @return string
      */

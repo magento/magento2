@@ -1,26 +1,3 @@
-None,None
-No,No
-Yes,Yes
-"Sort Order","Sort Order"
-Variable,Variable
-Title,Title
-Required,Required
-Password,Password
-Height,Height
-Width,Width
-Regular,Regular
-Documents,Documents
-"Unable to retrieve tracking","Unable to retrieve tracking"
-Sample,Sample
-"Not Required","Not Required"
-"Empty response","Empty response"
-Mode,Mode
-Return,Return
-Size,Size
-Girth,Girth
-Length,Length
-"Sorry, something went wrong. Please try again or contact us and we'll try to help.","Sorry, something went wrong. Please try again or contact us and we'll try to help."
-"User ID","User ID"
 "First-Class Mail Large Envelope","First-Class Mail Large Envelope"
 "First-Class Mail Letter","First-Class Mail Letter"
 "First-Class Mail Parcel","First-Class Mail Parcel"
@@ -28,7 +5,7 @@ Length,Length
 "Priority Mail","Priority Mail"
 "Priority Mail Express Hold For Pickup","Priority Mail Express Hold For Pickup"
 "Priority Mail Express","Priority Mail Express"
-"Standard Post","Standard Post"
+"Retail Ground","Retail Ground"
 "Media Mail","Media Mail"
 "Library Mail","Library Mail"
 "Priority Mail Express Flat Rate Envelope","Priority Mail Express Flat Rate Envelope"
@@ -63,8 +40,6 @@ Length,Length
 "Priority Mail Regional Rate Box B","Priority Mail Regional Rate Box B"
 "Priority Mail Regional Rate Box B Hold For Pickup","Priority Mail Regional Rate Box B Hold For Pickup"
 "First-Class Package Service Hold For Pickup","First-Class Package Service Hold For Pickup"
-"Priority Mail Express Flat Rate Boxes","Priority Mail Express Flat Rate Boxes"
-"Priority Mail Express Flat Rate Boxes Hold For Pickup","Priority Mail Express Flat Rate Boxes Hold For Pickup"
 "Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes","Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes"
 "Priority Mail Regional Rate Box C","Priority Mail Regional Rate Box C"
 "Priority Mail Regional Rate Box C Hold For Pickup","Priority Mail Regional Rate Box C Hold For Pickup"
@@ -96,37 +71,62 @@ Length,Length
 "Priority Mail International Padded Flat Rate Envelope","Priority Mail International Padded Flat Rate Envelope"
 "Priority Mail International DVD Flat Rate priced box","Priority Mail International DVD Flat Rate priced box"
 "Priority Mail International Large Video Flat Rate priced box","Priority Mail International Large Video Flat Rate priced box"
-"Priority Mail Express International Flat Rate Boxes","Priority Mail Express International Flat Rate Boxes"
 "Priority Mail Express International Padded Flat Rate Envelope","Priority Mail Express International Padded Flat Rate Envelope"
 Letter,Letter
 Flat,Flat
 Parcel,Parcel
+Variable,Variable
 "Flat-Rate Box","Flat-Rate Box"
 "Flat-Rate Envelope","Flat-Rate Envelope"
 Rectangular,Rectangular
 Non-rectangular,Non-rectangular
+Regular,Regular
 Large,Large
+Yes,Yes
+No,No
+"Not Required","Not Required"
+Required,Required
+"For some reason we can\'t retrieve tracking info right now.","For some reason we can\'t retrieve tracking info right now."
+"Sorry, something went wrong. Please try again or contact us and we\'ll try to help.","Sorry, something went wrong. Please try again or contact us and we\'ll try to help."
 track_summary,track_summary
+"Empty response","Empty response"
 "Service type does not match","Service type does not match"
 Merchandise,Merchandise
+Sample,Sample
 Gift,Gift
+Documents,Documents
+Return,Return
 Other,Other
-Container,Container
-Debug,Debug
-"Gateway URL","Gateway URL"
+None,None
+"Field ","Field "
+" is required."," is required."
+USPS,USPS
 "Enabled for Checkout","Enabled for Checkout"
+"Gateway URL","Gateway URL"
+"Secure Gateway URL","Secure Gateway URL"
+Title,Title
+"User ID","User ID"
+Password,Password
+Mode,Mode
+"Packages Request Type","Packages Request Type"
+Container,Container
+Size,Size
+Width,Width
+Length,Length
+Height,Height
+Girth,Girth
+Machinable,Machinable
+"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)","Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)"
 "Calculate Handling Fee","Calculate Handling Fee"
 "Handling Applied","Handling Applied"
 "Handling Fee","Handling Fee"
 "Allowed Methods","Allowed Methods"
-"Displayed Error Message","Displayed Error Message"
 "Free Method","Free Method"
+"Enable Free Shipping Threshold","Enable Free Shipping Threshold"
 "Free Shipping Amount Threshold","Free Shipping Amount Threshold"
+"Displayed Error Message","Displayed Error Message"
 "Ship to Applicable Countries","Ship to Applicable Countries"
 "Ship to Specific Countries","Ship to Specific Countries"
+Debug,Debug
 "Show Method if Not Applicable","Show Method if Not Applicable"
-"Packages Request Type","Packages Request Type"
-"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)","Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)"
-USPS,USPS
-"Secure Gateway URL","Secure Gateway URL"
-Machinable,Machinable
+"Sort Order","Sort Order"

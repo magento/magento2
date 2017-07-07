@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
@@ -45,33 +45,33 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var InlineEdit */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
-        $this->messageManager = $this->getMockForAbstractClass('Magento\Framework\Message\ManagerInterface');
-        $this->messageCollection = $this->getMock('Magento\Framework\Message\Collection', [], [], '', false);
-        $this->message = $this->getMockForAbstractClass('Magento\Framework\Message\MessageInterface');
-        $this->cmsPage = $this->getMock('Magento\Cms\Model\Page', [], [], '', false);
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageCollection = $this->getMock(\Magento\Framework\Message\Collection::class, [], [], '', false);
+        $this->message = $this->getMockForAbstractClass(\Magento\Framework\Message\MessageInterface::class);
+        $this->cmsPage = $this->getMock(\Magento\Cms\Model\Page::class, [], [], '', false);
         $this->context = $helper->getObject(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'request' => $this->request,
                 'messageManager' => $this->messageManager
             ]
         );
         $this->dataProcessor = $this->getMock(
-            'Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor',
+            \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor::class,
             [],
             [],
             '',
             false
         );
-        $this->pageRepository = $this->getMockForAbstractClass('Magento\Cms\Api\PageRepositoryInterface');
-        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
+        $this->pageRepository = $this->getMockForAbstractClass(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->resultJson = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
         $this->jsonFactory = $this->getMock(
-            'Magento\Framework\Controller\Result\JsonFactory',
+            \Magento\Framework\Controller\Result\JsonFactory::class,
             ['create'],
             [],
             '',
@@ -90,7 +90,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $postData = [
             1 => [
                 'title' => '404 Not Found',
-                'identifier' => 'no-route'
+                'identifier' => 'no-route',
+                'custom_theme' => '1',
+                'custom_root_template' => '2'
             ]
         ];
         $this->request->expects($this->any())
@@ -138,7 +140,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->with([
                 'layout' => '1column',
                 'title' => '404 Not Found',
-                'identifier' => 'no-route'
+                'identifier' => 'no-route',
+                'custom_theme' => '1',
+                'custom_root_template' => '2'
             ]);
         $this->jsonFactory->expects($this->once())
             ->method('create')
@@ -246,8 +250,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'is_active' => '1',
             'sort_order' => '1',
             'custom_theme' => '3',
-            'website_root' => '1',
-            'under_version_control' => '0',
             'store_id' => ['0']
         ];
         $pageData = [
@@ -257,7 +259,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'identifier' => 'home',
             'is_active' => '1',
             'custom_theme' => '3',
-            'under_version_control' => '0',
         ];
         $getData = [
             'page_id' => '2',
@@ -270,9 +271,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'sort_order' => '1',
             'custom_theme' => '3',
             'custom_root_template' => '1column',
-            'published_revision_id' => '0',
-            'website_root' => '1',
-            'under_version_control' => '0',
             'store_id' => ['0']
         ];
         $mergedData = [
@@ -286,9 +284,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'sort_order' => '1',
             'custom_theme' => '3',
             'custom_root_template' => '1column',
-            'published_revision_id' => '0',
-            'website_root' => '1',
-            'under_version_control' => '0',
             'store_id' => ['0']
         ];
         $this->cmsPage->expects($this->once())->method('getData')->willReturn($getData);

@@ -2,7 +2,7 @@
 /**
  * Origin filesystem driver
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Driver;
@@ -213,6 +213,13 @@ class Http extends File
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {
+        // check if the path given is already an absolute path containing the
+        // basepath. so if the basepath starts at position 0 in the path, we
+        // must not concatinate them again because path is already absolute.
+        if (0 === strpos($path, $basePath)) {
+            return $this->getScheme() . $path;
+        }
+
         return $this->getScheme() . $basePath . $path;
     }
 

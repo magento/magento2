@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
@@ -33,14 +33,14 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $paypalInfoManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
+        $this->paymentMock = $this->getMockBuilder(\Magento\Payment\Model\InfoInterface::class)
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paypalInfoManagerMock = $this->getMockBuilder('Magento\Paypal\Model\Info')
+        $this->paypalInfoManagerMock = $this->getMockBuilder(\Magento\Paypal\Model\Info::class)
             ->disableOriginalConstructor()
             ->getMock();
 

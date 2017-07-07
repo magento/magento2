@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Cron;
@@ -34,31 +34,23 @@ class ReportModulesInfo
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * Constructor
      *
      * @param Config $config
      * @param Collect $collect
      * @param \Magento\NewRelicReporting\Model\SystemFactory $systemFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         Config $config,
         Collect $collect,
         \Magento\NewRelicReporting\Model\SystemFactory $systemFactory,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder
     ) {
         $this->config = $config;
         $this->collect = $collect;
         $this->systemFactory = $systemFactory;
         $this->jsonEncoder = $jsonEncoder;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -77,28 +69,24 @@ class ReportModulesInfo
                             $modelData = [
                                 'type' => Config::MODULE_ENABLED,
                                 'action' => $this->jsonEncoder->encode($change),
-                                'updated_at' => $this->dateTime->formatDate(true)
                             ];
                             break;
                         case Config::DISABLED:
                             $modelData = [
                                 'type' => Config::MODULE_DISABLED,
                                 'action' => $this->jsonEncoder->encode($change),
-                                'updated_at' => $this->dateTime->formatDate(true)
                             ];
                             break;
                         case Config::INSTALLED:
                             $modelData = [
                                 'type' => Config::MODULE_INSTALLED,
                                 'action' => $this->jsonEncoder->encode($change),
-                                'updated_at' => $this->dateTime->formatDate(true)
                             ];
                             break;
                         case Config::UNINSTALLED:
                             $modelData = [
                                 'type' => Config::MODULE_UNINSTALLED,
                                 'action' => $this->jsonEncoder->encode($change),
-                                'updated_at' => $this->dateTime->formatDate(true)
                             ];
                             break;
                     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,21 +17,21 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Customer\Api\AccountManagementInterface $accountManagement */
-        $accountManagement = $objectManager->create('Magento\Customer\Api\AccountManagementInterface');
+        $accountManagement = $objectManager->create(\Magento\Customer\Api\AccountManagementInterface::class);
 
         /** @var \Magento\Customer\Helper\View $customerViewHelper */
-        $customerViewHelper = $objectManager->create('Magento\Customer\Helper\View');
+        $customerViewHelper = $objectManager->create(\Magento\Customer\Helper\View::class);
 
         $customer = $accountManagement->authenticate('customer@example.com', 'password');
-        $request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
         $request->setParam('customerId', $customer->getId());
         /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
-        $block = $layout->createBlock('Magento\Review\Block\Adminhtml\Main');
+        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
+        $block = $layout->createBlock(\Magento\Review\Block\Adminhtml\Main::class);
         $customerName = $customerViewHelper->getCustomerName($customer);
         /** @var \Magento\Framework\Escaper $escaper */
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Escaper');
+            ->get(\Magento\Framework\Escaper::class);
         $this->assertStringMatchesFormat(
             '%A' . __('All Reviews of Customer `%1`', $escaper->escapeHtml($customerName)) . '%A',
             $block->getHeaderHtml()

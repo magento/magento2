@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // no notice of license for now
@@ -22,20 +22,20 @@ require([
 
     $.extend(true, $, {
         calendarConfig: {
-            dayNames: <?php /* @escapeNotVerified */ echo $days['wide']?>,
-            dayNamesMin: <?php /* @escapeNotVerified */ echo $days['abbreviated']?>,
-            monthNames: <?php /* @escapeNotVerified */ echo $months['wide']?>,
-            monthNamesShort: <?php /* @escapeNotVerified */ echo $months['abbreviated']?>,
-            infoTitle: "<?php /* @escapeNotVerified */ echo __('About the calendar');?>",
-            firstDay: <?php /* @escapeNotVerified */ echo $firstDay?>,
-            closeText: "<?php /* @escapeNotVerified */ echo __('Close');?>",
-            currentText: "<?php /* @escapeNotVerified */ echo __('Go Today'); ?>",
-            prevText: "<?php /* @escapeNotVerified */ echo __('Previous');?>",
-            nextText: "<?php /* @escapeNotVerified */ echo __('Next');?>",
-            weekHeader: "<?php /* @escapeNotVerified */ echo __('WK'); ?>",
-            timeText: "<?php /* @escapeNotVerified */ echo __('Time');?>",
-            hourText: "<?php /* @escapeNotVerified */ echo __('Hour');?>",
-            minuteText: "<?php /* @escapeNotVerified */ echo __('Minute');?>",
+            dayNames: <?= /* @escapeNotVerified */ $days['wide'] ?>,
+            dayNamesMin: <?= /* @escapeNotVerified */ $days['abbreviated'] ?>,
+            monthNames: <?= /* @escapeNotVerified */ $months['wide'] ?>,
+            monthNamesShort: <?= /* @escapeNotVerified */ $months['abbreviated'] ?>,
+            infoTitle: "<?= /* @escapeNotVerified */ __('About the calendar') ?>",
+            firstDay: <?= /* @escapeNotVerified */ $firstDay ?>,
+            closeText: "<?= /* @escapeNotVerified */ __('Close') ?>",
+            currentText: "<?= /* @escapeNotVerified */ __('Go Today') ?>",
+            prevText: "<?= /* @escapeNotVerified */ __('Previous') ?>",
+            nextText: "<?= /* @escapeNotVerified */ __('Next') ?>",
+            weekHeader: "<?= /* @escapeNotVerified */ __('WK') ?>",
+            timeText: "<?= /* @escapeNotVerified */ __('Time') ?>",
+            hourText: "<?= /* @escapeNotVerified */ __('Hour') ?>",
+            minuteText: "<?= /* @escapeNotVerified */ __('Minute') ?>",
             dateFormat: $.datepicker.RFC_2822,
             showOn: "button",
             showAnim: "",
@@ -50,13 +50,13 @@ require([
             showTime: false,
             showHour: false,
             showMinute: false,
-            localTimezone: <?php /* @escapeNotVerified */ echo $block->getTimezoneOffsetSeconds() ?>,
-            serverTimezoneSeconds:<?php /* @escapeNotVerified */ echo $block->getStoreTimestamp() ?>,
-            yearRange: '<?php /* @escapeNotVerified */ echo $block->getYearRange() ?>'
+            serverTimezoneSeconds: <?= (int) $block->getStoreTimestamp() ?>,
+            serverTimezoneOffset: <?= (int) $block->getTimezoneOffsetSeconds() ?>,
+            yearRange: '<?= /* @escapeNotVerified */ $block->getYearRange() ?>'
         }
     });
 
-enUS = <?php /* @escapeNotVerified */ echo $enUS?>; // en_US locale reference
+enUS = <?= /* @escapeNotVerified */ $enUS ?>; // en_US locale reference
 
 });
 </script>

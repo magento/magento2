@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
@@ -17,6 +17,11 @@ use Magento\Cms\Api\Data\PageInterface;
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
     /** @var PostDataProcessor */
     protected $dataProcessor;
 
@@ -66,7 +71,7 @@ class InlineEdit extends \Magento\Backend\App\Action
             /** @var \Magento\Cms\Model\Page $page */
             $page = $this->pageRepository->getById($pageId);
             try {
-                $pageData = $this->dataProcessor->filter($postItems[$pageId]);
+                $pageData = $this->filterPost($postItems[$pageId]);
                 $this->validatePost($pageData, $page, $error, $messages);
                 $extendedPageData = $page->getData();
                 $this->setCmsPageData($page, $extendedPageData, $pageData);
@@ -90,6 +95,22 @@ class InlineEdit extends \Magento\Backend\App\Action
             'messages' => $messages,
             'error' => $error
         ]);
+    }
+
+    /**
+     * Filtering posted data.
+     *
+     * @param array $postData
+     * @return array
+     */
+    protected function filterPost($postData = [])
+    {
+        $pageData = $this->dataProcessor->filter($postData);
+        $pageData['custom_theme'] = isset($pageData['custom_theme']) ? $pageData['custom_theme'] : null;
+        $pageData['custom_root_template'] = isset($pageData['custom_root_template'])
+            ? $pageData['custom_root_template']
+            : null;
+        return $pageData;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->expectOutputString('');
-        $this->_driver = $this->getMock('Magento\Framework\Profiler\Driver\Standard', ['registerOutput']);
+        $this->_driver = $this->getMock(\Magento\Framework\Profiler\Driver\Standard::class, ['registerOutput']);
         $this->_object = new \Magento\TestFramework\Bootstrap\Profiler($this->_driver);
     }
 
@@ -41,7 +41,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'registerOutput'
         )->with(
-            $this->isInstanceOf('Magento\Framework\Profiler\Driver\Standard\Output\Csvfile')
+            $this->isInstanceOf(\Magento\Framework\Profiler\Driver\Standard\Output\Csvfile::class)
         );
         $this->_object->registerFileProfiler('php://output');
     }
@@ -53,7 +53,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'registerOutput'
         )->with(
-            $this->isInstanceOf('Magento\TestFramework\Profiler\OutputBamboo')
+            $this->isInstanceOf(\Magento\TestFramework\Profiler\OutputBamboo::class)
         );
         $this->_object->registerBambooProfiler('php://output', __DIR__ . '/_files/metrics.php');
     }

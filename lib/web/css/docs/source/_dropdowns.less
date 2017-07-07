@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -17,7 +17,7 @@
 //
 //  ```html
 //  <div class="actions dropdown example-dropdown-1">
-//     <button class="action toggle" data-toggle="dropdown" aria-haspopup="true">
+//     <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //         <span>button + dropdown</span>
 //     </button>
 //     <ul class="dropdown">
@@ -44,7 +44,7 @@
 //
 //  ```html
 //  <div class="example-dropdown-2">
-//     <span class="action toggle" data-toggle="dropdown" aria-haspopup="true">
+//     <span class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //         <span>span + dropdown</span>
 //     </span>
 //     <ul class="dropdown">
@@ -66,179 +66,269 @@
 }
 
 // # Drop-down variables
-//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
+//            <th>@_toggle-selector</th>
+//            <td>-</td>
+//            <td class="vars_value">~".action.toggle"</td>
+//            <td class="vars_value">Selector</td>
+//            <td>Toggle selector</td>
+//        </tr>
+//        <tr>
+//            <th>@_options-selector</th>
+//            <td>-</td>
+//            <td class="vars_value">~"ul.dropdown"</td>
+//            <td class="vars_value">Selector</td>
+//            <td>Options selector</td>
+//        </tr>
+//        <tr>
 //            <th>@_dropdown-actions-padding</th>
+//            <td>@dropdown-actions__padding</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle element padding</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Drop-down list</th>
+//            <th>@_dropdown-list-min-width</th>
+//            <td>@dropdown-list__min-width</td>
+//            <td class="vars_value">100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Drop-down min width value</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-width</th>
+//            <td>@dropdown-list__width</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Drop-down list width value</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-height</th>
+//            <td>@dropdown-list__height</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Drop-down list height value</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-margin-top</th>
+//            <td>@dropdown-list__margin-top</td>
+//            <td class="vars_value">4px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Drop-down list margin-top value</td>
+//        </tr>
+//        <tr>
+//            <th colspan="5" class="vars_section">Drop-down list</th>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-position-top</th>
+//            <td>@dropdown-list__position-top</td>
 //            <td class="vars_value">100%</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list position: top</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-position-right</th>
+//            <td>@dropdown-list__position-right</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list position: right</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-position-bottom</th>
+//            <td>@dropdown-list__position-bottom</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list position: bottom</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-position-left</th>
+//            <td>@dropdown-list__position-left</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list position: left</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-background</th>
+//            <td>@dropdown-list__background</td>
 //            <td class="vars_value">@color-white</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list background</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-border</th>
+//            <td>@dropdown-list__border</td>
 //            <td class="vars_value">1px solid #bbb</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list border</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-pointer</th>
+//            <td>@dropdown-list__pointer</td>
 //            <td class="vars_value">true</td>
 //            <td class="vars_value">true | false</td>
 //            <td>Drop-down list pointer is visible</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-pointer-border</th>
+//            <td>@dropdown-list-pointer__border</td>
 //            <td class="vars_value">#bbb</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list pointer border</td>
 //        </tr>
 //        <tr>
+//            <th>@_dropdown-list-pointer-position</th>
+//            <td>@dropdown-list-pointer__position</td>
+//            <td class="vars_value">left</td>
+//            <td class="vars_value">left | right</td>
+//            <td>Drop-down pointer position</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-pointer-position-top</th>
+//            <td>@dropdown-list-pointer__position-top</td>
+//            <td class="vars_value">-12px</td>
+//            <td class="vars_value">value</td>
+//            <td>Drop-down pointer top position</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-pointer-position-left-right</th>
+//            <td>@dropdown-list-pointer__position-left-right</td>
+//            <td class="vars_value">10px</td>
+//            <td class="vars_value">value</td>
+//            <td>Drop-down pointer left or right position</td>
+//        </tr>
+//        <tr>
 //            <th>@_dropdown-list-item-border</th>
+//            <td>@dropdown-list-item__border</td>
 //            <td class="vars_value">0</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list item border</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-item-padding</th>
-//            <td class="vars_value">3px 5px</td>
+//            <td>@dropdown-list-item__padding</td>
+//            <td class="vars_value">3px @indent__xs</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list item padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-item-margin</th>
+//            <td>@dropdown-list-item__margin</td>
 //            <td class="vars_value">0</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list item margin</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-item-hover</th>
+//            <td>@dropdown-list-item__hover</td>
 //            <td class="vars_value">#e8e8e8</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list item hovered background</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-shadow</th>
+//            <td>@dropdown-list__shadow</td>
 //            <td class="vars_value">0 3px 3px rgba(0,0,0,.15)</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list shadow</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-z-index</th>
+//            <td>@dropdown-list__z-index</td>
 //            <td class="vars_value">100</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list z-index</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Drop-down icon</th>
+//            <th colspan="5" class="vars_section">Drop-down icon</th>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-toggle-icon-content</th>
+//            <td>@dropdown-toggle-icon__content</td>
 //            <td class="vars_value">@icon-pointer-down</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon symbol code for default state</td>
 //        </tr>
 //        <tr>
 //            <th nowrap>@_dropdown-toggle-active-icon-content</th>
+//            <td>@dropdown-toggle-icon__active__content</td>
 //            <td class="vars_value">@icon-pointer-up</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon symbol code for active state</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font</th>
+//            <td>@dropdown-toggle-icon__font</td>
 //            <td class="vars_value">@button-icon__font</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon font</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-size</th>
+//            <td>@dropdown-toggle-icon__font-size</td>
 //            <td class="vars_value">@button-icon__font-size</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-line-height</th>
+//            <td>@dropdown-toggle-icon__font-line-height</td>
 //            <td class="vars_value">@button-icon__line-height</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon line height</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-color</th>
+//            <td>@dropdown-toggle-icon__font-color</td>
 //            <td class="vars_value">@button-icon__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon color</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-color-hover</th>
+//            <td>@dropdown-toggle-icon__font-color-hover</td>
 //            <td class="vars_value">@button-icon__hover__font-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon hovered color</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-color-active</th>
+//            <td>@dropdown-toggle-icon__font-color-active</td>
 //            <td class="vars_value">@button-icon__active__font-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon active color</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-margin</th>
+//            <td>@dropdown-toggle-icon__font-margin</td>
 //            <td class="vars_value">@button-icon__margin</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon margin</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-position</th>
+//            <td>@dropdown-toggle-icon__position</td>
 //            <td class="vars_value">after</td>
 //            <td class="vars_value">before | after</td>
 //            <td>Drop-down toggle icon position</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-vertical-align</th>
+//            <td>@dropdown-toggle-icon__font-vertical-align</td>
 //            <td class="vars_value" nowrap="nowrap">@button-icon__vertical-align</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down toggle icon vertical align</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-text-hide</th>
+//            <td>@dropdown-toggle-icon__text-hide</td>
 //            <td class="vars_value">@button-icon__text-hide</td>
 //            <td class="vars_value">true | false</td>
 //            <td>Text in the tag, that contains icon, is hidden</td>
@@ -257,7 +347,7 @@
 //
 //  ```html
 //  <div class="actions dropdown example-dropdown-3">
-//     <span class="action toggle" data-toggle="dropdown" aria-haspopup="true">
+//     <span class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //         <span>span + dropdown</span>
 //     </span>
 //     <ul class="dropdown">
@@ -291,7 +381,7 @@
 //
 //  ```html
 // <div class="actions dropdown example-dropdown-5">
-//    <span class="action toggle" data-toggle="dropdown" aria-haspopup="true">
+//    <span class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //        <span>span + dropdown</span>
 //    </span>
 //    <ul class="dropdown">
@@ -329,10 +419,10 @@
 //
 //  ```html
 //  <div class="actions split example-dropdown-6">
-//     <button href="#" class="action split">
+//     <button class="action split">
 //         <span>Spit button</span>
 //     </button>
-//     <button data-toggle="dropdown" class="action toggle" aria-haspopup="true">
+//     <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //         <span>Select</span>
 //     </button>
 //     <ul class="dropdown">
@@ -356,7 +446,7 @@
 //      <a href="#" class="action split">
 //          <span>Spit button</span>
 //      </a>
-//      <button data-toggle="dropdown" class="action toggle" aria-haspopup="true">
+//      <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //          <span>Select</span>
 //      </button>
 //      <ul class="dropdown">
@@ -389,186 +479,300 @@
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
+//            <th>@_toggle-selector</th>
+//            <td>-</td>
+//            <td class="vars_value">~".action.toggle"</td>
+//            <td class="vars_value">selector</td>
+//            <td>Split button action toggle selector</td>
+//        </tr>
+//        <tr>
+//            <th>@_options-selector</th>
+//            <td>-</td>
+//            <td class="vars_value">~"ul.dropdown"</td>
+//            <td class="vars_value">selector</td>
+//            <td>Split button options selector</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-selector</th>
+//            <td>-</td>
+//            <td class="vars_value">~".action.split"</td>
+//            <td class="vars_value">selector</td>
+//            <td>Split button selector</td>
+//        </tr>
+//        <tr>
 //            <th>@_dropdown-split-actions-padding</th>
+//            <td>@dropdown-split-actions__padding</td>
 //            <td class="vars_value">0 @indent__xs</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button toggle element padding</td>
 //        </tr>
 //        <tr>
+//            <th>@_dropdown-split-button-actions-padding</th>
+//            <td>@dropdown-split-button__actions__padding</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button actions padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-split-toggle-actions-padding</th>
+//            <td>@dropdown-split-toggle__actions__padding</td>
+//            <td class="vars_value">4px @indent__xs</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button toggle padding</td>
+//        </tr>
+//        <tr>
 //            <th>@_dropdown-split-toggle-position</th>
+//            <td>@dropdown-split-toggle__position</td>
 //            <td class="vars_value">right</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button toggle element position</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Drop-down list</th>
+//            <th colspan="5" class="vars_section">Drop-down list</th>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-split-list-min-width</th>
+//            <td>@dropdown-split-list__min-width</td>
+//            <td class="vars_value">100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button min width</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-split-list-width</th>
+//            <td>@dropdown-split-list__width</td>
+//            <td class="vars_value">100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button width</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-split-list-height</th>
+//            <td>@dropdown-split-list__height</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button height</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-split-list-margin-top</th>
+//            <td>@dropdown-split-list__margin-top</td>
+//            <td class="vars_value">4px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button margin-top</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-position-top</th>
+//            <td>@dropdown-split-list__position-top</td>
 //            <td class="vars_value">@dropdown-list__position-top</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list position: top</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-position-right</th>
+//            <td>@dropdown-split-list__position-right</td>
 //            <td class="vars_value">@dropdown-list__position-right</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list position: right</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-position-bottom</th>
+//            <td>@dropdown-split-list__position-bottom</td>
 //            <td class="vars_value">@dropdown-list__position-bottom</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list position: bottom</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-position-left</th>
+//            <td>@dropdown-split-list__position-left</td>
 //            <td class="vars_value">@dropdown-list__position-left</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list position: left</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-background</th>
+//            <td>@dropdown-split-list__background</td>
 //            <td class="vars_value">@dropdown-list__background</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down background</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-border</th>
+//            <td>@dropdown-split-list__border</td>
 //            <td class="vars_value">@dropdown-list__border</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down border</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-pointer</th>
+//            <td>@dropdown-split-list__pointer</td>
 //            <td class="vars_value">@dropdown-list__pointer</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list pointer</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-pointer-border</th>
+//            <td>@dropdown-split-list__pointer-border</td>
 //            <td class="vars_value">@dropdown-list-pointer__border</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list pointer border</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-button-border-radius-fix</th>
+//            <td>@dropdown-split-button__border-radius-fix</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">true | false</td>
 //            <td>Split button drop-down list item border</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-item-border</th>
+//            <td>@dropdown-split-list__item-border</td>
 //            <td class="vars_value">@dropdown-list-item__border</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list item border</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-item-padding</th>
+//            <td>@dropdown-split-list__item-padding</td>
 //            <td class="vars_value">@dropdown-list-item__padding</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list item padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-item-margin</th>
+//            <td>@dropdown-split-list__item-margin</td>
 //            <td class="vars_value">@dropdown-list-item__margin</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list item margin</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-item-hover</th>
+//            <td>@dropdown-split-list__item-hover</td>
 //            <td class="vars_value">@dropdown-list-item__hover</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list item hovered background</td>
 //        </tr>
 //        <tr>
+//            <th>@_dropdown-split-list-pointer-position</th>
+//            <td>@dropdown-split-list__pointer-position</td>
+//            <td class="vars_value">right</td>
+//            <td class="vars_value">left | right</td>
+//            <td>Split button drop-down list pointer position</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-split-list-pointer-position-top</th>
+//            <td>@dropdown-split-list__pointer-position-top</td>
+//            <td class="vars_value">-12px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button drop-down list pointer position top</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-split-list-pointer-position-left-right</th>
+//            <td>@dropdown-split-list__pointer-position-left-right</td>
+//            <td class="vars_value">10px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Split button drop-down list pointer left or right position</td>
+//        </tr>
+//        <tr>
 //            <th>@_dropdown-split-list-shadow</th>
+//            <td>@dropdown-split-list__shadow</td>
 //            <td class="vars_value">@dropdown-list__shadow</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list shadow</td>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-list-z-index</th>
+//            <td>@dropdown-split-list__z-index</td>
 //            <td class="vars_value">@dropdown-list__z-index</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down list z-index</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Dropdown icon</th>
+//            <th colspan="5" class="vars_section">Dropdown icon</th>
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-split-toggle-icon-content</th>
+//            <td>@dropdown-split-toggle-icon__content</td>
 //            <td class="vars_value">@dropdown-toggle-icon__content</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon - default state</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_dropdown-split-toggle-active-icon-content</th>
+//            <td>@dropdown-split-toggle-icon__active__content</td>
 //            <td class="vars_value" nowrap="nowrap">@dropdown-toggle-icon__active__content</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon - active state</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font</th>
+//            <td>@dropdown-split-toggle-icon__font</td>
 //            <td class="vars_value">@button-icon__font</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon font</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-size</th>
+//            <td>@dropdown-split-toggle-icon__font-size</td>
 //            <td class="vars_value">@button-icon__font-size</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-line-height</th>
+//            <td>@dropdown-split-toggle-icon__font-line-height</td>
 //            <td class="vars_value">@button-icon__line-height</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon line height</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-color</th>
+//            <td>@dropdown-split-toggle-icon__font-color</td>
 //            <td class="vars_value">@button-icon__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon color</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-color-hover</th>
+//            <td>@dropdown-split-toggle-icon__font-color-hover</td>
 //            <td class="vars_value">@button-icon__hover__font-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon hovered color</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-color-active</th>
+//            <td>@dropdown-split-toggle-icon__font-color-active</td>
 //            <td class="vars_value">@button-icon__active__font-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon active color</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-margin</th>
+//            <td>@dropdown-split-toggle-icon__font-margin</td>
 //            <td class="vars_value">@button-icon__margin</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon margin</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-position</th>
+//            <td>@dropdown-split-toggle-icon__position</td>
 //            <td class="vars_value">after</td>
 //            <td class="vars_value">before | after</td>
 //            <td>Split button drop-down toggle icon position</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-vertical-align</th>
+//            <td>@dropdown-split-toggle-icon__font-vertical-align</td>
 //            <td class="vars_value" nowrap="nowrap">@button-icon__vertical-align</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Split button drop-down toggle icon vertical align</td>
 //        </tr>
 //        <tr>
 //            <th>@_icon-font-text-hide</th>
+//            <td>@dropdown-split-toggle-icon__text-hide</td>
 //            <td class="vars_value">@button-icon__text-hide</td>
 //            <td class="vars_value">true | false</td>
 //            <td>The text in the toggle tag is hidden</td>
@@ -587,7 +791,7 @@
 //    <button class="action split">
 //        <span>Spit button</span>
 //    </button>
-//    <button data-toggle="dropdown" class="action toggle" aria-haspopup="true">
+//    <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //        <span>Select</span>
 //    </button>
 //    <ul class="dropdown">
@@ -611,7 +815,7 @@
 //    <button class="action split">
 //        <span>Spit button</span>
 //    </button>
-//    <button data-toggle="dropdown" class="action toggle" aria-haspopup="true">
+//    <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //        <span>Select</span>
 //    </button>
 //    <ul class="dropdown">
@@ -635,7 +839,7 @@
 //    <button class="action split">
 //        <span>Spit button</span>
 //    </button>
-//    <button data-toggle="dropdown" class="action toggle" aria-haspopup="true">
+//    <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //        <span>Select</span>
 //    </button>
 //    <ul class="dropdown">
@@ -681,7 +885,7 @@
 //     <button class="action split">
 //         <span>Spit button</span>
 //     </button>
-//     <button data-toggle="dropdown" class="action toggle" aria-haspopup="true">
+//     <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //         <span>Select</span>
 //     </button>
 //     <ul class="dropdown">
@@ -705,8 +909,8 @@
         @_dropdown-split-toggle-icon-content: @icon-expand,
         @_dropdown-split-toggle-active-icon-content: @icon-collapse,
         @_icon-font-position: before,
-        @_icon-font-color: red,
-        @_icon-font-color-hover: red
+        @_icon-font-color: #f00,
+        @_icon-font-color-hover: #f00
     );
 }
 
@@ -719,7 +923,7 @@
 //     <button class="action split">
 //         <span>Spit button</span>
 //     </button>
-//     <button data-toggle="dropdown" class="action toggle" aria-haspopup="true">
+//     <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
 //         <span>Select</span>
 //     </button>
 //     <ul class="dropdown">

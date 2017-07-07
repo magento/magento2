@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,18 +14,18 @@ $_height = $block->getImagesHeight();
 ?>
 <?php if ($block->getFilesCount() > 0): ?>
     <?php foreach ($block->getFiles() as $file): ?>
-    <div data-row="file" class="filecnt" id="<?php /* @escapeNotVerified */ echo $block->getFileId($file) ?>">
-        <p class="nm" style="height:<?php /* @escapeNotVerified */ echo $_height ?>px;width:<?php /* @escapeNotVerified */ echo $_width ?>px;">
+    <div data-row="file" class="filecnt" id="<?= $block->escapeHtmlAttr($block->getFileId($file)) ?>">
+        <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;width:<?= $block->escapeHtmlAttr($_width) ?>px;">
         <?php if ($block->getFileThumbUrl($file)):?>
-            <img src="<?php /* @escapeNotVerified */ echo $block->getFileThumbUrl($file) ?>" alt="<?php /* @escapeNotVerified */ echo $block->getFileName($file) ?>"/>
+            <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
         <?php endif; ?>
         </p>
         <?php if ($block->getFileWidth($file)): ?>
-            <small><?php /* @escapeNotVerified */ echo $block->getFileWidth($file) ?>x<?php /* @escapeNotVerified */ echo $block->getFileHeight($file) ?> <?php /* @escapeNotVerified */ echo __('px.') ?></small><br/>
+            <small><?= $block->escapeHtml($block->getFileWidth($file)) ?>x<?= $block->escapeHtml($block->getFileHeight($file)) ?> <?= $block->escapeHtml(__('px.')) ?></small><br/>
         <?php endif; ?>
-        <small><?php /* @escapeNotVerified */ echo $block->getFileShortName($file); ?></small>
+        <small><?= $block->escapeHtml($block->getFileShortName($file)) ?></small>
     </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="empty"><?php /* @escapeNotVerified */ echo __('No files found') ?></div>
+    <div class="empty"><?= $block->escapeHtml(__('No files found')) ?></div>
 <?php endif; ?>

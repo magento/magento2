@@ -2,7 +2,7 @@
 /**
  * Attribure lock state validator
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Attribute;
@@ -22,7 +22,7 @@ class LockValidatorComposite implements LockValidatorInterface
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $validators = [])
     {
         foreach ($validators as $validator) {
-            if (!is_subclass_of($validator, 'Magento\Catalog\Model\Attribute\LockValidatorInterface')) {
+            if (!is_subclass_of($validator, \Magento\Catalog\Model\Attribute\LockValidatorInterface::class)) {
                 throw new \InvalidArgumentException($validator . ' does not implements LockValidatorInterface');
             }
             $this->validators[] = $objectManager->get($validator);

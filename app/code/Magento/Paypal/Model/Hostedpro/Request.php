@@ -1,60 +1,68 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Hostedpro;
 
-use \Magento\Sales\Model\Order;
+use Magento\Customer\Helper\Address;
+use Magento\Framework\DataObject;
+use Magento\Framework\Locale\Resolver;
+use Magento\Payment\Helper\Formatter;
+use Magento\Paypal\Model\Hostedpro;
+use Magento\Sales\Model\Order;
+use Magento\Tax\Helper\Data;
 
 /**
  *  Website Payments Pro Hosted Solution request model to get token.
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Request extends \Magento\Framework\DataObject
+class Request extends DataObject
 {
+    use Formatter;
+
     /**
      * Request's order model
      *
      * @var \Magento\Sales\Model\Order
      */
-    protected $_order;
+    protected $order;
 
     /**
      * Request's Hosted Pro payment method model
      *
      * @var \Magento\Paypal\Model\Hostedpro
      */
-    protected $_paymentMethod;
+    protected $paymentMethod;
 
     /**
      * Name format for button variables
      *
      * @var string
      */
-    protected $_buttonVarFormat = 'L_BUTTONVAR%d';
+    protected $buttonVarFormat = 'L_BUTTONVAR%d';
 
     /**
      * Request Parameters which dont have to wrap as button vars
      *
      * @var string[]
      */
-    protected $_notButtonVars = ['METHOD', 'BUTTONCODE', 'BUTTONTYPE'];
+    protected $notButtonVars = ['METHOD', 'BUTTONCODE', 'BUTTONTYPE'];
 
     /**
      * Customer address
      *
      * @var \Magento\Customer\Helper\Address
      */
-    protected $_customerAddress = null;
+    protected $customerAddress = null;
 
     /**
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
      */
-    protected $_taxData;
+    protected $taxData;
 
     /**
      * Locale Resolver
@@ -70,14 +78,14 @@ class Request extends \Magento\Framework\DataObject
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Locale\Resolver $localeResolver,
-        \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Tax\Helper\Data $taxData,
+        Resolver $localeResolver,
+        Address $customerAddress,
+        Data $taxData,
         array $data = []
     ) {
-        $this->_customerAddress = $customerAddress;
+        $this->customerAddress = $customerAddress;
         $this->localeResolver = $localeResolver;
-        $this->_taxData = $taxData;
+        $this->taxData = $taxData;
         parent::__construct($data);
     }
 
@@ -94,10 +102,10 @@ class Request extends \Magento\Framework\DataObject
             // except special params from _notButtonVars list
             $i = 0;
             foreach ($this->_data as $key => $value) {
-                if (in_array($key, $this->_notButtonVars)) {
+                if (in_array($key, $this->notButtonVars)) {
                     $requestData[$key] = $value;
                 } else {
-                    $varKey = sprintf($this->_buttonVarFormat, $i);
+                    $varKey = sprintf($this->buttonVarFormat, $i);
                     $requestData[$varKey] = $key . '=' . $value;
                     $i++;
                 }
@@ -115,8 +123,8 @@ class Request extends \Magento\Framework\DataObject
      */
     public function setPaymentMethod($paymentMethod)
     {
-        $this->_paymentMethod = $paymentMethod;
-        $requestData = $this->_getPaymentData($paymentMethod);
+        $this->paymentMethod = $paymentMethod;
+        $requestData = $this->getPaymentData($paymentMethod);
         $this->addData($requestData);
 
         return $this;
@@ -128,10 +136,10 @@ class Request extends \Magento\Framework\DataObject
      * @param \Magento\Sales\Model\Order $order
      * @return $this
      */
-    public function setOrder($order)
+    public function setOrder(Order $order)
     {
-        $this->_order = $order;
-        $requestData = $this->_getOrderData($order);
+        $this->order = $order;
+        $requestData = $this->getOrderData($order);
         $this->addData($requestData);
 
         return $this;
@@ -146,7 +154,7 @@ class Request extends \Magento\Framework\DataObject
      */
     public function setAmount(Order $order)
     {
-        $this->addData($this->_getAmountData($order));
+        $this->addData($this->getAmountData($order));
         return $this;
     }
 
@@ -156,10 +164,10 @@ class Request extends \Magento\Framework\DataObject
      * @return array
      * @throws \Exception
      */
-    protected function _getAmountData(Order $order)
+    protected function getAmountData(Order $order)
     {
         // if tax is included - need add to request only total amount
-        if ($this->_taxData->getConfig()->priceIncludesTax()) {
+        if ($this->taxData->getConfig()->priceIncludesTax()) {
             return $this->getTaxableAmount($order);
         } else {
             return $this->getNonTaxableAmount($order);
@@ -173,18 +181,15 @@ class Request extends \Magento\Framework\DataObject
      */
     private function getNonTaxableAmount(Order $order)
     {
+        // PayPal denied transaction with 0 amount
+        $subtotal = $order->getBaseSubtotal() ? : $order->getPayment()->getBaseAmountAuthorized();
+
         return [
-            'subtotal' => $this->_formatPrice(
-                $this->_formatPrice(
-                    $order->getPayment()->getBaseAmountAuthorized()
-                ) - $this->_formatPrice(
-                    $order->getBaseTaxAmount()
-                ) - $this->_formatPrice(
-                    $order->getBaseShippingAmount()
-                )
-            ),
-            'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
-            'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
+            'subtotal' => $this->formatPrice($subtotal),
+            'total' => $this->formatPrice($order->getPayment()->getBaseAmountAuthorized()),
+            'tax' => $this->formatPrice($order->getBaseTaxAmount()),
+            'shipping' => $this->formatPrice($order->getBaseShippingAmount()),
+            'discount' => $this->formatPrice(abs($order->getBaseDiscountAmount()))
         ];
     }
 
@@ -195,7 +200,8 @@ class Request extends \Magento\Framework\DataObject
      */
     private function getTaxableAmount(Order $order)
     {
-        $amount = $this->_formatPrice($order->getPayment()->getBaseAmountAuthorized());
+        $amount = $this->formatPrice($order->getPayment()->getBaseAmountAuthorized());
+
         return [
             'amount' => $amount,
             'subtotal' => $amount // subtotal always is required
@@ -208,7 +214,7 @@ class Request extends \Magento\Framework\DataObject
      * @param \Magento\Paypal\Model\Hostedpro $paymentMethod
      * @return array
      */
-    protected function _getPaymentData(\Magento\Paypal\Model\Hostedpro $paymentMethod)
+    protected function getPaymentData(Hostedpro $paymentMethod)
     {
         $request = [
             'paymentaction' => strtolower($paymentMethod->getConfigData('payment_action')),
@@ -235,7 +241,7 @@ class Request extends \Magento\Framework\DataObject
      * @param \Magento\Sales\Model\Order $order
      * @return array
      */
-    protected function _getOrderData(\Magento\Sales\Model\Order $order)
+    protected function getOrderData(Order $order)
     {
         $request = [
             'invoice' => $order->getIncrementId(),
@@ -246,81 +252,72 @@ class Request extends \Magento\Framework\DataObject
 
         // append to request billing address data
         if ($billingAddress = $order->getBillingAddress()) {
-            $request = array_merge($request, $this->_getBillingAddress($billingAddress));
+            $request = array_merge($request, $this->getAddress($billingAddress, 'billing'));
         }
 
         // append to request shipping address data
         if ($shippingAddress = $order->getShippingAddress()) {
-            $request = array_merge($request, $this->_getShippingAddress($shippingAddress));
+            $request = array_merge($request, $this->getAddress($shippingAddress));
         }
 
         return $request;
     }
 
     /**
-     * Get shipping address request data
+     * Export address data to request
      *
-     * @param \Magento\Framework\DataObject $address
+     * @param DataObject $address
+     * @param string $type
      * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getShippingAddress(\Magento\Framework\DataObject $address)
+    protected function getAddress(DataObject $address, $type = '')
     {
-        $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
+        $type = !empty($type) ? $type . '_' : '';
         $request = [
-            'first_name' => $address->getFirstname(),
-            'last_name' => $address->getLastname(),
-            'city' => $address->getCity(),
-            'state' => $region ? $region : $address->getCity(),
-            'zip' => $address->getPostcode(),
-            'country' => $address->getCountry(),
+            $type . 'first_name' => $address->getFirstname(),
+            $type . 'last_name' => $address->getLastname(),
+            $type . 'city' => $address->getCity(),
+            $type . 'state' => $this->getRegion($address),
+            $type . 'zip' => $address->getPostcode(),
+            $type . 'country' => $address->getCountryId(),
         ];
 
-        // convert streets to tow lines format
-        $street = $this->_customerAddress->convertStreetLines($address->getStreet(), 2);
-
-        $request['address1'] = isset($street[0]) ? $street[0] : '';
-        $request['address2'] = isset($street[1]) ? $street[1] : '';
+        $streets = $this->getAddressStreets($address);
+        $request[$type . 'address1'] = $streets[0];
+        $request[$type . 'address2'] = $streets[1];
 
         return $request;
     }
 
     /**
-     * Get billing address request data
+     * Export region code from address data
      *
-     * @param \Magento\Framework\DataObject $address
-     * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function _getBillingAddress(\Magento\Framework\DataObject $address)
-    {
-        $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
-        $request = [
-            'billing_first_name' => $address->getFirstname(),
-            'billing_last_name' => $address->getLastname(),
-            'billing_city' => $address->getCity(),
-            'billing_state' => $region ? $region : $address->getCity(),
-            'billing_zip' => $address->getPostcode(),
-            'billing_country' => $address->getCountry(),
-        ];
-
-        // convert streets to tow lines format
-        $street = $this->_customerAddress->convertStreetLines($address->getStreet(), 2);
-
-        $request['billing_address1'] = isset($street[0]) ? $street[0] : '';
-        $request['billing_address2'] = isset($street[1]) ? $street[1] : '';
-
-        return $request;
-    }
-
-    /**
-     * Format price string
-     *
-     * @param mixed $string
+     * @param DataObject $address
      * @return string
      */
-    protected function _formatPrice($string)
+    protected function getRegion(DataObject $address)
     {
-        return sprintf('%.2F', $string);
+        // get region code, otherwise - region, otherwise - city
+        return $address->getRegionCode() ?: ($address->getRegion() ?: $address->getCity());
+    }
+
+    /**
+     * Export streets from address data
+     *
+     * @param DataObject $address
+     * @return array
+     */
+    protected function getAddressStreets(DataObject $address)
+    {
+        $street1 = '';
+        $street2 = '';
+        $data = $this->customerAddress->convertStreetLines($address->getStreet(), 2);
+        if (!empty($data[0])) {
+            $street1 = $data[0];
+        }
+        if (!empty($data[1])) {
+            $street2 = $data[1];
+        }
+        return [$street1, $street2];
     }
 }

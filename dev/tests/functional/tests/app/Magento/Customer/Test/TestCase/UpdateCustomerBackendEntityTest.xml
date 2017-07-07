@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerBackendEntityTest" summary="Update Backend Customer" ticketId="MAGETWO-23881">
         <variation name="UpdateCustomerBackendEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Wholesale</data>
             <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>
@@ -16,7 +17,7 @@
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/suffix" xsi:type="string">_Suffix%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <data name="customer/data/dob" xsi:type="string">01/08/1986</data>
+            <data name="customer/data/dob" xsi:type="string">08/01/1986</data>
             <data name="customer/data/taxvat" xsi:type="string">123456789001</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
@@ -43,7 +44,8 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
         </variation>
-        <variation name="UpdateCustomerBackendEntityTestVariation3">
+        <variation name="UpdateCustomerBackendEntityTestVariation3" summary="Address with alphanumeric zip">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
             <data name="customer/data/prefix" xsi:type="string">%isolation%Prefix_</data>
@@ -71,6 +73,52 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
+        </variation>
+        <variation name="UpdateCustomerBackendEntityTestVariation4" summary="Address w/o zip/state required, default billing/shipping checked">
+            <data name="initialCustomer/dataset" xsi:type="string">default</data>
+            <data name="customer/data/email" xsi:type="string">-</data>
+            <data name="address/data/default_billing" xsi:type="string">Yes</data>
+            <data name="address/data/default_shipping" xsi:type="string">Yes</data>
+            <data name="address/data/prefix" xsi:type="string">Prefix%isolation%_</data>
+            <data name="address/data/firstname" xsi:type="string">Doe%isolation%</data>
+            <data name="address/data/middlename" xsi:type="string">Middle Name %isolation%</data>
+            <data name="address/data/lastname" xsi:type="string">Doe%isolation%</data>
+            <data name="address/data/suffix" xsi:type="string">_Suffix%isolation%</data>
+            <data name="address/data/company" xsi:type="string">Company%isolation%</data>
+            <data name="address/data/street" xsi:type="string">3962 Horner Street</data>
+            <data name="address/data/city" xsi:type="string">Vancouver</data>
+            <data name="address/data/country_id" xsi:type="string">United Kingdom</data>
+            <data name="address/data/telephone" xsi:type="string">334-200-4061</data>
+            <data name="address/data/vat_id" xsi:type="string">U1234567891</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogin" />
+        </variation>
+        <variation name="UpdateCustomerBackendEntityTestVariation5" summary="Default billing/shipping unchecked">
+            <data name="initialCustomer/dataset" xsi:type="string">johndoe_unique_TX</data>
+            <data name="customer/data/email" xsi:type="string">-</data>
+            <data name="address/data/default_billing" xsi:type="string">No</data>
+            <data name="address/data/default_shipping" xsi:type="string">No</data>
+            <data name="address/data/prefix" xsi:type="string">Prefix%isolation%_</data>
+            <data name="address/data/firstname" xsi:type="string">Doe%isolation%</data>
+            <data name="address/data/middlename" xsi:type="string">Middle Name %isolation%</data>
+            <data name="address/data/lastname" xsi:type="string">Doe%isolation%</data>
+            <data name="address/data/suffix" xsi:type="string">_Suffix%isolation%</data>
+            <data name="address/data/company" xsi:type="string">Company%isolation%</data>
+            <data name="address/data/street" xsi:type="string">3962 Horner Street</data>
+            <data name="address/data/city" xsi:type="string">Vancouver</data>
+            <data name="address/data/country_id" xsi:type="string">United Kingdom</data>
+            <data name="address/data/telephone" xsi:type="string">334-200-4061</data>
+            <data name="address/data/vat_id" xsi:type="string">U1234567891</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
+        </variation>
+        <variation name="UpdateCustomerBackendEntityTestVariation6" summary="Delete customer address">
+            <data name="initialCustomer/dataset" xsi:type="string">johndoe_with_multiple_addresses</data>
+            <data name="customer/data/email" xsi:type="string">-</data>
+            <data name="addressIndexToDelete" xsi:type="number">1</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertAddressDeletedFrontend" />
         </variation>
     </testCase>
 </config>

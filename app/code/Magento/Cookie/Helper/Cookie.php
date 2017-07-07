@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Helper;
 
 /**
  * Cookie helper
+ * @api
  */
 class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -69,11 +70,22 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     public function isUserNotAllowSaveCookie()
     {
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
+        return $this->isCookieRestrictionModeEnabled() &&
+            empty($acceptedSaveCookiesWebsites[$this->_website->getId()]);
+    }
+
+    /**
+     * Check if cookie restriction mode is enabled for this store
+     *
+     * @return bool
+     */
+    public function isCookieRestrictionModeEnabled()
+    {
         return $this->scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_currentStore
-        ) && empty($acceptedSaveCookiesWebsites[$this->_website->getId()]);
+        );
     }
 
     /**
@@ -84,7 +96,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAcceptedSaveCookiesWebsiteIds()
     {
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
-        $acceptedSaveCookiesWebsites[$this->_website->getId()] = 1;
+        $acceptedSaveCookiesWebsites[(int)$this->_website->getId()] = 1;
         return json_encode($acceptedSaveCookiesWebsites);
     }
 

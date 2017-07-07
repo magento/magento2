@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Helper;
@@ -22,13 +22,13 @@ class PostHelperTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $contextMock = $this->getMock(
-            'Magento\Framework\App\Helper\Context',
+            \Magento\Framework\App\Helper\Context::class,
             ['getUrlBuilder', 'getUrlEncoder'],
             [],
             '',
             false
         );
-        $urlHelper = $this->getMockBuilder('Magento\Framework\Url\Helper\Data')
+        $urlHelper = $this->getMockBuilder(\Magento\Framework\Url\Helper\Data::class)
             ->disableOriginalConstructor()->getMock();
         $urlHelper->expects($this->once())
             ->method('getEncodedUrl')

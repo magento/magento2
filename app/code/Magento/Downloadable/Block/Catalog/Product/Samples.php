@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Downloadable\Model\ResourceModel\Sample;
 /**
  * Downloadable Product Samples part block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
 {

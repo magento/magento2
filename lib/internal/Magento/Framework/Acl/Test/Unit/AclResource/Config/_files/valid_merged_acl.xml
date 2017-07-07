@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Test_Value::show_toolbar" title="Lorem ipsum" sortOrder="12">
+                <resource id="Test_Value::global_search" title="some string for title" sortOrder="66" disabled="true">
+                    <resource id="Test_Value::dev" title="123" disabled="false" sortOrder="500" />
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,13 +69,13 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     protected function _getModelMock()
     {
         $customerCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
         );
         foreach ($this->_customers as $customer) {
             $customerCollection->addItem(new \Magento\Framework\DataObject($customer));
         }
 
-        $modelMock = $this->getMockBuilder('Magento\CustomerImportExport\Model\Import\AbstractCustomer')
+        $modelMock = $this->getMockBuilder(\Magento\CustomerImportExport\Model\Import\AbstractCustomer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -177,7 +177,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     public function testCheckUniqueKey(array $rowData, array $errors, $isValid = false)
     {
         $checkUniqueKey = new \ReflectionMethod(
-            'Magento\CustomerImportExport\Model\Import\AbstractCustomer',
+            \Magento\CustomerImportExport\Model\Import\AbstractCustomer::class,
             '_checkUniqueKey'
         );
         $checkUniqueKey->setAccessible(true);
@@ -230,7 +230,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
     {
         // clear array
         $validatedRows = new \ReflectionProperty(
-            'Magento\CustomerImportExport\Model\Import\AbstractCustomer',
+            \Magento\CustomerImportExport\Model\Import\AbstractCustomer::class,
             '_validatedRows'
         );
         $validatedRows->setAccessible(true);
@@ -239,7 +239,7 @@ class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\
 
         // reset counter
         $entitiesCount = new \ReflectionProperty(
-            'Magento\CustomerImportExport\Model\Import\AbstractCustomer',
+            \Magento\CustomerImportExport\Model\Import\AbstractCustomer::class,
             '_processedEntitiesCount'
         );
         $entitiesCount->setAccessible(true);

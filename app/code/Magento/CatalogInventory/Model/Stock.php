@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -24,7 +24,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @var string
      */
-    protected $eventPrefix = 'cataloginventory_stock';
+    protected $_eventPrefix = 'cataloginventory_stock';
 
     /**
      * Parameter name in event
@@ -32,7 +32,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @var string
      */
-    protected $eventObject = 'stock';
+    protected $_eventObject = 'stock';
 
     const BACKORDERS_NO = 0;
 
@@ -44,6 +44,8 @@ class Stock extends AbstractExtensibleModel implements StockInterface
 
     const STOCK_IN_STOCK = 1;
 
+    const WEBSITE_ID = 'website_id';
+
     /**
      * Default stock id
      */
@@ -54,10 +56,11 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock');
+        $this->_init(\Magento\CatalogInventory\Model\ResourceModel\Stock::class);
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Retrieve stock identifier
      *
@@ -142,5 +145,6 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

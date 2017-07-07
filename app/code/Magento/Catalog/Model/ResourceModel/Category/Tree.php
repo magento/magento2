@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Framework\Data\Tree\Dbp;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+
 /**
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Tree extends \Magento\Framework\Data\Tree\Dbp
+class Tree extends Dbp
 {
     const ID_FIELD = 'id';
 
@@ -88,15 +93,19 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     protected $_catalogCategory;
 
     /**
-     * Construct
-     *
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * Tree constructor.
      * @param \Magento\Catalog\Model\ResourceModel\Category $catalogCategory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory $collectionFactory
+     * @param Collection\Factory $collectionFactory
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Category $catalogCategory,
@@ -115,10 +124,10 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             $resource->getConnection('catalog'),
             $resource->getTableName('catalog_category_entity'),
             [
-                \Magento\Framework\Data\Tree\Dbp::ID_FIELD => 'entity_id',
-                \Magento\Framework\Data\Tree\Dbp::PATH_FIELD => 'path',
-                \Magento\Framework\Data\Tree\Dbp::ORDER_FIELD => 'position',
-                \Magento\Framework\Data\Tree\Dbp::LEVEL_FIELD => 'level'
+                Dbp::ID_FIELD => 'entity_id',
+                Dbp::PATH_FIELD => 'path',
+                Dbp::ORDER_FIELD => 'position',
+                Dbp::LEVEL_FIELD => 'level'
             ]
         );
         $this->_eventManager = $eventManager;
@@ -297,31 +306,35 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     protected function _getInactiveItemIds($collection, $storeId)
     {
-        $filter = $collection->getAllIdsSql();
-        $attributeId = $this->_catalogCategory->getIsActiveAttributeId();
+        $linkField = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getLinkField();
+        $intTable = $this->_coreResource->getTableName('catalog_category_entity_int');
 
-        $conditionSql = $this->_conn->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-        $table = $this->_coreResource->getTableName('catalog_category_entity_int');
-        $bind = ['attribute_id' => $attributeId, 'store_id' => $storeId, 'zero_store_id' => 0, 'cond' => 0];
-        $select = $this->_conn->select()->from(
-            ['d' => $table],
-            ['d.entity_id']
-        )->where(
-            'd.attribute_id = :attribute_id'
-        )->where(
-            'd.store_id = :zero_store_id'
-        )->where(
-            'd.entity_id IN (?)',
-            new \Zend_Db_Expr($filter)
-        )->joinLeft(
-            ['c' => $table],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = d.entity_id',
-            []
-        )->where(
-            $conditionSql . ' = :cond'
+        $select = $collection->getAllIdsSql()
+            ->joinInner(
+                ['d' => $intTable],
+                "e.{$linkField} = d.{$linkField}",
+                []
+            )->joinLeft(
+                ['c' => $intTable],
+                "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = d.{$linkField}",
+                []
+            )->where(
+                'd.attribute_id = :attribute_id'
+            )->where(
+                'd.store_id = :zero_store_id'
+            )->where(
+                $this->_conn->getCheckSql('c.value_id > 0', 'c.value', 'd.value') . ' = :cond'
+            );
+
+        return $this->_conn->fetchCol(
+            $select,
+            [
+                'attribute_id' => $this->_catalogCategory->getIsActiveAttributeId(),
+                'store_id' => $storeId,
+                'zero_store_id' => 0,
+                'cond' => 0
+            ]
         );
-
-        return $this->_conn->fetchCol($select, $bind);
     }
 
     /**
@@ -567,6 +580,9 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     protected function _createCollectionDataSelect($sorted = true, $optionalAttributes = [])
     {
+        $meta = $this->getMetadataPool()->getMetadata(CategoryInterface::class);
+        $linkField = $meta->getLinkField();
+
         $select = $this->_getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
         // add attributes to select
         $attributes = ['name', 'is_active', 'is_anchor'];
@@ -590,7 +606,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
                 $select->joinLeft(
                     [$tableDefault => $attribute->getBackend()->getTable()],
                     sprintf(
-                        '%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
+                        '%1$s.' . $linkField . '=e.' . $linkField .
+                        ' AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
                         $tableDefault,
                         $attribute->getId(),
                         \Magento\Store\Model\Store::DEFAULT_STORE_ID
@@ -599,7 +616,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
                 )->joinLeft(
                     [$tableStore => $attribute->getBackend()->getTable()],
                     sprintf(
-                        '%1$s.entity_id=e.entity_id AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
+                        '%1$s.' . $linkField . '=e.' . $linkField .
+                        ' AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
                         $tableStore,
                         $attribute->getId(),
                         $this->getStoreId()
@@ -657,5 +675,17 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         }
         $select = $this->_conn->select()->from($this->_table, ['entity_id'])->where('entity_id IN (?)', $ids);
         return $this->_conn->fetchCol($select);
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

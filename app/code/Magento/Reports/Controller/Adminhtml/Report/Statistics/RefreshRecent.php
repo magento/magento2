@@ -1,11 +1,10 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
-
 
 class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
@@ -19,7 +18,9 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
         try {
             $collectionsNames = $this->_getCollectionNames();
             /** @var \DateTime $currentDate */
-            $currentDate = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->date();
+            $currentDate = $this->_objectManager->get(
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+            )->date();
             $date = $currentDate->modify('-25 hours');
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate($date);
@@ -29,7 +30,7 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t refresh recent statistics.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
 
         if ($this->_getSession()->isFirstPageAfterLogin()) {

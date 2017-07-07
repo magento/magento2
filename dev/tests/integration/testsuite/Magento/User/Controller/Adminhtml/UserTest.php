@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml;
@@ -33,7 +33,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var $user \Magento\User\Model\User */
         $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\User\Model\User'
+            \Magento\User\Model\User::class
         )->loadByUsername(
             'dummy_username'
         );
@@ -132,7 +132,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $user \Magento\User\Model\User */
-        $user = $objectManager->create('Magento\User\Model\User');
+        $user = $objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername($postData['username']);
         if ($isPasswordCorrect) {
             $this->assertRedirect($this->stringContains('backend/admin/user/index'));
@@ -140,7 +140,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             $this->assertEquals($postData['email'], $user->getEmail());
             $this->assertEquals($postData['firstname'], $user->getFirstname());
             $this->assertEquals($postData['lastname'], $user->getLastname());
-            $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+            $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
             $this->assertTrue($encryptor->validateHash($postData['password'], $user->getPassword()));
         } else {
             $this->assertRedirect($this->stringContains('backend/admin/user/edit'));

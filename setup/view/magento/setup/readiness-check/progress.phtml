@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@
 
         <div class="message message-error" ng-switch-when="true">
             <span class="message-text">
-                <strong>Completed!</strong> You need to resolve these issues to continue.
+               <strong>Error!</strong> You need to resolve these issues to continue.
             </span>
         </div>
 
@@ -30,9 +30,54 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <span class="message-text">{{wordingOfReadinessCheckAction()}}.</span>
+        <span class="message-text" ng-bind-html="wordingOfReadinessCheckAction()"></span>
     </div>
 
+</div>
+
+<div class="extensions-information" ng-if="$state.current.type == 'update' && getObjectSize(getExtensionsList()) > 0">
+    <div class="message message-warning"
+         ng-show="componentDependency.processed && componentDependency.responseType != 'success'"
+    >
+        We found some extensions with available version updates. We recommend that you update to the recommended
+        versions or remove these extensions from the installation process. We found some extensions with available
+        version updates. We recommend that you update to the recommended versions or remove these extensions from
+        the installation process.
+    </div>
+    <div class="extensions-container">
+        <h3>Update these extension(s)</h3>
+        <ul class="list">
+            <li ng-repeat="extension in getExtensionsList()">
+                {{extension.name}} {{getCurrentVersion(extension.name)}} to
+                <select ng-change="versionChanged()"
+                        ng-model="extension.version"
+                        ng-disabled="checkingInProgress()"
+                >
+                    <option ng-repeat="version in getVersionsList(extension.name)"
+                            ng-selected="version == extension.version"
+                            value="{{version}}"
+                    >Version {{version}}</option>
+                </select>
+                <button class="extension-delete"
+                        title="Delete"
+                        ng-click="openDialog(extension.name)"
+                        ng-show="!checkingInProgress() && getObjectSize(getExtensionsList()) > 1">
+                    <span>Delete</span>
+                </button>
+            </li>
+        </ul>
+
+        <div ng-show="(needReCheck || hasErrors) && !checkingInProgress()">
+            <button ng-click="$state.forceReload()" class="btn btn-medium btn-secondary">
+                <span>Try Again</span>
+            </button>
+        </div>
+        <div ng-show="!needReCheck && !checkingInProgress() && !hasErrors">
+            <button ng-click="nextState()" class="btn btn-medium btn-prime">
+                <span>Update</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <div id="updater-application" class="readiness-check-item" ng-show="updater.visible">
@@ -243,7 +288,7 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <h3 class="readiness-check-title">Checking PHP Settings....</h3>
+        <h3 class="readiness-check-title">Checking PHP Settings *....</h3>
     </div>
 
     <div ng-show="settings.processed" ng-switch="settings.responseType">
@@ -253,10 +298,18 @@
             <span class="readiness-check-icon icon-success-round"></span>
 
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
                 <p>
                     Your PHP settings are correct.
                 </p>
+            </div>
+
+            <div ng-repeat="setting in settings.data">
+                <div class="message" ng-show="setting.warning">
+                    <p>
+                        {{setting.message}}
+                    </p>
+                </div>
             </div>
 
         </div>
@@ -265,7 +318,7 @@
 
             <span class="readiness-check-icon icon-failed-round"></span>
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
 
                 <div ng-show="settings.isRequestError">
                     <p>Server failed to respond. Please try again.</p>
@@ -339,7 +392,7 @@
 
                 <div class="readiness-check-side">
                     <p class="side-title">Need Help?</p>
-                    <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
+                    <a href="http://devdocs.magento.com/guides/v2.0/install-gde/system-requirements.html" target="_blank">PHP Extension Help</a>
                 </div>
 
                 <span class="readiness-check-icon icon-failed-round"></span>
@@ -443,29 +496,38 @@
                             <span ng-show="permissions.expanded">Hide detail</span>
                         </a>
                     </p>
-                    <p>
-                        The best way to resolve this is to allow write permissions for the following Magento
-                        directories and their sub-directories. The exact fix depends on your server, your host,
+                    <p ng-show="permissions.expanded">
+                        The best way to resolve this is to allow write permissions for files in the following Magento directories and subdirectories. The exact fix depends on your server, your host,
                         and other system variables.
                         <br>
-                        Our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a> can get you started.
+                        For help, see our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a> or call your hosting provider.
                     </p>
-                    <p>
-                        If you need more help, please call your hosting provider.
-                    </p>
-
-                    <ul class="list" ng-show="permissions.expanded">
+                    <ul class="list" ng-show="permissions.expanded" ng-init="showDetails=false">
                         <li
                             class="list-item-icon"
                             ng-repeat="name in permissions.data.required"
-                            ng-switch="hasItem(permissions.data.current, name)">
+                            ng-switch="hasItem(permissions.data.current, name.path)">
                             <span ng-switch-when="true" class="icon-success"></span>
                             <span ng-switch-default class="icon-failed"></span>
-                            <span>"{{name}}" writable directory permission.</span>
+                            <span>"{{name.path}}"</span>
+                            <span ng-switch-when="true">
+                                 - Writable.
+                            </span>
+                            <span ng-switch-default ng-hide="permission.expanded">
+                                - Not writable, change the permissions.
+                                <a href="#" ng-click="showDetails = !showDetails"">
+                                    <span ng-hide="showDetails">Show details</span>
+                                    <span ng-show="showDetails">Hide details</span>
+                                </a>
+                                <ul ng-show="showDetails" ng-repeat="file in name.missing">
+                                    <li class="icon-failed">
+                                        {{file}}<br>
+                                    </li>
+                                </ul>
+                            </span>
                         </li>
                     </ul>
-
-
+                    
                 </div>
 
             </div>
@@ -475,3 +537,46 @@
     </div>
 
 </div>
+
+<div class="readiness-check-item" id="warning-message" ng-show="true">
+    * - In some cases, you might have two PHP configuration files: one for the PHP command line and for the web server. If so, make the change in both php.ini files. For details, see the <a href="http://php.net/manual/en/configuration.file.php">php.ini reference</a>.
+</div>
+
+<script type="text/ng-template" id="removeDialog">
+    <div class="modals-wrapper">
+        <aside class="modal-popup modal-connect-signin _show" data-role="modal">
+            <div class="modal-inner-wrap">
+                <header class="modal-header">
+                    <button ng-click="closeThisDialog()"
+                            title="Close"
+                            class="action-close"
+                            data-role="closeBtn"
+                            type="button">
+                        <span>Close</span>
+                    </button>
+                </header>
+                <div class="modal-content" data-role="content">
+                    <div class="delete-modal-wrap">
+                        <h3>Remove Extension</h3>
+
+                        <p>Are you sure you want to remove “{{extensionToRemove}}” from
+                            the list?</p>
+                        <p>
+                            Please be aware that removing this extension will remove it from the current
+                            update wizard flow. You can update this extension at a later time by selecting
+                            the extension in the update grid.
+                        </p>
+                        <div class="actions">
+                            <button ng-click="removeExtension(extensionToRemove)" class="btn btn-large btn-prime">
+                                <span>Remove</span>
+                            </button>
+                            <button ng-click="closeThisDialog()" class="btn btn-large btn-secondary">
+                                <span>Cancel</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</script>

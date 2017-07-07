@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payment\Method\Billing;
+
+use Magento\Paypal\Model\Billing\Agreement;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Billing Agreement Payment Method Abstract model
@@ -24,12 +27,12 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payment\Info\Billing\Agreement';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info\Billing\Agreement::class;
 
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Payment\Form\Billing\Agreement';
+    protected $_formBlockType = \Magento\Paypal\Block\Payment\Form\Billing\Agreement::class;
 
     /**
      * Is method instance available
@@ -110,34 +113,35 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
-        $result = parent::assignData($data);
+        parent::assignData($data);
 
-        $key = self::TRANSPORT_BILLING_AGREEMENT_ID;
-        $id = false;
-        if (is_array($data) && isset($data[$key])) {
-            $id = $data[$key];
-        } elseif ($data instanceof \Magento\Framework\DataObject && $data->getData($key)) {
-            $id = $data->getData($key);
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+
+        if (!is_array($additionalData) || !isset($additionalData[self::TRANSPORT_BILLING_AGREEMENT_ID])) {
+            return $this;
         }
-        if ($id) {
-            $info = $this->getInfoInstance();
-            $ba = $this->_agreementFactory->create()->load($id);
-            if ($ba->getId() && $ba->getCustomerId() == $info->getQuote()->getCustomerId()) {
-                $info->setAdditionalInformation(
-                    $key,
-                    $id
-                )->setAdditionalInformation(
-                    self::PAYMENT_INFO_REFERENCE_ID,
-                    $ba->getReferenceId()
-                );
-            }
+
+        $id = $additionalData[self::TRANSPORT_BILLING_AGREEMENT_ID];
+        if (!$id || !is_numeric($id)) {
+            return $this;
         }
-        return $result;
+
+        $info = $this->getInfoInstance();
+        /** @var Agreement $ba */
+        $ba = $this->_agreementFactory->create();
+        $ba->load($id);
+
+        if ($ba->getId() && $ba->getCustomerId() == $info->getQuote()->getCustomerId()) {
+            $info->setAdditionalInformation(self::TRANSPORT_BILLING_AGREEMENT_ID, $id);
+            $info->setAdditionalInformation(self::PAYMENT_INFO_REFERENCE_ID, $ba->getReferenceId());
+        }
+
+        return $this;
     }
 
     /**
      * @param object $quote
-     * @return void
+     * @return bool
      */
     abstract protected function _isAvailable($quote);
 }

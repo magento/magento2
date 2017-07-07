@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,20 +48,20 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         if (!$attribute->usesSource()) {
             throw new StateException(__('Attribute %1 doesn\'t work with options', $attributeCode));
         }
-        $key = 'new_option';
 
+        $optionId = $this->getOptionId($option);
         $options = [];
-        $options['value'][$key][0] = $option->getLabel();
-        $options['order'][$key] = $option->getSortOrder();
+        $options['value'][$optionId][0] = $option->getLabel();
+        $options['order'][$optionId] = $option->getSortOrder();
 
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
-                $options['value'][$key][$label->getStoreId()] = $label->getLabel();
+                $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
             }
         }
 
         if ($option->getIsDefault()) {
-            $attribute->setDefault([$key]);
+            $attribute->setDefault([$optionId]);
         }
 
         $attribute->setOption($options);
@@ -87,12 +87,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         if (!$attribute->usesSource()) {
             throw new StateException(__('Attribute %1 doesn\'t have any option', $attributeCode));
         }
-
-        if (!$attribute->getSource()->getOptionText($optionId)) {
-            throw new NoSuchEntityException(
-                __('Attribute %1 does not contain option with Id %2', $attribute->getId(), $optionId)
-            );
-        }
+        $this->validateOption($attribute, $optionId);
 
         $removalMarker = [
             'option' => [
@@ -127,5 +122,29 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         }
 
         return $options;
+    }
+
+    /**
+     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
+     * @param int $optionId
+     * @throws NoSuchEntityException
+     * @return void
+     */
+    protected function validateOption($attribute, $optionId)
+    {
+        if (!$attribute->getSource()->getOptionText($optionId)) {
+            throw new NoSuchEntityException(
+                __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $optionId)
+            );
+        }
+    }
+
+    /**
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @return string
+     */
+    private function getOptionId($option)
+    {
+        return $option->getValue() ?: 'new_option';
     }
 }

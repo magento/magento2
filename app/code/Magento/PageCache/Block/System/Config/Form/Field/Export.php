@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Block\System\Config\Form\Field;
 
 /**
  * Class Export
+ *
+ * @api
  */
 class Export extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -20,18 +22,17 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         /** @var \Magento\Backend\Block\Widget\Button $buttonBlock  */
-        $buttonBlock = $this->getForm()->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
+        $buttonBlock = $this->getForm()->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class);
 
         $params = [
             'website' => $buttonBlock->getRequest()->getParam('website'),
             'varnish' => $this->getVarnishVersion()
         ];
 
-        $url = $this->getUrl("*/PageCache/exportVarnishConfig", $params);
         $data = [
             'id' => 'system_full_page_cache_varnish_export_button_version' . $this->getVarnishVersion(),
-            'label' => __('Export VCL for Varnish ') . $this->getVarnishVersion(),
-            'onclick' => "setLocation('" . $url . "')",
+            'label' => $this->getLabel(),
+            'onclick' => "setLocation('" . $this->getVarnishUrl($params) . "')",
         ];
 
         $html = $buttonBlock->setData($data)->toHtml();
@@ -49,10 +50,29 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * @return \Magento\Framework\Phrase
+     */
+    private function getLabel()
+    {
+        return  __('Export VCL for Varnish %1', $this->getVarnishVersion());
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    private function getVarnishUrl($params = [])
+    {
+        return $this->getUrl('*/PageCache/exportVarnishConfig', $params);
+    }
+
+    /**
      * Return PageCache TTL value from config
      * to avoid saving empty field
      *
      * @return string
+     * @deprecated
      */
     public function getTtlValue()
     {

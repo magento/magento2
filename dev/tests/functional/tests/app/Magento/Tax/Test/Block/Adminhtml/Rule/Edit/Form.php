@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -181,7 +181,7 @@ class Form extends FormInterface
         $taxRateBlock = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
         /** @var \Magento\Tax\Test\Block\Adminhtml\Rule\Edit\TaxRate $taxRateForm */
         $taxRateForm = $this->blockFactory->create(
-            'Magento\Tax\Test\Block\Adminhtml\Rule\Edit\TaxRate',
+            \Magento\Tax\Test\Block\Adminhtml\Rule\Edit\TaxRate::class,
             ['element' => $this->browser->find($this->taxRateForm)]
         );
 
@@ -338,6 +338,7 @@ class Form extends FormInterface
      */
     public function isTaxRateAvailable($value)
     {
+        $this->waitForTaxRates();
         /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRate */
         $taxRate = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
         return $taxRate->isValueVisible($value);

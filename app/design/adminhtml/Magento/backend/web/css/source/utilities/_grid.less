@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -12,21 +12,19 @@
 //  ---------------------------------------------
 
 //  Centered container element
-
 .container-fixed(@gutter: @grid-gutter-width) {
-    margin-right: auto;
+    .lib-clearer();
     margin-left: auto;
+    margin-right: auto;
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
-    .lib-clearer();
 }
 
 //  Creates a wrapper for a series of columns
-
 .make-row(@gutter: @grid-gutter-width) {
+    .lib-clearer();
     margin-left: (@gutter / -2);
     margin-right: (@gutter / -2);
-    .lib-clearer();
 }
 
 //
@@ -34,12 +32,12 @@
 //  ---------------------------------------------
 
 .make-xs-column(@columns; @gutter: @grid-gutter-width) {
-    position: relative;
     float: left;
-    width: percentage((@columns / @grid-columns));
     min-height: 1px;
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
+    position: relative;
+    width: percentage((@columns / @grid-columns));
 }
 
 .make-xs-column-offset(@columns) {
@@ -59,10 +57,10 @@
 //  ---------------------------------------------
 
 .make-m-column(@columns; @gutter: @grid-gutter-width) {
-    position: relative;
     min-height: 1px;
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
+    position: relative;
 
     .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
         float: left;
@@ -93,10 +91,10 @@
 //  ---------------------------------------------
 
 .make-l-column(@columns; @gutter: @grid-gutter-width) {
-    position: relative;
     min-height: 1px;
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
+    position: relative;
 
     .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
         float: left;
@@ -127,10 +125,10 @@
 //  ---------------------------------------------
 
 .make-xl-column(@columns; @gutter: @grid-gutter-width) {
-    position: relative;
     min-height: 1px;
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
+    position: relative;
 
     @media (min-width: @screen__xl) {
         float: left;

@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
 /**
- * Catalog product price attribute backend model
+ * Backend model for set of EAV attributes with 'frontend_input' equals 'price'.
+ *
+ * @api
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
@@ -48,26 +51,33 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $localeFormat;
 
     /**
-     * Construct
-     *
+     * @var \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Locale\FormatInterface $localeFormat
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
+        ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_helper = $catalogData;
         $this->_config = $config;
         $this->localeFormat = $localeFormat;
+        $this->scopeOverriddenValue = $scopeOverriddenValue
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeOverriddenValue::class);
     }
 
     /**
@@ -102,48 +112,50 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * After Save Attribute manipulation
+     * After Save Price Attribute manipulation
+     * Processes product price attributes if price scoped to website and updates data when:
+     * * Price changed for non-default store view - will update price for all stores assigned to current website.
+     * * Price will be changed according to store currency even if price changed in product with default store id.
+     * * In a case when price was removed for non-default store (use default option checked) the default store price
+     * * will be used instead
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterSave($object)
     {
-        $value = $object->getData($this->getAttribute()->getAttributeCode());
-        /**
-         * Orig value is only for existing objects
-         */
-        $oridData = $object->getOrigData();
-        $origValueExist = $oridData && array_key_exists($this->getAttribute()->getAttributeCode(), $oridData);
-        if ($object->getStoreId() != 0 || !$value || $origValueExist) {
-            return $this;
-        }
-
-        if ($this->getAttribute()->getIsGlobal() == ScopedAttributeInterface::SCOPE_WEBSITE) {
-            $baseCurrency = $this->_config->getValue(
-                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                'default'
-            );
-
-            $storeIds = $object->getStoreIds();
-            if (is_array($storeIds)) {
-                foreach ($storeIds as $storeId) {
-                    $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                    if ($storeCurrency == $baseCurrency) {
-                        continue;
-                    }
-                    $rate = $this->_currencyFactory->create()->load($baseCurrency)->getRate($storeCurrency);
-                    if (!$rate) {
-                        $rate = 1;
-                    }
-                    $newValue = $value * $rate;
-                    $object->addAttributeUpdate($this->getAttribute()->getAttributeCode(), $newValue, $storeId);
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = $this->getAttribute();
+        $attributeCode = $attribute->getAttributeCode();
+        $value = $object->getData($attributeCode);
+        if ((float)$value > 0) {
+            if ($attribute->isScopeWebsite() && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                if ($this->isUseDefault($object)) {
+                    $value = null;
+                }
+                foreach ((array)$object->getWebsiteStoreIds() as $storeId) {
+                    $object->addAttributeUpdate($attributeCode, $value, $storeId);
                 }
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Check whether product uses default attribute's value in selected scope
+     * @param \Magento\Catalog\Model\Product $object
+     * @return bool
+     */
+    private function isUseDefault($object)
+    {
+        $overridden = $this->scopeOverriddenValue->containsValue(
+            \Magento\Catalog\Api\Data\ProductInterface::class,
+            $object,
+            $this->getAttribute()->getAttributeCode(),
+            $object->getStoreId()
+        );
+        return !$overridden;
     }
 
     /**

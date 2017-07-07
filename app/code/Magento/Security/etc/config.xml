@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <admin>
+            <security>
+                <admin_account_sharing>0</admin_account_sharing>
+                <password_reset_protection_type>1</password_reset_protection_type>
+                <max_number_password_reset_requests>5</max_number_password_reset_requests>
+                <min_time_between_password_reset_requests>10</min_time_between_password_reset_requests>
+            </security>
+        </admin>
+        <customer>
+            <password>
+                <password_reset_protection_type>1</password_reset_protection_type>
+                <max_number_password_reset_requests>5</max_number_password_reset_requests>
+                <min_time_between_password_reset_requests>10</min_time_between_password_reset_requests>
+            </password>
+        </customer>
+    </default>
+</config>

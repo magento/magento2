@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata;
@@ -21,7 +21,7 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
             'id' => 13,
             'default_shipping' => true,
             'default_billing' => false,
-            'company' => 'eBay Inc.',
+            'company' => 'Magento Commerce Inc.',
             'middlename' => 'MiddleName',
             'prefix' => 'Mr.',
             'suffix' => 'Esq.',
@@ -50,14 +50,14 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         /** @var FormFactory $formFactory */
-        $formFactory = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Metadata\FormFactory');
+        $formFactory = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Metadata\FormFactory::class);
         $form = $formFactory->create('customer_address', 'customer_address_edit');
 
-        $this->assertInstanceOf('\Magento\Customer\Model\Metadata\Form', $form);
+        $this->assertInstanceOf(\Magento\Customer\Model\Metadata\Form::class, $form);
         $this->assertNotEmpty($form->getAttributes());
 
         /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->get('Magento\Framework\App\RequestInterface');
+        $request = Bootstrap::getObjectManager()->get(\Magento\Framework\App\RequestInterface::class);
         $request->setParams($this->_requestData);
 
         $this->assertEquals($this->_expectedData, $form->restoreData($form->extractData($request)));

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -12,13 +12,16 @@
         .block-addbysku {
             .fieldset {
                 margin: 0;
+
                 .fields {
                     position: relative;
+
                     .field {
                         display: inline-block;
                         margin-bottom: @indent__s;
                         vertical-align: top;
                     }
+
                     .actions-toolbar {
                         position: absolute;
                         right: 0;
@@ -26,17 +29,20 @@
                     }
                 }
             }
+
             .sku {
                 &:extend(.abs-add-box-sizing all);
                 margin-right: -155px;
                 padding-right: 160px;
                 width: 100%;
             }
+
             .skus {
                 > .label {
                     margin-top: @indent__s;
                 }
             }
+
             .qty {
                 .qty {
                     &:extend(.abs-input-qty all);
@@ -45,11 +51,14 @@
                     }
                 }
             }
+
             .block-content {
                 &:extend(.abs-add-clearfix-desktop all);
+
                 .box {
                     &:extend(.abs-blocks-2columns all);
                 }
+
                 .actions-toolbar {
                     clear: both;
                     .lib-actions-toolbar(
@@ -57,14 +66,17 @@
                     @_actions-toolbar-margin: 0 0 @indent__base
                     );
                     .lib-actions-toolbar-clear-floats();
+
                     > .secondary {
                         text-align: left;
                     }
                 }
             }
+
             .reset {
                 margin: @indent__s 0;
             }
+
             .note {
                 display: block;
                 margin: 0 0 @indent__base;
@@ -75,19 +87,20 @@
     .block-cart-failed {
         margin-top: @indent__xl;
         &:extend(.abs-shopping-cart-items all);
+
         .block-title {
             .lib-font-size(@h2__font-size);
+
             strong {
                 font-weight: @h2__font-weight;
             }
         }
+
         .actions {
             text-align: center;
+
             .action {
                 margin-bottom: @indent__s;
-                &.tocart {
-                    margin-right: @indent__s;
-                }
             }
         }
     }
@@ -104,12 +117,14 @@
                 margin-right: -85px;
                 padding-right: 90px;
             }
+
             .action {
                 &.remove {
                     .lib-button-icon(
                     @_icon-font-content: @icon-remove,
                     @_icon-font-text-hide: true,
-                    @_icon-font-size: 28px
+                    @_icon-font-size: 28px,
+                    @_icon-font-margin: 1px 0 0
                     );
                     .lib-button-reset();
                 }
@@ -125,7 +140,7 @@
                 &.remove {
                     .lib-button-reset();
                     .lib-button-as-link();
-                    margin-top: 4px;
+                    margin-top: 2px;
                 }
             }
         }
@@ -139,8 +154,17 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block-cart-failed {
         &:extend(.abs-shopping-cart-items-desktop all);
+
         .actions {
             text-align: left;
+        }
+
+        .actions.primary {
+            float: right;
+        }
+
+        .block-content {
+            &:extend(.abs-add-clearfix-desktop all);
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
@@ -35,7 +35,7 @@ class Group
     /** @var ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
-    /** @var StoreManagerInterface  */
+    /** @var StoreManagerInterface */
     protected $storeManager;
 
     /**
@@ -63,19 +63,19 @@ class Group
     }
 
     /**
-     * @param \Magento\Store\Model\ResourceModel\Group $object
-     * @param callable $proceed
+     * Perform updating url for categories and products assigned to the group
+     *
+     * @param \Magento\Store\Model\ResourceModel\Group $subject
+     * @param \Magento\Store\Model\ResourceModel\Group $result
      * @param AbstractModel $group
      * @return \Magento\Store\Model\ResourceModel\Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Store\Model\ResourceModel\Group $object,
-        \Closure $proceed,
+    public function afterSave(
+        \Magento\Store\Model\ResourceModel\Group $subject,
+        \Magento\Store\Model\ResourceModel\Group $result,
         AbstractModel $group
     ) {
-        $originGroup = $group;
-        $result = $proceed($originGroup);
         if (!$group->isObjectNew()
             && ($group->dataHasChangedFor('website_id')
                 || $group->dataHasChangedFor('root_category_id'))
@@ -113,7 +113,7 @@ class Group
         $collection = $this->productFactory->create()
             ->getCollection()
             ->addCategoryIds()
-            ->addAttributeToSelect(['name', 'url_path', 'url_key'])
+            ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addWebsiteFilter($websiteIds);
         foreach ($collection as $product) {
             /** @var \Magento\Catalog\Model\Product $product */

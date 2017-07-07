@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab\RuleInformation;
+use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\RuleInformation;
 
 /**
  * Assert that customer group find on catalog price rule page.
@@ -32,12 +32,12 @@ class AssertCustomerGroupOnCatalogPriceRuleForm extends AbstractConstraint
     ) {
         $catalogRuleIndex->open();
         $catalogRuleIndex->getGridPageActions()->addNew();
-        $catalogRuleNew->getEditForm()->openTab('rule_information');
+        $catalogRuleNew->getEditForm()->openSection('rule_information');
 
-        /** @var RuleInformation $ruleInformationTab */
-        $ruleInformationTab = $catalogRuleNew->getEditForm()->getTab('rule_information');
+        /** @var RuleInformation $ruleInformationSection */
+        $ruleInformationSection = $catalogRuleNew->getEditForm()->getSection('rule_information');
         \PHPUnit_Framework_Assert::assertTrue(
-            $ruleInformationTab->isVisibleCustomerGroup($customerGroup),
+            $ruleInformationSection->isVisibleCustomerGroup($customerGroup),
             "Customer group {$customerGroup->getCustomerGroupCode()} not in catalog price rule page."
         );
     }

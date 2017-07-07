@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
@@ -8,6 +8,7 @@ namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 /**
  * Shipment tracking control form
  *
+ * @api
  */
 class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
 {
@@ -44,7 +45,7 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
         $onclick = "submitAndReloadArea($('shipment_tracking_info').parentNode, '" . $this->getSubmitUrl() . "')";
         $this->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Add'), 'class' => 'save', 'onclick' => $onclick]
         );
     }

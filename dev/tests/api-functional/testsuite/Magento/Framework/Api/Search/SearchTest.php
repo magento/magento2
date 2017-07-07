@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\Search;
@@ -39,7 +39,7 @@ class SearchTest extends WebapiAbstract
                     ]
                 ],
                 'page_size' => 20000000000000,
-                'current_page' => 1,
+                'current_page' => 0,
             ],
         ];
 

@@ -1,36 +1,37 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 ?>
 
-<?php /* @escapeNotVerified */ echo $block->getSomeData();?>
-<?php /* @noEscape */ echo $block->getSomeData();?>
-<input name="form_key" type="hidden" value="<?php echo $block->escapeUrl($var) ?>" />
-<input name="form_key" type="hidden" value="<?php echo $block->escapeQuote('bla') ?>" />
-<input name="form_key" type="hidden" value="<?php echo $block->escapeXssInUrl("bla bla") ?>" />
+<?= /* @escapeNotVerified */ $block->getSomeData() ?>
+<?= /* @noEscape */ $block->getSomeData() ?>
+<input name="form_key" type="hidden" value="<?= $block->escapeUrl($var) ?>" />
+<input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr('value') ?>" />
+<input name="form_key" type="hidden" value="<?= $block->escapeJs('value') ?>" />
+<?= $block->escapeCss('value') ?>
 echo $var;
-<?php echo $block->getHtmlId("bla bla") ?>
-<?php echo $block->getIdHtml("bla bla") ?>
-<?= $block->getIdHtml("bla bla"); ?>
-<?php echo "\$var1"; ?>
-<?php echo '$var'; ?>
-<?php echo "bla"; ?>
-<?php echo 'bla'; ?>
-<?php echo (int)$var; ?>
-<?php echo (bool)$var; ?>
-<?php echo count($var); ?>
-<?php echo $object->methodHtml(); ?>
+<?= $block->getHtmlId("some value") ?>
+<?= $block->getIdHtml("some value") ?>
+<?= $block->getIdHtml("some value") ?>
+<?= "\$var1" ?>
+<?= '$var' ?>
+<?= "value" ?>
+<?= 'value' ?>
+<?= (int)$var ?>
+<?= (bool)$var ?>
+<?= count($var) ?>
+<?= $object->methodHtml() ?>
 <?php pecho($var);?>
-<?php echo $object->methodHtml() .
+<?= $object->methodHtml() .
     (bool)$var .
-    $block->escapeXssInUrl("bla bla");
+    $block->escapeUrl("some value");
 ?>
-<?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
-<?= $block->getExtendedElement($switchAttributeCode)->toHtml(); ?>
+<?= /* @noEscape */ '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
+<?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
 <?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
 <?php
 /**
@@ -41,5 +42,7 @@ echo $var;
 <?php
 /* This part is commented to remove all <col> tags from the code. */
 /* foreach ($block->getColumns() as $_column): ?>
-    <col <?php echo $_column->getProperty() ?> />
+    <col <?= $_column->getProperty() ?> />
 <?php endforeach; */ ?>
+
+<?= $block->escapeHtmlAttr($block->getParamValue('title_' . $store['value'])) ?>

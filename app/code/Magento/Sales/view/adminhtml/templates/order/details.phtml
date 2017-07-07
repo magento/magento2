@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,8 +14,8 @@ store name = $_order->getStore()->getGroup()->getName()
 ?>
 <?php $_order = $block->getOrder() ?>
 <div>
-<?php echo __('Customer Name: %1', $block->escapeHtml($_order->getCustomerFirstname() ? $_order->getCustomerName() : $_order->getBillingAddress()->getName())) ?><br />
-<?php echo __('Purchased From: %1', $block->escapeHtml($_order->getStore()->getGroup()->getName())) ?><br />
+<?= __('Customer Name: %1', $block->escapeHtml($_order->getCustomerFirstname() ? $_order->getCustomerName() : $_order->getBillingAddress()->getName())) ?><br />
+<?= __('Purchased From: %1', $block->escapeHtml($_order->getStore()->getGroup()->getName())) ?><br />
 </div>
 <table cellpadding="0" border="0" width="100%" style="border:1px solid #bebcb7; background:#f8f7f5;">
     <thead>
@@ -28,17 +28,17 @@ store name = $_order->getStore()->getGroup()->getName()
 
     <tbody>
 <?php $i = 0; foreach ($_order->getAllItems() as $_item): $i++ ?>
-        <tr <?php echo $i%2 ? 'bgcolor="#eeeded"' : '' ?>>
-            <td align="left" valign="top" style="padding:3px 9px"><strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+        <tr <?= $i%2 ? 'bgcolor="#eeeded"' : '' ?>>
+            <td align="left" valign="top" style="padding:3px 9px"><strong><?= $block->escapeHtml($_item->getName()) ?></strong>
             <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_item->getGiftMessageId())): ?>
-            <br /><strong><?php /* @escapeNotVerified */ echo __('Gift Message') ?></strong>
-            <br /><?php /* @escapeNotVerified */ echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+            <br /><strong><?= /* @escapeNotVerified */ __('Gift Message') ?></strong>
+            <br /><?= /* @escapeNotVerified */ __('From:') ?> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><?= /* @escapeNotVerified */ __('To:') ?> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><?= /* @escapeNotVerified */ __('Message:') ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
             <?php endif; ?>
             </td>
-            <td align="center" valign="top" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo $_item->getQtyOrdered()*1 ?></td>
-            <td align="right" valign="top" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo $_order->formatPrice($_item->getRowTotal()) ?></td>
+            <td align="center" valign="top" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></td>
+            <td align="right" valign="top" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_order->formatPrice($_item->getRowTotal()) ?></td>
         </tr>
 <?php endforeach ?>
     </tbody>
@@ -47,38 +47,38 @@ store name = $_order->getStore()->getGroup()->getName()
     <?php if ($_order->getGiftMessageId() && $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId())): ?>
         <tr>
             <td colspan="3" align="left" style="padding:3px 9px">
-            <strong><?php /* @escapeNotVerified */ echo __('Gift Message') ?></strong>
-            <br /><?php /* @escapeNotVerified */ echo __('From:'); ?> <?php echo $block->escapeHtml($_giftMessage->getSender()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('To:'); ?> <?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?>
-            <br /><?php /* @escapeNotVerified */ echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
+            <strong><?= /* @escapeNotVerified */ __('Gift Message') ?></strong>
+            <br /><?= /* @escapeNotVerified */ __('From:') ?> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+            <br /><?= /* @escapeNotVerified */ __('To:') ?> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+            <br /><?= /* @escapeNotVerified */ __('Message:') ?><br /> <?= $block->escapeHtml($_giftMessage->getMessage()) ?>
             </td>
         </tr>
      <?php endif; ?>
         <tr>
-            <td colspan="2" align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></td>
-            <td align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo $_order->formatPrice($_order->getSubtotal()) ?></td>
+            <td colspan="2" align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ __('Subtotal') ?></td>
+            <td align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_order->formatPrice($_order->getSubtotal()) ?></td>
         </tr>
         <?php if ($_order->getDiscountAmount() > 0): ?>
             <tr>
-                <td colspan="2" align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo(($_order->getCouponCode()) ? __('Discount (%1)', $_order->getCouponCode()) : __('Discount')) ?></td>
-                <td align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo $_order->formatPrice(0.00 - $_order->getDiscountAmount()) ?></td>
+                <td colspan="2" align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ (($_order->getCouponCode()) ? __('Discount (%1)', $_order->getCouponCode()) : __('Discount')) ?></td>
+                <td align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_order->formatPrice(0.00 - $_order->getDiscountAmount()) ?></td>
             </tr>
         <?php endif; ?>
         <?php if ($_order->getShippingAmount() || $_order->getShippingDescription()) : ?>
             <tr>
-                <td colspan="2" align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo __('Shipping &amp; Handling') ?></td>
-                <td align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo $_order->formatPrice($_order->getShippingAmount()) ?></td>
+                <td colspan="2" align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ __('Shipping &amp; Handling') ?></td>
+                <td align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_order->formatPrice($_order->getShippingAmount()) ?></td>
             </tr>
         <?php endif; ?>
         <?php if ($_order->getTaxAmount() > 0): ?>
             <tr>
-                <td colspan="2" align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo __('Tax') ?></td>
-                <td align="right" style="padding:3px 9px"><?php /* @escapeNotVerified */ echo $_order->formatPrice($_order->getTaxAmount()) ?></td>
+                <td colspan="2" align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ __('Tax') ?></td>
+                <td align="right" style="padding:3px 9px"><?= /* @escapeNotVerified */ $_order->formatPrice($_order->getTaxAmount()) ?></td>
             </tr>
         <?php endif; ?>
         <tr bgcolor="#DEE5E8">
-            <td colspan="2" align="right" style="padding:3px 9px"><strong><big><?php /* @escapeNotVerified */ echo __('Grand Total') ?></big></strong></td>
-            <td align="right" style="padding:6px 9px"><strong><big><?php /* @escapeNotVerified */ echo $_order->formatPrice($_order->getGrandTotal()) ?></big></strong></td>
+            <td colspan="2" align="right" style="padding:3px 9px"><strong><big><?= /* @escapeNotVerified */ __('Grand Total') ?></big></strong></td>
+            <td align="right" style="padding:6px 9px"><strong><big><?= /* @escapeNotVerified */ $_order->formatPrice($_order->getGrandTotal()) ?></big></strong></td>
         </tr>
     </tfoot>
 </table>

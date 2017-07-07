@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -26,7 +26,7 @@
             <div class="actions-toolbar">
                 <div class="primary">
                     <a class="action action-register primary" data-bind="attr: {href: registerUrl}">
-                        <span data-bind="i18n: 'Create Account'"></span>
+                        <span data-bind="i18n: 'Create an Account'"></span>
                     </a>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         <div class="block-content" aria-labelledby="block-customer-login-heading">
             <form class="form form-login"
                   method="post"
-                  data-bind="submit:login"
+                  data-bind="event: {submit: login }"
                   id="login-form">
                 <div class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
                     <div class="field email required">
@@ -60,6 +60,7 @@
                                    id="email"
                                    type="email"
                                    class="input-text"
+                                   data-bind="attr: {autocomplete: autocomplete}"
                                    data-validate="{required:true, 'validate-email':true}">
                         </div>
                     </div>
@@ -70,13 +71,13 @@
                                    type="password"
                                    class="input-text"
                                    id="pass"
-                                   data-validate="{required:true, 'validate-password':true}">
+                                   data-bind="attr: {autocomplete: autocomplete}"
+                                   data-validate="{required:true}">
                         </div>
                     </div>
                     <!-- ko foreach: getRegion('additional-login-form-fields') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                     <!-- /ko -->
-                    </div>
                     <div class="actions-toolbar">
                         <input name="context" type="hidden" value="checkout" />
                         <div class="primary">

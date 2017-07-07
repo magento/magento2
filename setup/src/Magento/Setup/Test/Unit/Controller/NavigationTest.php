@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,9 +34,10 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->navigationModel = $this->getMock('\Magento\Setup\Model\Navigation', [], [], '', false);
-        $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->navigationModel = $this->getMock(\Magento\Setup\Model\Navigation::class, [], [], '', false);
+        $this->status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
+        $this->objectManagerProvider =
+            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
         $this->controller = new Navigation($this->navigationModel, $this->status, $this->objectManagerProvider);
     }
 
@@ -45,14 +46,14 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $this->navigationModel->expects($this->once())->method('getData')->willReturn('some data');
         $viewModel = $this->controller->indexAction();
 
-        $this->assertInstanceOf('\Zend\View\Model\JsonModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $viewModel);
         $this->assertArrayHasKey('nav', $viewModel->getVariables());
     }
 
     public function testMenuActionUpdater()
     {
         $viewModel = $this->controller->menuAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -63,7 +64,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     public function testMenuActionInstaller()
     {
         $viewModel = $this->controller->menuAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -75,7 +76,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     {
         $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_INSTALLER);
         $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -87,7 +88,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     {
         $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_UPDATER);
         $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);

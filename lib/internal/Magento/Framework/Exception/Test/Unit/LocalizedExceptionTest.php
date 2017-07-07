@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Exception\Test\Unit;
@@ -10,8 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class LocalizedExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,10 +22,10 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
-        $rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\Renderer\Placeholder')
+        $rendererMock = $this->getMockBuilder(\Magento\Framework\Phrase\Renderer\Placeholder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->renderedMessage = 'rendered message';
@@ -151,5 +149,17 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
         );
         $expectedLogMessage = 'message parameter1 parameter2';
         $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
+    }
+
+    public function testGetCode()
+    {
+        $expectedCode = 42;
+        $localizedException = new LocalizedException(
+            new Phrase("message %1", ['test']),
+            new \Exception(),
+            $expectedCode
+        );
+
+        $this->assertEquals($expectedCode, $localizedException->getCode());
     }
 }

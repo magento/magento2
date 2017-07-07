@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Options;
@@ -19,9 +19,9 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Options\Ajax'
+            \Magento\Catalog\Block\Adminhtml\Product\Options\Ajax::class
         );
     }
 
@@ -35,10 +35,20 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('import_option_products', [1]);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+
+        $objectManager->get(\Magento\Framework\Registry::class)
+            ->register(
+                'import_option_products',
+                [$productRepository->get('simple')->getId()]
+            );
+
         $result = json_decode($this->_block->toHtml(), true);
+
         $this->assertEquals('test_option_code_1', $result[0]['title']);
     }
 }

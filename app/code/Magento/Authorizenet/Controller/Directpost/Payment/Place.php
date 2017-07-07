@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
@@ -9,12 +9,15 @@ use Magento\Authorizenet\Controller\Directpost\Payment;
 use Magento\Authorizenet\Helper\DataFactory;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\Http;
-use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Payment\Model\IframeConfigProvider;
 use Magento\Quote\Api\CartManagementInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Place
@@ -44,12 +47,20 @@ class Place extends Payment
     protected $jsonHelper;
 
     /**
+     * Logger for exception details
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Context $context
      * @param Registry $coreRegistry
      * @param DataFactory $dataFactory
      * @param CartManagementInterface $cartManagement
      * @param Onepage $onepageCheckout
      * @param JsonHelper $jsonHelper
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Context $context,
@@ -57,12 +68,14 @@ class Place extends Payment
         DataFactory $dataFactory,
         CartManagementInterface $cartManagement,
         Onepage $onepageCheckout,
-        JsonHelper $jsonHelper
+        JsonHelper $jsonHelper,
+        LoggerInterface $logger = null
     ) {
         $this->eventManager = $context->getEventManager();
         $this->cartManagement = $cartManagement;
         $this->onepageCheckout = $onepageCheckout;
         $this->jsonHelper = $jsonHelper;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         parent::__construct($context, $coreRegistry, $dataFactory);
     }
 
@@ -125,9 +138,17 @@ class Place extends Payment
                     'action' => $this
                 ]
             );
-        } catch (\Exception $exception) {
+        } catch (LocalizedException $exception) {
+            $this->logger->critical($exception);
             $result->setData('error', true);
-            $result->setData('error_messages', __('Cannot place order.'));
+            $result->setData('error_messages', $exception->getMessage());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $result->setData('error', true);
+            $result->setData(
+                'error_messages',
+                __('An error occurred on the server. Please try to place the order again.')
+            );
         }
         if ($response instanceof Http) {
             $response->representJson($this->jsonHelper->jsonEncode($result));

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Newsletter" template="order/create/abstract.phtml" name="newsletter">
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Newsletter\Form" template="order/create/newsletter/form.phtml" name="order.create.newsletter.form" as="form"/>
+            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Newsletter" template="Magento_Sales::order/create/abstract.phtml" name="newsletter">
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Newsletter\Form" template="Magento_Sales::order/create/newsletter/form.phtml" name="order.create.newsletter.form" as="form"/>
             </block>
         </referenceContainer>
     </body>

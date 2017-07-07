@@ -1,15 +1,28 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="shipping-address-item" data-bind="css: isSelected() ? 'selected-item' : 'not-selected-item'">
-    <!-- ko text: address().firstname --><!-- /ko --> <!-- ko text: address().lastname --><!-- /ko --><br/>
+    <!-- ko text: address().prefix --><!-- /ko --> <!-- ko text: address().firstname --><!-- /ko --> <!-- ko text: address().middlename --><!-- /ko -->
+    <!-- ko text: address().lastname --><!-- /ko --> <!-- ko text: address().suffix --><!-- /ko --><br/>
     <!-- ko text: address().street --><!-- /ko --><br/>
-    <!-- ko text: address().city --><!-- /ko -->, <!-- ko text: address().region --><!-- /ko --> <!-- ko text: address().postcode --><!-- /ko --><br/>
+    <!-- ko text: address().city --><!-- /ko -->, <span data-bind="html: address().region"></span> <!-- ko text: address().postcode --><!-- /ko --><br/>
     <!-- ko text: getCountryName(address().countryId) --><!-- /ko --><br/>
-    <!-- ko text: address().telephone --><!-- /ko --><br/>
+    <!-- ko if: (address().telephone) -->
+    <a data-bind="text: address().telephone, attr: {'href': 'tel:' + address().telephone}"></a>
+    <!-- /ko --><br/>
+    <!-- ko foreach: { data: address().customAttributes, as: 'element' } -->
+        <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
+            <!-- ko if: (typeof element[attribute] === "object") -->
+                <!-- ko text: element[attribute].value --><!-- /ko -->
+            <!-- /ko -->
+            <!-- ko if: (typeof element[attribute] === "string") -->
+                <!-- ko text: element[attribute] --><!-- /ko -->
+            <!-- /ko --><br/>
+        <!-- /ko -->
+    <!-- /ko -->
     <!-- ko if: (address().isEditable()) -->
     <button type="button"
             class="action edit-address-link"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,7 +44,7 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_gridMock = $this->getMock(
-            'Magento\Backend\Block\Widget\Grid',
+            \Magento\Backend\Block\Widget\Grid::class,
             ['getId', 'getCollection'],
             [],
             '',
@@ -53,7 +53,7 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
         $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
 
         $this->_layoutMock = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getParentName', 'getBlock', 'helper'],
             [],
             '',
@@ -80,9 +80,9 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_gridMock)
         );
 
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
 
-        $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
+        $this->_urlModelMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
 
         $arguments = [
             'layout' => $this->_layoutMock,
@@ -93,7 +93,7 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(
-            'Magento\Backend\Block\Widget\Grid\Massaction\Extended',
+            \Magento\Backend\Block\Widget\Grid\Massaction\Extended::class,
             $arguments
         );
         $this->_block->setNameInLayout('test_grid_massaction');
@@ -132,8 +132,14 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
     public function testGetGridIdsJsonWithUseSelectAll(array $items, $result)
     {
         $this->_block->setUseSelectAll(true);
-
-        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection')
+        
+        if ($this->_block->getMassactionIdField()) {
+            $massActionIdField = $this->_block->getMassactionIdField();
+        } else {
+            $massActionIdField = $this->_block->getParentBlock()->getMassactionIdField();
+        }
+        
+        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -142,14 +148,12 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
             ->willReturn($collectionMock);
 
         $collectionMock->expects($this->once())
-            ->method('clear')
-            ->willReturnSelf();
-        $collectionMock->expects($this->once())
             ->method('setPageSize')
             ->with(0)
             ->willReturnSelf();
         $collectionMock->expects($this->once())
-            ->method('getAllIds')
+            ->method('getColumnValues')
+            ->with($massActionIdField)
             ->willReturn($items);
 
         $this->assertEquals($result, $this->_block->getGridIdsJson());

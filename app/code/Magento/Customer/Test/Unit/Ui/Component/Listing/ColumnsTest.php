@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
@@ -30,44 +30,44 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     /** @var Columns */
     protected $component;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
+        $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->columnFactory = $this->getMock(
-            'Magento\Customer\Ui\Component\ColumnFactory',
+            \Magento\Customer\Ui\Component\ColumnFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->attributeRepository = $this->getMock(
-            'Magento\Customer\Ui\Component\Listing\AttributeRepository',
+            \Magento\Customer\Ui\Component\Listing\AttributeRepository::class,
             [],
             [],
             '',
             false
         );
         $this->attribute = $this->getMock(
-            'Magento\Customer\Model\Attribute',
+            \Magento\Customer\Model\Attribute::class,
             [],
             [],
             '',
             false
         );
         $this->column = $this->getMockForAbstractClass(
-            'Magento\Ui\Component\Listing\Columns\ColumnInterface',
+            \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
             [],
             '',
             false
         );
 
         $this->inlineEditUpdater = $this->getMockBuilder(
-            'Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater'
+            \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater::class
         )->disableOriginalConstructor()
             ->getMock();
 

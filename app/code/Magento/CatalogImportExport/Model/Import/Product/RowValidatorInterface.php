@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+/**
+ * Interface RowValidatorInterface
+ *
+ * @api
+ */
 interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorInterface
 {
     const ERROR_INVALID_SCOPE = 'invalidScope';
@@ -45,6 +50,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_INVALID_TIER_PRICE_GROUP = 'tierPriceGroupInvalid';
 
+    const ERROR_INVALID_TIER_PRICE_TYPE = 'tierPriceTypeInvalid';
+
     const ERROR_TIER_DATA_INCOMPLETE = 'tierPriceDataIsIncomplete';
 
     const ERROR_SKU_NOT_FOUND_FOR_DELETE = 'skuNotFoundToDelete';
@@ -74,6 +81,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
     const ERROR_MEDIA_URL_NOT_ACCESSIBLE = 'mediaUrlNotAvailable';
 
     const ERROR_MEDIA_PATH_NOT_ACCESSIBLE = 'mediaPathNotAvailable';
+
+    const ERROR_DUPLICATE_URL_KEY = 'duplicatedUrlKey';
 
     /**
      * Value that means all entities (e.g. websites, groups etc.)

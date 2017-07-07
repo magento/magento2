@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@ use \Magento\Review\Model\Review;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReviewTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Review\Model\Review */
@@ -54,44 +57,44 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $this->registryMock = $this->getMock('Magento\Framework\Registry');
+        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class);
         $this->productFactoryMock = $this->getMock(
-            'Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory',
+            \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->statusFactoryMock = $this->getMock(
-            'Magento\Review\Model\ResourceModel\Review\Status\CollectionFactory',
+            \Magento\Review\Model\ResourceModel\Review\Status\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->reviewSummaryMock = $this->getMock(
-            'Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory',
+            \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory::class,
             [],
             [],
             '',
             false
         );
         $this->summaryModMock = $this->getMock(
-            'Magento\Review\Model\Review\SummaryFactory',
+            \Magento\Review\Model\Review\SummaryFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->summaryMock = $this->getMock('Magento\Review\Model\Review\Summary', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->urlInterfaceMock = $this->getMock('Magento\Framework\UrlInterface');
-        $this->resource = $this->getMock('Magento\Review\Model\ResourceModel\Review', [], [], '', false);
+        $this->summaryMock = $this->getMock(\Magento\Review\Model\Review\Summary::class, [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->urlInterfaceMock = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->resource = $this->getMock(\Magento\Review\Model\ResourceModel\Review::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->review = $this->objectManagerHelper->getObject(
-            'Magento\Review\Model\Review',
+            \Magento\Review\Model\Review::class,
             [
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
@@ -110,7 +113,13 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductCollection()
     {
-        $collection = $this->getMock('Magento\Review\Model\ResourceModel\Review\Product\Collection', [], [], '', false);
+        $collection = $this->getMock(
+            \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($collection));
@@ -119,7 +128,13 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStatusCollection()
     {
-        $collection = $this->getMock('Magento\Review\Model\ResourceModel\Review\Status\Collection', [], [], '', false);
+        $collection = $this->getMock(
+            \Magento\Review\Model\ResourceModel\Review\Status\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->statusFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($collection));
@@ -155,7 +170,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $summary->setData($testSummaryData);
 
         $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'setRatingSummary', '__wakeup'],
             [],
             '',
@@ -165,7 +180,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->once())->method('setRatingSummary')->with($summary)->will($this->returnSelf());
 
         $summaryData = $this->getMock(
-            'Magento\Review\Model\Review\Summary',
+            \Magento\Review\Model\Review\Summary::class,
             ['load', 'getData', 'setStoreId', '__wakeup'],
             [],
             '',
@@ -239,7 +254,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAvailableOnStore($storeId, $result)
     {
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         if ($storeId) {
             $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
             $this->storeManagerMock->expects($this->once())
@@ -279,7 +294,15 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $productId = 1;
         $this->review->setEntityPkValue($productId);
+        $this->review->setStatusId(Review::STATUS_PENDING);
+        $this->assertEquals([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
+
+        $this->review->setEntityPkValue($productId);
         $this->review->setStatusId(Review::STATUS_APPROVED);
+        $this->assertEquals([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
+
+        $this->review->setEntityPkValue($productId);
+        $this->review->setStatusId(Review::STATUS_NOT_APPROVED);
         $this->assertEquals([Product::CACHE_TAG . '_' . $productId], $this->review->getIdentities());
     }
 }

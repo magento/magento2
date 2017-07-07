@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config;
@@ -29,7 +29,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
         $this->_requestMock->expects(
             $this->any()
         )->method(
@@ -39,9 +39,9 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('currentSectionId')
         );
-        $this->_structureMock = $this->getMock('Magento\Config\Model\Config\Structure', [], [], '', false);
+        $this->_structureMock = $this->getMock(\Magento\Config\Model\Config\Structure::class, [], [], '', false);
         $this->_structureMock->expects($this->once())->method('getTabs')->will($this->returnValue([]));
-        $this->_urlBuilderMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
+        $this->_urlBuilderMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
 
         $data = [
             'configStructure' => $this->_structureMock,
@@ -49,7 +49,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
             'urlBuilder' => $this->_urlBuilderMock,
         ];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_object = $helper->getObject('Magento\Config\Block\System\Config\Tabs', $data);
+        $this->_object = $helper->getObject(\Magento\Config\Block\System\Config\Tabs::class, $data);
     }
 
     protected function tearDown()
@@ -74,7 +74,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         );
 
         $sectionMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Section',
+            \Magento\Config\Model\Config\Structure\Element\Section::class,
             [],
             [],
             '',
@@ -88,7 +88,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
     public function testIsSectionActiveReturnsTrueForActiveSection()
     {
         $sectionMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Section',
+            \Magento\Config\Model\Config\Structure\Element\Section::class,
             [],
             [],
             '',
@@ -101,7 +101,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
     public function testIsSectionActiveReturnsFalseForNonActiveSection()
     {
         $sectionMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Section',
+            \Magento\Config\Model\Config\Structure\Element\Section::class,
             [],
             [],
             '',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,13 +52,25 @@ class FeedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->inboxFactory = $this->getMock('Magento\AdminNotification\Model\InboxFactory', ['create'], [], '', false);
-        $this->curlFactory = $this->getMock('Magento\Framework\HTTP\Adapter\CurlFactory', ['create'], [], '', false);
-        $this->curl = $this->getMockBuilder('Magento\Framework\HTTP\Adapter\Curl')
+        $this->inboxFactory = $this->getMock(
+            \Magento\AdminNotification\Model\InboxFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->curlFactory = $this->getMock(
+            \Magento\Framework\HTTP\Adapter\CurlFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->curl = $this->getMockBuilder(\Magento\Framework\HTTP\Adapter\Curl::class)
             ->disableOriginalConstructor()->getMock();
-        $this->appState = $this->getMock('Magento\Framework\App\State', ['getInstallDate'], [], '', false);
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, ['getInstallDate'], [], '', false);
         $this->inboxModel = $this->getMock(
-            'Magento\AdminNotification\Model\Inbox',
+            \Magento\AdminNotification\Model\Inbox::class,
             [
                 '__wakeup',
                 'parse'
@@ -68,7 +80,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->backendConfig = $this->getMock(
-            'Magento\Backend\App\ConfigInterface',
+            \Magento\Backend\App\ConfigInterface::class,
             [
                 'getValue',
                 'setValue',
@@ -76,7 +88,7 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->cacheManager = $this->getMock(
-            'Magento\Framework\App\CacheInterface',
+            \Magento\Framework\App\CacheInterface::class,
             [
                 'load',
                 'getFrontend',
@@ -86,15 +98,18 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->deploymentConfig = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
+        $this->deploymentConfig = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
             ->disableOriginalConstructor()->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->productMetadata = $this->getMock('Magento\Framework\App\ProductMetadata');
-        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
+        $this->productMetadata = $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
 
         $this->feed = $this->objectManagerHelper->getObject(
-            'Magento\AdminNotification\Model\Feed',
+            \Magento\AdminNotification\Model\Feed::class,
             [
                 'backendConfig' => $this->backendConfig,
                 'cacheManager' => $this->cacheManager,

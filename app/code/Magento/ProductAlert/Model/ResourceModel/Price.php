@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,8 @@ namespace Magento\ProductAlert\Model\ResourceModel;
 
 /**
  * Product alert for changed price resource model
+ *
+ * @api
  */
 class Price extends \Magento\ProductAlert\Model\ResourceModel\AbstractResource
 {

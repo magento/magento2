@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Generator;
@@ -24,11 +24,13 @@ class Container implements Layout\GeneratorInterface
      * @var array
      */
     protected $allowedTags = [
+        'aside',
         'dd',
         'div',
         'dl',
         'fieldset',
         'main',
+        'nav',
         'header',
         'footer',
         'ol',
@@ -83,12 +85,6 @@ class Container implements Layout\GeneratorInterface
         $elementName,
         $options
     ) {
-        $structure->setAttribute(
-            $elementName,
-            Layout\Element::CONTAINER_OPT_LABEL,
-            $options[Layout\Element::CONTAINER_OPT_LABEL]
-        );
-        unset($options[Layout\Element::CONTAINER_OPT_LABEL]);
         unset($options['type']);
 
         $this->validateOptions($options);

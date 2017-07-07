@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\Bundle;
@@ -30,23 +30,23 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject */
     private $minificationMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundle = $this->getMockBuilder('Magento\Framework\View\Asset\Bundle')
+        $this->bundle = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfig = $this->getMockBuilder('Magento\Framework\View\Asset\Bundle\ConfigInterface')
+        $this->bundleConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->assetConfig = $this->getMockBuilder('Magento\Framework\View\Asset\ConfigInterface')
+        $this->assetConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->asset = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Asset\LocalInterface',
+            \Magento\Framework\View\Asset\LocalInterface::class,
             [],
             '',
             false,
@@ -55,7 +55,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ['getContentType']
         );
 
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,27 +77,15 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
 
-    public function testAddAssetWithHtmlTypeAndWithoutModule()
-    {
-        $this->asset->expects($this->once())
-            ->method('getContentType')
-            ->willReturn('html');
-        $this->asset->expects($this->once())
-            ->method('getModule')
-            ->willReturn('');
-
-        $this->assertFalse($this->manager->addAsset($this->asset));
-    }
-
     public function testAddAssetWithExcludedFile()
     {
-        $dirRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
+        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $configView = $this->getMockBuilder('Magento\Framework\Config\View')
+        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->setMockClassName('configView')
             ->disableOriginalConstructor()
             ->getMock();
@@ -113,6 +101,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn('Lib');
         $this->asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
+            ->willReturn('source/file.min.js');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getFilePath')
             ->willReturn('source/file.min.js');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
@@ -131,13 +122,13 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAssetWithExcludedDirectory()
     {
-        $dirRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
+        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $configView = $this->getMockBuilder('Magento\Framework\Config\View')
+        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -183,13 +174,13 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAsset()
     {
-        $dirRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+        $dirRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
+        $context = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $configView = $this->getMockBuilder('Magento\Framework\Config\View')
+        $configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
             ->disableOriginalConstructor()
             ->getMock();
 

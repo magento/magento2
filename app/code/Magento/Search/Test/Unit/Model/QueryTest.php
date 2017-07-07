@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model;
@@ -23,11 +23,11 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->resource = $this->getMockBuilder('Magento\Search\Model\ResourceModel\Query')
+        $this->resource = $this->getMockBuilder(\Magento\Search\Model\ResourceModel\Query::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = $objectManager->getObject('Magento\Search\Model\Query', ['resource' => $this->resource]);
+        $this->model = $objectManager->getObject(\Magento\Search\Model\Query::class, ['resource' => $this->resource]);
     }
 
     public function testSaveNumResults()

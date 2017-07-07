@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,11 @@ use Magento\Framework\Setup\SchemaSetupInterface;
  */
 class InstallSchema implements InstallSchemaInterface
 {
+    /**
+     * @var string
+     */
+    private static $connectionName = 'checkout';
+
     /**
      * {@inheritdoc}
      */
@@ -62,7 +67,7 @@ class InstallSchema implements InstallSchemaInterface
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addIndex(
             $installer->getIdxName('persistent_session', ['key']),
@@ -97,8 +102,8 @@ class InstallSchema implements InstallSchemaInterface
          * Alter quote table with is_persistent flag
          *
          */
-        $installer->getConnection()->addColumn(
-            $installer->getTable('quote'),
+        $installer->getConnection(self::$connectionName)->addColumn(
+            $installer->getTable('quote', self::$connectionName),
             'is_persistent',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -109,6 +114,5 @@ class InstallSchema implements InstallSchemaInterface
         );
 
         $installer->endSetup();
-
     }
 }

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -15,8 +15,8 @@
     .appearing__off();
     background: @popup__background-color;
     min-width: 40%;
-    transform: scale(0.7);
-    transition: all 0.3s;
+    transform: scale(.7);
+    transition: all .3s;
     width: 75%;
 
     &.ui-dialog-active {
@@ -49,9 +49,11 @@
         position: absolute;
         right: @popup-close-icon__right;
         top: @popup-close-icon__top - .3;
+
         .ui-icon {
             display: none;
         }
+
         &.ui-state-hover {
             border: none;
         }
@@ -85,12 +87,14 @@
         font-size: @button__large__font-size;
         margin: 0 0 0 @popup__padding__horizontal;
         padding: @button__large__padding-vertical 0;
+
         &:before {
             content: normal;
         }
+
         span {
-            position: static;
             overflow: auto;
+            position: static;
         }
     }
 
@@ -112,6 +116,7 @@
     .side-col {
         float: left;
         padding-bottom: 0;
+
         &:after {
             display: none;
         }
@@ -140,9 +145,9 @@
     }
 
     .ui-resizable-handle {
-        position: absolute;
-        font-size: 0.1px;
         display: block;
+        font-size: .1px;
+        position: absolute;
     }
 
     .ui-resizable-disabled,
@@ -155,65 +160,65 @@
     .ui-resizable-n {
         cursor: n-resize;
         height: 7px;
-        width: 100%;
-        top: -5px;
         left: 0;
+        top: -5px;
+        width: 100%;
     }
 
     .ui-resizable-s {
+        bottom: 0;
         cursor: s-resize;
         height: 7px;
-        width: 100%;
-        bottom: 0;
         left: 0;
+        width: 100%;
     }
 
     .ui-resizable-e {
         cursor: e-resize;
-        width: 7px;
+        height: 100%;
         right: 0;
         top: 0;
-        height: 100%;
+        width: 7px;
     }
 
     .ui-resizable-w {
         cursor: w-resize;
-        width: 7px;
+        height: 100%;
         left: -7px;
         top: 0;
-        height: 100%;
+        width: 7px;
     }
 
     .ui-resizable-se {
+        bottom: 1px;
         cursor: se-resize;
-        width: 12px;
         height: 12px;
         right: 1px;
-        bottom: 1px;
+        width: 12px;
     }
 
     .ui-resizable-sw {
+        bottom: 0;
         cursor: sw-resize;
-        width: 9px;
         height: 9px;
         left: -5px;
-        bottom: 0;
+        width: 9px;
     }
 
     .ui-resizable-nw {
         cursor: nw-resize;
-        width: 9px;
         height: 9px;
         left: -5px;
         top: -5px;
+        width: 9px;
     }
 
     .ui-resizable-ne {
         cursor: ne-resize;
-        width: 9px;
         height: 9px;
         right: 0;
         top: -5px;
+        width: 9px;
     }
 
     //
@@ -221,16 +226,18 @@
     //  -----------------------------------------
 
     .main-col,
-    .magento_message {
+    .magento-message {
         .insert-title-inner {
             &:extend(.abs-clearfix all);
             border-bottom: 1px solid @color-gray68;
             margin: 0 0 @indent__base;
             padding-bottom: @indent__xs;
         }
+
         .insert-actions {
             float: right;
         }
+
         .title {
             font-size: @font-size__l;
             padding-top: @indent__xs;
@@ -245,9 +252,11 @@
         .breadcrumbs {
             list-style: none;
             padding-left: 0;
+
             li {
                 display: inline-block;
                 margin: 0 @indent__xs @indent__xs 0;
+
                 &:after {
                     content: '';
                     margin: 0 @indent__xs 0 0;
@@ -264,12 +273,14 @@
             display: inline-block;
             float: none;
             vertical-align: middle;
+
             span {
                 display: none;
             }
+
             input {
-                border: none;
                 -moz-transform: none;
+                border: none;
                 opacity: 1;
                 position: static;
             }
@@ -285,12 +296,14 @@
             border: 1px solid @color-gray68;
             display: inline-block;
             margin: 0 @indent__xs 15px 0;
+            overflow: hidden;
             padding: 3px;
             width: 100px;
-            overflow: hidden;
+
             &.selected {
                 border-color: @color-blue-dodger;
             }
+
             p {
                 text-align: center;
             }
@@ -314,8 +327,10 @@
             margin: 0 0 @indent__base @popup-fieldset__margin-left;
             width: auto;
         }
+
         .product-options {
             margin-left: @popup-fieldset__margin-left;
+
             .admin__field-control {
                 margin-bottom: @indent__base;
             }
@@ -331,36 +346,44 @@
         font-weight: @font-weight__bold;
         padding: 2rem 2rem 0 7.5rem;
     }
+
     .ui-dialog-titlebar-close {
         right: 1.5rem;
         top: 1rem;
+
         &:before {
             font-size: 1.4rem;
         }
     }
+
     .ui-dialog-content {
         background: @color-lazy-sun;
         margin-bottom: 0;
         overflow: inherit;
         padding: 0 2rem 2rem;
+
         .messages,
         .message {
             &:last-child {
                 margin-bottom: 0;
             }
         }
+
         .message {
             &:first-child {
                 padding-top: 0;
+
                 &:before {
                     top: 0;
                 }
             }
+
             &:last-child {
                 padding-bottom: 0;
             }
         }
     }
+
     .ui-dialog-buttonpane {
         background: @color-lazy-sun;
         padding: 0 2rem 2rem;
@@ -375,12 +398,14 @@
     list-style: none;
     margin: 0;
     padding: 0;
+
     li {
         margin-top: @indent__xs;
         padding-left: @indent__s;
+
         b {
-            margin-left: -@indent__s;
             display: inline-block;
+            margin-left: -@indent__s;
         }
     }
 }
@@ -389,20 +414,29 @@
 //  Attribute Popup
 //  _____________________________________________
 
+.attribute-popup { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+    .page-content {
+        padding: 0;
+    }
+}
+
 .attribute-popup-actions { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
     &:extend(.abs-clearfix all);
     background: @page-main-actions__background-color;
     border-bottom: 1px solid @page-main-actions__border-color;
     border-top: 1px solid @page-main-actions__border-color;
     padding: @page-main-actions__padding;
+
     &.page-actions {
         float: none;
     }
+
     &.fixed { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
         background: @color-white !important;
         border-bottom: 0 !important;
         left: 0 !important;
         padding: @popup__padding !important;
+
         .page-actions-buttons {
             padding-right: 0;
         }
@@ -429,177 +463,23 @@
     }
 }
 
-//
-//  Prototype popup window
-//  _____________________________________________
+.ie9 {
+    .catalog-product-attribute-edit {
+        &.attribute-popup {
+            min-width: 0;
 
-//  Prototype popup window is used to display WYSIWYG
-//  ToDo UI: Remove after complete Prototype removing
-
-.popup-window {
-    background: @popup__background-color;
-    &.dialog {
-        z-index: 900 !important;
-    }
-
-    .table_window > tbody > tr > td {
-        background: @popup__background-color;
-        border: 0;
-        padding: 0;
-    }
-
-    .magento_close {
-        &:extend(.ui-dialog .ui-dialog-titlebar-close all);
-    }
-
-    .magento_title {
-        &:extend(.ui-dialog .ui-dialog-titlebar all);
-    }
-
-    .magento_message {
-        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
-        position: relative;
-    }
-
-    .magento_content {
-        height: auto !important;
-        .buttons-set {
-            margin: 0 0 15px;
-            button {
-                margin-right: 4px;
+            .menu-wrapper {
+                display: none;
             }
-        }
-    }
 
-    .magento_buttons {
-        &:extend(.abs-clearfix all);
-        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
-        text-align: right;
-
-        .ok_button {
-            &:extend(.ui-dialog .action-primary all);
-            float: right;
-            margin: 0 0 0 @popup__padding__horizontal;
-        }
-
-        .cancel_button {
-            &:extend(.ui-dialog .action-close all);
-        }
-    }
-}
-
-.ui-widget-overlay {
-    &:extend(.abs-modal-overlay all);
-}
-
-.overlay_magento {
-    &:extend(.abs-modal-overlay all);
-    z-index: 800 !important;
-}
-
-//
-//  Old popup window
-//  _____________________________________________
-
-//  ToDo UI: old popups should be replaced by jquery UI popup
-
-.fade {
-    &:extend(.abs-modal-overlay all);
-    z-index: 1000;
-
-    .popup {
-        background: @popup__background-color;
-        border: 0;
-        border-radius: 0;
-        display: inline-block;
-        left: 12.5%;
-        position: absolute;
-        top: 5rem;
-        text-align: left;
-        width: 75%;
-        .close {
-            &:extend(.ui-dialog .ui-dialog-titlebar-close all);
-        }
-    }
-
-    .popup-inner {
-        padding: 0;
-    }
-
-    .popup-title {
-        &:extend(.ui-dialog .ui-dialog-titlebar all);
-        background: @color-lazy-sun;
-        font-size: 1.4rem;
-        font-weight: @font-weight__bold;
-        padding: 2rem 2rem 0 7.5rem;
-    }
-
-    .popup-header {
-        .popup-title {
-            margin: 0;
-        }
-    }
-
-    .popup-content {
-        &:extend(.abs-clearfix all);
-        background: @color-lazy-sun;
-        padding: 0 2rem 2rem;
-        p {
-            margin-top: 0;
-        }
-        .messages {
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-        .message {
-            &:first-child {
-                padding-top: 0;
-                &:before {
-                    top: 0;
+            .page-actions {
+                button {
+                    float: none;
                 }
-            }
-            &:last-child {
-                padding-bottom: 0;
-            }
-        }
-    }
 
-    .fieldset {
-        background: @color-lazy-sun;
-        border: 0;
-        margin: 1.5rem 0 1.5rem 1.5rem;
-        padding: 0;
-    }
-
-    .maintenance-checkbox-container {
-        padding-left: 20%;
-    }
-
-    .messages {
-        margin: 0 !important;
-    }
-
-    .actions {
-        &:extend(.abs-clearfix all);
-        margin: 0;
-        text-align: right;
-
-        .primary {
-            &:extend(.ui-dialog .action-primary all);
-            float: right;
-            line-height: inherit;
-            margin: 0 0 0 @popup__padding__horizontal;
-            &:hover {
-                box-shadow: none;
-            }
-        }
-
-        .cancel {
-            line-height: inherit;
-            &:extend(.ui-dialog .action-close all);
-            &:hover {
-                box-shadow: none;
+                .primary {
+                    float: right;
+                }
             }
         }
     }

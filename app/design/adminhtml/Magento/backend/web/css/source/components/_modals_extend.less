@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -12,6 +12,8 @@
 //  ---------------------------------------------
 
 @modal-title__color: @text__color;
+
+@modal-title-span__font-size: @font-size__base;
 
 @modal-popup-title__font-size: 2.4rem;
 
@@ -39,20 +41,25 @@
         right: 0;
         top: 0;
         z-index: 1;
+
         &:active {
             transform: none;
+
             &:before {
                 font-size: @modal-action-close__active__font-size;
             }
         }
+
         &:hover {
             &:before {
                 color: @modal-action-close__hover__color;
             }
         }
+
         &:before {
             font-size: @modal-action-close__font-size;
         }
+
         &:focus {
             background-color: transparent;
         }
@@ -62,12 +69,14 @@
 .modal-popup {
     &.prompt {
         .prompt-message {
-            padding: @modal-prompt-message__padding 0;
+            padding-bottom: @modal-prompt-message__padding;
+
             input {
                 width: 100%;
             }
         }
     }
+
     &.confirm,
     &.prompt {
         .modal-inner-wrap {
@@ -76,26 +85,31 @@
             }
         }
     }
+
     &.modal-system-messages {
         .modal-inner-wrap {
             background: @modal-popup-colored__background;
         }
     }
+
     &._image-box {
         .modal-inner-wrap {
             margin: 5rem auto;
             max-width: @modal-popup-image-box__max-width;
             position: static;
         }
+
         .thumbnail-preview {
             padding-bottom: @indent__l;
             text-align: center;
+
             .thumbnail-preview-image-block {
                 border: 1px solid @modal-popup-image-box__border-color;
                 margin: 0 auto @indent__base;
                 max-width: @modal-popup-image-box-preview__max-width;
                 padding: @indent__base;
             }
+
             .thumbnail-preview-image {
                 max-height: @modal-popup-image-box-preview-image__max-height;
             }
@@ -109,27 +123,31 @@
 
     .action-close {
         padding: @modal-popup__padding @modal-popup__padding;
-        &:active{
-            padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
+
+        &:active {
             padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
+            padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
         }
     }
 
     .modal-footer {
-        text-align: right;
         padding-top: @modal-slide__padding;
+        text-align: right;
 
         .action-primary {
             &:extend(.abs-action-secondary all);
             &:extend(.abs-action-l all);
         }
+
         .action-secondary {
             &:extend(.abs-action-tertiary all);
             &:extend(.abs-action-l all);
         }
     }
+
     .action-close {
         padding: @modal-popup__padding;
+
         &:active,
         &:focus {
             background: transparent;
@@ -140,6 +158,16 @@
 }
 
 .modal-slide {
+    .modal-content-new-attribute {
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+        padding-bottom: 0;
+
+        iframe {
+            margin-bottom: -@indent__m;
+        }
+    }
+
     .modal-title {
         font-size: @modal-slide-title__font-size;
         margin-right: @modal-slide-title__font-size + @modal-slide__padding + 1rem;
@@ -147,32 +175,36 @@
 
     .action-close {
         padding: @modal-slide-header__padding-vertical @modal-slide__padding;
+
         &:active {
-            padding-top: @modal-slide-header__padding-vertical + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
             padding-right: @modal-slide__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+            padding-top: @modal-slide-header__padding-vertical + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
         }
     }
+
     .page-main-actions {
-        margin-top: @modal-slide-header__padding-vertical;
         margin-bottom: @modal-slide-header__padding-vertical - @page-main-actions__padding;
+        margin-top: @modal-slide-header__padding-vertical;
     }
 
-    .magento_message {
+    .magento-message {
         padding: 0 @popup__padding__horizontal @popup__padding__vertical;
         position: relative;
     }
 
     .main-col,
-    .magento_message {
+    .magento-message {
         .insert-title-inner {
             &:extend(.abs-clearfix all);
             border-bottom: 1px solid @color-gray68;
             margin: 0 0 @indent__base;
             padding-bottom: @indent__xs;
         }
+
         .insert-actions {
             float: right;
         }
+
         .title {
             font-size: @font-size__l;
             padding-top: @indent__xs;
@@ -183,6 +215,7 @@
     .side-col {
         float: left;
         padding-bottom: 0;
+
         &:after {
             display: none;
         }
@@ -208,4 +241,10 @@
     font-weight: @font-weight__regular;
     margin-bottom: 0;
     min-height: 1em;
+
+    span {
+        font-size: @modal-title-span__font-size;
+        font-style: @font-style__emphasis;
+        margin-left: @indent__s;
+    }
 }

@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+/**
+ * Class CategoryProcessor
+ *
+ * @api
+ */
 class CategoryProcessor
 {
     /**
@@ -37,6 +42,13 @@ class CategoryProcessor
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $categoryFactory;
+
+    /**
+     * Failed categories during creation
+     *
+     * @var array
+     */
+    protected $failedCategories = [];
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
@@ -72,7 +84,10 @@ class CategoryProcessor
                     for ($i = 1; $i < $pathSize; $i++) {
                         $path[] = $collection->getItemById((int)$structure[$i])->getName();
                     }
-                    $index = implode(self::DELIMITER_CATEGORY, $path);
+                    /** @var string $index */
+                    $index = $this->standardizeString(
+                        implode(self::DELIMITER_CATEGORY, $path)
+                    );
                     $this->categories[$index] = $category->getId();
                 }
             }
@@ -107,23 +122,25 @@ class CategoryProcessor
         return $category->getId();
     }
 
-
     /**
      * Returns ID of category by string path creating nonexistent ones.
      *
      * @param string $categoryPath
-     * 
+     *
      * @return int
      */
     protected function upsertCategory($categoryPath)
     {
-        if (!isset($this->categories[$categoryPath])) {
+        /** @var string $index */
+        $index = $this->standardizeString($categoryPath);
+
+        if (!isset($this->categories[$index])) {
             $pathParts = explode(self::DELIMITER_CATEGORY, $categoryPath);
             $parentId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
             $path = '';
 
             foreach ($pathParts as $pathPart) {
-                $path .= $pathPart;
+                $path .= $this->standardizeString($pathPart);
                 if (!isset($this->categories[$path])) {
                     $this->categories[$path] = $this->createCategory($pathPart, $parentId);
                 }
@@ -132,7 +149,7 @@ class CategoryProcessor
             }
         }
 
-        return $this->categories[$categoryPath];
+        return $this->categories[$index];
     }
 
     /**
@@ -149,10 +166,53 @@ class CategoryProcessor
         $categories = explode($categoriesSeparator, $categoriesString);
 
         foreach ($categories as $category) {
-            $categoriesIds[] = $this->upsertCategory($category);
+            try {
+                $categoriesIds[] = $this->upsertCategory($category);
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->addFailedCategory($category, $e);
+            }
         }
 
         return $categoriesIds;
+    }
+
+    /**
+     * Add failed category
+     *
+     * @param string $category
+     * @param \Magento\Framework\Exception\AlreadyExistsException $exception
+     *
+     * @return $this
+     */
+    private function addFailedCategory($category, $exception)
+    {
+        $this->failedCategories[] =
+            [
+                'category' => $category,
+                'exception' => $exception,
+            ];
+        return $this;
+    }
+
+    /**
+     * Return failed categories
+     *
+     * @return array
+     */
+    public function getFailedCategories()
+    {
+        return $this->failedCategories;
+    }
+
+    /**
+     * Resets failed categories' array
+     *
+     * @return $this
+     */
+    public function clearFailedCategories()
+    {
+        $this->failedCategories = [];
+        return $this;
     }
 
     /**
@@ -165,5 +225,18 @@ class CategoryProcessor
     public function getCategoryById($categoryId)
     {
         return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
+    }
+
+    /**
+     * Standardize a string.
+     * For now it performs only a lowercase action, this method is here to include more complex checks in the future
+     * if needed.
+     *
+     * @param string $string
+     * @return string
+     */
+    private function standardizeString($string)
+    {
+        return mb_strtolower($string);
     }
 }

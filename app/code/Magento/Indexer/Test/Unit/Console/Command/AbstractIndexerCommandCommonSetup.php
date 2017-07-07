@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
@@ -13,7 +13,7 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager\ConfigLoader
      */
-    private $configLoaderMock;
+    protected $configLoaderMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerFactory
@@ -42,36 +42,60 @@ class AbstractIndexerCommandCommonSetup extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerFactory = $this->getMock(
+            \Magento\Framework\App\ObjectManagerFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->configLoaderMock = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
+        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->configLoaderMock = $this->getMock(
+            \Magento\Framework\App\ObjectManager\ConfigLoader::class,
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->collectionFactory = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->indexerFactory = $this->getMockBuilder(\Magento\Indexer\Model\IndexerFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
-                ['Magento\Framework\App\State', $this->stateMock],
-                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $this->configLoaderMock]
-            ]));
+            ->will(
+                $this->returnValueMap(
+                    array_merge(
+                        $this->getObjectManagerReturnValueMap(),
+                        [
+                            [\Magento\Indexer\Model\Indexer\CollectionFactory::class, $this->collectionFactory],
+                            [\Magento\Indexer\Model\IndexerFactory::class, $this->indexerFactory],
+                        ]
+                    )
+                )
+            );
+    }
 
-        $this->collectionFactory = $this->getMockBuilder('Magento\Indexer\Model\Indexer\CollectionFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->indexerFactory = $this->getMockBuilder('Magento\Indexer\Model\IndexerFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $this->objectManager
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValueMap([
-                ['Magento\Indexer\Model\Indexer\CollectionFactory', [], $this->collectionFactory],
-                ['Magento\Indexer\Model\IndexerFactory', [], $this->indexerFactory],
-            ]));
+    /**
+     * Return value map for object manager
+     *
+     * @return array
+     */
+    protected function getObjectManagerReturnValueMap()
+    {
+        return [
+            [\Magento\Framework\App\State::class, $this->stateMock],
+            [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $this->configLoaderMock]
+        ];
     }
 
     protected function configureAdminArea()

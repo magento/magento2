@@ -1,25 +1,25 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
-
+// @deprecated
 ?>
 <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
     <div class="ratings-container">
         <?php foreach ($block->getRating() as $_rating): ?>
         <?php if ($_rating->getPercent()): ?>
             <div class="ratings">
-               <?php echo $block->escapeHtml($_rating->getRatingCode()) ?>
+               <?= $block->escapeHtml($_rating->getRatingCode()) ?>
                 <div class="rating-box">
-                    <div class="rating" style="width:<?php /* @escapeNotVerified */ echo ceil($_rating->getPercent()) ?>%;"></div>
+                    <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getPercent()) ?>%;"></div>
                 </div>
             </div>
         <?php endif; ?>
         <?php endforeach; ?>
     </div>
 <?php else: ?>
-    <?php /* @escapeNotVerified */ echo __("Rating isn't Available") ?>
+    <?= $block->escapeHtml(__("Rating isn't Available")) ?>
 <?php endif; ?>

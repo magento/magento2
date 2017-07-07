@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block\Advanced;
@@ -20,9 +20,9 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
-        $this->_block = $this->_layout->createBlock('Magento\CatalogSearch\Block\Advanced\Result', 'block');
+        $this->_block = $this->_layout->createBlock(\Magento\CatalogSearch\Block\Advanced\Result::class, 'block');
     }
 
     /**
@@ -37,7 +37,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->getMock(
-            'Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             ['getAvailableSortByOptions'],
             [],
             '',
@@ -49,10 +49,14 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $category->setId(100500); // Any id - just for layer navigation
         /** @var \Magento\Catalog\Model\Layer\Resolver $resolver */
         $resolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Layer\Resolver');
+            ->get(\Magento\Catalog\Model\Layer\Resolver::class);
         $resolver->get()->setCurrentCategory($category);
 
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');
+        $childBlock = $this->_layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'search_result_list',
+            'block'
+        );
 
         $expectedOptions = ['option1' => 'Label Option 1', 'option3' => 'Label Option 2'];
         $this->assertNotEquals($expectedOptions, $childBlock->getAvailableOrders());
@@ -66,7 +70,11 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     public function testSetListModes()
     {
         /** @var $childBlock \Magento\Framework\View\Element\Text */
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');
+        $childBlock = $this->_layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'search_result_list',
+            'block'
+        );
         $this->assertEmpty($childBlock->getModes());
         $this->_block->setListModes();
         $this->assertNotEmpty($childBlock->getModes());
@@ -75,11 +83,15 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     public function testSetListCollection()
     {
         /** @var $childBlock \Magento\Framework\View\Element\Text */
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');
+        $childBlock = $this->_layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'search_result_list',
+            'block'
+        );
         $this->assertEmpty($childBlock->getCollection());
         $this->_block->setListCollection();
         $this->assertInstanceOf(
-            'Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection',
+            \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
             $childBlock->getCollection()
         );
     }

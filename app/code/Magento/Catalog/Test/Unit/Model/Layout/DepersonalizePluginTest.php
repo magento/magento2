@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,26 +32,26 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultLayout;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->catalogSessionMock = $this->getMock('Magento\Catalog\Model\Session',
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->catalogSessionMock = $this->getMock(
+            \Magento\Catalog\Model\Session::class,
             ['clearStorage'],
             [],
             '',
             false
         );
-        $this->resultLayout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->resultLayout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
         $this->depersonalizeCheckerMock = $this->getMock(
-            'Magento\PageCache\Model\DepersonalizeChecker',
+            \Magento\PageCache\Model\DepersonalizeChecker::class,
             [],
             [],
             '',
             false
         );
 
-        $this->plugin = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Model\Layout\DepersonalizePlugin',
+        $this->plugin = (new ObjectManager($this))->getObject(\Magento\Catalog\Model\Layout\DepersonalizePlugin::class,
             ['catalogSession' => $this->catalogSessionMock, 'depersonalizeChecker' => $this->depersonalizeCheckerMock]
         );
     }

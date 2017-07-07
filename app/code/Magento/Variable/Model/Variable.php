@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Model;
@@ -15,7 +15,7 @@ namespace Magento\Variable\Model;
  * @method string getName()
  * @method \Magento\Variable\Model\Variable setName(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Variable extends \Magento\Framework\Model\AbstractModel
 {
@@ -61,7 +61,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Variable\Model\ResourceModel\Variable');
+        $this->_init(\Magento\Variable\Model\ResourceModel\Variable::class);
     }
 
     /**

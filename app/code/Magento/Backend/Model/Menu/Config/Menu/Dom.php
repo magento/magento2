@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Config\Menu;
 
 /**
  * Menu configuration files handler
+ * @api
  */
 class Dom extends \Magento\Framework\Config\Dom
 {

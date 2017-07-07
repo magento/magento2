@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Report\Settlement;
@@ -72,7 +72,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\ResourceModel\Report\Settlement\Row');
+        $this->_init(\Magento\Paypal\Model\ResourceModel\Report\Settlement\Row::class);
     }
 
     /**
@@ -122,8 +122,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
     /**
      * Cast amounts of the specified keys
      *
-     * PayPal settlement reports contain amounts in cents, hence the values need to be divided by 100
-     * Also if the "credit" value is detected, it will be casted to negative amount
+     * If the "credit" value is detected, it will be casted to negative amount
      *
      * @param string $key
      * @return float|null
@@ -137,7 +136,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
             return null;
         }
 
-        $amount = $this->_data[$key] / 100;
+        $amount = $this->_data[$key];
         if ('CR' == $this->_data[$this->castAmountRelation[$key]]) {
             $amount = -1 * $amount;
         }

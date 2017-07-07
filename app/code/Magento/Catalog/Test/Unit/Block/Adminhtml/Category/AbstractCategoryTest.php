@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,14 +50,15 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->contextMock = $this->getMock(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             [],
             [],
             '',
             false
         );
 
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(
+            \Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -65,11 +66,13 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->will($this->returnValue($this->requestMock));
 
-        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilderMock = $this->getMockBuilder(
+            \Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(
+            \Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,7 +80,7 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreManager')
             ->will($this->returnValue($this->storeManagerMock));
 
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -86,7 +89,7 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->urlBuilderMock));
 
         $this->category = $this->objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Category\AbstractCategory',
+            \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory::class,
             [
                 'context' => $this->contextMock,
             ]
@@ -102,7 +105,6 @@ class AbstractCategoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 23;
         $saveUrl = 'save URL';
         $params = ['_current' => false, '_query' => false, 'store' => $storeId];
-
 
         $this->requestMock->expects($this->once())->method('getParam')->with('store')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())

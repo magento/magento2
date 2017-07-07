@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Model;
@@ -9,6 +9,8 @@ namespace Magento\OfflinePayments\Model;
  * Cash on delivery payment method model
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ *
+ * @api
  */
 class Cashondelivery extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -26,14 +28,14 @@ class Cashondelivery extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @var string
      */
-    protected $_formBlockType = 'Magento\OfflinePayments\Block\Form\Cashondelivery';
+    protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Cashondelivery::class;
 
     /**
      * Info instructions block path
      *
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info\Instructions';
+    protected $_infoBlockType = \Magento\Payment\Block\Info\Instructions::class;
 
     /**
      * Availability option

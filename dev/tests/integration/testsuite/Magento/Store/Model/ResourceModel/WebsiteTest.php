@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel;
@@ -11,7 +11,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $model \Magento\Store\Model\ResourceModel\Website */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Store\Model\ResourceModel\Website'
+            \Magento\Store\Model\ResourceModel\Website::class
         );
         $this->assertEquals(1, $model->countAll());
         $this->assertEquals(1, $model->countAll(false));

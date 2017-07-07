@@ -1,52 +1,22 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko if: $col.isSingle($row()._rowIndex) -->
 <a
     class="action-menu-item"
-    data-bind="
-        repeat: {
-            foreach: $col.getVisibleActions($row()._rowIndex),
-            item: '$action'
-        }"
-    data-repeat-bind="
-        attr: {
-            href: $action().href
-        },
-        click: $col.getActionHandler($action()),
-        text: $action().label"
-    ></a>
-<!-- /ko -->
+    if="$col.isSingle($row()._rowIndex)"
+    repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'"
+    click="$col.getActionHandler($action())"
+    text="$action().label"
+    attr="target: $col.getTarget($action()), href: $action().href"/>
 
-<!-- ko if: $col.isMultiple($row()._rowIndex) -->
-<div
-    class="action-select-wrap"
-    data-bind="collapsible">
-    <button class="action-select" data-bind="toggleCollapsible">
-        <span data-bind="i18n: 'Select'"></span>
-    </button>
-    <ul
-        class="action-menu"
-        data-bind="
-            css: {'_active': $collapsible.opened}">
-        <li
-            data-bind="
-                repeat: {
-                    foreach: $col.getVisibleActions($row()._rowIndex),
-                    item: '$action'
-                }">
-            <a
-                class="action-menu-item"
-                data-bind="
-                    attr: {
-                        href: $action().href
-                    },
-                    click: $col.getActionHandler($action()),
-                    text: $action().label"></a>
+<div class="action-select-wrap" if="$col.isMultiple($row()._rowIndex)" collapsible>
+    <button class="action-select" translate="'Select'" toggleCollapsible/>
+    <ul class="action-menu" css="_active: $collapsible.opened">
+        <li repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'">
+            <a class="action-menu-item" click="$col.getActionHandler($action())" text="$action().label" attr="target: $col.getTarget($action()), href: $action().href, 'data-action': 'item-' + $action().index"/>
         </li>
     </ul>
 </div>
-<!-- /ko -->

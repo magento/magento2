@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Downlaodable Sales Order Email items renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
 {
@@ -36,24 +36,27 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     protected $_itemsFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var \Magento\Framework\Url
      */
-    protected $urlGenerator;
+    protected $frontendUrlBuilder;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Framework\Url $frontendUrlBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory,
+        \Magento\Framework\Url $frontendUrlBuilder,
         array $data = []
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
+        $this->frontendUrlBuilder = $frontendUrlBuilder;
         parent::__construct($context, $data);
     }
 
@@ -94,7 +97,7 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
      */
     public function getPurchasedLinkUrl($item)
     {
-        return $this->_urlBuilder->getUrl(
+        return $this->frontendUrlBuilder->getUrl(
             'downloadable/download/link',
             [
                 'id' => $item->getLinkHash(),

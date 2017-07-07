@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -33,6 +33,9 @@
             <path>CHANGELOG.md</path>
         </item>
         <item>
+            <path>composer.lock</path>
+        </item>
+        <item>
             <path>dev/build/publication/extra_files/ce/CHANGELOG.md</path>
         </item>
         <item>
@@ -45,6 +48,16 @@
         <item>
             <path>dev/tests/api-functional/testsuite/Magento/Webapi/Routing/RequestIdOverrideTest.php</path>
             <word>overriden</word>
+        </item>
+        <item>
+            <path>composer.lock</path>
+        </item>
+        <item>
+            <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
+            <word>twig</word>
+        </item>
+        <item>
+            <path>dev/build/publication/sanity/ce.xml</path>
         </item>
     </whitelist>
 </config>

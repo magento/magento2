@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
@@ -24,16 +24,15 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
         $registration = $objectManager->get(
-            'Magento\Theme\Model\Theme\Registration'
+            \Magento\Theme\Model\Theme\Registration::class
         );
         $registration->register();
-        $objectManager->get('Magento\Framework\App\State')
-            ->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
         $this->_model = $objectManager->create(
-            'Magento\Framework\View\FileSystem'
+            \Magento\Framework\View\FileSystem::class
         );
         $objectManager->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->setDesignTheme(
             'Test_FrameworkThemeTest/default'
         );

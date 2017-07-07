@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model\ResourceModel\Message;
@@ -19,6 +19,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\GiftMessage\Model\Message', 'Magento\GiftMessage\Model\ResourceModel\Message');
+        $this->_init(
+            \Magento\GiftMessage\Model\Message::class,
+            \Magento\GiftMessage\Model\ResourceModel\Message::class
+        );
     }
 }

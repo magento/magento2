@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
@@ -58,7 +58,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -67,21 +67,21 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             ['query']
         );
         $this->dbContext = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\Context',
+            \Magento\Framework\Model\ResourceModel\Db\Context::class,
             [],
             [],
             '',
             false
         );
         $this->profileFactory = $this->getMock(
-            'Magento\SalesSequence\Model\ProfileFactory',
+            \Magento\SalesSequence\Model\ProfileFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['getConnection', 'getTableName'],
             [],
             '',
@@ -89,21 +89,21 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
         );
         $this->dbContext->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [],
             [],
             '',
             false
         );
         $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Meta',
+            \Magento\SalesSequence\Model\Meta::class,
             [],
             [],
             '',
             false
         );
         $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Profile',
+            \Magento\SalesSequence\Model\Profile::class,
             [],
             [],
             '',
@@ -156,7 +156,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($profileData);
-        $this->profile->expects($this->at(0))->method('setData')->with($profileData);
+        $this->profile->expects($this->at(1))->method('setData')->with($profileData);
         $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
     }
 }

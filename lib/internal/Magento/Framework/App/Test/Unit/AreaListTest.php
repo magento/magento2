@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit;
 
@@ -29,9 +27,9 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_resolverFactory = $this
-            ->getMock('\Magento\Framework\App\Area\FrontNameResolverFactory', [], [], '', false);
+            ->getMock(\Magento\Framework\App\Area\FrontNameResolverFactory::class, [], [], '', false);
     }
 
     public function testGetCodeByFrontNameWhenAreaDoesNotContainFrontName()
@@ -44,16 +42,16 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
             $expected
         );
 
-        $resolverMock = $this->getMock('\Magento\Framework\App\Area\FrontNameResolverInterface');
+        $resolverMock = $this->getMock(\Magento\Framework\App\Area\FrontNameResolverInterface::class);
         $this->_resolverFactory->expects(
             $this->any()
         )->method(
-                'create'
-            )->with(
-                'testValue'
-            )->will(
-                $this->returnValue($resolverMock)
-            );
+            'create'
+        )->with(
+            'testValue'
+        )->will(
+            $this->returnValue($resolverMock)
+        );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
         $this->assertEquals($expected, $actual);
@@ -97,7 +95,7 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($model->getDefaultRouter($code));
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\App\AreaInterface', ['areaCode' => $code])
+            ->with(\Magento\Framework\App\AreaInterface::class, ['areaCode' => $code])
             ->willReturn('test');
         $this->assertSame('test', $model->getArea($code));
     }
@@ -106,7 +104,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
     {
         $areas = ['area1' => 'value1', 'area2' => 'value2'];
         $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $expected = array_keys($areas);
@@ -118,7 +119,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
     {
         $areas = ['area1' => ['router' => 'value1'], 'area2' => 'value2'];
         $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
+            $this->objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $this->assertEquals($this->_model->getDefaultRouter('area1'), $areas['area1']['router']);
@@ -131,7 +135,10 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getObjectManagerMockGetArea();
         $areas = ['area1' => ['router' => 'value1'], 'area2' => 'value2'];
         $this->_model = new AreaList(
-            $objectManagerMock, $this->_resolverFactory, $areas, ''
+            $objectManagerMock,
+            $this->_resolverFactory,
+            $areas,
+            ''
         );
 
         $this->assertEquals($this->_model->getArea('testArea'), 'ok');
@@ -142,12 +149,12 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
      */
     protected function getObjectManagerMockGetArea()
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock
             ->expects($this->any())
             ->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\App\AreaInterface'),
+                $this->equalTo(\Magento\Framework\App\AreaInterface::class),
                 $this->equalTo(['areaCode' => 'testArea'])
             )
             ->will($this->returnValue('ok'));

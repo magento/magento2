@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category\Widget;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ChooserTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -51,13 +54,13 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRaw;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\View', ['getLayout'], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->viewMock = $this->getMock(\Magento\Framework\App\View::class, ['getLayout'], [], '', false);
         $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             [],
             [],
             '',
@@ -66,10 +69,10 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getMessageManager', 'getSession'],
             $helper->getConstructArguments(
-                'Magento\Backend\App\Action\Context',
+                \Magento\Backend\App\Action\Context::class,
                 [
                     'response' => $this->responseMock,
                     'request' => $this->requestMock,
@@ -79,10 +82,10 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+        $this->resultRaw = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRawFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+        $resultRawFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -90,8 +93,8 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRaw);
 
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', ['createBlock'], [], '', false);
-        $layoutFactory = $this->getMockBuilder('Magento\Framework\View\LayoutFactory')
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, ['createBlock'], [], '', false);
+        $layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -109,7 +112,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     protected function _getTreeBlock()
     {
         $this->chooserBlockMock = $this->getMock(
-            'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser', [], [], '', false
+            \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class, [], [], '', false
         );
 
         $this->layoutMock->expects($this->once())->method('createBlock')->will(

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -60,6 +60,7 @@
         <xs:attribute name="showInDefault" type="xs:int" use="optional" />
         <xs:attribute name="showInStore" type="xs:int" use="optional" />
         <xs:attribute name="showInWebsite" type="xs:int" use="optional" />
+        <xs:attribute name="canRestore" type="xs:int" use="optional" />
         <xs:attribute name="advanced" type="xs:boolean" use="optional" />
         <xs:attribute name="extends" type="xs:string" use="optional" />
     </xs:attributeGroup>
@@ -95,6 +96,7 @@
                     <xs:element name="header_css" type="xs:string" />
                     <xs:element name="resource" type="typeAclResourceId" />
                     <xs:element ref="group" />
+                    <xs:element name="frontend_model" type="typeModel" />
                 </xs:choice>
             </xs:sequence>
             <xs:attributeGroup ref="elementsAttributeGroup"/>
@@ -163,7 +165,7 @@
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="label" type="xs:string" />
-                    <xs:element name="comment" type="xs:string" />
+                    <xs:element ref="comment" />
                     <xs:element name="tooltip" type="xs:string" />
                     <xs:element name="hint" type="xs:string" />
                     <xs:element name="frontend_class" type="xs:string" />
@@ -315,7 +317,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_///\\\\*]{3,}" />
+            <xs:pattern value="[a-zA-Z0-9_///\\*]{3,}" />
             <xs:minLength value="3" />
         </xs:restriction>
     </xs:simpleType>
@@ -337,6 +339,11 @@
 
     <xs:attributeGroup name="attributeAttributeGroup">
         <xs:attribute name="type" type="xs:string" use="required" />
+        <xs:anyAttribute processContents="lax"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="commentAttributeGroup">
+        <xs:attribute name="model" type="xs:string" use="optional" />
         <xs:anyAttribute processContents="lax"/>
     </xs:attributeGroup>
 
@@ -388,7 +395,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_\\\\]{1,}" />
+            <xs:pattern value="[a-zA-Z0-9_\\]{1,}" />
             <xs:minLength value="3" />
         </xs:restriction>
     </xs:simpleType>
@@ -401,7 +408,7 @@
         </xs:annotation>
 
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_\\\\]{1,}" />
+            <xs:pattern value="[a-zA-Z0-9_\\]{1,}" />
             <xs:minLength value="2" />
         </xs:restriction>
     </xs:simpleType>
@@ -426,7 +433,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-zA-Z0-9]{1,}[_\\\\][A-Z]+[A-Z0-9a-z]{1,}" />
+            <xs:pattern value="[A-Z]+[a-zA-Z0-9]{1,}[_\\][A-Z]+[A-Z0-9a-z]{1,}" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
@@ -438,10 +445,25 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z0-9_\\\\:]+" />
+            <xs:pattern value="[A-Za-z0-9_\\:]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:element name="comment">
+        <xs:annotation>
+            <xs:documentation>
+                Comment type
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="1" processContents="lax" />
+            </xs:sequence>
+            <xs:attributeGroup ref="commentAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
 
     <xs:simpleType name="typeConfigPath">
         <xs:annotation>
@@ -451,14 +473,14 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_\\\\]+/[a-zA-Z0-9_\\\\]+/[a-zA-Z0-9_\\\\]+" />
+            <xs:pattern value="[a-zA-Z0-9_\\]+/[a-zA-Z0-9_\\]+/[a-zA-Z0-9_\\]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="typeUploadDirRestriction">
         <xs:restriction base="xs:string">
-            <xs:pattern value="([a-zA-Z0-9_\\\\]+/{0,1}){1,}" />
+            <xs:pattern value="([a-zA-Z0-9_\\]+/{0,1}){1,}" />
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="typeUploadDir">

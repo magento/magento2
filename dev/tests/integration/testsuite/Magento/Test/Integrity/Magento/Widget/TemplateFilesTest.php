@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Widget;
@@ -21,11 +21,11 @@ class TemplateFilesTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $blockFactory \Magento\Framework\View\Element\BlockFactory */
         $blockFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Element\BlockFactory'
+            \Magento\Framework\View\Element\BlockFactory::class
         );
         /** @var \Magento\Framework\View\Element\Template $block */
         $block = $blockFactory->createBlock($class);
-        $this->assertInstanceOf('Magento\Framework\View\Element\Template', $block);
+        $this->assertInstanceOf(\Magento\Framework\View\Element\Template::class, $block);
         $block->setTemplate((string)$template);
         $this->assertFileExists($block->getTemplateFile());
     }
@@ -39,15 +39,17 @@ class TemplateFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         /** @var $model \Magento\Widget\Model\Widget */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Widget\Model\Widget');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Widget\Model\Widget::class
+        );
         foreach ($model->getWidgetsArray() as $row) {
             /** @var $instance \Magento\Widget\Model\Widget\Instance */
             $instance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Widget\Model\Widget\Instance'
+                \Magento\Widget\Model\Widget\Instance::class
             );
             $config = $instance->setType($row['type'])->getWidgetConfigAsArray();
             $class = $row['type'];
-            if (is_subclass_of($class, 'Magento\Framework\View\Element\Template')) {
+            if (is_subclass_of($class, \Magento\Framework\View\Element\Template::class)) {
                 if (isset(
                     $config['parameters']
                 ) && isset(

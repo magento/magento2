@@ -1,25 +1,29 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
     'mage/template',
+    'matchMedia',
     'jquery/ui',
     'mage/translate'
-], function ($, _, mageTemplate) {
+], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
 
     /**
-     * Check wether the incoming string is not empty or if doesn't consist of spaces.
+     * Check whether the incoming string is not empty or if doesn't consist of spaces.
      *
      * @param {String} value - Value to check.
      * @returns {Boolean}
      */
     function isEmpty(value) {
-        return (value.length === 0) || (value == null) || /^\s+$/.test(value);
+        return value.length === 0 || value == null || /^\s+$/.test(value);
     }
 
     $.widget('mage.quickSearch', {
@@ -38,9 +42,11 @@ define([
                     '</span>' +
                 '</li>',
             submitBtn: 'button[type="submit"]',
-            searchLabel: '[data-role=minisearch-label]'
+            searchLabel: '[data-role=minisearch-label]',
+            isExpandable: null
         },
 
+        /** @inheritdoc */
         _create: function () {
             this.responseList = {
                 indexList: null,
@@ -50,6 +56,7 @@ define([
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
             this.searchLabel = $(this.options.searchLabel);
+            this.isExpandable = this.options.isExpandable;
 
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');
 
@@ -57,11 +64,34 @@ define([
 
             this.element.attr('autocomplete', this.options.autocomplete);
 
+            mediaCheck({
+                media: '(max-width: 768px)',
+                entry: function () {
+                    this.isExpandable = true;
+                }.bind(this),
+                exit: function () {
+                    this.isExpandable = false;
+                    this.element.removeAttr('aria-expanded');
+                }.bind(this)
+            });
+
+            this.searchLabel.on('click', function (e) {
+                // allow input to lose its' focus when clicking on label
+                if (this.isExpandable && this.isActive()) {
+                    e.preventDefault();
+                }
+            }.bind(this));
+
             this.element.on('blur', $.proxy(function () {
+                if (!this.searchLabel.hasClass('active')) {
+                    return;
+                }
 
                 setTimeout($.proxy(function () {
                     if (this.autoComplete.is(':hidden')) {
-                        this.searchLabel.removeClass('active');
+                        this.setActiveState(false);
+                    } else {
+                        this.element.trigger('focus');
                     }
                     this.autoComplete.hide();
                     this._updateAriaHasPopup(false);
@@ -70,17 +100,39 @@ define([
 
             this.element.trigger('blur');
 
-            this.element.on('focus', $.proxy(function () {
-                this.searchLabel.addClass('active');
-            }, this));
+            this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
-            this.searchForm.on('submit', $.proxy(function() {
+            this.searchForm.on('submit', $.proxy(function () {
                 this._onSubmit();
                 this._updateAriaHasPopup(false);
             }, this));
         },
+
+        /**
+         * Checks if search field is active.
+         *
+         * @returns {Boolean}
+         */
+        isActive: function () {
+            return this.searchLabel.hasClass('active');
+        },
+
+        /**
+         * Sets state of the search field to provided value.
+         *
+         * @param {Boolean} isActive
+         */
+        setActiveState: function (isActive) {
+            this.searchForm.toggleClass('active', isActive);
+            this.searchLabel.toggleClass('active', isActive);
+
+            if (this.isExpandable) {
+                this.element.attr('aria-expanded', isActive);
+            }
+        },
+
         /**
          * @private
          * @return {Element} The first element in the suggestion list.
@@ -99,9 +151,9 @@ define([
 
         /**
          * @private
-         * @param {Boolean} show Set attribute aria-haspopup to "true/false" for element.
+         * @param {Boolean} show - Set attribute aria-haspopup to "true/false" for element.
          */
-        _updateAriaHasPopup: function(show) {
+        _updateAriaHasPopup: function (show) {
             if (show) {
                 this.element.attr('aria-haspopup', 'true');
             } else {
@@ -155,25 +207,29 @@ define([
                     this._getFirstVisibleElement().addClass(this.options.selectClass);
                     this.responseList.selected = this._getFirstVisibleElement();
                     break;
+
                 case $.ui.keyCode.END:
                     this._getLastElement().addClass(this.options.selectClass);
                     this.responseList.selected = this._getLastElement();
                     break;
+
                 case $.ui.keyCode.ESCAPE:
                     this._resetResponseList(true);
                     this.autoComplete.hide();
                     break;
+
                 case $.ui.keyCode.ENTER:
                     this.searchForm.trigger('submit');
                     break;
+
                 case $.ui.keyCode.DOWN:
                     if (this.responseList.indexList) {
-                        if (!this.responseList.selected) {
+                        if (!this.responseList.selected) {  //eslint-disable-line max-depth
                             this._getFirstVisibleElement().addClass(this.options.selectClass);
                             this.responseList.selected = this._getFirstVisibleElement();
-                        }
-                        else if (!this._getLastElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
+                        } else if (!this._getLastElement().hasClass(this.options.selectClass)) {
+                            this.responseList.selected = this.responseList.selected
+                                .removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
                         } else {
                             this.responseList.selected.removeClass(this.options.selectClass);
                             this._getFirstVisibleElement().addClass(this.options.selectClass);
@@ -183,10 +239,12 @@ define([
                         this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
                     }
                     break;
+
                 case $.ui.keyCode.UP:
                     if (this.responseList.indexList !== null) {
                         if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected.removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
+                            this.responseList.selected = this.responseList.selected
+                                .removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
 
                         } else {
                             this.responseList.selected.removeClass(this.options.selectClass);
@@ -225,10 +283,14 @@ define([
             this.submitBtn.disabled = isEmpty(value);
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
-                $.get(this.options.url, {q: value}, $.proxy(function (data) {
-                    $.each(data, function(index, element) {
+                $.get(this.options.url, {
+                    q: value
+                }, $.proxy(function (data) {
+                    $.each(data, function (index, element) {
+                        var html;
+
                         element.index = index;
-                        var html = template({
+                        html = template({
                             data: element
                         });
                         dropdown.append(html);
@@ -249,7 +311,7 @@ define([
 
                     this.responseList.indexList
                         .on('click', function (e) {
-                            this.responseList.selected = $(e.target);
+                            this.responseList.selected = $(e.currentTarget);
                             this.searchForm.trigger('submit');
                         }.bind(this))
                         .on('mouseenter mouseleave', function (e) {

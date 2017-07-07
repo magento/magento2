@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,11 +11,14 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Accounts\Collection;
 
+/**
+ * @api
+ */
 class Initial extends \Magento\Reports\Model\ResourceModel\Report\Collection
 {
     /**
      * Report sub-collection class name
      * @var string
      */
-    protected $_reportCollection = 'Magento\Reports\Model\ResourceModel\Accounts\Collection';
+    protected $_reportCollection = \Magento\Reports\Model\ResourceModel\Accounts\Collection::class;
 }

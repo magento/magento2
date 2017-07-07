@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,25 +8,25 @@
 
 ?>
 <!-- <?php if ($block->getTitle()): ?>
-    <h3><?php /* @escapeNotVerified */ echo $block->getTitle() ?></h3>
+    <h3><?= /* @escapeNotVerified */ $block->getTitle() ?></h3>
 <?php endif ?> -->
 <?php if (!empty($tabs)): ?>
-<div id="<?php /* @escapeNotVerified */ echo $block->getId() ?>">
+<div id="<?= /* @escapeNotVerified */ $block->getId() ?>">
 <ul  class="tabs-horiz">
 <?php foreach ($tabs as $_tab): ?>
     <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
     <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
     <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
     <li>
-        <a href="<?php /* @escapeNotVerified */ echo $_tabHref?>" id="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab) ?>" title="<?php /* @escapeNotVerified */ echo $block->getTabTitle($_tab) ?>" class="<?php $_tabClass ?>" data-tab-type="<?php $_tabType ?>">
+        <a href="<?= /* @escapeNotVerified */ $_tabHref ?>" id="<?= /* @escapeNotVerified */ $block->getTabId($_tab) ?>" title="<?= /* @escapeNotVerified */ $block->getTabTitle($_tab) ?>" class="<?php $_tabClass ?>" data-tab-type="<?php $_tabType ?>">
             <span>
-                <span class="changed" title="<?php /* @escapeNotVerified */ echo __('The information in this tab has been changed.') ?>"></span>
-                <span class="error" title="<?php /* @escapeNotVerified */ echo __('This tab contains invalid data. Please resolve this before saving.') ?>"></span>
-                <span class="loader" title="<?php /* @escapeNotVerified */ echo __('Loading...') ?>"></span>
-                <?php /* @escapeNotVerified */ echo $block->getTabLabel($_tab) ?>
+                <span class="changed" title="<?= /* @escapeNotVerified */ __('The information in this tab has been changed.') ?>"></span>
+                <span class="error" title="<?= /* @escapeNotVerified */ __('This tab contains invalid data. Please resolve this before saving.') ?>"></span>
+                <span class="loader" title="<?= /* @escapeNotVerified */ __('Loading...') ?>"></span>
+                <?= /* @escapeNotVerified */ $block->getTabLabel($_tab) ?>
             </span>
         </a>
-        <div id="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab) ?>_content" style="display:none"><?php /* @escapeNotVerified */ echo $block->getTabContent($_tab) ?></div>
+        <div id="<?= /* @escapeNotVerified */ $block->getTabId($_tab) ?>_content" style="display:none"><?= /* @escapeNotVerified */ $block->getTabContent($_tab) ?></div>
     </li>
 <?php endforeach; ?>
 </ul>
@@ -34,10 +34,10 @@
 <script>
 require(["jquery","mage/backend/tabs"], function($){
     $(function() {
-        $('#<?php /* @escapeNotVerified */ echo $block->getId() ?>').tabs({
-            active: '<?php /* @escapeNotVerified */ echo $block->getActiveTabId() ?>',
-            destination: '#<?php /* @escapeNotVerified */ echo $block->getDestElementId() ?>',
-            shadowTabs: <?php /* @escapeNotVerified */ echo $block->getAllShadowTabs()?>
+        $('#<?= /* @escapeNotVerified */ $block->getId() ?>').tabs({
+            active: '<?= /* @escapeNotVerified */ $block->getActiveTabId() ?>',
+            destination: '#<?= /* @escapeNotVerified */ $block->getDestElementId() ?>',
+            shadowTabs: <?= /* @escapeNotVerified */ $block->getAllShadowTabs() ?>
         });
     });
 });

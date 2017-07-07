@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Test\Unit\Adapter;
@@ -24,6 +24,7 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $writeMock;
+
     /**
      * @var \Magento\Framework\Image\Adapter\ImageMagick
      */
@@ -32,10 +33,12 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $objectManager = new ObjectManager($this);
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
-        $this->writeMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')->getMock();
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
+        $this->writeMock = $this->getMockBuilder(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class
+        )->getMock();
         $this->filesystemMock = $this->getMock(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['getDirectoryWrite'],
             [],
             '',
@@ -48,11 +51,12 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
 
         $this->imageMagic = $objectManager
             ->getObject(
-                'Magento\Framework\Image\Adapter\ImageMagick',
+                \Magento\Framework\Image\Adapter\ImageMagick::class,
                 ['filesystem' => $this->filesystemMock,
                     'logger' => $this->loggerMock]
             );
     }
+
     /**
      * @param string $imagePath
      * @param string $expectedMessage

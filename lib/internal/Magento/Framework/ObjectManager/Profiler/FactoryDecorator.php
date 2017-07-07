@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Profiler;
@@ -11,7 +11,7 @@ class FactoryDecorator implements \Magento\Framework\ObjectManager\FactoryInterf
     /**
      * Name of the class that generates logging wrappers
      */
-    const GENERATOR_NAME = 'Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger';
+    const GENERATOR_NAME = \Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger::class;
 
     /**
      * @var \Magento\Framework\ObjectManager\FactoryInterface

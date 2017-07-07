@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Product;
@@ -27,12 +27,12 @@ class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit_Framework
         $entityId = 3;
         $storeId = 0;
 
-        $this->_codeMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', [], [], '', false);
-        $event = $this->getMock('Magento\Framework\Event', ['getProduct'], [], '', false);
-        $this->_eventObserverMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->_codeMock = $this->getMock(\Magento\GoogleOptimizer\Model\Code::class, [], [], '', false);
+        $event = $this->getMock(\Magento\Framework\Event::class, ['getProduct'], [], '', false);
+        $this->_eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
         $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'getStoreId', '__wakeup'],
             [],
             '',
@@ -44,7 +44,7 @@ class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit_Framework
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
-            'Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver',
+            \Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver::class,
             ['modelCode' => $this->_codeMock]
         );
     }

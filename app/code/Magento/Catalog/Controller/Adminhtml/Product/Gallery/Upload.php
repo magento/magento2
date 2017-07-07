@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
@@ -10,6 +10,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Upload extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
@@ -28,33 +35,25 @@ class Upload extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::products');
-    }
-
-    /**
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
         try {
             $uploader = $this->_objectManager->create(
-                'Magento\MediaStorage\Model\File\Uploader',
+                \Magento\MediaStorage\Model\File\Uploader::class,
                 ['fileId' => 'image']
             );
             $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
             /** @var \Magento\Framework\Image\Adapter\AdapterInterface $imageAdapter */
-            $imageAdapter = $this->_objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
+            $imageAdapter = $this->_objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
             $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             /** @var \Magento\Framework\Filesystem\Directory\Read $mediaDirectory */
-            $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')
+            $mediaDirectory = $this->_objectManager->get(\Magento\Framework\Filesystem::class)
                 ->getDirectoryRead(DirectoryList::MEDIA);
-            $config = $this->_objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+            $config = $this->_objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
             $result = $uploader->save($mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath()));
 
             $this->_eventManager->dispatch(
@@ -65,7 +64,7 @@ class Upload extends \Magento\Backend\App\Action
             unset($result['tmp_name']);
             unset($result['path']);
 
-            $result['url'] = $this->_objectManager->get('Magento\Catalog\Model\Product\Media\Config')
+            $result['url'] = $this->_objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class)
                 ->getTmpMediaUrl($result['file']);
             $result['file'] = $result['file'] . '.tmp';
         } catch (\Exception $e) {

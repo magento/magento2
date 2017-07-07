@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,12 +10,12 @@
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<p><?php echo $block->escapeHtml($block->getMethod()->getTitle()); ?></p>
+<p><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
 <?php if ($block->getInstructions()): ?>
     <table>
         <tbody>
             <tr>
-                <td><?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getInstructions())); ?></td>
+                <td><?= /* @noEscape */ nl2br($block->escapeHtml($block->getInstructions())) ?></td>
             </tr>
         </tbody>
     </table>

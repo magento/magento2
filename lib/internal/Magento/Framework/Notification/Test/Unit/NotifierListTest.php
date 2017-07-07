@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,16 +18,16 @@ class NotifierListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
 
     public function testAsArraySuccess()
     {
-        $notifier1 = $this->objectManagerHelper->getObject('Magento\Framework\Notification\NotifierPool');
-        $notifier2 = $this->objectManagerHelper->getObject('Magento\Framework\Notification\NotifierPool');
+        $notifier1 = $this->objectManagerHelper->getObject(\Magento\Framework\Notification\NotifierPool::class);
+        $notifier2 = $this->objectManagerHelper->getObject(\Magento\Framework\Notification\NotifierPool::class);
         $notifierList = $this->objectManagerHelper->getObject(
-            'Magento\Framework\Notification\NotifierList',
+            \Magento\Framework\Notification\NotifierList::class,
             [
                 'objectManager' => $this->objectManager,
                 'notifiers' => [$notifier1, $notifier2]
@@ -36,16 +36,16 @@ class NotifierListTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('InvalidArgumentException');
         $result = $notifierList->asArray();
         foreach ($result as $notifier) {
-            $this->assertInstanceOf('Magento\Framework\Notification\NotifierInterface', $notifier);
+            $this->assertInstanceOf(\Magento\Framework\Notification\NotifierInterface::class, $notifier);
         }
     }
 
     public function testAsArrayException()
     {
-        $notifierCorrect = $this->objectManagerHelper->getObject('Magento\Framework\Notification\NotifierPool');
-        $notifierIncorrect = $this->objectManagerHelper->getObject('Magento\Framework\Notification\NotifierList');
+        $notifierCorrect = $this->objectManagerHelper->getObject(\Magento\Framework\Notification\NotifierPool::class);
+        $notifierIncorrect = $this->objectManagerHelper->getObject(\Magento\Framework\Notification\NotifierList::class);
         $notifierList = $this->objectManagerHelper->getObject(
-            'Magento\Framework\Notification\NotifierList',
+            \Magento\Framework\Notification\NotifierList::class,
             [
                 'objectManager' => $this->objectManager,
                 'notifiers' => [$notifierCorrect, $notifierIncorrect]

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
@@ -21,11 +21,11 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var ElementFactory */
     private $_elementFactory;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_attributeMetadata = $this->getMock(
-            'Magento\Customer\Model\Data\AttributeMetadata',
+            \Magento\Customer\Model\Data\AttributeMetadata::class,
             [],
             [],
             '',
@@ -42,10 +42,10 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDataModel'
         )->will(
-            $this->returnValue('Magento\Customer\Model\Attribute\Data\Postcode')
+            $this->returnValue(\Magento\Customer\Model\Attribute\Data\Postcode::class)
         );
 
-        $dataModel = $this->getMock('Magento\Customer\Model\Metadata\Form\Text', [], [], '', false);
+        $dataModel = $this->getMock(\Magento\Customer\Model\Metadata\Form\Text::class, [], [], '', false);
         $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($dataModel));
 
         $actual = $this->_elementFactory->create($this->_attributeMetadata, '95131', $this->_entityTypeCode);
@@ -63,7 +63,7 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('text')
         );
 
-        $dataModel = $this->getMock('Magento\Customer\Model\Metadata\Form\Text', [], [], '', false);
+        $dataModel = $this->getMock(\Magento\Customer\Model\Metadata\Form\Text::class, [], [], '', false);
         $params = [
             'entityTypeCode' => $this->_entityTypeCode,
             'value' => 'Some Text',
@@ -75,7 +75,7 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Customer\Model\Metadata\Form\Text',
+            \Magento\Customer\Model\Metadata\Form\Text::class,
             $params
         )->will(
             $this->returnValue($dataModel)

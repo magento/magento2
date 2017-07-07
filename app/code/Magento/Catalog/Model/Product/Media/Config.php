@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,13 @@
 
 namespace Magento\Catalog\Model\Product\Media;
 
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Catalog product media config
+ *
+ * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -18,14 +23,19 @@ class Config implements ConfigInterface
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var Attribute
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    private $attributeHelper;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     */
+    public function __construct(StoreManagerInterface $storeManager)
     {
         $this->storeManager = $storeManager;
     }
@@ -155,5 +165,25 @@ class Config implements ConfigInterface
     protected function _prepareFile($file)
     {
         return ltrim(str_replace('\\', '/', $file), '/');
+    }
+
+    /**
+     * @return array
+     */
+    public function getMediaAttributeCodes()
+    {
+        return $this->getAttributeHelper()->getAttributeCodesByFrontendType('media_image');
+    }
+
+    /**
+     * @return Attribute
+     */
+    private function getAttributeHelper()
+    {
+        if (null === $this->attributeHelper) {
+            $this->attributeHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Eav\Model\Entity\Attribute::class);
+        }
+        return $this->attributeHelper;
     }
 }

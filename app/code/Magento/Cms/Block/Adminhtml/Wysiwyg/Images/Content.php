@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
-
 /**
  * Wysiwyg Images content block
+ *
+ * @api
  */
 class Content extends \Magento\Backend\Block\Widget\Container
 {

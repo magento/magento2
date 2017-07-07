@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App\Test\Unit\Http;
 
 use \Magento\Framework\App\Http\Context;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,10 +21,33 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
-    public function setUp()
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->object = $this->objectManager->getObject('Magento\Framework\App\Http\Context');
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->setMethods(['serialize'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+        $this->object = $this->objectManager->getObject(
+            \Magento\Framework\App\Http\Context::class,
+            [
+                'serializer' => $this->serializerMock
+            ]
+        );
     }
 
     public function testGetValue()
@@ -62,6 +86,21 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1'
         ];
         ksort($data);
-        $this->assertEquals(sha1(serialize($data)), $this->object->getVaryString());
+        $this->assertEquals(sha1(json_encode($data)), $this->object->getVaryString());
+    }
+
+    public function testToArray()
+    {
+        $newObject = new \Magento\Framework\App\Http\Context(['key' => 'value'], [], $this->serializerMock);
+
+        $newObject->setValue('key1', 'value1', 'default1');
+        $newObject->setValue('key2', 'value2', 'default2');
+        $this->assertEquals(
+            [
+                'data' => ['key' => 'value', 'key1' => 'value1', 'key2' => 'value2'],
+                'default' => ['key1' => 'default1', 'key2' => 'default2']
+            ],
+            $newObject->toArray()
+        );
     }
 }

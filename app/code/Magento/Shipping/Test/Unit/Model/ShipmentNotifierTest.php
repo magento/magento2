@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,8 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 
 /**
  * Class ShipmentNotifierTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,30 +43,30 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
      */
     protected $shipmentSenderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->historyCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->shipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['__wakeUp', 'getEmailSent'],
             [],
             '',
             false
         );
         $this->shipmentSenderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender\ShipmentSender',
+            \Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class,
             ['send'],
             [],
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->notifier = new ShipmentNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -78,14 +80,14 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
     public function testNotifySuccess()
     {
         $historyCollection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\History\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection::class,
             ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified'],
             [],
             '',
             false
         );
         $historyItem = $this->getMock(
-            'Magento\Sales\Model\Order\Status\History',
+            \Magento\Sales\Model\Order\Status\History::class,
             ['setIsCustomerNotified', 'save', '__wakeUp'],
             [],
             '',

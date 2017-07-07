@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,14 +13,14 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateVirtualTheme()
     {
-        $physicalTheme = $this->getMock('Magento\Theme\Model\Theme', ['__wakeup'], [], '', false, false);
+        $physicalTheme = $this->getMock(\Magento\Theme\Model\Theme::class, ['__wakeup'], [], '', false, false);
         $physicalTheme->setData(['parent_id' => 10, 'theme_title' => 'Test Theme']);
 
-        $copyService = $this->getMock('Magento\Theme\Model\CopyService', ['copy'], [], '', false, false);
+        $copyService = $this->getMock(\Magento\Theme\Model\CopyService::class, ['copy'], [], '', false, false);
         $copyService->expects($this->once())->method('copy')->will($this->returnValue($copyService));
 
         $virtualTheme = $this->getMock(
-            'Magento\Theme\Model\Theme',
+            \Magento\Theme\Model\Theme::class,
             ['__wakeup', 'getThemeImage', 'createPreviewImageCopy', 'save'],
             [],
             '',
@@ -39,11 +39,11 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
 
         $virtualTheme->expects($this->once())->method('save')->will($this->returnValue($virtualTheme));
 
-        $themeFactory = $this->getMock('Magento\Theme\Model\ThemeFactory', ['create'], [], '', false, false);
+        $themeFactory = $this->getMock(\Magento\Theme\Model\ThemeFactory::class, ['create'], [], '', false, false);
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($virtualTheme));
 
         $themeCollection = $this->getMock(
-            'Magento\Theme\Model\ResourceModel\Theme\Collection',
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class,
             ['addTypeFilter', 'addAreaFilter', 'addFilter', 'count'],
             [],
             '',
@@ -60,7 +60,7 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
         $themeCollection->expects($this->once())->method('count')->will($this->returnValue(1));
 
         $domainModel = new \Magento\Theme\Model\Theme\Domain\Physical(
-            $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false, false),
+            $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false, false),
             $themeFactory,
             $copyService,
             $themeCollection

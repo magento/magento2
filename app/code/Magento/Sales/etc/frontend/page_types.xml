@@ -1,29 +1,29 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_types.xsd">
-    <type id="sales_guest_creditmemo" label="Guest Order Creditmemo View"/>
-    <type id="sales_guest_form" label="Returns"/>
-    <type id="sales_guest_invoice" label="Guest Order Invoice View"/>
-    <type id="sales_guest_print" label="Sales Order Print View"/>
-    <type id="sales_guest_printcreditmemo" label="Sales Creditmemo Print View"/>
-    <type id="sales_guest_printinvoice" label="Sales Invoice Print View"/>
-    <type id="sales_guest_printshipment" label="Sales Shipment Print View"/>
+    <type id="sales_guest_creditmemo" label="Sales Guest Order Creditmemo View"/>
+    <type id="sales_guest_form" label="Sales Returns"/>
+    <type id="sales_guest_invoice" label="Sales Guest Order Invoice View"/>
+    <type id="sales_guest_print" label="Sales Guest Order Print View"/>
+    <type id="sales_guest_printcreditmemo" label="Sales Guest Creditmemo Print View"/>
+    <type id="sales_guest_printinvoice" label="Sales Guest Invoice Print View"/>
+    <type id="sales_guest_printshipment" label="Sales Guest Shipment Print View"/>
     <type id="sales_guest_reorder" label="Sales Guest Reorder"/>
-    <type id="sales_guest_shipment" label="Guest Order Shipment View"/>
-    <type id="sales_guest_view" label="Guest Order View"/>
-    <type id="sales_order_creditmemo" label="Customer My Account Order Creditmemo View"/>
-    <type id="sales_order_history" label="Customer My Account Order History"/>
-    <type id="sales_order_invoice" label="Customer My Account Order Invoice View"/>
+    <type id="sales_guest_shipment" label="Sales Guest Shipment View"/>
+    <type id="sales_guest_view" label="Sales Guest Order View"/>
+    <type id="sales_order_creditmemo" label="Sales Customer My Account Order Creditmemo View"/>
+    <type id="sales_order_history" label="Sales Customer My Account Order History"/>
+    <type id="sales_order_invoice" label="Sales Customer My Account Order Invoice View"/>
     <type id="sales_order_print" label="Sales Order Print View"/>
     <type id="sales_order_printcreditmemo" label="Sales Creditmemo Print View"/>
     <type id="sales_order_printinvoice" label="Sales Invoice Print View"/>
     <type id="sales_order_printshipment" label="Sales Shipment Print View"/>
     <type id="sales_order_reorder" label="Sales Reorder"/>
-    <type id="sales_order_shipment" label="Customer My Account Order Shipment View"/>
-    <type id="sales_order_view" label="Customer My Account Order View"/>
+    <type id="sales_order_shipment" label="Sales Customer My Account Order Shipment View"/>
+    <type id="sales_order_view" label="Sales Customer My Account Order View"/>
 </page_types>

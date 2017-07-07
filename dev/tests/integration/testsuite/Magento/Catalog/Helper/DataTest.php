@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
@@ -71,9 +71,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->helper = $this->objectManager->get('Magento\Catalog\Helper\Data');
+        $this->helper = $this->objectManager->get(\Magento\Catalog\Helper\Data::class);
         $this->taxRuleFixtureFactory = new TaxRuleFixtureFactory();
-        $this->scopeConfig = $this->objectManager->get('Magento\Framework\App\MutableScopeConfig');
+        $this->scopeConfig = $this->objectManager->get(\Magento\Framework\App\MutableScopeConfig::class);
     }
 
     protected function tearDown()
@@ -83,16 +83,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testGetBreadcrumbPath()
     {
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $category->load(5);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
 
         try {
             $path = $this->helper->getBreadcrumbPath();
@@ -100,9 +102,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(['category3', 'category4', 'category5'], array_keys($path));
             $this->assertArrayHasKey('label', $path['category3']);
             $this->assertArrayHasKey('link', $path['category3']);
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }
     }
@@ -110,16 +112,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetCategory()
     {
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
         try {
             $this->assertSame($category, $this->helper->getCategory());
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }
     }
@@ -127,16 +129,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetProduct()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_product', $product);
         try {
             $this->assertSame($product, $this->helper->getProduct());
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_product');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_product');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_product');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_product');
             throw $e;
         }
     }
@@ -152,12 +154,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->helper->getAttributeHiddenFields());
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('attribute_type_hidden_fields', 'test');
+        $objectManager->get(\Magento\Framework\Registry::class)->register('attribute_type_hidden_fields', 'test');
         try {
             $this->assertEquals('test', $this->helper->getAttributeHiddenFields());
-            $objectManager->get('Magento\Framework\Registry')->unregister('attribute_type_hidden_fields');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('attribute_type_hidden_fields');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Framework\Registry')->unregister('attribute_type_hidden_fields');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('attribute_type_hidden_fields');
             throw $e;
         }
     }
@@ -204,7 +206,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->helper->isUsingStaticUrlsAllowed());
         $this->helper->setStoreId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()->getId()
         );
         $this->assertTrue($this->helper->isUsingStaticUrlsAllowed());
@@ -225,7 +227,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->helper->isUrlDirectivesParsingAllowed());
         $this->helper->setStoreId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getStore()->getId()
         );
         $this->assertFalse($this->helper->isUrlDirectivesParsingAllowed());
@@ -233,7 +235,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPageTemplateProcessor()
     {
-        $this->assertInstanceOf('Magento\Framework\Filter\Template', $this->helper->getPageTemplateProcessor());
+        $this->assertInstanceOf(\Magento\Framework\Filter\Template::class, $this->helper->getPageTemplateProcessor());
     }
 
     /**
@@ -246,6 +248,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @dataProvider getTaxPriceDataProvider
      */
     public function testGetTaxPrice(
@@ -255,9 +258,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $productClassName = 'DefaultProductClass'
     ) {
         $this->setUpDefaultRules();
-        $fixtureProductId = 1;
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load($fixtureProductId);
+        $product = $productRepository->get('simple');
         $product->setTaxClassId($this->taxClasses[$productClassName]);
         $shippingAddress = $this->getCustomerAddress();
         $billingAddress = $shippingAddress;
@@ -394,7 +398,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'price include tax, display excluding tax, high rate product tax class, round' => [
                 (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
-                '2.67',
+                '2.97',
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
@@ -481,7 +485,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     private function getCustomerAddress()
     {
         $fixtureCustomerId = 1;
-        $customerAddress = $this->objectManager->create('Magento\Customer\Model\Address')->load($fixtureCustomerId);
+        $customerAddress = $this->objectManager->create(
+            \Magento\Customer\Model\Address::class
+        )->load($fixtureCustomerId);
         /** Set data which corresponds tax class fixture */
         $customerAddress->setCountryId('US')->setRegionId(42)->save();
         return $customerAddress;

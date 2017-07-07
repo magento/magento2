@@ -1,11 +1,18 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Payment\Api\Data\PaymentMethodInterface" type="Magento\Payment\Model\PaymentMethod"/>
+    <preference for="Magento\Payment\Api\PaymentMethodListInterface" type="Magento\Payment\Model\PaymentMethodList"/>
+    <preference for="Magento\Payment\Gateway\Validator\ResultInterface" type="Magento\Payment\Gateway\Validator\Result"/>
+    <preference for="Magento\Payment\Gateway\ConfigFactoryInterface" type="Magento\Payment\Gateway\Config\ConfigFactory" />
+    <preference for="Magento\Payment\Gateway\Command\CommandManagerPoolInterface" type="Magento\Payment\Gateway\Command\CommandManagerPool" />
+    <preference for="Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface" type="Magento\Payment\Gateway\Data\PaymentDataObjectFactory" />
+
     <type name="Magento\Payment\Model\Config\Reader">
         <arguments>
             <argument name="fileName" xsi:type="string">payment.xml</argument>
@@ -24,7 +31,6 @@
             <argument name="dataStorage" xsi:type="object">Magento\Payment\Model\Config\Data</argument>
         </arguments>
     </type>
-    <preference for="Magento\Payment\Gateway\Validator\ResultInterface" type="Magento\Payment\Gateway\Validator\Result"/>
     <type name="Magento\Payment\Block\ConfigurableInfo">
         <arguments>
             <argument name="config" xsi:type="object">Magento\Payment\Gateway\Config\Config</argument>

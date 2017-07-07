@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
@@ -25,7 +25,7 @@ class Discount extends AbstractTotal
          * Calculate how much shipping discount should be applied
          * basing on how much shipping should be refunded.
          */
-        $baseShippingAmount = $creditmemo->getBaseShippingAmount();
+        $baseShippingAmount = (float)$creditmemo->getBaseShippingAmount();
         if ($baseShippingAmount) {
             $baseShippingDiscount = $baseShippingAmount *
                 $order->getBaseShippingDiscountAmount() /

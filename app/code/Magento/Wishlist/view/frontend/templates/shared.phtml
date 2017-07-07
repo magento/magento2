@@ -1,24 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/* @var $block \Magento\Wishlist\Block\Share\Wishlist */
+/** @var \Magento\Wishlist\Block\Share\Wishlist $block */
 ?>
 
 <?php if ($block->hasWishlistItems()): ?>
-    <form class="form shared wishlist" action="<?php /* @escapeNotVerified */ echo $block->getUrl('wishlist/index/update') ?>" method="post">
+    <form class="form shared wishlist" action="<?= $block->escapeUrl($block->getUrl('wishlist/index/update')) ?>" method="post">
         <div class="wishlist table-wrapper">
             <table class="table data wishlist" id="wishlist-table">
-                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Wish List'); ?></caption>
+                <caption class="table-caption"><?= $block->escapeHtml(__('Wish List')) ?></caption>
                 <thead>
                 <tr>
-                    <th class="col product" scope="col"><?php /* @escapeNotVerified */ echo __('Product') ?></th>
-                    <th class="col comment" scope="col"><?php /* @escapeNotVerified */ echo __('Comment') ?></th>
-                    <th class="col actions" scope="col"><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></th>
+                    <th class="col product" scope="col"><?= $block->escapeHtml(__('Product')) ?></th>
+                    <th class="col comment" scope="col"><?= $block->escapeHtml(__('Comment')) ?></th>
+                    <th class="col actions" scope="col"><?= $block->escapeHtml(__('Add to Cart')) ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,39 +28,39 @@
                     $isVisibleProduct = $product->isVisibleInSiteVisibility();
                     ?>
                     <tr>
-                        <td data-th="<?php echo $block->escapeHtml(__('Product')) ?>" class="col product">
-                            <a class="product photo" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
-                                <?php echo $block->getImage($product, 'customer_shared_wishlist')->toHtml(); ?>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Product')) ?>" class="col product">
+                            <a class="product photo" href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
+                                <?= $block->getImage($product, 'customer_shared_wishlist')->toHtml() ?>
                             </a>
                             <strong class="product name">
-                                <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>">
-                                    <?php echo $block->escapeHtml($product->getName()) ?>
+                                <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>">
+                                    <?= $block->escapeHtml($product->getName()) ?>
                                 </a>
                             </strong>
                             <?php
                                 echo $block->getProductPriceHtml(
                                     $product,
-                                    \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+                                    'wishlist_configured_price',
                                     \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                     ['item' => $item]
                                 );
                             ?>
-                            <?php echo $block->getDetailsHtml($item) ?>
+                            <?= $block->getDetailsHtml($item) ?>
                         </td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Comment')) ?>" class="col comment"><?php /* @escapeNotVerified */ echo $block->getEscapedDescription($item) ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Comment')) ?>" class="col comment"><?= /* @noEscape */ $block->getEscapedDescription($item) ?></td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
                             <?php if ($product->isSaleable()): ?>
                                 <?php if ($isVisibleProduct): ?>
                                     <button type="button"
-                                            title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>"
-                                            data-post='<?php /* @escapeNotVerified */ echo $block->getSharedItemAddToCartUrl($item); ?>'
+                                            title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                            data-post='<?= /* @noEscape */ $block->getSharedItemAddToCartUrl($item) ?>'
                                             class="action tocart">
-                                        <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                                        <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                     </button>
                                 <?php endif ?>
                             <?php endif; ?>
-                            <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
-                                <span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span>
+                            <a href="#" data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
+                                <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
                             </a>
                         </td>
                     </tr>
@@ -73,20 +73,20 @@
             <?php if ($block->isSaleable()):?>
                 <div class="primary">
                     <button type="button"
-                            title="<?php /* @escapeNotVerified */ echo __('Add All to Cart') ?>"
-                            data-post='<?php /* @escapeNotVerified */ echo $block->getSharedAddAllToCartUrl(); ?>'
+                            title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>"
+                            data-post='<?= $block->escapeUrl($block->getSharedAddAllToCartUrl()) ?>'
                             class="action tocart primary">
-                        <span><?php /* @escapeNotVerified */ echo __('Add All to Cart') ?></span>
+                        <span><?= $block->escapeHtml(__('Add All to Cart')) ?></span>
                     </button>
                 </div>
             <?php endif;?>
             <div class="secondary">
-                <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-                    <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
+                <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                    <span><?= $block->escapeHtml(__('Back')) ?></span>
                 </a>
             </div>
         </div>
     </form>
 <?php else: ?>
-    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('Wish List is empty now.') ?></div></div>
+    <div class="message info empty"><div><?= $block->escapeHtml(__('Wish List is empty now.')) ?></div></div>
 <?php endif ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Model\Groups\Config\Converter;
@@ -36,7 +36,10 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
                     continue;
                 }
                 /** @var $group \DOMElement */
-                $output[$group->getAttribute('id')][$child->nodeName] = $child->nodeValue;
+                $output[$group->getAttribute('id')][$child->nodeName]['value'] = $child->nodeValue;
+                if ($child->hasAttribute('tooltip')) {
+                    $output[$group->getAttribute('id')][$child->nodeName]['tooltip'] = $child->getAttribute('tooltip');
+                }
             }
         }
         return $output;

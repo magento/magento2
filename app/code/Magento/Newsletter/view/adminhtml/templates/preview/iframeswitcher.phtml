@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Backend\Block\Page $block */
 ?>
 <div id="preview" class="cms-revision-preview">
     <div class="toolbar">
         <?php if (!$block->isSingleStoreMode()) :?>
         <div class="store-switcher">
-            <?php echo $block->getChildHtml('store_switcher') ?>
+            <?= $block->getChildHtml('store_switcher') ?>
         </div>
         <?php endif;?>
     </div>
-    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php /* @escapeNotVerified */ echo __('Preview') ?>" width="100%"></iframe>
-    <?php echo $block->getChildHtml('preview_form'); ?>
+    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?= $block->escapeHtmlAttr(__('Preview')) ?>" width="100%"></iframe>
+    <?= $block->getChildHtml('preview_form') ?>
 </div>
 
 <script>
@@ -42,8 +43,8 @@ function unBlockPreview() {
     jQuery('body').trigger('hideLoadingPopup');
 }
 
-Event.observe(window, 'load', preview);
-Event.observe(previewIframe, 'load', unBlockPreview);
+jQuery(document).ready(preview);
+jQuery(previewIframe).ready(unBlockPreview);
 
 jQuery("#preview_iframe").load(function() {
     jQuery(this).height(jQuery(this).contents().find("html").height() );

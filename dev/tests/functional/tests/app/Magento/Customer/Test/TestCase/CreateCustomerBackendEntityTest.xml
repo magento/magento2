@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\CreateCustomerBackendEntityTest" summary="Create Customer from Backend" ticketId="MAGETWO-23424">
-        <variation name="CreateCustomerBackendEntityTestVariation1">
-            <data name="description" xsi:type="string">General customer without address</data>
+        <variation name="CreateCustomerBackendEntityTestVariation1" summary="General customer without address">
             <data name="customerAction" xsi:type="string">save</data>
             <data name="customer/data/website_id" xsi:type="string">Main Website</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
@@ -19,8 +18,8 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation2">
-            <data name="description" xsi:type="string">Customer with prefix</data>
+        <variation name="CreateCustomerBackendEntityTestVariation2" summary="Customer with prefix">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="customerAction" xsi:type="string">save</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Wholesale</data>
             <data name="customer/data/prefix" xsi:type="string">M</data>
@@ -35,8 +34,8 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation3">
-            <data name="description" xsi:type="string">General customer from USA</data>
+        <variation name="CreateCustomerBackendEntityTestVariation3" summary="General customer from USA">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="customerAction" xsi:type="string">save</data>
             <data name="customer/data/website_id" xsi:type="string">Main Website</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
@@ -55,8 +54,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation4">
-            <data name="description" xsi:type="string">Retailer customer without address</data>
+        <variation name="CreateCustomerBackendEntityTestVariation4" summary="Retailer customer without address">
             <data name="customerAction" xsi:type="string">save</data>
             <data name="customer/data/website_id" xsi:type="string">Main Website</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">Retailer</data>
@@ -65,8 +63,7 @@
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.ccc</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInvalidEmail" />
         </variation>
-        <variation name="CreateCustomerBackendEntityTestVariation5">
-            <data name="description" xsi:type="string">General customer from Poland</data>
+        <variation name="CreateCustomerBackendEntityTestVariation5" summary="General customer from Poland">
             <data name="customerAction" xsi:type="string">save</data>
             <data name="customer/data/website_id" xsi:type="string">Main Website</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
@@ -92,11 +89,11 @@
             <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendFormTitle" />
         </variation>
         <variation name="CreateCustomerBackendEntityTestVariation7" summary="Create customer with custom customer group">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="customerAction" xsi:type="string">saveAndContinue</data>
             <data name="customer/data/website_id" xsi:type="string">Main Website</data>
             <data name="customer/data/group_id/dataset" xsi:type="string">customer_group_retail_customer</data>
@@ -134,6 +131,33 @@
                 <item name="6" xsi:type="string">Phone Number</item>
             </data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerBackendRequiredFields" />
+        </variation>
+        <variation name="CreateCustomerBackendEntityTestVariation10" summary="Create customer with 2 websites and with different allowed countries.">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="customerAction" xsi:type="string">save</data>
+            <data name="customer/data/website_id" xsi:type="string">Main Website</data>
+            <data name="customer/data/group_id/dataset" xsi:type="string">General</data>
+            <data name="customer/data/firstname" xsi:type="string">John%isolation%</data>
+            <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
+            <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
+            <data name="address/data/company" xsi:type="string">Magento</data>
+            <data name="address/data/country_id" xsi:type="string">Bangladesh</data>
+            <data name="address/data/street" xsi:type="string">Chmielna 113</data>
+            <data name="address/data/city" xsi:type="string">Bielsko-Biala</data>
+            <data name="address/data/postcode" xsi:type="string">43-310</data>
+            <data name="address/data/telephone" xsi:type="string">799885616</data>
+            <data name="steps" xsi:type="array">
+                <item name="configureAllowedCountries" xsi:type="array">
+                    <item name="countries" xsi:type="array">
+                        <item name="0" xsi:type="string">AS,BM</item>
+                        <item name="1" xsi:type="string">BD,BB,AF</item>
+                    </item>
+                </item>
+            </data>
+            <data name="beforeActionCallback" xsi:type="array">
+                <item name="assertAllowedCountries" xsi:type="string">assertAllowedCountries</item>
+            </data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
         </variation>
     </testCase>
 </config>

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,14 +13,13 @@
 
 @import 'source/lib/_lib.less'; // Global lib
 @import (reference) 'source/_extends.less';
-@import 'source/_theme.less'; // Theme variables overrides
 @import 'source/_sources.less'; // Theme
 
 //
 //  Magento Import instructions
 //  ---------------------------------------------
 
-//@magento_import "source/_module.less"; // import theme styles
+//@magento_import 'source/_module.less'; // import theme styles
 
 //
 //  Temporary
@@ -30,7 +29,9 @@
 .attribute-popup {
     .page-wrapper {
         margin-left: 0;
+        width: 100%;
     }
+
     .menu-wrapper,
     .page-header-hgroup,
     .page-header-actions {
@@ -57,3 +58,9 @@
 //  ---------------------------------------------
 
 @import 'source/_responsive.less';
+
+//
+//  Theme variables overrides
+//  ---------------------------------------------
+
+@import 'source/_theme.less';

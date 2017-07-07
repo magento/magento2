@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productRuleProcessor = $this->getMockBuilder(
-            'Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor'
+            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class
         )->disableOriginalConstructor()
         ->setMethods(['reindexList'])
         ->getMock();
@@ -29,12 +29,12 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterUpdateAttributes()
     {
-        $subject = $this->getMockBuilder('Magento\Catalog\Model\Product\Action')
+        $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $result = $this->getMockBuilder('Magento\Catalog\Model\Product\Action')
+        $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributesData', 'getProductIds'])
             ->getMock();
@@ -55,12 +55,12 @@ class ActionTest extends \PHPUnit_Framework_TestCase
     public function testAfterUpdateAttributesWithPrice()
     {
         $productIds = [1, 2, 3];
-        $subject = $this->getMockBuilder('Magento\Catalog\Model\Product\Action')
+        $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $result = $this->getMockBuilder('Magento\Catalog\Model\Product\Action')
+        $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributesData', 'getProductIds'])
             ->getMock();

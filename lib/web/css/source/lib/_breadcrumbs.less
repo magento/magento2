@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -41,7 +41,7 @@
     @_breadcrumbs-link-gradient: @breadcrumbs-link__gradient,
     @_breadcrumbs-link-gradient-direction: @breadcrumbs-link__gradient-direction,
 
-    //  Breadcrumbs link color
+    //  Breadcrumbs link color - default
     @_breadcrumbs-link-color: @breadcrumbs-link__color,
     @_breadcrumbs-link-background: @breadcrumbs-link__background,
     @_breadcrumbs-link-border: @breadcrumbs-link__border,
@@ -79,9 +79,11 @@
         .lib-css(color, @_breadcrumbs-current-color);
         .lib-list-inline();
     }
+
     .item {
         margin: 0;
     }
+
     a {
         .lib-css(background, @_breadcrumbs-link-background);
         .lib-background-gradient(
@@ -95,6 +97,7 @@
         .lib-css(display, @_breadcrumbs-display);
         .lib-css(padding, @_breadcrumbs-padding);
         .lib-css(text-decoration, @_breadcrumbs-link-text-decoration);
+
         &:visited {
             .lib-css(background, @_breadcrumbs-link-background-visited);
             .lib-background-gradient(
@@ -107,6 +110,7 @@
             .lib-css(color, @_breadcrumbs-link-color-visited);
             .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-visited);
         }
+
         &:hover {
             .lib-css(background, @_breadcrumbs-link-background-hover);
             .lib-background-gradient(
@@ -119,6 +123,7 @@
             .lib-css(color, @_breadcrumbs-link-color-hover);
             .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-hover);
         }
+
         &:active {
             .lib-css(background, @_breadcrumbs-link-background-active);
             .lib-background-gradient(
@@ -132,6 +137,7 @@
             .lib-css(text-decoration, @_breadcrumbs-link-text-decoration-active);
         }
     }
+
     strong {
         .lib-css(background, @_breadcrumbs-current-background);
         .lib-background-gradient(

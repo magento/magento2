@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -12,8 +12,10 @@
             <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
             <data name="role/data/resource_access" xsi:type="string">Custom</data>
             <data name="role/data/roles_resources" xsi:type="string">Sales</data>
+            <data name="role/data/current_password" xsi:type="string">%current_password%</data>
             <data name="updatedRole/data/rolename" xsi:type="string">UpdatedAdminRole%isolation%</data>
             <data name="updatedRole/data/resource_access" xsi:type="string">All</data>
+            <data name="updatedRole/data/current_password" xsi:type="string">%current_password%</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
     </testCase>

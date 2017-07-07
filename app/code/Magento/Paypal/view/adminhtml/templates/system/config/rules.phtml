@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,6 @@
         "Magento_Paypal/js/solutions",
         "domReady!"
     ], function (Solutions) {
-        var solutions = new Solutions({config: {solutions: <?php /* @noEscape */ echo $block->getJson(); ?>}});
+        var solutions = new Solutions({config: {solutions: <?= /* @noEscape */ $block->getJson() ?>}});
     });
 </script>

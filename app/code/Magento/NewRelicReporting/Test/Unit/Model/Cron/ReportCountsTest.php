@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Cron;
@@ -12,6 +12,8 @@ use Magento\Catalog\Api\CategoryManagementInterface;
 
 /**
  * Class ReportCountsTest
+ *
+ * @codingStandardsIgnoreFile
  */
 class ReportCountsTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,121 +25,111 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $config;
+    protected $configMock;
 
     /**
      * @var ProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productManagement;
+    protected $productManagementMock;
 
     /**
      * @var ConfigurableProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configurableManagement;
+    protected $configurableManagementMock;
 
     /**
      * @var CategoryManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $categoryManagement;
+    protected $categoryManagementMock;
 
     /**
      * @var \Magento\NewRelicReporting\Model\CountsFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $countsFactory;
+    protected $countsFactoryMock;
 
     /**
      * @var \Magento\NewRelicReporting\Model\Counts|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $countsModel;
+    protected $countsModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $countsCollectionFactory;
+    protected $countsCollectionFactoryMock;
 
     /**
      * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $countsCollection;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
+    protected $countsCollectionMock;
 
     /**
      * Setup
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->config = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->productManagement = $this->getMockBuilder('Magento\Catalog\Api\ProductManagementInterface')
+        $this->productManagementMock = $this->getMockBuilder(\Magento\Catalog\Api\ProductManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configurableManagement = $this
-            ->getMockBuilder('Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface')
+        $this->configurableManagementMock = $this
+            ->getMockBuilder(\Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->categoryManagement = $this->getMockBuilder('Magento\Catalog\Api\CategoryManagementInterface')
+        $this->categoryManagementMock = $this->getMockBuilder(\Magento\Catalog\Api\CategoryManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->countsFactory = $this->getMockBuilder('Magento\NewRelicReporting\Model\CountsFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->countsModel = $this->getMockBuilder('Magento\NewRelicReporting\Model\Counts')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->countsCollectionFactory = $this
-            ->getMockBuilder('Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory')
+        $this->countsFactoryMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\CountsFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionClassName = 'Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection';
-        $this->countsCollection = $this->getMockBuilder($collectionClassName)
+        $this->countsModelMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Counts::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->countsCollectionFactoryMock = $this
+            ->getMockBuilder(\Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $collectionClassName = \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection::class;
+        $this->countsCollectionMock = $this->getMockBuilder($collectionClassName)
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'addOrder', 'setPageSize', 'getFirstItem'])
             ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDate'])
-            ->getMock();
 
-        $this->countsFactory->expects($this->any())
+        $this->countsFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->countsModel);
-        $this->countsModel->expects($this->any())
+            ->willReturn($this->countsModelMock);
+        $this->countsModelMock->expects($this->any())
             ->method('load')
             ->willReturnSelf();
-        $this->countsCollectionFactory->expects($this->any())
+        $this->countsCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->countsCollection);
-        $this->countsCollection->expects($this->any())
+            ->willReturn($this->countsCollectionMock);
+        $this->countsCollectionMock->expects($this->any())
             ->method('addFieldToFilter')
             ->willReturnSelf();
-        $this->countsCollection->expects($this->any())
+        $this->countsCollectionMock->expects($this->any())
             ->method('addOrder')
             ->willReturnSelf();
-        $this->countsCollection->expects($this->any())
+        $this->countsCollectionMock->expects($this->any())
             ->method('setPageSize')
             ->willReturnSelf();
-        $this->countsCollection->expects($this->any())
+        $this->countsCollectionMock->expects($this->any())
             ->method('getFirstItem')
-            ->willReturn($this->countsModel);
+            ->willReturn($this->countsModelMock);
 
         $this->model = new ReportCounts(
-            $this->config,
-            $this->productManagement,
-            $this->configurableManagement,
-            $this->categoryManagement,
-            $this->countsFactory,
-            $this->countsCollectionFactory,
-            $this->dateTime
+            $this->configMock,
+            $this->productManagementMock,
+            $this->configurableManagementMock,
+            $this->categoryManagementMock,
+            $this->countsFactoryMock,
+            $this->countsCollectionFactoryMock
         );
     }
 
@@ -148,7 +140,7 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportCountsTestsModuleDisabledFromConfig()
     {
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(false);
 
@@ -165,35 +157,35 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
      */
     public function testReportCountsTest()
     {
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $this->productManagement->expects($this->exactly(2))
+        $this->productManagementMock->expects($this->exactly(2))
             ->method('getCount')
             ->willReturn(2);
-        $this->configurableManagement->expects($this->once())
+        $this->configurableManagementMock->expects($this->once())
             ->method('getCount')
             ->willReturn(2);
-        $this->categoryManagement->expects($this->once())
+        $this->categoryManagementMock->expects($this->once())
             ->method('getCount')
             ->willReturn(2);
 
-        $this->countsModel->expects($this->any())
+        $this->countsModelMock->expects($this->any())
             ->method('getCount')
             ->willReturn(1);
-        $this->countsModel->expects($this->any())
+        $this->countsModelMock->expects($this->any())
             ->method('setEntityId')
             ->willReturnSelf();
-        $this->countsModel->expects($this->any())
+        $this->countsModelMock->expects($this->any())
             ->method('setType')
             ->willReturnSelf();
-        $this->countsModel->expects($this->any())
+        $this->countsModelMock->expects($this->any())
             ->method('setCount')
             ->willReturnSelf();
-        $this->countsModel->expects($this->any())
+        $this->countsModelMock->expects($this->any())
             ->method('setUpdatedAt')
             ->willReturnSelf();
-        $this->countsModel->expects($this->any())
+        $this->countsModelMock->expects($this->any())
             ->method('save')
             ->willReturnSelf();
 

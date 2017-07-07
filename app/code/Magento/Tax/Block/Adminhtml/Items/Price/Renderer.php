@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Adminhtml\Items\Price;
@@ -14,6 +14,8 @@ use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order items price column renderer
+ *
+ * @api
  */
 class Renderer extends \Magento\Backend\Block\Template
 {

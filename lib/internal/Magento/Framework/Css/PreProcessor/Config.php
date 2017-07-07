@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Css\PreProcessor;
@@ -12,7 +12,7 @@ class Config
     /**
      * Temporary directory prefix
      */
-    const TMP_DIR = 'css';
+    const TMP_DIR = 'pub/static';
 
     /**
      * Returns relative path to materialization directory

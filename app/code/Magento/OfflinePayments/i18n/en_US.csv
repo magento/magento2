@@ -1,21 +1,21 @@
-Enabled,Enabled
-"Sort Order","Sort Order"
-Title,Title
 "Make Check payable to:","Make Check payable to:"
 "Send Check to:","Send Check to:"
 "Purchase Order Number","Purchase Order Number"
 "Make Check payable to: %1","Make Check payable to: %1"
 "Purchase Order Number: %1","Purchase Order Number: %1"
-"Make Check payable to:","Make Check payable to:"
 "Make Check payable to","Make Check payable to"
 "Send Check to","Send Check to"
+"Place Order","Place Order"
+"Check / Money Order","Check / Money Order"
+Enabled,Enabled
 "New Order Status","New Order Status"
+"Sort Order","Sort Order"
+Title,Title
 "Payment from Applicable Countries","Payment from Applicable Countries"
 "Payment from Specific Countries","Payment from Specific Countries"
+"Make Check Payable to","Make Check Payable to"
 "Minimum Order Total","Minimum Order Total"
 "Maximum Order Total","Maximum Order Total"
-"Check / Money Order","Check / Money Order"
-"Make Check Payable to","Make Check Payable to"
 "Purchase Order","Purchase Order"
 "Bank Transfer Payment","Bank Transfer Payment"
 Instructions,Instructions

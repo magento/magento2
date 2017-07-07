@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component;
@@ -60,7 +60,12 @@ class ColumnFactory
             'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
             'align' => 'left',
             'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
+            'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
         ], $config);
+        if ($attributeData[AttributeMetadata::FRONTEND_INPUT] == 'date') {
+            $config['dateFormat'] = 'MMM d, y';
+            $config['timezone'] = false;
+        }
         if (count($attributeData[AttributeMetadata::OPTIONS]) && !isset($config[AttributeMetadata::OPTIONS])) {
             $config[AttributeMetadata::OPTIONS] = $attributeData[AttributeMetadata::OPTIONS];
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,12 +27,13 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->blockFactory = $this->getMockBuilder('Magento\Framework\View\Element\BlockFactory')
+        $this->blockFactory = $this->getMockBuilder(\Magento\Framework\View\Element\BlockFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dataSourcePool = $objectManager->getObject('Magento\Framework\View\DataSourcePool', [
+        $this->dataSourcePool = $objectManager->getObject(
+            \Magento\Framework\View\DataSourcePool::class, [
             'blockFactory' => $this->blockFactory
         ]);
     }
@@ -48,7 +49,7 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
 
     protected function createBlock($blockClass)
     {
-        $block = $this->getMock('Magento\Framework\View\Element\BlockInterface');
+        $block = $this->getMock(\Magento\Framework\View\Element\BlockInterface::class);
 
         $this->blockFactory->expects($this->once())
             ->method('createBlock')
@@ -60,7 +61,7 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
     public function testAdd()
     {
         $blockName = 'DataSourcePoolTestBlock';
-        $blockClass = 'Magento\Framework\View\Test\Unit\DataSourcePoolTestBlock';
+        $blockClass = \Magento\Framework\View\Test\Unit\DataSourcePoolTestBlock::class;
 
         $block = $this->createBlock($blockClass);
 
@@ -70,7 +71,7 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $blockName = 'DataSourcePoolTestBlock';
-        $blockClass = 'Magento\Framework\View\Test\Unit\DataSourcePoolTestBlock';
+        $blockClass = \Magento\Framework\View\Test\Unit\DataSourcePoolTestBlock::class;
 
         $block = $this->createBlock($blockClass);
         $this->dataSourcePool->add($blockName, $blockClass);
@@ -88,7 +89,7 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
     public function testAssignAndGetNamespaceData()
     {
         $blockName = 'DataSourcePoolTestBlock';
-        $blockClass = 'Magento\Framework\View\Test\Unit\DataSourcePoolTestBlock';
+        $blockClass = \Magento\Framework\View\Test\Unit\DataSourcePoolTestBlock::class;
 
         $block = $this->createBlock($blockClass);
         $this->dataSourcePool->add($blockName, $blockClass);
@@ -99,21 +100,5 @@ class DataSourcePoolTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['alias' => $block], $this->dataSourcePool->getNamespaceData($namespace));
         $this->assertEquals([], $this->dataSourcePool->getNamespaceData('WrongNamespace'));
-    }
-}
-
-/**
- * Class DataSourcePoolTestBlock mock
- */
-class DataSourcePoolTestBlock implements \Magento\Framework\View\Element\BlockInterface
-{
-    /**
-     * Produce and return block's html output
-     *
-     * @return string
-     */
-    public function toHtml()
-    {
-        return '';
     }
 }

@@ -1,47 +1,17 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="left">
-            <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tabs" name="promo_quote_edit_tabs">
-                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main" name="promo_quote_edit_tab_main"/>
-                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Conditions" name="promo_quote_edit_tab_conditions"/>
-                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions" name="promo_quote_edit_tab_actions"/>
-                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels" name="promo_quote_edit_tab_labels"/>
-                <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons" name="promo_quote_edit_tab_coupons">
-                    <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Form" name="promo_quote_edit_tab_coupons_form"/>
-                    <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid" name="promo_quote_edit_tab_coupons_grid"/>
-                </block>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">main_section</argument>
-                    <argument name="block" xsi:type="string">promo_quote_edit_tab_main</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">conditions_section</argument>
-                    <argument name="block" xsi:type="string">promo_quote_edit_tab_conditions</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">actions_section</argument>
-                    <argument name="block" xsi:type="string">promo_quote_edit_tab_actions</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">labels_section</argument>
-                    <argument name="block" xsi:type="string">promo_quote_edit_tab_labels</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">coupons_section</argument>
-                    <argument name="block" xsi:type="string">promo_quote_edit_tab_coupons</argument>
-                </action>
-            </block>
-            <block class="Magento\Backend\Block\Template" template="Magento_SalesRule::promo/salesrulejs.phtml" name="promo_quote_edit_jsinit"/>
-        </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit" name="promo_quote_edit"/>
+            <uiComponent name="sales_rule_form"/>
         </referenceContainer>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="sales_rule_form_page_head_components" template="Magento_SalesRule::promo/salesrulejs.phtml"/>
+        </referenceBlock>
     </body>
 </page>

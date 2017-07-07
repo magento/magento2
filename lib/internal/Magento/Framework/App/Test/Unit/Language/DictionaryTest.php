@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,9 +33,21 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->readFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
-        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
-        $this->configFactory = $this->getMockBuilder('\Magento\Framework\App\Language\ConfigFactory')
+        $this->readFactory = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->componentRegistrar = $this->getMock(
+            \Magento\Framework\Component\ComponentRegistrar::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->configFactory = $this->getMockBuilder(\Magento\Framework\App\Language\ConfigFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,13 +63,13 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             $expected[$item[0]] = $item[1];
         }
 
-        $file = $this->getMockForAbstractClass('Magento\Framework\Filesystem\File\ReadInterface');
+        $file = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);
         for ($i = 0; $i < count($data); $i++) {
             $file->expects($this->at($i))->method('readCsv')->will($this->returnValue($data[$i]));
         }
         $file->expects($this->at($i))->method('readCsv')->will($this->returnValue(false));
 
-        $readMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $readMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $readMock->expects($this->any())->method('readFile')->willReturnMap([
             ['language.xml', $readMock],
             [$csvFileName, $file],
@@ -71,7 +83,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
         $this->readFactory->expects($this->any())->method("create")->willReturn($readMock);
 
-        $languageConfig = $this->getMock('\Magento\Framework\App\Language\Config', [], [], '', false);
+        $languageConfig = $this->getMock(\Magento\Framework\App\Language\Config::class, [], [], '', false);
         $languageConfig->expects($this->any())->method('getCode')->will($this->returnValue('en_US'));
         $languageConfig->expects($this->any())->method('getVendor')->will($this->returnValue('foo'));
         $languageConfig->expects($this->any())->method('getPackage')->will($this->returnValue('en_us'));

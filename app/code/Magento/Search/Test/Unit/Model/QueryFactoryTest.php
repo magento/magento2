@@ -1,265 +1,350 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Search\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Search\Helper\Data;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Model\QueryFactory;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Search\Model\Query;
 
+/**
+ * Class QueryFactoryTest tests Magento\Search\Model\QueryFactory
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QueryFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    const XML_PATH_MAX_QUERY_LENGTH = 'catalog/search/max_query_length';
+    /**
+     * @var QueryFactory
+     */
+    private $model;
 
-    const QUERY_VAR_NAME = 'q';
+    /**
+     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $queryHelper;
 
-    /** @var  \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject */
-    protected $queryMock;
+    /**
+     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $request;
 
-    /** @var  \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $requestMock;
+    /**
+     * @var StringUtils|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $string;
 
-    /** @var \Magento\Search\Model\QueryFactory */
-    protected $queryFactory;
+    /**
+     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManager;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var Query|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $query;
 
-    /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
-    protected $contextMock;
-
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $objectManagerMock;
-
-    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
-    protected $stringMock;
-
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfigMock;
-
+    /**
+     * SetUp method
+     */
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
-            ->setMethods(['getRequest', 'getScopeConfig'])
+        $this->queryHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects($this->once())
+        $this->request = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->string = $this->getMockBuilder(StringUtils::class)
+            ->setMethods(['substr', 'strlen', 'cleanString'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->query = $this->getMockBuilder(Query::class)
+            ->setMethods(['setIsQueryTextExceeded', 'setIsQueryTextShort', 'loadByQueryText', 'getId', 'setQueryText'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $context */
+        $context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->setMethods([])
-            ->getMock();
-        $this->stringMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
-            ->setMethods(['cleanString', 'substr'])
-            ->getMock();
-        $this->stringMock->expects($this->any())
-            ->method('cleanString')
-            ->will($this->returnArgument(0));
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
-            ->setMethods([])
-            ->getMock();
-        $this->contextMock->expects($this->once())
-            ->method('getScopeConfig')
-            ->will($this->returnValue($this->scopeConfigMock));
-        $this->queryMock = $this->getMockBuilder('\Magento\Search\Model\Query')
-            ->disableOriginalConstructor()
-            ->setMethods(['setIsQueryTextExceeded', 'getId', 'setQueryText', 'loadByQuery'])
-            ->getMock();
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->queryFactory = $this->objectManagerHelper->getObject(
-            'Magento\Search\Model\QueryFactory',
+            ->willReturn($this->request);
+
+        $this->model = (new ObjectManager($this))->getObject(
+            QueryFactory::class,
             [
-                'context' => $this->contextMock,
-                'objectManager' => $this->objectManagerMock,
-                'string' => $this->stringMock,
+                'queryHelper' => $this->queryHelper,
+                'context' => $context,
+                'string' => $this->string,
+                'objectManager' => $this->objectManager
             ]
         );
     }
 
+    /**
+     * Test for create method
+     */
+    public function testCreate()
+    {
+        $data = [1, 2, 3];
+
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->withConsecutive([Query::class, $data])
+            ->willReturn($this->query);
+
+        $result = $this->model->create($data);
+
+        $this->assertSame($this->query, $result);
+    }
+
+    /**
+     * Test for get new query method
+     */
     public function testGetNewQuery()
     {
-        $queryId = null;
+        $queryId = 123;
+        $maxQueryLength = 100;
+        $minQueryLength = 3;
+        $rawQueryText = '  Simple product   ';
+        $cleanedRawText = 'Simple product';
+        $isQueryTextExceeded = false;
+        $isQueryTextShort = false;
 
-        $this->mapScopeConfig(
-            [
-                self::XML_PATH_MAX_QUERY_LENGTH => 120,
-            ]
-        );
-        $rawQueryText = 'Simple product';
-        $preparedQueryText = $rawQueryText;
-        $this->requestMock->expects($this->once())
-            ->method('getParam')
-            ->with($this->equalTo(self::QUERY_VAR_NAME))
-            ->will($this->returnValue($rawQueryText));
+        $this->mockSetQueryTextNeverExecute($cleanedRawText);
+        $this->mockString($cleanedRawText);
+        $this->mockQueryLengths($maxQueryLength, $minQueryLength);
+        $this->mockGetRawQueryText($rawQueryText);
+        $this->mockSimpleQuery($cleanedRawText, $queryId, $isQueryTextExceeded, $isQueryTextShort);
 
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo('Magento\Search\Model\Query'))
-            ->will($this->returnValue($this->queryMock));
-        $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
-            ->with($this->equalTo($preparedQueryText))
-            ->will($this->returnSelf());
-        $this->queryMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($queryId));
-        $this->queryMock->expects($this->once())
-            ->method('setQueryText')
-            ->with($preparedQueryText)
-            ->will($this->returnSelf());
-        $this->queryMock->expects($this->once())
-            ->method('setIsQueryTextExceeded')
-            ->with($this->equalTo(false))
-            ->will($this->returnSelf());
-        $query = $this->queryFactory->get();
-        $this->assertSame($this->queryMock, $query);
+        $this->mockCreateQuery();
+
+        $result = $this->model->get();
+
+        $this->assertSame($this->query, $result);
     }
 
-    public function testGetLoadedQuery()
+    /**
+     * Test for get query twice method
+     */
+    public function testGetQueryTwice()
     {
         $queryId = 123;
+        $maxQueryLength = 100;
+        $minQueryLength = 3;
+        $rawQueryText = '  Simple product   ';
+        $cleanedRawText = 'Simple product';
+        $isQueryTextExceeded = false;
+        $isQueryTextShort = false;
 
-        $this->mapScopeConfig(
-            [
-                self::XML_PATH_MAX_QUERY_LENGTH => 20,
-            ]
-        );
-        $rawQueryText = 'Simple product';
-        $preparedQueryText = $rawQueryText;
-        $this->requestMock->expects($this->once())
-            ->method('getParam')
-            ->with($this->equalTo(self::QUERY_VAR_NAME))
-            ->will($this->returnValue($rawQueryText));
+        $this->mockSetQueryTextNeverExecute($cleanedRawText);
+        $this->mockString($cleanedRawText);
+        $this->mockQueryLengths($maxQueryLength, $minQueryLength);
+        $this->mockGetRawQueryText($rawQueryText);
+        $this->mockSimpleQuery($cleanedRawText, $queryId, $isQueryTextExceeded, $isQueryTextShort);
 
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo('Magento\Search\Model\Query'))
-            ->will($this->returnValue($this->queryMock));
-        $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
-            ->with($this->equalTo($preparedQueryText))
-            ->will($this->returnSelf());
-        $this->queryMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($queryId));
-        $this->queryMock->expects($this->once())
-            ->method('setIsQueryTextExceeded')
-            ->with($this->equalTo(false))
-            ->will($this->returnSelf());
-        $query = $this->queryFactory->get();
-        $this->assertSame($this->queryMock, $query);
+        $this->mockCreateQuery();
+
+        $result = $this->model->get();
+        $this->assertSame($this->query, $result, 'After first execution queries are not same');
+
+        $result = $this->model->get();
+        $this->assertSame($this->query, $result, 'After second execution queries are not same');
     }
 
+    /**
+     * Test for get query is too long method
+     */
     public function testGetTooLongQuery()
     {
         $queryId = 123;
+        $maxQueryLength = 8;
+        $minQueryLength = 3;
+        $rawQueryText = '  Simple product   ';
+        $cleanedRawText = 'Simple product';
+        $subRawText = 'Simple p';
+        $isQueryTextExceeded = true;
+        $isQueryTextShort = false;
 
-        $this->mapScopeConfig(
-            [
-                self::XML_PATH_MAX_QUERY_LENGTH => 12,
-            ]
-        );
-        $rawQueryText = 'This is very long search query text';
-        $preparedQueryText = 'This is very';
-        $this->stringMock->expects($this->once())
+        $this->string->expects($this->any())
             ->method('substr')
-            ->with($this->equalTo($rawQueryText))
-            ->will($this->returnValue($preparedQueryText));
-        $this->requestMock->expects($this->once())
-            ->method('getParam')
-            ->with($this->equalTo(self::QUERY_VAR_NAME))
-            ->will($this->returnValue($rawQueryText));
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo('Magento\Search\Model\Query'))
-            ->will($this->returnValue($this->queryMock));
-        $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
-            ->with($this->equalTo($preparedQueryText))
-            ->will($this->returnSelf());
-        $this->queryMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($queryId));
-        $this->queryMock->expects($this->once())
-            ->method('setIsQueryTextExceeded')
-            ->with($this->equalTo(true))
-            ->will($this->returnSelf());
-        $query = $this->queryFactory->get();
-        $this->assertSame($this->queryMock, $query);
+            ->withConsecutive([$cleanedRawText, 0, $maxQueryLength])
+            ->willReturn($subRawText);
+
+        $this->mockSetQueryTextNeverExecute($cleanedRawText);
+        $this->mockString($cleanedRawText);
+        $this->mockQueryLengths($maxQueryLength, $minQueryLength);
+        $this->mockGetRawQueryText($rawQueryText);
+        $this->mockSimpleQuery($subRawText, $queryId, $isQueryTextExceeded, $isQueryTextShort);
+
+        $this->mockCreateQuery();
+
+        $result = $this->model->get();
+        $this->assertSame($this->query, $result);
     }
 
     /**
-     * @depends testGetNewQuery
-     * @param $query
+     * Test for get query is Short long method
      */
-    public function testGetQueryTwice($query)
+    public function testGetTooShortQuery()
     {
-        $queryId = null;
+        $queryId = 123;
+        $maxQueryLength = 800;
+        $minQueryLength = 500;
+        $rawQueryText = '  Simple product   ';
+        $cleanedRawText = 'Simple product';
+        $isQueryTextExceeded = false;
+        $isQueryTextShort = true;
 
-        $this->mapScopeConfig(
-            [
-                self::XML_PATH_MAX_QUERY_LENGTH => 120,
-            ]
-        );
-        $rawQueryText = 'Simple product';
-        $preparedQueryText = $rawQueryText;
-        $this->requestMock->expects($this->once())
+        $this->mockSetQueryTextNeverExecute($cleanedRawText);
+        $this->mockString($cleanedRawText);
+        $this->mockQueryLengths($maxQueryLength, $minQueryLength);
+        $this->mockGetRawQueryText($rawQueryText);
+        $this->mockSimpleQuery($cleanedRawText, $queryId, $isQueryTextExceeded, $isQueryTextShort);
+
+        $this->mockCreateQuery();
+
+        $result = $this->model->get();
+        $this->assertSame($this->query, $result);
+    }
+
+    /**
+     * Test for get query is Short long method
+     */
+    public function testGetQueryWithoutId()
+    {
+        $queryId = 0;
+        $maxQueryLength = 100;
+        $minQueryLength = 3;
+        $rawQueryText = '  Simple product   ';
+        $cleanedRawText = 'Simple product';
+        $isQueryTextExceeded = false;
+        $isQueryTextShort = false;
+
+        $this->mockSetQueryTextOnceExecute($cleanedRawText);
+        $this->mockString($cleanedRawText);
+        $this->mockQueryLengths($maxQueryLength, $minQueryLength);
+        $this->mockGetRawQueryText($rawQueryText);
+        $this->mockSimpleQuery($cleanedRawText, $queryId, $isQueryTextExceeded, $isQueryTextShort);
+
+        $this->mockCreateQuery();
+
+        $result = $this->model->get();
+        $this->assertSame($this->query, $result);
+    }
+
+    /**
+     * @param int $maxQueryLength
+     * @param int $minQueryLength
+     * @return void
+     */
+    private function mockQueryLengths($maxQueryLength, $minQueryLength)
+    {
+        $this->queryHelper->expects($this->once())
+            ->method('getMaxQueryLength')
+            ->willReturn($maxQueryLength);
+        $this->queryHelper->expects($this->once())
+            ->method('getMinQueryLength')
+            ->willReturn($minQueryLength);
+    }
+
+    /**
+     * @param string $rawQueryText
+     * @return void
+     */
+    private function mockGetRawQueryText($rawQueryText)
+    {
+        $this->request->expects($this->any())
             ->method('getParam')
-            ->with($this->equalTo(self::QUERY_VAR_NAME))
-            ->will($this->returnValue($rawQueryText));
+            ->withConsecutive([QueryFactory::QUERY_VAR_NAME])
+            ->willReturn($rawQueryText);
+    }
 
-        $this->objectManagerMock->expects($this->once())
+    /**
+     * @param string $cleanedRawText
+     * @return void
+     */
+    private function mockString($cleanedRawText)
+    {
+        $this->string->expects($this->any())
+            ->method('cleanString')
+            ->withConsecutive([$cleanedRawText])
+            ->willReturnArgument(0);
+        $this->string->expects($this->any())
+            ->method('strlen')
+            ->withConsecutive([$cleanedRawText])
+            ->willReturn(strlen($cleanedRawText));
+    }
+
+    /**
+     * @return void
+     */
+    private function mockCreateQuery()
+    {
+        $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($this->equalTo('Magento\Search\Model\Query'))
-            ->will($this->returnValue($this->queryMock));
-        $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
-            ->with($this->equalTo($preparedQueryText))
-            ->will($this->returnSelf());
-        $this->queryMock->expects($this->once())
+            ->withConsecutive([Query::class, []])
+            ->willReturn($this->query);
+    }
+
+    /**
+     * @param string $cleanedRawText
+     * @param int $queryId
+     * @param bool $isQueryTextExceeded
+     * @param bool $isQueryTextShort
+     * @return void
+     */
+    private function mockSimpleQuery($cleanedRawText, $queryId, $isQueryTextExceeded, $isQueryTextShort)
+    {
+        $this->query->expects($this->once())
+            ->method('loadByQueryText')
+            ->withConsecutive([$cleanedRawText])
+            ->willReturnSelf();
+        $this->query->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($queryId));
-        $this->queryMock->expects($this->once())
+            ->willReturn($queryId);
+        $this->query->expects($this->once())
+            ->method('setIsQueryTextExceeded')
+            ->withConsecutive([$isQueryTextExceeded]);
+        $this->query->expects($this->once())
+            ->method('setIsQueryTextShort')
+            ->withConsecutive([$isQueryTextShort]);
+    }
+
+    /**
+     * @param string $cleanedRawText
+     * @return void
+     */
+    private function mockSetQueryTextNeverExecute($cleanedRawText)
+    {
+        $this->query->expects($this->never())
             ->method('setQueryText')
-            ->with($preparedQueryText)
-            ->will($this->returnSelf());
-        $this->queryMock->expects($this->once())
-            ->method('setIsQueryTextExceeded')
-            ->with($this->equalTo(false))
-            ->will($this->returnSelf());
-        $query = $this->queryFactory->get();
-        $this->assertSame($this->queryMock, $query);
-        $this->assertSame($query, $this->queryFactory->get());
-    }
-
-    public function testCreate()
-    {
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo('Magento\Search\Model\Query'))
-            ->will($this->returnValue($this->queryMock));
-        $query = $this->queryFactory->create();
-        $this->assertSame($this->queryMock, $query);
+            ->withConsecutive([$cleanedRawText])
+            ->willReturnSelf();
     }
 
     /**
-     * @param array $map
+     * @param string $cleanedRawText
+     * @return void
      */
-    private function mapScopeConfig(array $map)
+    private function mockSetQueryTextOnceExecute($cleanedRawText)
     {
-        $this->scopeConfigMock->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->will(
-                $this->returnCallback(
-                    function ($path) use ($map) {
-                        return isset($map[$path]) ? $map[$path] : null;
-                    }
-                )
-            );
+        $this->query->expects($this->once())
+            ->method('setQueryText')
+            ->withConsecutive([$cleanedRawText])
+            ->willReturnSelf();
     }
 }

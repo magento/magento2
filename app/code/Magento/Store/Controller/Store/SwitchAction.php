@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Controller\Store;
@@ -70,6 +70,7 @@ class SwitchAction extends Action
      */
     public function execute()
     {
+        $currentActiveStore = $this->storeManager->getStore();
         $storeCode = $this->_request->getParam(
             StoreResolver::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
@@ -97,6 +98,21 @@ class SwitchAction extends Action
             $this->storeCookieManager->setStoreCookie($store);
         }
 
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        if ($store->isUseStoreInUrl()) {
+            // Change store code in redirect url
+            if (strpos($this->_redirect->getRedirectUrl(), $currentActiveStore->getBaseUrl()) !== false) {
+                $this->getResponse()->setRedirect(
+                    str_replace(
+                        $currentActiveStore->getBaseUrl(),
+                        $store->getBaseUrl(),
+                        $this->_redirect->getRedirectUrl()
+                    )
+                );
+            } else {
+                $this->getResponse()->setRedirect($store->getBaseUrl());
+            }
+        } else {
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        }
     }
 }

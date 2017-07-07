@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Report;
@@ -25,8 +25,8 @@ class Order extends AbstractReport
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Sales\Model\ResourceModel\Report\Order\CreatedatFactory $createDatFactory
      * @param \Magento\Sales\Model\ResourceModel\Report\Order\UpdatedatFactory $updateDatFactory
      * @param string $connectionName
@@ -36,8 +36,8 @@ class Order extends AbstractReport
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Sales\Model\ResourceModel\Report\Order\CreatedatFactory $createDatFactory,
         \Magento\Sales\Model\ResourceModel\Report\Order\UpdatedatFactory $updateDatFactory,
         $connectionName = null
@@ -47,8 +47,8 @@ class Order extends AbstractReport
             $logger,
             $localeDate,
             $reportsFlagFactory,
-            $dateTime,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
         $this->_createDatFactory = $createDatFactory;

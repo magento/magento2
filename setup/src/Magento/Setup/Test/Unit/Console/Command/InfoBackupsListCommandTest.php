@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,18 +13,18 @@ class InfoBackupsListCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $table = $this->getMock('Symfony\Component\Console\Helper\Table', [], [], '', false);
+        $table = $this->getMock(\Symfony\Component\Console\Helper\Table::class, [], [], '', false);
         $table->expects($this->once())->method('setHeaders')->with(['Backup Filename', 'Backup Type']);
         $table->expects($this->once())->method('addRow')->with(['backupFile_media.tgz', 'media']);
         /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
+        $helperSet = $this->getMock(\Symfony\Component\Console\Helper\HelperSet::class, [], [], '', false);
         $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
         /** @var \Magento\Framework\App\Filesystem\DirectoryList
          * |\PHPUnit_Framework_MockObject_MockObject $directoryList
          */
-        $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $directoryList = $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
         /** @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject $file */
-        $file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $file = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
         $file->expects($this->once())->method('isExists')->will($this->returnValue(true));
         $file->expects($this->once())
             ->method('readDirectoryRecursively')

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -23,6 +23,7 @@
         <xs:attribute name="primary" type="nameType" use="optional" />
         <xs:attribute name="view_id" type="viewIdType" use="required" />
         <xs:attribute name="class" type="classType" use="required" />
+        <xs:attribute name="shared_index" type="xs:string" use="optional" />
     </xs:complexType>
 
     <xs:group name="fieldset">

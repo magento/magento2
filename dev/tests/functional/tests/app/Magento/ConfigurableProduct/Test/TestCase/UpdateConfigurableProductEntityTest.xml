@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ConfigurableProduct\Test\TestCase\UpdateConfigurableProductEntityTest" summary="Update Configurable Product" ticketId="MAGETWO-29916">
-        <variation name="UpdateConfigurableProductEntityTestVariation1">
-            <data name="description" xsi:type="string">Add new option to existed Attribute</data>
+        <variation name="UpdateConfigurableProductEntityTestVariation1" summary="Add new option to existed Attribute">
             <data name="attributeTypeAction" xsi:type="string">addOptions</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/configurable_attributes_data/dataset" xsi:type="string">one_new_options</data>
             <data name="updatedProduct/data/checkout_data/dataset" xsi:type="string">configurable_two_attributes</data>
-            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">153</data>
+            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">42</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
+            <!--lowest price of option-->
+            <data name="updatedProduct/data/price/value" xsi:type="string">40</data>
             <data name="updatedProduct/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
@@ -33,13 +33,12 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately" />
         </variation>
-        <variation name="UpdateConfigurableProductEntityTestVariation2">
-            <data name="description" xsi:type="string">Add new variations</data>
+        <variation name="UpdateConfigurableProductEntityTestVariation2" summary="Add new variations">
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/configurable_attributes_data/dataset" xsi:type="string">two_new_options</data>
             <data name="updatedProduct/data/checkout_data/dataset" xsi:type="string">configurable_three_attributes</data>
-            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">154</data>
+            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">1</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
             <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
@@ -55,17 +54,16 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
         </variation>
-        <variation name="UpdateConfigurableProductEntityTestVariation3">
-            <data name="description" xsi:type="string">Delete one attribute and add another</data>
+        <variation name="UpdateConfigurableProductEntityTestVariation3" summary="Delete one attribute and add another">
             <data name="attributeTypeAction" xsi:type="string">deleteLast</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/configurable_attributes_data/dataset" xsi:type="string">two_new_options</data>
             <data name="updatedProduct/data/checkout_data/dataset" xsi:type="string">configurable_two_attributes</data>
-            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">112</data>
+            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">1</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
-            <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
+            <data name="updatedProduct/data/price/value" xsi:type="string">1</data>
             <data name="updatedProduct/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
             <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
@@ -79,8 +77,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesAbsentOnProductPage" />
         </variation>
-        <variation name="UpdateConfigurableProductEntityTestVariation4">
-            <data name="description" xsi:type="string">Delete attribute and add another with products qty = 0</data>
+        <variation name="UpdateConfigurableProductEntityTestVariation4" summary="Delete attribute and add another with products qty = 0">
             <data name="attributeTypeAction" xsi:type="string">deleteAll</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>

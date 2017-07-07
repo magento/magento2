@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -113,7 +113,7 @@ class Snapshot extends Filesystem
     protected function _createDbBackupInstance()
     {
         return $this->_backupFactory->create(Factory::TYPE_DB)
-            ->setBackupExtension('gz')
+            ->setBackupExtension('sql')
             ->setTime($this->getTime())
             ->setBackupsDir($this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->getAbsolutePath())
             ->setResourceModel($this->getResourceModel());

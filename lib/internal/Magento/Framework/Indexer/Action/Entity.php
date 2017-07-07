@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Action;
@@ -24,6 +24,6 @@ class Entity extends Base
     {
         return !count($ids)
             ? $this->createResultCollection()
-            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getRowIdFieldName(), $ids);
+            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldName(), $ids);
     }
 }

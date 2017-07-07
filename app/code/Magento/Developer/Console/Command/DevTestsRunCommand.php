@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Console\Command;
@@ -86,7 +86,7 @@ class DevTestsRunCommand extends Command
             list($dir, $options) = $this->commands[$key];
             $dirName = realpath(BP . '/dev/tests/' . $dir);
             chdir($dirName);
-            $command = 'php '. BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
+            $command = PHP_BINARY . ' ' . BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
             $message = $dirName . '> ' . $command;
             $output->writeln(['', str_pad("---- {$message} ", 70, '-'), '']);
             passthru($command, $returnVal);
@@ -101,10 +101,12 @@ class DevTestsRunCommand extends Command
             foreach ($failures as $message) {
                 $output->writeln(' - ' . $message);
             }
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } else {
             $output->writeln('PASSED (' . count($runCommands) . ')');
         }
-        return 0;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // refresh report statistics
 /** @var \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportResource */
 $reportResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\SalesRule\Model\ResourceModel\Report\Rule'
+    \Magento\SalesRule\Model\ResourceModel\Report\Rule::class
 );
 $reportResource->beginTransaction();
 // prevent table truncation by incrementing the transaction nesting level counter

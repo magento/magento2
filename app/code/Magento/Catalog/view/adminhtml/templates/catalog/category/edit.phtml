@@ -1,180 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
- * Template for \Magento\Catalog\Block\Adminhtml\Category\Cointainer
+ * Template for \Magento\Catalog\Block\Adminhtml\Category\Edit
  */
 ?>
-
-<div id="category-edit-container" class="category-content">
-    <?php echo $block->getChildHtml('form') ?>
+<div data-id="information-dialog-category" class="messages" style="display: none;">
+    <div class="message message-notice">
+        <div><?= /* @escapeNotVerified */ __('This operation can take a long time') ?></div>
+    </div>
 </div>
-<script>
-require([
-    "jquery",
-    "tinymce",
-    'Magento_Ui/js/modal/confirm',
-    'Magento_Ui/js/modal/alert',
-    "loadingPopup",
-    "mage/backend/floating-header"
-], function(jQuery, tinyMCE, confirm, alert){
-
-//<![CDATA[
-    function categoryReset(url,useAjax){
-        if(useAjax){
-            var params = {active_tab_id:false};
-            updateContent(url, params);
-        }else{
-            location.href = url;
-        }
-    }
-
-    /**
-    * Delete some category
-    * This routine get categoryId explicitly, so even if currently selected tree node is out of sync
-    * with this form, we surely delete same category in the tree and at backend
-    */
-    function categoryDelete(url) {
-        confirm({
-            content: '<?php /* @escapeNotVerified */ echo __('Are you sure you want to delete this category?') ?>',
-            actions: {
-                confirm: function () {
-                    location.href = url;
-                }
-            }
-        });
-    }
-
-    /**
-     * Update category content area
-     */
-    function updateContent(url, params, refreshTree) {
-        var node        = tree.getNodeById(tree.currentNodeId),
-            parentNode  = node && node.parentNode,
-            parentId,
-            redirectUrl,
-            params;
-
-        params = jQuery.extend(params || {}, {
-            form_key: FORM_KEY
-        });
-
-        if (params.node_name) {
-            node.setText(params.node_name);
-        }
-
-        (function($){
-            var $categoryContainer = $('#category-edit-container'),
-                messagesContainer = $('.messages');
-            messagesContainer.html('');
-            $.ajax({
-                url: url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ),
-                data: params,
-                context: $('body'),
-                showLoader: true
-            }).done(function(data){
-                if (data.content) {
-                    $('.page-actions').floatingHeader('destroy');
-                    try {
-                        $('#category-edit-container .wysiwyg-editor').each(function(index, element) {
-                            tinyMCE.execCommand('mceRemoveControl', false, $(element).attr('id'));
-                        });
-                        $categoryContainer.html('');
-                    } catch (e) {
-                        alert({
-                            content: e.message
-                        });
-                    }
-                    $categoryContainer.html(data.content).trigger('contentUpdated');
-                    setTimeout(function() {
-                        $('#category-edit-container .wysiwyg-editor').each(function(index, element) {
-                            tinyMCE.execCommand('mceRemoveControl', false, $(element).attr('id'));
-                            tinyMCE.execCommand('mceAddControl', true, $(element).attr('id'));
-                        });
-                        $('.page-actions').floatingHeader({
-                            'title': '.category-edit-title'
-                        });
-                        $('body').trigger('contentUpdated');
-                        try {
-                            if (refreshTree) {
-                                window.refreshTreeArea();
-                            }
-                        } catch (e) {
-                            alert({
-                                content: e.message
-                            });
-                        };
-                    }, 25);
-                }
-
-                if (data.messages && data.messages.length > 0) {
-                    messagesContainer.html(data.messages);
-                }
-                if (data.toolbar) {
-                    $('[data-ui-id="page-actions-toolbar-content-header"]').replaceWith(data.toolbar)
-                }
-            });
-        })(jQuery);
-    }
-
-    /**
-     * Refresh tree nodes after saving or deleting a category
-     */
-    function refreshTreeArea(transport)
+<script type="text/x-magento-init">
     {
-        var config,
-            url;
-
-        if (tree && window.editingCategoryBreadcrumbs) {
-            // category deleted - delete its node
-            if (tree.nodeForDelete) {
-                var node = tree.getNodeById(tree.nodeForDelete);
-                tree.nodeForDelete = false;
-
-                if (node) { // Check maybe tree became somehow not synced with ajax and we're trying to delete unknown node
-                    node.parentNode.removeChild(node);
-                    tree.currentNodeId = false;
-                }
-            }
-            // category created - add its node
-            else if (tree.addNodeTo) {
-                var parent = tree.getNodeById(tree.addNodeTo);
-                tree.addNodeTo = false;
-
-                if (parent) { // Check maybe tree became somehow not synced with ajax and we're trying to add to unknown node
-                    config = editingCategoryBreadcrumbs[editingCategoryBreadcrumbs.length - 1];
-
-                    window.location.href = tree.buildUrl(config.id);
-                }
-            }
-
-            // update all affected categories nodes names
-            for (var i = 0; i < editingCategoryBreadcrumbs.length; i++) {
-                var node = tree.getNodeById(editingCategoryBreadcrumbs[i].id);
-                if (node) {
-                    node.setText(editingCategoryBreadcrumbs[i].text);
-                }
-            }
+        "*": {
+            "categoryForm": {"refreshUrl": "<?= /* @escapeNotVerified */ $block->getRefreshPathUrl() ?>"}
         }
     }
-
-    function displayLoadingMask() {
-        jQuery('body').loadingPopup();
-    }
-
-    window.refreshTreeArea = refreshTreeArea;
-    window.updateContent = updateContent;
-    window.categoryDelete = categoryDelete;
-    window.categoryReset = categoryReset;
-    window.displayLoadingMask = displayLoadingMask;
-//]]>
-
-});
 </script>

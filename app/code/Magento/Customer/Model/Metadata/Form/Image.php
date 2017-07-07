@@ -1,16 +1,81 @@
 <?php
 /**
- * Form Element Image Data Model
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\Api\ArrayObjectSearch;
+use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\Filesystem;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Image extends File
 {
+    /**
+     * @var ImageContentInterfaceFactory
+     */
+    private $imageContentFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param null $value
+     * @param string $entityTypeCode
+     * @param bool $isAjax
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
+     * @param Filesystem $fileSystem
+     * @param UploaderFactory $uploaderFactory
+     * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
+     * @param \Magento\Framework\Api\Data\ImageContentInterfaceFactory|null $imageContentInterfaceFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $value,
+        $entityTypeCode,
+        $isAjax,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
+        Filesystem $fileSystem,
+        UploaderFactory $uploaderFactory,
+        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
+        \Magento\Framework\Api\Data\ImageContentInterfaceFactory $imageContentInterfaceFactory = null
+    ) {
+        parent::__construct(
+            $localeDate,
+            $logger,
+            $attribute,
+            $localeResolver,
+            $value,
+            $entityTypeCode,
+            $isAjax,
+            $urlEncoder,
+            $fileValidator,
+            $fileSystem,
+            $uploaderFactory,
+            $fileProcessorFactory
+        );
+        $this->imageContentFactory = $imageContentInterfaceFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
+    }
+
     /**
      * Validate file by attribute validate rules
      * Return array of errors
@@ -68,7 +133,7 @@ class Image extends File
 
         $maxImageHeight = ArrayObjectSearch::getArrayElementByName(
             $rules,
-            'max_image_height'
+            'max_image_heght'
         );
         if ($maxImageHeight !== null) {
             if ($maxImageHeight < $imageProp[1]) {
@@ -78,5 +143,66 @@ class Image extends File
         }
 
         return $errors;
+    }
+
+    /**
+     * Process file uploader UI component data
+     *
+     * @param array $value
+     * @return bool|int|ImageContentInterface|string
+     */
+    protected function processUiComponentValue(array $value)
+    {
+        if ($this->_entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
+            $result = $this->processCustomerAddressValue($value);
+            return $result;
+        }
+
+        if ($this->_entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
+            $result = $this->processCustomerValue($value);
+            return $result;
+        }
+
+        return $this->_value;
+    }
+
+    /**
+     * Process file uploader UI component data for customer_address entity
+     *
+     * @param array $value
+     * @return string
+     */
+    protected function processCustomerAddressValue(array $value)
+    {
+        $result = $this->getFileProcessor()->moveTemporaryFile($value['file']);
+        return $result;
+    }
+
+    /**
+     * Process file uploader UI component data for customer entity
+     *
+     * @param array $value
+     * @return bool|int|ImageContentInterface|string
+     */
+    protected function processCustomerValue(array $value)
+    {
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . ltrim($value['file'], '/');
+
+        if ($this->getFileProcessor()->isExist($temporaryFile)) {
+            $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
+
+            /** @var ImageContentInterface $imageContentDataObject */
+            $imageContentDataObject = $this->imageContentFactory->create()
+                ->setName($value['name'])
+                ->setBase64EncodedData($base64EncodedData)
+                ->setType($value['type']);
+
+            // Remove temporary file
+            $this->getFileProcessor()->removeUploadedFile($temporaryFile);
+
+            return $imageContentDataObject;
+        }
+
+        return $this->_value;
     }
 }

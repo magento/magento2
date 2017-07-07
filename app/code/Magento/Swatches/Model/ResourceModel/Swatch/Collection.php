@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\ResourceModel\Swatch;
 
 /**
  * @codeCoverageIgnore
- * Swatch Collection
+ * Swatch Resource Collection
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -18,7 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Swatches\Model\Swatch', 'Magento\Swatches\Model\ResourceModel\Swatch');
+        $this->_init(\Magento\Swatches\Model\Swatch::class, \Magento\Swatches\Model\ResourceModel\Swatch::class);
     }
 
     /**

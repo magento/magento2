@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,27 +15,28 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ioObjectMock = $this->getMock('\Magento\Framework\Code\Generator\Io', [], [], '', false);
+        $this->ioObjectMock = $this->getMock(\Magento\Framework\Code\Generator\Io::class, [], [], '', false);
     }
 
     public function testGenerate()
     {
         require_once __DIR__ . '/_files/Sample.php';
         $model = $this->getMock(
-            '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
+            \Magento\Framework\ObjectManager\Code\Generator\Proxy::class,
             ['_validateData'],
-            ['\Magento\Framework\ObjectManager\Code\Generator\Sample',
+            [
+                \Magento\Framework\ObjectManager\Code\Generator\Sample::class,
                 null,
                 $this->ioObjectMock,
                 null,
                 null,
-                $this->getMock('Magento\Framework\Filesystem\FileResolver')
+                $this->getMock(\Magento\Framework\Filesystem\FileResolver::class)
             ]
         );
         $sampleProxyCode = file_get_contents(__DIR__ . '/_files/SampleProxy.txt');
 
         $this->ioObjectMock->expects($this->once())->method('generateResultFileName')
-            ->with('\Magento\Framework\ObjectManager\Code\Generator\Sample_Proxy')
+            ->with('\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample_Proxy::class)
             ->will($this->returnValue('sample_file.php'));
         $this->ioObjectMock->expects($this->once())->method('writeResultFile')
             ->with('sample_file.php', $sampleProxyCode);

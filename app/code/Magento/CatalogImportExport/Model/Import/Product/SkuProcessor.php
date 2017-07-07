@@ -1,10 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+/**
+ * Class SkuProcessor
+ *
+ * @api
+ */
 class SkuProcessor
 {
     /**
@@ -37,10 +42,32 @@ class SkuProcessor
     protected $productTypeModels;
 
     /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
+
+    /**
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
+
+    /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      */
-    public function __construct(\Magento\Catalog\Model\ProductFactory $productFactory)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\ProductFactory $productFactory
+    ) {
         $this->productFactory = $productFactory;
     }
 
@@ -98,7 +125,7 @@ class SkuProcessor
      */
     public function setNewSkuData($sku, $key, $data)
     {
-        if ($this->newSkus[$sku]) {
+        if (isset($this->newSkus[$sku])) {
             $this->newSkus[$sku][$key] = $data;
         }
         return $this;
@@ -125,6 +152,9 @@ class SkuProcessor
     {
         $oldSkus = [];
         $columns = ['entity_id', 'type_id', 'attribute_set_id', 'sku'];
+        if ($this->getProductEntityLinkField() != $this->getProductIdentifierField()) {
+            $columns[] = $this->getProductEntityLinkField();
+        }
         foreach ($this->productFactory->create()->getProductEntitiesInfo($columns) as $info) {
             $typeId = $info['type_id'];
             $sku = $info['sku'];
@@ -133,8 +163,53 @@ class SkuProcessor
                 'attr_set_id' => $info['attribute_set_id'],
                 'entity_id' => $info['entity_id'],
                 'supported_type' => isset($this->productTypeModels[$typeId]),
+                $this->getProductEntityLinkField() => $info[$this->getProductEntityLinkField()],
             ];
         }
         return $oldSkus;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }

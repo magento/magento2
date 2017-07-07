@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Click Done.
  * 5. Perform assertions.
  *
- * @group Integrations_(PS)
+ * @group Integrations
  * @ZephyrId MAGETWO-29648
  */
 class ReAuthorizeTokensIntegrationEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

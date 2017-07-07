@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -23,11 +23,6 @@
                     <item name="router" xsi:type="string">admin</item>
                 </item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\App\Router">
-        <arguments>
-            <argument name="routerId" xsi:type="string">admin</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Config">
@@ -71,7 +66,6 @@
             <argument name="backendHelper" xsi:type="object">Magento\Backend\Helper\Data\Proxy</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\Acl"/>
     <preference for="Magento\Framework\Acl\AclResource\ProviderInterface" type="Magento\Framework\Acl\AclResource\Provider"/>
     <type name="Magento\Framework\Acl\AclResource\Config\Reader\Filesystem">
@@ -87,11 +81,6 @@
     <type name="Magento\Framework\Acl\Builder">
         <arguments>
             <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\ResourceLoader</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Acl\Cache">
-        <arguments>
-            <argument name="cacheKey" xsi:type="string">backend_acl_resources</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl\RootResource">
@@ -134,6 +123,11 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Request\DataPersistor">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Backend\Model\Session\Quote\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">adminhtml_quote</argument>
@@ -144,7 +138,7 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Quote\Storage</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="cacheEnableCommand" xsi:type="object">Magento\Backend\Console\Command\CacheEnableCommand</item>
@@ -167,6 +161,37 @@
             <argument name="backendApps" xsi:type="array">
                 <item name="setup" xsi:type="object">Magento\Setup\BackendApp</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Response\HeaderManager">
+        <arguments>
+            <argument name="headerProviderList" xsi:type="array">
+                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XFrameOptions</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="admin/url/custom" xsi:type="string">1</item>
+                <item name="admin/url/custom_path" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom1/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom1/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom2/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom2/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_general/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_general/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_sales/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_sales/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_support/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_support/name" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Block\Menu">
+        <arguments>
+            <argument name="menuItemChecker" xsi:type="object">Magento\Backend\Block\MenuItemChecker</argument>
+            <argument name="anchorRenderer" xsi:type="object">Magento\Backend\Block\AnchorRenderer</argument>
         </arguments>
     </type>
 </config>

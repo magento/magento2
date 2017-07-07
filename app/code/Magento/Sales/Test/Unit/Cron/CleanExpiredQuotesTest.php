@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Cron;
@@ -29,9 +29,11 @@ class CleanExpiredQuotesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storesConfigMock = $this->getMock('Magento\Store\Model\StoresConfig', [], [], '', false);
+        $this->storesConfigMock = $this->getMock(\Magento\Store\Model\StoresConfig::class, [], [], '', false);
 
-        $this->quoteFactoryMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote\CollectionFactory')
+        $this->quoteFactoryMock = $this->getMockBuilder(
+            \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -51,7 +53,7 @@ class CleanExpiredQuotesTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('checkout/cart/delete_quote_after'))
             ->will($this->returnValue($lifetimes));
 
-        $quotesMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote\Collection')
+        $quotesMock = $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteFactoryMock->expects($this->exactly(count($lifetimes)))

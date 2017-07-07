@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,34 +57,35 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectMock = $this->getMockBuilder('Magento\Framework\App\Response\RedirectInterface')
+        $this->redirectMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
             ->will($this->returnValue(true));
-        $this->formKeyValidatorMock = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
+        $this->formKeyValidatorMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerRepositoryMock =
-            $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
+            $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->action = $objectManager->getObject('Magento\Newsletter\Controller\Manage\Save', [
+        $this->action = $objectManager->getObject(
+            \Magento\Newsletter\Controller\Manage\Save::class, [
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
                 'messageManager' => $this->messageManagerMock,
@@ -142,7 +143,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(
                     new NoSuchEntityException(
                         __(
-                            NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                            'No such entity with %fieldName = %fieldValue',
                             ['fieldName' => 'customerId', 'value' => 'value']
                         )
                     )

@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Model\Export;
 
+use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Listing\Columns;
+use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\MetadataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,14 +25,18 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $filter;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->filter = $this->getMockBuilder('Magento\Ui\Component\MassAction\Filter')
+        $this->filter = $this->getMockBuilder(\Magento\Ui\Component\MassAction\Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new MetadataProvider(
-            $this->filter
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            \Magento\Ui\Model\Export\MetadataProvider::class,
+            [
+                'filter' => $this->filter,
+            ]
         );
     }
 
@@ -60,21 +69,35 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $componentName
-     * @param $columnName
-     * @param $columnLabel
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param string $componentName
+     * @param string $columnName
+     * @param string $columnLabel
+     * @param string $columnActionsName
+     * @param string $columnActionsLabel
+     * @return UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function prepareColumns($componentName, $columnName, $columnLabel)
-    {
-        $component = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+    protected function prepareColumns(
+        $componentName,
+        $columnName,
+        $columnLabel,
+        $columnActionsName = 'actions_name',
+        $columnActionsLabel = 'actions_label'
+    ) {
+        /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $component */
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
 
-        $columns = $this->getMockBuilder('Magento\Ui\Component\Listing\Columns')
+        /** @var Columns|\PHPUnit_Framework_MockObject_MockObject $columns */
+        $columns = $this->getMockBuilder(\Magento\Ui\Component\Listing\Columns::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $column = $this->getMockBuilder('Magento\Ui\Component\Listing\Columns\Column')
+        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $column */
+        $column = $this->getMockBuilder(\Magento\Ui\Component\Listing\Columns\Column::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var Column|\PHPUnit_Framework_MockObject_MockObject $columnActions */
+        $columnActions = $this->getMockBuilder(\Magento\Ui\Component\Listing\Columns\Column::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -87,15 +110,32 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
         $columns->expects($this->once())
             ->method('getChildComponents')
-            ->willReturn([$column]);
+            ->willReturn([$column, $columnActions]);
 
         $column->expects($this->any())
             ->method('getName')
             ->willReturn($columnName);
         $column->expects($this->any())
             ->method('getData')
-            ->with('config/label')
-            ->willReturn($columnLabel);
+            ->willReturnMap(
+                [
+                    ['config/label', null, $columnLabel],
+                    ['config/dataType', null, 'data_type'],
+                ]
+            );
+
+        $columnActions->expects($this->any())
+            ->method('getName')
+            ->willReturn($columnActionsName);
+        $columnActions->expects($this->any())
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['config/label', null, $columnActionsLabel],
+                    ['config/dataType', null, 'actions'],
+                ]
+            );
+
         return $component;
     }
 
@@ -108,10 +148,11 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRowData($key, $fields, $options, $expected)
     {
-        $document = $this->getMockBuilder('Magento\Framework\Api\Search\DocumentInterface')
+        /** @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject $document */
+        $document = $this->getMockBuilder(\Magento\Framework\Api\Search\DocumentInterface::class)
             ->getMockForAbstractClass();
 
-        $attribute = $this->getMockBuilder('Magento\Framework\Api\AttributeInterface')
+        $attribute = $this->getMockBuilder(\Magento\Framework\Api\AttributeInterface::class)
             ->getMockForAbstractClass();
 
         $document->expects($this->once())
@@ -178,17 +219,17 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptions($filter, $options, $expected)
     {
-        $component = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
 
-        $childComponent = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $childComponent = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
 
-        $filters = $this->getMockBuilder('Magento\Ui\Component\Filters')
+        $filters = $this->getMockBuilder(\Magento\Ui\Component\Filters::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $select = $this->getMockBuilder('Magento\Ui\Component\Filters\Type\Select')
+        $select = $this->getMockBuilder(\Magento\Ui\Component\Filters\Type\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 

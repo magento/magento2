@@ -2,21 +2,19 @@
 /**
  * Cron application
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
 use Magento\Framework\App;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Cron implements \Magento\Framework\AppInterface
 {
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
     /**
      * @var State
      */
@@ -33,24 +31,41 @@ class Cron implements \Magento\Framework\AppInterface
     protected $_response;
 
     /**
-     * @param ManagerInterface $eventManager
+     * Object manager
+     *
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var \Magento\Framework\App\AreaList
+     */
+    private $areaList;
+
+    /**
+     * Inject dependencies
+     *
      * @param State $state
      * @param Console\Request $request
      * @param Console\Response $response
+     * @param ObjectManagerInterface $objectManager
      * @param array $parameters
+     * @param AreaList|null          $areaList
      */
     public function __construct(
-        ManagerInterface $eventManager,
         State $state,
         Console\Request $request,
         Console\Response $response,
-        array $parameters = []
+        ObjectManagerInterface $objectManager,
+        array $parameters = [],
+        \Magento\Framework\App\AreaList $areaList = null
     ) {
-        $this->_eventManager = $eventManager;
         $this->_state = $state;
         $this->_request = $request;
         $this->_request->setParams($parameters);
         $this->_response = $response;
+        $this->objectManager = $objectManager;
+        $this->areaList = $areaList ? $areaList : $this->objectManager->get(\Magento\Framework\App\AreaList::class);
     }
 
     /**
@@ -60,8 +75,15 @@ class Cron implements \Magento\Framework\AppInterface
      */
     public function launch()
     {
-        $this->_state->setAreaCode('crontab');
-        $this->_eventManager->dispatch('default');
+        $this->_state->setAreaCode(Area::AREA_CRONTAB);
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
+        $this->objectManager->configure($configLoader->load(Area::AREA_CRONTAB));
+
+        $this->areaList->getArea(Area::AREA_CRONTAB)->load(Area::PART_TRANSLATE);
+
+        /** @var \Magento\Framework\Event\ManagerInterface $eventManager */
+        $eventManager = $this->objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManager->dispatch('default');
         $this->_response->setCode(0);
         return $this->_response;
     }

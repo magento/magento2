@@ -1,21 +1,10 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <body>
-        <referenceBlock name="product_tabs">
-            <block name="downloadable_items" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable">
-                <block name="catalog.product.edit.tab.downloadable.links" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links" />
-                <block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples" />
-            </block>
-            <action method="addTab">
-                <argument name="name" xsi:type="string">downloadable_items</argument>
-                <argument name="block" xsi:type="string">downloadable_items</argument>
-            </action>
-        </referenceBlock>
-    </body>
+    <update handle="downloadable_items"/>
 </page>

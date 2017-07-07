@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
@@ -104,7 +104,7 @@ class Selection extends \Magento\Backend\Block\Widget
     {
         $this->addChild(
             'selection_delete_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Delete'), 'class' => 'action-delete', 'on_click' => 'bSelection.remove(event)']
         );
         return parent::_prepareLayout();
@@ -128,7 +128,7 @@ class Selection extends \Magento\Backend\Block\Widget
     public function getPriceTypeSelectHtml()
     {
         $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setData(
             [
                 'id' => $this->getFieldId() . '_<%- data.index %>_price_type',
@@ -153,7 +153,7 @@ class Selection extends \Magento\Backend\Block\Widget
     public function getQtyTypeSelectHtml()
     {
         $select = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setData(
             ['id' => $this->getFieldId() . '_<%- data.index %>_can_change_qty', 'class' => 'select']
         )->setName(

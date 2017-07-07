@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Export;
 
 /**
  * Export entity customer model
+ *
+ * @api
  *
  * @method \Magento\Customer\Model\ResourceModel\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
@@ -29,7 +31,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
     /**#@-*/
 
@@ -47,8 +49,8 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      */
     protected $_attributeOverrides = [
         'created_at' => ['backend_type' => 'datetime'],
-        'reward_update_notification' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
-        'reward_warning_notification' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
+        'reward_update_notification' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
+        'reward_warning_notification' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
     ];
 
     /**

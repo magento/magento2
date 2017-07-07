@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,14 +37,14 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     protected $invoice;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax $model */
-        $this->model = $this->objectManager->getObject('Magento\Sales\Model\Order\Creditmemo\Total\Tax');
+        $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Creditmemo\Total\Tax::class);
 
         $this->order = $this->getMock(
-            '\Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 '__wakeup'
             ],
@@ -54,7 +54,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->invoice = $this->getMock(
-            '\Magento\Sales\Model\Order\Invoice',
+            \Magento\Sales\Model\Order\Invoice::class,
             [
                 '__wakeup',
             ],
@@ -64,7 +64,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->creditmemo = $this->getMock(
-            '\Magento\Sales\Model\Order\Creditmemo',
+            \Magento\Sales\Model\Order\Creditmemo::class,
             [
                 'getAllItems',
                 'getOrder',
@@ -227,6 +227,95 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'tax_amount' => 19.49,
                     'base_tax_amount' => 19.49,
                     'shipping_tax_amount' => 2.45,
+                    'base_shipping_tax_amount' => 2.45,
+                ],
+            ],
+        ];
+
+        $currencyRatio = 2;
+        // scenario 1: 3 item_1, 3 item_2, $99 each, 8.19 tax rate
+        // 1 item_1 and 2 item_2 are invoiced and base currency <> display currency
+        $result['partial_invoice_partial_creditmemo_different_currencies'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'shipping_tax_amount' => 2.45 * $currencyRatio,
+                    'base_shipping_tax_amount' => 2.45,
+                    'shipping_discount_tax_compensation_amount' => 0.00,
+                    'base_shipping_discount_tax_compensation_amount' => 0.00,
+                    'tax_amount' => 53.56 * $currencyRatio,
+                    'base_tax_amount' => 53.56,
+                    'tax_invoiced' => 24.33 * $currencyRatio,
+                    'base_tax_invoiced' => 24.33,
+                    'tax_refunded' => 0.00,
+                    'base_tax_refunded' => 0.00,
+                    'base_shipping_amount' => 30.00,
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_invoiced' => 8.11 * $currencyRatio,
+                            'tax_refunded' => 0,
+                            'base_tax_invoiced' => 8.11,
+                            'base_tax_refunded' => 0,
+                            'discount_tax_compensation_amount' => 0,
+                            'base_discount_tax_compensation_amount' => 0,
+                            'qty_refunded' => 0,
+                        ],
+                        'is_last' => false,
+                        'qty' => 1,
+                    ],
+                    'item_2' => [
+                        'order_item' => [
+                            'qty_invoiced' => 2,
+                            'tax_refunded' => 0,
+                            'tax_invoiced' => 16.22 * $currencyRatio,
+                            'base_tax_refunded' => 0,
+                            'base_tax_invoiced' => 16.22,
+                            'discount_tax_compensation_amount' => 0,
+                            'base_discount_tax_compensation_amount' => 0,
+                            'qty_refunded' => 0,
+                        ],
+                        'is_last' => false,
+                        'qty' => 1,
+                    ],
+                ],
+                'is_last' => false,
+                'data_fields' => [
+                    'grand_total' => 198 * $currencyRatio,
+                    'base_grand_total' => 198,
+                    'base_shipping_amount' => 30,
+                    'tax_amount' => 0.82 * $currencyRatio,
+                    'base_tax_amount' => 0.82,
+                    'invoice' => new MagentoObject(
+                        [
+                            'shipping_tax_amount' => 2.45 * $currencyRatio,
+                            'base_shipping_tax_amount' => 2.45,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 8.11 * $currencyRatio,
+                        'base_tax_amount' => 8.11,
+                    ],
+                    'item_2' => [
+                        'tax_amount' => 8.11 * $currencyRatio,
+                        'base_tax_amount' => 8.11,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 216.67 * $currencyRatio,
+                    'base_grand_total' => 216.67,
+                    'tax_amount' => 19.49 * $currencyRatio,
+                    'base_tax_amount' => 19.49,
+                    'shipping_tax_amount' => 2.45 * $currencyRatio,
                     'base_shipping_tax_amount' => 2.45,
                 ],
             ],
@@ -543,7 +632,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
         $orderItem = $this->getMock(
-            '\Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             [
                 'isDummy',
                 '__wakeup'
@@ -558,7 +647,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
         $creditmemoItem = $this->getMock(
-            '\Magento\Sales\Model\Order\Creditmemo\Item',
+            \Magento\Sales\Model\Order\Creditmemo\Item::class,
             [
                 'getOrderItem',
                 'isLast',

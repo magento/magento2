@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $userIds = [];
 
 /** @var $model \Magento\User\Model\User */
-$model = $objectManager->create('Magento\User\Model\User');
+$model = $objectManager->create(\Magento\User\Model\User::class);
 $model->setFirstname("John")
     ->setLastname("Doe")
     ->setUsername('adminUser1')
@@ -28,7 +28,7 @@ $model->save();
 $userIds[] = $model->getDataByKey('user_id');
 
 /** @var $model \Magento\User\Model\User */
-$model = $objectManager->create('Magento\User\Model\User');
+$model = $objectManager->create(\Magento\User\Model\User::class);
 $model->setFirstname("John")
     ->setLastname("Doe")
     ->setUsername('adminUser2')
@@ -47,5 +47,5 @@ $defaultAdminUserId = 1;
 $lockLifetime = 86400;
 
 /** @var $modelLockedUsers \Magento\User\Model\ResourceModel\User */
-$modelLockedUsers = $objectManager->create('Magento\User\Model\ResourceModel\User');
+$modelLockedUsers = $objectManager->create(\Magento\User\Model\ResourceModel\User::class);
 $modelLockedUsers->lock($userIds, $defaultAdminUserId, $lockLifetime);

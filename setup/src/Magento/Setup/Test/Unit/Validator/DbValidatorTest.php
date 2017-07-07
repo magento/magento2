@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,8 +29,8 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
-        $this->connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->connectionFactory = $this->getMock(\Magento\Setup\Module\ConnectionFactory::class, [], [], '', false);
+        $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         $this->dbValidator = new DbValidator($this->connectionFactory);
     }
@@ -38,40 +38,46 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
     public function testCheckDatabaseConnection()
     {
         $this->connection
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $pdo = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class, [], '', false);
         $this->connection
             ->expects($this->atLeastOnce())
             ->method('query')
             ->willReturn($pdo);
-        $pdo->expects($this->once())
+
+        $listOfPrivileges = [
+            ['SELECT'],
+            ['INSERT'],
+            ['UPDATE'],
+            ['DELETE'],
+            ['CREATE'],
+            ['DROP'],
+            ['INDEX'],
+            ['ALTER'],
+            ['CREATE TEMPORARY TABLES'],
+            ['LOCK TABLES'],
+            ['EXECUTE'],
+            ['CREATE VIEW'],
+            ['SHOW VIEW'],
+            ['CREATE ROUTINE'],
+            ['ALTER ROUTINE'],
+            ['TRIGGER'],
+        ];
+        $accessibleDbs = ['some_db', 'name', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
             ->method('fetchAll')
-            ->willReturn(
+            ->willReturnMap(
                 [
-                    ['SELECT'],
-                    ['INSERT'],
-                    ['UPDATE'],
-                    ['DELETE'],
-                    ['CREATE'],
-                    ['DROP'],
-                    ['REFERENCES'],
-                    ['INDEX'],
-                    ['ALTER'],
-                    ['CREATE TEMPORARY TABLES'],
-                    ['LOCK TABLES'],
-                    ['EXECUTE'],
-                    ['CREATE VIEW'],
-                    ['SHOW VIEW'],
-                    ['CREATE ROUTINE'],
-                    ['ALTER ROUTINE'],
-                    ['EVENT'],
-                    ['TRIGGER'],
+                    [\PDO::FETCH_COLUMN, 0, $accessibleDbs],
+                    [\PDO::FETCH_NUM, null, $listOfPrivileges]
                 ]
             );
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host:3339', 'user', 'password'));
     }
 
     /**
@@ -85,12 +91,46 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('fetchOne')
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $pdo = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class, [], '', false);
         $this->connection
             ->expects($this->atLeastOnce())
             ->method('query')
             ->willReturn($pdo);
-        $pdo->expects($this->atLeastOnce())->method('fetchAll')->willReturn([['SELECT']]);
+        $listOfPrivileges = [['SELECT']];
+        $accessibleDbs = ['some_db', 'name', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->willReturnMap(
+                [
+                    [\PDO::FETCH_COLUMN, 0, $accessibleDbs],
+                    [\PDO::FETCH_NUM, null, $listOfPrivileges]
+                ]
+            );
+        $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database 'name' does not exist or specified database server user does not have
+     */
+    public function testCheckDatabaseConnectionDbNotAccessible()
+    {
+        $this->connection
+            ->expects($this->once())
+            ->method('fetchOne')
+            ->with('SELECT version()')
+            ->willReturn('5.6.0-0ubuntu0.12.04.1');
+        $pdo = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class, [], '', false);
+        $this->connection
+            ->expects($this->atLeastOnce())
+            ->method('query')
+            ->willReturn($pdo);
+        $accessibleDbs = ['some_db', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->willReturn($accessibleDbs);
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
@@ -126,7 +166,7 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckDatabaseConnectionFailed()
     {
-        $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
+        $connectionFactory = $this->getMock(\Magento\Setup\Module\ConnectionFactory::class, [], [], '', false);
         $connectionFactory->expects($this->once())->method('create')->willReturn(false);
         $this->dbValidator = new DbValidator($connectionFactory);
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');

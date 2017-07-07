@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Mapper;
 
+/**
+ * @api
+ */
 class Factory
 {
     const MAPPER_SORTING = 'sorting';
@@ -32,12 +35,13 @@ class Factory
      * @var array
      */
     protected $_typeMap = [
-        self::MAPPER_SORTING => 'Magento\Config\Model\Config\Structure\Mapper\Sorting',
-        self::MAPPER_PATH => 'Magento\Config\Model\Config\Structure\Mapper\Path',
-        self::MAPPER_IGNORE => 'Magento\Config\Model\Config\Structure\Mapper\Ignore',
-        self::MAPPER_DEPENDENCIES => 'Magento\Config\Model\Config\Structure\Mapper\Dependencies',
-        self::MAPPER_ATTRIBUTE_INHERITANCE => 'Magento\Config\Model\Config\Structure\Mapper\Attribute\Inheritance',
-        self::MAPPER_EXTENDS => 'Magento\Config\Model\Config\Structure\Mapper\ExtendsMapper',
+        self::MAPPER_SORTING => \Magento\Config\Model\Config\Structure\Mapper\Sorting::class,
+        self::MAPPER_PATH => \Magento\Config\Model\Config\Structure\Mapper\Path::class,
+        self::MAPPER_IGNORE => \Magento\Config\Model\Config\Structure\Mapper\Ignore::class,
+        self::MAPPER_DEPENDENCIES => \Magento\Config\Model\Config\Structure\Mapper\Dependencies::class,
+        self::MAPPER_ATTRIBUTE_INHERITANCE =>
+            \Magento\Config\Model\Config\Structure\Mapper\Attribute\Inheritance::class,
+        self::MAPPER_EXTENDS => \Magento\Config\Model\Config\Structure\Mapper\ExtendsMapper::class,
     ];
 
     /**

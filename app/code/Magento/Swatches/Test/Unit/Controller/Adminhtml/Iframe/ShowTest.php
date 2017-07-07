@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Controller\Adminhtml\Iframe;
@@ -9,6 +9,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class to show swatch image and save it on disk
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShowTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,39 +47,45 @@ class ShowTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManager|\Magento\Swatches\Controller\Adminhtml\Iframe\Show */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->contextMock = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
-        $observerMock = $this->getMock('\Magento\Framework\Event\Manager', [], [], '', false);
-        $this->responseMock = $this->getMock('\Magento\Framework\App\Response', ['setBody'], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
+        $observerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, ['setBody'], [], '', false);
         $this->contextMock->expects($this->once())->method('getEventManager')->willReturn($observerMock);
         $this->contextMock->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
-        $this->swatchHelperMock = $this->getMock('\Magento\Swatches\Helper\Media', [], [], '', false);
+        $this->swatchHelperMock = $this->getMock(\Magento\Swatches\Helper\Media::class, [], [], '', false);
         $this->adapterFactoryMock = $this->getMock(
-            '\Magento\Framework\Image\AdapterFactory',
+            \Magento\Framework\Image\AdapterFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->configMock = $this->getMock('\Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
-        $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
+        $this->configMock = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
+        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->uploaderFactoryMock = $this->getMock(
-            '\Magento\MediaStorage\Model\File\UploaderFactory',
+            \Magento\MediaStorage\Model\File\UploaderFactory::class,
             ['create'],
             [],
             '',
             false
         );
 
-        $this->uploaderMock = $this->getMock('\Magento\MediaStorage\Model\File\Uploader', [], [], '', false);
-        $this->adapterMock = $this->getMock('\Magento\Framework\Image\Adapter', [], [], '', false);
-        $this->mediaDirectoryMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $this->uploaderMock = $this->getMock(\Magento\MediaStorage\Model\File\Uploader::class, [], [], '', false);
+        $this->adapterMock = $this->getMock(\Magento\Framework\Image\Adapter\AdapterInterface::class);
+        $this->mediaDirectoryMock = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\Read::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->controller = $objectManager->getObject(
-            '\Magento\Swatches\Controller\Adminhtml\Iframe\Show',
+            \Magento\Swatches\Controller\Adminhtml\Iframe\Show::class,
             [
                 'context' => $this->contextMock,
                 'swatchHelper' => $this->swatchHelperMock,
@@ -87,7 +95,6 @@ class ShowTest extends \PHPUnit_Framework_TestCase
                 'uploaderFactory' => $this->uploaderFactoryMock,
             ]
         );
-
     }
 
     public function testExecuteException()
@@ -95,7 +102,7 @@ class ShowTest extends \PHPUnit_Framework_TestCase
         $this->uploaderFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->controller->execute();
     }
 

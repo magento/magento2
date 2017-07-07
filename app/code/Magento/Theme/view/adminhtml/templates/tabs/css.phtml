@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 
 <?php /** @var $block \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */ ?>
 
-<?php echo $block->getFormHtml(); ?>
+<?= $block->getFormHtml() ?>
 
 <script>
 require([
@@ -20,7 +20,7 @@ require([
     $( '#css_file_uploader' ).fileupload({
         dataType: 'json',
         replaceFileInput: false,
-        url : '<?php /* @escapeNotVerified */ echo $block->getUrl('*/system_design_theme/uploadcss') ?>',
+        url : '<?= /* @escapeNotVerified */ $block->getUrl('*/system_design_theme/uploadcss') ?>',
         acceptFileTypes: /(.|\/)(css)$/i,
 
         /**

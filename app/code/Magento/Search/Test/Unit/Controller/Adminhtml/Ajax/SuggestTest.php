@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,29 +46,29 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->autocomplete = $this->getMockBuilder('Magento\Search\Model\AutocompleteInterface')
+        $this->autocomplete = $this->getMockBuilder(\Magento\Search\Model\AutocompleteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems'])
             ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $this->url = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->url = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
-        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $this->resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())
@@ -91,7 +91,7 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->controller = $this->objectManagerHelper->getObject(
-            'Magento\Search\Controller\Ajax\Suggest',
+            \Magento\Search\Controller\Ajax\Suggest::class,
             [
                 'context' => $this->context,
                 'autocomplete' => $this->autocomplete
@@ -102,12 +102,12 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $searchString = "simple";
-        $firstItemMock =  $this->getMockBuilder('Magento\Search\Model\Autocomplete\Item')
+        $firstItemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('FirstItem')
             ->setMethods(['toArray'])
             ->getMock();
-        $secondItemMock =  $this->getMockBuilder('Magento\Search\Model\Autocomplete\Item')
+        $secondItemMock =  $this->getMockBuilder(\Magento\Search\Model\Autocomplete\Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('SecondItem')
             ->setMethods(['toArray'])

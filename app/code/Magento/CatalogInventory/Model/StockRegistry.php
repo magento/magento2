@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -67,111 +67,97 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
-     * @param int $websiteId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
-    public function getStock($websiteId = null)
+    public function getStock($scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        //}
-        return $this->stockRegistryProvider->getStock($websiteId);
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        return $this->stockRegistryProvider->getStock($scopeId);
     }
 
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      */
-    public function getStockItem($productId, $websiteId = null)
+    public function getStockItem($productId, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        //}
-        return $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        return $this->stockRegistryProvider->getStockItem($productId, $scopeId);
     }
 
     /**
      * @param string $productSku
-     * @param int $websiteId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getStockItemBySku($productSku, $websiteId = null)
+    public function getStockItemBySku($productSku, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        //}
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $productId = $this->resolveProductId($productSku);
-        return $this->stockRegistryProvider->getStockItem($productId, $websiteId);
+        return $this->stockRegistryProvider->getStockItem($productId, $scopeId);
     }
 
     /**
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
      */
-    public function getStockStatus($productId, $websiteId = null)
+    public function getStockStatus($productId, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        //}
-        return $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        return $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
     }
 
     /**
      * @param string $productSku
-     * @param int $websiteId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getStockStatusBySku($productSku, $websiteId = null)
+    public function getStockStatusBySku($productSku, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        //}
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $productId = $this->resolveProductId($productSku);
-        return $this->getStockStatus($productId, $websiteId);
+        return $this->getStockStatus($productId, $scopeId);
     }
 
     /**
      * Retrieve Product stock status
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return int
      */
-    public function getProductStockStatus($productId, $websiteId = null)
+    public function getProductStockStatus($productId, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        //}
-        $stockStatus = $this->getStockStatus($productId, $websiteId);
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $stockStatus = $this->getStockStatus($productId, $scopeId);
         return $stockStatus->getStockStatus();
     }
 
     /**
      * @param string $productSku
-     * @param null $websiteId
+     * @param null $scopeId
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getProductStockStatusBySku($productSku, $websiteId = null)
+    public function getProductStockStatusBySku($productSku, $scopeId = null)
     {
-        //if (!$websiteId) {
-        $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
-        //}
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
         $productId = $this->resolveProductId($productSku);
-        return $this->getProductStockStatus($productId, $websiteId);
+        return $this->getProductStockStatus($productId, $scopeId);
     }
 
     /**
      * @inheritdoc
      */
-    public function getLowStockItems($websiteId, $qty, $currentPage = 1, $pageSize = 0)
+    public function getLowStockItems($scopeId, $qty, $currentPage = 1, $pageSize = 0)
     {
         $criteria = $this->criteriaFactory->create();
         $criteria->setLimit($currentPage, $pageSize);
-        $criteria->setWebsiteFilter($websiteId);
+        $criteria->setScopeFilter($scopeId);
         $criteria->setQtyFilter('<=', $qty);
         $criteria->addField('qty');
         return $this->stockItemRepository->getList($criteria);

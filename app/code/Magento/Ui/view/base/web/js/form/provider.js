@@ -1,12 +1,17 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
     'uiElement',
-    './client'
-], function (_, Element, Client) {
+    './client',
+    'mageUtils'
+], function (_, Element, Client, utils) {
     'use strict';
 
     return Element.extend({
@@ -54,6 +59,41 @@ define([
             this.client.save(data, options);
 
             return this;
+        },
+
+        /**
+         * Update data that stored in provider.
+         *
+         * @param {Boolean} isProvider
+         * @param {Object} newData
+         * @param {Object} oldData
+         *
+         * @returns {Provider}
+         */
+        updateConfig: function (isProvider, newData, oldData) {
+            if (isProvider === true) {
+                this.setData(oldData, newData, this);
+            }
+
+            return this;
+        },
+
+        /**
+         *  Set data to provder based on current data.
+         *
+         * @param {Object} oldData
+         * @param {Object} newData
+         * @param {Provider} current
+         * @param {String} parentPath
+         */
+        setData: function (oldData, newData, current, parentPath) {
+            _.each(newData, function (val, key) {
+                if (_.isObject(val) || _.isArray(val)) {
+                    this.setData(oldData[key], val, current[key], utils.fullPath(parentPath, key));
+                } else if (val != oldData[key] && oldData[key] == current[key]) {//eslint-disable-line eqeqeq
+                    this.set(utils.fullPath(parentPath, key), val);
+                }
+            }, this);
         }
     });
 });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -199,7 +199,7 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAsConfigFileException($settingName, $expectedExceptionMsg)
     {
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', $expectedExceptionMsg);
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $expectedExceptionMsg);
         $this->_object->getAsConfigFile($settingName);
     }
 

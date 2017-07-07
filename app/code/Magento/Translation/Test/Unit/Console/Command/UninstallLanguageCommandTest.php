@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,26 +51,25 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dependencyChecker = $this->getMock(
-            'Magento\Framework\Composer\DependencyChecker',
+            \Magento\Framework\Composer\DependencyChecker::class,
             [],
             [],
             '',
             false
         );
-        $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
-        $this->composerInfo = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
-        $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $this->remove = $this->getMock(\Magento\Framework\Composer\Remove::class, [], [], '', false);
+        $this->composerInfo = $this->getMock(\Magento\Framework\Composer\ComposerInformation::class, [], [], '', false);
+        $this->cache = $this->getMock(\Magento\Framework\App\Cache::class, [], [], '', false);
         $this->backupRollbackFactory = $this->getMock(
-            'Magento\Framework\Setup\BackupRollbackFactory',
+            \Magento\Framework\Setup\BackupRollbackFactory::class,
             [],
             [],
             '',
             false
         );
-
 
         $this->command = new UninstallLanguageCommand(
             $this->dependencyChecker,
@@ -100,7 +99,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $backupRollback = $this->getMock('Magento\Framework\Setup\BackupRollback', [], [], '', false);
+        $backupRollback = $this->getMock(\Magento\Framework\Setup\BackupRollback::class, [], [], '', false);
         $backupRollback->expects($this->once())->method('codeBackup');
 
         $this->backupRollbackFactory->expects($this->once())
@@ -165,8 +164,6 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains('Nothing is removed.', $this->tester->getDisplay());
     }
-
-
 
     public function testExecutePackageNoLanguage()
     {

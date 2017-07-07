@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -78,34 +78,40 @@
 }
 
 //  # Table mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_table-width</th>
+//            <td>@table__width</td>
 //            <td class="vars_value">100%</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table width</td>
 //        </tr>
 //        <tr>
 //            <th>@_cell-padding-horizontal</th>
+//            <td>@table-cell__padding-horizontal</td>
 //            <td class="vars_value">@indent__s</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell horizontal padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_cell-padding-vertical</th>
+//            <td>@table-cell__padding-vertical</td>
 //            <td class="vars_value">8px</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell vertical padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-margin-bottom</th>
+//            <td>@table__margin-bottom</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table margin bottom</td>
@@ -188,82 +194,96 @@
 }
 
 //  # Table typography mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_table-td-font-size </th>
+//            <th>@_table-td-font-size</th>
+//            <td>@table-td__font-size</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-td-color</th>
+//            <td>@table-td__color</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell font color</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-td-font-family</th>
+//            <td>@table-td__font-family</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell font family</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_table-td-font-weight</th>
+//            <td>@table-td__font-weight</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-td-line-height</th>
+//            <td>@table-td__line-height</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell line height</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-td-font-style</th>
+//            <td>@table-td__font-style</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-th-font-size</th>
+//            <td>@table-th__font-size</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-th-color</th>
+//            <td>@table-th__color</td>
 //            <td class="vars_value">@text__color__intense</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell font color</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-th-font-family</th>
+//            <td>@table-th__font-family</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-th-font-weight</th>
+//            <td>@table-th__font-weight</td>
 //            <td class="vars_value">@font-weight__bold</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-th-line-height</th>
+//            <td>@table-th__line-height</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell line height</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-th-font-style</th>
+//            <td>@table-th__font-style</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell font style</td>
@@ -347,70 +367,82 @@
 }
 
 //  # Table caption mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-hide</th>
+//            <td>@table-caption__hide</td>
 //            <td class="vars_value">true</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption is visible</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-font-size</th>
+//            <td>@table-caption__font-size</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-color</th>
+//            <td>@table-caption__color</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption text color</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_table-caption-font-family</th>
+//            <td>@table-caption__font-family</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-font-weight</th>
+//            <td>@table-caption__font-weight</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-font-style</th>
+//            <td>@table-caption__font-style</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-line-height</th>
+//            <td>@table-caption__line-height</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption line height</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-alignment</th>
+//            <td>@table-caption__alignment</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption alignment</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-caption-margin-top</th>
+//            <td>@table-caption__margin-top</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption top margin</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_table-caption-margin-bottom</th>
+//            <td>@table-caption__margin-bottom</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table caption bottom margin</td>
@@ -503,58 +535,68 @@
 }
 
 //  # Table cells resize variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_th-padding-top</th>
+//            <td>@table-cell__padding-vertical / 2</td>
 //            <td class="vars_value">@_td-padding-top</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell top padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_th-padding-right</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
 //            <td class="vars_value">@_td-padding-right</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell right padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_th-padding-bottom</th>
+//            <td>@table-cell__padding-vertical / 2</td>
 //            <td class="vars_value">@_td-padding-top</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell bottom padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_th-padding-left</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
 //            <td class="vars_value">@_td-padding-right</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cell left padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_td-padding-top</th>
+//            <td>@table-cell__padding-vertical / 2</td>
 //            <td class="vars_value">@table-cell__padding-vertical / 2</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell top padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_td-padding-right</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
 //            <td class="vars_value">@table-cell__padding-horizontal / 2</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell right padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_td-padding-bottom</th>
+//            <td>@table-cell__padding-vertical / 2</td>
 //            <td class="vars_value">@_td-padding-top</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell bottom padding</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_td-padding-left</th>
+//            <td>@table-cell__padding-horizontal / 2</td>
 //            <td class="vars_value" nowrap="nowrap">@_td-padding-right</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cell left padding</td>
@@ -644,40 +686,47 @@
 }
 
 //  # Table background mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
-//            <th class="vars_head">Allowable values</th>
-//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_table-background-color</th>
+//            <td>@table__background-color</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table background</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-head-background-color</th>
+//            <td>@table-head__background-color</td>
 //            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table thead background</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-foot-background-color</th>
+//            <td>@table-foot__background-color</td>
 //            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table tfoot background</td>
 //        </tr>
 //        <tr>
 //            <th>@_table-body-th-background-color</th>
+//            <td>@table-body-th__background-color</td>
 //            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table header cells background</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_table-td-background-color</th>
+//            <td>@table-td__background-color</td>
 //            <td class="vars_value">@table__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table cells background</td>
@@ -769,34 +818,40 @@
 }
 
 //  # Table borders mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_table_type</th>
+//            <td>-</td>
 //            <td class="vars_value">normal</td>
 //            <td class="vars_value">normal | horizontal | vertical | light | clear | horizontal_body</td>
-//            <td>Table border settings. When is set to "horizontal_body", the table border settings are applyed only for tbody</td>
+//            <td>Table border settings. When is set to "horizontal_body", the table border settings are applied only for tbody</td>
 //        </tr>
 //        <tr>
 //            <th>@_table_border-width</th>
+//            <td>@table__border-width</td>
 //            <td class="vars_value" nowrap="nowrap">@border-width__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table border width</td>
 //        </tr>
 //        <tr>
 //            <th>@_table_border-style</th>
+//            <td>@table__border-style</td>
 //            <td class="vars_value">solid</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table border style</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_table_border-color</th>
+//            <td>@table__border-color</td>
 //            <td class="vars_value">@border-color__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Table border color</td>
@@ -1205,11 +1260,12 @@
 }
 
 //  # Striped table mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
-//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
@@ -1223,7 +1279,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_stripped-color</th>
-//            <td class="vars_value">@table-td__color</td>
+//            <td class="vars_value">@table-cell-stripped__color</td>
 //            <td class="vars_value">@text__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Striped cells text color</td>
@@ -1240,7 +1296,7 @@
 //            <td class="vars_value">-</td>
 //            <td class="vars_value">odd</td>
 //            <td class="vars_value">odd | even</td>
-//            <td>Rows stripes are applyed to</td>
+//            <td>Rows stripes are applied to</td>
 //        </tr>
 //    </table>
 //  </pre>
@@ -1321,22 +1377,26 @@
 }
 
 //  # Table with rows hover mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_table_cell-background-color-hover</th>
+//            <td>@table-cell__hover__background-color</td>
 //            <td class="vars_value">@panel__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered table row background</td>
 //        </tr>
 //        <tr>
 //            <th>@_table_cell-odd-background-color-hover</th>
+//            <td>@table-cell__hover__background-color</td>
 //            <td class="vars_value">@_table_cell-background-color-hover</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered table odd row background</td>
@@ -1346,7 +1406,7 @@
 
 //  # Responsive table technics #1
 //
-//  Magento UI library employs two responsive tables technics which are applyed by calling an appropriate mixin.
+//  Magento UI library employs two responsive tables technics which are applied by calling an appropriate mixin.
 //
 //  The <code>.lib-table-overflow()</code> mixin adds a horizontal scrollbar for a table. This mixin accepts no variables.
 //
@@ -1515,11 +1575,12 @@
 }
 
 //  # Responsive table technics #2 mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
-//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
@@ -1554,8 +1615,8 @@
 //        </tr>
 //        <tr>
 //            <th>@_table-responsive-cell-padding</th>
+//            <td class="vars_value">@table-responsive-cell__padding</td>
 //            <td class="vars_value">@indent__xs 0</td>
-//            <td class="vars_value">-</td>
 //            <td class="vars_value">true | false</td>
 //            <td>Responsive table cells padding</td>
 //        </tr>

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
@@ -16,6 +16,7 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
+        $formName = $this->getRequest()->getParam('form');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
@@ -26,7 +27,7 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         )->setType(
             $type
         )->setRule(
-            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
         )->setPrefix(
             'actions'
         );
@@ -35,7 +36,7 @@ class NewActionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         }
 
         if ($model instanceof \Magento\Rule\Model\Condition\AbstractCondition) {
-            $model->setJsFormObject($this->getRequest()->getParam('form'));
+            $model->setJsFormObject($formName);
             $html = $model->asHtmlRecursive();
         } else {
             $html = '';

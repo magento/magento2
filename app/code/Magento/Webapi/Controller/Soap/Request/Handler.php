@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Soap\Request;
@@ -8,7 +8,7 @@ namespace Magento\Webapi\Controller\Soap\Request;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor;
@@ -38,8 +38,8 @@ class Handler
     /** @var SoapConfig */
     protected $_apiConfig;
 
-    /** @var AuthorizationInterface */
-    protected $_authorization;
+    /** @var Authorization */
+    protected $authorization;
 
     /** @var SimpleDataObjectConverter */
     protected $_dataObjectConverter;
@@ -59,7 +59,7 @@ class Handler
      * @param SoapRequest $request
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
-     * @param AuthorizationInterface $authorization
+     * @param Authorization $authorization
      * @param SimpleDataObjectConverter $dataObjectConverter
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param DataObjectProcessor $dataObjectProcessor
@@ -69,7 +69,7 @@ class Handler
         SoapRequest $request,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         SoapConfig $apiConfig,
-        AuthorizationInterface $authorization,
+        Authorization $authorization,
         SimpleDataObjectConverter $dataObjectConverter,
         ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
@@ -78,7 +78,7 @@ class Handler
         $this->_request = $request;
         $this->_objectManager = $objectManager;
         $this->_apiConfig = $apiConfig;
-        $this->_authorization = $authorization;
+        $this->authorization = $authorization;
         $this->_dataObjectConverter = $dataObjectConverter;
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_dataObjectProcessor = $dataObjectProcessor;
@@ -107,18 +107,10 @@ class Handler
             throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
 
-        $isAllowed = false;
-        foreach ($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES] as $resource) {
-            if ($this->_authorization->isAllowed($resource)) {
-                $isAllowed = true;
-                break;
-            }
-        }
-
-        if (!$isAllowed) {
+        if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
                 __(
-                    AuthorizationException::NOT_AUTHORIZED,
+                    'Consumer is not authorized to access %resources',
                     ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
                 )
             );
@@ -165,7 +157,11 @@ class Handler
         } elseif (is_array($data)) {
             $dataType = substr($dataType, 0, -2);
             foreach ($data as $key => $value) {
-                if ($value instanceof ExtensibleDataInterface || $value instanceof MetadataObjectInterface) {
+                if ($value instanceof $dataType
+                    // the following two options are supported for backward compatibility
+                    || $value instanceof ExtensibleDataInterface
+                    || $value instanceof MetadataObjectInterface
+                ) {
                     $result[] = $this->_dataObjectConverter
                         ->convertKeysToCamelCase($this->_dataObjectProcessor->buildOutputDataArray($value, $dataType));
                 } else {

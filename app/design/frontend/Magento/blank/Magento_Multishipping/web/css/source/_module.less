@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -8,10 +8,10 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .multicheckout {
         .title {
             margin-bottom: @indent__l;
+
             strong {
                 font-weight: @font-weight__regular;
             }
@@ -19,20 +19,24 @@
 
         .table-wrapper {
             margin-bottom: 0;
+
             .action.delete {
                 display: inline-block;
-                margin: 7px 0 0;
             }
+
             .col {
                 .qty {
                     display: inline-block;
+
                     .input-text {
                         &:extend(.abs-input-qty all);
                     }
                 }
+
                 .label {
                     &:extend(.abs-visually-hidden all);
                 }
+
                 &.item {
                     .action.edit {
                         font-weight: @font-weight__regular;
@@ -40,9 +44,11 @@
                     }
                 }
             }
+
             .cart-price {
                 &:extend(.abs-checkout-cart-price all);
             }
+
             .product-item-name {
                 &:extend(.abs-checkout-product-name all);
             }
@@ -63,14 +69,17 @@
         .actions-toolbar {
             > .secondary {
                 display: block;
+
                 .action {
                     margin-bottom: @indent__m;
+
                     &.back {
                         display: block;
                         margin-left: 0;
                     }
                 }
             }
+
             > .primary {
                 margin-right: @indent__s;
             }
@@ -82,6 +91,7 @@
 
         .item-options {
             margin: @indent__s 0 0;
+
             &:extend(.abs-product-options-list all);
             &:extend(.abs-add-clearfix all);
         }
@@ -97,13 +107,16 @@
                         > .legend {
                             &:extend(.abs-visually-hidden all);
                         }
+
                         > .legend + br {
                             &:extend(.abs-no-display all);
                         }
+
                         > .field {
                             &:before {
                                 display: none;
                             }
+
                             .control {
                                 display: inline-block;
                             }
@@ -118,8 +131,10 @@
             &:extend(.abs-account-title all);
             border-bottom: @border-width__base solid @border-color__base;
             padding-bottom: @indent__s;
+
             strong {
                 font-weight: @font-weight__regular;
+
                 span {
                     .lib-css(color, @primary__color__light);
                 }
@@ -138,6 +153,7 @@
             .block-title > strong {
                 .lib-font-size(24);
             }
+
             .block-shipping {
                 .block-content:not(:last-child) {
                     margin-bottom: @indent__xl;
@@ -149,6 +165,7 @@
             span {
                 margin-right: @indent__s;
             }
+
             > .action {
                 margin: 0;
             }
@@ -163,6 +180,7 @@
         .box-billing-method {
             .fieldset {
                 margin: 0;
+
                 .legend.box-title {
                     margin: 0 0 @indent__xs;
                 }
@@ -176,17 +194,19 @@
         .checkout-review .grand.totals {
             .lib-font-size(@font-size__xl);
             margin-bottom: @indent__xl;
+
             .mark {
                 font-weight: @font-weight__regular;
             }
         }
     }
 
-    [class^="multishipping-"] {
+    [class^='multishipping-'] {
         .nav-sections,
         .nav-toggle {
             &:extend(.abs-no-display all);
         }
+
         .logo {
             margin-left: 0;
         }
@@ -223,6 +243,7 @@
             &:not(:last-child) {
                 margin-bottom: @indent__xl;
             }
+
             &:last-child {
                 margin-bottom: 0;
             }
@@ -233,9 +254,11 @@
                 .data.table {
                     thead {
                         display: block;
+
                         tr {
                             display: block;
                         }
+
                         .col.item {
                             display: block;
                             padding: 0;
@@ -243,6 +266,7 @@
                     }
                 }
             }
+
             .data.table {
                 &:extend(.abs-checkout-order-review all);
             }
@@ -252,6 +276,7 @@
             .action {
                 margin-bottom: @indent__m;
             }
+
             > .primary {
                 margin-bottom: @indent__m;
                 margin-right: 0;
@@ -266,12 +291,15 @@
             .column:not(.sidebar-main) & {
                 &:extend(.abs-reset-left-margin-desktop-s all);
             }
+
             .secondary {
                 float: none;
                 margin-top: 11px;
                 text-align: right;
+
                 .action {
                     margin-left: @indent__s;
+
                     &.back {
                         display: block;
                         float: left;
@@ -294,14 +322,17 @@
                 float: left;
                 width: 25%;
             }
+
             .box-shipping-method {
                 padding-left: @indent__m;
                 padding-right: @indent__m;
                 width: 50%;
+
                 .fieldset {
                     .legend {
                         &:extend(.abs-reset-left-margin-desktop-s all);
                     }
+
                     .field {
                         &:before {
                             display: none;
@@ -318,6 +349,7 @@
                 float: left;
                 width: 25%;
             }
+
             .box-billing-method {
                 &:extend(.abs-add-box-sizing-desktop-s all);
                 float: left;
@@ -341,6 +373,7 @@
                 padding-top: @indent__xl;
                 width: auto;
             }
+
             .col.item {
                 width: 75%;
             }
@@ -350,6 +383,7 @@
         .methods-payment {
             .item-content > .fieldset {
                 width: auto;
+
                 .field {
                     &.cvv {
                         display: inline-block;
@@ -357,6 +391,7 @@
                     }
                 }
             }
+
             .fieldset > .field:not(.choice) {
                 > .label {
                     float: none;
@@ -364,6 +399,7 @@
                     text-align: left;
                     width: auto;
                 }
+
                 &:not(.cvv) {
                     .control {
                         width: 100%;
@@ -379,6 +415,7 @@
         .nav-toggle {
             display: block;
         }
+
         .logo {
             margin-left: @indent__xl;
         }

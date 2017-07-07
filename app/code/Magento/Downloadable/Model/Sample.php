@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
@@ -14,7 +14,7 @@ use Magento\Downloadable\Api\Data\SampleInterface;
  * @method \Magento\Downloadable\Model\ResourceModel\Sample getResource()
  * @method int getProductId()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {
@@ -67,7 +67,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\ResourceModel\Sample');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Sample::class);
         parent::_construct();
     }
 

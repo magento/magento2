@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Rss\Product;
@@ -75,36 +75,42 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->request->expects($this->at(0))->method('getParam')->with('store_id')->will($this->returnValue(null));
         $this->request->expects($this->at(1))->method('getParam')->with('cid')->will($this->returnValue(null));
 
-        $this->httpContext = $this->getMockBuilder('Magento\Framework\App\Http\Context')
+        $this->httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->setMethods(['getValue'])->disableOriginalConstructor()->getMock();
         $this->httpContext->expects($this->any())->method('getValue')->will($this->returnValue(1));
 
-        $this->imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
-        $this->outputHelper = $this->getMock('Magento\Catalog\Helper\Output', ['productAttribute'], [], '', false);
-        $this->msrpHelper = $this->getMock('Magento\Msrp\Helper\Data', ['canApplyMsrp'], [], '', false);
-        $this->priceCurrency = $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface');
-        $this->rssModel = $this->getMock('Magento\Catalog\Model\Rss\Product\Special', [], [], '', false);
-        $this->rssUrlBuilder = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
+        $this->imageHelper = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
+        $this->outputHelper = $this->getMock(
+            \Magento\Catalog\Helper\Output::class,
+            ['productAttribute'],
+            [],
+            '',
+            false
+        );
+        $this->msrpHelper = $this->getMock(\Magento\Msrp\Helper\Data::class, ['canApplyMsrp'], [], '', false);
+        $this->priceCurrency = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->rssModel = $this->getMock(\Magento\Catalog\Model\Rss\Product\Special::class, [], [], '', false);
+        $this->rssUrlBuilder = $this->getMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
 
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $store = $this->getMockBuilder('\Magento\Store\Model\Store')
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getId', 'getFrontendName', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $store->expects($this->any())->method('getFrontendName')->will($this->returnValue('Store 1'));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('en_US'));
 
-        $this->localeDate = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $this->localeDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
-            'Magento\Catalog\Block\Rss\Product\Special',
+            \Magento\Catalog\Block\Rss\Product\Special::class,
             [
                 'request' => $this->request,
                 'httpContext' => $this->httpContext,
@@ -169,7 +175,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
 
     protected function getItemMock()
     {
-        $item = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods([
                 '__wakeup',
                 '__sleep',

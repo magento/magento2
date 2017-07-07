@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -249,15 +249,15 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 5,
                 ['unsigned' => true, 'nullable' => false, 'default' => 0],
-                'Is Divided into Multiple Boxes for Shipping'
+                'Website ID'
             )
             ->addIndex(
                 $installer->getIdxName(
                     'cataloginventory_stock_item',
-                    ['product_id', 'website_id'],
+                    ['product_id', 'stock_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['product_id', 'website_id'],
+                ['product_id', 'stock_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -343,6 +343,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName('cataloginventory_stock_status', ['website_id']),
                 ['website_id']
+            )
+            ->addIndex(
+                $installer->getIdxName('cataloginventory_stock_status', ['stock_status']),
+                ['stock_status']
             )
             ->setComment('Cataloginventory Stock Status');
         $installer->getConnection()
@@ -457,6 +461,5 @@ class InstallSchema implements InstallSchemaInterface
             ->createTable($table);
 
         $installer->endSetup();
-
     }
 }

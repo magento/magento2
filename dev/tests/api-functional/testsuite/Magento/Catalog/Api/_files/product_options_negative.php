@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ return [
         'type' => 'field',
         'sort_order' => 1,
         'is_require' => 1,
-        'price' => 10,
+        'price' => 10.0,
         'price_type' => 'fixed',
         'sku' => 'sku1',
         'max_characters' => 10,
@@ -51,7 +51,7 @@ return [
         'is_require' => 1,
         'values' => [
             [
-                'price' => 10,
+                'price' => 10.0,
                 'price_type' => 'fixed',
                 'sku' => 'radio option 1 sku',
                 'title' => '',
@@ -66,7 +66,7 @@ return [
         'is_require' => 1,
         'values' => [
             [
-                'price' => 10,
+                'price' => 10.0,
                 'price_type' => 'fixed_one',
                 'sku' => 'checkbox option 1 sku',
                 'title' => 'checkbox option 1',
@@ -81,7 +81,7 @@ return [
         'is_require' => 1,
         'values' => [
             [
-                'price' => 10,
+                'price' => 10.0,
                 'price_type' => 'fixed',
                 'sku' => 'multiple option 1 sku',
                 'title' => 'multiple option 1',

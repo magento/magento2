@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model;
@@ -25,6 +25,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $item;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressMock;
 
     /**
      * @var \Magento\SalesRule\Model\RulesApplier|\PHPUnit_Framework_MockObject_MockObject
@@ -60,30 +65,51 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->rulesApplier = $this->getMock(
-            'Magento\SalesRule\Model\RulesApplier',
+            \Magento\SalesRule\Model\RulesApplier::class,
             ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription', '__wakeup'],
             [],
             '',
             false
         );
 
-        /** @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
-        $this->item = $this->getMock('Magento\Quote\Model\Quote\Item', ['__wakeup'], [], '', false);
+        $this->addressMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getShippingAmountForDiscount',
+                    'getQuote',
+                    'getCustomAttributesCodes',
+                    'setCartFixedRules'
+                ]
+            )
+            ->getMock();
 
-        $context = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->catalogData = $this->getMock('Magento\Catalog\Helper\Data', [], [], '', false);
-        $this->utility = $this->getMock('Magento\SalesRule\Model\Utility', [], [], '', false);
-        $this->validators = $this->getMock('Magento\SalesRule\Model\Validator\Pool', ['getValidators'], [], '', false);
-        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $this->ruleCollection = $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule\Collection')
+        /** @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        $this->item = $this->getMock(\Magento\Quote\Model\Quote\Item::class, ['__wakeup', 'getAddress'], [], '', false);
+        $this->item->expects($this->any())
+            ->method('getAddress')
+            ->willReturn($this->addressMock);
+
+        $context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->catalogData = $this->getMock(\Magento\Catalog\Helper\Data::class, [], [], '', false);
+        $this->utility = $this->getMock(\Magento\SalesRule\Model\Utility::class, [], [], '', false);
+        $this->validators = $this->getMock(
+            \Magento\SalesRule\Model\Validator\Pool::class,
+            ['getValidators'],
+            [],
+            '',
+            false
+        );
+        $this->messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $this->ruleCollection = $this->getMockBuilder(\Magento\SalesRule\Model\ResourceModel\Rule\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $ruleCollectionFactoryMock = $this->prepareRuleCollectionMock($this->ruleCollection);
 
         /** @var \Magento\SalesRule\Model\Validator|\PHPUnit_Framework_MockObject_MockObject $validator */
         $this->model = $this->helper->getObject(
-            'Magento\SalesRule\Model\Validator',
+            \Magento\SalesRule\Model\Validator::class,
             [
                 'context' => $context,
                 'registry' => $registry,
@@ -98,12 +124,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->model->setWebsiteId(1);
         $this->model->setCustomerGroupId(2);
         $this->model->setCouponCode('code');
-        $this->ruleCollection->expects($this->at(0))
+        $this->ruleCollection->expects($this->any())
             ->method('setValidationFilter')
             ->with(
                 $this->model->getWebsiteId(),
                 $this->model->getCustomerGroupId(),
-                $this->model->getCouponCode()
+                $this->model->getCouponCode(),
+                null,
+                $this->addressMock
             )
             ->willReturnSelf();
     }
@@ -115,26 +143,26 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $fixturePath = __DIR__ . '/_files/';
         $itemDownloadable = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getAddress', '__wakeup'],
             [],
             '',
             false
         );
-        $itemDownloadable->expects($this->any())->method('getAddress')->will($this->returnValue(new \stdClass()));
+        $itemDownloadable->expects($this->any())->method('getAddress')->will($this->returnValue($this->addressMock));
 
         $itemSimple = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getAddress', '__wakeup'],
             [],
             '',
             false
         );
-        $itemSimple->expects($this->any())->method('getAddress')->will($this->returnValue(new \stdClass()));
+        $itemSimple->expects($this->any())->method('getAddress')->will($this->returnValue($this->addressMock));
 
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['getStoreId', '__wakeup'],
             [],
             '',
@@ -162,13 +190,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
         $item = $this->getQuoteItemMock();
         $rule = $this->getMock(
-            'Magento\SalesRule\Model\Rule',
+            \Magento\SalesRule\Model\Rule::class,
             [],
             [],
             '',
             false
         );
-        $actionsCollection = $this->getMock('Magento\Rule\Model\Action\Collection', ['validate'], [], '', false);
+        $actionsCollection = $this->getMock(\Magento\Rule\Model\Action\Collection::class, ['validate'], [], '', false);
         $actionsCollection->expects($this->any())
             ->method('validate')
             ->with($item)
@@ -277,7 +305,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testInit()
     {
         $this->assertInstanceOf(
-            'Magento\SalesRule\Model\Validator',
+            \Magento\SalesRule\Model\Validator::class,
             $this->model->init(
                 $this->model->getWebsiteId(),
                 $this->model->getCustomerGroupId(),
@@ -288,7 +316,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testCanApplyDiscount()
     {
-        $validator = $this->getMockBuilder('Magento\Framework\Validator\AbstractValidator')
+        $validator = $this->getMockBuilder(\Magento\Framework\Validator\AbstractValidator::class)
             ->setMethods(['isValid'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -312,16 +340,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInitTotalsCanApplyDiscount()
     {
-        $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $rule = $this->getMock(
-            'Magento\SalesRule\Model\Rule',
+            \Magento\SalesRule\Model\Rule::class,
             ['getSimpleAction', 'getActions', 'getId'],
             [],
             '',
             false
         );
         $item1 = $this->getMockForAbstractClass(
-            'Magento\Quote\Model\Quote\Item\AbstractItem',
+            \Magento\Quote\Model\Quote\Item\AbstractItem::class,
             [],
             '',
             false,
@@ -337,7 +364,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Magento\SalesRule\Model\Rule::CART_FIXED_ACTION);
         $iterator = new \ArrayIterator([$rule]);
         $this->ruleCollection->expects($this->once())->method('getIterator')->willReturn($iterator);
-        $validator = $this->getMockBuilder('Magento\Framework\Validator\AbstractValidator')
+        $validator = $this->getMockBuilder(\Magento\Framework\Validator\AbstractValidator::class)
             ->setMethods(['isValid'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -356,7 +383,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->utility->expects($this->once())->method('getItemQty')->willReturn(1);
         $this->utility->expects($this->any())->method('canProcessRule')->willReturn(true);
 
-        $actionsCollection = $this->getMock('Magento\Rule\Model\Action\Collection', ['validate'], [], '', false);
+        $actionsCollection = $this->getMock(\Magento\Rule\Model\Action\Collection::class, ['validate'], [], '', false);
         $actionsCollection->expects($this->at(0))->method('validate')->with($item1)->willReturn(true);
         $actionsCollection->expects($this->at(1))->method('validate')->with($item2)->willReturn(true);
         $rule->expects($this->any())->method('getActions')->willReturn($actionsCollection);
@@ -367,7 +394,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->model->getCustomerGroupId(),
             $this->model->getCouponCode()
         );
-        $this->model->initTotals($items, $address);
+        $this->model->initTotals($items, $this->addressMock);
         $this->assertArrayHasKey('items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('base_items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('items_count', $this->model->getRuleItemTotalsInfo($rule->getId()));
@@ -376,7 +403,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInitTotalsNoItems()
     {
-        $address = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $address = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $this->item->expects($this->never())
             ->method('getParentItemId');
         $this->model->init(
@@ -393,20 +420,20 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareRuleCollectionMock($ruleCollection)
     {
-        $this->ruleCollection->expects($this->once())
+        $this->ruleCollection->expects($this->any())
             ->method('addFieldToFilter')
             ->with('is_active', 1)
             ->will($this->returnSelf());
-        $this->ruleCollection->expects($this->once())
+        $this->ruleCollection->expects($this->any())
             ->method('load')
             ->will($this->returnSelf());
 
         $ruleCollectionFactoryMock =
-            $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory')
+            $this->getMockBuilder(\Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $ruleCollectionFactoryMock->expects($this->once())
+        $ruleCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($ruleCollection));
         return $ruleCollectionFactoryMock;
@@ -424,14 +451,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->model->getCouponCode()
         );
         $this->assertInstanceOf(
-            'Magento\SalesRule\Model\Validator',
-            $this->model->processShippingAmount($this->getAddressMock())
+            \Magento\SalesRule\Model\Validator::class,
+            $this->model->processShippingAmount($this->setupAddressMock())
         );
     }
 
     public function testProcessShippingAmountProcessDisabled()
     {
-        $ruleMock = $this->getMockBuilder('Magento\SalesRule\Model\Rule')
+        $ruleMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -445,8 +472,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->model->getCouponCode()
         );
         $this->assertInstanceOf(
-            'Magento\SalesRule\Model\Validator',
-            $this->model->processShippingAmount($this->getAddressMock())
+            \Magento\SalesRule\Model\Validator::class,
+            $this->model->processShippingAmount($this->setupAddressMock())
         );
     }
 
@@ -458,7 +485,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $discountAmount = 50;
 
-        $ruleMock = $this->getMockBuilder('Magento\SalesRule\Model\Rule')
+        $ruleMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
             ->setMethods(['getApplyToShipping', 'getSimpleAction', 'getDiscountAmount'])
             ->getMock();
@@ -487,8 +514,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->model->getCouponCode()
         );
         $this->assertInstanceOf(
-            'Magento\SalesRule\Model\Validator',
-            $this->model->processShippingAmount($this->getAddressMock(5))
+            \Magento\SalesRule\Model\Validator::class,
+            $this->model->processShippingAmount($this->setupAddressMock(5))
         );
     }
 
@@ -507,13 +534,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @param null|int $shippingAmount
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getAddressMock($shippingAmount = null)
+    protected function setupAddressMock($shippingAmount = null)
     {
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['setAppliedRuleIds', 'getStore'])
             ->getMock();
@@ -524,30 +551,26 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('setAppliedRuleIds')
             ->willReturnSelf();
 
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
-            ->disableOriginalConstructor()
-            ->setMethods(['getShippingAmountForDiscount', 'getQuote', 'getCustomAttributesCodes'])
-            ->getMock();
-        $addressMock->expects($this->any())
+        $this->addressMock->expects($this->any())
             ->method('getShippingAmountForDiscount')
             ->willReturn($shippingAmount);
-        $addressMock->expects($this->any())
+        $this->addressMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($quoteMock);
-        $addressMock->expects($this->any())
+        $this->addressMock->expects($this->any())
             ->method('getCustomAttributesCodes')
             ->willReturn([]);
-        return $addressMock;
+        return $this->addressMock;
     }
 
     public function testReset()
     {
         $this->utility->expects($this->once())
             ->method('resetRoundingDeltas');
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
+        $addressMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
         $addressMock->expects($this->once())
@@ -558,6 +581,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->model->getCustomerGroupId(),
             $this->model->getCouponCode()
         );
-        $this->assertInstanceOf('\Magento\SalesRule\Model\Validator', $this->model->reset($addressMock));
+        $this->assertInstanceOf(\Magento\SalesRule\Model\Validator::class, $this->model->reset($addressMock));
     }
 }

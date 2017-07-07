@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,25 +12,25 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Paypal::paypal" title="PayPal Section" sortOrder="50" />
+                            <resource id="Magento_Paypal::paypal" title="PayPal Section" translate="title" sortOrder="50" />
                         </resource>
                     </resource>
                 </resource>
                 <resource id="Magento_Reports::report">
                     <resource id="Magento_Reports::salesroot">
-                        <resource id="Magento_Paypal::paypal_settlement_reports" title="PayPal Settlement" sortOrder="70">
-                            <resource id="Magento_Paypal::paypal_settlement_reports_view" title="View" sortOrder="10" />
-                            <resource id="Magento_Paypal::fetch" title="Fetch" sortOrder="20" />
+                        <resource id="Magento_Paypal::paypal_settlement_reports" title="PayPal Settlement" translate="title" sortOrder="70">
+                            <resource id="Magento_Paypal::paypal_settlement_reports_view" title="View" translate="title" sortOrder="10" />
+                            <resource id="Magento_Paypal::fetch" title="Fetch" translate="title" sortOrder="20" />
                         </resource>
                     </resource>
                 </resource>
                 <resource id="Magento_Sales::sales">
                     <resource id="Magento_Sales::sales_operation">
-                        <resource id="Magento_Paypal::billing_agreement"  title="Billing Agreements" sortOrder="60">
-                            <resource id="Magento_Paypal::billing_agreement_actions" title="Actions" sortOrder="10">
-                                <resource id="Magento_Paypal::billing_agreement_actions_view" title="View" sortOrder="5" />
-                                <resource id="Magento_Paypal::actions_manage" title="Manage" sortOrder="10" />
-                                <resource id="Magento_Paypal::use" title="Place Order Using Billing Agreements" sortOrder="15" />
+                        <resource id="Magento_Paypal::billing_agreement"  title="Billing Agreements" translate="title" sortOrder="60">
+                            <resource id="Magento_Paypal::billing_agreement_actions" title="Actions" translate="title" sortOrder="10">
+                                <resource id="Magento_Paypal::billing_agreement_actions_view" title="View" translate="title" sortOrder="5" />
+                                <resource id="Magento_Paypal::actions_manage" title="Manage" translate="title" sortOrder="10" />
+                                <resource id="Magento_Paypal::use" title="Place Order Using Billing Agreements" translate="title" sortOrder="15" />
                             </resource>
                         </resource>
                     </resource>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,14 +14,14 @@
 ?>
 <?php if ($block->isShow()): ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?php /* @escapeNotVerified */ echo __('Show Report For:') ?></label>
+    <label class="label" for="store_switcher"><?= /* @escapeNotVerified */ __('Show Report For:') ?></label>
     <div class="control">
         <select 
             id="store_switcher"
             class="admin__control-select"
             name="store_switcher"
             onchange="return switchStore(this);">
-            <option value=""><?php /* @escapeNotVerified */ echo __('All Websites') ?></option>
+            <option value=""><?= /* @escapeNotVerified */ __('All Websites') ?></option>
             <?php foreach ($block->getWebsiteCollection() as $_website): ?>
                 <?php $showWebsite = false; ?>
                 <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
@@ -29,21 +29,21 @@
                     <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
                         <?php if ($showWebsite == false): ?>
                             <?php $showWebsite = true; ?>
-                                <option website="true" value="<?php /* @escapeNotVerified */ echo $_website->getId() ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()): ?> selected<?php endif; ?>>
-                                    <?php /* @escapeNotVerified */ echo $_website->getName() ?>
+                                <option website="true" value="<?= /* @escapeNotVerified */ $_website->getId() ?>"<?php if ($block->getRequest()->getParam('website') == $_website->getId()): ?> selected<?php endif; ?>>
+                                    <?= /* @escapeNotVerified */ $_website->getName() ?>
                                 </option>
                         <?php endif; ?>
                         <?php if ($showGroup == false): ?>
                             <?php $showGroup = true; ?>
-                            <option group="true" value="<?php /* @escapeNotVerified */ echo $_group->getId() ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $_group->getName() ?></option>
+                            <option group="true" value="<?= /* @escapeNotVerified */ $_group->getId() ?>"<?php if ($block->getRequest()->getParam('group') == $_group->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_group->getName() ?></option>
                         <?php endif; ?>
-                        <option value="<?php /* @escapeNotVerified */ echo $_store->getId() ?>"<?php if ($block->getStoreId() == $_store->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $_store->getName() ?></option>
+                        <option value="<?= /* @escapeNotVerified */ $_store->getId() ?>"<?php if ($block->getStoreId() == $_store->getId()): ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= /* @escapeNotVerified */ $_store->getName() ?></option>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
         </select>
     </div>
-    <?php echo $block->getHintHtml() ?>
+    <?= $block->getHintHtml() ?>
 </div>
 <script>
 require(['prototype'], function(){
@@ -60,7 +60,7 @@ require(['prototype'], function(){
         if(obj.switchParams){
             storeParam+= obj.switchParams;
         }
-        setLocation('<?php /* @escapeNotVerified */ echo $block->getSwitchUrl() ?>'+storeParam);
+        setLocation('<?= /* @escapeNotVerified */ $block->getSwitchUrl() ?>'+storeParam);
     }
 
 });

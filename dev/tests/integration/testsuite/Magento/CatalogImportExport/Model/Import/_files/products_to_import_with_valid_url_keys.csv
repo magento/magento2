@@ -1,0 +1,4 @@
+sku,product_type,store_view_code,name,price,attribute_set_code,url_key
+simple1,simple,,"simple 1",25,Default,url-key1
+simple2,simple,,"simple 2",34,Default,url-key2
+simple3,simple,,"simple 3",58,Default,url-key3

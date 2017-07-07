@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail\Test\Unit;
@@ -17,9 +17,9 @@ class TransportTest extends \PHPUnit_Framework_TestCase
      */
     protected $_transport;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_messageMock = $this->getMock('\Magento\Framework\Mail\Message', [], [], '', false);
+        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\Message::class, [], [], '', false);
         $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
     }
 
@@ -29,7 +29,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransportWithIncorrectMessageObject()
     {
-        $this->_messageMock = $this->getMock('\Magento\Framework\Mail\MessageInterface');
+        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\MessageInterface::class);
         $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
     }
 

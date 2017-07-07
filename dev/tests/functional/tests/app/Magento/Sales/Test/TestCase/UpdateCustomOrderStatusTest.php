@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save order status.
  * 6. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29868
  */
 class UpdateCustomOrderStatusTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -160,7 +159,7 @@ class UpdateCustomOrderStatusTest extends Injectable
             $filter = ['label' => $this->orderStatus->getLabel(), 'status' => $this->orderStatusInitial->getStatus()];
             $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
             $this->objectManager->create(
-                'Magento\Config\Test\TestStep\SetupConfigurationStep',
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
                 ['configData' => 'checkmo_custom_new_order_status_rollback']
             )->run();
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
@@ -11,6 +11,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 /**
  * Adminhtml quote session
  *
+ * @api
  * @method Quote setCustomerId($id)
  * @method int getCustomerId()
  * @method bool hasCustomerId()
@@ -147,11 +148,13 @@ class Quote extends \Magento\Framework\Session\SessionManager
             $this->_quote = $this->quoteFactory->create();
             if ($this->getStoreId()) {
                 if (!$this->getQuoteId()) {
-                    $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId())
-                        ->setIsActive(false)
-                        ->setStoreId($this->getStoreId());
+                    $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId());
+                    $this->_quote->setIsActive(false);
+                    $this->_quote->setStoreId($this->getStoreId());
+                    
                     $this->quoteRepository->save($this->_quote);
                     $this->setQuoteId($this->_quote->getId());
+                    $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
                 } else {
                     $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
                     $this->_quote->setStoreId($this->getStoreId());
@@ -160,6 +163,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                 if ($this->getCustomerId() && $this->getCustomerId() != $this->_quote->getCustomerId()) {
                     $customer = $this->customerRepository->getById($this->getCustomerId());
                     $this->_quote->assignCustomer($customer);
+                    $this->quoteRepository->save($this->_quote);
                 }
             }
             $this->_quote->setIgnoreOldQty(true);

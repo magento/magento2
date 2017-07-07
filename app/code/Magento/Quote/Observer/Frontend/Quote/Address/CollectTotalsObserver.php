@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
@@ -9,6 +9,16 @@ use Magento\Framework\Event\ObserverInterface;
 
 class CollectTotalsObserver implements ObserverInterface
 {
+    /**
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     */
+    private $addressRepository;
+
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
+    private $customerSession;
+
     /**
      * @var \Magento\Customer\Helper\Address
      */
@@ -44,19 +54,25 @@ class CollectTotalsObserver implements ObserverInterface
      * @param VatValidator $vatValidator
      * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddressHelper,
         \Magento\Customer\Model\Vat $customerVat,
         VatValidator $vatValidator,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Customer\Model\Session $customerSession
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
         $this->vatValidator = $vatValidator;
         $this->customerDataFactory = $customerDataFactory;
         $this->groupManagement = $groupManagement;
+        $this->addressRepository = $addressRepository;
+        $this->customerSession = $customerSession;
     }
 
     /**
@@ -64,6 +80,7 @@ class CollectTotalsObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -84,6 +101,15 @@ class CollectTotalsObserver implements ObserverInterface
         }
         $customerCountryCode = $address->getCountryId();
         $customerVatNumber = $address->getVatId();
+
+        /** try to get data from customer if quote address needed data is empty */
+        if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) {
+            $customerAddress = $this->addressRepository->getById($customer->getDefaultShipping());
+
+            $customerCountryCode = $customerAddress->getCountryId();
+            $customerVatNumber = $customerAddress->getVatId();
+        }
+
         $groupId = null;
         if (empty($customerVatNumber) || false == $this->customerVat->isCountryInEU($customerCountryCode)) {
             $groupId = $customer->getId() ? $this->groupManagement->getDefaultGroup(
@@ -101,6 +127,7 @@ class CollectTotalsObserver implements ObserverInterface
         if ($groupId) {
             $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
+            $this->customerSession->setCustomerGroupId($groupId);
             $customer->setGroupId($groupId);
             $quote->setCustomer($customer);
         }

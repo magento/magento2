@@ -1,30 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Product variations matrix block
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
+ * Product variations matrix block
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Matrix extends \Magento\Backend\Block\Template
 {
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry;
-
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
@@ -60,35 +53,40 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $localeCurrency;
 
     /**
+     * @var LocatorInterface
+     */
+    protected $locator;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
-     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Helper\Image $image
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
+     * @param LocatorInterface $locator
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType,
-        \Magento\Framework\Registry $coreRegistry,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix,
         ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Helper\Image $image,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        LocatorInterface $locator,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_configurableType = $configurableType;
-        $this->_coreRegistry = $coreRegistry;
         $this->stockRegistry = $stockRegistry;
         $this->variationMatrix = $variationMatrix;
         $this->productRepository = $productRepository;
         $this->localeCurrency = $localeCurrency;
         $this->image = $image;
+        $this->locator = $locator;
     }
 
     /**
@@ -106,7 +104,7 @@ class Matrix extends \Magento\Backend\Block\Template
      */
     public function getProduct()
     {
-        return $this->_coreRegistry->registry('current_product');
+        return $this->locator->getProduct();
     }
 
     /**
@@ -117,6 +115,46 @@ class Matrix extends \Magento\Backend\Block\Template
     public function getVariations()
     {
         return $this->variationMatrix->getVariations($this->getAttributes());
+    }
+
+    /**
+     * Retrieve data source for variations data
+     *
+     * @return string
+     */
+    public function getProvider()
+    {
+        return $this->getData('config/provider');
+    }
+
+    /**
+     * Retrieve configurable modal name
+     *
+     * @return string
+     */
+    public function getModal()
+    {
+        return $this->getData('config/modal');
+    }
+
+    /**
+     * Retrieve form name
+     *
+     * @return string
+     */
+    public function getForm()
+    {
+        return $this->getData('config/form');
+    }
+
+    /**
+     * Retrieve configurable modal name
+     *
+     * @return string
+     */
+    public function getConfigurableModal()
+    {
+        return $this->getData('config/configurableModal');
     }
 
     /**
@@ -239,7 +277,7 @@ class Matrix extends \Magento\Backend\Block\Template
     public function getVariationWizard($initData)
     {
         /** @var \Magento\Ui\Block\Component\StepsWizard $wizardBlock */
-        $wizardBlock = $this->getChildBlock('variation-steps-wizard');
+        $wizardBlock = $this->getChildBlock($this->getData('config/nameStepWizard'));
         if ($wizardBlock) {
             $wizardBlock->setInitData($initData);
             return $wizardBlock->toHtml();
@@ -282,6 +320,7 @@ class Matrix extends \Magento\Backend\Block\Template
         if ($variations) {
             $usedProductAttributes = $this->getUsedAttributes();
             $productByUsedAttributes = $this->getAssociatedProducts();
+            $configurableAttributes = $this->getAttributes();
             foreach ($variations as $variation) {
                 $attributeValues = [];
                 foreach ($usedProductAttributes as $attribute) {
@@ -298,12 +337,12 @@ class Matrix extends \Magento\Backend\Block\Template
                                 'code' => $attribute->getAttributeCode(),
                                 'label' => $attribute->getStoreLabel(),
                                 'id' => $attribute->getAttributeId(),
-                                'position' => $attribute->getPosition(),
+                                'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
                                 'chosen' => [],
                             ];
                             foreach ($attribute->getOptions() as $option) {
                                 if (!empty($option->getValue())) {
-                                    $attributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
+                                    $attributes[$attribute->getAttributeId()]['options'][] = [
                                         'attribute_code' => $attribute->getAttributeCode(),
                                         'attribute_label' => $attribute->getStoreLabel(0),
                                         'id' => $option->getValue(),
@@ -322,7 +361,7 @@ class Matrix extends \Magento\Backend\Block\Template
                             'value' => $optionId,
                         ];
                         $variationOptions[] = $variationOption;
-                        $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
+                        $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
                     }
 
                     $productMatrix[] = [

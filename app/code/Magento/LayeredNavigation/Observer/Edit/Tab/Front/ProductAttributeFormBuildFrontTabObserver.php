@@ -2,7 +2,7 @@
 /**
  * Product attribute edit form observer
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\LayeredNavigation\Observer\Edit\Tab\Front;
@@ -55,7 +55,7 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
                 'name' => 'is_filterable',
                 'label' => __("Use in Layered Navigation"),
                 'title' => __('Can be used only with catalog input type Dropdown, Multiple Select and Price'),
-                'note' => __('Can be used only with catalog input type Dropdown, Multiple Select and Price'),
+                'note' => __('Can be used only with catalog input type Dropdown, Multiple Select and Price.'),
                 'values' => [
                     ['value' => '0', 'label' => __('No')],
                     ['value' => '1', 'label' => __('Filterable (with results)')],
@@ -71,7 +71,7 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
                 'name' => 'is_filterable_in_search',
                 'label' => __("Use in Search Results Layered Navigation"),
                 'title' => __('Can be used only with catalog input type Dropdown, Multiple Select and Price'),
-                'note' => __('Can be used only with catalog input type Dropdown, Multiple Select and Price'),
+                'note' => __('Can be used only with catalog input type Dropdown, Multiple Select and Price.'),
                 'values' => $this->optionList->toOptionArray(),
             ]
         );
@@ -83,7 +83,7 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
                 'name' => 'position',
                 'label' => __('Position'),
                 'title' => __('Position in Layered Navigation'),
-                'note' => __('Position of attribute in layered navigation block'),
+                'note' => __('Position of attribute in layered navigation block.'),
                 'class' => 'validate-digits'
             ]
         );

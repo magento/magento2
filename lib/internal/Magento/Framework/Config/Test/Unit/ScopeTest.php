@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->areaListMock = $this->getMock('Magento\Framework\App\AreaList', ['getCodes'], [], '', false);
+        $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, ['getCodes'], [], '', false);
         $this->model = new Scope($this->areaListMock);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,8 @@ class TestPhrases
         // Phrase objects
         $phraseObjects = [
             // Single concatenation
-            new Phrase('first part' . ' second part'),
+            new Phrase('first part'
+                . ' second part'),
             new Phrase('first part' . ' second part' . ' third part'),
 
             // Multiple concatenation
@@ -83,5 +84,7 @@ class TestPhrases
             __("string with escaped \"double quotes\""),
             __("string with placeholder in escaped double quotes \"%1\"", "arg"),
         ];
+
+        $unclosedApostrophePhrase = __('string that\'s got an unclosed single quote in it');
     }
 }

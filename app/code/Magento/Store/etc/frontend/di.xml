@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
     <type name="Magento\Framework\App\FrontController">
         <plugin name="requestPreprocessor" type="Magento\Store\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
     </type>
-    <type name="\Magento\Framework\App\Action\Action">
+    <type name="Magento\Framework\App\Action\Action">
         <plugin name="contextPlugin" type="Magento\Store\App\Action\Plugin\Context" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\App\RouterList" shared="true">

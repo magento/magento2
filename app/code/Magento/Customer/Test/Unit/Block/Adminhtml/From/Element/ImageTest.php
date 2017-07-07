@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\From\Element;
@@ -28,14 +28,14 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->backendHelperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
+        $this->backendHelperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
+        $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->image = $objectManager->getObject(
-            'Magento\Customer\Block\Adminhtml\Form\Element\Image',
+            \Magento\Customer\Block\Adminhtml\Form\Element\Image::class,
             [
                 'adminhtmlData' => $this->backendHelperMock,
                 'urlEncoder' => $this->urlEncoder,
@@ -47,7 +47,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'image.jpg';
         $url = 'http://example.com/backend/customer/index/viewfile/' . $value;
-        $formMock = $this->getMockBuilder('Magento\Framework\Data\Form')
+        $formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->image->setForm($formMock);

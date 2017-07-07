@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Setup;
@@ -80,7 +80,7 @@ class InstallSchema implements InstallSchemaInterface
             ->addForeignKey(
                 $setup->getFkName('ui_bookmark', 'user_id', 'admin_user', 'user_id'),
                 'user_id',
-                'admin_user',
+                $setup->getTable('admin_user'),
                 'user_id',
                 Table::ACTION_CASCADE
             )

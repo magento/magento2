@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,11 +9,13 @@
         name: inputName,
         id: uid,
         disabled: disabled,
-        'aria-describedby': noticeId,
+        'aria-describedby': getDescriptionId(),
+        'aria-required': required,
+        'aria-invalid': error() ? true : 'false',
         placeholder: placeholder
     },
     hasFocus: focused,
-    options: options,
+    optgroup: options,
     value: value,
     optionsCaption: caption,
     optionsValue: 'value',

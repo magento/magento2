@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
 
         $this->collectionUpdater = new \Magento\Sales\Model\Grid\Child\CollectionUpdater(
             $this->registryMock
@@ -32,9 +32,9 @@ class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testUpdateIfOrderExists()
     {
         $collectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection', [], [], '', false
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class, [], [], '', false
         );
-        $transactionMock = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
+        $transactionMock = $this->getMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [], [], '', false);
         $this->registryMock
             ->expects($this->once())
             ->method('registry')

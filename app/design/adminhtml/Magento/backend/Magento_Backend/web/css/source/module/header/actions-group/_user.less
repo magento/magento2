@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -31,6 +31,7 @@
     line-height: @line-height__base; // ToDo UI: Delete with admin scope
     margin-left: .3rem;
     z-index: @user-account-menu__z-index;
+
     &._active,
     &.active {
         //  User account action
@@ -39,6 +40,7 @@
             box-shadow: @component__box-shadow__base;
         }
     }
+
     //  User account action
     .admin__action-dropdown {
         .action-toggle-triangle(
@@ -51,9 +53,9 @@
         padding-bottom: @user-account__padding-bottom;
         padding-left: @user-account__padding-left;
         padding-top: @user-account__padding-top;
+
         &:before {
             @_icon-user__size: 2rem;
-
             &:extend(.abs-icon all);
             color: @user-account-action__color;
             content: @icon-account__content;
@@ -63,6 +65,7 @@
             position: absolute;
             top: 50%;
         }
+
         &:hover {
             &:before {
                 color: @user-account-action__hover__color;
@@ -72,19 +75,23 @@
     //  User account menu
     .admin__action-dropdown-menu {
         @_user-menu__indent-side: 1rem;
+
         min-width: @user-account-menu__min-width;
         padding-left: @_user-menu__indent-side;
         padding-right: @_user-menu__indent-side;
+
         > li {
             > a {
-                padding-right: (@user-account__padding-right - @_user-menu__indent-side);
                 padding-left: .5em;
-                white-space: nowrap;
+                padding-right: (@user-account__padding-right - @_user-menu__indent-side);
                 transition: @smooth__background-color;
+                white-space: nowrap;
+
                 &:hover {
                     background-color: @user-account-menu__hover__background-color;
                     color: @action-dropdown__color;
                 }
+
                 &:active {
                     background-color: @user-account-menu__active__background-color;
                     bottom: -1px;
@@ -92,6 +99,7 @@
                 }
             }
         }
+
         .admin-user-name {
             .lib-text-overflow-ellipsis();
             display: inline-block;

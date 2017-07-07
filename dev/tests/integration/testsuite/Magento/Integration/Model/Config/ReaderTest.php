@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -22,10 +22,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $this->_fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_configReader = $objectManager->create(
-            'Magento\Integration\Model\Config\Reader',
+            \Magento\Integration\Model\Config\Reader::class,
             ['fileResolver' => $this->_fileResolverMock]
         );
     }
@@ -33,8 +33,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testRead()
     {
         $configFiles = [
-            file_get_contents(realpath(__DIR__ . '/_files/integrationA.xml')),
-            file_get_contents(realpath(__DIR__ . '/_files/integrationB.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/configA.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/configB.xml')),
         ];
         $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
 

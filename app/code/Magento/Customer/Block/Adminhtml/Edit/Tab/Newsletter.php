@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -133,6 +133,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Initialize the form.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initForm()
     {
@@ -144,7 +145,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         $form->setHtmlIdPrefix('_newsletter');
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         $subscriber = $this->_subscriberFactory->create()->loadByCustomerId($customerId);
-        $this->_coreRegistry->register('subscriber', $subscriber);
+        $this->_coreRegistry->register('subscriber', $subscriber, true);
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Newsletter Information')]);
 
@@ -166,6 +167,8 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         $form->setValues(['subscription' => $isSubscribed ? 'true' : 'false']);
         $form->getElement('subscription')->setIsChecked($isSubscribed);
 
+        $this->updateFromSession($form, $customerId);
+
         $changedDate = $this->getStatusChangedDate();
         if ($changedDate) {
             $fieldset->addField(
@@ -181,6 +184,24 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
 
         $this->setForm($form);
         return $this;
+    }
+
+    /**
+     * Update form elements from session data
+     *
+     * @param \Magento\Framework\Data\Form $form
+     * @param int $customerId
+     * @return void
+     */
+    protected function updateFromSession(\Magento\Framework\Data\Form $form, $customerId)
+    {
+        $data = $this->_backendSession->getCustomerFormData();
+        if (!empty($data)) {
+            $dataCustomerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            if (isset($data['subscription']) && $dataCustomerId == $customerId) {
+                $form->getElement('subscription')->setIsChecked($data['subscription']);
+            }
+        }
     }
 
     /**
@@ -200,24 +221,6 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         }
 
         return null;
-    }
-
-    /**
-     * Prepare the layout.
-     *
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        $this->setChild(
-            'grid',
-            $this->getLayout()->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid',
-                'newsletter.grid'
-            )
-        );
-        parent::_prepareLayout();
-        return $this;
     }
 
     /**

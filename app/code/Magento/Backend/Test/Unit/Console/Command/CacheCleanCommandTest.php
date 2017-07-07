@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheCleanCommandTest extends AbstractCacheManageCommandTest
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->cacheEventName = 'adminhtml_cache_flush_system';
         parent::setUp();

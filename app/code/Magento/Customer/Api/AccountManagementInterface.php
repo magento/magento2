@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Api;
 
 /**
  * Interface for managing customers accounts.
+ * @api
  */
 interface AccountManagementInterface
 {
@@ -18,12 +19,12 @@ interface AccountManagementInterface
     const ACCOUNT_CONFIRMED = 'account_confirmed';
     const ACCOUNT_CONFIRMATION_REQUIRED = 'account_confirmation_required';
     const ACCOUNT_CONFIRMATION_NOT_REQUIRED = 'account_confirmation_not_required';
+    const MAX_PASSWORD_LENGTH = 256;
     /**#@-*/
 
     /**
      * Create customer account. Perform necessary business operations like sending email.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
      * @param string $redirectUrl
@@ -58,7 +59,6 @@ interface AccountManagementInterface
     /**
      * Validate customer data.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return \Magento\Customer\Api\Data\ValidationResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -79,7 +79,6 @@ interface AccountManagementInterface
     /**
      * Activate a customer account using a key that was sent in a confirmation email.
      *
-     * @api
      * @param string $email
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -101,7 +100,6 @@ interface AccountManagementInterface
     /**
      * Authenticate a customer by username and password
      *
-     * @api
      * @param string $email
      * @param string $password
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -112,7 +110,6 @@ interface AccountManagementInterface
     /**
      * Change customer password.
      *
-     * @api
      * @param string $email
      * @param string $currentPassword
      * @param string $newPassword
@@ -124,7 +121,6 @@ interface AccountManagementInterface
     /**
      * Change customer password.
      *
-     * @api
      * @param int $customerId
      * @param string $currentPassword
      * @param string $newPassword
@@ -136,7 +132,6 @@ interface AccountManagementInterface
     /**
      * Send an email to the customer with a password reset link.
      *
-     * @api
      * @param string $email
      * @param string $template
      * @param int $websiteId
@@ -148,7 +143,6 @@ interface AccountManagementInterface
     /**
      * Reset customer password.
      *
-     * @api
      * @param string $email
      * @param string $resetToken
      * @param string $newPassword
@@ -160,7 +154,6 @@ interface AccountManagementInterface
     /**
      * Check if password reset token is valid.
      *
-     * @api
      * @param int $customerId
      * @param string $resetPasswordLinkToken
      * @return bool True if the token is valid
@@ -175,7 +168,6 @@ interface AccountManagementInterface
     /**
      * Gets the account confirmation status.
      *
-     * @api
      * @param int $customerId
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -185,7 +177,6 @@ interface AccountManagementInterface
     /**
      * Resend confirmation email.
      *
-     * @api
      * @param string $email
      * @param int $websiteId
      * @param string $redirectUrl
@@ -197,7 +188,6 @@ interface AccountManagementInterface
     /**
      * Check if given email is associated with a customer account in given website.
      *
-     * @api
      * @param string $customerEmail
      * @param int $websiteId If not set, will use the current websiteId
      * @return bool
@@ -208,7 +198,6 @@ interface AccountManagementInterface
     /**
      * Check store availability for customer given the customerId.
      *
-     * @api
      * @param int $customerWebsiteId
      * @param int $storeId
      * @return bool
@@ -219,7 +208,6 @@ interface AccountManagementInterface
     /**
      * Retrieve default billing address for the given customerId.
      *
-     * @api
      * @param int $customerId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
@@ -230,7 +218,6 @@ interface AccountManagementInterface
     /**
      * Retrieve default shipping address for the given customerId.
      *
-     * @api
      * @param int $customerId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
@@ -241,7 +228,6 @@ interface AccountManagementInterface
     /**
      * Return hashed password, which can be directly saved to database.
      *
-     * @api
      * @param string $password
      * @return string
      */

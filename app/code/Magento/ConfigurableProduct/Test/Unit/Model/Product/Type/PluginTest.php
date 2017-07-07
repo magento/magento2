@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetOptionArray(array $expected, array $data)
     {
         $moduleManagerMock = $this->getMock(
-            'Magento\Framework\Module\Manager', ['isOutputEnabled'], [], '', false
+            \Magento\Framework\Module\Manager::class, ['isOutputEnabled'], [], '', false
         );
         $moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')
@@ -40,7 +40,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     public function afterGetOptionArrayDataProvider()
     {
-        $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
+        $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
         return [
             [
                 [

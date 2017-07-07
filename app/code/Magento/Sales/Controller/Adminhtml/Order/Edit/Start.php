@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
@@ -8,14 +8,11 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
 {
     /**
-     * Acl check for admin
+     * Authorization level of a basic admin session
      *
-     * @return bool
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
-    }
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 
     /**
      * Start edit order initialization
@@ -26,7 +23,7 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
     {
         $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 

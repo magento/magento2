@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Test\Unit\Model;
@@ -19,9 +19,9 @@ class UserValidationRulesTest extends \PHPUnit_Framework_TestCase
      */
     private $rules;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->validator = $this->getMock('Magento\Framework\Validator\DataObject', [], [], '', false);
+        $this->validator = $this->getMock(\Magento\Framework\Validator\DataObject::class, [], [], '', false);
         $this->rules = new UserValidationRules();
     }
 

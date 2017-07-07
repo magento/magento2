@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data\Quote;
@@ -29,10 +29,10 @@ class QuoteAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
 
         $this->addressAdapterFactoryMock =
-            $this->getMockBuilder('Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory')
+            $this->getMockBuilder(\Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -44,7 +44,9 @@ class QuoteAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $expected = 'USD';
         /** @var \Magento\Quote\Api\Data\CurrencyInterface $currencyrMock */
-        $currencyMock = $this->getMockBuilder('Magento\Quote\Api\Data\CurrencyInterface')->getMockForAbstractClass();
+        $currencyMock = $this->getMockBuilder(
+            \Magento\Quote\Api\Data\CurrencyInterface::class
+        )->getMockForAbstractClass();
         $currencyMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn($expected);
         $this->quoteMock->expects($this->once())->method('getCurrency')->willReturn($currencyMock);
         $this->assertEquals($expected, $this->model->getCurrencyCode());
@@ -61,7 +63,9 @@ class QuoteAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $expected = 1;
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customerMock */
-        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMockForAbstractClass();
+        $customerMock = $this->getMockBuilder(
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $customerMock->expects($this->once())->method('getId')->willReturn($expected);
         $this->quoteMock->expects($this->once())->method('getCustomer')->willReturn($customerMock);
         $this->assertEquals($expected, $this->model->getCustomerId());
@@ -77,10 +81,10 @@ class QuoteAdapterTest extends \PHPUnit_Framework_TestCase
     public function testGetBillingAddress()
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
-        $addressAdapterMock = $this->getMockBuilder('Magento\Payment\Gateway\Data\AddressAdapterInterface')
+        $addressAdapterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Data\AddressAdapterInterface::class)
             ->getMockForAbstractClass();
         /** @var \Magento\Quote\Api\Data\AddressInterface $quoteAddressMock */
-        $quoteAddressMock = $this->getMockBuilder('Magento\Quote\Api\Data\AddressInterface')
+        $quoteAddressMock = $this->getMockBuilder(\Magento\Quote\Api\Data\AddressInterface::class)
             ->getMockForAbstractClass();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
@@ -101,10 +105,10 @@ class QuoteAdapterTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingAddress()
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
-        $addressAdapterMock = $this->getMockBuilder('Magento\Payment\Gateway\Data\AddressAdapterInterface')
+        $addressAdapterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Data\AddressAdapterInterface::class)
             ->getMockForAbstractClass();
         /** @var \Magento\Quote\Api\Data\AddressInterface $quoteAddressMock */
-        $quoteAddressMock = $this->getMockBuilder('Magento\Quote\Api\Data\AddressInterface')
+        $quoteAddressMock = $this->getMockBuilder(\Magento\Quote\Api\Data\AddressInterface::class)
             ->getMockForAbstractClass();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')

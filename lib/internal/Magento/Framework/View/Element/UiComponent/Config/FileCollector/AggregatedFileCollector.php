@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config\FileCollector;
 
-use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\DesignInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollectorInterface;
 
@@ -34,28 +33,28 @@ class AggregatedFileCollector implements FileCollectorInterface
     protected $design;
 
     /**
-     * @var Filesystem
+     * @var ReadFactory
      */
-    protected $filesystem;
+    protected $readFactory;
 
     /**
      * Constructor
      *
      * @param CollectorInterface $collectorAggregated
      * @param DesignInterface $design
-     * @param Filesystem $filesystem
+     * @param ReadFactory $readFactory
      * @param string $searchPattern
      */
     public function __construct(
         CollectorInterface $collectorAggregated,
         DesignInterface $design,
-        Filesystem $filesystem,
+        ReadFactory $readFactory,
         $searchPattern = null
     ) {
         $this->searchPattern = $searchPattern;
         $this->collectorAggregated = $collectorAggregated;
         $this->design = $design;
-        $this->filesystem = $filesystem;
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -75,10 +74,12 @@ class AggregatedFileCollector implements FileCollectorInterface
             throw new \Exception('Search pattern cannot be empty.');
         }
         $files = $this->collectorAggregated->getFiles($this->design->getDesignTheme(), $searchPattern);
-        $fileReader = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         foreach ($files as $file) {
-            $filePath = $fileReader->getRelativePath($file->getFilename());
-            $result[sprintf('%x', crc32($filePath))] = $fileReader->readFile($filePath);
+            $fullFileName = $file->getFileName();
+            $fileDir = dirname($fullFileName);
+            $fileName = basename($fullFileName);
+            $dirRead = $this->readFactory->create($fileDir);
+            $result[$fullFileName] = $dirRead->readFile($fileName);
         }
 
         return $result;

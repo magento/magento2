@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CmsUrlRewrite\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
 
+/**
+ * @api
+ */
 class CmsPageUrlPathGenerator
 {
     /** @var \Magento\Framework\Filter\FilterManager */
@@ -22,7 +25,6 @@ class CmsPageUrlPathGenerator
      * @param PageInterface $cmsPage
      *
      * @return string
-     * @api
      */
     public function getUrlPath(PageInterface $cmsPage)
     {
@@ -34,7 +36,6 @@ class CmsPageUrlPathGenerator
      *
      * @param PageInterface $cmsPage
      * @return string
-     * @api
      */
     public function getCanonicalUrlPath(PageInterface $cmsPage)
     {
@@ -46,7 +47,6 @@ class CmsPageUrlPathGenerator
      *
      * @param PageInterface $cmsPage
      * @return string
-     * @api
      */
     public function generateUrlKey(PageInterface $cmsPage)
     {

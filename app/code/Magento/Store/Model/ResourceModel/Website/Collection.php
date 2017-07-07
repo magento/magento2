@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel\Website;
 
 /**
  * Websites collection
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -25,7 +27,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->setFlag('load_default_website', false);
-        $this->_init('Magento\Store\Model\Website', 'Magento\Store\Model\ResourceModel\Website');
+        $this->_init(\Magento\Store\Model\Website::class, \Magento\Store\Model\ResourceModel\Website::class);
     }
 
     /**

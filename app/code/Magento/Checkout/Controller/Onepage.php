@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
@@ -150,7 +150,7 @@ abstract class Onepage extends Action
         }
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->_objectManager->get('Magento\Checkout\Model\Session')->getQuote();
+        $quote = $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getQuote();
         if ($quote->isMultipleShippingAddresses()) {
             $quote->removeAllAddresses();
         }
@@ -184,7 +184,7 @@ abstract class Onepage extends Action
             return true;
         }
         $action = $this->getRequest()->getActionName();
-        if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getCartWasUpdated(true)
+        if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getCartWasUpdated(true)
             &&
             !in_array($action, ['index', 'progress'])
         ) {
@@ -258,7 +258,7 @@ abstract class Onepage extends Action
      */
     public function getOnepage()
     {
-        return $this->_objectManager->get('Magento\Checkout\Model\Type\Onepage');
+        return $this->_objectManager->get(\Magento\Checkout\Model\Type\Onepage::class);
     }
 
     /**
@@ -269,13 +269,13 @@ abstract class Onepage extends Action
     protected function _canShowForUnregisteredUsers()
     {
         return $this->_objectManager->get(
-            'Magento\Customer\Model\Session'
+            \Magento\Customer\Model\Session::class
         )->isLoggedIn() || $this->getRequest()->getActionName() == 'index' || $this->_objectManager->get(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->isAllowedGuestCheckout(
             $this->getOnepage()->getQuote()
         ) || !$this->_objectManager->get(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->isCustomerMustBeLogged();
     }
 }

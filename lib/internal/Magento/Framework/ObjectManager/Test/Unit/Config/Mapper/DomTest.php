@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config\Mapper;
@@ -21,7 +21,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $argumentParser = $this->getMock('\Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser');
+        $argumentParser = $this->getMock(\Magento\Framework\ObjectManager\Config\Mapper\ArgumentParser::class);
         $argumentParser->expects(
             $this->any()
         )->method(
@@ -30,7 +30,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
             $this->returnCallback([$this, 'parserMockCallback'])
         );
 
-        $booleanUtils = $this->getMock('\Magento\Framework\Stdlib\BooleanUtils');
+        $booleanUtils = $this->getMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $booleanUtils->expects(
             $this->any()
         )->method(
@@ -39,7 +39,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
             $this->returnValueMap([['true', true], ['false', false]])
         );
 
-        $this->argumentInterpreter = $this->getMock('Magento\Framework\Data\Argument\InterpreterInterface');
+        $this->argumentInterpreter = $this->getMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
         $this->argumentInterpreter->expects(
             $this->any()
         )->method(

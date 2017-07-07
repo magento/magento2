@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,12 +26,21 @@
             <default>
                 <group>1</group>
             </default>
+            <account_information>
+                <change_email_template>customer_account_information_change_email_template</change_email_template>
+                <change_email_and_password_template>customer_account_information_change_email_and_password_template</change_email_and_password_template>
+            </account_information>
             <password>
                 <forgot_email_identity>support</forgot_email_identity>
                 <forgot_email_template>customer_password_forgot_email_template</forgot_email_template>
                 <remind_email_template>customer_password_remind_email_template</remind_email_template>
-                <reset_link_expiration_period>1</reset_link_expiration_period>
+                <reset_link_expiration_period>2</reset_link_expiration_period>
                 <reset_password_template>customer_password_reset_password_template</reset_password_template>
+                <required_character_classes_number>3</required_character_classes_number>
+                <minimum_password_length>8</minimum_password_length>
+                <lockout_failures>10</lockout_failures>
+                <lockout_threshold>10</lockout_threshold>
+                <autocomplete_on_storefront>0</autocomplete_on_storefront>
             </password>
             <address>
                 <street_lines>2</street_lines>
@@ -42,6 +51,9 @@
                 <suffix_options />
                 <dob_show />
                 <gender_show />
+                <telephone_show>req</telephone_show>
+                <company_show>opt</company_show>
+                <fax_show/>
             </address>
             <startup>
                 <redirect_dashboard>1</redirect_dashboard>
@@ -56,40 +68,33 @@
 {{depend street4}}{{var street4}}{{/depend}}
 {{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}
 {{var country}}
-T: {{var telephone}}
+{{depend telephone}}T: {{var telephone}}{{/depend}}
 {{depend fax}}F: {{var fax}}{{/depend}}
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}</text>
                 <oneline>{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}, {{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}</oneline>
-                <html><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}{{depend firstname}}<br/>{{/depend}}
+                <html><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}{{depend firstname}}<br />{{/depend}}
 {{depend company}}{{var company}}<br />{{/depend}}
 {{if street1}}{{var street1}}<br />{{/if}}
 {{depend street2}}{{var street2}}<br />{{/depend}}
 {{depend street3}}{{var street3}}<br />{{/depend}}
 {{depend street4}}{{var street4}}<br />{{/depend}}
-{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br/>
-{{var country}}<br/>
-{{depend telephone}}T: {{var telephone}}{{/depend}}
-{{depend fax}}<br/>F: {{var fax}}{{/depend}}
-{{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}]]></html>
+{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br />
+{{var country}}<br />
+{{depend telephone}}T: <a href="tel:{{var telephone}}">{{var telephone}}</a>{{/depend}}
+{{depend fax}}<br />F: {{var fax}}{{/depend}}
+{{depend vat_id}}<br />VAT: {{var vat_id}}{{/depend}}]]></html>
                 <pdf><![CDATA[{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}|
 {{depend company}}{{var company}}|{{/depend}}
-{{if street1}}{{var street1}}
-{{/if}}
+{{if street1}}{{var street1}}|{{/if}}
 {{depend street2}}{{var street2}}|{{/depend}}
 {{depend street3}}{{var street3}}|{{/depend}}
 {{depend street4}}{{var street4}}|{{/depend}}
-{{if city}}{{var city}},|{{/if}}
-{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}|
+{{if city}}{{var city}}, {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}|
 {{var country}}|
-{{depend telephone}}T: {{var telephone}}{{/depend}}|
-{{depend fax}}<br/>F: {{var fax}}{{/depend}}|
-{{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
+{{depend telephone}}T: {{var telephone}}|{{/depend}}
+{{depend fax}}F: {{var fax}}|{{/depend}}|
+{{depend vat_id}}VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
         </customer>
-        <general>
-            <restriction>
-                <autocomplete_on_storefront>0</autocomplete_on_storefront>
-            </restriction>
-        </general>
     </default>
 </config>

@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Data Definition for table
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\DB\Ddl;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Data Definition for table
+ *
+ * @api
+ */
 class Table
 {
     /**
@@ -42,12 +41,11 @@ class Table
     // Capable to support long date-time before 1970
     const TYPE_TEXT = 'text';
 
+    // A real blob, stored as binary inside DB
     const TYPE_BLOB = 'blob';
 
     // Used for back compatibility, when query param can't use statement options
     const TYPE_VARBINARY = 'varbinary';
-
-    // A real blob, stored as binary inside DB
 
     /**
      * Default and maximal TEXT and BLOB columns sizes we can support for different DB systems.

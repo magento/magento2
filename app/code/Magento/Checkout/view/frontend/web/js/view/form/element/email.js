@@ -1,9 +1,8 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*browser:true*/
-/*global define*/
+
 define([
     'jquery',
     'uiComponent',
@@ -83,6 +82,7 @@ define([
          */
         checkEmailAvailability: function () {
             var self = this;
+
             this.validateRequest();
             this.isEmailCheckComplete = $.Deferred();
             this.isLoading(true);
@@ -125,7 +125,7 @@ define([
 
             loginForm.validation();
 
-            if (focused === false) {
+            if (focused === false && !!this.email()) {
                 return !!$(usernameSelector).valid();
             }
 
@@ -149,7 +149,7 @@ define([
 
             if (this.isPasswordVisible() && $(loginForm).validation() && $(loginForm).validation('isValid')) {
                 fullScreenLoader.startLoader();
-                loginAction(loginData).always(function() {
+                loginAction(loginData).always(function () {
                     fullScreenLoader.stopLoader();
                 });
             }

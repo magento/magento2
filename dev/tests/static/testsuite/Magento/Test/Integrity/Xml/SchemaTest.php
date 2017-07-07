@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,11 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                     . 'xsi:noNamespaceSchemaLocation="urn:magento:framework:Relative_Path/something.xsd"'
                 );
 
-                $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocations[1]);
+                try {
+                    $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocations[1]);
+                } catch (\Exception $exception) {
+                    $errors = [$exception->__toString()];
+                }
                 $this->assertEmpty(
                     $errors,
                     "Error validating $filename against {$schemaLocations[1]}\n" . print_r($errors, true)

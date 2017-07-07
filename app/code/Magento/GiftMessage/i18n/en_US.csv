@@ -1,22 +1,44 @@
-Cancel,Cancel
+"Gift Messages are not applicable for empty cart","Gift Messages are not applicable for empty cart"
+"Gift Messages are not applicable for virtual products","Gift Messages are not applicable for virtual products"
+"Gift Message is not available","Gift Message is not available"
+"Could not add gift message to shopping cart","Could not add gift message to shopping cart"
+"There is no item with provided id in the cart","There is no item with provided id in the cart"
+"There is no product with provided  itemId: %1 in the cart","There is no product with provided  itemId: %1 in the cart"
+"There is no item with provided id in the order","There is no item with provided id in the order"
+"There is no item with provided id in the order or gift message isn\'t allowed","There is no item with provided id in the order or gift message isn\'t allowed"
+"Could not add gift message to order: ""%1""","Could not add gift message to order: ""%1"""
+"There is no order with provided id or gift message isn\'t allowed","There is no order with provided id or gift message isn\'t allowed"
+"There is no order with provided id","There is no order with provided id"
+"Gift Messages are not applicable for empty order","Gift Messages are not applicable for empty order"
+"Could not add gift message to order\'s item: ""%1""","Could not add gift message to order\'s item: ""%1"""
+"Unknown entity type","Unknown entity type"
+"Test label","Test label"
+"Use Config Settings","Use Config Settings"
 From,From
 To,To
-OK,OK
-"Gift Message","Gift Message"
 Message,Message
-"Unknown entity type","Unknown entity type"
+Cancel,Cancel
+OK,OK
 "Gift Options","Gift Options"
+"Gift Message","Gift Message"
 "Do you have any gift items in your order?","Do you have any gift items in your order?"
-"Add gift options","Add gift options"
+"Add Gift Options","Add Gift Options"
 "Gift Options for the Entire Order","Gift Options for the Entire Order"
-"Add gift options for the Entire Order","Add gift options for the Entire Order"
-"If you don't want to leave a gift message for the entire order, leave this box blank.","If you don't want to leave a gift message for the entire order, leave this box blank."
+"Leave this box blank if you don\'t want to leave a gift message for the entire order.","Leave this box blank if you don\'t want to leave a gift message for the entire order."
 "Gift Options for Individual Items","Gift Options for Individual Items"
-"Add gift options for Individual Items","Add gift options for Individual Items"
-"Item %1 of %2","Item %1 of %2"
-"You can leave a box blank if you don't wish to add a gift message for the item.","You can leave a box blank if you don't wish to add a gift message for the item."
-"Gift Options for this address.","Gift Options for this address."
-"You can leave this box blank if you do not wish to add a gift message for this address.","You can leave this box blank if you do not wish to add a gift message for this address."
-"You can leave this box blank if you do not wish to add a gift message for the item.","You can leave this box blank if you do not wish to add a gift message for the item."
+"<span>Item %1</span> of %2","<span>Item %1</span> of %2"
+"Leave a box blank if you don\'t want to add a gift message for that item.","Leave a box blank if you don\'t want to add a gift message for that item."
+"Add Gift Options for the Entire Order","Add Gift Options for the Entire Order"
+"You can leave this box blank if you don\'t want to add a gift message for this address.","You can leave this box blank if you don\'t want to add a gift message for this address."
+"Add Gift Options for Individual Items","Add Gift Options for Individual Items"
+"You can leave this box blank if you don\'t want to add a gift message for the item.","You can leave this box blank if you don\'t want to add a gift message for the item."
+"Gift Message (optional)","Gift Message (optional)"
+To:,To:
+From:,From:
+Message:,Message:
+Update,Update
+"Gift Options","Gift Options"
+Edit,Edit
+Delete,Delete
 "Allow Gift Messages on Order Level","Allow Gift Messages on Order Level"
 "Allow Gift Messages for Order Items","Allow Gift Messages for Order Items"

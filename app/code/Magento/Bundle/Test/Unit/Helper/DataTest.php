@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Helper;
@@ -21,9 +21,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
+        $this->config = $this->getMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
         $this->helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Bundle\Helper\Data',
+            \Magento\Bundle\Helper\Data::class,
             ['config' => $this->config]
         );
     }

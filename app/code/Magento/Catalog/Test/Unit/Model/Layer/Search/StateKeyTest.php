@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,10 +32,10 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
         $this->queryFactoryMock = $this->getMock(
-            '\Magento\Search\Model\QueryFactory',
+            \Magento\Search\Model\QueryFactory::class,
             [],
             [],
             '',
@@ -51,16 +51,16 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $categoryMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue('2'));
 
         $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('3'));
 
-        $queryMock = $this->getMock('\Magento\CatalogSearch\Helper\Query', ['getId'], [], '', false);
+        $queryMock = $this->getMock(\Magento\Search\Model\Query::class, ['getId'], [], '', false);
         $queryMock->expects($this->once())->method('getId')->will($this->returnValue('4'));
         $this->queryFactoryMock->expects($this->once())->method('get')->will($this->returnValue($queryMock));
 

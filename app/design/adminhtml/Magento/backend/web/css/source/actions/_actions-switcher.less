@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,104 +7,139 @@
 //  Yes/no switcher
 //  _____________________________________________
 
-//  ToDo UI: integrate the switcher to the backend
-
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
-@actions-switcher-background-color: @color-gray89;
-@actions-switcher-border-radius: 12px;
-@actions-switcher-border: 1px solid @color-gray65-lighten;
-@actions-switcher-control-background-color: @color-white;
-@actions-switcher-height: 20px;
-@actions-switcher-width: 37px;
+@actions-switcher-speed: .2s;
+
+@actions-switcher__background-color: @color-gray89;
+@actions-switcher__border-radius: 12px;
+@actions-switcher__border: 1px solid @color-gray65-lighten;
+@actions-switcher__height: 22px;
+@actions-switcher__width: 37px;
+
+@actions-switcher-control__background-color: @color-white;
+
+@actions-switcher-handler__background-color: @color-white;
+@actions-switcher-handler__height: @actions-switcher__height;
+@actions-switcher-handler__width: @actions-switcher__height;
 
 //
 
-.actions-switch {
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-    height: @actions-switcher-height;
-    margin-right: 30px;
+.admin__actions-switch {
+    display: inline-block;
     position: relative;
-    width: @actions-switcher-width;
-}
+    vertical-align: middle;
 
-.actions-switch-label {
-    background: @actions-switcher-background-color;
-    border-radius: @actions-switcher-border-radius;
-    border: @actions-switcher-border;
-    cursor: pointer;
-    display: block;
-    overflow: hidden;
-}
+    .admin__field-control & {
+        line-height: @action__height;
+    }
 
-.actions-switch-inner {
-    display: block;
-    margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
-    width: 200%;
-    &:before,
-    &:after {
-        border-radius: @actions-switcher-border-radius;
-        color: @color-white;
-        display: block;
-        float: left;
-        height: @actions-switcher-height;
-        line-height: 22px;
-        padding: 0;
-        width: 50%;
-    }
-    &:before {
-        background-color: @color-green-apple;
-        content: "";
-    }
-    &:after {
-        content: "";
-        text-align: right;
+    + .admin__field-service {
+        min-width: @field-size__m;
     }
 }
 
-.actions-switch-indicator {
-    background: @actions-switcher-control-background-color;
-    border-radius: @actions-switcher-border-radius;
-    border: @actions-switcher-border;
-    bottom: -2px;
-    display: block;
-    position: absolute;
-    right: 15px;
-    top: 0;
-    transition: all 0.3s ease-in 0s;
-    width: 22px;
-}
+.admin__actions-switch-checkbox {
+    &:extend(.abs-visually-hidden all);
 
-.actions-switch-text {
-    &:after {
-        content: attr(data-label-no);
-        display: block;
-        left: 32px;
-        margin-left: 12px;
-        position: absolute;
+    ._disabled &,
+    &.disabled {
+        + .admin__actions-switch-label {
+            cursor: not-allowed;
+            opacity: @disabled__opacity;
+            pointer-events: none;
+        }
     }
-}
 
-.actions-switch-checkbox {
-    display: none;
     &:checked {
-        + .actions-switch-label {
-            .actions-switch-inner {
-                margin-left: 0;
+        + .admin__actions-switch-label {
+            &:before {
+                left: (@actions-switcher__width - @actions-switcher-handler__width);
             }
-            .actions-switch-indicator {
-                right: 0;
+
+            &:after {
+                background: @color-green-apple;
             }
-            .actions-switch-text {
-                &:after {
-                    content: attr(data-label-yes);
+
+            .admin__actions-switch-text {
+                &:before {
+                    content: attr(data-text-on);
                 }
             }
         }
+    }
+
+    &:focus {
+        + .admin__actions-switch-label {
+            &:before,
+            &:after {
+                border-color: @field-control__focus__border-color;
+            }
+        }
+    }
+
+    ._error & {
+        + .admin__actions-switch-label {
+            &:before,
+            &:after {
+                border-color: @field-error-control__border-color;
+            }
+        }
+    }
+}
+
+.admin__actions-switch-label {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    display: inline-block;
+    height: @actions-switcher__height;
+    line-height: @actions-switcher__height;
+    position: relative;
+    user-select: none;
+    vertical-align: middle;
+
+    &:before,
+    &:after {
+        left: 0;
+        position: absolute;
+        right: auto;
+        top: 0;
+    }
+
+    &:before {
+        background: @actions-switcher-handler__background-color;
+        border: @actions-switcher__border;
+        border-radius: 100%;
+        content: '';
+        display: block;
+        height: @actions-switcher-handler__height;
+        transition: left @actions-switcher-speed ease-in 0s;
+        width: @actions-switcher-handler__width;
+        z-index: 1;
+    }
+
+    &:after {
+        background: @actions-switcher__background-color;
+        border: @actions-switcher__border;
+        border-radius: @actions-switcher__border-radius;
+        content: '';
+        display: block;
+        height: @actions-switcher__height;
+        transition: background @actions-switcher-speed ease-in 0s;
+        vertical-align: middle;
+        width: @actions-switcher__width;
+        z-index: 0;
+    }
+}
+
+.admin__actions-switch-text {
+    &:before {
+        content: attr(data-text-off);
+        padding-left: (@actions-switcher__width + 10);
+        white-space: nowrap;
     }
 }

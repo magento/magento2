@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
@@ -35,7 +35,9 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
             $cartData = $this->getRequest()->getParam('cart');
             if (is_array($cartData)) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get('Magento\Framework\Locale\ResolverInterface')->getLocale()]
+                    ['locale' => $this->_objectManager->get(
+                        \Magento\Framework\Locale\ResolverInterface::class
+                    )->getLocale()]
                 );
                 foreach ($cartData as $index => $data) {
                     if (isset($data['qty'])) {
@@ -51,11 +53,11 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError(
-                $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($e->getMessage())
+                $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
             );
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We can\'t update the shopping cart.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
     }
 

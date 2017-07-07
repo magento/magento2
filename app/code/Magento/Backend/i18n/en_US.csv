@@ -1,30 +1,8 @@
-Custom,Custom
-"Are you sure?","Are you sure?"
-Close,Close
-Cancel,Cancel
-Back,Back
-Product,Product
-Price,Price
-Quantity,Quantity
-ID,ID
-SKU,SKU
-Customers,Customers
-No,No
-Subtotal,Subtotal
-Discount,Discount
-Action,Action
-"Excl. Tax","Excl. Tax"
-Total,Total
-"Incl. Tax","Incl. Tax"
-"Total incl. tax","Total incl. tax"
-Reset,Reset
-Edit,Edit
-"What is this?","What is this?"
 "Invalid Form Key. Please refresh the page.","Invalid Form Key. Please refresh the page."
 "You entered an invalid Secret Key. Please refresh the page.","You entered an invalid Secret Key. Please refresh the page."
 "Cache Storage Management","Cache Storage Management"
 "Flush Magento Cache","Flush Magento Cache"
-"Cache storage may contain additional data. Are you sure that you want flush it?","Cache storage may contain additional data. Are you sure that you want flush it?"
+"The cache storage may contain additional data. Are you sure that you want to flush it?","The cache storage may contain additional data. Are you sure that you want to flush it?"
 "Flush Cache Storage","Flush Cache Storage"
 Invalidated,Invalidated
 Orders,Orders
@@ -32,17 +10,17 @@ Amounts,Amounts
 Bestsellers,Bestsellers
 "Most Viewed Products","Most Viewed Products"
 "New Customers","New Customers"
+Customers,Customers
 Customer,Customer
 Guest,Guest
 Items,Items
-"Grand Total","Grand Total"
+Total,Total
 "Lifetime Sales","Lifetime Sales"
-"Average Orders","Average Orders"
-"Search Term","Search Term"
-Results,Results
-Uses,Uses
+"Average Order","Average Order"
 Average,Average
-"Order Quantity","Order Quantity"
+Product,Product
+Price,Price
+Quantity,Quantity
 Views,Views
 Revenue,Revenue
 Tax,Tax
@@ -50,9 +28,9 @@ Shipping,Shipping
 "Images (.gif, .jpg, .png)","Images (.gif, .jpg, .png)"
 "Media (.avi, .flv, .swf)","Media (.avi, .flv, .swf)"
 "All Files","All Files"
-"Interface Language","Interface Language"
 "Reset to Default","Reset to Default"
 "All Store Views","All Store Views"
+"What is this?","What is this?"
 "Save Account","Save Account"
 "My Account","My Account"
 "Account Information","Account Information"
@@ -64,6 +42,8 @@ Email,Email
 "New Password","New Password"
 "Password Confirmation","Password Confirmation"
 "Interface Locale","Interface Locale"
+"Current User Identity Verification","Current User Identity Verification"
+"Your Password","Your Password"
 "Save Cache Settings","Save Cache Settings"
 "Catalog Rewrites","Catalog Rewrites"
 Refresh,Refresh
@@ -80,23 +60,10 @@ Rebuild,Rebuild
 "No change","No change"
 Disable,Disable
 Enable,Enable
-"Default Config","Default Config"
-"Save Config","Save Config"
-[GLOBAL],[GLOBAL]
-[WEBSITE],[WEBSITE]
-"[STORE VIEW]","[STORE VIEW]"
-"Use Default","Use Default"
-"Use Website","Use Website"
-Add,Add
-"Delete File","Delete File"
-"Search String","Search String"
-"Design Theme","Design Theme"
-"Add \Exception","Add \Exception"
-"-- No Theme --","-- No Theme --"
-Synchronize,Synchronize
-Configuration,Configuration
 "Add Design Change","Add Design Change"
+Back,Back
 Delete,Delete
+"Are you sure?","Are you sure?"
 Save,Save
 "Edit Design Change","Edit Design Change"
 "New Store Design Change","New Store Design Change"
@@ -108,12 +75,14 @@ Store,Store
 "Date To","Date To"
 "Design Change","Design Change"
 General,General
+Cancel,Cancel
 "Delete %1 '%2'","Delete %1 '%2'"
 "Delete %1","Delete %1"
 "Block Information","Block Information"
 "Backup Options","Backup Options"
 "Create DB Backup","Create DB Backup"
 Yes,Yes
+No,No
 "Delete Store","Delete Store"
 "Delete Web Site","Delete Web Site"
 "Save Web Site","Save Web Site"
@@ -144,53 +113,11 @@ Stores,Stores
 "Create Website","Create Website"
 "Create Store","Create Store"
 "Create Store View","Create Store View"
-"Custom Variables","Custom Variables"
-"Add New Variable","Add New Variable"
-"Save and Continue Edit","Save and Continue Edit"
-"Custom Variable ""%1""","Custom Variable ""%1"""
-"New Custom Variable","New Custom Variable"
-Variable,Variable
-"Variable Code","Variable Code"
-"Variable Name","Variable Name"
-"Use Default Variable Values","Use Default Variable Values"
-"Variable HTML Value","Variable HTML Value"
-"Variable Plain Value","Variable Plain Value"
-"URL Rewrite Management","URL Rewrite Management"
-"Add URL Rewrite","Add URL Rewrite"
-"Edit URL Rewrite for a Category","Edit URL Rewrite for a Category"
-"Add URL Rewrite for a Category","Add URL Rewrite for a Category"
-Category:,Category:
-"We can't set up a URL rewrite because the product you chose is not associated with a website.","We can't set up a URL rewrite because the product you chose is not associated with a website."
-"We can't set up a URL rewrite because the category your chose is not associated with a website.","We can't set up a URL rewrite because the category your chose is not associated with a website."
-"Edit URL Rewrite for a Product","Edit URL Rewrite for a Product"
-"Add URL Rewrite for a Product","Add URL Rewrite for a Product"
-Product:,Product:
-"Skip Category Selection","Skip Category Selection"
-"Edit URL Rewrite for CMS page","Edit URL Rewrite for CMS page"
-"Add URL Rewrite for CMS page","Add URL Rewrite for CMS page"
-"CMS page:","CMS page:"
-"Chosen cms page does not associated with any website.","Chosen cms page does not associated with any website."
-Title,Title
-"URL Key","URL Key"
-"Store View","Store View"
-"Edit URL Rewrite","Edit URL Rewrite"
-"Add New URL Rewrite","Add New URL Rewrite"
-"Are you sure you want to do this?","Are you sure you want to do this?"
-"URL Rewrite Information","URL Rewrite Information"
-Type,Type
-"ID Path","ID Path"
-"Request Path","Request Path"
-"Target Path","Target Path"
-Redirect,Redirect
-Description,Description
-"For category","For category"
-"For product","For product"
-"For CMS page","For CMS page"
-"Create URL Rewrite:","Create URL Rewrite:"
-"Global Attribute","Global Attribute"
-"This attribute shares the same value in all stores.","This attribute shares the same value in all stores."
 Home,Home
+Reset,Reset
+"Are you sure you want to do this?","Are you sure you want to do this?"
 "Add New Image","Add New Image"
+"Export block for grid %1 is not defined","Export block for grid %1 is not defined"
 "Reset Filter","Reset Filter"
 Search,Search
 Any,Any
@@ -201,173 +128,118 @@ To,To
 "[ deleted ]","[ deleted ]"
 "Select All","Select All"
 " [deleted]"," [deleted]"
-"We couldn't find any records.","We couldn't find any records."
+"We couldn\'t find any records.","We couldn\'t find any records."
 "Add New","Add New"
+"Invalid export type supplied for grid export block","Invalid export type supplied for grid export block"
 Export,Export
 "Please correct the column format and try again.","Please correct the column format and try again."
 "Please select items.","Please select items."
 Submit,Submit
+"Unknown block type","Unknown block type"
+"Please correct the tab configuration and try again. Tab Id should be not empty","Please correct the tab configuration and try again. Tab Id should be not empty"
 "Please correct the tab configuration and try again.","Please correct the tab configuration and try again."
 "You have logged out.","You have logged out."
-"Cache Management","Cache Management"
-"You flushed the cache storage.","You flushed the cache storage."
-"The Magento cache storage has been flushed.","The Magento cache storage has been flushed."
-"%1 cache type(s) enabled.","%1 cache type(s) enabled."
-"An error occurred while enabling cache.","An error occurred while enabling cache."
-"%1 cache type(s) disabled.","%1 cache type(s) disabled."
-"An error occurred while disabling cache.","An error occurred while disabling cache."
-"%1 cache type(s) refreshed.","%1 cache type(s) refreshed."
-"An error occurred while refreshing cache.","An error occurred while refreshing cache."
-"Specified cache type(s) don't exist: ","Specified cache type(s) don't exist: "
-"The JavaScript/CSS cache has been cleaned.","The JavaScript/CSS cache has been cleaned."
-"An error occurred while clearing the JavaScript/CSS cache.","An error occurred while clearing the JavaScript/CSS cache."
+"Specified cache type(s) don\'t exist: %1","Specified cache type(s) don\'t exist: %1"
 "The image cache was cleaned.","The image cache was cleaned."
 "An error occurred while clearing the image cache.","An error occurred while clearing the image cache."
+"The JavaScript/CSS cache has been cleaned.","The JavaScript/CSS cache has been cleaned."
+"An error occurred while clearing the JavaScript/CSS cache.","An error occurred while clearing the JavaScript/CSS cache."
+"The static files cache has been cleaned.","The static files cache has been cleaned."
+"You flushed the cache storage.","You flushed the cache storage."
+"The Magento cache storage has been flushed.","The Magento cache storage has been flushed."
+"Cache Management","Cache Management"
+"%1 cache type(s) disabled.","%1 cache type(s) disabled."
+"An error occurred while disabling cache.","An error occurred while disabling cache."
+"%1 cache type(s) enabled.","%1 cache type(s) enabled."
+"An error occurred while enabling cache.","An error occurred while enabling cache."
+"%1 cache type(s) refreshed.","%1 cache type(s) refreshed."
+"An error occurred while refreshing cache.","An error occurred while refreshing cache."
 Dashboard,Dashboard
+"We updated lifetime statistic.","We updated lifetime statistic."
+"We can\'t refresh lifetime statistics.","We can\'t refresh lifetime statistics."
 "invalid request","invalid request"
 "see error log for details","see error log for details"
 "Service unavailable: %1","Service unavailable: %1"
 Error,Error
-"Access Denied","Access Denied"
+"Access Denied.","Access Denied."
 "You need more permissions to do this.","You need more permissions to do this."
 "No search modules were registered","No search modules were registered"
 "Please make sure that all global admin search modules are installed and activated.","Please make sure that all global admin search modules are installed and activated."
-System,System
-"The account has been saved.","The account has been saved."
+"You saved the account.","You saved the account."
 "An error occurred while saving account.","An error occurred while saving account."
-"This section is not allowed.","This section is not allowed."
-"You saved the configuration.","You saved the configuration."
-"An error occurred while saving this configuration:","An error occurred while saving this configuration:"
-"Synchronizing %1 to %2","Synchronizing %1 to %2"
-Synchronizing...,Synchronizing...
-"The timeout limit for response from synchronize process was reached.","The timeout limit for response from synchronize process was reached."
+"You deleted the design change.","You deleted the design change."
+"You can't delete the design change.","You can't delete the design change."
 "Store Design","Store Design"
 "Edit Store Design Change","Edit Store Design Change"
 "You saved the design change.","You saved the design change."
-"You deleted the design change.","You deleted the design change."
-"Cannot delete the design change.","Cannot delete the design change."
+System,System
 "Manage Stores","Manage Stores"
+"The database was backed up.","The database was backed up."
+"We can\'t create a backup right now. Please try again later.","We can\'t create a backup right now. Please try again later."
+"Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.","Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1."
+"Something went wrong. Please try again.","Something went wrong. Please try again."
+"This store cannot be deleted.","This store cannot be deleted."
+"You deleted the store.","You deleted the store."
+"Unable to delete the store. Please try again later.","Unable to delete the store. Please try again later."
+"This store view cannot be deleted.","This store view cannot be deleted."
+"Store View","Store View"
+"You deleted the store view.","You deleted the store view."
+"Unable to delete the store view. Please try again later.","Unable to delete the store view. Please try again later."
+"This website cannot be deleted.","This website cannot be deleted."
+"You deleted the website.","You deleted the website."
+"Unable to delete the website. Please try again later.","Unable to delete the website. Please try again later."
 "The website does not exist.","The website does not exist."
-"Before modifying the website code please make sure that it is not used in index.php.","Before modifying the website code please make sure that it is not used in index.php."
+"Before modifying the website code please make sure it is not used in index.php.","Before modifying the website code please make sure it is not used in index.php."
 "The store does not exist","The store does not exist"
 "Store view doesn't exist","Store view doesn't exist"
-"Before modifying the store view code please make sure that it is not used in index.php.","Before modifying the store view code please make sure that it is not used in index.php."
+"Before modifying the store view code please make sure it is not used in index.php.","Before modifying the store view code please make sure it is not used in index.php."
 "New ","New "
-"The website has been saved.","The website has been saved."
-"The store has been saved.","The store has been saved."
-"The store view has been saved","The store view has been saved"
-"An error occurred while saving. Please review the error log.","An error occurred while saving. Please review the error log."
-"Unable to proceed. Please, try again.","Unable to proceed. Please, try again."
-"This website cannot be deleted.","This website cannot be deleted."
-"This store cannot be deleted.","This store cannot be deleted."
-"This store view cannot be deleted.","This store view cannot be deleted."
-"Unable to proceed. Please, try again","Unable to proceed. Please, try again"
-"The website has been deleted.","The website has been deleted."
-"Unable to delete website. Please, try again later.","Unable to delete website. Please, try again later."
-"The store has been deleted.","The store has been deleted."
-"Unable to delete store. Please, try again later.","Unable to delete store. Please, try again later."
-"The store view has been deleted.","The store view has been deleted."
-"Unable to delete store view. Please, try again later.","Unable to delete store view. Please, try again later."
-"The database was backed up.","The database was backed up."
-"We couldn't create a backup right now. Please try again later.","We couldn't create a backup right now. Please try again later."
-"Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.","Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1."
-"You saved the custom variable.","You saved the custom variable."
-"You deleted the custom variable.","You deleted the custom variable."
-"URL Rewrites","URL Rewrites"
-"[New/Edit] URL Rewrite","[New/Edit] URL Rewrite"
-"The URL Rewrite has been saved.","The URL Rewrite has been saved."
-"An error occurred while saving URL Rewrite.","An error occurred while saving URL Rewrite."
-"Chosen product does not associated with the chosen store or category.","Chosen product does not associated with the chosen store or category."
-"Chosen category does not associated with the chosen store.","Chosen category does not associated with the chosen store."
-"Chosen cms page does not associated with the chosen store.","Chosen cms page does not associated with the chosen store."
-"The URL Rewrite has been deleted.","The URL Rewrite has been deleted."
-"An error occurred while deleting URL Rewrite.","An error occurred while deleting URL Rewrite."
+"You saved the website.","You saved the website."
+"You saved the store.","You saved the store."
+"You saved the store view.","You saved the store view."
+"Something went wrong while saving. Please review the error log.","Something went wrong while saving. Please review the error log."
 "Last 24 Hours","Last 24 Hours"
 "Last 7 Days","Last 7 Days"
 "Current Month","Current Month"
 YTD,YTD
 2YTD,2YTD
+"Authentication storage is incorrect.","Authentication storage is incorrect."
 "You did not sign in correctly or your account is temporarily disabled.","You did not sign in correctly or your account is temporarily disabled."
 "Authentication error occurred.","Authentication error occurred."
-"Please specify the admin custom URL.","Please specify the admin custom URL."
-"Invalid %1. %2","Invalid %1. %2"
-"Value must be a URL or one of placeholders: %1","Value must be a URL or one of placeholders: %1"
-"Specify a URL or path that starts with placeholder(s): %1, and ends with ""/"".","Specify a URL or path that starts with placeholder(s): %1, and ends with ""/""."
-"%1 An empty value is allowed as well.","%1 An empty value is allowed as well."
-"Specify a fully qualified URL.","Specify a fully qualified URL."
-"Selected allowed currency ""%1"" is not available in installed currencies.","Selected allowed currency ""%1"" is not available in installed currencies."
-"Default display currency ""%1"" is not available in allowed currencies.","Default display currency ""%1"" is not available in allowed currencies."
-"Sorry, we haven't installed the base currency you selected.","Sorry, we haven't installed the base currency you selected."
-"We can't save the Cron expression.","We can't save the Cron expression."
-"Sorry, we haven't installed the default display currency you selected.","Sorry, we haven't installed the default display currency you selected."
-"Sorry, the default display currency you selected in not available in allowed currencies.","Sorry, the default display currency you selected in not available in allowed currencies."
-"Please correct the email address: ""%1"".","Please correct the email address: ""%1""."
-"The sender name ""%1"" is not valid. Please use only visible characters and spaces.","The sender name ""%1"" is not valid. Please use only visible characters and spaces."
-"Maximum sender name length is 255. Please correct your settings.","Maximum sender name length is 255. Please correct your settings."
-"The file you're uploading exceeds the server size limit of %1 kilobytes.","The file you're uploading exceeds the server size limit of %1 kilobytes."
-"The base directory to upload file is not specified.","The base directory to upload file is not specified."
-"The specified image adapter cannot be used because of: ","The specified image adapter cannot be used because of: "
-"Default scope","Default scope"
-"Base currency","Base currency"
-"Display default currency","Display default currency"
-"website(%1) scope","website(%1) scope"
-"store(%1) scope","store(%1) scope"
-"Currency ""%1"" is used as %2 in %3.","Currency ""%1"" is used as %2 in %3."
-"Please correct the timezone.","Please correct the timezone."
-"IP Address","IP Address"
-"Cookie (unsafe)","Cookie (unsafe)"
-"Always (during development)","Always (during development)"
-"Only Once (version upgrade)","Only Once (version upgrade)"
-"Never (production)","Never (production)"
-Bcc,Bcc
-"Separate Email","Separate Email"
-"%1 (Default)","%1 (Default)"
-title,title
-Optional,Optional
-Required,Required
-Website,Website
-"File System","File System"
-Database,Database
-"HTTP (unsecure)","HTTP (unsecure)"
-"HTTPS (SSL)","HTTPS (SSL)"
-"Yes (302 Found)","Yes (302 Found)"
-"Yes (301 Moved Permanently)","Yes (301 Moved Permanently)"
-Specified,Specified
+"Admin session lifetime must be less than or equal to 31536000 seconds (one year)","Admin session lifetime must be less than or equal to 31536000 seconds (one year)"
+"Admin session lifetime must be greater than or equal to 60 seconds","Admin session lifetime must be greater than or equal to 60 seconds"
 Order,Order
 "Order #%1","Order #%1"
-"Order #%1 (%2)","Order #%1 (%2)"
 "Access denied","Access denied"
-"Please try to log out and sign in again.","Please try to log out and sign in again."
+"Please try to sign out and sign in again.","Please try to sign out and sign in again."
 "If you continue to receive this message, please contact the store owner.","If you continue to receive this message, please contact the store owner."
-"Access denied.","Access denied."
-"Log into Magento Admin Page","Log into Magento Admin Page"
-"Magento Admin Panel","Magento Admin Panel"
-Welcome,Welcome
-"User Name:","User Name:"
+"You need more permissions to access this.","You need more permissions to access this."
+"Welcome, please sign in","Welcome, please sign in"
+Username,Username
 "user name","user name"
-Password:,Password:
+Password,Password
 password,password
-"Log in","Log in"
-"Please wait...","Please wait..."
+"Sign in","Sign in"
 "Select Range:","Select Range:"
 "No Data Found","No Data Found"
 "Chart is disabled. To enable the chart, click <a href=""%1"">here</a>.","Chart is disabled. To enable the chart, click <a href=""%1"">here</a>."
-"Last 5 Orders","Last 5 Orders"
-"Last 5 Search Terms","Last 5 Search Terms"
-"Top 5 Search Terms","Top 5 Search Terms"
+"Last Orders","Last Orders"
+"Last Search Terms","Last Search Terms"
+"Top Search Terms","Top Search Terms"
 "There are no search keywords.","There are no search keywords."
 "View Statistics For:","View Statistics For:"
 "All Websites","All Websites"
-"Shipping Amount","Shipping Amount"
-"Tax Amount","Tax Amount"
+"Reload Data","Reload Data"
 "Browse Files...","Browse Files..."
-"Magento is an eBay Inc. company. Copyright&copy; %1 Magento, Inc. All rights reserved.","Magento is an eBay Inc. company. Copyright&copy; %1 Magento, Inc. All rights reserved."
-"Magento ver. %1","Magento ver. %1"
-"Help Us Keep Magento Healthy - Report All Bugs","Help Us Keep Magento Healthy - Report All Bugs"
+Magento,Magento
+"Copyright&copy; %1 Magento Commerce Inc. All rights reserved.","Copyright&copy; %1 Magento Commerce Inc. All rights reserved."
+"ver. %1","ver. %1"
+"Magento Admin Panel","Magento Admin Panel"
 "Account Setting","Account Setting"
 "Customer View","Customer View"
 "Sign Out","Sign Out"
 "About the calendar","About the calendar"
+Close,Close
 "Go Today","Go Today"
 Previous,Previous
 Next,Next
@@ -375,61 +247,31 @@ WK,WK
 Time,Time
 Hour,Hour
 Minute,Minute
-"Please select an option.","Please select an option."
-"This is a required field.","This is a required field."
-"Please enter a valid number in this field.","Please enter a valid number in this field."
-"Please enter only numbers (1-9) into this field. Do not use spaces, commas, or any other characters.","Please enter only numbers (1-9) into this field. Do not use spaces, commas, or any other characters."
-"Please enter only letters (a-z) into this field.","Please enter only letters (a-z) into this field."
-"Please enter only numbers (0-9) or letters (a-z) into this field.","Please enter only numbers (0-9) or letters (a-z) into this field."
-"Please enter only numbers or letters into this field. Do not use spaces, commas, or any other characters.","Please enter only numbers or letters into this field. Do not use spaces, commas, or any other characters."
-"Please enter only letters (a-z), numbers (0-9), spaces and the ""#"" character into this field.","Please enter only letters (a-z), numbers (0-9), spaces and the ""#"" character into this field."
-"Please enter a valid phone number (for example, (123) 456-7890 or 123-456-7890).","Please enter a valid phone number (for example, (123) 456-7890 or 123-456-7890)."
-"Please enter a valid date.","Please enter a valid date."
-"Please enter a valid email address(for example johndoe@domain.com.).","Please enter a valid email address(for example johndoe@domain.com.)."
-"Please enter 6 or more characters.","Please enter 6 or more characters."
-"Please make sure your passwords match.","Please make sure your passwords match."
-"Please enter a valid URL (for example, the URL must begin with ""http://"").","Please enter a valid URL (for example, the URL must begin with ""http://"")."
-"Please enter a valid URL (for examples, http://www.example.com or www.example.com).","Please enter a valid URL (for examples, http://www.example.com or www.example.com)."
-"Please enter a valid social security number (for example, 123-45-6789).","Please enter a valid social security number (for example, 123-45-6789)."
-"Please enter a valid zip code (for example, 90602 or 90602-1234).","Please enter a valid zip code (for example, 90602 or 90602-1234)."
-"Please enter a valid zip code.","Please enter a valid zip code."
-"Please use this date format: dd/mm/yyyy. For example, enter ""17/03/2006"" to represent March 17, 2006.","Please use this date format: dd/mm/yyyy. For example, enter ""17/03/2006"" to represent March 17, 2006."
-"Please enter a valid dollar amount (for example, $100.00).","Please enter a valid dollar amount (for example, $100.00)."
-"Please select one of these options.","Please select one of these options."
-"Please select State/Province.","Please select State/Province."
-"Please enter a valid password.","Please enter a valid password."
-"Please enter a number greater than 0 in this field.","Please enter a number greater than 0 in this field."
-"Please enter a valid credit card number.","Please enter a valid credit card number."
-"Please wait, loading...","Please wait, loading..."
 "JavaScript may be disabled in your browser.","JavaScript may be disabled in your browser."
 "To use this website you must first enable JavaScript in your browser.","To use this website you must first enable JavaScript in your browser."
 "This is only a demo store. You can browse and place orders, but nothing will be processed.","This is only a demo store. You can browse and place orders, but nothing will be processed."
-Scope:,Scope:
+"Report an Issue","Report an Issue"
+"Store View:","Store View:"
 "Stores Configuration","Stores Configuration"
-"Please confirm scope switching. All data that hasn't been saved will be lost.","Please confirm scope switching. All data that hasn't been saved will be lost."
+"Please confirm scope switching. All data that hasn\'t been saved will be lost.","Please confirm scope switching. All data that hasn\'t been saved will be lost."
 "Additional Cache Management","Additional Cache Management"
 "Flush Catalog Images Cache","Flush Catalog Images Cache"
 "Pregenerated product images files","Pregenerated product images files"
 "Flush JavaScript/CSS Cache","Flush JavaScript/CSS Cache"
-"Themes JavaScript and CSS files combined to one file.","Themes JavaScript and CSS files combined to one file."
-"Flush Static Files Cache", "Flush Static Files Cache"
-"Preprocessed view files and static files", "Preprocessed view files and static files"
+"Themes JavaScript and CSS files combined to one file","Themes JavaScript and CSS files combined to one file"
+"Flush Static Files Cache","Flush Static Files Cache"
+"Preprocessed view files and static files","Preprocessed view files and static files"
 Catalog,Catalog
 JavaScript/CSS,JavaScript/CSS
 "JavaScript/CSS Cache","JavaScript/CSS Cache"
-"Add after","Add after"
-"Current Configuration Scope:","Current Configuration Scope:"
-"Personal Information","Personal Information"
 "No records found.","No records found."
-"Select Category","Select Category"
 Images,Images
 "Big Image","Big Image"
 Thumbnail,Thumbnail
 "Additional Settings","Additional Settings"
-"Total %1 records found","Total %1 records found"
-View,View
+"records found","records found"
+selected,selected
 "per page","per page"
-Page,Page
 "Previous page","Previous page"
 "of %1","of %1"
 "Next page","Next page"
@@ -439,80 +281,66 @@ Actions,Actions
 "Unselect All","Unselect All"
 "Select Visible","Select Visible"
 "Unselect Visible","Unselect Visible"
-"items selected","items selected"
+"Changes have been made to this section that have not been saved.","Changes have been made to this section that have not been saved."
+"This tab contains invalid data. Please resolve this before saving.","This tab contains invalid data. Please resolve this before saving."
 "The information in this tab has been changed.","The information in this tab has been changed."
-"This tab contains invalid data. Please solve the problem before saving.","This tab contains invalid data. Please solve the problem before saving."
 Loading...,Loading...
-Country,Country
-City,City
-"VAT Number","VAT Number"
-"Street Address","Street Address"
+"We could not detect a size.","We could not detect a size."
+"We don\'t recognize or support this file extension type.","We don\'t recognize or support this file extension type."
+"Allow everything","Allow everything"
+"Magento Admin","Magento Admin"
+"Global Search","Global Search"
+Marketing,Marketing
+"SEO & Search","SEO & Search"
+"User Content","User Content"
+Content,Content
+Elements,Elements
 Design,Design
-"Media Storage","Media Storage"
-Admin,Admin
-Advanced,Advanced
-"Transactional Emails","Transactional Emails"
-"Store Name","Store Name"
-"Store Phone Number","Store Phone Number"
-Region/State,Region/State
-"Sender Name","Sender Name"
-"Sender Email","Sender Email"
-Locale,Locale
-"Base URL","Base URL"
-"Enable Charts","Enable Charts"
-"Secure Base URL","Secure Base URL"
-Host,Host
-"File extension not known or unsupported type.","File extension not known or unsupported type."
-Debug,Debug
-"System(config.xml, local.xml) and modules configuration files(config.xml, menu.xml).","System(config.xml, local.xml) and modules configuration files(config.xml, menu.xml)."
+Schedule,Schedule
+Settings,Settings
+"All Stores","All Stores"
+Attributes,Attributes
+"Other Settings","Other Settings"
+"Data Transfer","Data Transfer"
+"Magento Connect","Magento Connect"
+"Connect Manager","Connect Manager"
+"Package Extensions","Package Extensions"
+Tools,Tools
+"Web Setup Wizard","Web Setup Wizard"
+Currency,Currency
+Communications,Communications
 Services,Services
+Advanced,Advanced
 "Disable Modules Output","Disable Modules Output"
 "Store Email Addresses","Store Email Addresses"
 "Custom Email 1","Custom Email 1"
+"Sender Email","Sender Email"
+"Sender Name","Sender Name"
 "Custom Email 2","Custom Email 2"
 "General Contact","General Contact"
 "Sales Representative","Sales Representative"
 "Customer Support","Customer Support"
-"User-Agent Exceptions","User-Agent Exceptions"
-"
-                        Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style=""font-family:monospace"">Firefox<br />/^mozilla/i</span>
-                    ","
-                        Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style=""font-family:monospace"">Firefox<br />/^mozilla/i</span>
-                    "
-"Find a string in client user-agent header and switch to specific design theme for that browser.","Find a string in client user-agent header and switch to specific design theme for that browser."
-Pagination,Pagination
-"Pagination Frame","Pagination Frame"
-"How many links to display at once.","How many links to display at once."
-"Pagination Frame Skip","Pagination Frame Skip"
-"If the current frame position does not cover utmost pages, will render link to current position plus/minus this value.","If the current frame position does not cover utmost pages, will render link to current position plus/minus this value."
-"Anchor Text for Previous","Anchor Text for Previous"
-"Alternative text for previous link in pagination menu. If empty, default arrow image will used.","Alternative text for previous link in pagination menu. If empty, default arrow image will used."
-"Anchor Text for Next","Anchor Text for Next"
-"Alternative text for next link in pagination menu. If empty, default arrow image will used.","Alternative text for next link in pagination menu. If empty, default arrow image will used."
-"Logo Image","Logo Image"
-"Logo Image Alt","Logo Image Alt"
 Developer,Developer
-"Developer Client Restrictions","Developer Client Restrictions"
-"Allowed IPs (comma separated)","Allowed IPs (comma separated)"
-"Leave empty for access from any location.","Leave empty for access from any location."
-"Template Path Hints","Template Path Hints"
+Debug,Debug
+"Enabled Template Path Hints for Storefront","Enabled Template Path Hints for Storefront"
+"Enabled Template Path Hints for Admin","Enabled Template Path Hints for Admin"
 "Add Block Names to Hints","Add Block Names to Hints"
 "Template Settings","Template Settings"
 "Allow Symlinks","Allow Symlinks"
 "Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.","Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk."
+"Minify Html","Minify Html"
+"Minification is not applied in developer mode.","Minification is not applied in developer mode."
 "Translate Inline","Translate Inline"
-"Enabled for Frontend","Enabled for Frontend"
+"Enabled for Storefront","Enabled for Storefront"
 "Enabled for Admin","Enabled for Admin"
-"Translate, blocks and other output caches should be disabled for both frontend and admin inline translations.","Translate, blocks and other output caches should be disabled for both frontend and admin inline translations."
-"Log Settings","Log Settings"
-"System Log File Name","System Log File Name"
-"Logging from \Psr\Log\LoggerInterface. File is located in {{base_dir}}/var/log","Logging from \Psr\Log\LoggerInterface. File is located in {{base_dir}}/var/log"
-"Exceptions Log File Name","Exceptions Log File Name"
+"Translate, blocks and other output caches should be disabled for both Storefront and Admin inline translations.","Translate, blocks and other output caches should be disabled for both Storefront and Admin inline translations."
 "JavaScript Settings","JavaScript Settings"
 "Merge JavaScript Files","Merge JavaScript Files"
+"Enable JavaScript Bundling","Enable JavaScript Bundling"
 "Minify JavaScript Files","Minify JavaScript Files"
 "CSS Settings","CSS Settings"
 "Merge CSS Files","Merge CSS Files"
+"Minify CSS Files","Minify CSS Files"
 "Image Processing Settings","Image Processing Settings"
 "Image Adapter","Image Adapter"
 "Static Files Settings","Static Files Settings"
@@ -521,29 +349,36 @@ Developer,Developer
 "Allow Countries","Allow Countries"
 "Default Country","Default Country"
 "European Union Countries","European Union Countries"
+"Top destinations","Top destinations"
 "Locale Options","Locale Options"
 Timezone,Timezone
+Locale,Locale
 "First Day of Week","First Day of Week"
 "Weekend Days","Weekend Days"
+"Store Name","Store Name"
+"Store Phone Number","Store Phone Number"
+"Store Hours of Operation","Store Hours of Operation"
+Country,Country
+Region/State,Region/State
 "ZIP/Postal Code","ZIP/Postal Code"
+City,City
+"Street Address","Street Address"
 "Street Address Line 2","Street Address Line 2"
+"VAT Number","VAT Number"
 "Single-Store Mode","Single-Store Mode"
 "Enable Single-Store Mode","Enable Single-Store Mode"
 "This setting will not be taken into account if system has more than one store view.","This setting will not be taken into account if system has more than one store view."
 "Mail Sending Settings","Mail Sending Settings"
 "Disable Email Communications","Disable Email Communications"
+Host,Host
 "Port (25)","Port (25)"
 "Set Return-Path","Set Return-Path"
 "Return-Path Email","Return-Path Email"
-"Storage Configuration for Media","Storage Configuration for Media"
-"Select Media Database","Select Media Database"
-"After selecting a new media storage location, press the Synchronize button to transfer all media to that location. Media will not be available in the new location until the synchronization process is complete.","After selecting a new media storage location, press the Synchronize button to transfer all media to that location. Media will not be available in the new location until the synchronization process is complete."
-"Environment Update Time","Environment Update Time"
+Admin,Admin
 "Admin User Emails","Admin User Emails"
 "Forgot Password Email Template","Forgot Password Email Template"
+"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
 "Forgot and Reset Email Sender","Forgot and Reset Email Sender"
-"Recovery Link Expiration Period (days)","Recovery Link Expiration Period (days)"
-"Please enter a number 1 or greater in this field.","Please enter a number 1 or greater in this field."
 "Startup Page","Startup Page"
 "Admin Base URL","Admin Base URL"
 "Use Custom Admin URL","Use Custom Admin URL"
@@ -551,12 +386,15 @@ Timezone,Timezone
 "Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/","Make sure that base URL ends with '/' (slash), e.g. http://yourdomain/magento/"
 "Use Custom Admin Path","Use Custom Admin Path"
 "Custom Admin Path","Custom Admin Path"
-"You will have to log in after you save your custom admin path.","You will have to log in after you save your custom admin path."
+"You will have to sign in after you save your custom admin path.","You will have to sign in after you save your custom admin path."
 Security,Security
+"Recovery Link Expiration Period (hours)","Recovery Link Expiration Period (hours)"
+"Please enter a number 1 or greater in this field.","Please enter a number 1 or greater in this field."
 "Add Secret Key to URLs","Add Secret Key to URLs"
 "Login is Case Sensitive","Login is Case Sensitive"
 "Admin Session Lifetime (seconds)","Admin Session Lifetime (seconds)"
-"Values less than 60 are ignored.","Values less than 60 are ignored."
+"Please enter at least 60 and at most 31536000 (one year).","Please enter at least 60 and at most 31536000 (one year)."
+"Enable Charts","Enable Charts"
 Web,Web
 "Url Options","Url Options"
 "Add Store Code to Urls","Add Store Code to Urls"
@@ -569,78 +407,53 @@ Web,Web
 "Search Engine Optimization","Search Engine Optimization"
 "Use Web Server Rewrites","Use Web Server Rewrites"
 "Base URLs","Base URLs"
+"Base URL","Base URL"
 "Specify URL or {{base_url}} placeholder.","Specify URL or {{base_url}} placeholder."
 "Base Link URL","Base Link URL"
 "Base URL for Static View Files","Base URL for Static View Files"
 "May be empty or start with {{unsecure_base_url}} placeholder.","May be empty or start with {{unsecure_base_url}} placeholder."
 "Base URL for User Media Files","Base URL for User Media Files"
 "Base URLs (Secure)","Base URLs (Secure)"
+"Secure Base URL","Secure Base URL"
 "Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.","Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder."
 "Secure Base Link URL","Secure Base Link URL"
 "Secure Base URL for Static View Files","Secure Base URL for Static View Files"
 "May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.","May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder."
 "Secure Base URL for User Media Files","Secure Base URL for User Media Files"
-"Use Secure URLs in Frontend","Use Secure URLs in Frontend"
+"Use Secure URLs on Storefront","Use Secure URLs on Storefront"
 "Use Secure URLs in Admin","Use Secure URLs in Admin"
+"Enable HTTP Strict Transport Security (HSTS)","Enable HTTP Strict Transport Security (HSTS)"
+"Upgrade Insecure Requests","Upgrade Insecure Requests"
 "Offloader header","Offloader header"
 "Default Pages","Default Pages"
 "Default Web URL","Default Web URL"
 "Default No-route URL","Default No-route URL"
-"Default Cookie Settings","Default Cookie Settings"
-"Cookie Lifetime","Cookie Lifetime"
-"Cookie Path","Cookie Path"
-"Cookie Domain","Cookie Domain"
-"Use HTTP Only","Use HTTP Only"
-"Cookie Restriction Mode","Cookie Restriction Mode"
 "Session Validation Settings","Session Validation Settings"
 "Validate REMOTE_ADDR","Validate REMOTE_ADDR"
 "Validate HTTP_VIA","Validate HTTP_VIA"
 "Validate HTTP_X_FORWARDED_FOR","Validate HTTP_X_FORWARDED_FOR"
 "Validate HTTP_USER_AGENT","Validate HTTP_USER_AGENT"
-"Use SID on Frontend","Use SID on Frontend"
+"Use SID on Storefront","Use SID on Storefront"
 "Allows customers to stay logged in when switching between different stores.","Allows customers to stay logged in when switching between different stores."
 "Cache Type","Cache Type"
+Description,Description
 Tags,Tags
 "<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>","<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>"
-"Variable ID","Variable ID"
-Options,Options
-"Magento Admin","Magento Admin"
 "Community Edition","Community Edition"
-"Last Orders","Last Orders"
-"Last Search Terms","Last Search Terms"
-"Top Search Terms","Top Search Terms"
-"Your Password","Your Password"
-"You saved the account.","You saved the account."
-"Current User Identity Verification","Current User Identity Verification"
-Marketing,Marketing
-Communications,Communications
-"SEO & Search","SEO & Search"
-"User Content","User Content"
-"Data Transfer","Data Transfer"
-"Import History","Import History"
-Extensions,Extensions
-"Web Setup Wizard","Web Setup Wizard"
-"VAT number","VAT number"
-"Top destinations","Top destinations"
-"Store Hours of Operation","Store Hours of Operation"
-"Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/","Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/"
-"Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/","Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/"
-"Use Secure URLs on Storefront","Use Secure URLs on Storefront"
-"Use SID on Storefront","Use SID on Storefront"
-"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
-"For Windows server only.","For Windows server only."
-"Enabled Template Path Hints for Storefront","Enabled Template Path Hints for Storefront"
-"Enabled Template Path Hints for Admin","Enabled Template Path Hints for Admin"
-"Minify Html","Minify Html"
-"Enabled for Storefront","Enabled for Storefront"
-"Translate, blocks and other output caches should be disabled for both Storefront and Admin inline translations.", "Translate, blocks and other output caches should be disabled for both Storefront and Admin inline translations."
-"Enable Javascript Bundling","Enable Javascript Bundling"
-"Minify CSS Files","Minify CSS Files"
-"When the adapter was changed, please, flush Catalog Images Cache.","When the adapter was changed, please, flush Catalog Images Cache."
-"Average Order","Average Order"
-"Last Orders","Last Orders"
-"Last Search Terms","Last Search Terms"
-"Top Search Terms","Top Search Terms"
-"Reload Data","Reload Data"
-"Welcome, please sign in","Welcome, please sign in"
-"Sign in","Sign in"
+"Default Theme","Default Theme"
+"Applied Theme","Applied Theme"
+"If no value is specified, the system default is used. The system default may be modified by third party extensions.","If no value is specified, the system default is used. The system default may be modified by third party extensions."
+"Design Rule","Design Rule"
+"User Agent Rules","User Agent Rules"
+Magento_Ui/js/dynamic-rows/record,Magento_Ui/js/dynamic-rows/record
+Pagination,Pagination
+"Pagination Frame","Pagination Frame"
+"How many links to display at once.","How many links to display at once."
+"Pagination Frame Skip","Pagination Frame Skip"
+"If current frame position does not cover utmost pages, it renders the link to current position plus/minus this value.","If current frame position does not cover utmost pages, it renders the link to current position plus/minus this value."
+"Anchor Text for Previous","Anchor Text for Previous"
+"Alternative text for the previous pages link in the pagination menu. If empty, the default arrow image is used.","Alternative text for the previous pages link in the pagination menu. If empty, the default arrow image is used."
+"Anchor Text for Next","Anchor Text for Next"
+"Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used.","Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used."
+"Theme Name","Theme Name"
+"Deployment config file %1 is not writable.","Deployment config file %1 is not writable."

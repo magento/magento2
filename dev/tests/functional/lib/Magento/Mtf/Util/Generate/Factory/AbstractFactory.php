@@ -1,19 +1,20 @@
 <?php
 /**
- * @api
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\Util\Generate\Factory;
 
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class AbstractFactory
  *
  * Abstract Factory Generator
  *
+ * @api
  */
 abstract class AbstractFactory
 {
@@ -26,10 +27,9 @@ abstract class AbstractFactory
     protected $_checkList = [];
 
     /**
-     * @return mixed
-     */
-    /**
      * Generate Blocks
+     *
+     * @return void
      */
     public function launch()
     {
@@ -105,7 +105,7 @@ abstract class AbstractFactory
      * @return bool
      * @throws \Exception
      */
-    protected function checkAndCreateFolder($folder, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE)
+    protected function checkAndCreateFolder($folder, $mode = 0777)
     {
         if (is_dir($folder)) {
             return true;
@@ -127,7 +127,7 @@ abstract class AbstractFactory
      * @param bool $recursive
      * @return bool
      */
-    protected function mkDir($dir, $mode = 0770, $recursive = true)
+    protected function mkDir($dir, $mode = 0777, $recursive = true)
     {
         return @mkdir($dir, $mode, $recursive);
     }
@@ -156,7 +156,7 @@ abstract class AbstractFactory
 
             $pattern = $this->_getPattern($type, $location);
 
-            $filesIterator = glob($pattern, GLOB_BRACE);
+            $filesIterator = Glob::glob($pattern, Glob::GLOB_BRACE);
 
             foreach ($filesIterator as $filePath) {
                 if (!is_dir($filePath)) {

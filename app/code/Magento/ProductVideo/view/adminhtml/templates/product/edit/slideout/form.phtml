@@ -1,36 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
 ?>
-<div id="<?php /* @escapeNotVerified */ echo $block->getNameInLayout();?>" style="display:none">
-    <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
-    <script>
-        require(["jquery","mage/mage"],function($) {
-            $(function(){
-                $('#new-video').mage(
-                    'newVideoDialog',
-                    <?php /* @escapeNotVerified */ echo $block->getWidgetOptions();?>
-                );
-            });
-        });
-    </script>
-  <div id="video-player-preview-location" class="video-player-sidebar">
-      <div class="video-player-container"></div>
-      <div class="video-information title">
-          <label><?php /* @escapeNotVerified */ echo __('Title:') ?> </label><span></span>
-      </div>
-      <div class="video-information uploaded">
-          <label><?php /* @escapeNotVerified */ echo __('Uploaded:') ?> </label><span></span>
-      </div>
-      <div class="video-information uploader">
-          <label><?php /* @escapeNotVerified */ echo __('Uploader:') ?> </label><span></span>
-      </div>
-      <div class="video-information duration">
-          <label><?php /* @escapeNotVerified */ echo __('Duration:') ?> </label><span></span>
-      </div>
-  </div>
+<div id="<?= /* @escapeNotVerified */ $block->getNameInLayout() ?>" style="display:none"
+    data-modal-info='<?= /* @escapeNotVerified */ $block->getWidgetOptions() ?>'
+>
+    <?= /* @escapeNotVerified */ $block->getFormHtml() ?>
+    <div id="video-player-preview-location" class="video-player-sidebar">
+        <div class="video-player-container"></div>
+        <div class="video-information title">
+            <label><?= /* @escapeNotVerified */ __('Title:') ?> </label><span></span>
+        </div>
+        <div class="video-information uploaded">
+            <label><?= /* @escapeNotVerified */ __('Uploaded:') ?> </label><span></span>
+        </div>
+        <div class="video-information uploader">
+            <label><?= /* @escapeNotVerified */ __('Uploader:') ?> </label><span></span>
+        </div>
+        <div class="video-information duration">
+            <label><?= /* @escapeNotVerified */ __('Duration:') ?> </label><span></span>
+        </div>
+    </div>
 </div>
-

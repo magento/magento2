@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Rule\Model\ResourceModel;
 
 /**
  * Abstract Rule entity resource model
  *
- * @author Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Rule\Model\ResourceModel;
-
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -43,22 +43,25 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      */
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $fromDate = $object->getFromDate();
-        if ($fromDate instanceof \DateTime) {
-            $object->setFromDate($fromDate->format('Y-m-d H:i:s'));
-        } elseif (!is_string($fromDate) || empty($fromDate)) {
-            $object->setFromDate(null);
-        }
-
-        $toDate = $object->getToDate();
-        if ($toDate instanceof \DateTime) {
-            $object->setToDate($toDate->format('Y-m-d H:i:s'));
-        } elseif (!is_string($toDate) || empty($toDate)) {
-            $object->setToDate(null);
-        }
-
+        $this->resolveDate($object, 'from_date');
+        $this->resolveDate($object, 'to_date');
         parent::_beforeSave($object);
         return $this;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param string $dateIdentifier
+     * @return void
+     */
+    private function resolveDate(\Magento\Framework\Model\AbstractModel $object, $dateIdentifier)
+    {
+        $date = $object->getData($dateIdentifier);
+        if ($date instanceof \DateTime) {
+            $object->setData($dateIdentifier, $date->format('Y-m-d H:i:s'));
+        } elseif (!is_string($date) || empty($date)) {
+            $object->setData($dateIdentifier, null);
+        }
     }
 
     /**

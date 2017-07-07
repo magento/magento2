@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config\Form\Field;
@@ -10,6 +10,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Backend system config datetime field renderer
+ * @api
  */
 class Notification extends \Magento\Config\Block\System\Config\Form\Field
 {

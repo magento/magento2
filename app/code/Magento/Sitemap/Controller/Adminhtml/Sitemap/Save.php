@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
@@ -24,16 +24,16 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             $data['sitemap_path'] = '/' . ltrim($data['sitemap_path'], '/');
             $path = rtrim($data['sitemap_path'], '\\/') . '/' . $data['sitemap_filename'];
             /** @var $validator \Magento\MediaStorage\Model\File\Validator\AvailablePath */
-            $validator = $this->_objectManager->create('Magento\MediaStorage\Model\File\Validator\AvailablePath');
+            $validator = $this->_objectManager->create(\Magento\MediaStorage\Model\File\Validator\AvailablePath::class);
             /** @var $helper \Magento\Sitemap\Helper\Data */
-            $helper = $this->_objectManager->get('Magento\Sitemap\Helper\Data');
+            $helper = $this->_objectManager->get(\Magento\Sitemap\Helper\Data::class);
             $validator->setPaths($helper->getValidPaths());
             if (!$validator->isValid($path)) {
                 foreach ($validator->getMessages() as $message) {
                     $this->messageManager->addError($message);
                 }
                 // save data in session
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($data);
                 // redirect to edit form
                 return false;
             }
@@ -50,7 +50,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     protected function clearSiteMap(\Magento\Sitemap\Model\Sitemap $model)
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
-        $directory = $this->_objectManager->get('Magento\Framework\Filesystem')
+        $directory = $this->_objectManager->get(\Magento\Framework\Filesystem::class)
             ->getDirectoryWrite(DirectoryList::ROOT);
 
         if ($this->getRequest()->getParam('sitemap_id')) {
@@ -74,7 +74,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         // init model and set data
         /** @var \Magento\Sitemap\Model\Sitemap $model */
-        $model = $this->_objectManager->create('Magento\Sitemap\Model\Sitemap');
+        $model = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
         $this->clearSiteMap($model);
         $model->setData($data);
 
@@ -85,13 +85,13 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             // display success message
             $this->messageManager->addSuccess(__('You saved the sitemap.'));
             // clear previously saved data from session
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
             return $model->getId();
         } catch (\Exception $e) {
             // display error message
             $this->messageManager->addError($e->getMessage());
             // save data in session
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($data);
         }
         return false;
     }

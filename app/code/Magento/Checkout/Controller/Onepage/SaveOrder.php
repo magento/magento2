@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Onepage;
@@ -29,7 +29,9 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
 
         $result = new DataObject();
         try {
-            $agreementsValidator = $this->_objectManager->get('Magento\CheckoutAgreements\Model\AgreementsValidator');
+            $agreementsValidator = $this->_objectManager->get(
+                \Magento\CheckoutAgreements\Model\AgreementsValidator::class
+            );
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 $result->setData('success', false);
                 $result->setData('error', true);
@@ -72,8 +74,8 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                 ]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_objectManager->get('Magento\Checkout\Helper\Data')
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(\Magento\Checkout\Helper\Data::class)
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());
             $result->setData(
                 'success',
@@ -102,8 +104,8 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                 $this->getOnepage()->getCheckout()->setUpdateSection(null);
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_objectManager->get('Magento\Checkout\Helper\Data')
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(\Magento\Checkout\Helper\Data::class)
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());
             $result->setData('success', false);
             $result->setData('error', true);

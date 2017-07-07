@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -25,11 +25,11 @@ return [
             . ' <fileFormat name="name_one" model="model1"/></config>',
         [
             "Element 'entityType', attribute 'model': [facet 'pattern'] The value '1' is not accepted by the " .
-            "pattern '[A-Za-z_\\\\\\\\]+'.\nLine: 1\n",
+            "pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
             "Element 'entityType', attribute 'model': '1' is not a valid value of the atomic type" .
             " 'modelName'.\nLine: 1\n",
             "Element 'fileFormat', attribute 'model': [facet 'pattern'] The value 'model1' is not " .
-            "accepted by the pattern '[A-Za-z_\\\\\\\\]+'.\nLine: 1\n",
+            "accepted by the pattern '[A-Za-z_\\\\]+'.\nLine: 1\n",
             "Element 'fileFormat', attribute 'model': 'model1' is not a valid " .
             "value of the atomic type 'modelName'.\nLine: 1\n"
         ],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config;
@@ -52,14 +52,44 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
         $originalData = $element->getOriginalData();
         $this->addData(
             [
+                // Global
+                'query' => $this->createQuery(
+                    [
+                        'partnerId' => $originalData['partner_id'],
+                        'partnerLogoUrl' => $this->_assetRepo->getUrl($originalData['partner_logo_url']),
+                        'receiveCredentials' => $originalData['receive_credentials'],
+                        'showPermissions' => $originalData['show_permissions'],
+                        'displayMode' => $originalData['display_mode'],
+                        'productIntentID' => $originalData['product_intent_id'],
+                    ]
+                ),
+                // Live
                 'button_label' => __($originalData['button_label']),
                 'button_url' => $originalData['button_url'],
                 'html_id' => $element->getHtmlId(),
+                // Sandbox
                 'sandbox_button_label' => __($originalData['sandbox_button_label']),
                 'sandbox_button_url' => $originalData['sandbox_button_url'],
                 'sandbox_html_id' => 'sandbox_' . $element->getHtmlId(),
             ]
         );
         return $this->_toHtml();
+    }
+
+    /**
+     * Create request query
+     *
+     * @param array $requestData
+     * @return string
+     */
+    private function createQuery(array $requestData)
+    {
+        $query = [];
+
+        foreach ($requestData as $name => $value) {
+            $query[] = sprintf('%s=%s', $name, $value);
+        }
+
+        return implode('&', $query);
     }
 }

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Test\Block\Form\Login;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -15,6 +17,13 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
     /** @var CustomerInterface */
     private $customer;
 
@@ -32,6 +41,9 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /** @var \Psr\Log\LoggerInterface */
     protected $logger;
+
+    /** @var EmailNotificationInterface */
+    private $emailNotification;
 
     /**
      * @param Action\Context $context
@@ -58,6 +70,23 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
+     * Get email notification
+     *
+     * @return EmailNotificationInterface
+     * @deprecated
+     */
+    private function getEmailNotification()
+    {
+        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                EmailNotificationInterface::class
+            );
+        } else {
+            return $this->emailNotification;
+        }
+    }
+
+    /**
      * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
@@ -75,11 +104,15 @@ class InlineEdit extends \Magento\Backend\App\Action
 
         foreach (array_keys($postItems) as $customerId) {
             $this->setCustomer($this->customerRepository->getById($customerId));
+            $currentCustomer = clone $this->getCustomer();
+
             if ($this->getCustomer()->getDefaultBilling()) {
                 $this->updateDefaultBilling($this->getData($postItems[$customerId]));
             }
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
+
+            $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
         }
 
         return $resultJson->setData([
@@ -130,7 +163,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $this->dataObjectHelper->populateWithArray(
             $customer,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
     }
 
@@ -149,7 +182,7 @@ class InlineEdit extends \Magento\Backend\App\Action
                 $this->dataObjectHelper->populateWithArray(
                     $address,
                     $this->processAddressData($data),
-                    '\Magento\Customer\Api\Data\AddressInterface'
+                    \Magento\Customer\Api\Data\AddressInterface::class
                 );
                 break;
             }
@@ -249,15 +282,5 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorWithCustomerId($errorText)
     {
         return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
-    }
-
-    /**
-     * Customer access rights checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }

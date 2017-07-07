@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option\Value;
@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 /**
  * Catalog product option values collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
@@ -20,8 +21,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Catalog\Model\Product\Option\Value',
-            'Magento\Catalog\Model\ResourceModel\Product\Option\Value'
+            \Magento\Catalog\Model\Product\Option\Value::class,
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value::class
         );
     }
 

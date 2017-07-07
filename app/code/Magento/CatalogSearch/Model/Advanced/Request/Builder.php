@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Advanced\Request;
 
 use Magento\Framework\Search\Request\Builder as RequestBuilder;
 
+/**
+ * @api
+ */
 class Builder extends RequestBuilder
 {
     /**

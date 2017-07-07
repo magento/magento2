@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer */
         $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Setup\ModuleDataSetupInterface'
+            \Magento\Framework\Setup\ModuleDataSetupInterface::class
         );
         $this->_connection = $installer->getConnection();
         $this->_tableName = $this->_connection->getTableName('table_two_column_idx');

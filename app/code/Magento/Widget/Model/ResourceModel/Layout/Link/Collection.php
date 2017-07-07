@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\ResourceModel\Layout\Link;
@@ -45,7 +45,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Widget\Model\Layout\Link', 'Magento\Widget\Model\ResourceModel\Layout\Link');
+        $this->_init(\Magento\Widget\Model\Layout\Link::class, \Magento\Widget\Model\ResourceModel\Layout\Link::class);
     }
 
     /**
@@ -101,7 +101,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addUpdatedDaysBeforeFilter($days)
     {
-        $datetime = new \DateTime();
+        $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
         $storeInterval = new \DateInterval('P' . $days . 'D');
         $datetime->sub($storeInterval);
         $formattedDate = $this->dateTime->formatDate($datetime->getTimestamp());

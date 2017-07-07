@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -9,8 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Setup\BackupRollback;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Setup\Model\WebLogger;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -21,47 +19,64 @@ class BackupActionItems extends AbstractActionController
     /**
      * Handler for BackupRollback
      *
-     * @var BackupRollback
+     * @var \Magento\Framework\Setup\BackupRollback
      */
     private $backupHandler;
+
     /**
      * Filesystem
      *
-     * @var Filesystem
+     * @var \Magento\Framework\Backup\Filesystem
      */
     private $fileSystem;
 
     /**
      * Filesystem Directory List
      *
-     * @var DirectoryList
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryList;
 
     /**
      * Constructor
      *
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param WebLogger $logger
-     * @param DirectoryList $directoryList
-     * @param Filesystem $fileSystem
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Setup\Model\WebLogger $logger
+     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param \Magento\Framework\Backup\Filesystem $fileSystem
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
-        WebLogger $logger,
-        DirectoryList $directoryList,
-        Filesystem $fileSystem
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Magento\Setup\Model\WebLogger $logger,
+        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        \Magento\Framework\Backup\Filesystem $fileSystem
     ) {
         $objectManager = $objectManagerProvider->get();
-        $this->backupHandler = $objectManager->create('Magento\Framework\Setup\BackupRollback', ['log' => $logger]);
+        $this->backupHandler = $objectManager->create(
+            \Magento\Framework\Setup\BackupRollback::class,
+            ['log' => $logger]
+        );
         $this->directoryList = $directoryList;
         $this->fileSystem = $fileSystem;
     }
 
     /**
+     * No index action, return 404 error page
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        $view = new \Zend\View\Model\ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
+    }
+
+    /**
      * Checks disk space availability
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      */
     public function checkAction()
     {
@@ -99,7 +114,7 @@ class BackupActionItems extends AbstractActionController
     /**
      * Takes backup for code, media or DB
      *
-     * @return JsonModel
+     * @return \Zend\View\Model\JsonModel
      */
     public function createAction()
     {

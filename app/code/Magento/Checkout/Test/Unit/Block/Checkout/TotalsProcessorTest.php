@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,10 +18,10 @@ class TotalsProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfigMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeConfigMock = $this->getMock(
-            '\Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             [],
             '',
@@ -38,13 +38,13 @@ class TotalsProcessorTest extends \PHPUnit_Framework_TestCase
                 'sub-total' => [],
                 'grand-total' => [],
                 'non-existant-total' => null
-        ];
+            ];
         $expectedResult['components']['checkout']['children']['sidebar']['children']['summary']
             ['children']['totals']['children'] = [
                 'sub-total' => ['sortOrder' => 10],
                 'grand-total' => ['sortOrder' => 20],
                 'non-existant-total' => null
-        ];
+            ];
         $configData = ['sub_total' => 10, 'grand_total' => 20];
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')->with('sales/totals_sort')

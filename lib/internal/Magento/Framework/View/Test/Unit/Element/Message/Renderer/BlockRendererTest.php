@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer;
@@ -21,10 +21,10 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $blockTemplate;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->blockTemplate = $this->getMockBuilder(
-            'Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template'
+            \Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -35,7 +35,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
-        $message = $this->getMock('Magento\Framework\Message\MessageInterface');
+        $message = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
         $messageData = [
             'painting' => 'The Last Supper',
             'apostles_cnt' => 28,
@@ -77,7 +77,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
     public function testRenderNoTemplate()
     {
         /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
-        $message = $this->getMock('Magento\Framework\Message\MessageInterface');
+        $message = $this->getMock(\Magento\Framework\Message\MessageInterface::class);
         $messageData = [
             'who' => 'Brian',
             'is' => 'a Very Naughty Boy'

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model;
@@ -60,9 +60,9 @@ class ProductUrlPathGenerator
     {
         $path = $product->getData('url_path');
         if ($path === null) {
-            $path = $product->getUrlKey() === false
-                ? $this->prepareProductDefaultUrlKey($product)
-                : $this->prepareProductUrlKey($product);
+            $path = $product->getUrlKey()
+                ? $this->prepareProductUrlKey($product)
+                : $this->prepareProductDefaultUrlKey($product);
         }
         return $category === null
             ? $path

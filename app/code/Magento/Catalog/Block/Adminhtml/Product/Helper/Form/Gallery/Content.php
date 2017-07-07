@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,8 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -32,6 +34,11 @@ class Content extends \Magento\Backend\Block\Widget
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    private $imageHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -55,7 +62,7 @@ class Content extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('uploader', 'Magento\Backend\Block\Media\Uploader');
+        $this->addChild('uploader', \Magento\Backend\Block\Media\Uploader::class);
 
         $this->getUploader()->getConfig()->setUrl(
             $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')
@@ -121,16 +128,44 @@ class Content extends \Magento\Backend\Block\Widget
      */
     public function getImagesJson()
     {
-        if (is_array($this->getElement()->getValue())) {
-            $value = $this->getElement()->getValue();
-            if (is_array($value['images']) && count($value['images']) > 0) {
-                foreach ($value['images'] as &$image) {
-                    $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+        $value = $this->getElement()->getImages();
+        if (is_array($value) &&
+            array_key_exists('images', $value) &&
+            is_array($value['images']) &&
+            count($value['images'])
+        ) {
+            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $images = $this->sortImagesByPosition($value['images']);
+            foreach ($images as &$image) {
+                $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+                try {
+                    $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
+                    $image['size'] = $fileHandler['size'];
+                } catch (FileSystemException $e) {
+                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('small_image');
+                    $image['size'] = 0;
+                    $this->_logger->warning($e);
                 }
-                return $this->_jsonEncoder->encode($value['images']);
             }
+            return $this->_jsonEncoder->encode($images);
         }
         return '[]';
+    }
+
+    /**
+     * Sort images array by position key
+     *
+     * @param array $images
+     * @return array
+     */
+    private function sortImagesByPosition($images)
+    {
+        if (is_array($images)) {
+            usort($images, function ($imageA, $imageB) {
+                return ($imageA['position'] < $imageB['position']) ? -1 : 1;
+            });
+        }
+        return $images;
     }
 
     /**
@@ -170,6 +205,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve default state allowance
+     *
      * @return bool
      */
     public function hasUseDefault()
@@ -184,7 +221,7 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Enter description here...
+     * Retrieve media attributes
      *
      * @return array
      */
@@ -194,10 +231,25 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve JSON data
+     *
      * @return string
      */
     public function getImageTypesJson()
     {
         return $this->_jsonEncoder->encode($this->getImageTypes());
+    }
+
+    /**
+     * @return \Magento\Catalog\Helper\Image
+     * @deprecated
+     */
+    private function getImageHelper()
+    {
+        if ($this->imageHelper === null) {
+            $this->imageHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Helper\Image::class);
+        }
+        return $this->imageHelper;
     }
 }

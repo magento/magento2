@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
@@ -27,7 +27,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         ];
         $this->getRequest()->setPostValue($post);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Template'
+            \Magento\Newsletter\Model\Template::class
         );
     }
 
@@ -36,8 +36,9 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         /**
          * Unset messages
          */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->destroy();
-        unset($this->_model);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)
+            ->destroy();
+        $this->_model = null;
     }
 
     /**
@@ -93,7 +94,6 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testSaveActionTemplateWithInvalidDataAndVerifySuccessMessage()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
@@ -8,8 +8,7 @@ namespace Magento\Backend\Block;
 /**
  * Base widget class
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Widget extends \Magento\Backend\Block\Template
@@ -82,7 +81,7 @@ class Widget extends \Magento\Backend\Block\Template
     public function getButtonHtml($label, $onclick, $class = '', $buttonId = null, $dataAttr = [])
     {
         return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             ['label' => $label, 'onclick' => $onclick, 'class' => $class, 'type' => 'button', 'id' => $buttonId]
         )->setDataAttribute(

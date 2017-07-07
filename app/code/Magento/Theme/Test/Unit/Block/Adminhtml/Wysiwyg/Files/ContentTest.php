@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
@@ -31,13 +31,13 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helperStorage = $this->getMock('Magento\Theme\Helper\Storage', [], [], '', false);
-        $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
-        $this->_request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->_helperStorage = $this->getMock(\Magento\Theme\Helper\Storage::class, [], [], '', false);
+        $this->_urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
+        $this->_request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
-            'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content',
+            \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content::class,
             [
                 'urlBuilder' => $this->_urlBuilder,
                 'request' => $this->_request,
@@ -45,7 +45,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->_filesContent = $objectManagerHelper->getObject(
-            'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content',
+            \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content::class,
             $constructArguments
         );
     }

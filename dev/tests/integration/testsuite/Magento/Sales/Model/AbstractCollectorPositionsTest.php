@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit_Framework_TestCas
      */
     public function testCollectorPosition($collectorCode, $configType, array $before, array $after)
     {
-        $allCollectors = $this->_getConfigCollectors($configType);
+        $allCollectors = self::_getConfigCollectors($configType);
         $collectorCodes = array_keys($allCollectors);
         $collectorPos = array_search($collectorCode, $collectorCodes);
         $this->assertNotSame(false, $collectorPos, "'{$collectorCode}' total collector is not found");
@@ -62,15 +62,15 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit_Framework_TestCas
     {
         switch ($configType) {
             case 'quote':
-                $configClass = 'Magento\Quote\Model\Quote\Address\Total\Collector';
+                $configClass = \Magento\Quote\Model\Quote\Address\Total\Collector::class;
                 $methodGetCollectors = 'getCollectors';
                 break;
             case 'invoice':
-                $configClass = 'Magento\Sales\Model\Order\Invoice\Config';
+                $configClass = \Magento\Sales\Model\Order\Invoice\Config::class;
                 $methodGetCollectors = 'getTotalModels';
                 break;
             case 'creditmemo':
-                $configClass = 'Magento\Sales\Model\Order\Creditmemo\Config';
+                $configClass = \Magento\Sales\Model\Order\Creditmemo\Config::class;
                 $methodGetCollectors = 'getTotalModels';
                 break;
             default:

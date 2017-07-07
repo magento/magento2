@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use \Magento\Sales\Model\Order\CreditmemoRepository;
 
 /**
  * Class CreditmemoRepositoryTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,31 +30,39 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchResultFactoryMock;
 
-    public function setUp()
+    /**
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessorMock;
+    
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->metadataMock = $this->getMock('Magento\Sales\Model\ResourceModel\Metadata', [], [], '', false);
+        $this->metadataMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Metadata::class, [], [], '', false);
         $this->searchResultFactoryMock = $this->getMock(
-            'Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory',
+            \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
         $this->creditmemo = $objectManager->getObject(
-            'Magento\Sales\Model\Order\CreditmemoRepository',
+            \Magento\Sales\Model\Order\CreditmemoRepository::class,
             [
                 'metadata' => $this->metadataMock,
-                'searchResultFactory' => $this->searchResultFactoryMock
+                'searchResultFactory' => $this->searchResultFactoryMock,
+                'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
-        $this->type = $this->getMock('Magento\Eav\Model\Entity\Type', ['fetchNewIncrementId'], [], '', false);
+        $this->type = $this->getMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId'], [], '', false);
     }
 
     public function testGet()
     {
         $id = 1;
-        $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -88,7 +98,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityNoId()
     {
         $id = 1;
-        $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -108,7 +118,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataMock->expects($this->once())
@@ -119,44 +129,15 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')
+        $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filterGroups = [$filterGroup];
-        $field = 'test_field';
-        $fieldValue = 'test_value';
-
-        $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')
+        $collection = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filter->expects($this->any())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $filter->expects($this->any())
-            ->method('getField')
-            ->willReturn($field);
-        $filter->expects($this->any())
-            ->method('getValue')
-            ->willReturn($fieldValue);
-
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-
-        $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn($filterGroups);
-
-        $collection = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->withAnyParameters();
-
+        $this->collectionProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
         $this->searchResultFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collection);
@@ -166,14 +147,14 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
+        $mapper = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())
@@ -193,13 +174,13 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteWithException()
     {
-        $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->never())
             ->method('getEntityId');
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
+        $mapper = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())
@@ -215,14 +196,14 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->any())
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
+        $mapper = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())
@@ -242,13 +223,13 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithException()
     {
-        $entity = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->never())
             ->method('getEntityId');
 
-        $mapper = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Creditmemo')
+        $mapper = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mapper->expects($this->once())

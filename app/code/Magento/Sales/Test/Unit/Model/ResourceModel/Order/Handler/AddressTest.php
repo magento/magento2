@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Handler;
@@ -14,34 +14,38 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\ResourceModel\Order\Handler\Address
      */
     protected $address;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Address\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressCollectionMock;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeMock;
+
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
+
     /**
      * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->attributeMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Attribute',
+            \Magento\Sales\Model\ResourceModel\Attribute::class,
             [],
             [],
             '',
             false
         );
         $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 '__wakeup',
                 'getAddresses',
@@ -62,14 +66,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->addressMock = $this->getMock(
-            'Magento\Sales\Model\Order\Address',
+            \Magento\Sales\Model\Order\Address::class,
             [],
             [],
             '',
             false
         );
         $this->addressCollectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Address\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Address\Collection::class,
             [],
             [],
             '',

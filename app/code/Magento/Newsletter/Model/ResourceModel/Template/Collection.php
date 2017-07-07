@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\ResourceModel\Template;
@@ -9,6 +9,8 @@ namespace Magento\Newsletter\Model\ResourceModel\Template;
  * Newsletter templates collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +21,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Template', 'Magento\Newsletter\Model\ResourceModel\Template');
+        $this->_init(
+            \Magento\Newsletter\Model\Template::class,
+            \Magento\Newsletter\Model\ResourceModel\Template::class
+        );
     }
 
     /**

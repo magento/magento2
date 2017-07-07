@@ -1,9 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Event\InvokerInterface;
+use Magento\Framework\Event\ConfigInterface;
+use Magento\Framework\Event\Manager as EventManager;
 
 /**
  * Class ManagerTest
@@ -15,74 +20,74 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_invoker;
+    protected $invokerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_eventFactory;
+    protected $eventFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_event;
+    protected $event;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_wrapperFactory;
+    protected $wrapperFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_observer;
+    protected $observer;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_eventConfigMock;
+    protected $eventConfigMock;
 
     /**
      * @var \Magento\Framework\Event\Manager
      */
-    protected $_eventManager;
+    protected $eventManager;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
 
     protected function setUp()
     {
-        $this->_invoker = $this->getMock('Magento\Framework\Event\InvokerInterface');
-        $this->_eventConfigMock = $this->getMock('Magento\Framework\Event\ConfigInterface');
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->invokerMock = $this->getMock(InvokerInterface::class);
+        $this->eventConfigMock = $this->getMock(ConfigInterface::class);
 
-        $this->_eventManager = new \Magento\Framework\Event\Manager($this->_invoker, $this->_eventConfigMock);
+        $this->eventManager = $this->objectManagerHelper->getObject(
+            EventManager::class,
+            [
+                'invoker' => $this->invokerMock,
+                'eventConfig' => $this->eventConfigMock
+            ]
+        );
     }
 
     public function testDispatch()
     {
-        $this->_eventConfigMock->expects(
-            $this->once()
-        )->method(
-            'getObservers'
-        )->with(
-            'some_event'
-        )->will(
-            $this->returnValue(
-                ['observer' => ['instance' => 'class', 'method' => 'method', 'name' => 'observer']]
-            )
-        );
-        $this->_eventManager->dispatch('some_event', ['123']);
+        $this->eventConfigMock->expects($this->once())
+            ->method('getObservers')
+            ->with('some_eventname')
+            ->willReturn(['observer' => ['instance' => 'class', 'method' => 'method', 'name' => 'observer']]);
+        $this->eventManager->dispatch('some_eventName', ['123']);
     }
 
     public function testDispatchWithEmptyEventObservers()
     {
-        $this->_eventConfigMock->expects(
-            $this->once()
-        )->method(
-            'getObservers'
-        )->with(
-            'some_event'
-        )->will(
-            $this->returnValue([])
-        );
-        $this->_invoker->expects($this->never())->method('dispatch');
-        $this->_eventManager->dispatch('some_event');
+        $this->eventConfigMock->expects($this->once())
+            ->method('getObservers')
+            ->with('some_event')
+            ->willReturn([]);
+        $this->invokerMock->expects($this->never())->method('dispatch');
+        $this->eventManager->dispatch('some_event');
     }
 }

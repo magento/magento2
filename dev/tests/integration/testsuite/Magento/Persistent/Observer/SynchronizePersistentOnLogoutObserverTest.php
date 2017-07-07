@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Observer;
@@ -23,7 +23,7 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit_Framework_TestC
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $this->_customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
     }
 
     /**
@@ -39,7 +39,7 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit_Framework_TestC
         // check that persistent session has been stored for Customer
         /** @var \Magento\Persistent\Model\Session $sessionModel */
         $sessionModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Persistent\Model\Session'
+            \Magento\Persistent\Model\Session::class
         );
         $sessionModel->loadByCookieKey();
         $this->assertEquals(1, $sessionModel->getCustomerId());
@@ -48,7 +48,7 @@ class SynchronizePersistentOnLogoutObserverTest extends \PHPUnit_Framework_TestC
 
         /** @var \Magento\Persistent\Model\Session $sessionModel */
         $sessionModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Persistent\Model\Session'
+            \Magento\Persistent\Model\Session::class
         );
         $sessionModel->loadByCookieKey();
         $this->assertNull($sessionModel->getCustomerId());

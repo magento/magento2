@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -808,7 +808,28 @@ class InstallData implements InstallDataInterface
             ['BR', 'SP', 'São Paulo'],
             ['BR', 'SE', 'Sergipe'],
             ['BR', 'TO', 'Tocantins'],
-            ['BR', 'DF', 'Distrito Federal']
+            ['BR', 'DF', 'Distrito Federal'],
+            ['HR', 'HR-01', 'Zagrebačka županija'],
+            ['HR', 'HR-02', 'Krapinsko-zagorska županija'],
+            ['HR', 'HR-03', 'Sisačko-moslavačka županija'],
+            ['HR', 'HR-04', 'Karlovačka županija'],
+            ['HR', 'HR-05', 'Varaždinska županija'],
+            ['HR', 'HR-06', 'Koprivničko-križevačka županija'],
+            ['HR', 'HR-07', 'Bjelovarsko-bilogorska županija'],
+            ['HR', 'HR-08', 'Primorsko-goranska županija'],
+            ['HR', 'HR-09', 'Ličko-senjska županija'],
+            ['HR', 'HR-10', 'Virovitičko-podravska županija'],
+            ['HR', 'HR-11', 'Požeško-slavonska županija'],
+            ['HR', 'HR-12', 'Brodsko-posavska županija'],
+            ['HR', 'HR-13', 'Zadarska županija'],
+            ['HR', 'HR-14', 'Osječko-baranjska županija'],
+            ['HR', 'HR-15', 'Šibensko-kninska županija'],
+            ['HR', 'HR-16', 'Vukovarsko-srijemska županija'],
+            ['HR', 'HR-17', 'Splitsko-dalmatinska županija'],
+            ['HR', 'HR-18', 'Istarska županija'],
+            ['HR', 'HR-19', 'Dubrovačko-neretvanska županija'],
+            ['HR', 'HR-20', 'Međimurska županija'],
+            ['HR', 'HR-21', 'Grad Zagreb']
         ];
 
         foreach ($data as $row) {
@@ -843,23 +864,14 @@ class InstallData implements InstallDataInterface
             ]
         );
 
-        /**
-         * @var $countries array
-         */
-        $countries = [];
-        foreach ($this->directoryData->getCountryCollection() as $country) {
-            if ($country->getRegionCollection()->getSize() > 0) {
-                $countries[] = $country->getId();
-            }
-        }
-
+        $countries = $this->directoryData->getCountryCollection()->getCountriesWithRequiredStates();
         $setup->getConnection()->insert(
             $setup->getTable('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,
                 'path' => Data::XML_PATH_STATES_REQUIRED,
-                'value' => implode(',', $countries)
+                'value' => implode(',', array_keys($countries))
             ]
         );
     }

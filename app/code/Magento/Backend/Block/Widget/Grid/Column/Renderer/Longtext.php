@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
- * Backend Grid Renderer
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -30,7 +31,7 @@ class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             $truncateLength = $this->getColumn()->getTruncate();
         }
         $text = $this->filterManager->truncate(parent::_getValue($row), ['length' => $truncateLength]);
-        if ($this->getColumn()->getEscape()) {
+        if (!$this->getColumn()->hasEscape() || $this->getColumn()->getEscape()) {
             $text = $this->escapeHtml($text);
         }
         if ($this->getColumn()->getNl2br()) {

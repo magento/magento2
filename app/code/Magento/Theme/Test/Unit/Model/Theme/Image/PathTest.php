@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,12 +45,12 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->mediaDirectory = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class, [], [], '', false
         );
-        $this->_assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->_assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
@@ -74,7 +74,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
         $theme = $this->getMock(
-            'Magento\Theme\Model\Theme',
+            \Magento\Theme\Model\Theme::class,
             ['getPreviewImage', 'isPhysical', '__wakeup'],
             [],
             '',
@@ -84,7 +84,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
             ->method('getPreviewImage')
             ->will($this->returnValue('image.png'));
 
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
         $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
@@ -97,7 +97,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
         $theme = $this->getMock(
-            'Magento\Theme\Model\Theme',
+            \Magento\Theme\Model\Theme::class,
             ['getPreviewImage', 'isPhysical', '__wakeup'],
             [],
             '',

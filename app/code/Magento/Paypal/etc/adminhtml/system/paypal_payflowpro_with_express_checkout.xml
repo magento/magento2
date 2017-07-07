@@ -1,19 +1,21 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="paypal_payflowpro_with_express_checkout" translate="label comment" extends="payment_all_paypal/paypal_payflowpro">
-        <label>Payflow Pro (Includes Express Checkout)</label>
+        <label>Payflow Pro</label>
         <attribute type="paypal_ec_separate">0</attribute>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <field id="enable_paypal_payflow">
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
             </field>
+            <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+            <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
             <group id="paypal_payflow_api_settings" translate="label">
                 <label>Payflow Pro and Express Checkout</label>
                 <field id="business_account" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/business_account" translate="label" sortOrder="10">
@@ -41,7 +43,14 @@
                     <field id="enable_paypal_payflow"/>
                 </requires>
             </field>
-            <group id="paypal_payflow_advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="22">
+            <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+                <config_path>payment/payflow_express_bml/sort_order</config_path>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
+                <depends>
+                    <field id="enable_express_checkout_bml_payflow">1</field>
+                </depends>
+            </field>
+            <group id="paypal_payflow_advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="40">
                 <label>Advertise PayPal Credit</label>
                 <comment>
                     <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>

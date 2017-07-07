@@ -2,7 +2,7 @@
 /**
  * Factory to create new SoapServer objects.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap;
@@ -11,6 +11,7 @@ class ServerFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @deprecated
      */
     protected $_objectManager;
 
@@ -42,7 +43,7 @@ class ServerFactory
      */
     public function create($url, $options)
     {
-        $soapServer = $this->_objectManager->create('SoapServer', ['wsdl' => $url, 'options' => $options]);
+        $soapServer = new \SoapServer($url, $options);
         $soapServer->setObject($this->_soapHandler);
         return $soapServer;
     }

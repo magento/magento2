@@ -1,56 +1,131 @@
-Cancel,Cancel
-Price,Price
-Quantity,Quantity
-ID,ID
-SKU,SKU
-Qty,Qty
-"Incl. Tax","Incl. Tax"
-"Use Default","Use Default"
-Delete,Delete
-Name,Name
-"Add Option","Add Option"
-"Stock Availability","Stock Availability"
-"In Stock","In Stock"
-"Out of Stock","Out of Stock"
-Image,Image
-"Use To Create Configurable Product","Use To Create Configurable Product"
-"Create Empty","Create Empty"
-"Generate Variations","Generate Variations"
-"Create New Variation Set","Create New Variation Set"
-"Associated Products","Associated Products"
-"Quick simple product creation","Quick simple product creation"
-Autogenerate,Autogenerate
-"Select Configurable Attributes","Select Configurable Attributes"
-"Configurable Product Settings","Configurable Product Settings"
+"Add configurable attributes to the current Attribute Set (""%1"")","Add configurable attributes to the current Attribute Set (""%1"")"
+"Add configurable attributes to the new Attribute Set based on current","Add configurable attributes to the new Attribute Set based on current"
+"New attribute set name","New attribute set name"
+"Add configurable attributes to the existing Attribute Set","Add configurable attributes to the existing Attribute Set"
+"Choose existing Attribute Set","Choose existing Attribute Set"
+Configurations,Configurations
+"Attribute Values","Attribute Values"
+"Bulk Images &amp; Price","Bulk Images &amp; Price"
+"Create New Attribute","Create New Attribute"
+"Select Attributes","Select Attributes"
+Summary,Summary
 "Choose an Option...","Choose an Option..."
 "This attribute is used in configurable products.","This attribute is used in configurable products."
-"Cannot add the item to shopping cart","Cannot add the item to shopping cart"
-"Please specify the product's option(s).","Please specify the product's option(s)."
+"Product has been already attached","Product has been already attached"
+"Product with specified sku: %1 is not a configurable product","Product with specified sku: %1 is not a configurable product"
+"Requested option doesn\'t exist","Requested option doesn\'t exist"
+"Requested option doesn\'t exist: %1","Requested option doesn\'t exist: %1"
+"Cannot delete variations from product: %1","Cannot delete variations from product: %1"
+"Cannot delete option with id: %1","Cannot delete option with id: %1"
+"Option with id ""%1"" not found","Option with id ""%1"" not found"
+"Something went wrong while saving option.","Something went wrong while saving option."
+"Only implemented for configurable product: %1","Only implemented for configurable product: %1"
+"Option attribute ID is not specified.","Option attribute ID is not specified."
+"Option label is not specified.","Option label is not specified."
+"Option values are not specified.","Option values are not specified."
+"Value index is not specified for an option.","Value index is not specified for an option."
+"Product with id ""%1"" does not contain required attribute ""%2"".","Product with id ""%1"" does not contain required attribute ""%2""."
+"Products ""%1"" and ""%2"" have the same set of attribute values.","Products ""%1"" and ""%2"" have the same set of attribute values."
+"You can\'t add the item to shopping cart.","You can\'t add the item to shopping cart."
+"You need to choose options for your item.","You need to choose options for your item."
 "Some product variations fields are not valid.","Some product variations fields are not valid."
+"Configuration must have specified attributes","Configuration must have specified attributes"
+"Configurable product ""%1"" does not have sub-products","Configurable product ""%1"" does not have sub-products"
 "This group contains attributes used in configurable products. Please move these attributes to another group and try again.","This group contains attributes used in configurable products. Please move these attributes to another group and try again."
 "This attribute is used in configurable products. You cannot remove it from the attribute set.","This attribute is used in configurable products. You cannot remove it from the attribute set."
-"Delete Variations Group","Delete Variations Group"
+"Associated Products","Associated Products"
+"Step 2: Attribute Values","Step 2: Attribute Values"
+"Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.","Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU."
 "Sort Variations","Sort Variations"
-"Variation Label","Variation Label"
-Label,Label
-"Change Price","Change Price"
-Include,Include
-%,%
-"begin typing to add value","begin typing to add value"
-Variations,Variations
-"Current Variations","Current Variations"
-Display,Display
-Weight,Weight
-"Upload Image","Upload Image"
-Choose,Choose
+Options,Options
+"Select All","Select All"
+"Deselect All","Deselect All"
+"Remove Attribute","Remove Attribute"
+"Save Option","Save Option"
+"Remove Option","Remove Option"
+"Create New Value","Create New Value"
+"Step 3: Bulk Images, Price and Quantity","Step 3: Bulk Images, Price and Quantity"
+"Based on your selections <span class=""new-products-count"" data-bind=""text:countVariations""></span>
+        new products will be created. Use this step to customize images and price for your new products.","Based on your selections <span class=""new-products-count"" data-bind=""text:countVariations""></span>
+        new products will be created. Use this step to customize images and price for your new products."
+Images,Images
+"Apply single set of images to all SKUs","Apply single set of images to all SKUs"
+"Apply unique images by attribute to each SKU","Apply unique images by attribute to each SKU"
+"Skip image uploading at this time","Skip image uploading at this time"
+"Browse Files...","Browse Files..."
+"Browse to find or drag image here","Browse to find or drag image here"
+"Remove image","Remove image"
+"Edit role","Edit role"
+Hidden,Hidden
+"Alt Text","Alt Text"
+Role,Role
+"Hide from Product Page","Hide from Product Page"
+"Select attribute","Select attribute"
 Select,Select
+Price,Price
+"Apply single price to all SKUs","Apply single price to all SKUs"
+"Apply unique prices by attribute to each SKU","Apply unique prices by attribute to each SKU"
+"Skip price at this time","Skip price at this time"
+Quantity,Quantity
+"Apply single quantity to each SKUs","Apply single quantity to each SKUs"
+"Apply unique quantity by attribute to each SKU","Apply unique quantity by attribute to each SKU"
+"Skip quantity at this time","Skip quantity at this time"
+"Step 1: Select Attributes","Step 1: Select Attributes"
+"Selected Attributes:","Selected Attributes:"
+"Step 4: Summary","Step 4: Summary"
+"Configurable products allow customers to choose options (Ex: shirt color).
+            You need to create a simple product for each configuration (Ex: a product for each color).","Configurable products allow customers to choose options (Ex: shirt color).
+            You need to create a simple product for each configuration (Ex: a product for each color)."
+"Edit Configurations","Edit Configurations"
+"Create Configurations","Create Configurations"
+"Add Products Manually","Add Products Manually"
+"Current Variations","Current Variations"
+Image,Image
+Name,Name
+SKU,SKU
+Weight,Weight
+Actions,Actions
+"Upload Image","Upload Image"
+"Upload image","Upload image"
 "No Image","No Image"
-"Attribute set comprising all selected configurable attributes need to be in order to save generated variations.","Attribute set comprising all selected configurable attributes need to be in order to save generated variations."
-"Add configurable attributes to the current set (""<span data-role=""name-container"">%1</span>"")","Add configurable attributes to the current set (""<span data-role=""name-container"">%1</span>"")"
-"Add configurable attributes to the new set based on current","Add configurable attributes to the new set based on current"
-"New attribute set name","New attribute set name"
+"Choose a different Product","Choose a different Product"
+"Remove Product","Remove Product"
+"Create Product Configurations","Create Product Configurations"
 "Choose Affected Attribute Set","Choose Affected Attribute Set"
 Confirm,Confirm
-"File extension not known or unsupported type.","File extension not known or unsupported type."
+Cancel,Cancel
+"New Product Review","New Product Review"
+"Here are the products you\'re about to create.","Here are the products you\'re about to create."
+"You created these products for this configuration.","You created these products for this configuration."
+"Disassociated Products","Disassociated Products"
+"These products are not associated.","These products are not associated."
+"Disable Product","Disable Product"
+"Enable Product","Enable Product"
+"Incl. Tax","Incl. Tax"
+"Select Associated Product","Select Associated Product"
+Done,Done
+"For better results, add attributes and attribute values to your products.","For better results, add attributes and attribute values to your products."
+"An attribute has been removed. This attribute will no longer appear in your configurations.","An attribute has been removed. This attribute will no longer appear in your configurations."
+"Select options for all attributes or remove unused attributes.","Select options for all attributes or remove unused attributes."
+"Please select attribute for {section} section.","Please select attribute for {section} section."
+"Please fill in the values for {section} section.","Please fill in the values for {section} section."
+"Please fill-in correct values.","Please fill-in correct values."
+"Please select image(s) for your attribute.","Please select image(s) for your attribute."
+"Please choose image(s).","Please choose image(s)."
+"We could not detect a size.","We could not detect a size."
+"We don\'t recognize or support this file extension type.","We don\'t recognize or support this file extension type."
+"Please select attribute(s).","Please select attribute(s)."
+"Generate Products","Generate Products"
 "Configurable Product Image","Configurable Product Image"
-"Add Products Manually","Add Products Manually"
+Select...,Select...
+Status,Status
+ID,ID
+Thumbnail,Thumbnail
+"Attribute Code","Attribute Code"
+"Attribute Label","Attribute Label"
+Required,Required
+System,System
+Visible,Visible
+Scope,Scope
+Searchable,Searchable
+Comparable,Comparable

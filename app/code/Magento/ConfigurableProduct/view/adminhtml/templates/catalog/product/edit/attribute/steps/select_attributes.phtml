@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,31 +8,40 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
 ?>
-<div class="select-attributes-block">
+<div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-role="select-attributes-step">
     <div class="select-attributes-actions" data-type="skipKO">
-        <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton(); ?>
+        <?= /* @noEscape */  $block->getAddNewAttributeButton() ?>
     </div>
-    <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 1: Select Attributes') ?></h2>
-    <div class="selected-attributes" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
-        <?= /* @escapeNotVerified */  __('Selected Attributes:') ?>
+    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
+            __('Step 1: Select Attributes')
+        ); ?></h2>
+    <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
+        <?= $block->escapeHtml(
+            __('Selected Attributes:')
+        ); ?>
         <span data-bind="text: selectedAttributes() || '--'"></span>
     </div>
 </div>
-<?= $block->getChildHtml(); ?>
+<?= $block->getChildHtml() ?>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
+                    "<?= /* @noEscape */  $block->getComponentName() ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/select_attributes",
-                        "multiselectName":
-                            "product_attributes_listing.product_attributes_listing.product_attributes_columns.ids",
-                        "providerName": "product_attributes_listing.product_attributes_listing_data_source",
-                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>"
+                        "multiselectName": "<?= /* @noEscape */ $block->getData('config/multiselectName') ?>",
+                        "providerName": "<?= /* @noEscape */ $block->getData('config/providerName') ?>",
+                        "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>"
                     }
                 }
             }
         }
     }
+</script>
+<script>
+    require(['jquery'], function ($) {
+        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=select-attributes-step]').applyBindings();
+        $('body').trigger('contentUpdated');
+    })
 </script>

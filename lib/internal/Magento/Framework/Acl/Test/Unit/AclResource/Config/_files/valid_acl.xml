@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,8 +9,8 @@
     <acl>
         <resources>
             <resource id="Test_Value::show_toolbar" title="Lorem ipsum" sortOrder="12">
-                <resource id="Test_Value::global_search" title="some string for title" sortOrder="66" disabled="true">
-                    <resource id="Test_Value::dev" title="123" disabled="false" sortOrder="500" />
+                <resource id="Test_Value::global_search" sortOrder="66" disabled="true">
+                    <resource id="Test_Value::dev" disabled="false" />
                 </resource>
             </resource>
         </resources>

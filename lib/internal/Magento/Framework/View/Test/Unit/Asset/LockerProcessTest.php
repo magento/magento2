@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
@@ -9,6 +9,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\LockerProcess;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class LockerProcessTest
@@ -35,17 +37,31 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
     private $filesystemMock;
 
     /**
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stateMock;
+
+    /**
      * Set up
      */
     protected function setUp()
     {
         $this->fileName = DirectoryList::TMP . DIRECTORY_SEPARATOR . self::LOCK_NAME . LockerProcess::LOCK_EXTENSION;
 
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->lockerProcess = new LockerProcess($this->filesystemMock);
+        $this->lockerProcess = (new ObjectManager($this))->getObject(
+            LockerProcess::class,
+            [
+                'filesystem' => $this->filesystemMock,
+                'state' => $this->stateMock,
+            ]
+        );
     }
 
     /**
@@ -57,10 +73,19 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
      */
     public function testLockProcess($method)
     {
+        $this->stateMock->expects(self::once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
         $this->filesystemMock->expects(self::once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->$method());
+
+        $this->lockerProcess->lockProcess(self::LOCK_NAME);
+    }
+
+    public function testNotLockProcessInProductionMode()
+    {
+        $this->stateMock->expects(self::once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
+        $this->filesystemMock->expects($this->never())->method('getDirectoryWrite');
 
         $this->lockerProcess->lockProcess(self::LOCK_NAME);
     }
@@ -70,10 +95,20 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnlockProcess()
     {
+        $this->stateMock->expects(self::exactly(2))->method('getMode')->willReturn(State::MODE_DEVELOPER);
         $this->filesystemMock->expects(self::once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->getTmpDirectoryMockFalse(1));
+
+        $this->lockerProcess->lockProcess(self::LOCK_NAME);
+        $this->lockerProcess->unlockProcess();
+    }
+
+    public function testNotUnlockProcessInProductionMode()
+    {
+        $this->stateMock->expects(self::exactly(2))->method('getMode')->willReturn(State::MODE_PRODUCTION);
+        $this->filesystemMock->expects(self::never())->method('getDirectoryWrite');
 
         $this->lockerProcess->lockProcess(self::LOCK_NAME);
         $this->lockerProcess->unlockProcess();
@@ -106,7 +141,6 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
             ->method('readFile')
             ->with($this->fileName)
             ->willReturn(time() - 25);
-
 
         $tmpDirectoryMock->expects(self::once())
             ->method('writeFile')
@@ -147,7 +181,7 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
      */
     private function getTmpDirectoryMock()
     {
-        $tmpDirectoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $tmpDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
 
         return $tmpDirectoryMock;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -25,20 +25,26 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
             'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
             'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
         ];
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMock('\Magento\Framework\App\ObjectManager', [], [], '', false);
+        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManager = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $themePackageListMock = $this->getMock(
-            'Magento\Framework\View\Design\Theme\ThemePackageList',
+            \Magento\Framework\View\Design\Theme\ThemePackageList::class,
             [],
             [],
             '',
             false
         );
-        $componentRegistrarMock = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $componentRegistrarMock = $this->getMock(
+            \Magento\Framework\Component\ComponentRegistrar::class,
+            [],
+            [],
+            '',
+            false
+        );
         $componentRegistrarMock->expects($this->any())->method('getPaths')->will($this->returnValue($modules));
-        $dirSearchMock = $this->getMock('Magento\Framework\Component\DirSearch', [], [], '', false);
+        $dirSearchMock = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
         $dirSearchMock->expects($this->once())->method('collectFiles')->willReturn(
             [
                 __DIR__ . '/_files/root/app/code/Magento/A/etc/module.xml',
@@ -46,9 +52,9 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
-            ['Magento\Framework\View\Design\Theme\ThemePackageList', $themePackageListMock],
-            ['Magento\Framework\Component\ComponentRegistrar', $componentRegistrarMock],
-            ['Magento\Framework\Component\DirSearch', $dirSearchMock]
+            [\Magento\Framework\View\Design\Theme\ThemePackageList::class, $themePackageListMock],
+            [\Magento\Framework\Component\ComponentRegistrar::class, $componentRegistrarMock],
+            [\Magento\Framework\Component\DirSearch::class, $dirSearchMock]
         ]));
 
         $this->command = new DependenciesShowFrameworkCommand($componentRegistrarMock, $objectManagerProvider);
@@ -74,8 +80,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
             $fileContents
         );
         $this->assertContains('"Dependencies for each module:",' . PHP_EOL, $fileContents);
-        $this->assertContains('"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL, $fileContents);
-        $this->assertContains('"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL, $fileContents);
-
+        $this->assertContains('"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",3' . PHP_EOL, $fileContents);
+        $this->assertContains('"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",3' . PHP_EOL, $fileContents);
     }
 }

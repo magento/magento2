@@ -1,15 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
+use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
+use Magento\Downloadable\Model\Product\TypeHandler\Link as LinkHandler;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class LinkRepository
@@ -38,6 +44,11 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     protected $contentValidator;
 
     /**
+     * @var Type
+     */
+    protected $downloadableType;
+
+    /**
      * @var ContentUploaderInterface
      */
     protected $fileContentUploader;
@@ -46,6 +57,16 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @var EncoderInterface
      */
     protected $jsonEncoder;
+
+    /**
+     * @var LinkHandler
+     */
+    private $linkTypeHandler;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -155,13 +176,15 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             return $this->updateLink($product, $link, $isGlobalScopeContent);
         } else {
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
-                throw new InputException(__('Product type of the product must be \'downloadable\'.'));
+                throw new InputException(__('Provided product must be type \'downloadable\'.'));
             }
-            if (!$this->contentValidator->isValid($link)) {
+            $validateLinkContent = !($link->getLinkType() === 'file' && $link->getLinkFile());
+            $validateSampleContent = !($link->getSampleType() === 'file' && $link->getSampleFile());
+            if (!$this->contentValidator->isValid($link, $validateLinkContent, $validateSampleContent)) {
                 throw new InputException(__('Provided link information is invalid.'));
             }
 
-            if (!in_array($link->getLinkType(), ['url', 'file'])) {
+            if (!in_array($link->getLinkType(), ['url', 'file'], true)) {
                 throw new InputException(__('Invalid link type.'));
             }
             $title = $link->getTitle();
@@ -184,7 +207,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         $isGlobalScopeContent
     ) {
         $linkData = [
-            'link_id' => $link->getid() === null ? 0 : $link->getid(),
+            'link_id' => (int)$link->getid(),
             'is_delete' => 0,
             'type' => $link->getLinkType(),
             'sort_order' => $link->getSortOrder(),
@@ -214,24 +237,31 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             );
         }
 
-        if ($link->getSampleType() == 'file' && $link->getSampleFile() === null) {
+        if ($link->getSampleType() == 'file') {
             $linkData['sample']['type'] = 'file';
-            $linkData['sample']['file'] = $this->jsonEncoder->encode(
-                [
+            if ($link->getSampleFile() === null) {
+                $fileData = [
                     $this->fileContentUploader->upload($link->getSampleFileContent(), 'link_sample_file'),
-                ]
-            );
+                ];
+            } else {
+                $fileData = [
+                    [
+                        'file' => $link->getSampleFile(),
+                        'status' => 'old',
+                    ]
+                ];
+            }
+            $linkData['sample']['file'] = $this->jsonEncoder->encode($fileData);
         } elseif ($link->getSampleType() == 'url') {
             $linkData['sample']['type'] = 'url';
             $linkData['sample']['url'] = $link->getSampleUrl();
         }
 
         $downloadableData = ['link' => [$linkData]];
-        $product->setDownloadableData($downloadableData);
         if ($isGlobalScopeContent) {
             $product->setStoreId(0);
         }
-        $this->downloadableType->save($product);
+        $this->getLinkTypeHandler()->save($product, $downloadableData);
         return $product->getLastAddedLinkId();
     }
 
@@ -255,11 +285,14 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         if (!$existingLink->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
         }
-        if ($existingLink->getProductId() != $product->getId()) {
+        $linkFieldValue = $product->getData(
+            $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+        );
+        if ($existingLink->getProductId() != $linkFieldValue) {
             throw new InputException(__('Provided downloadable link is not related to given product.'));
         }
-        $validateLinkContent = $link->getLinkFileContent() === null ? false : true;
-        $validateSampleContent = $link->getSampleFileContent() === null ? false : true;
+        $validateLinkContent = !($link->getLinkFileContent() === null);
+        $validateSampleContent = !($link->getSampleFileContent() === null);
         if (!$this->contentValidator->isValid($link, $validateLinkContent, $validateSampleContent)) {
             throw new InputException(__('Provided link information is invalid.'));
         }
@@ -273,10 +306,10 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             }
         }
 
-        if ($link->getLinkType() == 'file' && $link->getLinkFileContent() === null) {
+        if ($link->getLinkType() == 'file' && $link->getLinkFileContent() === null && !$link->getLinkFile()) {
             $link->setLinkFile($existingLink->getLinkFile());
         }
-        if ($link->getSampleType() == 'file' && $link->getSampleFileContent() === null) {
+        if ($link->getSampleType() == 'file' && $link->getSampleFileContent() === null && !$link->getSampleFile()) {
             $link->setSampleFile($existingLink->getSampleFile());
         }
 
@@ -294,7 +327,41 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         if (!$link->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
         }
-        $link->delete();
+        try {
+            $link->delete();
+        } catch (\Exception $exception) {
+            throw new StateException(__('Cannot delete link with id %1', $link->getId()), $exception);
+        }
         return true;
+    }
+
+    /**
+     * Get MetadataPool instance
+     *
+     * @deprecated MAGETWO-52273
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+
+        return $this->metadataPool;
+    }
+
+    /**
+     * Get LinkTypeHandler  instance
+     *
+     * @deprecated MAGETWO-52273
+     * @return LinkHandler
+     */
+    private function getLinkTypeHandler()
+    {
+        if (!$this->linkTypeHandler) {
+            $this->linkTypeHandler = ObjectManager::getInstance()->get(LinkHandler::class);
+        }
+
+        return $this->linkTypeHandler;
     }
 }

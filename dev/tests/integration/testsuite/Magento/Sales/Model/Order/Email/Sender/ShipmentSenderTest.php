@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
@@ -15,21 +15,21 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSend()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
 
         $shipment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Order\Shipment'
+            \Magento\Sales\Model\Order\Shipment::class
         );
         $shipment->setOrder($order);
 
         $this->assertEmpty($shipment->getEmailSent());
 
         $orderSender = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Email\Sender\ShipmentSender');
+            ->create(\Magento\Sales\Model\Order\Email\Sender\ShipmentSender::class);
         $result = $orderSender->send($shipment, true);
 
         $this->assertTrue($result);
@@ -45,18 +45,18 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
     public function testPackages()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        $order = $objectManager->create('Magento\Sales\Model\Order');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
 
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipment = $objectManager->create('Magento\Sales\Model\Order\Shipment');
+        $shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class);
         $shipment->setOrder($order);
 
         $packages = [['1'], ['2']];
 
-        $shipment->addItem($objectManager->create('Magento\Sales\Model\Order\Shipment\Item'));
+        $shipment->addItem($objectManager->create(\Magento\Sales\Model\Order\Shipment\Item::class));
         $shipment->setPackages($packages);
         $this->assertEquals($packages, $shipment->getPackages());
         $shipment->save();

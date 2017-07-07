@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Attribute;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ConfigurableProduct\Model\Attribute\LockValidator;
 
 class LockValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,33 +34,69 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $select;
 
+    /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataPoolMock;
+
     protected function setUp()
     {
         $helper = new ObjectManager($this);
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->setMethods(['reset', 'from', 'join', 'where', 'group', 'limit'])
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->metadataPoolMock->expects(self::once())
+            ->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($this->getMetaDataMock());
+
         $this->model = $helper->getObject(
-            'Magento\ConfigurableProduct\Model\Attribute\LockValidator',
-            ['resource' => $this->resource]
+            LockValidator::class,
+            [
+                'resource' => $this->resource
+            ]
         );
+        $refClass = new \ReflectionClass(LockValidator::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
     public function testValidate()
     {
         $this->validate(false);
+    }
+
+    /**
+     * @return EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMetaDataMock()
+    {
+        $metadata = $this->getMockBuilder(EntityMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $metadata->expects(self::once())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+
+        return $metadata;
     }
 
     /**
@@ -78,7 +118,7 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
         $bind = ['attribute_id' => $attributeId, 'attribute_set_id' => $attributeSet];
 
         /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
-        $object = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->setMethods(['getAttributeId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -10,7 +10,7 @@ namespace Magento\Framework;
  */
 class ValidatorFactory
 {
-    const DEFAULT_INSTANCE_NAME = 'Magento\Framework\Validator';
+    const DEFAULT_INSTANCE_NAME = Validator::class;
 
     /**
      * Object Manager instance

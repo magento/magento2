@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
@@ -52,19 +52,19 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPostValue'])
             ->getMockForAbstractClass();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->getMock();
 
         $this->resultFactoryMock->expects($this->once())
@@ -74,7 +74,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->objectManagerHelper->getObject(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'resultFactory' => $this->resultFactoryMock,
                 'request' => $this->requestMock,
@@ -83,7 +83,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->saveController = $this->objectManagerHelper->getObject(
-            'Magento\Sitemap\Controller\Adminhtml\Sitemap\Save',
+            \Magento\Sitemap\Controller\Adminhtml\Sitemap\Save::class,
             [
                 'context' => $this->context
             ]
@@ -105,11 +105,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testTryToSaveInvalidDataShouldFailWithErrors()
     {
-        $validatorClass = 'Magento\MediaStorage\Model\File\Validator\AvailablePath';
-        $helperClass = 'Magento\Sitemap\Helper\Data';
+        $validatorClass = \Magento\MediaStorage\Model\File\Validator\AvailablePath::class;
+        $helperClass = \Magento\Sitemap\Helper\Data::class;
         $validPaths = [];
         $messages = ['message1', 'message2'];
-        $sessionClass = 'Magento\Backend\Model\Session';
+        $sessionClass = \Magento\Backend\Model\Session::class;
         $data = ['sitemap_filename' => 'sitemap_filename', 'sitemap_path' => '/sitemap_path'];
         $siteMapId = 1;
 

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Code\Test\Unit;
 
@@ -45,16 +43,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->definedClassesMock = $this->getMock('\Magento\Framework\Code\Generator\DefinedClasses');
-        $this->ioObjectMock = $this->getMockBuilder('\Magento\Framework\Code\Generator\Io')
+        $this->definedClassesMock = $this->getMock(\Magento\Framework\Code\Generator\DefinedClasses::class);
+        $this->ioObjectMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\Io::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->buildModel(
             $this->ioObjectMock,
             [
-                'factory' => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
-                'proxy' => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
-                'interceptor' => '\Magento\Framework\Interception\Code\Generator\Interceptor'
+                'factory' => \Magento\Framework\ObjectManager\Code\Generator\Factory::class,
+                'proxy' => \Magento\Framework\ObjectManager\Code\Generator\Proxy::class,
+                'interceptor' => \Magento\Framework\Interception\Code\Generator\Interceptor::class
             ],
             $this->definedClassesMock
         );
@@ -71,14 +69,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \RuntimeException
      * @dataProvider generateValidClassDataProvider
      */
     public function testGenerateClass($className, $entityType)
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $fullClassName = $className . $entityType;
-        $entityGeneratorMock = $this->getMockBuilder('\Magento\Framework\Code\Generator\EntityAbstract')
+        $entityGeneratorMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\EntityAbstract::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
@@ -95,14 +93,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \RuntimeException
      */
     public function testGenerateClassWithError()
     {
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $entityGeneratorMock = $this->getMockBuilder('\Magento\Framework\Code\Generator\EntityAbstract')
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $entityGeneratorMock = $this->getMockBuilder(\Magento\Framework\Code\Generator\EntityAbstract::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerMock->expects($this->once())->method('create')->willReturn($entityGeneratorMock);
@@ -127,7 +125,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             \Magento\Framework\Code\Generator::GENERATION_SKIP,
-            $this->model->generateClass('Magento\GeneratedClass\Factory')
+            $this->model->generateClass(\Magento\GeneratedClass\Factory::class)
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,20 +24,20 @@ class BookTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $blockMock */
         $blockMock = $this->getMockBuilder(
-            '\Magento\Framework\View\Element\BlockInterface'
+            \Magento\Framework\View\Element\BlockInterface::class
         )->disableOriginalConstructor()->setMethods(
             ['setTitle', 'toHtml']
         )->getMock();
         $blockMock->expects($this->any())->method('setTitle');
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Helper\Session\CurrentCustomer');
+            ->get(\Magento\Customer\Helper\Session\CurrentCustomer::class);
         /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
+        $layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
         $layout->setBlock('head', $blockMock);
         $this->_block = $layout
             ->createBlock(
-                'Magento\Customer\Block\Address\Book',
+                \Magento\Customer\Block\Address\Book::class,
                 '',
                 ['currentCustomer' => $this->currentCustomer]
             );
@@ -47,7 +47,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
-        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry = $objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
         // Cleanup customer from registry
         $customerRegistry->remove(1);
     }
@@ -89,7 +89,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->_block->getAdditionalAddresses());
         $this->assertCount(1, $this->_block->getAdditionalAddresses());
         $this->assertInstanceOf(
-            '\Magento\Customer\Api\Data\AddressInterface',
+            \Magento\Customer\Api\Data\AddressInterface::class,
             $this->_block->getAdditionalAddresses()[0]
         );
         $this->assertEquals(2, $this->_block->getAdditionalAddresses()[0]->getId());
@@ -118,9 +118,11 @@ class BookTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddressHtml()
     {
-        $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>" .
-            "\nUnited States<br/>\nT: 3468676\n\n";
-        $address = Bootstrap::getObjectManager()->get('Magento\Customer\Api\AddressRepositoryInterface')->getById(1);
+        $expected = "John Smith<br />\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />" .
+            "\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
+        $address = Bootstrap::getObjectManager()->get(
+            \Magento\Customer\Api\AddressRepositoryInterface::class
+        )->getById(1);
         $html = $this->_block->getAddressHtml($address);
         $this->assertEquals($expected, $html);
     }
@@ -137,7 +139,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
         $customer = $customerRepository->getById(1);
 
@@ -193,7 +195,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddressById()
     {
-        $this->assertInstanceOf('\Magento\Customer\Api\Data\AddressInterface', $this->_block->getAddressById(1));
+        $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $this->_block->getAddressById(1));
         $this->assertNull($this->_block->getAddressById(5));
     }
 }

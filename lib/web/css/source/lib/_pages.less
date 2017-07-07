@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -121,12 +121,14 @@
         @_pager-font-size: @_pager-font-size,
         @_pager-line-height: @_pager-line-height
     );
+
     .items {
         ._lib-pager-inline-block-spaces-container();
         .lib-list-reset-styles();
         .lib-css(display, @_pager-item-display);
         .lib-css(font-weight, @_pager-font-weight);
     }
+
     .item {
         ._lib-pager-inline-block-spaces-item(
             @_pager-font-size: @_pager-font-size,
@@ -134,10 +136,12 @@
         );
         .lib-css(margin, @_pager-item-margin);
         .lib-css(display, @_pager-item-display);
+
         .label {
             .lib-visually-hidden();
         }
     }
+
     a.page {
         .lib-css(background, @_pager-background);
         .lib-background-gradient(
@@ -189,6 +193,7 @@
             .lib-css(color, @_pager-color-active);
         }
     }
+
     strong.page {
         .lib-css(background, @_pager-current-background);
         .lib-background-gradient(
@@ -207,6 +212,7 @@
         .lib-css(font-weight, @_pager-current-font-weight);
         .lib-css(padding, @_pager-item-padding);
     }
+
     .action {
         .lib-css(background, @_pager-action-background);
         .lib-background-gradient(
@@ -274,6 +280,7 @@
                 @_icon-font-text-hide: @_pager-icon-font-text-hide
             );
         }
+
         &.previous {
             ._lib-pager-icon (
                 @_pager-icon-use: @_pager-icon-use,
@@ -323,6 +330,7 @@
             @_font-size: @_pager-font-size,
             @_line-height: @_pager-line-height
         );
+
         &:after {
             content: ': ';
         }
@@ -371,11 +379,13 @@
             .lib-css(color, @_icon-font-color-visited);
         }
     }
+
     &:active {
         &:before {
             .lib-css(color, @_icon-font-color-active);
         }
     }
+
     .lib-icon-font(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
@@ -419,9 +429,11 @@
         @_icon-font-position: @_icon-font-position,
         @_icon-font-text-hide: @_icon-font-text-hide
     );
+
     &:visited:after {
         .lib-css(color, @_icon-font-color-visited);
     }
+
     &:active:after {
         .lib-css(color, @_icon-font-color-active);
     }

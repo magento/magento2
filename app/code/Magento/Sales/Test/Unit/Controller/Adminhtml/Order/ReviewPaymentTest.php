@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
@@ -54,7 +54,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'getRequest',
                 'getResponse',
@@ -70,17 +70,17 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->orderManagementMock = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+        $this->orderManagementMock = $this->getMockBuilder(\Magento\Sales\Api\OrderManagementInterface::class)
             ->getMockForAbstractClass();
-        $this->orderRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderRepositoryInterface')
+        $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMockForAbstractClass();
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
             ->setMethods(['getPayment'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMock(
-            'Magento\Framework\Message\Manager',
+            \Magento\Framework\Message\Manager::class,
             ['addSuccess', 'addError'],
             [],
             '',
@@ -88,7 +88,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resultRedirectFactoryMock = $this->getMock(
-            'Magento\Backend\Model\View\Result\RedirectFactory',
+            \Magento\Backend\Model\View\Result\RedirectFactory::class,
             ['create'],
             [],
             '',
@@ -96,7 +96,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->paymentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
+            \Magento\Sales\Model\Order\Payment::class,
             ['update', 'getIsTransactionApproved'],
             [],
             '',
@@ -104,14 +104,14 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resultRedirectMock = $this->getMock(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             ['setPath'],
             [],
             '',
             false
         );
 
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->setMethods(['getParam'])
             ->disableOriginalConstructor()->getMock();
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
@@ -121,7 +121,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirectFactoryMock);
 
         $this->reviewPayment = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\ReviewPayment',
+            \Magento\Sales\Controller\Adminhtml\Order\ReviewPayment::class,
             [
                 'context' => $this->contextMock,
                 'orderManager' => $this->orderManagementMock,
@@ -140,7 +140,6 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())->method('create')
             ->willReturn($this->resultRedirectMock);
-
 
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')

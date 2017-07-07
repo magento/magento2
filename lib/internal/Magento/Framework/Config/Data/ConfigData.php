@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ namespace Magento\Framework\Config\Data;
 
 /**
  * Data transfer object to store config data for config options
+ * @api
  */
 class ConfigData
 {
@@ -24,6 +25,13 @@ class ConfigData
      * @var array
      */
     private $data = [];
+
+    /**
+     * Override previous config options when save
+     *
+     * @var bool
+     */
+    private $overrideWhenSave = false;
 
     /**
      * Constructor
@@ -53,6 +61,27 @@ class ConfigData
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Sets override when save flag
+     *
+     * @param bool $overrideWhenSave
+     * @return void
+     */
+    public function setOverrideWhenSave($overrideWhenSave)
+    {
+        $this->overrideWhenSave = $overrideWhenSave;
+    }
+
+    /**
+     * Gets override when save flag
+     *
+     * @return bool
+     */
+    public function isOverrideWhenSave()
+    {
+        return $this->overrideWhenSave;
     }
 
     /**

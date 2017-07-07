@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\TaxClass\Type;
@@ -11,7 +11,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $searchResultsMock  = $this->getMockBuilder('Magento\Framework\Api\SearchResults')
+        $searchResultsMock  = $this->getMockBuilder(\Magento\Framework\Api\SearchResults::class)
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -21,13 +21,13 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Api\FilterBuilder $filterBuilder */
         $filterBuilder = $objectManagerHelper
-            ->getObject('Magento\Framework\Api\FilterBuilder');
+            ->getObject(\Magento\Framework\Api\FilterBuilder::class);
         /** @var \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder */
         $filterGroupBuilder = $objectManagerHelper
-            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
+            ->getObject(\Magento\Framework\Api\Search\FilterGroupBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $objectManagerHelper->getObject(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             [
                 'filterGroupBuilder' => $filterGroupBuilder
             ]
@@ -36,7 +36,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->addFilters([$filterBuilder->setField('tax_class_id')->setValue(5)->create()])
             ->create();
 
-        $customerGroupServiceMock = $this->getMockBuilder('Magento\Customer\Api\GroupRepositoryInterface')
+        $customerGroupServiceMock = $this->getMockBuilder(\Magento\Customer\Api\GroupRepositoryInterface::class)
             ->setMethods(['getList'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -47,7 +47,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Customer */
         $model = $objectManagerHelper->getObject(
-            'Magento\Tax\Model\TaxClass\Type\Customer',
+            \Magento\Tax\Model\TaxClass\Type\Customer::class,
             [
                 'customerGroupRepository' => $customerGroupServiceMock,
                 'searchCriteriaBuilder' => $searchCriteriaBuilder,

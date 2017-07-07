@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Config\Price;
@@ -8,11 +8,13 @@ namespace Magento\Tax\Model\Config\Price;
 class IncludePrice extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @return void
+     * @return $this
      */
     public function afterSave()
     {
-        parent::afterSave();
+        $result = parent::afterSave();
         $this->_cacheManager->clean(['checkout_quote']);
+
+        return $result;
     }
 }

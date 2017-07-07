@@ -1,48 +1,50 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
 /**
  * @var $block \Magento\CheckoutAgreements\Block\Agreements
  */
-?>
-<?php if (!$block->getAgreements()) {
+if (!$block->getAgreements()) {
     return;
-} ?>
-<ol id="checkout-agreements" class="agreements checkout items">
-    <?php /** @var \Magento\CheckoutAgreements\Api\Data\AgreementInterface $agreement */ ?>
-    <?php foreach ($block->getAgreements() as $agreement): ?>
-        <li class="item">
-            <div class="checkout-agreement-item-content"<?php echo($agreement->getContentHeight() ? ' style="height:' . $agreement->getContentHeight() . '"' : '')?>>
-                <?php if ($agreement->getIsHtml()):?>
-                    <?php /* @escapeNotVerified */ echo $agreement->getContent() ?>
-                <?php else:?>
-                    <?php echo nl2br($block->escapeHtml($agreement->getContent())) ?>
-                <?php endif; ?>
-            </div>
-            <?php if($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_MANUAL): ?>
-            <div id="checkout-agreements-form-<?php /* @escapeNotVerified */ echo $agreement->getAgreementId()?>" class="field choice agree required">
-                <input type="checkbox"
-                       id="agreement-<?php /* @escapeNotVerified */ echo $agreement->getAgreementId()?>"
-                       name="agreement[<?php /* @escapeNotVerified */ echo $agreement->getAgreementId()?>]"
-                       value="1"
-                       title="<?php echo $block->escapeHtml($agreement->getCheckboxText()) ?>"
-                       class="checkbox""/>
-                <label class="label" for="agreement-<?php /* @escapeNotVerified */ echo $agreement->getAgreementId()?>">
-                    <span><?php echo $agreement->getIsHtml() ? $agreement->getCheckboxText() : $block->escapeHtml($agreement->getCheckboxText()) ?></span>
-                </label>
-            </div>
-            <?php elseif($agreement->getMode() == \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO): ?>
-            <div id="checkout-agreements-form-<?php /* @escapeNotVerified */ echo $agreement->getAgreementId()?>" class="field choice agree">
-                <span><?php echo $agreement->getIsHtml() ? $agreement->getCheckboxText() : $block->escapeHtml($agreement->getCheckboxText()) ?></span>
-            </div>
-            <?php endif; ?>
-        </li>
-    <?php endforeach ?>
-</ol>
+}
+
+/** @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection $argeementsCollection */
+$argeementsCollection = $block->getAgreements();
+$agreementMappedArray = [];
+/** @var \Magento\CheckoutAgreements\Model\Agreement $agreement */
+foreach ($argeementsCollection as $agreement) {
+    if ($agreement->getIsActive()) {
+        $agreementMappedArray[] = [
+            'mode' => $agreement->getMode(),
+            'agreementId' => $agreement->getAgreementId(),
+            'checkboxText' => $agreement->getCheckboxText(),
+            'content' => $agreement->getContent()
+        ];
+    }
+}
+$agreementJson = json_encode($agreementMappedArray);
+?>
+
+<div data-bind="scope: 'checkout-agreements-component-scope'" class="checkout-agreements-block">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "checkout-agreements-component-scope": {
+                        "component": "Magento_CheckoutAgreements/js/view/checkout-agreements",
+                        "agreements": <?= /* @noEscape */ $agreementJson ?>,
+                        "isVisible": true
+                    }
+                }
+            }
+        }
+    }
+</script>

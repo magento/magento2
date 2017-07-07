@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,12 +37,18 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->rss = $this->getMock('Magento\Review\Model\Rss', ['__wakeUp', 'getProductCollection'], [], '', false);
-        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
+        $this->storeManagerInterface = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->rss = $this->getMock(
+            \Magento\Review\Model\Rss::class,
+            ['__wakeUp', 'getProductCollection'],
+            [],
+            '',
+            false
+        );
+        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\Review\Block\Adminhtml\Rss',
+            \Magento\Review\Block\Adminhtml\Rss::class,
             [
                 'storeManager' => $this->storeManagerInterface,
                 'rssModel' => $this->rss,
@@ -73,7 +79,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
         ];
         $rssUrl = 'http://rss.magento.com';
         $productModel = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product',
+            \Magento\Catalog\Model\ResourceModel\Product::class,
             [
                 'getStoreId',
                 'getId',
@@ -88,7 +94,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $storeModel = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $storeModel = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->storeManagerInterface->expects($this->once())->method('getStore')->will($this->returnValue($storeModel));
         $storeModel->expects($this->once())->method('getName')
             ->will($this->returnValue($rssData['entries']['description']['store']));

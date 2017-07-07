@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit;
@@ -27,7 +27,7 @@ class InvalidateTokenButton extends GenericButton implements ButtonProviderInter
                 'class' => 'invalidate-token',
                 'on_click' => 'deleteConfirm(\'' . $deleteConfirmMsg . '\', \'' . $this->getInvalidateTokenUrl() .
                     '\')',
-                'sort_order' => 50,
+                'sort_order' => 65,
             ];
         }
         return $data;

@@ -1,0 +1,17 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//  General rule hides group legend and shows first field label instead
+//  in app/design/adminhtml/Magento/backend/web/css/source/forms/_fields.less
+//  This must be reset for Customer Address page
+.address-item-edit-content {
+    .admin__field {
+        legend {
+            &.admin__field-label {
+                opacity: 1;
+            }
+        }
+    }
+}

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -41,184 +41,242 @@
 }
 
 //  # Tabs mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-font-family</th>
+//            <td>@tab-control__font-family</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value" nowrap>'' | false | value</td>
 //            <td>Tabs font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-font-size</th>
+//            <td>@tab-control__font-size</td>
 //            <td class="vars_value">@font-size__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tabs font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-font-weight</th>
+//            <td>@tab-control__font-weight</td>
 //            <td class="vars_value">@font-weight__semibold</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tabs font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-font-style</th>
+//            <td>@tab-control__font-style</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tabs font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-line-height</th>
+//            <td>@tab-control__line-height</td>
 //            <td class="vars_value">@tab-control__height</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tabs line height</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Tabs controls settings</th>
+//            <th colspan="5" class="vars_section">Tabs controls settings</th>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-background-color</th>
+//            <td>@tab-control__background-color</td>
 //            <td class="vars_value">@panel__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Current tab background</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-color</th>
+//            <td>@tab-control__color</td>
 //            <td class="vars_value">@link__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Current tab text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-text-decoration</th>
+//            <td>@tab-control__text-decoration</td>
 //            <td class="vars_value">none</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Current tab text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-background-color-hover</th>
+//            <td>@tab-control__hover__background-color</td>
 //            <td class="vars_value">lighten(@tab-control__background-color, 5%)</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered tab background</td>
 //        </tr>
 //        <tr>
+//            <th>@_tab-control-color-visited</th>
+//            <td>@tab-control__color</td>
+//            <td class="vars_value">@text__color__muted</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Visited tab color</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-text-decoration-visited</th>
+//            <td>@tab-control__color</td>
+//            <td class="vars_value"></td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Visited tab text-decoration</td>
+//        </tr>
+//        <tr>
 //            <th>@_tab-control-color-hover</th>
+//            <td>@tab-control__hover__color</td>
 //            <td class="vars_value">@tab-control__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered tab text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-text-decoration-hover</th>
+//            <td>@tab-control__text-decoration</td>
 //            <td class="vars_value">@tab-control__text-decoration</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered tab text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-background-color-active</th>
+//            <td>@tab-control__active__background-color</td>
 //            <td class="vars_value">lighten(@tab-control__background-color, 15%)</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Active tab background</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-color-active</th>
+//            <td>@tab-control__active__color</td>
 //            <td class="vars_value">@text__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Active tab text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-text-decoration-active</th>
+//            <td>@tab-control__text-decoration</td>
 //            <td class="vars_value">@tab-control__text-decoration</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Active tab text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-height</th>
+//            <td>@tab-control__height</td>
 //            <td class="vars_value">@indent__l</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Height of tab control</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-margin-right</th>
+//            <td>@tab-control__margin-right</td>
 //            <td class="vars_value">@indent__xs</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Right margin of tab title block</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-padding-top</th>
+//            <td>@tab-control__padding-top</td>
 //            <td class="vars_value">@indent__xs</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab control padding top</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_tab-control-padding-right</th>
+//            <td>@tab-control__padding-right</td>
 //            <td class="vars_value">@indent__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab control padding right</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-padding-bottom</th>
+//            <td>@tab-control__padding-bottom</td>
 //            <td class="vars_value">@tab-control__padding-bottom</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab control padding bottom</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-control-padding-left</th>
+//            <td>@tab-control__padding-left</td>
 //            <td class="vars_value">@tab-control__padding-left</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab control padding left</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Tab content settings</th>
+//            <th>@_tab-control-border-width</th>
+//            <td>@tab-control__border-width</td>
+//            <td class="vars_value">@border-width__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Tab control border width</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-border-color</th>
+//            <td>@tab-control__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Tab control border color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="5" class="vars_section">Tab content settings</th>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-background-color</th>
+//            <td>@tab-content__background-color</td>
 //            <td class="vars_value">@tab-control__active__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab content background</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-border-top-status</th>
+//            <td>@tab-content__border-top-status</td>
 //            <td class="vars_value">false</td>
 //            <td class="vars_value">true | false</td>
 //            <td>Tab content border top status. When set to 'true' the content has only top border. When set to 'false' the content has all 4 borders</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-border</th>
+//            <td>@tab-content__border</td>
 //            <td class="vars_value">@tab-control__border-width solid @tab-control__border-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab content border</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-margin-top</th>
+//            <td>@tab-content__margin-top</td>
 //            <td class="vars_value">@tab-control__height + @tab-control__border-width + @tab-control__padding-top + @tab-control__padding-bottom</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab content top margin (it is the sum of tabs height and top border width)</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-padding-top</th>
+//            <td>@tab-content__padding-top</td>
 //            <td class="vars_value">@indent__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab content padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-padding-right</th>
+//            <td>@tab-content__padding-right</td>
 //            <td class="vars_value">@indent__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab content padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-padding-bottom</th>
+//            <td>@tab-content__padding-bottom</td>
 //            <td class="vars_value">@tab-content__padding-top</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab content padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_tab-content-padding-left</th>
+//            <td>@tab-content__padding-left</td>
 //            <td class="vars_value">@tab-content__padding-right</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tab content padding</td>
@@ -297,196 +355,228 @@
 }
 
 //  # Accordion mixin variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
 //            <th class="vars_head">Default value</th>
 //            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-font-family</th>
+//            <td>@accordion-control__font-family</td>
 //            <td class="vars_value">@tab-control__font-family</td>
 //            <td class="vars_value" nowrap>'' | false | value</td>
 //            <td>Accordion font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-font-size</th>
+//            <td>@accordion-control__font-size</td>
 //            <td class="vars_value">@font-size__l</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-font-style</th>
+//            <td>@accordion-control__font-style</td>
 //            <td class="vars_value">@tab-control__font-style</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-font-weight</th>
+//            <td>@accordion-control__font-weight</td>
 //            <td class="vars_value">@tab-control__font-weight</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-line-height</th>
+//            <td>@accordion-control__line-height</td>
 //            <td class="vars_value">@accordion-control__height</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion line height</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Accordion tabs controls settings</th>
+//            <th colspan="5" class="vars_section">Accordion tabs controls settings</th>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-border-top</th>
+//            <td>@accordion-control__border-top</td>
 //            <td class="vars_value">@tab-control__border-width solid @tab-control__border-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control border</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-border-right</th>
+//            <td>@accordion-control__border-right</td>
 //            <td class="vars_value">@tab-control__border-width solid @tab-control__border-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control border</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-border-bottom</th>
+//            <td>@accordion-control__border-bottom</td>
 //            <td class="vars_value">@tab-control__border-width solid @tab-control__border-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control border</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-border-left</th>
+//            <td>@accordion-control__border-left</td>
 //            <td class="vars_value">@tab-control__border-width solid @tab-control__border-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control border</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-background-color</th>
+//            <td>@accordion-control__background-color</td>
 //            <td class="vars_value">@tab-control__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control background</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color</th>
+//            <td>@accordion-control__color</td>
 //            <td class="vars_value">@tab-control__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control color</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-text-decoration</th>
+//            <td>@accordion-control__text-decoration</td>
 //            <td class="vars_value">@tab-control__text-decoration</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control text decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color-visited</th>
+//            <td>@accordion-control__color</td>
 //            <td class="vars_value">@accordion-control__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control visited link color</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_accordion-control-text-decoration-visited</th>
+//            <td>@accordion-control__text-decoration</td>
 //            <td class="vars_value">@accordion-control__text-decoration</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion control visited link text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-background-color-hover</th>
+//            <td>@accordion-control__hover__background-color</td>
 //            <td class="vars_value">@tab-control__hover__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered accordion control background</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color-hover</th>
+//            <td>@accordion-control__hover__color</td>
 //            <td class="vars_value">@tab-control__hover__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered accordion control text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-text-decoration-hover</th>
+//            <td>@accordion-control__hover__text-decoration</td>
 //            <td class="vars_value">@tab-control__hover__text-decoration</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Hovered accordion control text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-background-color-active</th>
+//            <td>@accordion-control__active__background-color</td>
 //            <td class="vars_value">@tab-control__active__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Active accordion control background</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-color-active</th>
+//            <td>@accordion-control__active__color</td>
 //            <td class="vars_value">@tab-control__active__color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Active accordion control text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-text-decoration-active</th>
+//            <td>@accordion-control__active__text-decoration</td>
 //            <td class="vars_value">@tab-control__active__text-decoration</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Active accordion control text-decoration</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-height</th>
+//            <td>@accordion-control__height</td>
 //            <td class="vars_value">@indent__xl</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Height of accordion control</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-margin-bottom</th>
+//            <td>@accordion-control__margin-bottom</td>
 //            <td class="vars_value">@indent__xs</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Bottom margin of the accordion control</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-padding-top</th>
+//            <td>@accordion-control__padding-top</td>
 //            <td class="vars_value">@tab-control__padding-top</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab control padding top</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_accordion-control-padding-right</th>
+//            <td>@accordion-control__padding-right</td>
 //            <td class="vars_value">@indent__base</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab control padding right</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-padding-bottom</th>
+//            <td>@accordion-control__padding-bottom</td>
 //            <td class="vars_value">@tab-control__padding-bottom</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab control padding bottom</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-control-padding-left</th>
+//            <td>@accordion-control__padding-left</td>
 //            <td class="vars_value">@accordion-control__padding-right</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab control padding left</td>
 //        </tr>
 //        <tr>
-//            <th colspan="4" class="vars_section">Accordion content settings</th>
+//            <th colspan="5" class="vars_section">Accordion content settings</th>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-content-background-color</th>
+//            <td>@accordion-content__background-color</td>
 //            <td class="vars_value">@tab-control__active__background-color</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab content background</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-content-border</th>
+//            <td>@accordion-content__border</td>
 //            <td class="vars_value">@tab-content__border</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab content border</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-content-margin</th>
+//            <td>@accordion-content__margin</td>
 //            <td class="vars_value">0 0 @indent__xs</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab content margin</td>
 //        </tr>
 //        <tr>
 //            <th>@_accordion-content-padding</th>
+//            <td>@accordion-content__padding</td>
 //            <td class="vars_value">@tab-content__padding-top @tab-content__padding-right @tab-content__padding-bottom @tab-content__padding-left</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Accordion tab content padding</td>
@@ -496,7 +586,7 @@
 
 //  # Responsive tabs
 //
-//  Since tabs and accordion have same markup, they can transform one into other by means of CSS and JavaScript. This can be used for responsive web design. For instance, for mobile version there is an accordion, for desctop version it is transformed to tabs. To implement this approach, use the  <code>.lib-data-accordion()</code> mixin for mobile version, and the <code>.lib-data-tabs()</code> mixin for desctop version.
+//  Since tabs and accordion have same markup, they can transform one into other by means of CSS and JavaScript. This can be used for responsive web design. For instance, for mobile version there is an accordion, for desktop version it is transformed to tabs. To implement this approach, use the  <code>.lib-data-accordion()</code> mixin for mobile version, and the <code>.lib-data-tabs()</code> mixin for desktop version.
 //
 //  ```html
 //  <dl class="example-sections-4" data-sections="tabs">

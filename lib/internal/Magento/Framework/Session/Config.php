@@ -2,7 +2,7 @@
 /**
  * Session configuration object
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -16,48 +16,32 @@ use Magento\Framework\Session\SaveHandlerInterface;
 /**
  * Magento session configuration
  *
- * @method Config setSaveHandler()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config implements ConfigInterface
 {
-    /**
-     * Configuration path for session save method
-     */
+    /** Configuration path for session save method */
     const PARAM_SESSION_SAVE_METHOD = 'session/save';
 
-    /**
-     * Configuration path for session save path
-     */
+    /** Configuration path for session save path */
     const PARAM_SESSION_SAVE_PATH = 'session/save_path';
 
-    /**
-     * Configuration path for session cache limiter
-     */
+    /** Configuration path for session cache limiter */
     const PARAM_SESSION_CACHE_LIMITER = 'session/cache_limiter';
 
-    /**
-     * Configuration path for cookie domain
-     */
+    /** Configuration path for cookie domain */
     const XML_PATH_COOKIE_DOMAIN = 'web/cookie/cookie_domain';
 
-    /**
-     * Configuration path for cookie lifetime
-     */
+    /** Configuration path for cookie lifetime */
     const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
 
-    /**
-     * Configuration path for cookie http only param
-     */
+    /** Configuration path for cookie http only param */
     const XML_PATH_COOKIE_HTTPONLY = 'web/cookie/cookie_httponly';
 
-    /**
-     * Configuration path for cookie path
-     */
+    /** Configuration path for cookie path */
     const XML_PATH_COOKIE_PATH = 'web/cookie/cookie_path';
 
-    /**
-     * Cookie default lifetime
-     */
+    /** Cookie default lifetime */
     const COOKIE_LIFETIME_DEFAULT = 3600;
 
     /**
@@ -67,19 +51,13 @@ class Config implements ConfigInterface
      */
     protected $options = [];
 
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $_scopeConfig;
 
-    /**
-     * @var \Magento\Framework\Stdlib\StringUtils
-     */
+    /** @var \Magento\Framework\Stdlib\StringUtils */
     protected $_stringHelper;
 
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
+    /** @var \Magento\Framework\App\RequestInterface */
     protected $_httpRequest;
 
     /**
@@ -94,12 +72,13 @@ class Config implements ConfigInterface
         'session.cookie_httponly',
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $_scopeType;
 
-    /** @var  \Magento\Framework\ValidatorFactory */
+    /** @var string */
+    protected $lifetimePath;
+
+    /** @var \Magento\Framework\ValidatorFactory */
     protected $_validatorFactory;
 
     /**
@@ -128,21 +107,7 @@ class Config implements ConfigInterface
         $this->_stringHelper = $stringHelper;
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
-
-        /**
-         * Session handler
-         *
-         * Save handler may be set to custom value in deployment config, which will override everything else.
-         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
-         */
-        $defaultSaveHandler = $this->getStorageOption('session.save_handler')
-            ?: SaveHandlerInterface::DEFAULT_HANDLER;
-        $saveMethod = $deploymentConfig->get(
-            self::PARAM_SESSION_SAVE_METHOD,
-            $defaultSaveHandler
-        );
-        $saveMethod = $saveMethod === 'db' ? 'user' : $saveMethod;
-        $this->setSaveHandler($saveMethod);
+        $this->lifetimePath = $lifetimePath;
 
         /**
          * Session path
@@ -168,8 +133,7 @@ class Config implements ConfigInterface
         /**
          * Cookie settings: lifetime, path, domain, httpOnly. These govern settings for the session cookie.
          */
-        $lifetime = $this->_scopeConfig->getValue($lifetimePath, $this->_scopeType);
-        $this->setCookieLifetime($lifetime, self::COOKIE_LIFETIME_DEFAULT);
+        $this->configureCookieLifetime();
 
         $path = $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_PATH, $this->_scopeType);
         $path = empty($path) ? $this->_httpRequest->getBasePath() : $path;
@@ -182,6 +146,11 @@ class Config implements ConfigInterface
         $this->setCookieHttpOnly(
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)
         );
+
+        $secureURL = $this->_scopeConfig->getValue('web/secure/base_url', $this->_scopeType);
+        $unsecureURL = $this->_scopeConfig->getValue('web/unsecure/base_url', $this->_scopeType);
+        $isFullySecuredURL = $secureURL == $unsecureURL;
+        $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
     }
 
     /**
@@ -325,7 +294,7 @@ class Config implements ConfigInterface
     {
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookieLifetimeValidator'
+            \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator::class
         );
         if ($validator->isValid($cookieLifetime)) {
             $this->setOption('session.cookie_lifetime', (int)$cookieLifetime);
@@ -358,7 +327,7 @@ class Config implements ConfigInterface
         $cookiePath = (string)$cookiePath;
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookiePathValidator'
+            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class
         );
         if ($validator->isValid($cookiePath)) {
             $this->setOption('session.cookie_path', $cookiePath);
@@ -390,7 +359,7 @@ class Config implements ConfigInterface
     {
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookieDomainValidator'
+            \Magento\Framework\Session\Config\Validator\CookieDomainValidator::class
         );
         if ($validator->isValid($cookieDomain)) {
             $this->setOption('session.cookie_domain', $cookieDomain);
@@ -545,5 +514,16 @@ class Config implements ConfigInterface
         } else {
             throw new \BadMethodCallException(sprintf('Method "%s" does not exist in %s', $method, get_class($this)));
         }
+    }
+
+    /**
+     * Set session cookie lifetime according to configuration
+     *
+     * @return $this
+     */
+    protected function configureCookieLifetime()
+    {
+        $lifetime = $this->_scopeConfig->getValue($this->lifetimePath, $this->_scopeType);
+        return $this->setCookieLifetime($lifetime, self::COOKIE_LIFETIME_DEFAULT);
     }
 }

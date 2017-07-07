@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\File\Test\Unit;
 
@@ -36,9 +34,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     {
         $expected = 4;
         $this->_model->setLineLength($expected);
-        $lineLengthProperty = new \ReflectionProperty(
-            'Magento\Framework\File\Csv', '_lineLength'
-        );
+        $lineLengthProperty = new \ReflectionProperty(\Magento\Framework\File\Csv::class, '_lineLength');
         $lineLengthProperty->setAccessible(true);
         $actual = $lineLengthProperty->getValue($this->_model);
         $this->assertEquals($expected, $actual);
@@ -46,12 +42,12 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDelimiter()
     {
-        $this->assertInstanceOf('\Magento\Framework\File\Csv', $this->_model->setDelimiter(','));
+        $this->assertInstanceOf(\Magento\Framework\File\Csv::class, $this->_model->setDelimiter(','));
     }
 
     public function testSetEnclosure()
     {
-        $this->assertInstanceOf('\Magento\Framework\File\Csv', $this->_model->setEnclosure('"'));
+        $this->assertInstanceOf(\Magento\Framework\File\Csv::class, $this->_model->setEnclosure('"'));
     }
 
     /**

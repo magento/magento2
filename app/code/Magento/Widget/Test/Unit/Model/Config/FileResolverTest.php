@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,9 +33,9 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleReader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->factory = $this->getMock('Magento\Framework\Config\FileIteratorFactory', [], [], '', false);
-        $this->componentDirSearch = $this->getMock('\Magento\Framework\Component\DirSearch', [], [], '', false);
+        $this->moduleReader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
+        $this->factory = $this->getMock(\Magento\Framework\Config\FileIteratorFactory::class, [], [], '', false);
+        $this->componentDirSearch = $this->getMock(\Magento\Framework\Component\DirSearch::class, [], [], '', false);
         $this->object = new FileResolver($this->moduleReader, $this->factory, $this->componentDirSearch);
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -12,7 +12,6 @@
             <data name="searchTerm/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="searchTerm/data/num_results" xsi:type="string">1</data>
             <data name="searchTerm/data/popularity" xsi:type="string">20</data>
-            <data name="searchTerm/data/synonym_for" xsi:type="string">simple%isolation%</data>
             <data name="searchTerm/data/redirect" xsi:type="string">http://example.com/</data>
             <data name="searchTerm/data/display_in_terms" xsi:type="string">No</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessSaveMessage" />

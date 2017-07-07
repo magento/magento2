@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Model;
@@ -22,7 +22,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     protected function _construct()
     {
-        $this->_init('Magento\CheckoutAgreements\Model\ResourceModel\Agreement');
+        $this->_init(\Magento\CheckoutAgreements\Model\ResourceModel\Agreement::class);
     }
 
     /**
@@ -65,6 +65,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @inheritdoc
      */
@@ -214,5 +215,6 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

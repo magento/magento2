@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class XmlCatalogGenerateCommand Generates dictionary of URNs for the IDE
  *
  * @SuppressWarnings(PMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class XmlCatalogGenerateCommand extends Command
 {
@@ -42,9 +43,9 @@ class XmlCatalogGenerateCommand extends Command
     private $urnResolver;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
-    private $rootDirRead;
+    private $readFactory;
 
     /**
      * Supported formats
@@ -56,19 +57,19 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * @param \Magento\Framework\App\Utility\Files $filesUtility
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
-     * @param \Magento\Framework\Filesystem $filesystemFactory
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Developer\Model\XmlCatalog\Format\FormatInterface[] $formats
      */
     public function __construct(
         \Magento\Framework\App\Utility\Files $filesUtility,
         \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
-        \Magento\Framework\Filesystem $filesystemFactory,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         array $formats = []
     ) {
         $this->filesUtility = $filesUtility;
         $this->urnResolver = $urnResolver;
         $this->formats = $formats;
-        $this->rootDirRead = $filesystemFactory->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
         parent::__construct();
     }
 
@@ -111,9 +112,10 @@ class XmlCatalogGenerateCommand extends Command
 
         $urns = [];
         foreach ($files as $file) {
-            $content = $this->rootDirRead->readFile(
-                $this->rootDirRead->getRelativePath($file[0])
-            );
+            $fileDir = dirname($file[0]);
+            $fileName = basename($file[0]);
+            $read = $this->readFactory->create($fileDir);
+            $content = $read->readFile($fileName);
             $matches = [];
             preg_match_all('/schemaLocation="(urn\:magento\:[^"]*)"/i', $content, $matches);
             if (isset($matches[1])) {
@@ -160,6 +162,7 @@ class XmlCatalogGenerateCommand extends Command
      */
     private function getFormatters($format)
     {
+        $format = strtolower($format);
         if (!isset($this->formats[$format])) {
             return false;
         }

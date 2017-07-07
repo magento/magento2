@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Quote;
@@ -49,7 +49,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock->expects($this->any())
@@ -57,13 +57,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->willReturnSelf();
 
-        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
-        $this->resourceMock = $this->getMockBuilder('Magento\Quote\Model\ResourceModel\Quote')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects($this->any())
@@ -75,18 +75,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->any())
             ->method('getTable')
             ->willReturn('test_table');
-        $this->customerResourceMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer')
+        $this->customerResourceMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fetchStrategyMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db\FetchStrategy\Query')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fetchStrategyMock = $this->getMockBuilder(
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class
+        )->disableOriginalConstructor()->getMock();
 
-        $this->entityFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Collection\EntityFactory')
+        $this->entityFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\EntityFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $snapshotClassName = 'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot';
+        $snapshotClassName = \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class;
         $this->entitySnapshotMock = $this->getMockBuilder($snapshotClassName)
             ->disableOriginalConstructor()
             ->setMethods(['registerSnapshot'])
@@ -94,7 +94,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\Reports\Model\ResourceModel\Quote\Collection',
+            \Magento\Reports\Model\ResourceModel\Quote\Collection::class,
             [
                 'customerResource' => $this->customerResourceMock,
                 'resource' => $this->resourceMock,
@@ -110,15 +110,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $customerName = "CONCAT_WS('firstname', 'lastname')";
         $customerTableName = 'customer_entity';
         $customerId = ['customer_id' => ['test_id']];
-        $customersData = [['item_1']];
-        $itemData = ['test'];
+        $customersData = [['entity_id' => 'test_id', 'name' => 'item_1']];
 
         $this->selectMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
         $this->selectMock->expects($this->once())
             ->method('from')
-            ->with(['customer' => $customerTableName], ['email'])
+            ->with(['customer' => $customerTableName], ['entity_id', 'email'])
             ->willReturnSelf();
         $this->selectMock->expects($this->once())
             ->method('columns')
@@ -155,12 +154,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->willReturn($customerId);
 
-        $itemMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $itemMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $itemMock->expects($this->once())
-            ->method('getData')
-            ->willReturn($itemData);
 
         $this->entityFactoryMock->expects($this->any())
             ->method('create')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block;
@@ -13,6 +13,7 @@ use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
 /**
  * Review form block
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -67,6 +68,13 @@ class Form extends \Magento\Framework\View\Element\Template
     protected $jsLayout;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Form constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Review\Helper\Data $reviewData
@@ -74,8 +82,10 @@ class Form extends \Magento\Framework\View\Element\Template
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param Url $customerUrl
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -87,7 +97,8 @@ class Form extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Url $customerUrl,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->urlEncoder = $urlEncoder;
         $this->_reviewData = $reviewData;
@@ -98,6 +109,8 @@ class Form extends \Magento\Framework\View\Element\Template
         $this->customerUrl = $customerUrl;
         parent::__construct($context, $data);
         $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -133,13 +146,13 @@ class Form extends \Magento\Framework\View\Element\Template
      */
     public function getJsLayout()
     {
-        return \Zend_Json::encode($this->jsLayout);
+        return $this->serializer->serialize($this->jsLayout);
     }
 
     /**
      * Get product info
      *
-     * @return Product
+     * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getProductInfo()
@@ -171,6 +184,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * Get collection of ratings
      *
      * @return RatingCollection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRatings()
     {

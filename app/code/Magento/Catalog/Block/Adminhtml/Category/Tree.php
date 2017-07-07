@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,16 @@ namespace Magento\Catalog\Block\Adminhtml\Category;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\Data\Tree\Node;
+use Magento\Store\Model\Store;
 
+/**
+ * Class Tree
+ *
+ * @api
+ * @package Magento\Catalog\Block\Adminhtml\Category
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
@@ -76,31 +85,30 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     protected function _prepareLayout()
     {
-        $addUrl = $this->getUrl("*/*/add", ['_current' => true, 'id' => null, '_query' => false]);
-
-        $this->addChild(
-            'add_sub_button',
-            'Magento\Backend\Block\Widget\Button',
-            [
-                'label' => __('Add Subcategory'),
-                'onclick' => "addNew('" . $addUrl . "', false)",
-                'class' => 'add',
-                'id' => 'add_subcategory_button',
-                'style' => $this->canAddSubCategory() ? '' : 'display: none;'
-            ]
-        );
-
-        if ($this->canAddRootCategory()) {
+        $addUrl = $this->getUrl("*/*/add", ['_current' => false, 'id' => null, '_query' => false]);
+        if ($this->getStore()->getId() == Store::DEFAULT_STORE_ID) {
             $this->addChild(
-                'add_root_button',
-                'Magento\Backend\Block\Widget\Button',
+                'add_sub_button', \Magento\Backend\Block\Widget\Button::class,
                 [
-                    'label' => __('Add Root Category'),
-                    'onclick' => "addNew('" . $addUrl . "', true)",
+                    'label' => __('Add Subcategory'),
+                    'onclick' => "addNew('" . $addUrl . "', false)",
                     'class' => 'add',
-                    'id' => 'add_root_category_button'
+                    'id' => 'add_subcategory_button',
+                    'style' => $this->canAddSubCategory() ? '' : 'display: none;'
                 ]
             );
+
+            if ($this->canAddRootCategory()) {
+                $this->addChild(
+                    'add_root_button', \Magento\Backend\Block\Widget\Button::class,
+                    [
+                        'label' => __('Add Root Category'),
+                        'onclick' => "addNew('" . $addUrl . "', true)",
+                        'class' => 'add',
+                        'id' => 'add_root_category_button'
+                    ]
+                );
+            }
         }
 
         return parent::_prepareLayout();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,8 @@ namespace Magento\ImportExport\Model;
 /**
  * Export model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
@@ -19,6 +20,11 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     const FILTER_ELEMENT_GROUP = 'export_filter';
 
     const FILTER_ELEMENT_SKIP = 'skip_attr';
+
+    /**
+     * Allow multiple values wrapping in double quotes for additional attributes.
+     */
+    const FIELDS_ENCLOSURE = 'fields_enclosure';
 
     /**
      * Filter fields types.
@@ -107,9 +113,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The entity adapter object must be an instance of %1 or %2.',
-                            'Magento\ImportExport\Model\Export\Entity\AbstractEntity',
-                            'Magento\ImportExport\Model\Export\AbstractEntity'
+                            'The entity adapter object must be an instance of %1 or %2.', \Magento\ImportExport\Model\Export\Entity\AbstractEntity::class, \Magento\ImportExport\Model\Export\AbstractEntity::class
                         )
                     );
                 }
@@ -151,8 +155,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 if (!$this->_writer instanceof \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __(
-                            'The adapter object must be an instance of %1.',
-                            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter'
+                            'The adapter object must be an instance of %1.', \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class
                         )
                     );
                 }
@@ -234,10 +237,13 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     public static function getStaticAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
-        if ($attribute->getAttributeCode() == 'category_ids') {
+        if (in_array($attribute->getAttributeCode(), ['category_ids', 'media_gallery'])) {
             return self::FILTER_TYPE_INPUT;
         }
         $columns = $attribute->getFlatColumns();
+        if (empty($columns)) {
+            return self::FILTER_TYPE_INPUT;
+        }
         switch ($columns[$attribute->getAttributeCode()]['type']) {
             case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
             case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:

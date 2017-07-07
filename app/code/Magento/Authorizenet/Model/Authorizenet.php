@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model;
@@ -332,7 +332,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
                     ->setXCity($billing->getCity())
                     ->setXState($billing->getRegion())
                     ->setXZip($billing->getPostcode())
-                    ->setXCountry($billing->getCountry())
+                    ->setXCountry($billing->getCountryId())
                     ->setXPhone($billing->getTelephone())
                     ->setXFax($billing->getFax())
                     ->setXCustId($order->getCustomerId())
@@ -352,7 +352,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
                     ->setXShipToCity($shipping->getCity())
                     ->setXShipToState($shipping->getRegion())
                     ->setXShipToZip($shipping->getPostcode())
-                    ->setXShipToCountry($shipping->getCountry());
+                    ->setXShipToCountry($shipping->getCountryId());
             }
 
             $request->setXPoNum($payment->getPoNumber())

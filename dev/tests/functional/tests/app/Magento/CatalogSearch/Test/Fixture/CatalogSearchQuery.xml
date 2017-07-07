@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -19,7 +19,6 @@
         <field name="num_results" is_required="" />
         <field name="popularity" is_required="" />
         <field name="redirect" is_required="" />
-        <field name="synonym_for" is_required="" />
         <field name="store_id" is_required="" />
         <field name="display_in_terms" is_required="" />
         <field name="is_active" is_required="" />

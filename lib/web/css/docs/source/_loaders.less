@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,6 +7,7 @@
 //  A page loader is an animation a visitor sees while the page or an element is loaded. During this time a page is blocked with overlay.
 //
 //  Default loader markup
+//
 //  <pre>
 //  <code>
 //  &lt;div id="example1" class="loader" data-text="Please wait..." style="display: none;"&gt;
@@ -28,106 +29,124 @@
 }
 
 //  # Default loader variables
+//
 //  <pre>
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
-//        <th class="vars_head">Allowable values</th>
+//        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_loader-overlay-background-color</th>
+//        <td>@loader-overlay__background-color</td>
 //        <td class="vars_value">rgba(255, 255, 255, .5)</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader overlay background color</td>
 //      </tr>
 //      <tr>
 //        <th>@_loader-overlay-z-index</th>
+//        <td>@loader-overlay__z-index</td>
 //        <td class="vars_value">9999</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader overlay background z-index</td>
 //      </tr>
 //      <tr>
 //        <th>@_loader-icon-width</th>
+//        <td>@loader-icon__width</td>
 //        <td class="vars_value">160px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader icon width</td>
 //      </tr>
 //      <tr>
 //        <th>@_loader-icon-height</th>
+//        <td>@loader-icon__height</td>
 //        <td class="vars_value">160px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader icon height</td>
 //      </tr>
 //      <tr>
 //        <th>@_loader-icon-background-color</th>
+//        <td>@loader-icon__background-color</td>
 //        <td class="vars_value">transparent</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader icon background color</td>
 //      </tr>
 //      <tr>
 //        <th>@_loader-icon-background-image</th>
+//        <td>@loader-icon__background-image</td>
 //        <td class="vars_value">url('@{baseDir}images/loader-2.gif')</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader icon ackground image</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-icon-background-position</th>
+//        <td>@loader-icon__background-position</td>
 //        <td class="vars_value">50% 50%</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader icon background position</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-icon-border-radius</th>
+//        <td>@loader-icon__border-radius</td>
 //        <td class="vars_value">5px</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader icon border radius</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-icon-padding</th>
+//        <td>@loader-icon__padding</td>
 //        <td class="vars_value">''</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader icon icon padding</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-text</th>
+//        <td>@loader-text</td>
 //        <td class="vars_value">false</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader text presence</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-text-color</th>
+//        <td>@loader-text__color</td>
 //        <td class="vars_value">@primary__color</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader text color</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-text-font-size</th>
+//        <td>@loader-text__font-size</td>
 //        <td class="vars_value">@font-size__base</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader text font size</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-text-font-family</th>
+//        <td>@loader-text__font-family</td>
 //        <td class="vars_value">@font-family__base</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader text font family</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-text-font-weight</th>
+//        <td>@loader-text__font-weight</td>
 //        <td class="vars_value">@font-weight__regular</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader text font weight</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-text-font-style</th>
+//        <td>@loader-text__font-style</td>
 //        <td class="vars_value">@font-style__base</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader text font style</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_loader-text-padding</th>
+//        <td>@loader-text__padding</td>
 //        <td class="vars_value">130px 0 0</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader text padding</td>
@@ -152,22 +171,26 @@
 }
 
 // # Loading default variables
+//
 //  <pre>
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Global variable</th>
 //        <th class="vars_head">Default value</th>
-//        <th class="vars_head">Allowable values</th>
+//        <th class="vars_head">Allowed values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_loading-background-color</th>
+//        <td>@loading__background-color</td>
 //        <td class="vars_value">@loader-overlay__background-color</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loading overlay background color</td>
 //      </tr>
 //      <tr>
 //        <th>@_loading-background-image</th>
+//        <td>@loading__background-image</td>
 //        <td class="vars_value">@loader-icon__background-image</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loading overlay background z-index</td>

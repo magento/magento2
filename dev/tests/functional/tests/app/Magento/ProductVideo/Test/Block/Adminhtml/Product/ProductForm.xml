@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <images-and-videos>
         <class>\Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\ImagesAndVideos</class>
-        <selector>#product_info_tabs_image-management</selector>
+        <selector>[data-index="block_gallery"]</selector>
         <strategy>css selector</strategy>
         <fields>
             <position />
@@ -26,4 +26,4 @@
             <role />
         </fields>
     </images-and-videos>
-</tabs>
+</sections>

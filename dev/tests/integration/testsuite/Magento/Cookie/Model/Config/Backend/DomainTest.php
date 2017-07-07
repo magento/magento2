@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Model\Config\Backend;
@@ -24,7 +24,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $domain \Magento\Cookie\Model\Config\Backend\Domain */
         $domain = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cookie\Model\Config\Backend\Domain'
+            \Magento\Cookie\Model\Config\Backend\Domain::class
         );
         $domain->setValue($value);
         $domain->setPath('path');

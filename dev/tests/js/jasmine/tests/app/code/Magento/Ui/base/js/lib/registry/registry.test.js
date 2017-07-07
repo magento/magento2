@@ -1,10 +1,9 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
-
 define([
     'uiRegistry'
 ], function (registry) {
@@ -38,13 +37,6 @@ define([
 
                 expect(type).toEqual('object');
             });
-            it('Check assigned value after used method', function () {
-                var elem = 'test',
-                    prop = 'magento';
-                
-                registry.set(elem, prop);
-                expect(registry.storage.data.get(elem)).toEqual(prop);
-            });
         });
         describe('"registry.get" method', function () {
             it('Check for defined', function () {
@@ -62,14 +54,6 @@ define([
                 var type = registry.get() instanceof Array;
 
                 expect(type).toBeFalsy();
-            });
-            it('Check called callback with arguments', function () {
-                var elems = ['magento'],
-                    callback = function () {};
-
-                registry.events.wait = jasmine.createSpy();
-                registry.get(elems, callback);
-                expect(registry.events.wait).toHaveBeenCalledWith(elems, callback);
             });
         });
         describe('"registry.remove" method', function () {
@@ -89,13 +73,6 @@ define([
 
                 expect(type).toEqual('object');
             });
-            it('Check called registry.storage.remove with arguments', function () {
-                var elems = ['magento'];
-
-                registry.storage.remove = jasmine.createSpy();
-                registry.remove(elems);
-                expect(registry.storage.remove).toHaveBeenCalledWith(elems);
-            });
         });
         describe('"registry.has" method', function () {
             it('Check for defined', function () {
@@ -106,23 +83,10 @@ define([
 
                 expect(type).toEqual('function');
             });
-            it('Check returned value if registry.storage has property', function () {
-                var name = 'magento';
-
-                registry.storage.data.set(name, 'magentoValue');
-                expect(registry.has(name)).toEqual(true);
-            });
             it('Check returned value if registry.storage has not property', function () {
                 var name = 'magentoNonProperty';
 
                 expect(registry.has(name)).toEqual(false);
-            });
-            it('Check called registry.storage.has with arguments', function () {
-                var elems = ['magento'];
-
-                registry.storage.has = jasmine.createSpy();
-                registry.has(elems);
-                expect(registry.storage.has).toHaveBeenCalledWith(elems);
             });
         });
         describe('"registry.async" method', function () {
@@ -148,22 +112,6 @@ define([
                 var type = typeof registry.remove('magento');
 
                 expect(type).toEqual('object');
-            });
-            it('Check registry.storage for defined', function () {
-                registry.create();
-                expect(registry.storage).toBeDefined();
-            });
-            it('Check registry.storage type', function () {
-                registry.create();
-                expect(typeof registry.storage).toEqual('object');
-            });
-            it('Check registry.events for defined', function () {
-                registry.create();
-                expect(registry.events).toBeDefined();
-            });
-            it('Check registry.events type', function () {
-                registry.create();
-                expect(typeof registry.events).toEqual('object');
             });
         });
     });

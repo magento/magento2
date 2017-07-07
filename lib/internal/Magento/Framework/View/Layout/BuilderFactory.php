@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -26,8 +26,8 @@ class BuilderFactory
      * @var array
      */
     protected $typeMap = [
-        self::TYPE_LAYOUT => 'Magento\Framework\View\Layout\Builder',
-        self::TYPE_PAGE   => 'Magento\Framework\View\Page\Builder',
+        self::TYPE_LAYOUT => \Magento\Framework\View\Layout\Builder::class,
+        self::TYPE_PAGE   => \Magento\Framework\View\Page\Builder::class,
     ];
 
     /**

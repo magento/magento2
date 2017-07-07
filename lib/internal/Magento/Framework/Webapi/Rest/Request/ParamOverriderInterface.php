@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ namespace Magento\Framework\Webapi\Rest\Request;
  * invoked could have a signature of "getAddresses($customerId)", but in the webapi.xml, the $customerId parameter
  * would be forced to be the customer id of the current authenticated user.
  *
- * The forced override parameter configuration is in the webapi.xml. 
+ * The forced override parameter configuration is in the webapi.xml.
  *
  * <data>
  *   <parameter name="customer.id" force="true">%customer_id%</parameter>
@@ -25,6 +25,8 @@ namespace Magento\Framework\Webapi\Rest\Request;
  * ParamOverriderCustomerId would return the current authenticated user's customer id. If you
  * create new ParamOverriderInterface implementations, you can register new implementations by
  * adding to the parameter list for ParamsOverrider's dependency injection configuration.
+ *
+ * @api
  */
 interface ParamOverriderInterface
 {

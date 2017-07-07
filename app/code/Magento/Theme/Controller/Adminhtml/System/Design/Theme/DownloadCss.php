@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
@@ -9,6 +9,10 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class DownloadCss
+ * @deprecated
+ */
 class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**
@@ -22,11 +26,13 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
         $file = $this->getRequest()->getParam('file');
 
         /** @var $urlDecoder \Magento\Framework\Url\DecoderInterface */
-        $urlDecoder = $this->_objectManager->get('Magento\Framework\Url\DecoderInterface');
+        $urlDecoder = $this->_objectManager->get(\Magento\Framework\Url\DecoderInterface::class);
         $fileId = $urlDecoder->decode($file);
         try {
             /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-            $theme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface')->load($themeId);
+            $theme = $this->_objectManager->create(
+                \Magento\Framework\View\Design\ThemeInterface::class
+            )->load($themeId);
             if (!$theme->getId()) {
                 throw new \InvalidArgumentException(sprintf('Theme not found: "%1".', $themeId));
             }
@@ -44,7 +50,7 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('File not found: "%1".', $fileId));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
     }
 }

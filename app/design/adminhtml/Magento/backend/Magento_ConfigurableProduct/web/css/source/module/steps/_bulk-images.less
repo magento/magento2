@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -18,6 +18,7 @@
     .steps-wizard-section-list {
         &:extend(.abs-list-reset-styles all);
         margin: 0 0 @indent__l;
+
         > li {
             margin: 0 0 @indent__s;
         }
@@ -55,424 +56,40 @@
             display: block;
             margin: 0 0 @indent__s;
         }
+
         .attributes-selector-list {
             border: 1px solid @color-gray-light01;
             list-style-type: none;
             margin: 0 0 @indent__m;
             padding: @indent__m @indent__s;
+
             &:empty {
                 display: none;
             }
+
             > .item {
                 + .item {
                     margin-top: @indent__m;
                 }
-            } 
+            }
         }
+
         .attribute-label {
             .lib-font-size(16);
             margin-bottom: @indent__xs;
         }
+
         .image-panel {
             margin: 0;
         }
     }
 
     .bulk-attribute-values {
-        max-width: 400px;
-    }
-}
+        max-width: 700px;
 
-//  ToDo UI: Make Image Management styles global for all product management
-
-//
-//  Image Management Variables
-//  _____________________________________________
-
-@image-gallery__background: @color-white-fog;
-@image-gallery-placeholder__background: @color-white;
-@image-gallery-placeholder__border: 1px solid @color-gray80;
-@image-gallery-placeholder__height: 125px;
-@image-gallery-placeholder__width: @image-gallery-placeholder__height;
-@image-gallery-icons__color: @color-gray62;
-@image-gallery-icons__hover__color: @color-gray52;
-@image-gallery-placeholder-icon__color: @color-gray80;
-@image-gallery-image__z-index: 1;
-@image-gallery-image-hidden__z-index: @image-gallery-image__z-index + 1;
-@image-gallery-action__z-index: @image-gallery-image-hidden__z-index + 1;
-@image-gallery-fade__z-index: @image-gallery-action__z-index + 1;
-
-//
-//  Image Management
-//  _____________________________________________
-
-.gallery {
-    &:extend(.abs-clearfix all);
-    background: @image-gallery__background;
-    padding: @indent__s .3rem 0;
-    .image {
-        margin-bottom: @indent__s;
-    }
-}
-
-.image {
-    background: @image-gallery-placeholder__background;
-    border: @image-gallery-placeholder__border;
-    box-sizing: border-box;
-    display: inline-block;
-    float: left;
-    height: @image-gallery-placeholder__height;
-    margin: 0 .8rem;
-    overflow: hidden;
-    position: relative;
-    width: @image-gallery-placeholder__width;
-
-    .product-image {
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 100%;
-        z-index: @image-gallery-image__z-index;
-    }
-
-    //  Image Placeholder
-    &.image-placeholder {
-        position: relative;
-        .lib-icon-font(
-        @icon-camera__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 4rem,
-        @_icon-font-color: @image-gallery-placeholder-icon__color,
-        @_icon-font-text-hide: true
-        );
-        &:before {
-            position: absolute;
-            top: 12px;
-            width: 100%;
-            z-index: @image-gallery-image__z-index;
-        }
-        .image-browse {
-            bottom: 0;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            > span {
-                display: none;
-            }
-        }
-        input[type="file"] {
-            border: 500px solid transparent;
-            bottom: 0;
-            cursor: pointer;
-            font-size: 10em;
-            height: 100%;
-            left: 0;
-            opacity: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 100%;
-            z-index: @image-gallery-action__z-index;
-        }
-
-        .spinner {
-            display: none;
-        }
-
-        &.loading,
-        .file-row {
-            .spinner {
-                background: @color-white;
-                display: block;
-                height: 100%;
-                left: 0;
-                margin: 0;
-                position: absolute;
-                top: 0;
-                width: 100%;
-                z-index: @image-gallery-fade__z-index;
-                > span {
-                    left: 50%;
-                    top: 50%;
-                    margin: 0 0 0 -@indent__base;
-                }
-            }
-        }
-        .file-row {
-            height: 100%;
-            position: absolute;
-            width: 100%;
-        }
-    }
-
-    .image-placeholder-text {
-        .lib-font-size(11);
-        bottom: 0;
-        color: @color-blue-dodger;
-        left: 0;
-        line-height: 1.333;
-        margin-bottom: 15%;
-        padding: 0 @indent__s;
-        position: absolute;
-        right: 0;
-        text-align: center;
-    }
-
-    &.ui-sortable-placeholder {
-        background: @color-blue-clear-sky;
-        border: 1px solid @color-blue-dodger;
-        visibility: visible !important;
-    }
-
-    // Actions
-    .action-remove {
-        &:extend(.abs-action-reset all);
-        bottom: 6px;
-        cursor: pointer;
-        height: 20px;
-        left: 6px;
-        position: absolute;
-        width: 20px;
-        z-index: @image-gallery-action__z-index;
-        .lib-icon-font(
-        @icon-delete__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 1.8rem,
-        @_icon-font-color: @image-gallery-icons__color,
-        @_icon-font-color-hover: @image-gallery-icons__hover__color,
-        @_icon-font-text-hide: true,
-        @_icon-font-display: none
-        );
-    }
-
-    .image-label {
-        bottom: 6px;
-        cursor: pointer;
-        height: 20px;
-        position: absolute;
-        right: 3px;
-        width: 20px;
-        z-index: @image-gallery-action__z-index;
-        .lib-icon-font(
-        @icon-tag__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 1.8rem,
-        @_icon-font-color: @image-gallery-icons__color,
-        @_icon-font-color-hover: @image-gallery-icons__hover__color,
-        @_icon-font-text-hide: true,
-        @_icon-font-display: none
-        );
-    }
-
-    &:hover {
-        .action-remove,
-        .image-label {
-            display: block;
-        }
-    }
-
-    &.base-image {
-        .image-label {
-            // ToDo UI: remove after image roles labels implemented
-            background: url(../Magento_Backend/images/gallery-image-base-label.png) no-repeat;
-            bottom: 0;
-            display: block;
-            height: 33px;
-            right: 0;
-            width: 33px;
-            &:before {
-                display: none;
-            }
-        }
-        &:hover {
-            .image-label {
-                background: none;
-                bottom: 6px;
-                height: 20px;
-                right: 3px;
-                width: 20px;
-                &:before {
-                    display: block;
-                }
-            }
-        }
-    }
-
-    .draggable-handle {
-        cursor: move;
-        height: 20px;
-        left: 3px;
-        position: absolute;
-        top: 2px;
-        width: 20px;
-        z-index: @image-gallery-action__z-index;
-        .lib-icon-font(
-        @icon-gripper__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 1.8rem,
-        @_icon-font-color: @image-gallery-icons__color,
-        @_icon-font-color-hover: @image-gallery-icons__hover__color
-        );
-    }
-
-    .image-fade {
-        .lib-font-size(18);
-        background: rgba(255, 255, 255, .8);
-        bottom: 0;
-        color: @color-gray62;
-        content: attr(data-image-hidden-label);
-        font-weight: @font-weight__semibold;
-        left: 0;
-        line-height: @image-gallery-placeholder__height;
-        position: absolute;
-        right: 0;
-        text-align: center;
-        text-transform: uppercase;
-        top: 0;
-        visibility: hidden;
-        z-index: @image-gallery-image-hidden__z-index;
-    }
-
-    &.hidden-for-front {
-        .image-fade {
-            visibility: visible;
-        }
-    }
-}
-
-//
-//  Gallery image panel
-//  ---------------------------------------------
-
-.image-panel {
-    &:extend(.abs-clearfix all);
-    background: @color-white;
-    border-bottom: 1px solid @color-gray76;
-    box-shadow: inset 0 1px 3px @color-gray80;
-    clear: both;
-    display: none;
-    margin: 0 -18px 15px;
-    padding: @indent__base 15px;
-    position: relative;
-    top: 5px;
-}
-
-.image-panel-controls,
-.image-panel-preview {
-    float: left;
-    margin-left: 2.127659574%;
-    width: 65.95744680199999%;
-}
-
-.image-panel-preview {
-    margin-left: 0;
-}
-
-.image-panel-controls {
-    padding: 0 1%;
-    width: 29.914893614%;
-    .image-name {
-        color: @color-gray40;
-        display: block;
-        .lib-font-size(16);
-    }
-    .action-remove {
-        &:extend(.abs-action-reset all);
-        margin: 0 0 35px;
-        .lib-icon-font(
-        @icon-delete__content,
-        @_icon-font: @icons-admin__font-name,
-        @_icon-font-size: 1.8rem,
-        @_icon-font-color: @image-gallery-icons__color,
-        @_icon-font-color-hover: @image-gallery-icons__hover__color,
-        @_icon-font-text-hide: true
-        );
-    }
-    .fieldset-image-panel {
-        padding: @indent__base @indent__xs 0 0;
-        .field {
-            margin-bottom: @indent__s;
-        }
-        .label {
-            margin-bottom: @indent__s;
-            padding-top: 0;
+        .admin__field-label {
+            padding-left: 2.6rem;
             text-align: left;
-            width: 100%;
-        }
-    }
-    .fieldset-image-panel .field > .control,
-    .image-panel-controls textarea {
-        resize: vertical;
-        width: 100%;
-    }
-}
-
-.image-file-params {
-    color: @color-gray40;
-    .lib-font-size(11);
-    margin: 0 0 @indent__s;
-}
-
-.image-panel-preview img {
-    width: 100%;
-}
-
-//
-//  Custom Multiselect
-//  _____________________________________________
-
-.gallery {
-    //  ToDo UI: remove after new gallery images editing design implementation
-    .multiselect-alt {
-        border-radius: 5px;
-        border: 1px solid @color-gray80;
-        color: @color-gray20;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        .item {
-            border-top: 1px solid @color-white;
-            cursor: pointer;
-            position: relative;
-            &:first-child {
-                border-top: 0;
-            }
-            &.selected {
-                background: @color-blue-clear-sky;
-                &:hover {
-                    background: darken(@color-blue-clear-sky, 10%);
-                }
-                label {
-                    .lib-icon-font(
-                    @icon-check-mage__content,
-                    @_icon-font: @icons-admin__font-name,
-                    @_icon-font-size: 1.4rem,
-                    @_icon-font-color: @color-blue-dodger
-                    );
-                    &:before {
-                        left: 8px;
-                        position: absolute;
-                        top: 6px;
-                        width: 17px;
-                    }
-                }
-            }
-        }
-        label {
-            display: block;
-            cursor: pointer;
-            padding: 6px @indent__m @indent__xs;
-        }
-        input[type="checkbox"] {
-            height: 0;
-            margin: 0;
-            opacity: 0;
-            padding: 0;
-            width: 0;
         }
     }
 }

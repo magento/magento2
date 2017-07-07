@@ -1,6 +1,10 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'jquery',
@@ -20,7 +24,6 @@ define([
 
     $.widget('mage.priceBox', {
         options: globalOptions,
-        cache: {},
 
         /**
          * Widget initialisation.
@@ -29,6 +32,7 @@ define([
          */
         _init: function initPriceBox() {
             var box = this.element;
+
             box.trigger('updatePrice');
             this.cache.displayPrices = utils.deepClone(this.options.prices);
         },
@@ -39,6 +43,7 @@ define([
         _create: function createPriceBox() {
             var box = this.element;
 
+            this.cache = {};
             this._setDefaultsFromPriceConfig();
             this._setDefaultsFromDataSet();
 
@@ -70,7 +75,8 @@ define([
         updatePrice: function updatePrice(newPrices) {
             var prices = this.cache.displayPrices,
                 additionalPrice = {},
-                pricesCode = [];
+                pricesCode = [],
+                priceValue, origin, finalPrice;
 
             this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
 
@@ -89,19 +95,19 @@ define([
                     pricesCode = _.keys(additional);
                 }
                 _.each(pricesCode, function (priceCode) {
-                    var priceValue = additional[priceCode] || {};
+                    priceValue = additional[priceCode] || {};
                     priceValue.amount = +priceValue.amount || 0;
                     priceValue.adjustments = priceValue.adjustments || {};
 
                     additionalPrice[priceCode] = additionalPrice[priceCode] || {
-                        'amount': 0,
-                        'adjustments': {}
-                    };
-                    additionalPrice[priceCode].amount =  0 + (additionalPrice[priceCode].amount || 0)
-                        + priceValue.amount;
+                            'amount': 0,
+                            'adjustments': {}
+                        };
+                    additionalPrice[priceCode].amount =  0 + (additionalPrice[priceCode].amount || 0) +
+                        priceValue.amount;
                     _.each(priceValue.adjustments, function (adValue, adCode) {
-                        additionalPrice[priceCode].adjustments[adCode] = 0
-                            + (additionalPrice[priceCode].adjustments[adCode] || 0) + adValue;
+                        additionalPrice[priceCode].adjustments[adCode] = 0 +
+                            (additionalPrice[priceCode].adjustments[adCode] || 0) + adValue;
                     });
                 });
             });
@@ -110,16 +116,16 @@ define([
                 this.cache.displayPrices = utils.deepClone(this.options.prices);
             } else {
                 _.each(additionalPrice, function (option, priceCode) {
-                    var origin = this.options.prices[priceCode] || {},
-                        final = prices[priceCode] || {};
+                    origin = this.options.prices[priceCode] || {};
+                    finalPrice = prices[priceCode] || {};
                     option.amount = option.amount || 0;
                     origin.amount = origin.amount || 0;
                     origin.adjustments = origin.adjustments || {};
-                    final.adjustments = final.adjustments || {};
+                    finalPrice.adjustments = finalPrice.adjustments || {};
 
-                    final.amount = 0 + origin.amount + option.amount;
+                    finalPrice.amount = 0 + origin.amount + option.amount;
                     _.each(option.adjustments, function (pa, paCode) {
-                        final.adjustments[paCode] = 0 + (origin.adjustments[paCode] || 0) + pa;
+                        finalPrice.adjustments[paCode] = 0 + (origin.adjustments[paCode] || 0) + pa;
                     });
                 }, this);
             }
@@ -127,6 +133,7 @@ define([
             this.element.trigger('reloadPrice');
         },
 
+        /*eslint-disable no-extra-parens*/
         /**
          * Render price unit block.
          */
@@ -135,16 +142,19 @@ define([
                 priceTemplate = mageTemplate(this.options.priceTemplate);
 
             _.each(this.cache.displayPrices, function (price, priceCode) {
-                price.final = _.reduce(price.adjustments, function(memo, amount) {
+                price.final = _.reduce(price.adjustments, function (memo, amount) {
                     return memo + amount;
                 }, price.amount);
 
                 price.formatted = utils.formatPrice(price.final, priceFormat);
 
-                $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({data: price}));
+                $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({
+                    data: price
+                }));
             }, this);
         },
 
+        /*eslint-enable no-extra-parens*/
         /**
          * Overwrites initial (default) prices object.
          * @param {Object} prices
@@ -177,6 +187,7 @@ define([
             var box = this.element,
                 priceHolders = $('[data-price-type]', box),
                 prices = this.options.prices;
+
             this.options.productId = box.data('productId');
 
             if (_.isEmpty(prices)) {
@@ -184,7 +195,7 @@ define([
                     var type = $(element).data('priceType'),
                         amount = parseFloat($(element).data('priceAmount'));
 
-                    if (type && amount) {
+                    if (type && !_.isNaN(amount)) {
                         prices[type] = {
                             amount: amount
                         };
@@ -199,10 +210,7 @@ define([
         _setDefaultsFromPriceConfig: function _setDefaultsFromPriceConfig() {
             var config = this.options.priceConfig;
 
-            if (config) {
-                if (+config.productId !== +this.options.productId) {
-                    return;
-                }
+            if (config && config.prices) {
                 this.options.prices = config.prices;
             }
         }

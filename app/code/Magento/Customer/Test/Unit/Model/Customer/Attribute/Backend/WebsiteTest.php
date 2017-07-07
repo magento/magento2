@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,9 +20,9 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManager;
 
-    public function setUp()
+    protected function setUp()
     {
-        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $this->testable = new \Magento\Customer\Model\Customer\Attribute\Backend\Website($storeManager);
@@ -30,7 +30,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveWithId()
     {
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -39,7 +39,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
-            'Magento\Customer\Model\Customer\Attribute\Backend\Website',
+            \Magento\Customer\Model\Customer\Attribute\Backend\Website::class,
             $this->testable->beforeSave($object)
         );
     }
@@ -47,12 +47,12 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave()
     {
         $websiteId = 1;
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasData', 'setData'])
             ->getMock();
 
-        $store = $this->getMockBuilder('Magento\Framework\DataObject')->setMethods(['getWebsiteId'])->getMock();
+        $store = $this->getMockBuilder(\Magento\Framework\DataObject::class)->setMethods(['getWebsiteId'])->getMock();
         $store->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
 
         $this->storeManager->expects($this->once())
@@ -67,7 +67,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
-            'Magento\Customer\Model\Customer\Attribute\Backend\Website',
+            \Magento\Customer\Model\Customer\Attribute\Backend\Website::class,
             $this->testable->beforeSave($object)
         );
     }

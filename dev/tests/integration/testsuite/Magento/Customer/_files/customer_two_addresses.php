@@ -2,15 +2,20 @@
 /**
  * Customer address fixture with entity_id = 2, this fixture also creates address with entity_id = 1
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\Customer\Model\CustomerRegistry;
 
 require 'customer_address.php';
 
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+    ->create(\Magento\Customer\Model\Address::class);
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(CustomerRegistry::class);
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     [
@@ -29,4 +34,6 @@ $customerAddress->setData(
 )->setCustomerId(
     1
 );
+
 $customerAddress->save();
+$customerRegistry->remove($customerAddress->getCustomerId());

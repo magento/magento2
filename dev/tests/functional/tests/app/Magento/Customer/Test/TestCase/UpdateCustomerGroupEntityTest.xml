@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -35,6 +35,9 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCustomerForm" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCartPriceRuleForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnCatalogPriceRuleForm" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupOnProductForm" />
         </variation>
     </testCase>
 </config>

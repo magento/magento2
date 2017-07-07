@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,6 @@
  * @see \Magento\Payment\Block\Transparent\Info
  */
 ?>
-<fieldset id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()); ?>" style="display:none" class="fieldset items redirect">
-    <div><?php echo $block->escapeHtml(__('We\'ll ask for your payment details before you place an order.')); ?></div>
+<fieldset id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>" style="display:none" class="fieldset items redirect">
+    <div><?= $block->escapeHtml(__('We\'ll ask for your payment details before you place an order.')) ?></div>
 </fieldset>

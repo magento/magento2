@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model\ResourceModel\System\Message;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -51,8 +54,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\AdminNotification\Model\System\Message',
-            'Magento\AdminNotification\Model\ResourceModel\System\Message'
+            \Magento\AdminNotification\Model\System\Message::class,
+            \Magento\AdminNotification\Model\ResourceModel\System\Message::class
         );
     }
 

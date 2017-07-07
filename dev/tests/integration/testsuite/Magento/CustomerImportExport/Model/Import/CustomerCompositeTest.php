@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
@@ -83,7 +83,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_entityAdapter = $this->_objectManager->create(
-            'Magento\CustomerImportExport\Model\Import\CustomerComposite'
+            \Magento\CustomerImportExport\Model\Import\CustomerComposite::class
         );
     }
 
@@ -95,7 +95,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected function _assertCustomerData(array $expectedData)
     {
         /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
-        $collection = $this->_objectManager->create('Magento\Customer\Model\ResourceModel\Customer\Collection');
+        $collection = $this->_objectManager->create(\Magento\Customer\Model\ResourceModel\Customer\Collection::class);
         $collection->addAttributeToSelect($this->_customerAttributes);
         $customers = $collection->getItems();
 
@@ -143,7 +143,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         // set entity adapter parameters
         $this->_entityAdapter->setParameters(['behavior' => $behavior]);
         /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->create('Magento\Framework\Filesystem');
+        $filesystem = $this->_objectManager->create(\Magento\Framework\Filesystem::class);
         $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $this->_entityAdapter->getErrorAggregator()->initValidationStrategy(

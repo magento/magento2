@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment;
@@ -17,7 +17,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $arguments = [
             'shipmentRepository' => $this->getMock(
-                'Magento\Sales\Model\Order\ShipmentRepository',
+                \Magento\Sales\Model\Order\ShipmentRepository::class,
                 [],
                 [],
                 '',
@@ -25,7 +25,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             ),
         ];
 
-        $this->_model = $objectManagerHelper->getObject('Magento\Sales\Model\Order\Shipment\Track', $arguments);
+        $this->_model = $objectManagerHelper->getObject(\Magento\Sales\Model\Order\Shipment\Track::class, $arguments);
     }
 
     public function testAddData()
@@ -44,7 +44,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         $storeObject = new \Magento\Framework\DataObject(['id' => $storeId]);
 
         $shipmentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['getStore', '__wakeup'],
             [],
             '',

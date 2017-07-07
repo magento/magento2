@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,22 +43,20 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
     }
 
     /**
-     * Get Price Amount object
-     *
-     * @return AmountInterface
+     * @inheritdoc
      */
     public function getAmount()
     {
-        if (null === $this->amount) {
+        if (!isset($this->amount[$this->getValue()])) {
             $price = $this->getValue();
             if ($this->product->getPriceType() == Price::PRICE_TYPE_FIXED) {
                 /** @var \Magento\Catalog\Pricing\Price\CustomOptionPrice $customOptionPrice */
                 $customOptionPrice = $this->priceInfo->getPrice(CustomOptionPrice::PRICE_CODE);
                 $price += $customOptionPrice->getCustomOptionRange(true);
             }
-            $this->amount = $this->calculator->getMinRegularAmount($price, $this->product);
+            $this->amount[$this->getValue()] = $this->calculator->getMinRegularAmount($price, $this->product);
         }
-        return $this->amount;
+        return $this->amount[$this->getValue()];
     }
 
     /**

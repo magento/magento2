@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,8 @@ use \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as R
  */
 class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
+    const TABLE_NAME = 'tableName';
+    const LINK_FIELD = 'linkField';
 
     /**
      * @var ResourceFactory |\PHPUnit_Framework_MockObject_MockObject
@@ -79,7 +81,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeDate;
+    protected $dateTime;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
@@ -121,61 +123,61 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     protected $errorAggregator;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         $this->jsonHelper = $this->getMock(
-            '\Magento\Framework\Json\Helper\Data',
+            \Magento\Framework\Json\Helper\Data::class,
             [],
             [],
             '',
             false
         );
         $this->importExportData = $this->getMock(
-            '\Magento\ImportExport\Helper\Data',
+            \Magento\ImportExport\Helper\Data::class,
             [],
             [],
             '',
             false
         );
         $this->resourceHelper = $this->getMock(
-            '\Magento\ImportExport\Model\ResourceModel\Helper',
+            \Magento\ImportExport\Model\ResourceModel\Helper::class,
             [],
             [],
             '',
             false
         );
         $this->resource = $this->getMock(
-            '\Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['getConnection'],
             [],
             '',
             false
         );
         $this->connection = $this->getMockForAbstractClass(
-            '\Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false
         );
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->dataSourceModel = $this->getMock(
-            '\Magento\ImportExport\Model\ResourceModel\Import\Data',
+            \Magento\ImportExport\Model\ResourceModel\Import\Data::class,
             [],
             [],
             '',
             false
         );
         $this->eavConfig = $this->getMock(
-            '\Magento\Eav\Model\Config',
+            \Magento\Eav\Model\Config::class,
             [],
             [],
             '',
             false
         );
         $entityType = $this->getMock(
-            '\Magento\Eav\Model\Entity\Type',
+            \Magento\Eav\Model\Entity\Type::class,
             [],
             [],
             '',
@@ -184,93 +186,95 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $entityType->method('getEntityTypeId')->willReturn('');
         $this->eavConfig->method('getEntityType')->willReturn($entityType);
         $this->resourceFactory = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory',
+            \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory::class,
             ['create', 'getTable'],
             [],
             '',
             false
         );
         $this->resourceFactory->expects($this->any())->method('create')->willReturnSelf();
-        $this->resourceFactory->expects($this->any())->method('getTable')->willReturnSelf();
+        $this->resourceFactory->expects($this->any())->method('getTable')->willReturn(self::TABLE_NAME);
         $this->catalogData = $this->getMock(
-            '\Magento\Catalog\Helper\Data',
+            \Magento\Catalog\Helper\Data::class,
             [],
             [],
             '',
             false
         );
         $this->storeResolver = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product\StoreResolver',
+            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class,
             [],
             [],
             '',
             false
         );
         $this->importProduct = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product',
+            \Magento\CatalogImportExport\Model\Import\Product::class,
             [],
             [],
             '',
             false
         );
         $this->productModel = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [],
             [],
             '',
             false
         );
         $this->validator = $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator',
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class,
             ['isValid', 'getMessages'],
             [],
             '',
             false
         );
         $this->websiteValidator = $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website',
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class,
             [],
             [],
             '',
             false
         );
         $this->tierPriceValidator = $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice',
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice::class,
             [],
             [],
             '',
             false
         );
         $this->stringObject = $this->getMock(
-            '\Magento\Framework\Stdlib\StringUtils',
+            \Magento\Framework\Stdlib\StringUtils::class,
             [],
             [],
             '',
             false
         );
         $this->errorAggregator = $this->getErrorAggregatorObject();
-        $this->localeDate = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime\Timezone',
+        $this->dateTime = $this->getMock(
+            \Magento\Framework\Stdlib\DateTime\DateTime::class,
             ['date', 'format'],
             [],
             '',
             false
         );
-        $this->localeDate->expects($this->any())->method('date')->willReturnSelf();
+        $this->dateTime->expects($this->any())->method('date')->willReturnSelf();
 
-        $this->advancedPricing = $this->getAdvancedPricingMock([
-            'retrieveOldSkus',
-            'validateRow',
-            'addRowError',
-            'saveProductPrices',
-            'getCustomerGroupId',
-            'getWebSiteId',
-            'deleteProductTierPrices',
-            'getBehavior',
-            'saveAndReplaceAdvancedPrices',
-            'processCountExistingPrices',
-            'processCountNewPrices'
-        ]);
+        $this->advancedPricing = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'validateRow',
+                'addRowError',
+                'saveProductPrices',
+                'getCustomerGroupId',
+                'getWebSiteId',
+                'deleteProductTierPrices',
+                'getBehavior',
+                'saveAndReplaceAdvancedPrices',
+                'processCountExistingPrices',
+                'processCountNewPrices'
+            ]
+        );
 
         $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn([]);
     }
@@ -294,14 +298,16 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     public function testValidateRowResult($rowData, $behavior, $expectedResult)
     {
         $rowNum = 0;
-        $advancedPricingMock = $this->getAdvancedPricingMock([
-            'retrieveOldSkus',
-            'addRowError',
-            'saveProductPrices',
-            'getCustomerGroupId',
-            'getWebSiteId',
-            'getBehavior',
-        ]);
+        $advancedPricingMock = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'addRowError',
+                'saveProductPrices',
+                'getCustomerGroupId',
+                'getWebSiteId',
+                'getBehavior',
+            ]
+        );
         $this->validator->expects($this->any())->method('isValid')->willReturn(true);
         $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
 
@@ -317,14 +323,16 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     public function testValidateRowAddRowErrorCall($rowData, $behavior, $error)
     {
         $rowNum = 0;
-        $advancedPricingMock = $this->getAdvancedPricingMock([
-            'retrieveOldSkus',
-            'addRowError',
-            'saveProductPrices',
-            'getCustomerGroupId',
-            'getWebSiteId',
-            'getBehavior',
-        ]);
+        $advancedPricingMock = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'addRowError',
+                'saveProductPrices',
+                'getCustomerGroupId',
+                'getWebSiteId',
+                'getBehavior',
+            ]
+        );
         $this->validator->expects($this->any())->method('isValid')->willReturn(true);
         $advancedPricingMock->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $advancedPricingMock->expects($this->once())->method('addRowError')->with($error, $rowNum);
@@ -341,13 +349,15 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $rowData = [
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_SKU => 'sku value',
         ];
-        $advancedPricingMock = $this->getAdvancedPricingMock([
-            'retrieveOldSkus',
-            'addRowError',
-            'saveProductPrices',
-            'getCustomerGroupId',
-            'getWebSiteId',
-        ]);
+        $advancedPricingMock = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'addRowError',
+                'saveProductPrices',
+                'getCustomerGroupId',
+                'getWebSiteId',
+            ]
+        );
         $this->setPropertyValue($advancedPricingMock, '_validatedRows', []);
         $this->validator->expects($this->once())->method('isValid')->willReturn(false);
         $messages = ['value'];
@@ -408,29 +418,123 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $groupWebsiteId,
         $expectedTierPrices
     ) {
-        $this->advancedPricing
+        $skuProduct = 'product1';
+        $sku = $data[0][AdvancedPricing::COL_SKU];
+        $advancedPricing = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'validateRow',
+                'addRowError',
+                'getCustomerGroupId',
+                'getWebSiteId',
+                'deleteProductTierPrices',
+                'getBehavior',
+                'saveAndReplaceAdvancedPrices',
+                'processCountExistingPrices',
+                'processCountNewPrices'
+            ]
+        );
+        $advancedPricing
             ->expects($this->any())
             ->method('getBehavior')
             ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
-        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
+        $advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
 
-        $this->advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap([
-            [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
-        ]);
+        $advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap(
+            [
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
+            ]
+        );
 
-        $this->advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap([
-            [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
-        ]);
+        $advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap(
+            [
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
+            ]
+        );
 
-        $this->advancedPricing->expects($this->any())->method('saveProductPrices')->will($this->returnSelf());
+        $oldSkus = [$sku => $skuProduct];
+        $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
+        $advancedPricing->expects($this->once())->method('retrieveOldSkus')->willReturn($oldSkus);
+        $this->connection->expects($this->once())
+            ->method('insertOnDuplicate')
+            ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
 
-        $this->advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
-        $this->advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
+        $advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
+        $advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
 
-        $result = $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
+        $result = $this->invokeMethod($advancedPricing, 'saveAndReplaceAdvancedPrices');
 
-        $this->assertEquals($this->advancedPricing, $result);
+        $this->assertEquals($advancedPricing, $result);
+    }
+
+    /**
+     * Test method saveAndReplaceAdvancedPrices with append import behaviour.
+     */
+    public function testSaveAndReplaceAdvancedPricesAppendBehaviourDataAndCallsWithoutTierPrice()
+    {
+        $data = [
+            0 => [
+                AdvancedPricing::COL_SKU => 'sku value',
+                AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
+                AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
+                AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
+                AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
+            ],
+        ];
+        $tierCustomerGroupId = 'tier customer group id value';
+        $tierWebsiteId = 'tier website id value';
+        $expectedTierPrices = [];
+
+        $skuProduct = 'product1';
+        $sku = $data[0][AdvancedPricing::COL_SKU];
+        $advancedPricing = $this->getAdvancedPricingMock(
+            [
+                'retrieveOldSkus',
+                'validateRow',
+                'addRowError',
+                'getCustomerGroupId',
+                'getWebSiteId',
+                'deleteProductTierPrices',
+                'getBehavior',
+                'saveAndReplaceAdvancedPrices',
+                'processCountExistingPrices',
+                'processCountNewPrices'
+            ]
+        );
+        $advancedPricing
+            ->expects($this->any())
+            ->method('getBehavior')
+            ->willReturn(\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
+        $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($data);
+        $advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
+
+        $advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap(
+            [
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
+            ]
+        );
+
+        $advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap(
+            [
+                [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
+            ]
+        );
+
+        $oldSkus = [$sku => $skuProduct];
+        $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
+        $advancedPricing->expects($this->never())->method('retrieveOldSkus')->willReturn($oldSkus);
+        $this->connection->expects($this->never())
+            ->method('insertOnDuplicate')
+            ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
+
+        $advancedPricing->expects($this->any())->method('processCountExistingPrices')->willReturnSelf();
+        $advancedPricing->expects($this->any())->method('processCountNewPrices')->willReturnSelf();
+
+        $result = $this->invokeMethod($advancedPricing, 'saveAndReplaceAdvancedPrices');
+
+        $this->assertEquals($advancedPricing, $result);
     }
 
     /**
@@ -561,6 +665,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups ',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
@@ -570,58 +675,73 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 '$expectedTierPrices' => [
                     'sku value' => [
                         [
-                            'all_groups' => false,//$rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS
-                            'customer_group_id' => 'tier customer group id value',//$tierCustomerGroupId
+                            'all_groups' => false,
+                            'customer_group_id' => 'tier customer group id value',
                             'qty' => 'tier price qty value',
                             'value' => 'tier price value',
                             'website_id' => 'tier website id value',
+                            'percentage_value' => null
                         ],
                     ],
                 ],
-            ],
-            [// tier customer group is equal to all group
-                 '$data' => [
-                     0 => [
-                         AdvancedPricing::COL_SKU => 'sku value',
-                         //tier
-                         AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier price website value',
-                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => AdvancedPricing::VALUE_ALL_GROUPS,
-                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
-                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
-                     ],
-                 ],
-                 '$tierCustomerGroupId' => 'tier customer group id value',
-                 '$groupCustomerGroupId' => 'group customer group id value',
-                 '$tierWebsiteId' => 'tier website id value',
-                 '$groupWebsiteId' => 'group website id value',
-                 '$expectedTierPrices' => [
-                     'sku value' => [
-                         [
-                             'all_groups' => true,//$rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS
-                             'customer_group_id' => 'tier customer group id value',//$tierCustomerGroupId
-                             'qty' => 'tier price qty value',
-                             'value' => 'tier price value',
-                             'website_id' => 'tier website id value',
-                         ],
-                     ],
-                 ],
             ],
             [
                 '$data' => [
                     0 => [
                         AdvancedPricing::COL_SKU => 'sku value',
                         //tier
-                        AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
-                        AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
+                        AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier price website value',
+                        AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups ',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_PERCENT
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
                 '$groupCustomerGroupId' => 'group customer group id value',
                 '$tierWebsiteId' => 'tier website id value',
                 '$groupWebsiteId' => 'group website id value',
-                '$expectedTierPrices' => [],
+                '$expectedTierPrices' => [
+                    'sku value' => [
+                        [
+                            'all_groups' => false,
+                            'customer_group_id' => 'tier customer group id value',
+                            'qty' => 'tier price qty value',
+                            'value' => 0,
+                            'percentage_value' => 'tier price value',
+                            'website_id' => 'tier website id value',
+                        ],
+                    ],
+                ],
+            ],
+            [// tier customer group is equal to all group
+                '$data' => [
+                    0 => [
+                        AdvancedPricing::COL_SKU => 'sku value',
+                        //tier
+                        AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier price website value',
+                        AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => AdvancedPricing::VALUE_ALL_GROUPS,
+                        AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
+                        AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
+                    ],
+                ],
+                '$tierCustomerGroupId' => 'tier customer group id value',
+                '$groupCustomerGroupId' => 'group customer group id value',
+                '$tierWebsiteId' => 'tier website id value',
+                '$groupWebsiteId' => 'group website id value',
+                '$expectedTierPrices' => [
+                    'sku value' => [
+                        [
+                            'all_groups' => true,
+                            'customer_group_id' => 'tier customer group id value',
+                            'qty' => 'tier price qty value',
+                            'value' => 'tier price value',
+                            'website_id' => 'tier website id value',
+                            'percentage_value' => null
+                        ],
+                    ],
+                ],
             ],
             [
                 '$data' => [
@@ -632,6 +752,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
+                        AdvancedPricing::COL_TIER_PRICE_TYPE => AdvancedPricing::TIER_PRICE_TYPE_FIXED
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
@@ -641,11 +762,12 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 '$expectedTierPrices' => [
                     'sku value' => [
                         [
-                            'all_groups' => false,//$rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL_GROUPS
-                            'customer_group_id' => 'tier customer group id value',//$tierCustomerGroupId
+                            'all_groups' => false,
+                            'customer_group_id' => 'tier customer group id value',
                             'qty' => 'tier price qty value',
                             'value' => 'tier price value',
                             'website_id' => 'tier website id value',
+                            'percentage_value' => null
                         ],
                     ]
                 ],
@@ -712,6 +834,199 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     }
 
     /**
+     * @param array $priceData
+     * @param array $oldSkus
+     * @param array $priceIn
+     * @param int $callNum
+     * @dataProvider saveProductPricesDataProvider
+     */
+    public function testSaveProductPrices($priceData, $oldSkus, $priceIn, $callNum)
+    {
+        $this->advancedPricing = $this->getAdvancedPricingMock(['retrieveOldSkus']);
+
+        $this->advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn($oldSkus);
+
+        $this->connection->expects($this->exactly($callNum))
+            ->method('insertOnDuplicate')
+            ->with(self::TABLE_NAME, $priceIn, ['value', 'percentage_value']);
+
+        $this->invokeMethod($this->advancedPricing, 'saveProductPrices', [$priceData, 'table']);
+    }
+
+    public function saveProductPricesDataProvider()
+    {
+        return [
+            [[], ['oSku1' => 'product1', 'oSku2' => 'product2'], [], 0],
+            [
+                [
+                    'oSku1' => ['row1' => ['row1-1', 'row1-2'], 'row2' => ['row2-1', 'row2-2']],
+                    'nSku' => ['row3', 'row4'],
+                ],
+                ['oSku1' => 'product1', 'oSku2' => 'product2'],
+                [
+                    ['row1-1', 'row1-2', self::LINK_FIELD => 'product1'],
+                    ['row2-1', 'row2-2', self::LINK_FIELD => 'product1']
+                ],
+                1
+            ],
+        ];
+    }
+
+    /**
+     * @param array $listSku
+     * @param array $cachedSkuToDelete
+     * @param int $numCallAddError
+     * @param int $numCallDelete
+     * @param boolean $exceptionInDelete
+     * @param boolean $result
+     * @dataProvider deleteProductTierPricesDataProvider
+     */
+    public function testDeleteProductTierPrices(
+        $listSku,
+        $cachedSkuToDelete,
+        $numCallAddError,
+        $numCallDelete,
+        $exceptionInDelete,
+        $result
+    ) {
+        $this->advancedPricing = $this->getAdvancedPricingMock(['addRowError', 'retrieveOldSkus']);
+        $dbSelectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        if ($listSku) {
+            $this->connection->expects($this->once())
+                ->method('fetchCol')
+                ->willReturn($cachedSkuToDelete);
+            $this->connection->expects($this->once())
+                ->method('select')
+                ->willReturn($dbSelectMock);
+            $dbSelectMock->expects($this->once())
+                ->method('from')
+                ->with(self::TABLE_NAME, self::LINK_FIELD)
+                ->willReturnSelf();
+            $dbSelectMock->expects($this->once())
+                ->method('where')
+                ->willReturnSelf();
+        }
+
+        $this->advancedPricing->expects($this->exactly($numCallAddError))
+            ->method('addRowError');
+        if ($exceptionInDelete) {
+            $this->connection->expects($this->exactly($numCallDelete))
+                ->method('delete')
+                ->willThrowException(new \Exception());
+        } else {
+            $this->connection->expects($this->exactly($numCallDelete))
+                ->method('delete')
+                ->willReturn(1);
+        }
+        $this->assertEquals(
+            $result,
+            $this->invokeMethod($this->advancedPricing, 'deleteProductTierPrices', [$listSku, 'table'])
+        );
+    }
+
+    public function deleteProductTierPricesDataProvider()
+    {
+        return [
+            [
+                [],
+                ['toDelete1', 'toDelete2'],
+                0,
+                0,
+                0,
+                false
+            ],
+            [
+                ['sku1', 'sku2'],
+                ['toDelete1', 'toDelete2'],
+                0,
+                1,
+                0,
+                true
+            ],
+            [
+                ['sku1', 'sku2'],
+                ['toDelete1', 'toDelete2'],
+                0,
+                1,
+                1,
+                false
+            ],
+            [
+                ['sku1', 'sku2'],
+                [],
+                1,
+                0,
+                0,
+                false
+            ],
+        ];
+    }
+
+    /**
+     * @param array $prices
+     * @param array $existingPrices
+     * @param array $oldSkus
+     * @param int $numCall
+     * @param array $args
+     * @dataProvider processCountExistingPricesDataProvider
+     */
+    public function testProcessCountExistingPrices(
+        $prices,
+        $existingPrices,
+        $oldSkus,
+        $numCall,
+        $args
+    ) {
+        $this->advancedPricing = $this->getAdvancedPricingMock(
+            [
+                'incrementCounterUpdated',
+                'retrieveOldSkus'
+            ]
+        );
+        $dbSelectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->connection->expects($this->once())
+            ->method('fetchAssoc')
+            ->willReturn($existingPrices);
+        $this->connection->expects($this->once())
+            ->method('select')
+            ->willReturn($dbSelectMock);
+        $dbSelectMock->expects($this->once())
+            ->method('from')
+            ->with(
+                self::TABLE_NAME,
+                ['value_id', self::LINK_FIELD, 'all_groups', 'customer_group_id']
+            )->willReturnSelf();
+        $this->advancedPricing->expects($this->once())
+            ->method('retrieveOldSkus')
+            ->willReturn($oldSkus);
+        $this->advancedPricing->expects($this->exactly($numCall))
+            ->method('incrementCounterUpdated')
+            ->withConsecutive($args);
+
+        $this->invokeMethod($this->advancedPricing, 'processCountExistingPrices', [$prices, 'table']);
+    }
+
+    public function processCountExistingPricesDataProvider()
+    {
+        return [
+            [
+                ['oSku1' => ['price1'], 'nSku' => 'price'],
+                [[self::LINK_FIELD => 'product1']],
+                ['oSku1' => 'product1', 'oSku2' => 'product2'],
+                1,
+                [['price1'], [self::LINK_FIELD => 'product1']]
+            ],
+            [
+                ['oSku1' => ['price1'], 'nSku' => 'price'],
+                [[self::LINK_FIELD => 'product']],
+                ['oSku1' => 'product1', 'oSku2' => 'product2'],
+                0,
+                [['price1'], [self::LINK_FIELD => 'product1']]
+            ],
+        ];
+    }
+
+    /**
      * Get any object property value.
      *
      * @param $object
@@ -755,11 +1070,11 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     private function invokeMethod($object, $method, $args = [])
     {
-        $class = new \ReflectionClass('\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing');
+        $class = new \ReflectionClass(\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class);
         $method = $class->getMethod($method);
         $method->setAccessible(true);
 
-        return $method->invokeArgs($this->advancedPricing, []);
+        return $method->invokeArgs($object, $args);
     }
 
     /**
@@ -771,8 +1086,29 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     private function getAdvancedPricingMock($methods = [])
     {
-        return $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',
+        $metadataPoolMock = $this->getMock(
+            \Magento\Framework\EntityManager\MetadataPool::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock = $this->getMock(
+            \Magento\Framework\EntityManager\EntityMetadata::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn(self::LINK_FIELD);
+        $metadataPoolMock->expects($this->any())
+            ->method('getMetaData')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
+        $advancedPricingMock = $this->getMock(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class,
             $methods,
             [
                 $this->jsonHelper,
@@ -783,7 +1119,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 $this->resourceHelper,
                 $this->stringObject,
                 $this->errorAggregator,
-                $this->localeDate,
+                $this->dateTime,
                 $this->resourceFactory,
                 $this->productModel,
                 $this->catalogData,
@@ -795,5 +1131,11 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ],
             ''
         );
+        $reflection = new \ReflectionClass(\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class);
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($advancedPricingMock, $metadataPoolMock);
+
+        return $advancedPricingMock;
     }
 }

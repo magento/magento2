@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,17 +25,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->sendfriendModel = $this->getMock(
-            'Magento\SendFriend\Model\SendFriend',
+            \Magento\SendFriend\Model\SendFriend::class,
             ['__wakeup', 'canEmailToFriend'],
             [],
             '',
             false
         );
-        $this->productView = $this->getMock('Magento\Catalog\Block\Product\View', [], [], '', false);
+        $this->productView = $this->getMock(\Magento\Catalog\Block\Product\View::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->view = $this->objectManagerHelper->getObject(
-            'Magento\SendFriend\Block\Plugin\Catalog\Product\View',
+            \Magento\SendFriend\Block\Plugin\Catalog\Product\View::class,
             [
                 'sendfriend' => $this->sendfriendModel
             ]

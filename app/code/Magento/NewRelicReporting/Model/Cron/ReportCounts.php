@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Cron;
@@ -47,11 +47,6 @@ class ReportCounts
     protected $countsCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * Constructor
      *
      * @param Config $config
@@ -60,7 +55,6 @@ class ReportCounts
      * @param CategoryManagementInterface $categoryManagement
      * @param \Magento\NewRelicReporting\Model\CountsFactory $countsFactory
      * @param \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory $countsCollectionFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         Config $config,
@@ -68,8 +62,7 @@ class ReportCounts
         ConfigurableProductManagementInterface $configurableManagement,
         CategoryManagementInterface $categoryManagement,
         \Magento\NewRelicReporting\Model\CountsFactory $countsFactory,
-        \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory $countsCollectionFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory $countsCollectionFactory
     ) {
         $this->config = $config;
         $this->productManagement = $productManagement;
@@ -77,7 +70,6 @@ class ReportCounts
         $this->categoryManagement = $categoryManagement;
         $this->countsFactory = $countsFactory;
         $this->countsCollectionFactory = $countsCollectionFactory;
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -105,7 +97,6 @@ class ReportCounts
             $model->setEntityId(null);
             $model->setType($type);
             $model->setCount($count);
-            $model->setUpdatedAt($this->dateTime->formatDate(true));
             $model->save();
         }
     }

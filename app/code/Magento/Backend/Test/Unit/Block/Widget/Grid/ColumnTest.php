@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,9 +28,9 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
+        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false, false);
         $this->_blockMock = $this->getMock(
-            'Magento\Framework\View\Element\Template',
+            \Magento\Framework\View\Element\Template::class,
             ['setColumn', 'getHtml'],
             [],
             '',
@@ -40,10 +40,10 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
+            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
         ];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Column', $arguments);
+        $this->_block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Column::class, $arguments);
         $this->_block->setId('id');
     }
 
@@ -69,7 +69,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         )->method(
             'createBlock'
         )->with(
-            'Magento\Backend\Block\Widget\Grid\Column\Filter\Text'
+            \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
         )->will(
             $this->returnValue($this->_blockMock)
         );
@@ -119,7 +119,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         )->method(
             'createBlock'
         )->with(
-            'Magento\Backend\Block\Widget\Grid\Column\Filter\Text'
+            \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
         )->will(
             $this->returnValue($this->_blockMock)
         );
@@ -226,7 +226,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         )->method(
             'createBlock'
         )->with(
-            'Magento\Backend\Block\Widget\Grid\Column\Renderer\Text'
+            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text::class
         )->will(
             $this->returnValue($this->_blockMock)
         );
@@ -370,12 +370,12 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     {
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
+            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
             'data' => $groupedData,
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Column', $arguments);
+        $block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Column::class, $arguments);
         $this->assertEquals($expected, $block->isGrouped());
     }
 

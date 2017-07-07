@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,37 +8,38 @@
 
 namespace Magento\ConfigurableProduct\Model\Product;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  */
 class VariationHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Object under test
-     *
-     * @var \Magento\ConfigurableProduct\Model\Product\VariationHandler
-     */
-    protected $_model;
+    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    private $_model;
 
-    /**
-     * @var \Magento\Catalog\Model\Product
-     */
-    protected $_product;
+    /** @var \Magento\Catalog\Model\Product */
+    private $_product;
+
+    /** @var \Magento\CatalogInventory\Api\StockRegistryInterface */
+    private $stockRegistry;
 
     protected function setUp()
     {
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $this->_product = Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Product::class
         );
         $this->_product->load(1);
-        // fixture
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ConfigurableProduct\Model\Product\VariationHandler'
+        $this->_model = Bootstrap::getObjectManager()->create(
+            \Magento\ConfigurableProduct\Model\Product\VariationHandler::class
         );
         // prevent fatal errors by assigning proper "singleton" of type instance to the product
         $this->_product->setTypeInstance($this->_model);
+        $this->stockRegistry = Bootstrap::getObjectManager()->get(
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class
+        );
     }
 
     /**
@@ -52,15 +53,17 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
         $this->assertEquals(3, count($generatedProducts));
         foreach ($generatedProducts as $productId) {
+            $stockItem = $this->stockRegistry->getStockItem($productId);
             /** @var $product \Magento\Catalog\Model\Product */
-            $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
+            $product = Bootstrap::getObjectManager()->create(
+                \Magento\Catalog\Model\Product::class
             );
             $product->load($productId);
             $this->assertNotNull($product->getName());
             $this->assertNotNull($product->getSku());
             $this->assertNotNull($product->getPrice());
             $this->assertNotNull($product->getWeight());
+            $this->assertEquals('1', $stockItem->getIsInStock());
         }
     }
 
@@ -71,14 +74,12 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateSimpleProductsWithPartialData($productsData)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
-        $stockRegistry = $objectManager->get('Magento\CatalogInventory\Api\StockRegistryInterface');
         $this->_product->setNewVariationsAttributeSetId(4);
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
+        $parentStockItem = $this->stockRegistry->getStockItem($this->_product->getId());
         foreach ($generatedProducts as $productId) {
-            $stockItem = $stockRegistry->getStockItem($productId);
-            $this->assertEquals('0', $stockItem->getManageStock());
+            $stockItem = $this->stockRegistry->getStockItem($productId);
+            $this->assertEquals($parentStockItem->getManageStock(), $stockItem->getManageStock());
             $this->assertEquals('1', $stockItem->getIsInStock());
         }
     }

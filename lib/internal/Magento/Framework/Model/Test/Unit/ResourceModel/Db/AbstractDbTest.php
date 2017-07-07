@@ -1,17 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractDbTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @var AbstractDb
      */
     protected $_model;
 
@@ -33,7 +39,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_resourcesMock = $this->getMock(
-            '\Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -41,16 +47,16 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->relationProcessorMock = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
             [],
             [],
             '',
             false
         );
         $this->transactionManagerMock = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface'
+            \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class
         );
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->_resourcesMock);
         $contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')
@@ -60,7 +66,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->transactionManagerMock);
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             [$contextMock],
             '',
             true,
@@ -113,7 +119,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     public function testAddUniqueFieldArray()
     {
         $this->assertInstanceOf(
-            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             $this->_model->addUniqueField(['someField'])
         );
     }
@@ -131,7 +137,8 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     {
         $data = 'MainTableName';
         $idFieldNameProperty = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb', '_idFieldName'
+            AbstractDb::class,
+            '_idFieldName'
         );
         $idFieldNameProperty->setAccessible(true);
         $idFieldNameProperty->setValue($this->_model, $data);
@@ -154,14 +161,16 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMainTable($tableName, $expectedResult)
     {
-        $mainTableProperty = new \ReflectionProperty('Magento\Framework\Model\ResourceModel\Db\AbstractDb', '_mainTable');
+        $mainTableProperty = new \ReflectionProperty(
+            AbstractDb::class,
+            '_mainTable'
+        );
         $mainTableProperty->setAccessible(true);
         $mainTableProperty->setValue($this->_model, $tableName);
         $this->_resourcesMock->expects($this->once())
             ->method('getTableName')
             ->with($expectedResult)
-            ->will($this->returnValue($expectedResult)
-            );
+            ->will($this->returnValue($expectedResult));
         $this->assertEquals($expectedResult, $this->_model->getMainTable());
     }
 
@@ -188,7 +197,10 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $this->_resourcesMock->expects($this->once())->method('getTableName')->with($data)->will(
             $this->returnValue('tableName')
         );
-        $tablesProperty = new \ReflectionProperty('Magento\Framework\Model\ResourceModel\Db\AbstractDb', '_tables');
+        $tablesProperty = new \ReflectionProperty(
+            AbstractDb::class,
+            '_tables'
+        );
         $tablesProperty->setAccessible(true);
         $tablesProperty->setValue($this->_model, [$data]);
         $this->assertEquals($data, $this->_model->getTable($data));
@@ -206,7 +218,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetChecksum($checksum, $expected)
     {
-        $connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionMock = $this->getMock(AdapterInterface::class, [], [], '', false);
         $connectionMock->expects($this->once())->method('getTablesChecksum')->with($checksum)->will(
             $this->returnValue([$checksum => 'checksum'])
         );
@@ -232,7 +244,10 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
     public function testResetUniqueField()
     {
-        $uniqueFields = new \ReflectionProperty('Magento\Framework\Model\ResourceModel\Db\AbstractDb', '_uniqueFields');
+        $uniqueFields = new \ReflectionProperty(
+            AbstractDb::class,
+            '_uniqueFields'
+        );
         $uniqueFields->setAccessible(true);
         $uniqueFields->setValue($this->_model, ['uniqueField1', 'uniqueField2']);
         $this->_model->resetUniqueField();
@@ -242,7 +257,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     public function testGetUniqueFields()
     {
         $uniqueFieldsReflection = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             '_uniqueFields'
         );
         $uniqueFieldsReflection->setAccessible(true);
@@ -257,36 +272,35 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $contextMock = $this->getMock('\Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $abstractModelMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\AbstractModel',
-            [$contextMock, $registryMock],
-            '',
-            false,
-            true,
-            true,
-            ['__wakeup']
-        );
-
-        $value = 'some_value';
-        $idFieldName = new \ReflectionProperty('Magento\Framework\Model\ResourceModel\Db\AbstractDb', '_idFieldName');
-        $idFieldName->setAccessible(true);
-        $idFieldName->setValue($this->_model, 'field_value');
-
+        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $object->expects($this->once())->method('beforeLoad')->with('some_value', 'field_name');
+        $object->expects($this->once())->method('afterLoad')->willReturnSelf();
+        $object->expects($this->once())->method('setOrigData')->willReturnSelf();
+        $object->expects($this->once())->method('setHasDataChanges')->with(false)->willReturnSelf();
+        $result = $this->_model->load($object, 'some_value', 'field_name');
+        $this->assertEquals($this->_model, $result);
         $this->assertInstanceOf(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
-            $this->_model->load($abstractModelMock, $value, $idFieldName)
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            $result
         );
     }
 
     public function testDelete()
     {
-        $connectionInterfaceMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $contextMock = $this->getMock('\Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $connectionInterfaceMock = $this->getMock(
+            AdapterInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $abstractModelMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\AbstractModel',
+            AbstractModel::class,
             [$contextMock, $registryMock],
             '',
             false,
@@ -296,11 +310,10 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         );
         $this->_resourcesMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionInterfaceMock)
-        );
+            ->will($this->returnValue($connectionInterfaceMock));
 
         $abstractModelMock->expects($this->once())->method('getData')->willReturn(['data' => 'value']);
-        $connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
+        $connectionMock = $this->getMock(AdapterInterface::class);
         $this->transactionManagerMock->expects($this->once())
             ->method('start')
             ->with($connectionInterfaceMock)
@@ -323,13 +336,13 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('tableName')
         );
         $mainTableReflection = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             '_mainTable'
         );
         $mainTableReflection->setAccessible(true);
         $mainTableReflection->setValue($this->_model, 'tableName');
         $idFieldNameReflection = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             '_idFieldName'
         );
         $idFieldNameReflection->setAccessible(true);
@@ -340,17 +353,17 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $abstractModelMock->expects($this->once())->method('afterDelete');
         $abstractModelMock->expects($this->once())->method('afterDeleteCommit');
         $this->assertInstanceOf(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             $this->_model->delete($abstractModelMock)
         );
     }
 
     public function testHasDataChangedNegative()
     {
-        $contextMock = $this->getMock('\Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $abstractModelMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\AbstractModel',
+            AbstractModel::class,
             [$contextMock, $registryMock],
             '',
             false,
@@ -369,14 +382,20 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDataChanged($getOriginData, $expected)
     {
-        $connectionInterfaceMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionInterfaceMock = $this->getMock(
+            AdapterInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->_resourcesMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($connectionInterfaceMock)
         );
-        $contextMock = $this->getMock('\Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $abstractModelMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\AbstractModel',
+            AbstractModel::class,
             [$contextMock, $registryMock],
             '',
             false,
@@ -384,15 +403,17 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             true,
             ['__wakeup', 'getOrigData', 'getData']
         );
-        $mainTableProperty = new \ReflectionProperty('Magento\Framework\Model\ResourceModel\Db\AbstractDb', '_mainTable');
+        $mainTableProperty = new \ReflectionProperty(
+            AbstractDb::class,
+            '_mainTable'
+        );
         $mainTableProperty->setAccessible(true);
         $mainTableProperty->setValue($this->_model, 'table');
 
         $this->_resourcesMock->expects($this->once())
             ->method('getTableName')
             ->with('table')
-            ->will($this->returnValue('tableName')
-            );
+            ->will($this->returnValue('tableName'));
         $abstractModelMock->expects($this->at(0))->method('getOrigData')->will($this->returnValue(true));
         $abstractModelMock->expects($this->at(1))->method('getOrigData')->will($this->returnValue($getOriginData));
         $connectionInterfaceMock->expects($this->any())->method('describeTable')->with('tableName')->will(
@@ -409,15 +430,18 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareDataForUpdate()
     {
-        $connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionMock = $this->getMock(AdapterInterface::class, [], [], '', false);
         $context = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-                'Magento\Framework\Model\Context'
+            \Magento\Framework\Model\Context::class
         );
-        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $resourceMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             [
                 '_construct',
                 'getConnection',
@@ -428,44 +452,48 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $connectionInterfaceMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionInterfaceMock = $this->getMock(
+            AdapterInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connectionInterfaceMock));
-        $resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+        $resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $abstractModelMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\AbstractModel',
+            AbstractModel::class,
             [$context, $registryMock, $resourceMock, $resourceCollectionMock]
         );
         $data = 'tableName';
         $this->_resourcesMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock)
-        );
+            ->will($this->returnValue($connectionMock));
         $this->_resourcesMock->expects($this->any())->method('getTableName')->with($data)->will(
             $this->returnValue('tableName')
         );
         $mainTableReflection = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             '_mainTable'
         );
         $mainTableReflection->setAccessible(true);
         $mainTableReflection->setValue($this->_model, 'tableName');
         $idFieldNameReflection = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            AbstractDb::class,
             '_idFieldName'
         );
         $idFieldNameReflection->setAccessible(true);
         $idFieldNameReflection->setValue($this->_model, 'idFieldName');
         $connectionMock->expects($this->any())->method('save')->with('tableName', 'idFieldName');
         $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
-
         $abstractModelMock->setIdFieldName('id');
         $abstractModelMock->setData(
             [
-                'id'    => 12345,
+                'id'    => 0,
                 'name'  => 'Test Name',
                 'value' => 'Test Value'
             ]
@@ -473,7 +501,9 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $abstractModelMock->afterLoad();
         $this->assertEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $newData = ['value' => 'Test Value New'];
-        $this->_model->expects($this->once())->method('_prepareDataForTable')->will($this->returnValue($newData));
+        $this->_model->expects($this->atLeastOnce())
+            ->method('_prepareDataForTable')
+            ->will($this->returnValue($newData));
         $abstractModelMock->addData($newData);
         $this->assertNotEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $abstractModelMock->isObjectNew(false);
@@ -484,7 +514,23 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
                 $newData,
                 'idFieldName'
             );
-
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select->expects($this->once())
+            ->method('from')
+            ->with('tableName')
+            ->willReturnSelf();
+        $connectionMock->expects($this->once())
+            ->method('select')
+            ->willReturn($select);
+        $select->expects($this->once())
+            ->method('reset')
+            ->with(\Magento\Framework\DB\Select::WHERE);
+        $select->expects($this->exactly(2))
+            ->method('where')
+            ->withConsecutive(['uniqueField IS NULL'], ['idFieldName!=?', 0]);
+        $this->_model->addUniqueField(['field' => 'uniqueField']);
         $this->_model->save($abstractModelMock);
     }
 
@@ -499,7 +545,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         /**
          * Mock SUT so as not to test extraneous logic
          */
-        $model = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $model = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['_prepareDataForSave', 'getIdFieldName', 'getConnection', 'getMainTable'])
             ->getMockForAbstractClass();
@@ -516,7 +562,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setValue($model, $pkIncrement);
 
         // Mocked behavior
-        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['lastInsertId'])
             ->getMockForAbstractClass();
@@ -526,8 +572,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             ->willReturn($connectionMock);
 
         $idFieldName = 'id_field_name';
-        $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id',]);
-
+        $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id']);
 
         // Test expectations
         //      Only get object's id field name if not PK autoincrement
@@ -538,7 +583,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
         //      Only set object id if not PK autoincrement
         $setIdInvokedCount = $pkIncrement ? 1 : 0;
-        $inputObject = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+        $inputObject = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $inputObject->expects($this->exactly($setIdInvokedCount))->method('setId');
@@ -550,9 +595,37 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $reflectionMethod->invokeArgs($model, [$inputObject]);
     }
 
+    /**
+     * @return array
+     */
     public function saveNewObjectDataProvider()
     {
         return [[true], [false]];
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     */
+    public function testDuplicateExceptionProcessingOnSave()
+    {
+        $connection = $this->getMock(AdapterInterface::class);
+        $connection->expects($this->once())->method('rollback');
+
+        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $model */
+        $model = $this->getMockBuilder(AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getConnection'])
+            ->getMockForAbstractClass();
+        $model->expects($this->any())->method('getConnection')->willReturn($connection);
+
+        /** @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        $object = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $object->expects($this->once())->method('beforeSave')->willThrowException(new DuplicateException());
+        $object->expects($this->once())->method('setHasDataChanges')->with(true);
+
+        $model->save($object);
+    }
 }

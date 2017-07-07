@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Design\Backend\Theme;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
@@ -33,26 +35,26 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected $cacheTypeListMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
-        $this->cacheTypeListMock = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
+        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
+        $this->cacheTypeListMock = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder('Magento\Framework\Event\ManagerInterface')->getMock());
-        $this->configMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
+            ->willReturn($this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock());
+        $this->configMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Theme\Model\Design\Backend\Theme',
+            \Magento\Theme\Model\Design\Backend\Theme::class,
             [
                 'design' => $this->designMock,
                 'context' => $this->contextMock,
@@ -92,13 +94,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         Theme::XML_PATH_INVALID_CACHES,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        ScopeInterface::SCOPE_STORE,
                         null,
                         ['block_html' => 1, 'layout' => 1, 'translate' => 1]
                     ],
                     [
                         null,
-                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         $oldValue
                     ],
@@ -109,11 +111,58 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
     }
 
+    /**
+     * @param string|null $value
+     * @param string $expectedResult
+     * @return void
+     * @dataProvider getValueDataProvider
+     */
+    public function testGetValue($value, $expectedResult)
+    {
+        $this->model->setValue($value);
+        $this->assertEquals($expectedResult, $this->model->getValue());
+    }
+
+    public function getValueDataProvider()
+    {
+        return [
+            [null, ''],
+            ['value', 'value']
+        ];
+    }
+
     public function afterSaveDataProvider()
     {
         return [
             [0, 'some_value'],
             [2, 'other_value'],
         ];
+    }
+
+    public function testAfterDelete()
+    {
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        Theme::XML_PATH_INVALID_CACHES,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        ['block_html' => 1, 'layout' => 1, 'translate' => 1]
+                    ],
+                    [
+                        null,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'old_value'
+                    ],
+
+                ]
+            );
+        $this->cacheTypeListMock->expects($this->exactly(2))
+            ->method('invalidate');
+        $this->model->setValue('some_value');
+        $this->assertSame($this->model, $this->model->afterDelete());
     }
 }

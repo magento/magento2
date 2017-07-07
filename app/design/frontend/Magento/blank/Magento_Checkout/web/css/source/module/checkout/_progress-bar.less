@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -48,6 +48,7 @@
         counter-reset: i;
         font-size: 0;
     }
+
     .opc-progress-bar-item {
         .lib-css(margin, 0 0 @checkout-progress-bar-item__margin);
         display: inline-block;
@@ -129,11 +130,14 @@
             &:before {
                 background: @checkout-progress-bar-item__active__background-color;
             }
+
             > span {
                 .lib-css(color, @checkout-progress-bar-item__color);
+
                 &:before {
                     .lib-css(background, @checkout-progress-bar-item__active__background-color);
                 }
+
                 &:after {
                     .lib-css(content, @checkout-progress-bar-item-element-inner__active__content);
                     .lib-css(font-family, @icons__font-name);
@@ -145,8 +149,10 @@
 
         &._complete {
             cursor: pointer;
+
             > span {
                 .lib-css(color, @checkout-progress-bar-item__color);
+
                 &:after {
                     .lib-css(content, @checkout-progress-bar-item-element-inner__active__content);
                     .lib-css(font-family, @icons__font-name);

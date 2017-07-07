@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,7 +51,7 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         // ScheduledStructure
-        $this->readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+        $this->readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scheduledStructure = new ScheduledStructure();
@@ -59,23 +59,23 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->scheduledStructure);
 
         // DataStructure
-        $this->generatorContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Context')
+        $this->generatorContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->structureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
+        $this->structureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
             ->setMethods(['reorderChildElement'])
             ->getMock();
         $this->generatorContextMock->expects($this->any())->method('getStructure')
             ->willReturn($this->structureMock);
 
-        $this->helperMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure\Helper')
+        $this->helperMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helperObjectManager->getObject(
-            'Magento\Framework\View\Layout\GeneratorPool',
+            \Magento\Framework\View\Layout\GeneratorPool::class,
             [
                 'helper' => $this->helperMock,
                 'generators' => $this->getGeneratorsMocks()
@@ -88,11 +88,11 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected function getGeneratorsMocks()
     {
-        $firstGenerator = $this->getMock('Magento\Framework\View\Layout\GeneratorInterface');
+        $firstGenerator = $this->getMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
         $firstGenerator->expects($this->any())->method('getType')->willReturn('first_generator');
         $firstGenerator->expects($this->atLeastOnce())->method('process');
 
-        $secondGenerator = $this->getMock('Magento\Framework\View\Layout\GeneratorInterface');
+        $secondGenerator = $this->getMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
         $secondGenerator->expects($this->any())->method('getType')->willReturn('second_generator');
         $secondGenerator->expects($this->atLeastOnce())->method('process');
         return [$firstGenerator, $secondGenerator];
@@ -137,7 +137,7 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                  */
                 $this->assertContains($elementName, $schedule['structure']);
                 $scheduledStructure->unsetStructureElement($elementName);
-                $scheduledStructure->setElement($elementName, []);
+                $scheduledStructure->setElement($elementName, ['block', []]);
                 $structure->createStructuralElement($elementName, 'block', 'someClass');
             });
 
@@ -171,7 +171,10 @@ class GeneratorPoolTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'expectedScheduledElements' => [
-                    'first.element' => [], 'second.element' => [], 'third.element' => [], 'sort.element' => []
+                    'first.element' => ['block', []],
+                    'second.element' => ['block', []],
+                    'third.element' => ['block', []],
+                    'sort.element' => ['block', []],
                 ],
             ],
         ];

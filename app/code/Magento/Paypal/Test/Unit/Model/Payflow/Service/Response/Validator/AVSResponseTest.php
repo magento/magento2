@@ -1,130 +1,69 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse;
+use Magento\Paypal\Model\Payflow\Transparent;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-/**
- * Class AVSResponseTest
- *
- * Test class for \Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse
- */
 class AVSResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse
+     * @var AVSResponse
      */
-    protected $validator;
+    private $validator;
 
     /**
-     * @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
-    protected $configMock;
+    private $config;
 
     /**
-     * Set up
-     *
-     * @return void
+     * @var Transparent|MockObject
+     */
+    private $payflowproFacade;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $sessionTransparentMock = $this->getMockBuilder('Magento\Framework\Session\Generic')
-            ->setMethods(['getQuoteId'])
+        $this->config = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentManagementMock = $this->getMockBuilder('Magento\Quote\Api\PaymentMethodManagementInterface')
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->configMock = $this->getMockBuilder('Magento\Payment\Model\Method\ConfigInterface')
-            ->getMockForAbstractClass();
 
-        $this->setToExpectedCallsInConstructor(
-            $quoteRepositoryMock,
-            $sessionTransparentMock,
-            $paymentManagementMock
-        );
-
-        $this->validator = new AVSResponse(
-            $quoteRepositoryMock,
-            $sessionTransparentMock,
-            $paymentManagementMock
-        );
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteRepositoryMock
-     * @param \PHPUnit_Framework_MockObject_MockObject $sessionTransparentMock
-     * @param \PHPUnit_Framework_MockObject_MockObject $paymentManagementMock
-     */
-    protected function setToExpectedCallsInConstructor(
-        \PHPUnit_Framework_MockObject_MockObject $quoteRepositoryMock,
-        \PHPUnit_Framework_MockObject_MockObject $sessionTransparentMock,
-        \PHPUnit_Framework_MockObject_MockObject $paymentManagementMock
-    ) {
-        $quoteId = 77;
-
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Api\Data\CartInterface')
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
-        $paymentMock = $this->getMockBuilder('Magento\Quote\Api\Data\PaymentInterface')
-            ->setMethods(['getMethodInstance'])
-            ->getMockForAbstractClass();
-        $paymentInstanceMock = $this->getMockBuilder('Magento\Payment\Model\Method\TransparentInterface')
-            ->getMockForAbstractClass();
-
-        $sessionTransparentMock->expects($this->once())
-            ->method('getQuoteId')
-            ->willReturn($quoteId);
-
-        $quoteRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($quoteId)
-            ->willReturn($quoteMock);
-
-        $quoteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($quoteId);
-
-        $paymentManagementMock->expects($this->once())
-            ->method('get')
-            ->with($quoteId)
-            ->willReturn($paymentMock);
-
-        $paymentMock->expects($this->once())
-            ->method('getMethodInstance')
-            ->willReturn($paymentInstanceMock);
-
-        $paymentInstanceMock->expects($this->once())
-            ->method('getConfigInterface')
-            ->willReturn($this->configMock);
+        $this->validator = new AVSResponse();
     }
 
     /**
      * @param bool $expectedResult
      * @param \Magento\Framework\DataObject $response
      * @param array $configMap
-     * @param int $exactlyCount
      *
      * @dataProvider validationDataProvider
      */
     public function testValidation(
         $expectedResult,
         \Magento\Framework\DataObject $response,
-        array $configMap,
-        $exactlyCount
+        array $configMap
     ) {
-        $this->configMock->expects($this->exactly($exactlyCount))
-            ->method('getValue')
+        $this->payflowproFacade->method('getConfig')
+            ->willReturn($this->config);
+
+        $this->config->method('getValue')
             ->willReturnMap($configMap);
 
-        $this->assertEquals($expectedResult, $this->validator->validate($response));
+        static::assertEquals($expectedResult, $this->validator->validate($response, $this->payflowproFacade));
 
         if (!$expectedResult) {
-            $this->assertNotEmpty($response->getRespmsg());
+            static::assertNotEmpty($response->getRespmsg());
         }
     }
 
@@ -142,15 +81,12 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'Y',
-                        'iavs' => 'Y',
                     ]
                 ),
                 'configMap' => [
                     ['avs_street', null, '0'],
                     ['avs_zip', null, '0'],
-                    ['avs_international', null, '0'],
                 ],
-                'exactlyCount' => 3,
             ],
             [
                 'expectedResult' => true,
@@ -158,15 +94,12 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'Y',
-                        'iavs' => 'Y',
                     ]
                 ),
                 'configMap' => [
                     ['avs_street', null, '1'],
                     ['avs_zip', null, '1'],
-                    ['avs_international', null, '1'],
                 ],
-                'exactlyCount' => 3,
             ],
             [
                 'expectedResult' => false,
@@ -174,15 +107,12 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'N',
-                        'iavs' => 'Y',
                     ]
                 ),
                 'configMap' => [
                     ['avs_street', null, '1'],
                     ['avs_zip', null, '1'],
-                    ['avs_international', null, '1'],
                 ],
-                'exactlyCount' => 2,
             ],
             [
                 'expectedResult' => true,
@@ -190,15 +120,12 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'N',
-                        'iavs' => 'N',
                     ]
                 ),
                 'configMap' => [
                     ['avs_street', null, '1'],
                     ['avs_zip', null, '0'],
-                    ['avs_international', null, '0'],
                 ],
-                'exactlyCount' => 3,
             ],
             [
                 'expectedResult' => true,
@@ -206,15 +133,12 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'N',
-                        'iavs' => 'N',
                     ]
                 ),
                 'configMap' => [
                     ['avs_street', null, '0'],
                     ['avs_zip', null, '0'],
-                    ['avs_international', null, '0'],
                 ],
-                'exactlyCount' => 3,
             ],
             [
                 'expectedResult' => true,
@@ -222,15 +146,12 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
                     [
                         'avsaddr' => 'X',
                         'avszip' => 'Y',
-                        'iavs' => 'X',
                     ]
                 ),
                 'configMap' => [
                     ['avs_street', null, '1'],
                     ['avs_zip', null, '1'],
-                    ['avs_international', null, '1'],
                 ],
-                'exactlyCount' => 3,
             ],
             [
                 'expectedResult' => true,
@@ -238,15 +159,12 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
                     [
                         'avsaddr' => 'X',
                         'avszip' => 'Y',
-                        'iavs' => 'X',
                     ]
                 ),
                 'configMap' => [
                     ['avs_street', null, '1'],
                     ['avs_zip', null, '0'],
-                    ['avs_international', null, '1'],
                 ],
-                'exactlyCount' => 3,
             ],
         ];
     }

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,108 +7,135 @@
 @catalog-event-color: @primary__color;
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-//
-//     Catalog Events
-// --------------------------------------
-.block-category-event {
-    .lib-css(background, @catalog-event-background-color);
-    .lib-css(color, @catalog-event-color);
-    text-align: center;
-    padding: @indent__s 0 15px;
-    &.block:last-child {
-        margin-bottom: @indent__s;
-    }
-    .block-title {
-        margin: 0 0 @indent__s;
-        strong {
-            .lib-font-size(15);
-            font-weight: @font-weight__light;
+    //
+    //  Catalog Events
+    //  ---------------------------------------------
+
+    .block-category-event {
+        .lib-css(background, @catalog-event-background-color);
+        .lib-css(color, @catalog-event-color);
+        padding: @indent__s 0 15px;
+        text-align: center;
+
+        &.block:last-child {
+            margin-bottom: @indent__s;
         }
-    }
-    .ticker {
-        .lib-list-reset-styles();
-        li {
-            display: none;
-            margin: 0 15px;
+
+        .block-title {
+            margin: 0 0 @indent__s;
+
+            strong {
+                .lib-font-size(15);
+                font-weight: @font-weight__light;
+            }
         }
-        .value {
-            .lib-font-size(18);
-            font-weight: @font-weight__light;
-        }
-        .label {
-            display: block;
-            text-transform: lowercase;
-            .lib-font-size(10);
-        }
-    }
-    .dates {
-        .start,
-        .end {
-            display: block;
-        }
-        .date {
-            .lib-font-size(50);
-        }
-        .time {
-            display: block;
-        }
-        .start {
-            &:after {
-                content: "\2013";
-                .lib-font-size(50);
+
+        .ticker {
+            .lib-list-reset-styles();
+
+            li {
+                display: none;
+                margin: 0 15px;
+            }
+
+            .value {
+                .lib-font-size(18);
+                font-weight: @font-weight__light;
+            }
+
+            .label {
+                .lib-font-size(10);
                 display: block;
+                text-transform: lowercase;
+            }
+        }
+
+        .dates {
+            display: table;
+            margin: 0 auto;
+
+            .start,
+            .end {
+                display: table-cell;
+                vertical-align: top;
+            }
+
+            .date {
+                .lib-font-size(18);
+            }
+
+            .time {
+                display: block;
+            }
+
+            .start {
+                padding-right: @indent__xl;
+                position: relative;
+
+                &:after {
+                    .lib-font-size(18);
+                    content: '\2013';
+                    display: block;
+                    position: absolute;
+                    right: 15px;
+                    top: 0;
+                }
             }
         }
     }
 }
 
-}
-
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block-category-event {
         &.block:last-child {
             margin-bottom: @indent__l;
             padding: @indent__s 0 @indent__l;
         }
+
         .block-title {
             margin: 0;
+
             strong {
                 .lib-font-size(24);
             }
         }
+
         .ticker {
             li {
                 display: none;
                 margin: 0 50px;
             }
+
             .value {
                 .lib-font-size(60);
             }
+
             .label {
                 .lib-font-size(14);
                 text-transform: none;
             }
         }
+
         .dates {
-            .start,
-            .end {
-                display: inline-block;
+            .date {
+                .lib-font-size(50);
             }
+
             .start {
                 padding-right: 50px;
-                position: relative;
+
                 &:after {
-                    position: absolute;
+                    .lib-font-size(50);
                     right: 10px;
-                    top: 0;
                 }
             }
         }

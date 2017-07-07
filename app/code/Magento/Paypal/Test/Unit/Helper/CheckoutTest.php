@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,105 +9,95 @@
  */
 namespace Magento\Paypal\Test\Unit\Helper;
 
+use Magento\Checkout\Model\Session;
+use Magento\Paypal\Helper\Checkout;
+use Magento\Sales\Model\Order;
+
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_session;
+    private $session;
 
     /**
-     * @var \Magento\Quote\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Checkout
      */
-    protected $_quoteFactory;
+    private $checkout;
 
-    /**
-     * @var \Magento\Paypal\Helper\Checkout
-     */
-    protected $_checkout;
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
-        $this->_session = $this->getMockBuilder(
-            'Magento\Checkout\Model\Session'
-        )->disableOriginalConstructor()->setMethods(
-            ['getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup']
-        )->getMock();
-        $this->_quoteFactory = $this->getMockBuilder(
-            'Magento\Quote\Model\QuoteFactory'
-        )->disableOriginalConstructor()->setMethods(
-            ['create', '__wakeup']
-        )->getMock();
+        $this->session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_checkout = new \Magento\Paypal\Helper\Checkout($this->_session, $this->_quoteFactory);
+        $this->checkout = new Checkout($this->session);
     }
 
-    /**
-     * Get order mock
-     *
-     * @param bool $hasOrderId
-     * @param array $mockMethods
-     * @return \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getOrderMock($hasOrderId, $mockMethods = [])
+    public function testCancelCurrentOrder()
     {
-        $order = $this->getMockBuilder(
-            'Magento\Sales\Model\Order'
-        )->disableOriginalConstructor()->setMethods(
-            array_merge(['getId', '__wakeup'], $mockMethods)
-        )->getMock();
-        $order->expects($this->once())->method('getId')->will($this->returnValue($hasOrderId ? 'order id' : null));
-        return $order;
+        $id = 1;
+        $state = Order::STATE_PENDING_PAYMENT;
+        $comment = 'Bla Bla';
+
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->session->expects(static::once())
+            ->method('getLastRealOrder')
+            ->willReturn($order);
+        $order->expects(static::once())
+            ->method('getId')
+            ->willReturn($id);
+        $order->expects(static::once())
+            ->method('getState')
+            ->willReturn($state);
+        $order->expects(static::once())
+            ->method('registerCancellation')
+            ->with($comment)
+            ->willReturnSelf();
+        $order->expects(static::once())
+            ->method('save');
+
+        static::assertTrue($this->checkout->cancelCurrentOrder($comment));
     }
 
-    /**
-     * @param bool $hasOrderId
-     * @param bool $isOrderCancelled
-     * @param bool $expectedResult
-     * @dataProvider cancelCurrentOrderDataProvider
-     */
-    public function testCancelCurrentOrder($hasOrderId, $isOrderCancelled, $expectedResult)
+    public function testCancelCurrentOrderWhichIsCancelled()
     {
-        $comment = 'Some test comment';
-        $order = $this->_getOrderMock($hasOrderId, ['registerCancellation', 'save']);
-        $order->setData(
-            'state',
-            $isOrderCancelled ? \Magento\Sales\Model\Order::STATE_CANCELED : 'some another state'
-        );
-        if ($expectedResult) {
-            $order->expects(
-                $this->once()
-            )->method(
-                'registerCancellation'
-            )->with(
-                $this->equalTo($comment)
-            )->will(
-                $this->returnSelf()
-            );
-            $order->expects($this->once())->method('save');
-        } else {
-            $order->expects($this->never())->method('registerCancellation');
-            $order->expects($this->never())->method('save');
-        }
+        $id = 1;
+        $state = Order::STATE_CANCELED;
+        $comment = 'Bla Bla';
 
-        $this->_session->expects($this->any())->method('getLastRealOrder')->will($this->returnValue($order));
-        $this->assertEquals($expectedResult, $this->_checkout->cancelCurrentOrder($comment));
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->session->expects(static::once())
+            ->method('getLastRealOrder')
+            ->willReturn($order);
+        $order->expects(static::once())
+            ->method('getId')
+            ->willReturn($id);
+        $order->expects(static::once())
+            ->method('getState')
+            ->willReturn($state);
+        $order->expects(static::never())
+            ->method('registerCancellation')
+            ->with($comment)
+            ->willReturnSelf();
+        $order->expects(static::never())
+            ->method('save');
+
+        static::assertFalse($this->checkout->cancelCurrentOrder($comment));
     }
 
-    /**
-     * @return array
-     */
-    public function cancelCurrentOrderDataProvider()
+    public function testRestoreQuote()
     {
-        return [
-            [true, false, true],
-            [true, true, false],
-            [false, true, false],
-            [false, false, false]
-        ];
+        $this->session->expects(static::once())
+            ->method('restoreQuote')
+            ->willReturn(true);
+
+        static::assertTrue($this->checkout->restoreQuote());
     }
 }

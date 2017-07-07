@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
@@ -60,33 +60,33 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->commentRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\ShipmentCommentRepositoryInterface',
+            \Magento\Sales\Api\ShipmentCommentRepositoryInterface::class,
             ['getList'],
             '',
             false
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             ['create', 'addFilters'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
+            \Magento\Framework\Api\FilterBuilder::class,
             ['setField', 'setValue', 'setConditionType', 'create'],
             [],
             '',
             false
         );
         $this->repositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\ShipmentRepositoryInterface',
+            \Magento\Sales\Api\ShipmentRepositoryInterface::class,
             ['get'],
             '',
             false
         );
         $this->notifierMock = $this->getMock(
-            'Magento\Shipping\Model\ShipmentNotifier',
+            \Magento\Shipping\Model\ShipmentNotifier::class,
             ['notify'],
             [],
             '',
@@ -94,7 +94,7 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->shipmentService = $objectManager->getObject(
-            'Magento\Sales\Model\Service\ShipmentService',
+            \Magento\Sales\Model\Service\ShipmentService::class,
             [
                 'commentRepository' => $this->commentRepositoryMock,
                 'criteriaBuilder' => $this->searchCriteriaBuilderMock,
@@ -114,7 +114,7 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
         $returnValue = 'return-value';
 
         $shipmentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['getShippingLabel'],
             [],
             '',
@@ -141,14 +141,14 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
         $returnValue = 'return-value';
 
         $filterMock = $this->getMock(
-            'Magento\Framework\Api\Filter',
+            \Magento\Framework\Api\Filter::class,
             [],
             [],
             '',
             false
         );
         $searchCriteriaMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
+            \Magento\Framework\Api\SearchCriteria::class,
             [],
             [],
             '',
@@ -193,7 +193,7 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
         $returnValue = 'return-value';
 
         $modelMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\AbstractModel',
+            \Magento\Sales\Model\AbstractModel::class,
             [],
             '',
             false

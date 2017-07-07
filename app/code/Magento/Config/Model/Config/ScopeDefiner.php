@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config;
@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * System configuration scope
+ * @api
  */
 class ScopeDefiner
 {

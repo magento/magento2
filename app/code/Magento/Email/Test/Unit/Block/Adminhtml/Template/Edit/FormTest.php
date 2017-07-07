@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Edit;
@@ -28,31 +28,31 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject */
     protected $templateMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['registry'])
             ->getMock();
-        $this->variablesMock = $this->getMockBuilder('Magento\Email\Model\Source\Variables')
+        $this->variablesMock = $this->getMockBuilder(\Magento\Email\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->setMethods(['toOptionArray'])
             ->getMock();
-        $this->variableFactoryMock = $this->getMockBuilder('Magento\Variable\Model\VariableFactory')
+        $this->variableFactoryMock = $this->getMockBuilder(\Magento\Variable\Model\VariableFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->variableMock = $this->getMockBuilder('Magento\Variable\Model\Variable')
+        $this->variableMock = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
             ->disableOriginalConstructor()
             ->setMethods(['getVariablesOptionArray'])
             ->getMock();
-        $this->templateMock = $this->getMockBuilder('Magento\Email\Model\Template')
+        $this->templateMock = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getVariablesOptionArray'])
             ->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->form = $objectManager->getObject(
-            'Magento\Email\Block\Adminhtml\Template\Edit\Form',
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
             [
                 'registry' => $this->registryMock,
                 'variableFactory' => $this->variableFactoryMock,

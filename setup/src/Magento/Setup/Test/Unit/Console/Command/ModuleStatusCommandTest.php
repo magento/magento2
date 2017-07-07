@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -12,18 +12,18 @@ class ModuleStatusCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->will($this->returnValue($objectManager));
-        $moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $moduleList = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
+        $fullModuleList = $this->getMock(\Magento\Framework\Module\FullModuleList::class, [], [], '', false);
         $objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Framework\Module\ModuleList', [], $moduleList],
-                ['Magento\Framework\Module\FullModuleList', [], $fullModuleList],
+                [\Magento\Framework\Module\ModuleList::class, [], $moduleList],
+                [\Magento\Framework\Module\FullModuleList::class, [], $fullModuleList],
             ]));
         $moduleList->expects($this->any())
             ->method('getNames')

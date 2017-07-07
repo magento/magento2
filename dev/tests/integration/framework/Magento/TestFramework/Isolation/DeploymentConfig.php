@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class DeploymentConfig
     public function startTestSuite()
     {
         if (null === $this->reader) {
-            $this->reader = Bootstrap::getObjectManager()->get('Magento\Framework\App\DeploymentConfig\Reader');
+            $this->reader = Bootstrap::getObjectManager()->get(\Magento\Framework\App\DeploymentConfig\Reader::class);
             $this->config = $this->reader->load();
         }
     }

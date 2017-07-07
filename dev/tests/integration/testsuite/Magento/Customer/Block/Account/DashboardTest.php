@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account;
@@ -23,15 +23,15 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->customerSession = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $this->customerSession = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
 
         $this->block = Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Account\Dashboard',
+            \Magento\Customer\Block\Account\Dashboard::class,
             '',
             [
                 'customerSession' => $this->customerSession,
@@ -49,7 +49,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\CustomerRegistry');
+            ->get(\Magento\Customer\Model\CustomerRegistry::class);
         //Cleanup customer from registry
         $customerRegistry->remove(1);
     }
@@ -65,7 +65,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $this->customerSession->setCustomerId(1);
         $object = $this->block->getCustomer();
         $this->assertEquals($customer, $object);
-        $this->assertInstanceOf('Magento\Customer\Api\Data\CustomerInterface', $object);
+        $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $object);
     }
 
     /**
@@ -92,7 +92,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $addresses = $this->block->getPrimaryAddresses();
         $this->assertCount(1, $addresses);
         $address = $addresses[0];
-        $this->assertInstanceOf('Magento\Customer\Api\Data\AddressInterface', $address);
+        $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $address);
         $this->assertEquals((int)$customer->getDefaultBilling(), $address->getId());
         $this->assertEquals((int)$customer->getDefaultShipping(), $address->getId());
     }

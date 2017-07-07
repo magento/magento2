@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Sitemap;
@@ -9,6 +9,7 @@ namespace Magento\Sitemap\Model\ResourceModel\Sitemap;
  * Sitemap resource model collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -19,7 +20,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init('Magento\Sitemap\Model\Sitemap', 'Magento\Sitemap\Model\ResourceModel\Sitemap');
+        $this->_init(\Magento\Sitemap\Model\Sitemap::class, \Magento\Sitemap\Model\ResourceModel\Sitemap::class);
     }
 
     /**

@@ -1,11 +1,10 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
-
 
 class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
@@ -18,7 +17,7 @@ class Generate extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         // init and load sitemap model
         $id = $this->getRequest()->getParam('sitemap_id');
-        $sitemap = $this->_objectManager->create('Magento\Sitemap\Model\Sitemap');
+        $sitemap = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
         /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
         $sitemap->load($id);
         // if sitemap record exists

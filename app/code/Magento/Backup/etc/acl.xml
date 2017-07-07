@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,8 +11,8 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::system">
                     <resource id="Magento_Backend::tools">
-                        <resource id="Magento_Backup::backup" title="Backups" sortOrder="30">
-                            <resource id="Magento_Backup::rollback" title="Rollback" />
+                        <resource id="Magento_Backup::backup" title="Backups" translate="title" sortOrder="30">
+                            <resource id="Magento_Backup::rollback" title="Rollback" translate="title" />
                         </resource>
                     </resource>
                 </resource>

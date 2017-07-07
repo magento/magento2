@@ -2,11 +2,17 @@
 /**
  * Catalog super product link collection
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product;
 
+/**
+ * Class Collection
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
@@ -34,6 +40,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
+
         $this->getSelect()->join(
             ['link_table' => $this->_linkTable],
             'link_table.product_id = e.entity_id',
@@ -51,7 +58,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setProductFilter($product)
     {
-        $this->getSelect()->where('link_table.parent_id = ?', (int)$product->getId());
+        $metadata = $this->getProductEntityMetadata();
+
+        $this->getSelect()->where('link_table.parent_id = ?', $product->getData($metadata->getLinkField()));
         return $this;
     }
 

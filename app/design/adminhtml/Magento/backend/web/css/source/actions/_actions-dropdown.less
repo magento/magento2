@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -9,7 +9,7 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 //
 //  Utilities
@@ -24,6 +24,7 @@
             right: 0;
         }
     }
+
     .admin__action-dropdown-menu {
         left: auto;
         right: 0;
@@ -35,10 +36,11 @@
 ) when (@_align = right) {
     .admin__action-dropdown-text {
         &:after {
-            right: -(@component__shadow-size__base + 1);
             left: 0;
+            right: -(@component__shadow-size__base + 1);
         }
     }
+
     .admin__action-dropdown-menu {
         left: 0;
         right: auto;
@@ -57,12 +59,14 @@
     .admin__action-dropdown-menu__align(left);
     display: inline-block;
     position: relative;
+
     &.active,
     &._active {
         .admin__action-dropdown {
             border-color: @action-dropdown__active__border-color;
             box-shadow: @component__box-shadow__base;
         }
+
         //  Dropdown helper to prevent box shadow unnecessary appearing
         .admin__action-dropdown-text {
             &:after {
@@ -73,14 +77,17 @@
                 top: 100%;
             }
         }
+
         .admin__action-dropdown-menu {
             display: block;
         }
     }
+
     &._disabled {
         .admin__action-dropdown {
             cursor: default;
         }
+
         &:hover {
             .admin__action-dropdown {
                 color: @action-dropdown__color;
@@ -107,16 +114,19 @@
     position: relative;
     vertical-align: baseline;
     z-index: 2;
+
     &:hover,
     &:focus {
         background-color: @action-dropdown__background-color;
         color: @action-dropdown__hover__color;
         text-decoration: none;
     }
+
     //  Triangle
     &:after {
         right: @action-dropdown__padding-horizontal;
     }
+
     //  Icon
     &:before {
         margin-right: 1rem;
@@ -136,8 +146,10 @@
     top: 100%;
     transition: all @appearing__transition-duration @apperaing__transition-timing-function;
     z-index: 1;
+
     > li {
         display: block;
+
         > a {
             .action-dropdown-menu-link-pattern();
             padding: @action-dropdown-menu-link__padding-vertical @action-dropdown-menu-link__padding-horizontal;
@@ -149,35 +161,43 @@
 
 .selectmenu {
     &:extend(.abs-form-control-pattern);
-    &._focus {
-        &:extend(.abs-form-control-pattern:focus);
-    }
     display: inline-block;
     padding-left: 1.5rem;
     position: relative;
     text-align: left;
     width: auto;
     z-index: 1;
+
     &:hover {
         &:extend(.abs-form-control-pattern:hover);
     }
-    &._active {
-        z-index: @action-select__z-index;
-        border-color: @action__active__border-color;
+
+    &._focus {
+        &:extend(.abs-form-control-pattern:focus);
     }
+
+    &._active {
+        border-color: @action__active__border-color;
+        z-index: @action-select__z-index;
+    }
+
     .action-save,
     .action-edit,
     .action-delete {
         .action-icon();
+
         &:before {
             &:extend(.abs-icon all);
             content: @icon-delete__content;
         }
+
         > span {
             &:extend(.abs-visually-hidden all);
         }
+
         padding: 0 1rem 0 1rem;
     }
+
     .action-edit,
     .action-delete {
         border: 0 solid @color-white;
@@ -187,33 +207,38 @@
         right: 0;
         top: 0;
         z-index: 1;
+
         &:hover {
             border: 0 solid @color-white;
             border-left-width: 1px;
         }
     }
+
     .action-save:before {
         content: @icon-arrow-right__content;
     }
+
     .action-edit:before {
         content: @icon-edit__content;
     }
 }
+
 .selectmenu-value {
     display: inline-block;
-    input[type="text"] {
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        appearance: none;
+
+    input[type='text'] {
+        .lib-css(appearance, none, 1);
         border: 0;
         display: inline;
         margin: 0;
         width: 6rem;
+
         body._keyfocus &:focus {
             box-shadow: none;
         }
     }
 }
+
 .selectmenu-toggle {
     .action-toggle-triangle();
     background: transparent;
@@ -224,28 +249,35 @@
     right: 0;
     top: 0;
     width: 0;
+
     &:focus,
     &:active,
     &:hover {
         background: transparent;
     }
+
     .selectmenu:hover & {
         &:before {
             &:extend(.abs-form-control-pattern:hover);
         }
     }
+
     .selectmenu._active &:before {
         border-color: @action__active__border-color;
     }
+
     .selectmenu._focus &:before {
         &:extend(.abs-form-control-pattern:focus);
     }
+
     body._keyfocus &:focus {
         box-shadow: none;
     }
+
     span {
         &:extend(.abs-visually-hidden all);
     }
+
     &:before {
         background: @color-gray89;
         border-left: 1px solid @action__border-color;
@@ -258,6 +290,7 @@
         width: 3.2rem;
     }
 }
+
 .selectmenu-items {
     background: @action-dropdown__background-color;
     border: 1px solid @action__active__border-color;
@@ -267,12 +300,14 @@
     left: -1px;
     margin-top: 3px;
     max-width: 20rem;
-    min-width: ~"calc(100% + 2px)";
+    min-width: ~'calc(100% + 2px)';
     position: absolute;
     top: 100%;
+
     &._active {
         display: block;
     }
+
     ul {
         float: left;
         list-style-type: none;
@@ -280,15 +315,18 @@
         min-width: 100%;
         padding: 0;
     }
+
     li {
         .lib-vendor-prefix-display(flex);
         .lib-vendor-prefix-flex-direction(row);
         display: flex;
         flex-direction: row;
         transition: background .2s linear;
+
         &:hover {
             background: @action-menu__hover__background-color;
         }
+
         &:last-child {
             .selectmenu-item-action {
                 .lib-link();
@@ -296,35 +334,40 @@
         }
     }
 }
+
 .selectmenu-item {
     position: relative;
     width: 100%;
     z-index: 1;
+
     li._edit > & {
         display: none;
     }
 }
+
 .selectmenu-item-edit {
     display: none;
     padding: .3rem 4rem .3rem .4rem;
     position: relative;
     white-space: nowrap;
     z-index: 1;
+
     li:last-child & {
         padding-right: .4rem;
     }
+
     .admin__control-text {
-        width: 5.4rem;
         margin: 0;
+        width: 5.4rem;
     }
+
     li._edit & {
         display: block;
     }
 }
+
 .selectmenu-item-action {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+    .lib-css(appearance, none, 1);
     background: transparent;
     border: 0;
     color: @text__color;
@@ -336,6 +379,7 @@
     text-align: left;
     transition: background .2s linear;
     width: 5rem;
+
     &:hover,
     &:focus {
         background: @action-menu__hover__background-color;

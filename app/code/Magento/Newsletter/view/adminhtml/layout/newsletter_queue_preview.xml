@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,6 +10,7 @@
         <attribute name="id" value="html-body"/>
         <attribute name="class" value="preview-window"/>
         <referenceContainer name="backend.page" remove="true"/>
+        <referenceContainer name="menu.wrapper" remove="true"/>
         <referenceContainer name="root">
             <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Newsletter::preview/iframeswitcher.phtml">
                 <block class="Magento\Newsletter\Block\Adminhtml\Queue\Preview\Form" name="preview_form"/>

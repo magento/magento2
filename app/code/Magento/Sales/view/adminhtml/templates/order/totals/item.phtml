@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@
 
 <?php if ((float) $_source->getDataUsingMethod($block->getSourceField())): ?>
     <tr>
-        <td class="label"><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?php /* @escapeNotVerified */ echo __($block->getLabel()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
-        <td <?php echo $block->getHtmlClass() ? ('class="' . $block->getHtmlClass() . '"') : '';?>><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute($block->getSourceField()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
+        <td class="label"><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?= /* @escapeNotVerified */ __($block->getLabel()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
+        <td <?= $block->getHtmlClass() ? ('class="' . $block->getHtmlClass() . '"') : '' ?>><?php if ($block->getStrong()) : ?><strong><?php endif; ?><?= /* @escapeNotVerified */ $block->displayPriceAttribute($block->getSourceField()) ?><?php if ($block->getStrong()) : ?></strong><?php endif; ?></td>
     </tr>
 <?php endif; ?>

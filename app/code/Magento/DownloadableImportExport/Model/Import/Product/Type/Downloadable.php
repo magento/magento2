@@ -2,16 +2,18 @@
 /**
  * Import entity of downloadable product type
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
-use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\EntityManager\MetadataPool;
 use \Magento\Store\Model\Store;
 
 /**
  * Class Downloadable
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -242,7 +244,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $downloadableHelper;
 
     /**
-     * Constructor
+     * Downloadable constructor
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
@@ -250,7 +252,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -258,12 +260,12 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
-        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
+        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
+        MetadataPool $metadataPool = null
     ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
-        $this->connection = $resource->getConnection('write');
         $this->uploaderHelper = $uploaderHelper;
         $this->downloadableHelper = $downloadableHelper;
     }
@@ -285,7 +287,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($this->_type != $productData['type_id']) {
                     continue;
                 }
-                $this->parseOptions($rowData, $productData['entity_id']);
+                $this->parseOptions($rowData, $productData[$this->getProductEntityLinkField()]);
             }
             if (!empty($this->cachedOptions['sample']) || !empty($this->cachedOptions['link'])) {
                 $this->saveOptions();
@@ -303,6 +305,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param bool $isNewProduct Optional
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {

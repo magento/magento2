@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Model\Storage;
@@ -109,7 +109,7 @@ abstract class AbstractStorage implements StorageInterface
         $this->dataObjectHelper->populateWithArray(
             $dataObject,
             $data,
-            '\Magento\UrlRewrite\Service\V1\Data\UrlRewrite'
+            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class
         );
         return $dataObject;
     }

@@ -1,9 +1,9 @@
-Enable,Enable
 Dynamic,Dynamic
 Constant,Constant
 "Conversion Color value is not valid ""%1"". Please set hexadecimal 6-digit value.","Conversion Color value is not valid ""%1"". Please set hexadecimal 6-digit value."
 "Conversion Id value is not valid ""%1"". Conversion Id should be an integer.","Conversion Id value is not valid ""%1"". Conversion Id should be an integer."
 "Google AdWords","Google AdWords"
+Enable,Enable
 "Conversion ID","Conversion ID"
 "Conversion Language","Conversion Language"
 "Conversion Format","Conversion Format"

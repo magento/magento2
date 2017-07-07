@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ namespace Magento\Reports\Helper;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Stdlib\DateTime;
 
+/**
+ * @api
+ */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     const REPORT_PERIOD_TYPE_DAY = 'day';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
@@ -176,8 +179,8 @@ class Collection extends \Magento\Framework\Data\Collection
                 \IntlDateFormatter::SHORT,
                 \IntlDateFormatter::NONE
             ),
-            'start' => $dateStart->format('Y-m-d 00:00:00'),
-            'end' => $dateStart->format('Y-m-d 23:59:59'),
+            'start' => $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 00:00:00')),
+            'end' => $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 23:59:59')),
         ];
         return $interval;
     }
@@ -195,21 +198,25 @@ class Collection extends \Magento\Framework\Data\Collection
         $interval = [];
         $interval['period'] = $dateStart->format('m/Y');
         if ($firstInterval) {
-            $interval['start'] = $dateStart->format('Y-m-d 00:00:00');
+            $interval['start'] = $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 00:00:00'));
         } else {
-            $interval['start'] = $dateStart->format('Y-m-01 00:00:00');
+            $interval['start'] = $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-01 00:00:00'));
         }
 
         if ($dateStart->diff($dateEnd)->m == 0) {
-            $interval['end'] = $dateStart->setDate(
-                $dateStart->format('Y'),
-                $dateStart->format('m'),
-                $dateEnd->format('d')
-            )->format(
-                'Y-m-d 23:59:59'
+            $interval['end'] = $this->_localeDate->convertConfigTimeToUtc(
+                $dateStart->setDate(
+                    $dateStart->format('Y'),
+                    $dateStart->format('m'),
+                    $dateEnd->format('d')
+                )->format(
+                    'Y-m-d 23:59:59'
+                )
             );
         } else {
-            $interval['end'] = $dateStart->format('Y-m-' . date('t', $dateStart->getTimestamp()) . ' 23:59:59');
+            $interval['end'] = $this->_localeDate->convertConfigTimeToUtc(
+                $dateStart->format('Y-m-' . date('t', $dateStart->getTimestamp()) . ' 23:59:59')
+            );
         }
 
         $dateStart->modify('+1 month');
@@ -234,13 +241,15 @@ class Collection extends \Magento\Framework\Data\Collection
         $interval = [];
         $interval['period'] = $dateStart->format('Y');
         $interval['start'] = $firstInterval
-            ? $dateStart->format('Y-m-d 00:00:00')
-            : $dateStart->format('Y-01-01 00:00:00');
+            ? $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 00:00:00'))
+            : $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-01-01 00:00:00'));
 
         $interval['end'] = $dateStart->diff($dateEnd)->y == 0
-            ? $dateStart->setDate($dateStart->format('Y'), $dateEnd->format('m'), $dateEnd->format('d'))
-                ->format('Y-m-d 23:59:59')
-            : $dateStart->format('Y-12-31 23:59:59');
+            ? $this->_localeDate->convertConfigTimeToUtc(
+                $dateStart->setDate($dateStart->format('Y'), $dateEnd->format('m'), $dateEnd->format('d'))
+                    ->format('Y-m-d 23:59:59')
+            )
+            : $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-12-31 23:59:59'));
         $dateStart->modify('+1 year');
 
         if ($dateStart->diff($dateEnd)->y == 0) {
@@ -355,7 +364,7 @@ class Collection extends \Magento\Framework\Data\Collection
         }
         return $this->_reports;
     }
-    
+
     /**
      * Load data
      *

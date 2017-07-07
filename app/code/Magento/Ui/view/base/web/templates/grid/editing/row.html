@@ -1,35 +1,22 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tr
-    data-part="body.row"
-    class="data-grid-editable-row"
-    data-bind="
-        '_odd-row': !!($row()._rowIndex % 2),
-        foreach: {
-            data: fields,
-            as: '$col'
-        }">
+<tr class="data-grid-editable-row" each="data: fields, as: '$col'" css="'_odd-row': !!($row()._rowIndex % 2)">
     <!-- ko if: $parent.getColumn(index).visible -->
 
-    <!-- ko if: $parent.isActionsColumn($data) -->
-    <td class="data-grid-actions-cell">
-        <span class="data-grid-row-changed" data-bind="css: {_changed: $parent.hasChanges}">
-            <span class="data-grid-row-changed-tooltip" data-bind="i18n: 'Record contains unsaved changes.'"></span>
-        </span>
-    </td>
-    <!-- /ko -->
-    <!-- ko ifnot: $parent.isActionsColumn($data) -->
-        <!-- ko if: $col.isEditor -->
-        <td data-bind="template: $parent.fieldTmpl"></td>
+        <td class="data-grid-actions-cell" if="$parent.isActionsColumn($data)">
+            <span class="data-grid-row-changed" css="_changed: $parent.hasChanges">
+                <span class="data-grid-row-changed-tooltip" translate="'Record contains unsaved changes.'"/>
+            </span>
+        </td>        
+        
+        <!-- ko ifnot: $parent.isActionsColumn($data) -->
+            <td if="$col.isEditor" template="$parent.fieldTmpl"/>
+            <td ifnot="$col.isEditor" css="$col.getFieldClass()" template="$col.getBody()"/>
         <!-- /ko -->
-        <!-- ko ifnot: $col.isEditor -->
-        <td data-bind="template: $col.getBody(), css: $col.getFieldClass()"></td>
-        <!-- /ko -->
-    <!-- /ko -->
 
     <!-- /ko -->
 </tr>

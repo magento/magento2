@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -9,30 +9,42 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Json\Json;
 use Zend\View\Model\JsonModel;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Model\MarketplaceManager;
+use Magento\Setup\Model\PackagesData;
+use Magento\Setup\Model\PackagesAuth;
 
 class Marketplace extends AbstractActionController
 {
+    /**
+     * @var PackagesAuth
+     */
+    private $packagesAuth;
 
     /**
-     * @var ComposerInformation
+     * @var PackagesData
      */
-    private $composerInformation;
+    private $packagesData;
 
     /**
-     * @var MarketplaceManager
+     * @param PackagesAuth $packagesAuth
+     * @param PackagesData $packagesData
      */
-    private $marketplaceManager;
-
-    /**
-     * @param ComposerInformation $composerInformation
-     * @param MarketplaceManager $marketplaceManager
-     */
-    public function __construct(ComposerInformation $composerInformation, MarketplaceManager $marketplaceManager)
+    public function __construct(PackagesAuth $packagesAuth, PackagesData $packagesData)
     {
-        $this->composerInformation = $composerInformation;
-        $this->marketplaceManager = $marketplaceManager;
+        $this->packagesAuth = $packagesAuth;
+        $this->packagesData = $packagesData;
+    }
+
+    /**
+     * No index action, return 404 error page
+     *
+     * @return ViewModel
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
     }
 
     /**
@@ -49,9 +61,10 @@ class Marketplace extends AbstractActionController
         try {
             $userName = isset($params['username']) ? $params['username'] : '';
             $password = isset($params['password']) ? $params['password'] : '';
-            $isValid = $this->marketplaceManager->checkCredentialsAction($userName, $password);
+            $isValid = $this->packagesAuth->checkCredentials($userName, $password);
             $isValid = json_decode($isValid, true);
-            if ($isValid['success'] === true && $this->marketplaceManager->saveAuthJson($userName, $password)) {
+            if ($isValid['success'] === true && $this->packagesAuth->saveAuthJson($userName, $password)) {
+                $this->packagesData->syncPackagesData();
                 return new JsonModel(['success' => true]);
             } else {
                 return new JsonModel(['success' => false, 'message' => $isValid['message']]);
@@ -69,20 +82,21 @@ class Marketplace extends AbstractActionController
     public function checkAuthAction()
     {
         try {
-            $authDataJson = $this->marketplaceManager->getAuthJsonData();
+            $authDataJson = $this->packagesAuth->getAuthJsonData();
             if ($authDataJson) {
-                $isValid = $this->marketplaceManager->checkCredentialsAction(
-                    $authDataJson['username'],
-                    $authDataJson['password']
-                );
+                $isValid = $this->packagesAuth->checkCredentials($authDataJson['username'], $authDataJson['password']);
                 $isValid = json_decode($isValid, true);
                 if ($isValid['success'] === true) {
-                    return new JsonModel(['success' => true, 'data' => $authDataJson]);
+                    return new JsonModel(['success' => true, 'data' => [
+                        PackagesAuth::KEY_USERNAME => $authDataJson[PackagesAuth::KEY_USERNAME]
+                    ]]);
                 } else {
                     return new JsonModel(['success' => false, 'message' => $isValid['message']]);
                 }
             }
-            return new JsonModel(['success' => false, 'data' => $authDataJson]);
+            return new JsonModel(['success' => false, 'data' => [
+                PackagesAuth::KEY_USERNAME => $authDataJson[PackagesAuth::KEY_USERNAME]
+            ]]);
         } catch (\Exception $e) {
             return new JsonModel(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -96,7 +110,7 @@ class Marketplace extends AbstractActionController
     public function removeCredentialsAction()
     {
         try {
-            $result = $this->marketplaceManager->removeCredentials();
+            $result = $this->packagesAuth->removeCredentials();
             return new JsonModel(['success' => $result]);
         } catch (\Exception $e) {
             return new JsonModel(['success' => false, 'message' => $e->getMessage()]);

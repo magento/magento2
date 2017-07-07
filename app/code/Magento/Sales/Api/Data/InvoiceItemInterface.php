@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
+
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Invoice item interface.
@@ -11,7 +13,7 @@ namespace Magento\Sales\Api\Data;
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
  */
-interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface InvoiceItemInterface extends ExtensibleDataInterface, LineItemInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -112,10 +114,12 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Base discount tax compensation amount.
      */
     const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
+
     /**
      * Invoice
      */
     const INVOICE = 'invoice';
+
     /**
      * Gets the additional data for the invoice item.
      *
@@ -140,7 +144,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the base discount tax compensation amount for the invoice item.
      *
-     * @return float Base discount tax compensation amount.
+     * @return float|null Base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -211,7 +215,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the discount tax compensation amount for the invoice item.
      *
-     * @return float Discount tax compensation amount.
+     * @return float|null Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -221,13 +225,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return string|null Name.
      */
     public function getName();
-
-    /**
-     * Gets the order item ID for the invoice item.
-     *
-     * @return int Order item ID.
-     */
-    public function getOrderItemId();
 
     /**
      * Gets the parent ID for the invoice item.
@@ -256,13 +253,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return int|null Product ID.
      */
     public function getProductId();
-
-    /**
-     * Gets the quantity for the invoice item.
-     *
-     * @return float Quantity.
-     */
-    public function getQty();
 
     /**
      * Gets the row total for the invoice item.
@@ -373,14 +363,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setBasePriceInclTax($amount);
 
     /**
-     * Sets the quantity for the invoice item.
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function setQty($qty);
-
-    /**
      * Sets the base cost for the invoice item.
      *
      * @param float $baseCost
@@ -419,14 +401,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setProductId($id);
-
-    /**
-     * Sets the order item ID for the invoice item.
-     *
-     * @param int $id
-     * @return $this
-     */
-    public function setOrderItemId($id);
 
     /**
      * Sets the additional data for the invoice item.

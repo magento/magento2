@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
@@ -27,19 +27,19 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexerRegistryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_indexerMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer',
+            \Magento\Indexer\Model\Indexer::class,
             ['getId', 'invalidate', 'getPriceIndexer', 'isScheduled'],
             [],
             '',
             false
         );
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get'],
             [],
             '',
@@ -47,7 +47,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = $this->_objectManager->getObject(
-            'Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import',
+            \Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import::class,
             ['indexerRegistry' => $this->indexerRegistryMock]
         );
     }
@@ -66,7 +66,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             ->method('isScheduled')
             ->will($this->returnValue(false));
 
-        $importMock = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
+        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
         $this->assertEquals('return_value', $this->_model->afterImportSource($importMock, 'return_value'));
     }
 }

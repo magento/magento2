@@ -1,17 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+
 /**
  * Downloadable Product  Samples resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
     /**
      * Catalog data
      *
@@ -198,12 +207,19 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['s' => $this->getTable('downloadable_link_title')],
             's.link_id=m.link_id AND s.store_id=0',
             []
+        )->join(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf(
+                'cpe.entity_id = m.product_id',
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+            ),
+            []
         )->joinLeft(
             ['st' => $this->getTable('downloadable_link_title')],
             'st.link_id=m.link_id AND st.store_id=:store_id',
             ['title' => $ifNullDefaultTitle]
         )->where(
-            'm.product_id=:product_id'
+            'cpe.entity_id=:product_id'
         );
         $bind = [':store_id' => (int)$storeId, ':product_id' => $productId];
 
@@ -216,5 +232,17 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _createCurrency()
     {
         return $this->_currencyFactory->create();
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

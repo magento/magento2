@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,8 @@ interface FormatterInterface
      * Format deployment configuration
      *
      * @param array $data
+     * @param array $comments
      * @return string
      */
-    public function format($data);
+    public function format($data, array $comments = []);
 }

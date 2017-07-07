@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * View configuration files handler
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Config\Dom\UrnResolver;
-
+/**
+ * View configuration files handler
+ *
+ * @api
+ */
 class View extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
@@ -43,7 +42,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         ValidationStateInterface $validationState,
         $fileName,
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global',
         $xpath = []
     ) {
@@ -131,16 +130,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     }
 
     /**
-     * Return copy of DOM
-     *
-     * @return \Magento\Framework\Config\Dom
-     */
-    public function getDomConfigCopy()
-    {
-        return clone $this->_getDomConfigModel();
-    }
-
-    /**
      * Variables are identified by module and name
      *
      * @return array
@@ -149,7 +138,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     {
         $idAttributes = [
             '/view/vars' => 'module',
-            '/view/vars/var' => 'name',
+            '/view/vars/(var/)*var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
         ];
         foreach ($this->xpath as $attribute) {
@@ -209,5 +198,24 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         if ($this->data === null) {
             $this->data = $this->read();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function read($scope = null)
+    {
+        $scope = $scope ?: $this->_defaultScope;
+        $result = [];
+
+        $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
+        // Sort parents desc
+        krsort($parents);
+
+        foreach ($parents as $parent) {
+            $result = array_replace_recursive($result, $this->_readFiles([$parent]));
+        }
+
+        return array_replace_recursive($result, parent::read($scope));
     }
 }

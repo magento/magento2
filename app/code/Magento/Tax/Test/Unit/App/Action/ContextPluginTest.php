@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\App\Action;
@@ -55,28 +55,28 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->taxHelperMock = $this->getMockBuilder('Magento\Tax\Helper\Data')
+        $this->taxHelperMock = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->weeeHelperMock = $this->getMockBuilder('Magento\Weee\Helper\Data')
+        $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->weeeTaxMock = $this->getMockBuilder('\Magento\Weee\Model\Tax')
+        $this->weeeTaxMock = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->httpContextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')
+        $this->httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->taxCalculationMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Proxy')
+        $this->taxCalculationMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Proxy::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTaxRates'])
             ->getMock();
 
-        $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
@@ -84,16 +84,16 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder('Magento\Framework\Module\Manager')
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cacheConfigMock = $this->getMockBuilder('Magento\PageCache\Model\Config')
+        $this->cacheConfigMock = $this->getMockBuilder(\Magento\PageCache\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->contextPlugin = $this->objectManager->getObject(
-            'Magento\Tax\Model\App\Action\ContextPlugin',
+            \Magento\Tax\Model\App\Action\ContextPlugin::class,
             [
                 'customerSession' => $this->customerSessionMock,
                 'httpContext' => $this->httpContextMock,
@@ -111,9 +111,9 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
      * @param bool $cache
      * @param bool $taxEnabled
      * @param bool $loggedIn
-     * @dataProvider dataProviderAroundDispatch
+     * @dataProvider beforeDispatchDataProvider
      */
-    public function testAroundDispatch($cache, $taxEnabled, $loggedIn)
+    public function testBeforeDispatch($cache, $taxEnabled, $loggedIn)
     {
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
@@ -158,20 +158,16 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
                     ->with('tax_rates', [], 0);
             }
 
-            $action = $this->objectManager->getObject('Magento\Framework\App\Test\Unit\Action\Stub\ActionStub');
-            $request = $this->getMock('\Magento\Framework\App\Request\Http', ['getActionName'], [], '', false);
-            $expectedResult = 'expectedResult';
-            $proceed = function ($request) use ($expectedResult) {
-                return $expectedResult;
-            };
-            $this->contextPlugin->aroundDispatch($action, $proceed, $request);
+            $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
+            $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
+            $this->contextPlugin->beforeDispatch($action, $request);
         }
     }
 
     /**
      * @return array
      */
-    public function dataProviderAroundDispatch()
+    public function beforeDispatchDataProvider()
     {
         return [
             [false, false, false],

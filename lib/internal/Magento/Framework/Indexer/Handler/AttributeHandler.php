@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Handler;
@@ -23,6 +23,11 @@ class AttributeHandler implements HandlerInterface
     public function prepareSql(SourceProviderInterface $source, $alias, $fieldInfo)
     {
         if (isset($fieldInfo['bind'])) {
+
+            if (!method_exists($source, 'joinAttribute')) {
+                return;
+            }
+
             $source->joinAttribute(
                 $fieldInfo['name'],
                 $fieldInfo['entity'] . '/' . $fieldInfo['origin'],

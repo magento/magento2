@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -19,7 +19,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products/';
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -87,7 +87,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual_in_stock.php
      */
     public function testAssign()
@@ -138,7 +138,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     protected function getLinkedProducts($sku, $linkType)
     {
         /** @var \Magento\Catalog\Model\ProductLink\Management $linkManagement */
-        $linkManagement = $this->objectManager->get('Magento\Catalog\Api\ProductLinkManagementInterface');
+        $linkManagement = $this->objectManager->get(\Magento\Catalog\Api\ProductLinkManagementInterface::class);
         $linkedProducts = $linkManagement->getLinkedItemsByType($sku, $linkType);
 
         return $linkedProducts;

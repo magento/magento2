@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
@@ -30,11 +30,11 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->tableName = 'some_table_name';
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
@@ -45,7 +45,7 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->tableName);
 
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\TemporaryStorage',
+            \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class,
             ['resource' => $resource]
         );
     }
@@ -55,7 +55,7 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
         $sql = 'some SQL query';
 
         /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
-        $select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -83,27 +83,57 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
         $documentId = 312432;
         $documentValue = 1.235123;
 
-        $documentField = $this->getMockBuilder('Magento\Framework\Search\DocumentField')
+        $attributeValue = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $documentField->expects($this->once())
+        $attributeValue->expects($this->once())
             ->method('getValue')
             ->willReturn($documentValue);
 
-        $document = $this->getMockBuilder('Magento\Framework\Search\Document')
+        $document = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
             ->disableOriginalConstructor()
             ->getMock();
         $document->expects($this->once())
             ->method('getId')
             ->willReturn($documentId);
         $document->expects($this->once())
-            ->method('getField')
+            ->method('getCustomAttribute')
             ->with('score')
-            ->willReturn($documentField);
+            ->willReturn($attributeValue);
 
         $table = $this->createTemporaryTable();
 
         $result = $this->model->storeDocuments([$document]);
+
+        $this->assertEquals($result, $table);
+    }
+
+    public function testStoreApiDocuments()
+    {
+        $documentId = 312432;
+        $documentValue = 1.235123;
+
+        $attributeValue = $this->getMockBuilder(\Magento\Framework\Api\AttributeValue::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeValue->expects($this->once())
+            ->method('getValue')
+            ->willReturn($documentValue);
+
+        $document = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $document->expects($this->once())
+            ->method('getId')
+            ->willReturn($documentId);
+        $document->expects($this->once())
+            ->method('getCustomAttribute')
+            ->with('score')
+            ->willReturn($attributeValue);
+
+        $table = $this->createTemporaryTable();
+
+        $result = $this->model->storeApiDocuments([$document]);
 
         $this->assertEquals($result, $table);
     }
@@ -113,7 +143,7 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
      */
     private function createTemporaryTable()
     {
-        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->disableOriginalConstructor()
             ->getMock();
         $table->expects($this->at(1))

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,12 @@
  * @see \Magento\Backend\Block\Denied
  */
 ?>
-<h1 class="page-heading"><?php /* @escapeNotVerified */ echo __('Access denied') ?></h1>
+<h1 class="page-heading"><?= /* @escapeNotVerified */ __('Access denied') ?></h1>
 <?php if (!$block->hasAvailableResources()): ?>
 <p>
-<?php /* @escapeNotVerified */ echo __('Please try to sign out and sign in again.') ?><br/>
-<?php /* @escapeNotVerified */ echo __('If you continue to receive this message, please contact the store owner.') ?>
+<?= /* @escapeNotVerified */ __('Please try to sign out and sign in again.') ?><br/>
+<?= /* @escapeNotVerified */ __('If you continue to receive this message, please contact the store owner.') ?>
 </p>
 <?php else: ?>
-<p><?php /* @escapeNotVerified */ echo __('You need more permissions to access this.') ?></p>
+<p><?= /* @escapeNotVerified */ __('You need more permissions to access this.') ?></p>
 <?php endif?>

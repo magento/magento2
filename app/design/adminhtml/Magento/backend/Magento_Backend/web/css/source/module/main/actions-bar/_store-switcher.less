@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -14,14 +14,16 @@
     float: left;
     font-size: round(@font-size__base - .1rem, 1);
     margin-top: .7rem;
+
     .admin__action-dropdown {
-        margin-left: .5em;
         background-color: @page-main-actions__background-color;
+        margin-left: .5em;
     }
+
     .dropdown {
         .lib-dropdown(
-        @_options-selector: ~".dropdown-menu",
-        @_dropdown-list-border: 1px #ada89e solid,
+        @_options-selector: ~'.dropdown-menu',
+        @_dropdown-list-border: 1px solid @color-gray65-lighten,
         @_dropdown-list-pointer: false,
         @_icon-font-line-height: 2,
         @_icon-font-color: @text__color,
@@ -33,54 +35,68 @@
         @_dropdown-list-shadow: @component__box-shadow__base
         );
     }
+
     .dropdown-menu {
         left: 0;
         margin-top: .5em;
+        max-height: 250px;
+        overflow-y: auto;
         padding-top: .25em;
+
         li {
             border: 0;
             cursor: default;
+
             &:hover {
                 cursor: default;
             }
+
             a,
             span {
                 color: @text__color;
                 display: block;
                 padding: .5rem 1.3rem;
             }
+
             a {
                 text-decoration: none;
+
                 &:hover {
                     background: @color-lighter-gray;
                 }
             }
+
             span {
                 color: @color-gray68;
                 cursor: default;
             }
+
             &.current {
                 span {
-                    background: #eee;
+                    background: @color-gray-darken0;
                     color: @text__color;
                 }
             }
         }
+
         .store-switcher-store {
             a,
             span {
                 padding-left: 2.6rem;
             }
         }
+
         .store-switcher-store-view {
             a,
             span {
                 padding-left: 3.9rem;
             }
         }
+
         .dropdown-toolbar {
             border-top: 1px solid @color-gray92;
             margin-top: 1rem;
+
             a {
                 &:before {
                     &:extend(.abs-icon all);
@@ -101,38 +117,44 @@
 .store-switcher-alt {
     display: inline-block;
     position: relative;
+
     &.active {
         .dropdown-menu {
             display: block;
         }
     }
+
     .dropdown-menu {
         margin-top: 2px;
         white-space: nowrap;
+
         ul {
             list-style: none;
             margin: 0;
             padding: 0;
         }
     }
+
     strong {
-        color: #a6a098;
+        color: @color-gray65-almost;
         display: block;
         font-size: 14px;
         font-weight: 500;
         line-height: 1.333;
         padding: 5px 10px;
     }
+
     .store-selected {
-        color: #676056;
+        color: @color-brownie-light;
         cursor: pointer;
         font-size: 12px;
         font-weight: 400;
         line-height: 1.333;
+
         &:after {
-            color: #b3b0ad;
-            content: '\e02c'; /* arrow down icon */
             -webkit-font-smoothing: antialiased;
+            color: @color-dark-grayish-orange;
+            content: '\e02c'; // Arrow down icon
             font-style: normal;
             font-weight: normal;
             margin: 0 0 0 3px;
@@ -140,21 +162,26 @@
             vertical-align: text-top;
         }
     }
+
     .store-switcher-website,
     .store-switcher-store {
         padding: 0;
+
         &:hover {
             background: none;
         }
     }
+
     .store-switcher-store-view {
         padding: 0;
     }
+
     .store-switcher-all,
     .manage-stores {
         padding: 0;
+
         > a {
-            color: #676056;
+            color: @color-brownie-light;
             display: block;
             font-size: 12px;
             padding: 8px 15px;
@@ -165,6 +192,7 @@
 
 .store-switcher-website {
     margin: 5px 0 0;
+
     > strong {
         padding-left: 13px;
     }
@@ -172,9 +200,11 @@
 
 .store-switcher-store {
     margin: 1px 0 0;
+
     > strong {
         padding-left: 20px;
     }
+
     > ul {
         margin-top: 1px;
     }
@@ -182,14 +212,26 @@
 
 .store-switcher-store-view {
     &:first-child {
-        border-top: 1px solid #e5e5e5;
+        border-top: 1px solid @color-gray90;
     }
+
     > a {
-        color: #333;
+        color: @color-gray20;
         display: block;
         font-size: 13px;
         padding: 5px 15px 5px 24px;
         text-decoration: none;
+    }
+}
+
+.store-view {
+    &:not(.store-switcher) {
+        float: left;
+    }
+
+    .store-switcher-label {
+        display: inline-block;
+        margin-top: @indent__s;
     }
 }
 
@@ -200,6 +242,7 @@
 .tooltip {
     display: inline-block;
     margin-left: .5em;
+
     .help {
         span,
         a {
@@ -210,27 +253,31 @@
             vertical-align: middle;
             width: 22px;
             z-index: 2;
+
             &:before {
                 &:extend(.abs-icon all);
                 color: @text__color;
                 content: @icon-help__content;
                 font-size: 1.7rem;
             }
+
             span {
-                .lib-visually-hidden();
+                &:extend(.abs-visually-hidden all);
             }
         }
+
         a {
             &:hover {
                 text-decoration: none;
             }
         }
     }
+
     .tooltip-content {
         background: rgba(49, 48, 43, .8);
-        background: #000;
+        background: @color-black;
         border-radius: 3px;
-        color: #fff;
+        color: @color-white;
         display: none;
         margin-left: -19px;
         margin-top: 10px;
@@ -239,8 +286,9 @@
         position: absolute;
         text-shadow: none;
         z-index: 20;
+
         &:before {
-            border-bottom: 5px solid #000;
+            border-bottom: 5px solid @color-black;
             border-left: 5px solid transparent;
             border-right: 5px solid transparent;
             content: '';
@@ -251,13 +299,16 @@
             top: -5px;
             width: 0;
         }
+
         &.loading {
             position: absolute;
+
             &:before {
                 border-bottom-color: rgba(0, 0, 0, .3);
             }
         }
     }
+
     &:hover > .tooltip-content {
         display: block;
     }

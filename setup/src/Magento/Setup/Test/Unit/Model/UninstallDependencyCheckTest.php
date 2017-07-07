@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,23 +37,23 @@ class UninstallDependencyCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->composerInfo = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
+        $this->composerInfo = $this->getMock(\Magento\Framework\Composer\ComposerInformation::class, [], [], '', false);
         $this->packageDependencyChecker = $this->getMock(
-            'Magento\Framework\Composer\DependencyChecker',
+            \Magento\Framework\Composer\DependencyChecker::class,
             [],
             [],
             '',
             false
         );
         $this->themeDependencyChecker = $this->getMock(
-            'Magento\Theme\Model\Theme\ThemeDependencyChecker',
+            \Magento\Theme\Model\Theme\ThemeDependencyChecker::class,
             [],
             [],
             '',
             false
         );
         $this->themeDependencyCheckerFactory = $this->getMock(
-            'Magento\Setup\Model\ThemeDependencyCheckerFactory',
+            \Magento\Setup\Model\ThemeDependencyCheckerFactory::class,
             [],
             [],
             '',

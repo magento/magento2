@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,11 +38,11 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->_transferAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', [], [], '', false);
-        $this->_fileUploader = $this->getMock('Magento\Framework\File\Uploader', [], [], '', false);
+        $this->_filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->_transferAdapterMock = $this->getMock(\Zend_File_Transfer_Adapter_Http::class, [], [], '', false);
+        $this->_fileUploader = $this->getMock(\Magento\Framework\File\Uploader::class, [], [], '', false);
 
-        $adapterFactory = $this->getMock('Magento\Framework\HTTP\Adapter\FileTransferFactory');
+        $adapterFactory = $this->getMock(\Magento\Framework\HTTP\Adapter\FileTransferFactory::class);
         $adapterFactory->expects(
             $this->once()
         )->method(
@@ -52,7 +52,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $uploaderFactory = $this->getMock(
-            'Magento\Framework\File\UploaderFactory',
+            \Magento\Framework\File\UploaderFactory::class,
             ['create'],
             [],
             '',
@@ -102,7 +102,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => true,
                 'save' => true,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception\LocalizedException'
+                'exception' => \Magento\Framework\Exception\LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -110,7 +110,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => false,
                 'save' => true,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception\LocalizedException'
+                'exception' => \Magento\Framework\Exception\LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -118,7 +118,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 'checkAllowedExtension' => true,
                 'save' => false,
                 'result' => false,
-                'exception' => 'Magento\Framework\Exception\LocalizedException'
+                'exception' => \Magento\Framework\Exception\LocalizedException::class
             ]
         ];
     }

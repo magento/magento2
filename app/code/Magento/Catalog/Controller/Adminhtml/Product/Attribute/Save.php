@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,8 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use \Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -47,16 +48,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     protected $groupCollectionFactory;
 
     /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    private $layoutFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Product\AttributeSet\BuildFactory $buildFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -69,7 +76,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Catalog\Helper\Product $productHelper
+        \Magento\Catalog\Helper\Product $productHelper,
+        \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -78,6 +86,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $this->attributeFactory = $attributeFactory;
         $this->validatorFactory = $validatorFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
+        $this->layoutFactory = $layoutFactory;
     }
 
     /**
@@ -89,7 +98,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $setId = $this->getRequest()->getParam('set');
 
@@ -107,8 +115,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
                     $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $name));
-                    $this->messageManager->setAttributeData($data);
-                    return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
+                    $this->_session->setAttributeData($data);
+                    return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     $this->messageManager->addError($e->getMessage());
                 } catch (\Exception $e) {
@@ -116,17 +124,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 }
             }
 
-            $redirectBack = $this->getRequest()->getParam('back', false);
-            /* @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-            $model = $this->attributeFactory->create();
-
             $attributeId = $this->getRequest()->getParam('attribute_id');
-
-            $attributeCode = $this->getRequest()->getParam('attribute_code');
-            $frontendLabel = $this->getRequest()->getParam('frontend_label');
-            $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel[0]);
-            if (strlen($this->getRequest()->getParam('attribute_code')) > 0) {
-                $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,30}$/']);
+            $attributeCode = $this->getRequest()->getParam('attribute_code')
+                ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
+            if (strlen($attributeCode) > 0) {
+                $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']);
                 if (!$validatorAttrCode->isValid($attributeCode)) {
                     $this->messageManager->addError(
                         __(
@@ -135,7 +137,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                             $attributeCode
                         )
                     );
-                    return $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $attributeId, '_current' => true]);
+                    return $this->returnResult(
+                        'catalog/*/edit',
+                        ['attribute_id' => $attributeId, '_current' => true],
+                        ['error' => true]
+                    );
                 }
             }
             $data['attribute_code'] = $attributeCode;
@@ -148,21 +154,28 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     foreach ($inputType->getMessages() as $message) {
                         $this->messageManager->addError($message);
                     }
-                    return $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $attributeId, '_current' => true]);
+                    return $this->returnResult(
+                        'catalog/*/edit',
+                        ['attribute_id' => $attributeId, '_current' => true],
+                        ['error' => true]
+                    );
                 }
             }
+
+            /* @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            $model = $this->attributeFactory->create();
 
             if ($attributeId) {
                 $model->load($attributeId);
                 if (!$model->getId()) {
                     $this->messageManager->addError(__('This attribute no longer exists.'));
-                    return $resultRedirect->setPath('catalog/*/');
+                    return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
                 if ($model->getEntityTypeId() != $this->_entityTypeId) {
                     $this->messageManager->addError(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
-                    return $resultRedirect->setPath('catalog/*/');
+                    return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
 
                 $data['attribute_code'] = $model->getAttributeCode();
@@ -207,17 +220,23 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             if ($setId && $groupCode) {
                 // For creating product attribute on product page we need specify attribute set and group
                 $attributeSetId = $attributeSet ? $attributeSet->getId() : $setId;
-                $groupCollection = $attributeSet
-                    ? $attributeSet->getGroups()
-                    : $this->groupCollectionFactory->create()->setAttributeSetFilter($attributeSetId)->load();
-                foreach ($groupCollection as $group) {
-                    if ($group->getAttributeGroupCode() == $groupCode) {
-                        $attributeGroupId = $group->getAttributeGroupId();
-                        break;
-                    }
+                $groupCollection = $this->groupCollectionFactory->create()
+                    ->setAttributeSetFilter($attributeSetId)
+                    ->addFieldToFilter('attribute_group_code', $groupCode)
+                    ->setPageSize(1)
+                    ->load();
+
+                $group = $groupCollection->getFirstItem();
+                if (!$group->getId()) {
+                    $group->setAttributeGroupCode($groupCode);
+                    $group->setSortOrder($this->getRequest()->getParam('groupSortOrder'));
+                    $group->setAttributeGroupName($this->getRequest()->getParam('groupName'));
+                    $group->setAttributeSetId($attributeSetId);
+                    $group->save();
                 }
+
                 $model->setAttributeSetId($attributeSetId);
-                $model->setAttributeGroupId($attributeGroupId);
+                $model->setAttributeGroupId($group->getId());
             }
 
             try {
@@ -236,19 +255,54 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     if (!is_null($attributeSet)) {
                         $requestParams['new_attribute_set_id'] = $attributeSet->getId();
                     }
-                    $resultRedirect->setPath('catalog/product/addAttribute', $requestParams);
-                } elseif ($redirectBack) {
-                    $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $model->getId(), '_current' => true]);
-                } else {
-                    $resultRedirect->setPath('catalog/*/');
+                    return $this->returnResult('catalog/product/addAttribute', $requestParams, ['error' => false]);
+                } elseif ($this->getRequest()->getParam('back', false)) {
+                    return $this->returnResult(
+                        'catalog/*/edit',
+                        ['attribute_id' => $model->getId(), '_current' => true],
+                        ['error' => false]
+                    );
                 }
-                return $resultRedirect;
+                return $this->returnResult('catalog/*/', [], ['error' => false]);
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setAttributeData($data);
-                return $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $attributeId, '_current' => true]);
+                return $this->returnResult(
+                    'catalog/*/edit',
+                    ['attribute_id' => $attributeId, '_current' => true],
+                    ['error' => true]
+                );
             }
         }
-        return $resultRedirect->setPath('catalog/*/');
+        return $this->returnResult('catalog/*/', [], ['error' => true]);
+    }
+
+    /**
+     * @param string $path
+     * @param array $params
+     * @param array $response
+     * @return \Magento\Framework\Controller\Result\Json|\Magento\Backend\Model\View\Result\Redirect
+     */
+    private function returnResult($path = '', array $params = [], array $response = [])
+    {
+        if ($this->isAjax()) {
+            $layout = $this->layoutFactory->create();
+            $layout->initMessages();
+
+            $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
+            $response['params'] = $params;
+            return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
+        }
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
+    }
+
+    /**
+     * Define whether request is Ajax
+     *
+     * @return boolean
+     */
+    private function isAjax()
+    {
+        return $this->getRequest()->getParam('isAjax');
     }
 }

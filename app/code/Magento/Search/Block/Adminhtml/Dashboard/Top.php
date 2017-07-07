@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Block\Adminhtml\Dashboard;
 
 /**
  *  Dashboard last search keywords block
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Top extends \Magento\Backend\Block\Dashboard\Grid
@@ -91,8 +92,10 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
             [
                 'header' => __('Search Term'),
                 'sortable' => false,
-                'index' => 'name',
-                'renderer' => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery'
+                'index' => 'query_text',
+                'renderer' => \Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery::class,
+                'header_css_class' => 'col-search-query',
+                'column_css_class' => 'col-search-query'
             ]
         );
 

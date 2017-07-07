@@ -1,25 +1,18 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="downloadable_items"/>
     <body>
-        <referenceBlock name="product_tabs">
+        <referenceBlock name="product_form">
             <!-- @todo ui: remove arguments within .admin__scope-old -->
             <arguments>
                 <argument name="excluded_panel" xsi:type="string">product_info_tabs_downloadable_items_content</argument>
             </arguments>
-            <block name="downloadable_items" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable">
-                <block name="catalog.product.edit.tab.downloadable.links" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links" />
-                <block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples" />
-            </block>
-            <action method="addTab">
-                <argument name="name" xsi:type="string">downloadable_items</argument>
-                <argument name="block" xsi:type="string">downloadable_items</argument>
-            </action>
         </referenceBlock>
     </body>
 </page>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -8,7 +8,9 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Block\UrlKeyRenderer;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
@@ -26,6 +28,11 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
 
     /** @var UrlRewriteHandler */
     protected $urlRewriteHandler;
+
+    /**
+     * @var UrlRewriteBunchReplacer
+     */
+    private $urlRewriteBunchReplacer;
 
     /**
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
@@ -46,6 +53,21 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
     }
 
     /**
+     * Retrieve Url Rewrite Replacer based on bunches
+     *
+     * @deprecated
+     * @return UrlRewriteBunchReplacer
+     */
+    private function getUrlRewriteBunchReplacer()
+    {
+        if (!$this->urlRewriteBunchReplacer) {
+            $this->urlRewriteBunchReplacer = ObjectManager::getInstance()->get(UrlRewriteBunchReplacer::class);
+        }
+
+        return $this->urlRewriteBunchReplacer;
+    }
+
+    /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
@@ -61,11 +83,11 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
             );
             $category->setData('save_rewrites_history', $saveRewritesHistory);
             $urlRewrites = array_merge(
-                $this->categoryUrlRewriteGenerator->generate($category),
+                $this->categoryUrlRewriteGenerator->generate($category, true),
                 $this->urlRewriteHandler->generateProductUrlRewrites($category)
             );
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);
-            $this->urlPersist->replace($urlRewrites);
+            $this->getUrlRewriteBunchReplacer()->doBunchReplace($urlRewrites);
         }
     }
 }

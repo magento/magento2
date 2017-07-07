@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -12,11 +12,11 @@ namespace Magento\CatalogInventory\Api;
 interface StockIndexInterface
 {
     /**
-     * Rebuild stock index of the given website
+     * Rebuild stock index of the given scope
      *
      * @param int $productId
-     * @param int $websiteId
+     * @param int $scopeId
      * @return bool
      */
-    public function rebuild($productId = null, $websiteId = null);
+    public function rebuild($productId = null, $scopeId = null);
 }

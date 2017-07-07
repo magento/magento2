@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Adminhtml\Settlement;
@@ -36,7 +36,7 @@ class Details extends \Magento\Backend\Block\Widget\Form\Container
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->addChild('form', 'Magento\Paypal\Block\Adminhtml\Settlement\Details\Form');
+        $this->addChild('form', \Magento\Paypal\Block\Adminhtml\Settlement\Details\Form::class);
         return $this;
     }
 }

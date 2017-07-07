@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,10 @@ var config = {
         '*': {
             checkoutBalance:    'Magento_Customer/js/checkout-balance',
             address:            'Magento_Customer/address',
-            setPassword:        'Magento_Customer/set-password'
+            changeEmailPassword: 'Magento_Customer/change-email-password',
+            passwordStrengthIndicator: 'Magento_Customer/js/password-strength-indicator',
+            zxcvbn: 'Magento_Customer/js/zxcvbn',
+            addressValidation: 'Magento_Customer/js/addressValidation'
         }
     }
 };

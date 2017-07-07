@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit\SampleData;
@@ -30,14 +30,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected $absolutePath;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->setMethods(['getDirectoryWrite'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->writeInterface = $this->getMockForAbstractClass(
-            'Magento\Framework\Filesystem\Directory\WriteInterface',
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
             [],
             '',
             false,
@@ -47,7 +47,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->state = $objectManager->getObject(
-            'Magento\Framework\Setup\SampleData\State',
+            \Magento\Framework\Setup\SampleData\State::class,
             ['filesystem' => $this->filesystem]
         );
     }
@@ -61,7 +61,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers setError()
+     * @covers \Magento\Framework\Setup\SampleData\State::setError
      */
     public function testHasError()
     {

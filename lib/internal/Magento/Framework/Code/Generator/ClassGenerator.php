@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -85,6 +85,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     public function setClassDocBlock(array $docBlock)
     {
         $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+        $docBlockObject->setWordWrap(false);
         $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
 
         return parent::setDocBlock($docBlockObject);
@@ -122,9 +123,14 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
 
             if (isset($methodOptions['docblock']) && is_array($methodOptions['docblock'])) {
                 $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+                $docBlockObject->setWordWrap(false);
                 $this->_setDataToObject($docBlockObject, $methodOptions['docblock'], $this->_docBlockOptions);
 
                 $methodObject->setDocBlock($docBlockObject);
+            }
+
+            if (!empty($methodOptions['returnType'])) {
+                $methodObject->setReturnType($methodOptions['returnType']);
             }
 
             $this->addMethodFromGenerator($methodObject);
@@ -165,6 +171,7 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
                 $docBlock = $propertyOptions['docblock'];
                 if (is_array($docBlock)) {
                     $docBlockObject = new \Zend\Code\Generator\DocBlockGenerator();
+                    $docBlockObject->setWordWrap(false);
                     $this->_setDataToObject($docBlockObject, $docBlock, $this->_docBlockOptions);
                     $propertyObject->setDocBlock($docBlockObject);
                 }
@@ -203,10 +210,10 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
     public function getNamespaceName()
     {
-        return ltrim(parent::getNamespaceName(), '\\');
+        return ltrim(parent::getNamespaceName(), '\\') ?: null;
     }
 }

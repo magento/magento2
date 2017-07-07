@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,11 +22,11 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testInvalidateSingleToken()
     {
         /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Api\AdminTokenServiceInterface');
+        $tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Api\AdminTokenServiceInterface::class);
         /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
+        $tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
         /** @var \Magento\User\Model\User $userModel */
-        $userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
 
         $adminUserNameFromFixture = 'adminUser';
         $tokenService->createAdminAccessToken(
@@ -48,15 +48,15 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testInvalidateMultipleTokens()
     {
         /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Api\AdminTokenServiceInterface');
+        $tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Api\AdminTokenServiceInterface::class);
 
         /** @var \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory $tokenModelCollectionFactory */
         $tokenModelCollectionFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory'
+            \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory::class
         );
 
         /** @var \Magento\User\Model\User $userModel */
-        $userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
 
         $adminUserNameFromFixture = 'adminUser';
         $tokenService->createAdminAccessToken(
@@ -85,7 +85,7 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testInvalidateToken_NoTokens()
     {
         /** @var \Magento\User\Model\User $userModel */
-        $userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
         $adminUserNameFromFixture = 'adminUser';
         $adminUserId = $userModel->loadByUsername($adminUserNameFromFixture)->getId();
         // invalidate token

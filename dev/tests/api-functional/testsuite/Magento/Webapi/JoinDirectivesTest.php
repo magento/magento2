@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,13 +37,15 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->searchBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
-        $this->sortOrderBuilder = $objectManager->create('Magento\Framework\Api\SortOrderBuilder');
-        $this->filterBuilder = $objectManager->create('Magento\Framework\Api\FilterBuilder');
-        $this->user = $objectManager->create('Magento\User\Model\User');
+        $this->searchBuilder = $objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->sortOrderBuilder = $objectManager->create(\Magento\Framework\Api\SortOrderBuilder::class);
+        $this->filterBuilder = $objectManager->create(\Magento\Framework\Api\FilterBuilder::class);
+        $this->user = $objectManager->create(\Magento\User\Model\User::class);
     }
 
     /**
+     * Rollback rules
+     * @magentoApiDataFixture Magento/SalesRule/_files/rules_rollback.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetList()

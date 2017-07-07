@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
@@ -29,8 +27,8 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rendererOne = $this->getMock('Magento\Framework\Phrase\RendererInterface');
-        $this->rendererTwo = $this->getMock('Magento\Framework\Phrase\RendererInterface');
+        $this->rendererOne = $this->getMock(\Magento\Framework\Phrase\RendererInterface::class);
+        $this->rendererTwo = $this->getMock(\Magento\Framework\Phrase\RendererInterface::class);
         $this->object = new \Magento\Framework\Phrase\Renderer\Composite([$this->rendererOne, $this->rendererTwo]);
     }
 
@@ -53,27 +51,27 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->rendererOne->expects(
             $this->once()
         )->method(
-                'render'
-            )->with(
-                [$text],
-                $arguments
-            )->will(
-                $this->returnValue($resultAfterFirst)
-            );
+            'render'
+        )->with(
+            [$text],
+            $arguments
+        )->will(
+            $this->returnValue($resultAfterFirst)
+        );
 
         $this->rendererTwo->expects(
             $this->once()
         )->method(
-                'render'
-            )->with(
-                [
-                    $text,
-                    $resultAfterFirst,
-                ],
-                $arguments
-            )->will(
-                $this->returnValue($resultAfterSecond)
-            );
+            'render'
+        )->with(
+            [
+                $text,
+                $resultAfterFirst,
+            ],
+            $arguments
+        )->will(
+            $this->returnValue($resultAfterSecond)
+        );
 
         $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));
     }

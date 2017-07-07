@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Api;
@@ -15,7 +15,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
     const RESOURCE_PATH = '/V1/products/';
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -23,8 +23,9 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
+
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      * @magentoApiDataFixture Magento/GroupedProduct/_files/product_grouped.php
      */
     public function testSave()
@@ -35,7 +36,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
             'sku' => $productSku,
             'link_type' => $linkType,
             'linked_product_type' => 'simple',
-            'linked_product_sku' => 'simple',
+            'linked_product_sku' => 'simple-1',
             'position' => 3,
             'extension_attributes' => [
                 'qty' =>  (float) 300.0000,
@@ -56,7 +57,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
         $this->_webApiCall($serviceInfo, ['entity' => $productData]);
 
         /** @var \Magento\Catalog\Api\ProductLinkManagementInterface $linkManagement */
-        $linkManagement = $this->objectManager->get('Magento\Catalog\Api\ProductLinkManagementInterface');
+        $linkManagement = $this->objectManager->get(\Magento\Catalog\Api\ProductLinkManagementInterface::class);
         $actual = $linkManagement->getLinkedItemsByType($productSku, $linkType);
         array_walk($actual, function (&$item) {
             $item = $item->__toArray();

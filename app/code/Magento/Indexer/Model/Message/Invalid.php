@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,12 +14,20 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
     protected $collection;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param \Magento\Indexer\Model\Indexer\Collection $collection
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      */
     public function __construct(
-        \Magento\Indexer\Model\Indexer\Collection $collection
+        \Magento\Indexer\Model\Indexer\Collection $collection,
+        \Magento\Framework\UrlInterface $urlBuilder
     ) {
         $this->collection = $collection;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -40,6 +48,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Retrieve unique message identity
      *
@@ -57,9 +66,14 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      */
     public function getText()
     {
-        // @codingStandardsIgnoreStart
-        return __('One or more of the indexers are not valid. Please add Magento cron file to crontab or launch cron.php manually.');
-        // @codingStandardsIgnoreEnd
+        $url = $this->urlBuilder->getUrl('indexer/indexer/list');
+        //@codingStandardsIgnoreStart
+        return __(
+            'One or more <a href="%1">indexers are invalid</a>. Make sure your <a href="%2" target="_blank">Magento cron job</a> is running.',
+            $url,
+            'http://devdocs.magento.com/guides/v2.0/config-guide/cli/config-cli-subcommands-cron.html#config-cli-cron-bkg'
+        );
+        //@codingStandardsIgnoreEnd
     }
 
     /**
@@ -71,5 +85,6 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
     {
         return self::SEVERITY_MAJOR;
     }
+
     //@codeCoverageIgnoreEnd
 }

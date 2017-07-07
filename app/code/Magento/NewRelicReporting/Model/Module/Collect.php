@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model\Module;
 
 use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleListInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Module;
 
@@ -29,11 +29,6 @@ class Collect
     protected $fullModuleList;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @var \Magento\NewRelicReporting\Model\ModuleFactory
      */
     protected $moduleFactory;
@@ -49,7 +44,6 @@ class Collect
      * @param ModuleListInterface $moduleList
      * @param FullModuleList $fullModuleList
      * @param Manager $moduleManager
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory
      * @param \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
      */
@@ -57,14 +51,12 @@ class Collect
         ModuleListInterface $moduleList,
         FullModuleList $fullModuleList,
         Manager $moduleManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory,
         \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
     ) {
         $this->moduleList = $moduleList;
         $this->fullModuleList = $fullModuleList;
         $this->moduleManager = $moduleManager;
-        $this->dateTime = $dateTime;
         $this->moduleFactory = $moduleFactory;
         $this->moduleCollectionFactory = $moduleCollectionFactory;
     }
@@ -112,7 +104,6 @@ class Collect
             'active'        =>  $active,
             'setup_version' =>  $setupVersion,
             'state'         =>  $state,
-            'updated_at'    =>  $this->dateTime->formatDate(true)
         ];
 
         $newModule->setData($data);
@@ -146,7 +137,7 @@ class Collect
         $disabledCount = $enabledCount = $uninstalledCount = 0;
 
         foreach ($stateValues as $state) {
-            switch($state){
+            switch ($state) {
                 case Config::ENABLED:
                     $enabledCount++;
                     break;
@@ -295,7 +286,6 @@ class Collect
                         'active' => $active,
                         'setup_version' => $module['setup_version'],
                         'state' => $state,
-                        'updated_at' => $this->dateTime->formatDate(true)
                     ];
                     if ($refresh) {
                         $dbModule->setData($data);

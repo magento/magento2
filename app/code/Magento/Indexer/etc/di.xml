@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -39,11 +39,11 @@
         </arguments>
     </type>
     <type name="Magento\Indexer\Model\Processor">
-        <plugin name="page-cache-indexer-reindex-invalidate"
-                type="Magento\Indexer\Model\Processor\InvalidateCache" sortOrder="10"/>
+        <plugin name="page-cache-indexer-reindex-clean-cache"
+                type="Magento\Indexer\Model\Processor\CleanCache" sortOrder="10"/>
     </type>
 
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="info" xsi:type="object">Magento\Indexer\Console\Command\IndexerInfoCommand</item>
@@ -51,7 +51,9 @@
                 <item name="set-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetModeCommand</item>
                 <item name="show-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowModeCommand</item>
                 <item name="status" xsi:type="object">Magento\Indexer\Console\Command\IndexerStatusCommand</item>
+                <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement" />
 </config>

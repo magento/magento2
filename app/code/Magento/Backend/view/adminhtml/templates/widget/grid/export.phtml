@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,13 +8,13 @@
 
 ?>
 <div class="admin__data-grid-export">
-    <label for="<?php /* @escapeNotVerified */ echo $block->getId() ?>_export" class="admin__control-support-text">
-        <?php /* @escapeNotVerified */ echo __('Export to:') ?>
+    <label for="<?= /* @escapeNotVerified */ $block->getId() ?>_export" class="admin__control-support-text">
+        <?= /* @escapeNotVerified */ __('Export to:') ?>
     </label>
-    <select name="<?php /* @escapeNotVerified */ echo $block->getId() ?>_export" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_export" class="admin__control-select">
+    <select name="<?= /* @escapeNotVerified */ $block->getId() ?>_export" id="<?= /* @escapeNotVerified */ $block->getId() ?>_export" class="admin__control-select">
         <?php foreach ($block->getExportTypes() as $_type): ?>
-            <option value="<?php /* @escapeNotVerified */ echo $_type->getUrl() ?>"><?php /* @escapeNotVerified */ echo $_type->getLabel() ?></option>
+            <option value="<?= /* @escapeNotVerified */ $_type->getUrl() ?>"><?= /* @escapeNotVerified */ $_type->getLabel() ?></option>
         <?php endforeach; ?>
     </select>
-    <?php echo $block->getExportButtonHtml() ?>
+    <?= $block->getExportButtonHtml() ?>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,9 @@ namespace Magento\Customer\Test\Unit\Controller\Ajax;
 
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LoginTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -65,19 +68,24 @@ class LoginTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRaw;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $redirectMock;
+
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode'],
             [],
             '',
             false
         );
         $this->customerSession = $this->getMock(
-            '\Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             [
                 'isLoggedIn',
                 'getLastCustomerId',
@@ -91,7 +99,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['get'],
             [],
             '',
@@ -99,7 +107,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerAccountManagementMock =
             $this->getMock(
-                '\Magento\Customer\Model\AccountManagement',
+                \Magento\Customer\Model\AccountManagement::class,
                 ['authenticate'],
                 [],
                 '',
@@ -107,25 +115,25 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->jsonHelperMock = $this->getMock(
-            '\Magento\Framework\Json\Helper\Data',
+            \Magento\Framework\Json\Helper\Data::class,
             ['jsonDecode'],
             [],
             '',
             false
         );
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+        $this->resultJsonFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+        $this->resultRaw = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRawFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+        $resultRawFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -133,13 +141,18 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRaw);
 
+        $contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
+        $this->redirectMock = $this->getMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $contextMock->expects($this->atLeastOnce())->method('getRedirect')->willReturn($this->redirectMock);
+        $contextMock->expects($this->atLeastOnce())->method('getRequest')->willReturn($this->request);
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
-            'Magento\Customer\Controller\Ajax\Login',
+            \Magento\Customer\Controller\Ajax\Login::class,
             [
+                'context' => $contextMock,
                 'customerSession' => $this->customerSession,
                 'helper' => $this->jsonHelperMock,
-                'request' => $this->request,
                 'response' => $this->response,
                 'resultRawFactory' => $resultRawFactory,
                 'resultJsonFactory' => $this->resultJsonFactory,
@@ -179,7 +192,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->with($jsonRequest)
             ->willReturn(['username' => 'customer@example.com', 'password' => 'password']);
 
-        $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
+        $customerMock = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerAccountManagementMock
             ->expects($this->any())
             ->method('authenticate')
@@ -192,11 +205,23 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession->expects($this->once())->method('regenerateId');
 
+        $redirectMock = $this->getMock(\Magento\Customer\Model\Account\Redirect::class, [], [], '', false);
+        $this->object->setAccountRedirect($redirectMock);
+        $redirectMock->expects($this->once())->method('getRedirectCookie')->willReturn('some_url1');
+
+        $scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->object->setScopeConfig($scopeConfigMock);
+        $scopeConfigMock->expects($this->once())->method('getValue')
+            ->with('customer/startup/redirect_dashboard')
+            ->willReturn(0);
+
+        $this->redirectMock->expects($this->once())->method('success')->willReturn('some_url2');
         $this->resultRaw->expects($this->never())->method('setHttpResponseCode');
 
         $result = [
             'errors' => false,
-            'message' => __('Login successful.')
+            'message' => __('Login successful.'),
+            'redirectUrl' => 'some_url2',
         ];
 
         $this->resultJson
@@ -237,7 +262,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->with($jsonRequest)
             ->willReturn(['username' => 'invalid@example.com', 'password' => 'invalid']);
 
-        $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
+        $customerMock = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerAccountManagementMock
             ->expects($this->any())
             ->method('authenticate')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,9 +38,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_group = $this->getMock('Magento\Config\Model\Config\Structure\Element\Group', [], [], '', false);
+        $this->_group = $this->getMock(\Magento\Config\Model\Config\Structure\Element\Group::class, [], [], '', false);
         $this->_element = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Form\Element\AbstractElement',
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [],
             '',
             false,
@@ -63,14 +63,14 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->_element->expects($this->any())
             ->method('getId')
             ->will($this->returnValue('id'));
-        $this->_user = $this->getMock('Magento\User\Model\User', [], [], '', false);
-        $this->_authSession = $this->getMock('Magento\Backend\Model\Auth\Session', [], [], '', false);
+        $this->_user = $this->getMock(\Magento\User\Model\User::class, [], [], '', false);
+        $this->_authSession = $this->getMock(\Magento\Backend\Model\Auth\Session::class, [], [], '', false);
         $this->_authSession->expects($this->any())
             ->method('__call')
             ->with('getUser')
             ->will($this->returnValue($this->_user));
         $this->_model = $helper->getObject(
-            'Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group',
+            \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group::class,
             ['authSession' => $this->_authSession]
         );
         $this->_model->setGroup($this->_group);

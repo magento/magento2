@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store\Delete;
@@ -23,18 +23,18 @@ class Group extends \Magento\Backend\Block\Template
         $this->setAction($this->getUrl('adminhtml/*/deleteGroupPost', ['group_id' => $itemId]));
         $this->addChild(
             'confirm_deletion_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Delete Store'), 'onclick' => "deleteForm.submit()", 'class' => 'cancel']
         );
         $onClick = "setLocation('" . $this->getUrl('adminhtml/*/editGroup', ['group_id' => $itemId]) . "')";
         $this->addChild(
             'cancel_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Cancel'), 'onclick' => $onClick, 'class' => 'cancel']
         );
         $this->addChild(
             'back_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Back'), 'onclick' => $onClick, 'class' => 'cancel']
         );
         return parent::_prepareLayout();

@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
@@ -30,15 +28,15 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
 
     private $requestMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();
         $this->requestMock->expects($this->any())
             ->method('isSecure')->willReturn(true);
         $this->objectManager = new ObjectManager($this);
         $cookieMetadataFactory = $this
-            ->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
+            ->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
             ->disableOriginalConstructor()->getMock();
         $cookieMetadataFactory->expects($this->any())
             ->method('createSensitiveCookieMetadata')
@@ -117,7 +115,8 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
             ],
-            $cookieScope->getSensitiveCookieMetadata()->__toArray());
+            $cookieScope->getSensitiveCookieMetadata()->__toArray()
+        );
     }
 
     /**
@@ -286,7 +285,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     protected function createCookieScope($params = [])
     {
         $params = array_merge($this->defaultScopeParams, $params);
-        return $this->objectManager->getObject('Magento\Framework\Stdlib\Cookie\CookieScope', $params);
+        return $this->objectManager->getObject(\Magento\Framework\Stdlib\Cookie\CookieScope::class, $params);
     }
 
     /**
@@ -298,7 +297,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     public function createSensitiveMetadata($metadata = [])
     {
         return $this->objectManager->getObject(
-            'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
+            \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class,
             ['metadata' => $metadata, 'request' => $this->requestMock]
         );
     }
@@ -312,7 +311,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     public function createPublicMetadata($metadata = [])
     {
         return $this->objectManager->getObject(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
             ['metadata' => $metadata]
         );
     }
@@ -326,7 +325,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     public function createCookieMetadata($metadata = [])
     {
         return $this->objectManager->getObject(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadata',
+            \Magento\Framework\Stdlib\Cookie\CookieMetadata::class,
             ['metadata' => $metadata]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model;
@@ -34,11 +34,23 @@ class TaxRateManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filterBuilderMock = $this->getMock('\Magento\Framework\Api\FilterBuilder', [], [], '', false);
-        $this->taxRuleRepositoryMock = $this->getMock('\Magento\Tax\Api\TaxRuleRepositoryInterface', [], [], '', false);
-        $this->taxRateRepositoryMock = $this->getMock('\Magento\Tax\Api\TaxRateRepositoryInterface', [], [], '', false);
+        $this->filterBuilderMock = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
+        $this->taxRuleRepositoryMock = $this->getMock(
+            \Magento\Tax\Api\TaxRuleRepositoryInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->taxRateRepositoryMock = $this->getMock(
+            \Magento\Tax\Api\TaxRateRepositoryInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->searchCriteriaBuilderMock = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             [],
             [],
             '',
@@ -57,12 +69,18 @@ class TaxRateManagementTest extends \PHPUnit_Framework_TestCase
         $customerTaxClassId = 4;
         $productTaxClassId = 42;
         $rateIds = [10];
-        $productFilterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $customerFilterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $searchResultsMock = $this->getMock('\Magento\Tax\Api\Data\TaxRuleSearchResultsInterface', [], [], '', false);
-        $taxRuleMock = $this->getMock('\Magento\Tax\Api\Data\TaxRuleInterface', [], [], '', false);
-        $taxRateMock = $this->getMock('\Magento\Tax\Api\Data\TaxRateInterface', [], [], '', false);
+        $productFilterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
+        $customerFilterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
+        $searchResultsMock = $this->getMock(
+            \Magento\Tax\Api\Data\TaxRuleSearchResultsInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $taxRuleMock = $this->getMock(\Magento\Tax\Api\Data\TaxRuleInterface::class, [], [], '', false);
+        $taxRateMock = $this->getMock(\Magento\Tax\Api\Data\TaxRateInterface::class, [], [], '', false);
 
         $this->filterBuilderMock->expects($this->exactly(2))->method('setField')->withConsecutive(
             ['customer_tax_class_ids'],

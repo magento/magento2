@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\Setup\Application;
 
 if (PHP_SAPI == 'cli') {
     echo "You cannot run this from the command line." . PHP_EOL .
@@ -28,4 +29,7 @@ HTML;
 $handler = new \Magento\Framework\App\ErrorHandler();
 set_error_handler([$handler, 'handler']);
 
-\Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
+$configuration = require __DIR__ . '/config/application.config.php';
+$bootstrap = new Application();
+$application = $bootstrap->bootstrap($configuration);
+$application->run();

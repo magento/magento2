@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,9 +10,9 @@
  * Files that temporary excluded from results
  */
 return [
-    '/app/code/Magento/Backend/Model/View.php',
-    '/app/code/Magento/Backend/App/AbstractAction.php',
-    '/app/code/Magento/Backend/App/Response/Http/FileFactory.php',
-    '/app/code/Magento/Backend/Block/Widget.php',
-    '/app/code/Magento/Backend/Block/System/Config/Dwstree.php',
+    ['Magento_Backend', 'Model/View.php'],
+    ['Magento_Backend', 'App/AbstractAction.php'],
+    ['Magento_Backend', 'App/Response/Http/FileFactory.php'],
+    ['Magento_Backend', 'Block/Widget.php'],
+    ['Magento_Backend', 'Block/System/Config/Dwstree.php'],
 ];

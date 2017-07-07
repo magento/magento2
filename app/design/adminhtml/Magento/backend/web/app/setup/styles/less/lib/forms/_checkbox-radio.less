@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -20,10 +20,9 @@
 
 .form-el-checkbox,
 .form-el-radio {
-    .lib-visually-hidden();
+    &:extend(.abs-visually-hidden all);
 
     //  Disabled state
-
     &[disabled],
     &.disabled {
         + .form-label,
@@ -53,6 +52,7 @@
         position: relative;
         text-align: left;
         transition: border-color .1s linear;
+
         &:before {
             border: 1px solid;
             content: '';
@@ -69,23 +69,21 @@
 //  _____________________________________________
 
 //  Unchecked checkbox state
-
 .form-el-checkbox {
     + .form-label {
         &:before {
             background-color: @checkbox__background-color;
             border-color: @checkbox__border-color;
             border-radius: @form-el__border-radius;
+            font-size: @checkbox-check__font-size;
             height: 1.6rem;
             line-height: @checkbox-check__line-height;
             width: 1.6rem;
-            font-size: @checkbox-check__font-size;
         }
     }
 }
 
 //  Checked checkbox state
-
 .form-el-checkbox {
     &:checked {
         + .form-label {
@@ -102,7 +100,6 @@
 //  _____________________________________________
 
 //  Unchecked radio state
-
 .form-el-radio {
     + .form-label {
         &:before {
@@ -112,6 +109,7 @@
             height: 1.8rem;
             width: 1.8rem;
         }
+
         &:after {
             background: transparent;
             border: .5rem solid transparent;
@@ -127,10 +125,10 @@
     }
 
     //  Checked radio state
-
     &:checked {
         + .form-label {
             cursor: default;
+
             &:after {
                 border-color: @radio-bullet__color;
             }

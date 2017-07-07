@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModel = $this->getMock('Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+        $this->fixtureModel = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
         $this->command = new GenerateFixturesCommand($this->fixtureModel);
     }
 
@@ -33,14 +33,14 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
         $this->fixtureModel->expects($this->once())->method('loadConfig')->with('path_to_profile.xml');
         $this->fixtureModel->expects($this->once())->method('initObjectManager');
         $this->fixtureModel->expects($this->once())->method('loadFixtures');
-        
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['profile' => 'path_to_profile.xml']);
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not enough arguments.
+     * @expectedExceptionMessage Not enough arguments
      */
     public function testExecuteInvalidLanguageArgument()
     {

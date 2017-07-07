@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Controller;
 
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 
 abstract class AbstractResult implements ResultInterface
 {
@@ -83,10 +84,10 @@ abstract class AbstractResult implements ResultInterface
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param HttpResponseInterface $response
      * @return $this
      */
-    protected function applyHttpHeaders(ResponseInterface $response)
+    protected function applyHttpHeaders(HttpResponseInterface $response)
     {
         if (!empty($this->httpResponseCode)) {
             $response->setHttpResponseCode($this->httpResponseCode);
@@ -105,17 +106,17 @@ abstract class AbstractResult implements ResultInterface
         }
         return $this;
     }
-
+    
     /**
-     * @param ResponseInterface $response
+     * @param HttpResponseInterface $response
      * @return $this
      */
-    abstract protected function render(ResponseInterface $response);
+    abstract protected function render(HttpResponseInterface $response);
 
     /**
      * Render content
      *
-     * @param ResponseInterface $response
+     * @param HttpResponseInterface|ResponseInterface $response
      * @return $this
      */
     public function renderResult(ResponseInterface $response)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -33,7 +33,7 @@ return [
         '</option></config>',
         [
             "Element 'option', attribute 'renderer': [facet 'pattern'] The value 'true12' is not accepted by the " .
-            "pattern '[a-zA-Z_\\\\\\\\]+'.\nLine: 1\n",
+            "pattern '[a-zA-Z_\\\\]+'.\nLine: 1\n",
             "Element 'option', attribute 'renderer': 'true12' is not a valid value of the atomic" .
             " type 'modelName'.\nLine: 1\n"
         ],

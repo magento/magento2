@@ -1,12 +1,13 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Payflow;
 
 use Magento\Paypal\Controller\Payflow;
+use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
 
 class ReturnUrl extends Payflow
@@ -17,6 +18,16 @@ class ReturnUrl extends Payflow
     protected $allowedOrderStates = [
         Order::STATE_PROCESSING,
         Order::STATE_COMPLETE,
+        Order::STATE_PAYMENT_REVIEW
+    ];
+
+    /**
+     * Payment method code
+     * @var string
+     */
+    protected $allowedPaymentMethodCodes = [
+        Config::METHOD_PAYFLOWPRO,
+        Config::METHOD_PAYFLOWLINK
     ];
 
     /**
@@ -35,16 +46,44 @@ class ReturnUrl extends Payflow
             $order = $this->_orderFactory->create()->loadByIncrementId($this->_checkoutSession->getLastRealOrderId());
 
             if ($order->getIncrementId()) {
-                if (in_array($order->getState(), $this->allowedOrderStates)) {
+                if ($this->checkOrderState($order)) {
                     $redirectBlock->setData('goto_success_page', true);
                 } else {
-                    $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
-                    $redirectBlock->setData('goto_section', $gotoSection);
-                    $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
+                    if ($this->checkPaymentMethod($order)) {
+                        $gotoSection = $this->_cancelPayment(strval($this->getRequest()->getParam('RESPMSG')));
+                        $redirectBlock->setData('goto_section', $gotoSection);
+                        $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
+                    } else {
+                        $redirectBlock->setData('goto_section', false);
+                        $redirectBlock->setData('error_msg', __('Requested payment method does not match with order.'));
+                    }
                 }
             }
         }
 
         $this->_view->renderLayout();
+    }
+
+    /**
+     * Check order state
+     *
+     * @param Order $order
+     * @return bool
+     */
+    protected function checkOrderState(Order $order)
+    {
+        return in_array($order->getState(), $this->allowedOrderStates);
+    }
+
+    /**
+     * Check requested payment method
+     *
+     * @param Order $order
+     * @return bool
+     */
+    protected function checkPaymentMethod(Order $order)
+    {
+        $payment = $order->getPayment();
+        return in_array($payment->getMethod(), $this->allowedPaymentMethodCodes);
     }
 }

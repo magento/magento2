@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -43,6 +43,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (isnumber(@total-columns)) and not (isnumber(@end-column)) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(@span, @total-columns);
 }
@@ -53,6 +54,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (isnumber(@total-columns)) and (@end-column = true) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(
         @span,
@@ -66,6 +68,7 @@
     @end-column
 ) when (isnumber(@span)) and not (isnumber(@end-column)) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(@span);
 }
@@ -75,6 +78,7 @@
     @end-column
 ) when (isnumber(@span)) and ( @end-column = true ) {
     @showgutter: false;
+
     .lib-column(@showgutter);
     .lib-span(@span);
     .lib-end-column();
@@ -101,6 +105,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (isnumber(@total-columns)) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(
         @span,
@@ -114,6 +119,7 @@
     @end-column: false
 ) when (isnumber(@span)) and (@end-column = true) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(
         @span,
@@ -127,6 +133,7 @@
     @end-column
 ) when not (isnumber(@end-column)) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(@span);
 }
@@ -136,6 +143,7 @@
     @end-column
 ) when (@end-column = true) {
     @showgutter: false;
+
     .lib-inline-column(@showgutter);
     .lib-span(@span);
     .lib-inline-end-column();
@@ -173,7 +181,8 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
-    padding-left: @calc-column-width;
+
+    .lib-css(padding-left, @calc-column-width);
 }
 
 .lib-post-pad(
@@ -181,7 +190,8 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
-    padding-right: @calc-column-width;
+
+    .lib-css(padding-right, @calc-column-width);
 }
 
 .lib-pre-push(
@@ -189,7 +199,8 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
-    margin-left: @calc-column-width;
+
+    .lib-css(margin-left, @calc-column-width);
 }
 
 .lib-post-push(
@@ -197,7 +208,8 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)+@gutter-width) / @grid-width);
-    margin-right: @calc-column-width;
+
+    .lib-css(margin-right, @calc-column-width);
 }
 
 .lib-post-push-end(
@@ -205,7 +217,8 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)) / @grid-width);
-    margin-right: @calc-column-width;
+
+    .lib-css(margin-right, @calc-column-width);
 }
 
 .lib-column-width(
@@ -213,7 +226,8 @@
     @total-columns: @total-columns
 ) {
     @calc-column-width: 100%*((((@gutter-width+@column-width)*@span)-@gutter-width) / @grid-width);
-    width: @calc-column-width;
+
+    .lib-css(width, @calc-column-width);
 }
 
 .lib-column-gutter(
@@ -228,5 +242,6 @@
     @end-column: false
 ) when not (@end-column) {
     @calc-gutter-width: 100%*(@gutter-width/@grid-width);
-    margin-right: @calc-gutter-width;
+
+    .lib-css(margin-right, @calc-gutter-width);
 }

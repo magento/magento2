@@ -1,27 +1,25 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="data-grid-search-control-wrap">
-    <label class="data-grid-search-label" for="data-grid-search" data-bind="attr: {title: $t('Search')}">
-        <span data-bind="text: $t('Search')"></span>
+    <label class="data-grid-search-label" attr="title: $t('Search'), for: index">
+        <span translate="'Search'"/>
     </label>
-    <input
-            id="data-grid-search"
-            class="admin__control-text data-grid-search-control"
+    <input class="admin__control-text data-grid-search-control" type="text"
             data-bind="
                 attr: {
+                    id: index,
                     placeholder: placeholder
                 },
                 textInput: inputValue,
                 keyboard: {
-                    13: apply,
+                    13: apply.bind($data, false),
                     27: cancel
-                }"
-            type="text"/>
-    <button class="action-submit" data-bind="click: apply.bind($data, false)" type="button">
-        <span data-bind="i18n: 'Search'"></span>
+                }"/>
+    <button class="action-submit" type="button" click="apply.bind($data, false)">
+        <span translate="'Search'"/>
     </button>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,9 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+/**
+ * @api
+ */
 class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -146,7 +149,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
             ]
         );
         $continueButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'label' => __('Continue'),
@@ -170,7 +173,12 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         return $this->getUrl(
             'adminhtml/*/*',
-            ['_current' => true, 'code' => '<%- data.code %>', 'theme_id' => '<%- data.theme_id %>']
+            [
+                '_current' => true,
+                'code' => '<%- data.code %>',
+                'theme_id' => '<%- data.theme_id %>',
+                '_escape_params' => false
+            ]
         );
     }
 

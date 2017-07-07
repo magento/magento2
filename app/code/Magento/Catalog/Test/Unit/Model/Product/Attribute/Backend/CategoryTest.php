@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
@@ -11,12 +11,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $categoryIds = [1, 2, 3, 4, 5];
 
-        $product = $this->getMock('Magento\Framework\DataObject', ['getCategoryIds', 'setData']);
+        $product = $this->getMock(\Magento\Framework\DataObject::class, ['getCategoryIds', 'setData']);
         $product->expects($this->once())->method('getCategoryIds')->will($this->returnValue($categoryIds));
 
         $product->expects($this->once())->method('setData')->with('category_ids', $categoryIds);
 
-        $categoryAttribute = $this->getMock('Magento\Framework\DataObject', ['getAttributeCode']);
+        $categoryAttribute = $this->getMock(\Magento\Framework\DataObject::class, ['getAttributeCode']);
         $categoryAttribute->expects(
             $this->once()
         )->method(

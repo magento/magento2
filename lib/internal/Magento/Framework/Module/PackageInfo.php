@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
@@ -74,6 +74,8 @@ class PackageInfo
      * Load the packages information
      *
      * @return void
+     * @throws \Zend_Json_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function load()
     {
@@ -82,7 +84,18 @@ class PackageInfo
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
                 $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
-                    $packageData = \Zend_Json::decode($jsonData[$key]);
+                    try {
+                        $packageData = \Zend_Json::decode($jsonData[$key]);
+                    } catch (\Zend_Json_Exception $e) {
+                        throw new \Zend_Json_Exception(
+                            sprintf(
+                                "%s composer.json error: %s",
+                                $moduleName,
+                                $e->getMessage()
+                            )
+                        );
+                    }
+
                     if (isset($packageData['name'])) {
                         $this->packageModuleMap[$packageData['name']] = $moduleName;
                     }
@@ -211,6 +224,25 @@ class PackageInfo
             $require = $this->convertToModuleNames($this->requireMap[$moduleName]);
         }
         return $require;
+    }
+
+    /**
+     * Get all module names a module required by
+     *
+     * @param string $requiredModuleName
+     * @return array
+     */
+    public function getRequiredBy($requiredModuleName)
+    {
+        $this->load();
+        $requiredBy = [];
+        foreach ($this->requireMap as $moduleName => $moduleRequireList) {
+            if (in_array($requiredModuleName, $moduleRequireList)) {
+                $requiredBy[] = $moduleName;
+            }
+        }
+
+        return $requiredBy;
     }
 
     /**

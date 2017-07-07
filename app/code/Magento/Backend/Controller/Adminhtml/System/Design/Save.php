@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
@@ -38,7 +38,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
             $data['design'] = $this->_filterPostData($data['design']);
             $id = (int)$this->getRequest()->getParam('id');
 
-            $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface');
+            $design = $this->_objectManager->create(\Magento\Framework\App\DesignInterface::class);
             if ($id) {
                 $design->load($id);
             }
@@ -53,7 +53,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
                 $this->messageManager->addSuccess(__('You saved the design change.'));
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setDesignData($data);
+                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setDesignData($data);
                 return $resultRedirect->setPath('adminhtml/*/', ['id' => $design->getId()]);
             }
         }

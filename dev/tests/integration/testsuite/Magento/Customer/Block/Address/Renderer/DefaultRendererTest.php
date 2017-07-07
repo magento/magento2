@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Address\Renderer;
@@ -20,7 +20,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_addressConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Model\Address\Config'
+            \Magento\Customer\Model\Address\Config::class
         );
     }
 
@@ -49,14 +49,14 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             'telephone' => '3468676',
         ];
 
-        $htmlResult = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, " .
-            "75477<br/>\nUnited States<br/>\nT: 3468676\n\n";
+        $htmlResult = "John Smith<br />\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, " .
+            "75477<br />\nUnited States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         return [
             [$addressAttributes, AttributeDataFactory::OUTPUT_FORMAT_HTML, $htmlResult],
             [
                 $addressAttributes,
                 AttributeDataFactory::OUTPUT_FORMAT_PDF,
-                "John Smith|\n\nGreen str, 67\n\n\n\n\nCityM,|\nAlabama, 75477|\nUnited States|\nT: 3468676|\n|\n|"
+                "John Smith|\n\nGreen str, 67|\n\n\n\nCityM, Alabama, 75477|\nUnited States|\nT: 3468676|\n|\n|"
             ],
             [
                 $addressAttributes,
@@ -97,7 +97,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
         ];
 
         $address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Address'
+            \Magento\Customer\Model\Address::class
         )->setData(
             $data
         );
@@ -106,13 +106,13 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             [
                 $address,
                 AttributeDataFactory::OUTPUT_FORMAT_HTML,
-                "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>
-United States<br/>\nT: 3468676\n\n",
+                "John Smith<br />\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br />
+United States<br />\nT: <a href=\"tel:3468676\">3468676</a>\n\n",
             ],
             [
                 $address,
                 AttributeDataFactory::OUTPUT_FORMAT_PDF,
-                "John Smith|\n\nGreen str, 67\n\n\n\n\nCityM,|\nAlabama, 75477|
+                "John Smith|\n\nGreen str, 67|\n\n\n\nCityM, Alabama, 75477|
 United States|\nT: 3468676|\n|\n|"
             ],
             [

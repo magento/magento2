@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\Widget;
@@ -32,6 +32,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
 
     /**
      * Name of request parameter for page number value
+     *
+     * @deprecated
      */
     const PAGE_VAR_NAME = 'np';
 
@@ -41,6 +43,40 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @var \Magento\Catalog\Block\Product\Widget\Html\Pager
      */
     protected $_pager;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * NewWidget constructor.
+     *
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
+     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     */
+    public function __construct(
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
+        \Magento\Framework\App\Http\Context $httpContext,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
+        parent::__construct(
+            $context,
+            $productCollectionFactory,
+            $catalogProductVisibility,
+            $httpContext,
+            $data
+        );
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+    }
 
     /**
      * Product collection initialize process
@@ -88,7 +124,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
     public function getCurrentPage()
     {
-        return abs((int)$this->getRequest()->getParam(self::PAGE_VAR_NAME));
+        return abs((int)$this->getRequest()->getParam($this->getData('page_var_name')));
     }
 
     /**
@@ -103,7 +139,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             [
                 $this->getDisplayType(),
                 $this->getProductsPerPage(),
-                intval($this->getRequest()->getParam(self::PAGE_VAR_NAME))
+                intval($this->getRequest()->getParam($this->getData('page_var_name'), 1)),
+                $this->serializer->serialize($this->getRequest()->getParams())
             ]
         );
     }
@@ -180,14 +217,14 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         if ($this->showPager()) {
             if (!$this->_pager) {
                 $this->_pager = $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Product\Widget\Html\Pager',
+                    \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
                     'widget.new.product.list.pager'
                 );
 
                 $this->_pager->setUseContainer(true)
                     ->setShowAmounts(true)
                     ->setShowPerPage(false)
-                    ->setPageVarName(self::PAGE_VAR_NAME)
+                    ->setPageVarName($this->getData('page_var_name'))
                     ->setLimit($this->getProductsPerPage())
                     ->setTotalLimit($this->getProductsCount())
                     ->setCollection($this->getProductCollection());

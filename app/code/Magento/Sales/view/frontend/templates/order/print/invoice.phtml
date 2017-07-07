@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,18 +17,18 @@
 <?php foreach ($_invoices as $_invoice): ?>
 <div class="order-details-items invoice">
     <div class="order-title">
-        <strong><?php /* @escapeNotVerified */ echo __('Invoice #') ?><?php /* @escapeNotVerified */ echo $_invoice->getIncrementId(); ?></strong>
+        <strong><?= /* @escapeNotVerified */ __('Invoice #') ?><?= /* @escapeNotVerified */ $_invoice->getIncrementId() ?></strong>
     </div>
     <div class="table-wrapper table-order-items invoice">
-        <table class="data table table-order-items invoice" id="my-invoice-table-<?php /* @escapeNotVerified */ echo $_invoice->getId(); ?>">
-            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Invoiced') ?></caption>
+        <table class="data table table-order-items invoice" id="my-invoice-table-<?= /* @escapeNotVerified */ $_invoice->getId() ?>">
+            <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items Invoiced') ?></caption>
             <thead>
             <tr>
-                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty Invoiced') ?></th>
-                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+                <th class="col name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                <th class="col sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th class="col price"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th class="col qty"><?= /* @escapeNotVerified */ __('Qty Invoiced') ?></th>
+                <th class="col subtotal"><?= /* @escapeNotVerified */ __('Subtotal') ?></th>
             </tr>
             </thead>
             <?php $_items = $_invoice->getItemsCollection(); ?>
@@ -38,59 +38,59 @@
     continue;
 } ?>
             <tbody>
-                <?php echo $block->getItemHtml($_item) ?>
+                <?= $block->getItemHtml($_item) ?>
             </tbody>
             <?php endforeach; ?>
             <tfoot>
-                <?php echo $block->getInvoiceTotalsHtml($_invoice)?>
+                <?= $block->getInvoiceTotalsHtml($_invoice) ?>
             </tfoot>
         </table>
     </div>
     <div class="block block-order-details-view">
         <div class="block-title">
-            <strong><?php /* @escapeNotVerified */ echo __('Order Information') ?></strong>
+            <strong><?= /* @escapeNotVerified */ __('Order Information') ?></strong>
         </div>
         <div class="block-content">
         <?php if (!$_order->getIsVirtual()): ?>
             <div class="box box-order-shipping-address">
                 <div class="box-title">
-                    <strong><?php /* @escapeNotVerified */ echo __('Shipping Address') ?></strong>
+                    <strong><?= /* @escapeNotVerified */ __('Shipping Address') ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_shipping = $_invoice->getShippingAddress() ?>
-                    <address><?php /* @escapeNotVerified */ echo $block->formatAddress($_shipping, 'html') ?></address>
+                    <address><?= /* @escapeNotVerified */ $block->formatAddress($_shipping, 'html') ?></address>
                 </div>
             </div>
 
             <div class="box box-order-shipping-method">
                 <div class="box-title">
-                    <strong><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></strong>
+                    <strong><?= /* @escapeNotVerified */ __('Shipping Method') ?></strong>
                 </div>
                 <div class="box-content">
                     <?php if ($_order->getShippingDescription()): ?>
-                        <?php echo $block->escapeHtml($_order->getShippingDescription()) ?>
+                        <?= $block->escapeHtml($_order->getShippingDescription()) ?>
                     <?php else: ?>
-                        <?php /* @escapeNotVerified */ echo __('No shipping information available'); ?>
+                        <?= /* @escapeNotVerified */ __('No shipping information available') ?>
                     <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
             <div class="box box-order-billing-address">
                 <div class="box-title">
-                    <strong><?php /* @escapeNotVerified */ echo __('Billing Address') ?></strong>
+                    <strong><?= /* @escapeNotVerified */ __('Billing Address') ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_billing = $_invoice->getbillingAddress() ?>
-                    <address><?php /* @escapeNotVerified */ echo $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
+                    <address><?= /* @escapeNotVerified */ $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
                 </div>
             </div>
 
             <div class="box box-order-billing-method">
                 <div class="box-title">
-                    <strong><?php /* @escapeNotVerified */ echo __('Payment Method') ?></strong>
+                    <strong><?= /* @escapeNotVerified */ __('Payment Method') ?></strong>
                 </div>
                 <div class="box-content">
-                    <?php echo $block->getPaymentInfoHtml() ?>
+                    <?= $block->getPaymentInfoHtml() ?>
                 </div>
             </div>
         </div>

@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Rule\Action;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Rule\Model\Action\Collection
 {
     /**
@@ -20,7 +23,7 @@ class Collection extends \Magento\Rule\Model\Action\Collection
         array $data = []
     ) {
         parent::__construct($assetRepo, $layout, $actionFactory, $data);
-        $this->setType('Magento\CatalogRule\Model\Rule\Action\Collection');
+        $this->setType(\Magento\CatalogRule\Model\Rule\Action\Collection::class);
     }
 
     /**
@@ -32,7 +35,7 @@ class Collection extends \Magento\Rule\Model\Action\Collection
         $actions = array_merge_recursive(
             $actions,
             [
-                ['value' => 'Magento\CatalogRule\Model\Rule\Action\Product', 'label' => __('Update the Product')]
+                ['value' => \Magento\CatalogRule\Model\Rule\Action\Product::class, 'label' => __('Update the Product')]
             ]
         );
         return $actions;

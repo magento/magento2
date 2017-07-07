@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,22 +12,22 @@
 
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View" name="sales_invoice_view">
-                <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form" name="form" template="order/invoice/view/form.phtml">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="order/view/info.phtml"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form" name="form" template="Magento_Sales::order/invoice/view/form.phtml">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="Magento_Sales::order/view/info.phtml"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Items" name="invoice_items" template="order/invoice/view/items.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="order/invoice/view/items/renderer/default.phtml"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="items/column/qty.phtml" group="column"/>
-                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="items/column/name.phtml" group="column"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Items" name="invoice_items" template="Magento_Sales::order/invoice/view/items.phtml">
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/invoice/view/items/renderer/default.phtml"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_Sales::items/column/qty.phtml" group="column"/>
+                        <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>
                         <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
                     </block>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="order/comments/view.phtml">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="Magento_Sales::order/comments/view.phtml">
                         <action method="setParentType">
                             <argument name="type" xsi:type="string">invoice</argument>
                         </action>
                     </block>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
-                        <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="order/totals/tax.phtml"/>
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Totals" name="invoice_totals" template="Magento_Sales::order/totals.phtml">
+                        <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="Magento_Sales::order/totals/tax.phtml"/>
                     </block>
                 </block>
             </block>

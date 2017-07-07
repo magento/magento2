@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model;
 
-use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
@@ -31,24 +31,24 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $_entityBehaviors = [
         'catalog_product' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Basic::class,
             'code' => 'basic_behavior',
             'notes' => [
                 \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => "Note: Product IDs will be regenerated."
             ],
         ],
         'customer_composite' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Basic::class,
             'code' => 'basic_behavior',
             'notes' => [],
         ],
         'customer' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Custom::class,
             'code' => 'custom_behavior',
             'notes' => [],
         ],
         'customer_address' => [
-            'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
+            'token' => \Magento\ImportExport\Model\Source\Import\Behavior\Custom::class,
             'code' => 'custom_behavior',
             'notes' => [],
         ],
@@ -60,17 +60,17 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_uniqueBehaviors = [
-        'basic_behavior' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
-        'custom_behavior' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
+        'basic_behavior' => \Magento\ImportExport\Model\Source\Import\Behavior\Basic::class,
+        'custom_behavior' => \Magento\ImportExport\Model\Source\Import\Behavior\Custom::class,
     ];
 
     protected function setUp()
     {
         $this->_importConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ImportExport\Model\Import\Config'
+            \Magento\ImportExport\Model\Import\Config::class
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ImportExport\Model\Import',
+            \Magento\ImportExport\Model\Import::class,
             ['importConfig' => $this->_importConfig]
         );
     }
@@ -82,7 +82,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Customer\Collection'
+            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
         );
 
         $existCustomersCount = count($customersCollection->load());
@@ -92,7 +92,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setData(
             Import::FIELD_NAME_VALIDATION_STRATEGY,
-            Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+            ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
         );
         $this->_model->importSource();
 
@@ -105,10 +105,15 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateSource()
     {
+        $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
+
         $this->_model->setEntity('catalog_product');
+        $this->_model->setData(\Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY, $validationStrategy);
+        $this->_model->setData(\Magento\ImportExport\Model\Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
+
         /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject $source */
         $source = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractSource',
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
             [['sku', 'name']]
         );
         $source->expects($this->any())->method('_getNextRow')->will($this->returnValue(false));
@@ -122,7 +127,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function testValidateSourceException()
     {
         $source = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractSource',
+            \Magento\ImportExport\Model\Import\AbstractSource::class,
             [],
             '',
             false

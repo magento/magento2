@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Unit\Model;
-
 
 class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,18 +25,39 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->categoryRepositoryMock = $this->getMock('\Magento\Catalog\Model\CategoryRepository', [], [], '', false);
+        $this->categoryRepositoryMock = $this->getMock(
+            \Magento\Catalog\Model\CategoryRepository::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $productResource = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
+        $categoryLinkRepository = $this->getMockBuilder(\Magento\Catalog\Api\CategoryLinkRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $indexerRegistry = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productLinkFactoryMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory',
+            \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
+
         $this->model = new \Magento\Catalog\Model\CategoryLinkManagement(
             $this->categoryRepositoryMock,
             $this->productLinkFactoryMock
         );
+
+        $this->setProperties($this->model, [
+            'productResource' => $productResource,
+            'categoryLinkRepository' => $categoryLinkRepository,
+            'productLinkFactory' => $this->productLinkFactoryMock,
+            'indexerRegistry' => $indexerRegistry
+        ]);
     }
 
     public function testGetAssignedProducts()
@@ -46,19 +66,25 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
         $productId = 55;
         $position = 25;
         $productSku = 'testSku';
-        $categoryProductLinkMock = $this->getMock('\Magento\Catalog\Api\Data\CategoryProductLinkInterface');
+        $categoryProductLinkMock = $this->getMock(\Magento\Catalog\Api\Data\CategoryProductLinkInterface::class);
         $categoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             [],
             [],
             '',
             false
         );
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $productMock->expects($this->once())->method('getSku')->willReturn($productSku);
         $productMock->expects($this->once())->method('getData')->with('cat_index_position')->willReturn($position);
         $items = [$productId => $productMock];
-        $productsMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
+        $productsMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductCollection')->willReturn($productsMock);
@@ -79,5 +105,21 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
             ->with($categoryId)
             ->willReturnSelf();
         $this->assertEquals([$categoryProductLinkMock], $this->model->getAssignedProducts($categoryId));
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

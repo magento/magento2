@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,11 +32,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CustomerImportExport\Model\Export\Address'
+            \Magento\CustomerImportExport\Model\Export\Address::class
         );
 
         $websites = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getWebsites(
             true
         );
@@ -58,7 +58,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $expectedAttributes = [];
         /** @var $collection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class
         );
         /** @var $attribute \Magento\Customer\Model\Attribute */
         foreach ($collection as $attribute) {
@@ -70,7 +70,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv'
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
         $this->_model->setParameters([]);
@@ -91,7 +91,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         // Get addresses
         /** @var $customers \Magento\Customer\Model\Customer[] */
         $customers = $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->registry(
             '_fixture/Magento_ImportExport_Customers_Array'
         );
@@ -149,7 +149,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv'
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
 
@@ -163,7 +163,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         // Get expected address count
         /** @var $customers \Magento\Customer\Model\Customer[] */
         $customers = $objectManager->get(
-            'Magento\Framework\Registry'
+            \Magento\Framework\Registry::class
         )->registry(
             '_fixture/Magento_ImportExport_Customers_Array'
         );
@@ -193,7 +193,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeCollection()
     {
         $this->assertInstanceOf(
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection',
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class,
             $this->_model->getAttributeCollection()
         );
     }

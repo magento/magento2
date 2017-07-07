@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
@@ -9,7 +9,7 @@ use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList
 use Magento\Quote\Model\Quote\Item;
 
 /**
- * Class QtyProcessor
+ * @deprecated No more used
  */
 class QtyProcessor
 {
@@ -34,6 +34,7 @@ class QtyProcessor
     /**
      * @param Item $quoteItem
      * @return $this
+     * @deprecated No more used
      */
     public function setItem(Item $quoteItem)
     {
@@ -44,6 +45,7 @@ class QtyProcessor
     /**
      * @param float $qty
      * @return float|int
+     * @deprecated No more used
      */
     public function getRowQty($qty)
     {
@@ -57,6 +59,7 @@ class QtyProcessor
     /**
      * @param int $qty
      * @return int
+     * @deprecated No more used
      */
     public function getQtyForCheck($qty)
     {

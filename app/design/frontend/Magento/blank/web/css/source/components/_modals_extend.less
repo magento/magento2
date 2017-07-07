@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -16,7 +16,7 @@
 
 @modal-popup-title__font-size: 26px;
 @modal-popup-title-mobile__font-size: @font-size__base;
-@modal-popup-breakpoint-screen__m: @screen__m + 1;
+@modal-popup-breakpoint-screen__m: @screen__m;
 
 @modal-slide__first__indent-left: 44px;
 @modal-slide-mobile__background-color: @color-gray-light01;
@@ -48,6 +48,7 @@
             position: absolute;
             right: 0;
             top: 0;
+
             &:hover {
                 &:before {
                     color: @modal-action-close__hover__color;
@@ -55,11 +56,13 @@
             }
         }
     }
+
     .modal-custom {
         .action-close {
             .lib-css(margin, @indent__m);
         }
     }
+
     .modal-popup {
         .modal-title {
             .lib-css(border-bottom, @modal-title__border);
@@ -70,8 +73,9 @@
             min-height: 1em;
             word-wrap: break-word;
         }
+
         .action-close {
-            padding: @modal-popup__padding;
+            padding: @indent__s;
         }
     }
 
@@ -79,9 +83,10 @@
         .action-close {
             padding: @modal-slide-action-close__padding;
         }
+
         .page-main-actions {
-            margin-top: @modal-slide-header__padding-vertical;
             margin-bottom: @modal-slide-header__padding-vertical - (@indent__l/2);
+            margin-top: @modal-slide-header__padding-vertical;
         }
     }
 
@@ -116,11 +121,13 @@
     .custom-slide {
         .lib-modal();
         .lib-modal-slide();
+
         &._show {
             -webkit-overflow-scrolling: touch;
-            overflow-y: auto;
             overflow-x: hidden;
+            overflow-y: auto;
         }
+
         .modal-inner-wrap {
             .lib-css(background-color, @modal-slide-mobile__background-color);
             box-sizing: border-box;
@@ -128,11 +135,13 @@
             min-height: 100%;
         }
     }
+
     body {
         &._has-modal-custom {
             height: 100vh;
             overflow: hidden;
             width: 100vw;
+
             .modal-custom-overlay {
                 .lib-css(background-color, @modal-overlay__background-color);
             }
@@ -146,17 +155,20 @@
             .modal-inner-wrap[class] {
                 .lib-css(background-color, @modal-slide-mobile__background-color);
             }
+
             &._inner-scroll {
                 &._show {
                     -webkit-overflow-scrolling: touch;
                     overflow-y: auto;
                 }
+
                 .modal-inner-wrap {
                     height: auto;
                     min-height: 100%;
                 }
             }
         }
+
         .modal-title {
             .lib-css(font-size, @modal-popup-title-mobile__font-size);
             .lib-css(font-weight, @font-weight__bold);

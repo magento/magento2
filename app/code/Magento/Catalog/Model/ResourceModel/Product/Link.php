@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -27,16 +27,17 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_catalogProductRelation;
 
     /**
+     * Link constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Relation $catalogProductRelation
-     * @param string $connectionName
+     * @param string|null $connectionName
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         Relation $catalogProductRelation,
         $connectionName = null
     ) {
-        $this->_catalogProductRelation = $catalogProductRelation;
         parent::__construct($context, $connectionName);
     }
 
@@ -52,15 +53,84 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Delete product link by link_id
+     *
+     * @param int $linkId
+     * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteProductLink($linkId)
+    {
+        return $this->getConnection()->delete($this->getMainTable(), ['link_id = ?' => $linkId]);
+    }
+
+    /**
+     * Retrieve product link_id by link product id and type id
+     *
+     * @param int $parentId
+     * @param int $linkedProductId
+     * @param int $typeId
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getProductLinkId($parentId, $linkedProductId, $typeId)
+    {
+        $connection = $this->getConnection();
+
+        $bind = [
+            ':product_id' => (int)$parentId,
+            ':link_type_id' => (int)$typeId,
+            ':linked_product_id' => (int)$linkedProductId
+        ];
+        $select = $connection->select()->from(
+            $this->getMainTable(),
+            ['link_id']
+        )->where(
+            'product_id = :product_id'
+        )->where(
+            'link_type_id = :link_type_id'
+        )->where(
+            'linked_product_id = :linked_product_id'
+        );
+
+        return $connection->fetchOne($select, $bind);
+    }
+
+    /**
+     * Check if product has links.
+     *
+     * @param int $parentId ID of product
+     * @return bool
+     */
+    public function hasProductLinks($parentId)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
+            $this->getMainTable(),
+            ['count' => new \Zend_Db_Expr('COUNT(*)')]
+        )->where(
+            'product_id = :product_id'
+        ) ;
+
+        return $connection->fetchOne(
+            $select,
+            [
+                'product_id' => $parentId
+            ]
+        ) > 0;
+    }
+
+    /**
      * Save Product Links process
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param int $parentId
      * @param array $data
      * @param int $typeId
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function saveProductLinks($product, $data, $typeId)
+    public function saveProductLinks($parentId, $data, $typeId)
     {
         if (!is_array($data)) {
             $data = [];
@@ -69,7 +139,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $attributes = $this->getAttributesByType($typeId);
         $connection = $this->getConnection();
 
-        $bind = [':product_id' => (int)$product->getId(), ':link_type_id' => (int)$typeId];
+        $bind = [':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId];
         $select = $connection->select()->from(
             $this->getMainTable(),
             ['linked_product_id', 'link_id']
@@ -81,16 +151,6 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $links = $connection->fetchPairs($select, $bind);
 
-        $deleteIds = [];
-        foreach ($links as $linkedProductId => $linkId) {
-            if (!isset($data[$linkedProductId])) {
-                $deleteIds[] = (int)$linkId;
-            }
-        }
-        if (!empty($deleteIds)) {
-            $connection->delete($this->getMainTable(), ['link_id IN (?)' => $deleteIds]);
-        }
-
         foreach ($data as $linkedProductId => $linkInfo) {
             $linkId = null;
             if (isset($links[$linkedProductId])) {
@@ -98,7 +158,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 unset($links[$linkedProductId]);
             } else {
                 $bind = [
-                    'product_id' => $product->getId(),
+                    'product_id' => $parentId,
                     'linked_product_id' => $linkedProductId,
                     'link_type_id' => $typeId,
                 ];

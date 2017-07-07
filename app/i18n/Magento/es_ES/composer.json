@@ -1,0 +1,18 @@
+{
+    "name": "magento/language-es_es",
+    "description": "Spanish (Spain) language",
+    "version": "100.2.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "magento/framework": "100.2.*"
+    },
+    "type": "magento2-language",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ]
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Subscriber;
@@ -13,6 +13,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class NewAction extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
@@ -75,7 +78,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      */
     protected function validateGuestSubscription()
     {
-        if ($this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+        if ($this->_objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class)
                 ->getValue(
                     \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -120,6 +123,15 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 $this->validateEmailFormat($email);
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
+
+                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
+                if ($subscriber->getId()
+                    && $subscriber->getSubscriberStatus() == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED
+                ) {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('This email address is already subscribed.')
+                    );
+                }
 
                 $status = $this->_subscriberFactory->create()->subscribe($email);
                 if ($status == \Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE) {

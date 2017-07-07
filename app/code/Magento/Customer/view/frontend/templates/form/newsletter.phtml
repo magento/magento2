@@ -1,28 +1,29 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Customer\Block\Newsletter $block */
 ?>
-<?php echo $block->getChildHtml('form_before')?>
-    <form class="form form-newsletter-manage" action="<?php /* @escapeNotVerified */ echo $block->getAction() ?>" method="post" id="form-validate">
+<?= $block->getChildHtml('form_before') ?>
+    <form class="form form-newsletter-manage" action="<?= $block->escapeUrl($block->getAction()) ?>" method="post" id="form-validate">
         <fieldset class="fieldset">
-            <?php echo $block->getBlockHtml('formkey')?>
-            <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Subscription option') ?></span></legend><br>
+            <?= $block->getBlockHtml('formkey') ?>
+            <legend class="legend"><span><?= $block->escapeHtml(__('Subscription option')) ?></span></legend><br>
             <div class="field choice">
-                <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?php /* @escapeNotVerified */ echo __('General Subscription') ?>"<?php if ($block->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
-                <label for="subscription" class="label"><span><?php /* @escapeNotVerified */ echo __('General Subscription') ?></span></label>
+                <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?= $block->escapeHtmlAttr(__('General Subscription')) ?>"<?php if ($block->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
+                <label for="subscription" class="label"><span><?= $block->escapeHtml(__('General Subscription')) ?></span></label>
             </div>
             <?php /* Extensions placeholder */ ?>
-            <?php echo $block->getChildHtml('customer.form.newsletter.extra')?>
+            <?= $block->getChildHtml('customer.form.newsletter.extra') ?>
         </fieldset>
         <div class="actions-toolbar">
-            <div class="primary"><button type="submit" title="<?php /* @escapeNotVerified */ echo __('Save') ?>" class="action save primary"><span><?php /* @escapeNotVerified */ echo __('Save') ?></span></button></div>
-            <div class="secondary"><a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Back') ?></span></a></div>
+            <div class="primary"><button type="submit" title="<?= $block->escapeHtmlAttr(__('Save')) ?>" class="action save primary"><span><?= $block->escapeHtml(__('Save')) ?></span></button></div>
+            <div class="secondary"><a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><span><?= $block->escapeHtml(__('Back')) ?></span></a></div>
         </div>
     </form>
 <?php /* Extensions placeholder */ ?>
-<?php echo $block->getChildHtml('customer.form.newsletter.extra2')?>
+<?= $block->getChildHtml('customer.form.newsletter.extra2') ?>

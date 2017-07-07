@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model\ResourceModel\Query;
@@ -10,6 +10,7 @@ use Magento\Store\Model\Store;
 /**
  * Search query collection
  *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -66,7 +67,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\Query', 'Magento\Search\Model\ResourceModel\Query');
+        $this->_init(\Magento\Search\Model\Query::class, \Magento\Search\Model\ResourceModel\Query::class);
     }
 
     /**
@@ -102,14 +103,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setQueryFilter($query)
     {
-        $ifSynonymFor = $this->getConnection()->getIfNullSql('synonym_for', 'query_text');
         $this->getSelect()->reset(
             \Magento\Framework\DB\Select::FROM
         )->distinct(
             true
         )->from(
-            ['main_table' => $this->getTable('search_query')],
-            ['query' => $ifSynonymFor, 'num_results']
+            ['main_table' => $this->getTable('search_query')]
         )->where(
             'num_results > 0 AND display_in_terms = 1 AND query_text LIKE ?',
             $this->_resourceHelper->addLikeEscape($query, ['position' => 'start'])
@@ -130,13 +129,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setPopularQueryFilter($storeIds = null)
     {
-        $ifSynonymFor = new \Zend_Db_Expr(
-            $this->getConnection()->getCheckSql(
-                "synonym_for IS NOT NULL AND synonym_for != ''",
-                'synonym_for',
-                'query_text'
-            )
-        );
 
         $this->getSelect()->reset(
             \Magento\Framework\DB\Select::FROM
@@ -145,8 +137,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         )->distinct(
             true
         )->from(
-            ['main_table' => $this->getTable('search_query')],
-            ['name' => $ifSynonymFor, 'num_results', 'popularity', 'query_id']
+            ['main_table' => $this->getTable('search_query')]
         );
         if ($storeIds) {
             $this->addStoreFilter($storeIds);
@@ -156,7 +147,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $this->getSelect()->where('num_results > 0');
         }
 
-        $this->getSelect()->order(['popularity desc', 'name']);
+        $this->getSelect()->order(['popularity desc']);
 
         return $this;
     }

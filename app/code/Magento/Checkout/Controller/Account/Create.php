@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Account;
@@ -50,21 +50,38 @@ class Create extends \Magento\Framework\App\Action\Action
      * @throws AlreadyExistsException
      * @throws NoSuchEntityException
      * @throws \Exception
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->_objectManager->get(\Magento\Framework\Controller\Result\JsonFactory::class)->create();
+
         if ($this->customerSession->isLoggedIn()) {
-            $this->messageManager->addError(__("Customer is already registered"));
-            return;
+            return $resultJson->setData(
+                [
+                    'errors' => true,
+                    'message' => __('Customer is already registered')
+                ]
+            );
         }
         $orderId = $this->checkoutSession->getLastOrderId();
         if (!$orderId) {
-            $this->messageManager->addError(__("Your session has expired"));
-            return;
+            return $resultJson->setData(
+                [
+                    'errors' => true,
+                    'message' => __('Your session has expired')
+                ]
+            );
         }
         try {
             $this->orderCustomerService->create($orderId);
+            return $resultJson->setData(
+                [
+                    'errors' => false,
+                    'message' => __('A letter with further instructions will be sent to your email.')
+                ]
+            );
         } catch (\Exception $e) {
             $this->messageManager->addException($e, $e->getMessage());
             throw $e;

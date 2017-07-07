@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,9 +17,9 @@
 ?>
 
 <div class="menu-wrapper"
-    ng-show="<?php echo implode( '&&', $expressions); ?>"
+    ng-show="<?= implode( '&&', $expressions) ?>"
     >
-<nav class="admin__menu" role="navigation" ng-controller="mainController">
+<nav class="admin__menu" ng-controller="mainController">
     <span
         class="logo logo-static"
         data-edition="Community Edition">
@@ -33,10 +33,15 @@
                 <span>Home</span>
             </a>
         </li>
-        <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'update'
-        || $state.current.type === 'uninstall'}">
-            <a href="" ui-sref="root.update">
-                <span>Component Manager</span>
+        <li class="item-extension level-0"  ng-class="{_active: $state.current.type === 'extension'
+            || ['install', 'uninstall', 'update'].indexOf($state.current.type) !== -1}">
+            <a href="" ui-sref="root.extension-auth">
+                <span>Extension Manager</span>
+            </a>
+        </li>
+        <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'module'}">
+            <a href="" ui-sref="root.module">
+                <span>Module Manager</span>
             </a>
         </li>
         <li class="item-upgrade level-0" ng-class="{_active: $state.current.type === 'upgrade'}">

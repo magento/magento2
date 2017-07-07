@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Rate;
@@ -31,19 +31,19 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
     /*
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMock();
 
-        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->taxRateRepository = $this->getMockBuilder('\Magento\Tax\Model\Calculation\RateRepository')
+        $this->taxRateRepository = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RateRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -67,12 +67,12 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
                 ];
         $objectManager = new ObjectManager($this);
         $rateTitles = [$objectManager->getObject(
-            '\Magento\Tax\Model\Calculation\Rate\Title',
+            \Magento\Tax\Model\Calculation\Rate\Title::class,
             ['data' => ['store_id' => 1, 'value' => 'texas']]
         )
         ];
         $rateMock = $objectManager->getObject(
-            'Magento\Tax\Model\Calculation\Rate',
+            \Magento\Tax\Model\Calculation\Rate::class,
             [
                 'data' =>
                     [
@@ -95,7 +95,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with($taxRateId)
             ->will($this->returnValue($rateMock));
 
-        $taxRateConverter = $this->getMockBuilder('\Magento\Tax\Model\Calculation\Rate\Converter')
+        $taxRateConverter = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Rate\Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -104,7 +104,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with($rateMock, true)
             ->willReturn($returnArray);
 
-        $jsonObject= $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $jsonObject= $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();
@@ -121,7 +121,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->willReturn($jsonObject);
 
         $notification = $objectManager->getObject(
-            'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
+            \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad::class,
             [
                 'taxRateRepository' => $this->taxRateRepository,
                 'taxRateConverter' => $taxRateConverter,
@@ -130,10 +130,8 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-
         // No exception thrown
         $this->assertSame($jsonObject, $notification->execute());
-
     }
 
     /**
@@ -156,7 +154,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with($taxRateId)
             ->willThrowException($noSuchEntityEx);
 
-        $jsonObject= $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $jsonObject= $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();
@@ -174,7 +172,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->willReturn($jsonObject);
 
         $notification = $objectManager->getObject(
-            'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
+            \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad::class,
             [
                 'taxRateRepository' => $this->taxRateRepository,
                 'request' => $this->request,
@@ -206,7 +204,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with($taxRateId)
             ->willThrowException($noSuchEntityEx);
 
-        $jsonObject= $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $jsonObject= $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData'])
             ->getMock();
@@ -224,7 +222,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->willReturn($jsonObject);
 
         $notification = $objectManager->getObject(
-            'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
+            \Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad::class,
             [
                 'taxRateRepository' => $this->taxRateRepository,
                 'request' => $this->request,

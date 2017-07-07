@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Adminhtml block for fieldset of product custom options
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset;
 
+/**
+ * Adminhtml block for fieldset of product custom options
+ *
+ * @api
+ */
 class Qty extends \Magento\Framework\View\Element\Template
 {
     /**

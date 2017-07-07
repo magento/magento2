@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
@@ -34,9 +34,9 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     private $loaderMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $this->packageInfoMock = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
         $requireMap = [
             ['A', ['B']],
             ['B', ['D', 'E']],
@@ -50,7 +50,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($requireMap));
 
         $this->packageInfoFactoryMock = $this->getMock(
-            'Magento\Framework\Module\PackageInfoFactory',
+            \Magento\Framework\Module\PackageInfoFactory::class,
             [],
             [],
             '',
@@ -60,8 +60,8 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->packageInfoMock));
 
-        $this->listMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $this->loaderMock = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
+        $this->listMock = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
+        $this->loaderMock = $this->getMock(\Magento\Framework\Module\ModuleList\Loader::class, [], [], '', false);
         $this->loaderMock
             ->expects($this->any())
             ->method('load')

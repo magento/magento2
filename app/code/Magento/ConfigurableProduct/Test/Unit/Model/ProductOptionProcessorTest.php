@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
@@ -12,6 +12,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,14 +44,14 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataObject = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->dataObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods([
                 'getSuperAttribute',
             ])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dataObjectFactory = $this->getMockBuilder('Magento\Framework\DataObject\Factory')
+        $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -57,12 +60,12 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->dataObject);
 
         $this->itemOptionValue = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface'
+            \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface::class
         )
             ->getMockForAbstractClass();
 
         $this->itemOptionValueFactory = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory'
+            \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -86,10 +89,12 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $options,
         $requestData
     ) {
-        $productOptionMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductOptionInterface')
+        $productOptionMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
-        $productOptionExtensionMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductOptionExtensionInterface')
+        $productOptionExtensionMock = $this->getMockBuilder(
+            \Magento\Catalog\Api\Data\ProductOptionExtensionInterface::class
+        )
             ->setMethods([
                 'getConfigurableItemOptions',
             ])
@@ -120,7 +125,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue $option */
         $option = $objectManager->getObject(
-            'Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue'
+            \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue::class
         );
         $option->setOptionId(1);
         $option->setOptionValue('test');

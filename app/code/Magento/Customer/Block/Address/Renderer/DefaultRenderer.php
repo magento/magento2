@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Address\Renderer;
@@ -91,11 +91,11 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
-     * @param AbstractAddress|null $address
+     * @param AddressModelInterface|null $address
      * @return string
      * All new code should use renderArray based on Metadata service
      */
-    public function getFormat(AbstractAddress $address = null)
+    public function getFormat(AddressModelInterface $address = null)
     {
         $countryFormat = $address === null
         ? false : $address->getCountryModel()->getFormat(

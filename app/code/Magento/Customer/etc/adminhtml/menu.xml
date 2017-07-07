@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Customer::customer" title="Customers" module="Magento_Customer" sortOrder="30" resource="Magento_Customer::customer"/>
-        <add id="Magento_Customer::customer_manage" title="All Customers" module="Magento_Customer" sortOrder="10" parent="Magento_Customer::customer" action="customer/index/" resource="Magento_Customer::manage"/>
-        <add id="Magento_Customer::customer_online" title="Now Online" module="Magento_Customer" sortOrder="30" parent="Magento_Customer::customer" action="customer/online/" resource="Magento_Customer::online"/>
-        <add id="Magento_Customer::customer_group" title="Customer Groups" module="Magento_Customer" sortOrder="50" parent="Magento_Backend::other_settings" action="customer/group" resource="Magento_Customer::group"/>
+        <add id="Magento_Customer::customer" title="Customers" translate="title" module="Magento_Customer" sortOrder="30" resource="Magento_Customer::customer"/>
+        <add id="Magento_Customer::customer_manage" title="All Customers" translate="title" module="Magento_Customer" sortOrder="10" parent="Magento_Customer::customer" action="customer/index/" resource="Magento_Customer::manage"/>
+        <add id="Magento_Customer::customer_online" title="Now Online" translate="title" module="Magento_Customer" sortOrder="30" parent="Magento_Customer::customer" action="customer/online/" resource="Magento_Customer::online"/>
+        <add id="Magento_Customer::customer_group" title="Customer Groups" translate="title" module="Magento_Customer" sortOrder="50" parent="Magento_Backend::other_settings" action="customer/group" resource="Magento_Customer::group"/>
     </menu>
 </config>

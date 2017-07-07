@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
-use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
 
 /**
  * EAV attribute resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -33,6 +36,11 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var Type
      */
     protected $_eavEntityType;
+
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * Class constructor
@@ -133,10 +141,10 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Delete entity
      *
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractMode $object
      * @return $this
      */
-    public function deleteEntity(AbstractModel $object)
+    public function deleteEntity(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getEntityAttributeId()) {
             return $this;
@@ -172,7 +180,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          */
         if (!$object->getId()) {
             if ($object->getFrontendInput() == 'select') {
-                $object->setSourceModel('Magento\Eav\Model\Entity\Attribute\Source\Table');
+                $object->setSourceModel(\Magento\Eav\Model\Entity\Attribute\Source\Table::class);
             }
         }
 
@@ -196,8 +204,33 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->_saveOption(
             $object
         );
-
+        $this->getConfig()->clear();
         return parent::_afterSave($object);
+    }
+
+    /**
+     * Perform actions after object delete
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getConfig()->clear();
+        return $this;
+    }
+
+    /**
+     * @return Config
+     * @deprecated
+     */
+    private function getConfig()
+    {
+        if (!$this->config) {
+            $this->config = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->config;
     }
 
     /**
@@ -411,7 +444,8 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $table = $this->getTable('eav_attribute_option');
-        $intOptionId = (int)$optionId;
+        // ignore strings that start with a number
+        $intOptionId = is_numeric($optionId) ? (int)$optionId : 0;
 
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {
@@ -483,6 +517,23 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $connection->fetchOne($select, $bind);
+    }
+
+    /**
+     * Get entity attribute
+     *
+     * @param int|string $entityAttributeId
+     * @return array
+     */
+    public function getEntityAttribute($entityAttributeId)
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->getTable('eav_entity_attribute')
+        )->where(
+            'entity_attribute_id = ?',
+            (int)$entityAttributeId
+        );
+        return $this->getConnection()->fetchRow($select);
     }
 
     /**
@@ -613,6 +664,11 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @var array
+     */
+    private $storeLabelsCache = [];
+
+    /**
      * Retrieve store labels by given attribute id
      *
      * @param int $attributeId
@@ -620,16 +676,19 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getStoreLabelsByAttributeId($attributeId)
     {
-        $connection = $this->getConnection();
-        $bind = [':attribute_id' => $attributeId];
-        $select = $connection->select()->from(
-            $this->getTable('eav_attribute_label'),
-            ['store_id', 'value']
-        )->where(
-            'attribute_id = :attribute_id'
-        );
+        if (!isset($this->storeLabelsCache[$attributeId])) {
+            $connection = $this->getConnection();
+            $bind = [':attribute_id' => $attributeId];
+            $select = $connection->select()->from(
+                $this->getTable('eav_attribute_label'),
+                ['store_id', 'value']
+            )->where(
+                'attribute_id = :attribute_id'
+            );
+            $this->storeLabelsCache[$attributeId] = $connection->fetchPairs($select, $bind);
+        }
 
-        return $connection->fetchPairs($select, $bind);
+        return $this->storeLabelsCache[$attributeId];
     }
 
     /**
@@ -650,5 +709,29 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $connection->fetchCol($select);
+    }
+
+    /**
+     * Provide variables to serialize
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        $properties = parent::__sleep();
+        $properties = array_diff($properties, ['_storeManager']);
+        return $properties;
+    }
+
+    /**
+     * Restore global dependencies
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 }

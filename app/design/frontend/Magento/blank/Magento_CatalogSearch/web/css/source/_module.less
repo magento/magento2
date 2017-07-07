@@ -1,32 +1,38 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
-@autocomplete-background: @color-white;
-@autocomplete-border: 1px solid @form-element-input__border-color;
-@autocomplete-item-border: 1px solid @color-gray90;
-@autocomplete-item-hover: @color-gray91;
-@autocomplete-item-amount-color: @color-gray60;
+//
+//  Variables
+//  _____________________________________________
+
+@autocomplete__background-color: @color-white;
+@autocomplete__border: 1px solid @form-element-input__border-color;
+@autocomplete-item__border: 1px solid @color-gray90;
+@autocomplete-item__hover__color: @color-gray91;
+@autocomplete-item-amount__color: @color-gray60;
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
-
-.block-search {
-    margin-bottom: 0;
-    .block {
-        &-title {
-            display: none;
-        }
-    }
-    .block-content {
+    .block-search {
         margin-bottom: 0;
-    }
-    .label {
-        .lib-icon-font(
+
+        .block {
+            &-title {
+                display: none;
+            }
+        }
+
+        .block-content {
+            margin-bottom: 0;
+        }
+
+        .label {
+            .lib-icon-font(
             @_icon-font-content: @icon-search,
             @_icon-font-size: 35px,
             @_icon-font-line-height: 33px,
@@ -34,128 +40,148 @@
             @_icon-font-color-hover: @minicart-icons-color-hover,
             @_icon-font-color-active: @minicart-icons-color-hover,
             @_icon-font-text-hide: true
-        );
-        display: inline-block;
-        float: right;
-        &.active {
-            + .control {
-                input {
-                    position: static;
-                }
-            }
-        }
-    }
-    .action.search {
-        display: none;
-    }
-    .control {
-        border-top: 1px solid @border-color__base;
-        clear: both;
-        margin: 0 -@layout__width-xs-indent -1px;
-        padding: 0 @layout__width-xs-indent;
-    }
+            );
+            display: inline-block;
+            float: right;
 
-    input {
-        left: -300%;
-        position: absolute;
-        margin: 15px 0;
-    }
-    .nested {
-        display: none;
-    }
-}
-
-.search-autocomplete {
-    display: none;
-    position: absolute;
-    z-index: 3;
-    overflow: hidden;
-    margin-top: -15px;
-    &:extend(.abs-add-box-sizing all);
-    ul {
-        .lib-list-reset-styles();
-        li {
-            &:not(:empty) {
-                .lib-css(background, @autocomplete-background);
-                .lib-css(border, @autocomplete-border);
-                border-top: 0;
-            }
-            .lib-css(border-top, @autocomplete-item-border);
-            cursor: pointer;
-            margin: 0;
-            padding: @indent__xs @indent__xl @indent__xs @indent__s;
-            position: relative;
-            text-align: left;
-            white-space: normal;
-            &:first-child {
-                border-top: none;
-            }
-            &:hover,
-            &.selected {
-                .lib-css(background, @autocomplete-item-hover);
-            }
-            .amount {
-                .lib-css(color, @autocomplete-item-amount-color);
-                position: absolute;
-                right: 7px;
-                top: @indent__xs;
-            }
-        }
-    }
-}
-
-.form.search.advanced {
-    .fields.range {
-        .field {
-            &:first-child {
-                position: relative;
-                .control {
-                    padding-right: 25px;
-                    &:after {
-                        content: ' \2013 ';
-                        display: inline-block;
-                        text-align: center;
-                        width: 25px;
-                        position: absolute;
-                        right: 0;
-                        top: 6px;
+            &.active {
+                + .control {
+                    input {
+                        position: static;
                     }
                 }
             }
-            &:last-child {
-                position: relative;
-                div.mage-error[generated] {
-                    position: absolute;
-                    top: 32px;
-                    left: 0;
-                }
-            }
-            &.with-addon {
-                .control {
-                    padding-right: 45px;
-                }
-            }
         }
-    }
-    .group.price {
-        .addon {
-            .addafter {
-                background: none;
-                border: 0;
-                padding-top: 6px;
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
-        }
-    }
-}
 
+        .action.search {
+            display: none;
+        }
+
+        .control {
+            border-top: 1px solid @border-color__base;
+            clear: both;
+            margin: 0 -@layout__width-xs-indent -1px;
+            padding: 0 @layout__width-xs-indent;
+        }
+
+        input {
+            left: -300%;
+            margin: 15px 0;
+            position: absolute;
+        }
+
+        .nested {
+            display: none;
+        }
+    }
+
+    .search-autocomplete {
+        &:extend(.abs-add-box-sizing all);
+        display: none;
+        margin-top: -15px;
+        overflow: hidden;
+        position: absolute;
+        z-index: 3;
+
+        ul {
+            .lib-list-reset-styles();
+
+            li {
+                .lib-css(border-top, @autocomplete-item__border);
+                cursor: pointer;
+                margin: 0;
+                padding: @indent__xs @indent__xl @indent__xs @indent__s;
+                position: relative;
+                text-align: left;
+                white-space: normal;
+
+                &:not(:empty) {
+                    border-top: 0;
+                    .lib-css(border, @autocomplete__border);
+                    .lib-css(background, @autocomplete__background-color);
+                }
+
+                &:first-child {
+                    border-top: none;
+                }
+
+                &:hover,
+                &.selected {
+                    .lib-css(background, @autocomplete-item__hover__color);
+                }
+
+                .amount {
+                    .lib-css(color, @autocomplete-item-amount__color);
+                    position: absolute;
+                    right: 7px;
+                    top: @indent__xs;
+                }
+            }
+        }
+    }
+
+    .form.search.advanced {
+        .fields.range {
+            .field {
+                &:first-child {
+                    position: relative;
+
+                    .control {
+                        padding-right: 25px;
+
+                        &:after {
+                            content: ' \2013 ';
+                            display: inline-block;
+                            position: absolute;
+                            right: 0;
+                            text-align: center;
+                            top: 6px;
+                            width: 25px;
+                        }
+                    }
+                }
+
+                &:last-child {
+                    position: relative;
+
+                    div.mage-error[generated] {
+                        left: 0;
+                        position: absolute;
+                        top: 32px;
+                    }
+                }
+
+                &.with-addon {
+                    .control {
+                        padding-right: 45px;
+                    }
+                }
+            }
+        }
+
+        .group.price {
+            .addon {
+                .addafter {
+                    background: none;
+                    border: 0;
+                    padding-top: 6px;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                }
+            }
+        }
+    }
+
+    .search.summary {
+        margin-bottom: @indent__s;
+    }
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .block-search {
         .block-content {
@@ -171,54 +197,62 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block-search {
-        position: relative;
         float: right;
         padding-left: 15px;
+        position: relative;
         width: 250px;
         z-index: 4;
+
         .label {
             &:extend(.abs-visually-hidden-desktop all);
         }
+
         .control {
             border-top: 0;
             margin: 0;
             padding: 0 0 25px;
         }
+
         .nested {
             display: block;
             padding-top: 5px;
             position: absolute;
         }
+
         input {
-            position: static;
-            padding-right: 35px;
-            margin: 0;
             .lib-input-placeholder(@form-element-input-placeholder__color);
+            margin: 0;
+            padding-right: 35px;
+            position: static;
         }
+
         .action.search {
-            position: absolute;
             display: inline-block;
+            .lib-button-icon(
+            @_icon-font-content: @icon-search,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: @header-icons-color
+            );
+            .lib-button-reset();
+            padding: @indent__xs 0;
+            position: absolute;
             right: 10px;
             top: 0;
             z-index: 1;
-            .lib-button-icon(
-                @_icon-font-content: @icon-search,
-                @_icon-font-text-hide: true,
-                @_icon-font-color: @header-icons-color
-            );
-            .lib-button-reset();
+
             &:focus {
                 &:before {
                     .lib-css(color, @color-gray20);
                 }
             }
-            padding: @indent__xs 0;
         }
     }
+
     .search-autocomplete {
         margin-top: 0;
     }

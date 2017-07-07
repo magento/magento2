@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Authorizenet\Model\TransactionService;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;
@@ -24,12 +23,12 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Transparent\Info';
+    protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info';
+    protected $_infoBlockType = \Magento\Payment\Block\Info::class;
 
     /**
      * Payment Method feature
@@ -118,6 +117,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @var \Magento\Sales\Api\TransactionRepositoryInterface
      */
     protected $transactionRepository;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $psrLogger;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -276,15 +280,14 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         switch ($result->getXResponseCode()) {
             case self::RESPONSE_CODE_APPROVED:
             case self::RESPONSE_CODE_HELD:
-                if (
-                    in_array(
-                        $result->getXResponseReasonCode(),
-                        [
+                if (in_array(
+                    $result->getXResponseReasonCode(),
+                    [
                             self::RESPONSE_REASON_CODE_APPROVED,
                             self::RESPONSE_REASON_CODE_PENDING_REVIEW,
                             self::RESPONSE_REASON_CODE_PENDING_REVIEW_AUTHORIZED
                         ]
-                    )
+                )
                 ) {
                     if (!$payment->getParentTransactionId()
                         || $result->getXTransId() != $payment->getParentTransactionId()
@@ -529,8 +532,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         $response = $this->getResponse();
         //md5 check
-        if (
-            !$this->getConfigData('trans_md5')
+        if (!$this->getConfigData('trans_md5')
             || !$this->getConfigData('login')
             || !$response->isValidHash($this->getConfigData('trans_md5'), $this->getConfigData('login'))
         ) {
@@ -761,7 +763,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         try {
             $transactionId = $this->getResponse()->getXTransId();
-            $data = $payment->getMethodInstance()->getTransactionDetails($transactionId);
+            $data = $this->transactionService->getTransactionDetails($this, $transactionId);
             $transactionStatus = (string)$data->transaction->transactionStatus;
             $fdsFilterAction = (string)$data->transaction->FDSFilterAction;
 
@@ -779,6 +781,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
                 $payment->getOrder()->addStatusHistoryComment($message);
             }
         } catch (\Exception $e) {
+            $this->getPsrLogger()->critical($e);
             //this request is optional
         }
         return $this;
@@ -796,8 +799,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     {
         try {
             $response = $this->getResponse();
-            if (
-                $voidPayment && $response->getXTransId() && strtoupper($response->getXType())
+            if ($voidPayment && $response->getXTransId() && strtoupper($response->getXType())
                 == self::REQUEST_TYPE_AUTH_ONLY
             ) {
                 $order->getPayment()->setTransactionId(null)->setParentTransactionId($response->getXTransId())->void();
@@ -805,7 +807,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $order->registerCancellation($message)->save();
         } catch (\Exception $e) {
             //quiet decline
-            $this->logger->critical($e);
+            $this->getPsrLogger()->critical($e);
         }
     }
 
@@ -972,5 +974,19 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);
 
         return $response;
+    }
+
+    /**
+     * @return \Psr\Log\LoggerInterface
+     *
+     * @deprecated
+     */
+    private function getPsrLogger()
+    {
+        if (null === $this->psrLogger) {
+            $this->psrLogger = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->psrLogger;
     }
 }

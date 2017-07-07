@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,15 +9,15 @@
  * @var $block \Magento\OfflinePayments\Block\Form\Checkmo
  */
 ?>
-<fieldset class="admin__fieldset payment-method" id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()) ?>" style="display:none">
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>" style="display:none">
     <?php if ($block->getMethod()->getPayableTo()): ?>
-        <label class="label"><span><?php echo $block->escapeHtml(__('Make Check payable to:')) ?></span></label> <?php echo $block->escapeHtml($block->getMethod()->getPayableTo()) ?>
+        <label class="label"><span><?= $block->escapeHtml(__('Make Check payable to:')) ?></span></label> <?= $block->escapeHtml($block->getMethod()->getPayableTo()) ?>
     <?php endif; ?>
     <?php if ($block->getMethod()->getMailingAddress()): ?>
         <div class="admin__field">
-            <label class="admin__field-label"><span><?php echo $block->escapeHtml(__('Send Check to:')) ?></span></label>
+            <label class="admin__field-label"><span><?= $block->escapeHtml(__('Send Check to:')) ?></span></label>
             <div class="admin__field-control checkmo-mailing-address">
-                <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
+                <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
             </div>
         </div>
     <?php endif; ?>

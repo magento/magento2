@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime;
+
+use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Timezone library
@@ -44,6 +47,11 @@ class Timezone implements TimezoneInterface
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
 
     /**
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
@@ -88,9 +96,13 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTimezone()
+    public function getConfigTimezone($scopeType = null, $scopeCode = null)
     {
-        return $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType);
+        return $this->_scopeConfig->getValue(
+            $this->getDefaultTimezonePath(),
+            $scopeType ?: $this->_scopeType,
+            $scopeCode
+        );
     }
 
     /**
@@ -141,11 +153,11 @@ class Timezone implements TimezoneInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function date($date = null, $locale = null, $useTimezone = true)
+    public function date($date = null, $locale = null, $useTimezone = true, $includeTime = true)
     {
         $locale = $locale ?: $this->_localeResolver->getLocale();
         $timezone = $useTimezone
-            ? $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType)
+            ? $this->getConfigTimezone()
             : date_default_timezone_get();
 
         if (empty($date)) {
@@ -153,10 +165,11 @@ class Timezone implements TimezoneInterface
         } elseif ($date instanceof \DateTime) {
             return $date->setTimezone(new \DateTimeZone($timezone));
         } elseif (!is_numeric($date)) {
+            $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
             $formatter = new \IntlDateFormatter(
                 $locale,
                 \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::SHORT,
+                $timeType,
                 new \DateTimeZone($timezone)
             );
             $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
@@ -231,7 +244,7 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
      * @param null $locale
@@ -240,16 +253,22 @@ class Timezone implements TimezoneInterface
      * @return string
      */
     public function formatDateTime(
-        \DateTimeInterface $date,
+        $date,
         $dateType = \IntlDateFormatter::SHORT,
         $timeType = \IntlDateFormatter::SHORT,
         $locale = null,
         $timezone = null,
         $pattern = null
     ) {
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date);
+        }
+
         if ($timezone === null) {
-            if ($date->getTimezone() === null || $date->getTimezone()->getName() === '+00:00') {
-                $timezone = new \DateTimeZone('UTC');
+            if ($date->getTimezone() == null || $date->getTimezone()->getName() == 'UTC'
+                || $date->getTimezone()->getName() == '+00:00'
+            ) {
+                $timezone = $this->getConfigTimezone();
             } else {
                 $timezone = $date->getTimezone();
             }
@@ -264,5 +283,31 @@ class Timezone implements TimezoneInterface
             $pattern
         );
         return $formatter->format($date);
+    }
+
+    /**
+     * Convert date from config timezone to Utc.
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
+     * @param string|\DateTimeInterface $date
+     * @param string $format
+     * @throws LocalizedException
+     * @return string
+     */
+    public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
+    {
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
+        } else {
+            if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
+                throw new LocalizedException(
+                    new Phrase('DateTime object timezone must be the same as config - %1', $this->getConfigTimezone())
+                );
+            }
+        }
+
+        $date->setTimezone(new \DateTimeZone('UTC'));
+
+        return $date->format($format);
     }
 }

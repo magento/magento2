@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
@@ -8,6 +8,7 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * @deprecated
  * Customer password attribute backend
  */
 class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
@@ -53,7 +54,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                 );
             }
 
-            if (trim($password) != $password) {
+            if (trim($password) !== $password) {
                 throw new LocalizedException(__('The password can not begin or end with a space.'));
             }
 
@@ -62,13 +63,14 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     }
 
     /**
+     * @deprecated
      * @param \Magento\Framework\DataObject $object
      * @return bool
      */
     public function validate($object)
     {
         $password = $object->getPassword();
-        if ($password && $password == $object->getPasswordConfirm()) {
+        if ($password && $password === $object->getPasswordConfirm()) {
             return true;
         }
 

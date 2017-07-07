@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\Action;
 
@@ -84,21 +82,33 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
-        $this->_redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface', [], [], '', false);
-        $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->_eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->_actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
+        $this->_redirectMock = $this->getMock(
+            \Magento\Framework\App\Response\RedirectInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_responseMock = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
+        $this->_responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
 
-        $this->pageConfigMock = $this->getMock('Magento\Framework\View\Page\Config', ['getConfig'], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
+        $this->pageConfigMock = $this->getMock(
+            \Magento\Framework\View\Page\Config::class,
+            ['getConfig'],
+            [],
+            '',
+            false
+        );
+        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
         $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
         $this->pageConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(1));
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
-            'Magento\Framework\App\Test\Unit\Action\ActionFake',
+            \Magento\Framework\App\Test\Unit\Action\ActionFake::class,
             [
                 'request' => $this->_requestMock,
                 'response' => $this->_responseMock,
@@ -171,22 +181,5 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($this->_responseMock, $this->action->dispatch($this->_requestMock));
-    }
-}
-
-class ActionFake extends Action
-{
-    /**
-     * Fake action to check a method call from a parent
-     */
-    public function execute()
-    {
-        $this->_forward(
-            ActionTest::ACTION_NAME,
-            ActionTest::CONTROLLER_NAME,
-            ActionTest::MODULE_NAME,
-            ActionTest::$actionParams);
-        $this->_redirect(ActionTest::FULL_ACTION_NAME, ActionTest::$actionParams);
-        return;
     }
 }

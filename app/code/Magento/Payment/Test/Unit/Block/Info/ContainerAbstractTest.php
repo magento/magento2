@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,19 +14,19 @@ class ContainerAbstractTest extends \PHPUnit_Framework_TestCase
     public function testSetInfoTemplate()
     {
         $block = $this->getMock(
-            'Magento\Payment\Block\Info\AbstractContainer',
+            \Magento\Payment\Block\Info\AbstractContainer::class,
             ['getChildBlock', 'getPaymentInfo'],
             [],
             '',
             false
         );
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $paymentInfo = $objectManagerHelper->getObject('Magento\Payment\Model\Info');
-        $methodInstance = $objectManagerHelper->getObject('Magento\OfflinePayments\Model\Checkmo');
+        $paymentInfo = $objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
+        $methodInstance = $objectManagerHelper->getObject(\Magento\OfflinePayments\Model\Checkmo::class);
         $paymentInfo->setMethodInstance($methodInstance);
         $block->expects($this->atLeastOnce())->method('getPaymentInfo')->will($this->returnValue($paymentInfo));
 
-        $childBlock = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template');
+        $childBlock = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template::class);
         $block->expects(
             $this->atLeastOnce()
         )->method(

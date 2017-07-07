@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,13 +13,26 @@ use Magento\Framework\Data\ObjectFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Interface StockItemCriteriaMapper
  * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Status
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockItemCriteriaMapper extends GenericMapper
 {
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
+     * @var StoreManagerInterface
+     * @deprecated
+     */
+    private $storeManager;
+
     /**
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
@@ -45,7 +58,7 @@ class StockItemCriteriaMapper extends GenericMapper
      */
     protected function init()
     {
-        $this->initResource('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
+        $this->initResource(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
         $this->map['qty'] = ['main_table', 'qty', 'qty'];
     }
 
@@ -107,10 +120,11 @@ class StockItemCriteriaMapper extends GenericMapper
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function mapStockStatus($storeId = null)
     {
-        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
         $this->getSelect()->joinLeft(
             ['status_table' => $this->getTable('cataloginventory_stock_status')],
             'main_table.product_id=status_table.product_id' .
@@ -148,5 +162,19 @@ class StockItemCriteriaMapper extends GenericMapper
             );
         }
         $this->addFieldToFilter('main_table.qty', [$methods[$comparisonMethod] => $qty]);
+    }
+
+    /**
+     * @return StockConfigurationInterface
+     *
+     * @deprecated
+     */
+    private function getStockConfiguration()
+    {
+        if ($this->stockConfiguration === null) {
+            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
+        }
+        return $this->stockConfiguration;
     }
 }

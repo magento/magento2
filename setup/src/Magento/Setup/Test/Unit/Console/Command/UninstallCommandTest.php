@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,8 +30,8 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
+        $this->installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
+        $this->installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
         $this->command = new UninstallCommand($this->installerFactory);
     }
 
@@ -53,14 +53,14 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function checkInteraction($answer)
     {
-        $question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', [], [], '', false);
+        $question = $this->getMock(\Symfony\Component\Console\Helper\QuestionHelper::class, [], [], '', false);
         $question
             ->expects($this->once())
             ->method('ask')
             ->will($this->returnValue($answer));
 
         /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
+        $helperSet = $this->getMock(\Symfony\Component\Console\Helper\HelperSet::class, [], [], '', false);
         $helperSet
             ->expects($this->once())
             ->method('get')

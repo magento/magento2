@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel\Address;
@@ -8,6 +8,7 @@ namespace Magento\Customer\Model\ResourceModel\Address;
 /**
  * Customers collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
@@ -19,7 +20,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Address', 'Magento\Customer\Model\ResourceModel\Address');
+        $this->_init(\Magento\Customer\Model\Address::class, \Magento\Customer\Model\ResourceModel\Address::class);
     }
 
     /**

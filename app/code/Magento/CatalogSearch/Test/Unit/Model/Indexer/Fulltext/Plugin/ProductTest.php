@@ -1,27 +1,33 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product
+     * @var \PHPUnit_Framework_MockObject_MockObject|ProductResourceModel
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit_Framework_MockObject_MockObject|ProductModel
      */
     protected $productMock;
 
@@ -31,7 +37,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $proceed;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -42,40 +48,38 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->subjectMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
-        $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState', '__wakeup']
-        );
-        $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $this->productMock = $this->getMockBuilder(ProductModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->subjectMock = $this->getMockBuilder(ProductResourceModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connection = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->subjectMock->method('getConnection')->willReturn($connection);
+
+        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'getState', '__wakeup'])
+            ->getMockForAbstractClass();
+        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
 
         $this->proceed = function () {
             return $this->subjectMock;
         };
 
-        $this->model = new Product($this->indexerRegistryMock);
+        $this->model = (new ObjectManager($this))->getObject(
+            Product::class,
+            ['indexerRegistry' => $this->indexerRegistryMock]
+        );
     }
 
     public function testAfterSaveNonScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
@@ -84,12 +88,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterSaveScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexRow');
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
@@ -98,12 +96,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterDeleteNonScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
@@ -112,12 +104,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterDeleteScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexRow');
-        $this->prepareIndexer();
-
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
         $this->assertEquals(
             $this->subjectMock,
             $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)

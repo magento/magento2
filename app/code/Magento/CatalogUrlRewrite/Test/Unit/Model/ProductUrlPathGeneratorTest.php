@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
@@ -34,7 +34,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $this->category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $productMethods = [
             '__wakeup',
             'getData',
@@ -46,21 +46,21 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
             'setStoreId',
         ];
 
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', $productMethods, [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, $productMethods, [], '', false);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->categoryUrlPathGenerator = $this->getMock(
-            'Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator',
+            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::class,
             [],
             [],
             '',
             false
         );
-        $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->productRepository->expects($this->any())->method('getById')->willReturn($this->product);
 
         $this->productUrlPathGenerator = (new ObjectManager($this))->getObject(
-            'Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator',
+            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::class,
             [
                 'storeManager' => $this->storeManager,
                 'scopeConfig' => $this->scopeConfig,
@@ -168,7 +168,7 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $storeId = 1;
         $this->product->expects($this->once())->method('getData')->with('url_path')
             ->will($this->returnValue('product-path'));
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
         $this->scopeConfig->expects($this->once())->method('getValue')

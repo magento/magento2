@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
@@ -212,7 +212,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
             );
             $field->setRenderer($renderer);
             if ($this->_coreRegistry->registry('rating_data')) {
@@ -242,7 +242,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!isset($this->fieldset[$formId])) {
             if (!$this->getForm()->getElement($formId)) {
                 $this->fieldset[$formId] = $this->getForm()->addFieldset($formId, $config);
-            } elseif ($this->getForm()->getElement($formId));
+            } elseif ($this->getForm()->getElement($formId)) {
+                //do nothing
+            }
         }
     }
 

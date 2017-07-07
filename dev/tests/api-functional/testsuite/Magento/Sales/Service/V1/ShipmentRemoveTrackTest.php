@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -46,11 +46,13 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
     public function testShipmentRemoveTrack()
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
+        $shipmentCollection = $this->objectManager->get(
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class
+        );
         $shipment = $shipmentCollection->getFirstItem();
 
         /** @var \Magento\Sales\Model\Order\Shipment\Track $track */
-        $track = $this->objectManager->create('Magento\Sales\Model\Order\Shipment\TrackFactory')->create();
+        $track = $this->objectManager->create(\Magento\Sales\Model\Order\Shipment\TrackFactory::class)->create();
         $track->addData(
             [
                 ShipmentTrackInterface::ENTITY_ID => null,

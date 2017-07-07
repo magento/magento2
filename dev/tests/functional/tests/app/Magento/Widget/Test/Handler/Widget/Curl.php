@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,6 +27,8 @@ class Curl extends AbstractCurl
     protected $mappingData = [
         'code' => [
             'CMS Page Link' => 'cms_page_link',
+            'Recently Viewed Products' => 'recently_viewed',
+            'Catalog New Products List' => 'new_products',
         ],
         'block' => [
             'Main Content Area' => 'content',
@@ -41,9 +43,18 @@ class Curl extends AbstractCurl
         ],
         'template' => [
             'CMS Page Link Block Template' => 'widget/link/link_block.phtml',
+            'New Products List Template' => 'product/widget/new/content/new_grid.phtml',
         ],
         'layout_handle' => [
             'Shopping Cart' => 'checkout_cart_index',
+        ],
+        'display_type' => [
+            'All products' => 'all_products',
+            'New products' => 'new_products',
+        ],
+        'show_pager' => [
+            'No' => '0',
+            'Yes' => '1',
         ],
     ];
 

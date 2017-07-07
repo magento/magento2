@@ -2,7 +2,7 @@
 /**
  * Base config model factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -30,6 +30,6 @@ class BaseFactory
      */
     public function create($sourceData = null)
     {
-        return $this->_objectManager->create('Magento\Framework\App\Config\Base', ['sourceData' => $sourceData]);
+        return $this->_objectManager->create(\Magento\Framework\App\Config\Base::class, ['sourceData' => $sourceData]);
     }
 }

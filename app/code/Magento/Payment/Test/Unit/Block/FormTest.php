@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,25 +36,25 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
-            '\Magento\Store\Model\StoreManager'
+            \Magento\Store\Model\StoreManager::class
         )->setMethods(
                 ['getStore']
             )->disableOriginalConstructor()->getMock();
         $this->_eventManager = $this->getMockBuilder(
-            '\Magento\Framework\Event\ManagerInterface'
+            \Magento\Framework\Event\ManagerInterface::class
         )->setMethods(
                 ['dispatch']
             )->disableOriginalConstructor()->getMock();
-        $this->_escaper = $this->getMock('\Magento\Framework\Escaper', null, [], '', true);
+        $this->_escaper = $this->getMock(\Magento\Framework\Escaper::class, null, [], '', true);
         $context = $helper->getObject(
-            'Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             [
                 'storeManager' => $this->_storeManager,
                 'eventManager' => $this->_eventManager,
                 'escaper' => $this->_escaper
             ]
         );
-        $this->_object = $helper->getObject('Magento\Payment\Block\Form', ['context' => $context]);
+        $this->_object = $helper->getObject(\Magento\Payment\Block\Form::class, ['context' => $context]);
     }
 
     /**
@@ -69,7 +69,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodCode()
     {
-        $method = $this->getMock('Magento\Payment\Model\MethodInterface', [], [], '', false);
+        $method = $this->getMock(\Magento\Payment\Model\MethodInterface::class, [], [], '', false);
         $method->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('method_code'));
@@ -82,7 +82,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetInfoData($field, $value, $expected)
     {
-        $methodInstance = $this->getMockBuilder('\Magento\Payment\Model\Method\AbstractMethod')
+        $methodInstance = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -91,7 +91,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->with($field)
             ->will($this->returnValue($value));
         $method = $this->getMockBuilder(
-            'Magento\Payment\Model\MethodInterface'
+            \Magento\Payment\Model\MethodInterface::class
         )->getMockForAbstractClass();
         $method->expects($this->any())
             ->method('getInfoInstance')
@@ -118,7 +118,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMethod()
     {
-        $methodInterfaceMock = $this->getMockBuilder('\Magento\Payment\Model\MethodInterface')
+        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
 
         $this->assertSame($this->_object, $this->_object->setMethod($methodInterfaceMock));

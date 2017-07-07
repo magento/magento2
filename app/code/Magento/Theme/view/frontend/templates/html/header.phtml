@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,13 @@ $welcomeMessage = $block->getWelcome();
 <?php switch ($block->getShowPart()):
     case 'welcome': ?>
         <li class="greet welcome" data-bind="scope: 'customer'">
-            <span data-bind="text: customer().fullname ? $t('Welcome, %1!').replace('%1', customer().fullname) : '<?=$block->escapeHtml($welcomeMessage) ?>'"></span>
+            <!-- ko if: customer().fullname  -->
+            <span data-bind="text: new String('<?= $block->escapeHtml(__('Welcome, %1!', '%1')) ?>').replace('%1', customer().firstname)">
+            </span>
+            <!-- /ko -->
+            <!-- ko ifnot: customer().fullname  -->
+            <span data-bind="html:'<?= $block->escapeHtml($welcomeMessage) ?>'"></span>
+            <!-- /ko -->
         </li>
         <script type="text/x-magento-init">
         {
@@ -32,7 +38,7 @@ $welcomeMessage = $block->getWelcome();
     <?php break; ?>
 
     <?php case 'other': ?>
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
     <?php break; ?>
 
 <?php endswitch; ?>

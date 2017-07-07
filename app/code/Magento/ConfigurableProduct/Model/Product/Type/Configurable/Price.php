@@ -2,7 +2,7 @@
 /**
  * Product type price model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -22,16 +22,16 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             return $product->getCalculatedFinalPrice();
         }
         if ($product->getCustomOption('simple_product') && $product->getCustomOption('simple_product')->getProduct()) {
-            return parent::getFinalPrice($qty, $product->getCustomOption('simple_product')->getProduct());
+            $finalPrice = parent::getFinalPrice($qty, $product->getCustomOption('simple_product')->getProduct());
         } else {
             $priceInfo = $product->getPriceInfo();
             $finalPrice = $priceInfo->getPrice('final_price')->getAmount()->getValue();
-            $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
-            $finalPrice = max(0, $finalPrice);
-            $product->setFinalPrice($finalPrice);
-
-            return $finalPrice;
         }
+        $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
+        $finalPrice = max(0, $finalPrice);
+        $product->setFinalPrice($finalPrice);
+
+        return $finalPrice;
     }
 
     /**
@@ -39,10 +39,15 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     public function getPrice($product)
     {
-        if ($product->getCustomOption('simple_product')) {
-            return $product->getCustomOption('simple_product')->getProduct()->getPrice();
-        } else {
-            return 0;
+        if (!empty($product)) {
+            $simpleProductOption = $product->getCustomOption('simple_product');
+            if (!empty($simpleProductOption)) {
+                $simpleProduct = $simpleProductOption->getProduct();
+                if (!empty($simpleProduct)) {
+                    return $simpleProduct->getPrice();
+                }
+            }
         }
+        return 0;
     }
 }

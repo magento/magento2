@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,62 +8,63 @@
 
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-    <div data-role="steps-wizard-main" class="steps-wizard" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
-        <div data-role="messages" class="messages"></div>
+<div data-role="steps-wizard-main" class="steps-wizard <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName() ?>'">
+    <div data-role="messages" class="messages"></div>
 
-        <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
-            <ul class="nav-bar">
-                <?php foreach ($block->getSteps() as $step) { ?>
-                    <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= /* @escapeNotVerified */  $step->getComponentName() ?>'}">
-                        <a href="#<?= /* @escapeNotVerified */  $step->getComponentName() ?>"
-                           data-bind="click: showSpecificStep">
-                            <?= /* @escapeNotVerified */  $step->getCaption() ?>
-                        </a>
-                    </li>
-                <?php } ?>
-            </ul>
-            <div class="nav-bar-outer-actions">
-                <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
-                    <button type="button"
-                            class="action-default action-primary action-next-step" data-bind="click: next">
-                        <span><?= /* @escapeNotVerified */  __('Next') ?></span>
-                    </button>
-                </div>
-                <div class="action-wrap action-wrap-prev" data-role="step-wizard-prev">
-                    <button type="button"
-                            class="action-default action-back-step"
-                            data-bind="click: back, css: { 'disabled': disabled}">
-                        <span><?= /* @escapeNotVerified */  __('Back') ?></span>
-                    </button>
-                </div>
-                <div class="action-wrap" data-role="closeBtn">
-                    <button type="button"
-                            class="action-cancel action-tertiary" data-bind="click: close">
-                        <span><?= /* @escapeNotVerified */  __('Cancel') ?></span>
-                    </button>
-                </div>
+    <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
+        <ul class="nav-bar">
+            <?php foreach ($block->getSteps() as $step) { ?>
+                <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= /* @escapeNotVerified */  $step->getComponentName() ?>'}">
+                    <a href="#<?= /* @escapeNotVerified */  $step->getComponentName() ?>"
+                       data-bind="click: showSpecificStep">
+                        <?= /* @escapeNotVerified */  $step->getCaption() ?>
+                    </a>
+                </li>
+            <?php } ?>
+        </ul>
+        <div class="nav-bar-outer-actions">
+            <div class="action-wrap" data-role="closeBtn">
+                <button type="button"
+                        class="action-cancel action-tertiary" data-bind="click: close">
+                    <span><?= /* @escapeNotVerified */  __('Cancel') ?></span>
+                </button>
+            </div>
+            <div class="action-wrap action-wrap-prev" data-role="step-wizard-prev">
+                <button type="button"
+                        class="action-default action-back-step"
+                        data-bind="click: back, css: { 'disabled': disabled}">
+                    <span><?= /* @escapeNotVerified */  __('Back') ?></span>
+                </button>
+            </div>
+            <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
+                <button type="button"
+                        class="action-default action-primary action-next-step" data-bind="click: next">
+                    <span><?= /* @escapeNotVerified */  __('Next') ?></span>
+                </button>
             </div>
         </div>
-        <div data-role="steps-wizard-tab">
-            <?php foreach ($block->getSteps() as $step) { ?>
-            <div data-bind="visible: selectedStep() == $element.id"
-                 class="content" id="<?= /* @escapeNotVerified */ $step->getComponentName() ?>"
+    </div>
+    <div data-role="steps-wizard-tab">
+        <?php foreach ($block->getSteps() as $step) { ?>
+            <div data-bind="visible: selectedStep() == $element.id, css: {'no-display':false}"
+                 class="content no-display" id="<?= /* @escapeNotVerified */ $step->getComponentName() ?>"
                  data-role="content">
                 <?= /* @escapeNotVerified */  $step->getContent() ?>
             </div>
-            <?php } ?>
-        </div>
+        <?php } ?>
     </div>
+</div>
 
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                        "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
+                        "<?= /* @escapeNotVerified */  $block->getComponentName() ?>": {
                             "component": "Magento_Ui/js/lib/step-wizard",
                             "initData": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
-                            "stepsNames": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>
+                            "stepsNames": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>,
+                            "modalClass": "<?= /* @noEscape */ $block->getData('config/dataScope') ?>"
                         }
                     }
                 }

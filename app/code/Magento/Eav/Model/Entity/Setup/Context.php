@@ -1,13 +1,22 @@
 <?php
 /**
- * Eav setup context object
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
 /**
+ * Constructor modification point for Magento\Eav\Model\Entity\Setup.
+ *
+ * All such context classes were introduced to allow for backwards compatible constructor modifications
+ * of classes that were supposed to be extended by extension developers.
+ *
+ * Do not call methods of this class directly.
+ *
+ * As Magento moves from inheritance-based APIs all such classes will be deprecated together with their
+ * corresponding abstract classes.
+ *
+ * @api
  * @codeCoverageIgnore
  */
 class Context extends \Magento\Framework\Module\Setup\Context

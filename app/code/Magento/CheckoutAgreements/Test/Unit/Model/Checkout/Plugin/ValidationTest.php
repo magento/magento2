@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
@@ -52,19 +52,21 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->agreementsValidatorMock = $this->getMock('\Magento\Checkout\Api\AgreementsValidatorInterface');
-        $this->subjectMock = $this->getMock('\Magento\Checkout\Api\PaymentInformationManagementInterface');
-        $this->paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
-        $this->addressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $this->agreementsValidatorMock = $this->getMock(\Magento\Checkout\Api\AgreementsValidatorInterface::class);
+        $this->subjectMock = $this->getMock(\Magento\Checkout\Api\PaymentInformationManagementInterface::class);
+        $this->paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
+        $this->addressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
         $this->extensionAttributesMock = $this->getMock(
-            '\Magento\Quote\Api\Data\PaymentExtension',
+            \Magento\Quote\Api\Data\PaymentExtension::class,
             ['getAgreementIds'],
             [],
             '',
             false
         );
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->repositoryMock = $this->getMock('Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface');
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->repositoryMock = $this->getMock(
+            \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface::class
+        );
 
         $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation(
             $this->agreementsValidatorMock,
@@ -85,7 +87,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
-        $this->paymentMock->expects($this->once())
+        $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
@@ -107,7 +109,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
-        $this->paymentMock->expects($this->once())
+        $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);
@@ -125,7 +127,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
-        $this->paymentMock->expects($this->once())
+        $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
         $this->model->beforeSavePaymentInformation($this->subjectMock, $cartId, $this->paymentMock, $this->addressMock);

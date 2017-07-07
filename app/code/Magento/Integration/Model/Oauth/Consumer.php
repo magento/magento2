@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Oauth;
@@ -10,6 +10,7 @@ use Magento\Framework\Oauth\ConsumerInterface;
 /**
  * Consumer model
  *
+ * @api
  * @author Magento Core Team <core@magentocommerce.com>
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer _getResource()
  * @method \Magento\Integration\Model\ResourceModel\Oauth\Consumer getResource()
@@ -42,6 +43,11 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * @var  \Magento\Integration\Helper\Oauth\Data
      */
     protected $dataHelper;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $_dateHelper;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -77,7 +83,23 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Integration\Model\ResourceModel\Oauth\Consumer');
+        $this->_init(\Magento\Integration\Model\ResourceModel\Oauth\Consumer::class);
+    }
+
+    /**
+     * The getter function to get the new DateTime dependency
+     *
+     * @return \Magento\Framework\Stdlib\DateTime\DateTime
+     *
+     * @deprecated
+     */
+    private function getDateHelper()
+    {
+        if ($this->_dateHelper === null) {
+            $this->_dateHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        }
+        return $this->_dateHelper;
     }
 
     /**
@@ -87,7 +109,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      */
     public function beforeSave()
     {
-        $this->setUpdatedAt(time());
         $this->validate();
         parent::beforeSave();
         return $this;
@@ -177,6 +198,8 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     public function isValidForTokenExchange()
     {
         $expiry = $this->dataHelper->getConsumerExpirationPeriod();
-        return $expiry > $this->getResource()->getTimeInSecondsSinceCreation($this->getId());
+        $currentTimestamp = $this->getDateHelper()->gmtTimestamp();
+        $updatedTimestamp = $this->getDateHelper()->gmtTimestamp($this->getUpdatedAt());
+        return $expiry > ($currentTimestamp - $updatedTimestamp);
     }
 }

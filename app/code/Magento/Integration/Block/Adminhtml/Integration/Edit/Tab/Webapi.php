@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit\Tab;
 
-use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Class for handling API section within integration.
+ *
+ * @api
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -121,6 +122,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected function _construct()
     {
         parent::_construct();
+        $savedFromData = $this->retrieveFormResources();
+        if (false !== $savedFromData) {
+            $this->setSelectedResources($savedFromData);
+            return;
+        }
         $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
         if (is_array($integrationData)
             && isset($integrationData['integration_id'])
@@ -132,6 +138,25 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         } else {
             $this->setSelectedResources([]);
         }
+    }
+
+    /**
+     * Retrieve saved resource
+     *
+     * @return array|bool
+     */
+    protected function retrieveFormResources()
+    {
+        $savedData = $this->_coreRegistry->registry(
+            \Magento\Integration\Controller\Adminhtml\Integration::REGISTRY_KEY_CURRENT_RESOURCE
+        );
+        if (is_array($savedData)) {
+            if ($savedData['all_resources']) {
+                return [$this->rootResource->getId()];
+            }
+            return $savedData['resource'];
+        }
+        return false;
     }
 
     /**
@@ -151,10 +176,24 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function getTree()
     {
+        return $this->integrationData->mapResources($this->getAclResources());
+    }
+
+    /**
+     * Get lit of all ACL resources declared in the system.
+     *
+     * @return array
+     */
+    private function getAclResources()
+    {
         $resources = $this->aclResourceProvider->getAclResources();
-        $rootArray = $this->integrationData->mapResources(
-            isset($resources[1]['children']) ? $resources[1]['children'] : []
+        $configResource = array_filter(
+            $resources,
+            function ($node) {
+                return $node['id'] == 'Magento_Backend::admin';
+            }
         );
-        return $rootArray;
+        $configResource = reset($configResource);
+        return isset($configResource['children']) ? $configResource['children'] : [];
     }
 }

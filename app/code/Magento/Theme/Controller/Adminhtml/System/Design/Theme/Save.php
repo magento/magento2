@@ -1,11 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+/**
+ * Class Save
+ * @deprecated
+ */
 class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**
@@ -23,12 +27,12 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         $reorderJsFiles = array_keys($this->getRequest()->getParam('js_order', []));
 
         /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
-        $themeFactory = $this->_objectManager->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
+        $themeFactory = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
         /** @var $cssService \Magento\Theme\Model\Theme\Customization\File\CustomCss */
-        $cssService = $this->_objectManager->get('Magento\Theme\Model\Theme\Customization\File\CustomCss');
+        $cssService = $this->_objectManager->get(\Magento\Theme\Model\Theme\Customization\File\CustomCss::class);
         /** @var $singleFile \Magento\Theme\Model\Theme\SingleFile */
         $singleFile = $this->_objectManager->create(
-            'Magento\Theme\Model\Theme\SingleFile',
+            \Magento\Theme\Model\Theme\SingleFile::class,
             ['fileService' => $cssService]
         );
         try {
@@ -70,7 +74,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $redirectBack = true;
         } catch (\Exception $e) {
             $this->messageManager->addError('The theme was not saved');
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $redirectBack
             ? $this->_redirect('adminhtml/*/edit', ['id' => $theme->getId()])

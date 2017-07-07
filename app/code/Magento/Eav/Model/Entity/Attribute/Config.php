@@ -1,24 +1,34 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
+/**
+ * Provides EAV attributes configuration
+ *
+ * @api
+ */
 class Config extends \Magento\Framework\Config\Data
 {
     /**
-     * @param \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader
+     * Constructor
+     *
+     * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param string $cacheId
-     * @codeCoverageIgnore
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = "eav_attributes"
+        $cacheId = 'eav_attributes',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 
     /**

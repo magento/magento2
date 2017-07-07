@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Arguments\FileResolver;
@@ -17,10 +17,10 @@ class PrimaryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet(array $fileList, $scope, $filename)
     {
-        $directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $directory = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $iteratorFactory = $this->getMock(
-            'Magento\Framework\Config\FileIteratorFactory',
+            \Magento\Framework\Config\FileIteratorFactory::class,
             ['create'],
             [],
             '',

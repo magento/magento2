@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
@@ -12,7 +12,11 @@ use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
+/**
+ * @api
+ */
 class Match implements QueryInterface
 {
     const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
@@ -40,19 +44,27 @@ class Match implements QueryInterface
     private $fulltextSearchMode;
 
     /**
+     * @var PreprocessorInterface[]
+     */
+    protected $preprocessors;
+
+    /**
      * @param ResolverInterface $resolver
      * @param Fulltext $fulltextHelper
      * @param string $fulltextSearchMode
+     * @param PreprocessorInterface[] $preprocessors
      */
     public function __construct(
         ResolverInterface $resolver,
         Fulltext $fulltextHelper,
-        $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN
+        $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN,
+        array $preprocessors = []
     ) {
         $this->resolver = $resolver;
         $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $this->fulltextHelper = $fulltextHelper;
         $this->fulltextSearchMode = $fulltextSearchMode;
+        $this->preprocessors = $preprocessors;
     }
 
     /**
@@ -107,6 +119,9 @@ class Match implements QueryInterface
     protected function prepareQuery($queryValue, $conditionType)
     {
         $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
+        foreach ($this->preprocessors as $preprocessor) {
+            $queryValue = $preprocessor->process($queryValue);
+        }
 
         $stringPrefix = '';
         if ($conditionType === BoolExpression::QUERY_CONDITION_MUST) {

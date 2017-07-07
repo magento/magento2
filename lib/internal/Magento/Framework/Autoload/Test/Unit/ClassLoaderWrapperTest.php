@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Autoload\Test\Unit;
 
@@ -29,10 +27,11 @@ class ClassLoaderWrapperTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->autoloaderMock = $this->getMock('Composer\Autoload\ClassLoader');
-        $this->model = (new ObjectManager($this))->getObject('Magento\Framework\Autoload\ClassLoaderWrapper',
+        $this->autoloaderMock = $this->getMock(\Composer\Autoload\ClassLoader::class);
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Framework\Autoload\ClassLoaderWrapper::class,
             [
                 'autoloader' => $this->autoloaderMock
             ]

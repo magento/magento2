@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib;
@@ -8,6 +8,8 @@ namespace Magento\Framework\Stdlib;
 /**
  * Converter of date formats
  * Internal dates
+ *
+ * @api
  */
 class DateTime
 {

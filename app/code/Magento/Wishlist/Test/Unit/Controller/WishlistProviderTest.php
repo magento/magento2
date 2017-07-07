@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Controller;
@@ -37,14 +37,14 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
 
         $this->wishlistFactory = $this->getMock(
-            '\Magento\Wishlist\Model\WishlistFactory',
+            \Magento\Wishlist\Model\WishlistFactory::class,
             ['create'],
             [],
             '',
@@ -52,7 +52,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->customerSession = $this->getMock(
-            '\Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             ['getCustomerId'],
             [],
             '',
@@ -60,7 +60,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->messageManager = $this->getMock(
-            '\Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             [],
             [],
             '',
@@ -68,7 +68,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->wishlistProvider = $objectManager->getObject(
-            'Magento\Wishlist\Controller\WishlistProvider',
+            \Magento\Wishlist\Controller\WishlistProvider::class,
             [
                 'request' => $this->request,
                 'wishlistFactory' => $this->wishlistFactory,
@@ -80,7 +80,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWishlist()
     {
-        $wishlist = $this->getMock('\Magento\Wishlist\Model\Wishlist', [], [], '', false);
+        $wishlist = $this->getMock(\Magento\Wishlist\Model\Wishlist::class, [], [], '', false);
 
         $this->wishlistFactory->expects($this->once())
             ->method('create')
@@ -92,7 +92,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetWishlistWithCustomer()
     {
         $wishlist = $this->getMock(
-            '\Magento\Wishlist\Model\Wishlist',
+            \Magento\Wishlist\Model\Wishlist::class,
             ['loadByCustomerId', 'getId', 'getCustomerId', '__wakeup'],
             [],
             '',
@@ -122,7 +122,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetWishlistWithIdAndCustomer()
     {
         $wishlist = $this->getMock(
-            '\Magento\Wishlist\Model\Wishlist',
+            \Magento\Wishlist\Model\Wishlist::class,
             ['loadByCustomerId', 'load', 'getId', 'getCustomerId', '__wakeup'],
             [],
             '',
@@ -157,7 +157,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetWishlistWithIdWithoutCustomer()
     {
         $wishlist = $this->getMock(
-            '\Magento\Wishlist\Model\Wishlist',
+            \Magento\Wishlist\Model\Wishlist::class,
             ['loadByCustomerId', 'load', 'getId', 'getCustomerId', '__wakeup'],
             [],
             '',

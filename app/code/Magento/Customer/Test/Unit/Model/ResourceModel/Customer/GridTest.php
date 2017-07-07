@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Customer;
@@ -33,32 +33,32 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /** @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject */
     protected $queryResult;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->indexerRegistry = $this->getMock(\Magento\Framework\Indexer\IndexerRegistry::class, [], [], '', false);
         $this->flatScopeResolver = $this->getMock(
-            'Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver',
+            \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class,
             [],
             [],
             '',
             false
         );
         $this->indexer = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false
         );
         $this->connection = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false
         );
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->queryResult = $this->getMockForAbstractClass(
-            'Zend_Db_Statement_Interface',
+            \Zend_Db_Statement_Interface::class,
             [],
             '',
             false
@@ -90,7 +90,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID, [])
             ->willReturn($gridTable);
 
-        $this->connection->expects($this->exactly(2))
+        $this->resource->expects($this->exactly(2))
             ->method('getTableName')
             ->willReturnMap([
                 [$gridTable],

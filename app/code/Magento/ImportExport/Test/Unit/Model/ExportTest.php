@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,11 +30,11 @@ class ExportTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getMageImportExportModelExportMock()
     {
-        $this->_exportConfigMock = $this->getMock('Magento\ImportExport\Model\Export\ConfigInterface');
+        $this->_exportConfigMock = $this->getMock(\Magento\ImportExport\Model\Export\ConfigInterface::class);
 
         /** @var $abstractMockEntity \Magento\ImportExport\Model\Export\AbstractEntity */
         $abstractMockEntity = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Export\AbstractEntity',
+            \Magento\ImportExport\Model\Export\AbstractEntity::class,
             [],
             '',
             false
@@ -42,7 +42,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
 
         /** @var $mockAdapterTest \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter */
         $mockAdapterTest = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
+            \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class,
             [],
             '',
             false,
@@ -58,17 +58,17 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_exportFileExtension)
         );
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $entityFactory = $this->getMock(
-            'Magento\ImportExport\Model\Export\Entity\Factory',
+            \Magento\ImportExport\Model\Export\Entity\Factory::class,
             [],
             [],
             '',
             false
         );
         $exportAdapterFac = $this->getMock(
-            'Magento\ImportExport\Model\Export\Adapter\Factory',
+            \Magento\ImportExport\Model\Export\Adapter\Factory::class,
             [],
             [],
             '',
@@ -76,7 +76,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         );
         /** @var $mockModelExport \Magento\ImportExport\Model\Export */
         $mockModelExport = $this->getMock(
-            'Magento\ImportExport\Model\Export',
+            \Magento\ImportExport\Model\Export::class,
             ['getEntityAdapter', '_getEntityAdapter', '_getWriter'],
             [$logger, $filesystem, $this->_exportConfigMock, $entityFactory, $exportAdapterFac]
         );

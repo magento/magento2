@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,14 +29,14 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $session \Magento\Customer\Model\Session */
         $this->_session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session');
+            ->get(\Magento\Customer\Model\Session::class);
         $this->_visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Visitor');
+            ->create(\Magento\Customer\Model\Visitor::class);
         $this->_visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product\Compare\ListCompare', ['customerVisitor' => $this->_visitor]);
+            ->create(\Magento\Catalog\Model\Product\Compare\ListCompare::class, ['customerVisitor' => $this->_visitor]);
     }
 
     protected function tearDown()
@@ -49,7 +49,7 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
         $this->_session->setCustomerId(1);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product')
+            ->create(\Magento\Catalog\Model\Product::class)
             ->load(1);
         $this->_model->addProduct($product);
         $this->assertTrue($this->_model->hasItems(1, $this->_visitor->getId()));
@@ -59,7 +59,7 @@ class ListCompareTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product')
+            ->create(\Magento\Catalog\Model\Product::class)
             ->load(1);
         $this->_model->addProduct($product);
         $this->assertFalse($this->_model->hasItems(1, $this->_visitor->getId()));

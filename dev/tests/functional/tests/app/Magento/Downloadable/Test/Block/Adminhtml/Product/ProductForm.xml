@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <downloadable_information>
-        <class>\Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable</class>
-        <selector>#product_info_tabs_product-details</selector>
+        <class>\Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable</class>
+        <selector>[data-index="downloadable"]</selector>
         <strategy>css selector</strategy>
     </downloadable_information>
-</tabs>
+</sections>

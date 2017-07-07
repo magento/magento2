@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Helper;
@@ -16,28 +16,10 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Search helper
+ * @api
  */
 class Data extends AbstractHelper
 {
-    /**
-     * @var array
-     */
-    protected $_suggestData = null;
-
-    /**
-     * Query object
-     *
-     * @var SearchQuery
-     */
-    protected $_query;
-
-    /**
-     * Query string
-     *
-     * @var string
-     */
-    protected $_queryText;
-
     /**
      * Note messages
      *
@@ -57,46 +39,36 @@ class Data extends AbstractHelper
      *
      * @var ScopeConfigInterface
      */
-    protected $_scopeConfig;
-
-    /**
-     * Query factory
-     *
-     * @var QueryFactory
-     */
-    protected $_queryFactory;
+    protected $scopeConfig;
 
     /**
      * @var Escaper
      */
-    protected $_escaper;
+    protected $escaper;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * Construct
      *
      * @param Context $context
-     * @param String $string
-     * @param QueryFactory $queryFactory
+     * @param StringUtils $string
      * @param Escaper $escaper
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
         StringUtils $string,
-        QueryFactory $queryFactory,
         Escaper $escaper,
         StoreManagerInterface $storeManager
     ) {
         $this->string = $string;
-        $this->_scopeConfig = $context->getScopeConfig();
-        $this->_queryFactory = $queryFactory;
-        $this->_escaper = $escaper;
-        $this->_storeManager = $storeManager;
+        $this->scopeConfig = $context->getScopeConfig();
+        $this->escaper = $escaper;
+        $this->storeManager = $storeManager;
         parent::__construct($context);
     }
 
@@ -108,7 +80,7 @@ class Data extends AbstractHelper
     public function isMinQueryLength()
     {
         $minQueryLength = $this->getMinQueryLength();
-        $thisQueryLength = $this->string->strlen($this->_queryFactory->get()->getQueryText());
+        $thisQueryLength = $this->string->strlen($this->getQueryText());
         return !$thisQueryLength || $minQueryLength !== '' && $thisQueryLength < $minQueryLength;
     }
 
@@ -119,7 +91,9 @@ class Data extends AbstractHelper
      */
     public function getEscapedQueryText()
     {
-        return $this->_escaper->escapeHtml($this->_queryFactory->get()->getQueryText());
+        return $this->escaper->escapeHtml(
+            $this->getPreparedQueryText($this->getQueryText(), $this->getMaxQueryLength())
+        );
     }
 
     /**
@@ -146,7 +120,7 @@ class Data extends AbstractHelper
     {
         return $this->_getUrl(
             'search/ajax/suggest',
-            ['_secure' => $this->_storeManager->getStore()->isCurrentlySecure()]
+            ['_secure' => $this->storeManager->getStore()->isCurrentlySecure()]
         );
     }
 
@@ -168,7 +142,7 @@ class Data extends AbstractHelper
      */
     public function getMinQueryLength($store = null)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             SearchQuery::XML_PATH_MIN_QUERY_LENGTH,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -183,7 +157,7 @@ class Data extends AbstractHelper
      */
     public function getMaxQueryLength($store = null)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             SearchQuery::XML_PATH_MAX_QUERY_LENGTH,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -233,7 +207,7 @@ class Data extends AbstractHelper
      */
     public function checkNotes($store = null)
     {
-        if ($this->_queryFactory->get()->isQueryTextExceeded()) {
+        if ($this->isQueryTooLong($this->getQueryText(), $this->getMaxQueryLength())) {
             $this->addNoteMessage(
                 __(
                     'Your search query can\'t be longer than %1, so we shortened your query.',
@@ -251,5 +225,41 @@ class Data extends AbstractHelper
     public function getQueryParamName()
     {
         return QueryFactory::QUERY_VAR_NAME;
+    }
+
+    /**
+     * @param string $queryText
+     * @param int|string $maxQueryLength
+     * @return bool
+     */
+    private function isQueryTooLong($queryText, $maxQueryLength)
+    {
+        return ($maxQueryLength !== '' && $this->string->strlen($queryText) > $maxQueryLength);
+    }
+
+    /**
+     * Retrieve search query text
+     *
+     * @return string
+     */
+    private function getQueryText()
+    {
+        $queryText = $this->_request->getParam($this->getQueryParamName());
+        return($queryText === null || is_array($queryText))
+            ? ''
+            : $this->string->cleanString(trim($queryText));
+    }
+
+    /**
+     * @param string $queryText
+     * @param int|string $maxQueryLength
+     * @return string
+     */
+    private function getPreparedQueryText($queryText, $maxQueryLength)
+    {
+        if ($this->isQueryTooLong($queryText, $maxQueryLength)) {
+            $queryText = $this->string->substr($queryText, 0, $maxQueryLength);
+        }
+        return $queryText;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model\ResourceModel\Debug;
@@ -18,8 +18,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Authorizenet\Model\Debug',
-            'Magento\Authorizenet\Model\ResourceModel\Debug'
+            \Magento\Authorizenet\Model\Debug::class,
+            \Magento\Authorizenet\Model\ResourceModel\Debug::class
         );
     }
 }

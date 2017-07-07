@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
@@ -17,7 +17,7 @@ class Edit extends RatingController
     {
         $this->initEnityId();
         /** @var \Magento\Review\Model\Rating $ratingModel */
-        $ratingModel = $this->_objectManager->create('Magento\Review\Model\Rating');
+        $ratingModel = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
         if ($this->getRequest()->getParam('id')) {
             $ratingModel->load($this->getRequest()->getParam('id'));
         }
@@ -29,8 +29,9 @@ class Edit extends RatingController
             $ratingModel->getId() ? $ratingModel->getRatingCode() : __('New Rating')
         );
         $resultPage->addBreadcrumb(__('Manage Ratings'), __('Manage Ratings'));
-        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Rating\Edit'))
-            ->addLeft($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Rating\Edit\Tabs'));
+        $resultPage->addContent($resultPage->getLayout()->createBlock(
+            \Magento\Review\Block\Adminhtml\Rating\Edit::class
+        ))->addLeft($resultPage->getLayout()->createBlock(\Magento\Review\Block\Adminhtml\Rating\Edit\Tabs::class));
         return $resultPage;
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 DaterangeTest = TestCase('DaterangeTest');
@@ -30,8 +30,8 @@ DaterangeTest.prototype.testInitDateRangeDatepickers = function() {
         from = $('#'+options.from.id),
         to = $('#'+options.to.id);
 
-    assertEquals(true, from.hasClass('hasDatepicker'));
-    assertEquals(true, to.hasClass('hasDatepicker'));
+    assertEquals(true, from.hasClass('_has-datepicker'));
+    assertEquals(true, to.hasClass('_has-datepicker'));
     dateRange.dateRange('destroy');
 };
 DaterangeTest.prototype.testDestroy = function() {
@@ -53,11 +53,11 @@ DaterangeTest.prototype.testDestroy = function() {
         from = $('#'+options.from.id),
         to = $('#'+options.to.id),
         dateRangeExist = dateRange.is(':mage-dateRange'),
-        fromExist = from.hasClass('hasDatepicker'),
-        toExist = to.hasClass('hasDatepicker');
+        fromExist = from.hasClass('_has-datepicker'),
+        toExist = to.hasClass('_has-datepicker');
 
     dateRange.dateRange('destroy');
     assertEquals(true, dateRangeExist != dateRange.is(':mage-dateRange'));
-    assertEquals(true, fromExist != from.hasClass('hasDatepicker'));
-    assertEquals(true, toExist != to.hasClass('hasDatepicker'));
+    assertEquals(true, fromExist != from.hasClass('_has-datepicker'));
+    assertEquals(true, toExist != to.hasClass('_has-datepicker'));
 };

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
@@ -20,7 +20,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
     }
@@ -47,7 +47,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
         $expectedInstanceType
     ) {
         $instanceMock = $this->getMockBuilder($expectedInstanceType)->disableOriginalConstructor()->getMock();
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         // Verify create() is called with correct concrete type
         $objectManagerMock->expects($this->once())
@@ -57,7 +57,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
 
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(
-            'Magento\Tax\Model\Calculation\CalculatorFactory',
+            \Magento\Tax\Model\Calculation\CalculatorFactory::class,
             ['objectManager' => $objectManagerMock]
         );
 
@@ -116,10 +116,10 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createDataProvider()
     {
-        $billingAddressMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+        $billingAddressMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $shippingAddressMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+        $shippingAddressMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -130,8 +130,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
                 null,
                 null,
                 null,
-                null,
-                'Magento\Tax\Model\Calculation\UnitBaseCalculator',
+                null, \Magento\Tax\Model\Calculation\UnitBaseCalculator::class,
             ],
             'Row HasBilling' => [
                 CalculatorFactory::CALC_ROW_BASE,
@@ -139,8 +138,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
                 $billingAddressMock,
                 null,
                 null,
-                null,
-                'Magento\Tax\Model\Calculation\RowBaseCalculator',
+                null, \Magento\Tax\Model\Calculation\RowBaseCalculator::class,
             ],
             'Row HasCustomerTaxClassId' => [
                 CalculatorFactory::CALC_ROW_BASE,
@@ -148,8 +146,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
                 null,
                 null,
                 123,
-                null,
-                'Magento\Tax\Model\Calculation\RowBaseCalculator',
+                null, \Magento\Tax\Model\Calculation\RowBaseCalculator::class,
             ],
             'Total HasShipping' => [
                 CalculatorFactory::CALC_TOTAL_BASE,
@@ -157,8 +154,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
                 null,
                 $shippingAddressMock,
                 null,
-                null,
-                'Magento\Tax\Model\Calculation\TotalBaseCalculator',
+                null, \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
             ],
             'Total HasShipping HasBilling HasCustomerTaxClassId' => [
                 CalculatorFactory::CALC_TOTAL_BASE,
@@ -166,8 +162,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
                 $billingAddressMock,
                 $shippingAddressMock,
                 1,
-                null,
-                'Magento\Tax\Model\Calculation\TotalBaseCalculator',
+                null, \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
             ],
             'Total HasShipping HasBilling HasCustomerTaxClassId, HasCustomer' => [
                 CalculatorFactory::CALC_TOTAL_BASE,
@@ -175,8 +170,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
                 $billingAddressMock,
                 $shippingAddressMock,
                 1,
-                1,
-                'Magento\Tax\Model\Calculation\TotalBaseCalculator',
+                1, \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
             ],
         ];
     }
@@ -189,7 +183,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(
-            'Magento\Tax\Model\Calculation\CalculatorFactory'
+            \Magento\Tax\Model\Calculation\CalculatorFactory::class
         );
 
         // Call create() with a bad type to generate exception

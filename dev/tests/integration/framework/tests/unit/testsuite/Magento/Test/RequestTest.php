@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test;
@@ -17,11 +17,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\TestFramework\Request(
-            $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface'),
-            $this->getMock('Magento\Framework\Stdlib\StringUtils'),
-            $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface'),
-            $this->getMock('Magento\Framework\ObjectManagerInterface')
+            $this->getMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class),
+            $this->getMock(\Magento\Framework\Stdlib\StringUtils::class),
+            $this->getMock(\Magento\Framework\App\Route\ConfigInterface\Proxy::class, [], [], '', false),
+            $this->getMock(\Magento\Framework\App\Request\PathInfoProcessorInterface::class),
+            $this->getMock(\Magento\Framework\ObjectManagerInterface::class)
         );
     }
 

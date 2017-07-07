@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model\Type\Plugin;
@@ -32,7 +32,7 @@ class Multishipping
     /**
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $subject
      * @param array|null $methods
-     * @return $this
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSetShippingMethods(

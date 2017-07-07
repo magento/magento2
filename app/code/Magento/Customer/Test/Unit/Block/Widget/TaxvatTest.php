@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,11 +29,11 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     /** @var Taxvat */
     private $_block;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->attribute = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
-        $this->customerMetadata = $this->getMockBuilder('\Magento\Customer\Api\CustomerMetadataInterface')
+        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects(
             $this->any()
@@ -46,8 +46,8 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_block = new \Magento\Customer\Block\Widget\Taxvat(
-            $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false),
-            $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
+            $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false),
+            $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false),
             $this->customerMetadata
         );
     }
@@ -82,7 +82,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -120,7 +120,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))

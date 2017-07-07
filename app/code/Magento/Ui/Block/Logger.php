@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Block;
@@ -8,6 +8,11 @@ namespace Magento\Ui\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Ui\Model\Config;
 
+/**
+ * Logger block
+ *
+ * @api
+ */
 class Logger extends Template
 {
     /**

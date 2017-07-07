@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model;
@@ -12,6 +12,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -141,10 +142,11 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
-                if ($installDate <= strtotime((string)$item->pubDate)) {
+                $itemPublicationDate = strtotime((string)$item->pubDate);
+                if ($installDate <= $itemPublicationDate) {
                     $feedData[] = [
                         'severity' => (int)$item->severity,
-                        'date_added' => $this->getDate((string)$item->pubDate),
+                        'date_added' => date('Y-m-d H:i:s', $itemPublicationDate),
                         'title' => (string)$item->title,
                         'description' => (string)$item->description,
                         'url' => (string)$item->link,
@@ -159,17 +161,6 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->setLastUpdate();
 
         return $this;
-    }
-
-    /**
-     * Retrieve DB date from RSS date
-     *
-     * @param string $rssDate
-     * @return string YYYY-MM-DD YY:HH:SS
-     */
-    public function getDate($rssDate)
-    {
-        return gmdate('Y-m-d H:i:s', strtotime($rssDate));
     }
 
     /**

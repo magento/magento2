@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -12,18 +12,22 @@
         .block-addbysku {
             .fieldset {
                 margin: 0;
+
                 .fields {
                     position: relative;
+
                     .field {
                         display: inline-block;
                         margin-bottom: @indent__s;
                         vertical-align: top;
+
                         &.sku {
                             &:extend(.abs-add-box-sizing all);
                             margin-right: -85px;
                             padding-right: 90px;
                             width: 100%;
                         }
+
                         &.qty {
                             .qty {
                                 &:extend(.abs-input-qty all);
@@ -33,28 +37,34 @@
                             }
                         }
                     }
+
                     .actions-toolbar {
                         position: absolute;
-                        top: 7px;
                         right: 0;
+                        top: 7px;
                     }
                 }
             }
+
             .form-addbysku {
                 .actions-toolbar {
                     margin-bottom: @indent__base;
+
                     .primary {
                         text-align: left;
+
                         .action {
                             width: auto;
                         }
                     }
+
                     .secondary {
                         float: none;
                         text-align: left;
                     }
                 }
             }
+
             .action {
                 &.add {
                     .lib-button-icon(
@@ -66,14 +76,17 @@
                     padding: 4px;
                     width: auto;
                 }
+
                 &.links {
                     display: inline-block;
                     margin: @indent__base 0 0;
                 }
+
                 &.reset {
                     display: block;
                     margin: @indent__s 0;
                 }
+
                 &.remove {
                     .lib-button-icon(
                     @_icon-font-content: @icon-remove,

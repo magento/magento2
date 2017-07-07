@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,13 +9,13 @@
  * @var $block \Magento\OfflinePayments\Block\Form\Purchaseorder
  */
 ?>
-<fieldset class="admin__fieldset payment-method" id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()) ?>" style="display: none">
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>" style="display: none">
     <div class="admin__field _required">
-        <label for="po_number" class="admin__field-label"><span><?php echo $block->escapeHtml(__('Purchase Order Number')) ?></span></label>
+        <label for="po_number" class="admin__field-label"><span><?= $block->escapeHtml(__('Purchase Order Number')) ?></span></label>
         <div class="admin__field-control">
             <input type="text" id="po_number" name="payment[po_number]"
-                   title="<?php echo $block->escapeHtml(__("Purchase Order Number")) ?>" class="required-entry admin__control-text"
-                   value="<?php /* @noEscape */ echo $block->getInfoData('po_number') ?>"/>
+                   title="<?= $block->escapeHtml(__("Purchase Order Number")) ?>" class="required-entry admin__control-text"
+                   value="<?= /* @noEscape */ $block->getInfoData('po_number') ?>"/>
         </div>
     </div>
 </fieldset>

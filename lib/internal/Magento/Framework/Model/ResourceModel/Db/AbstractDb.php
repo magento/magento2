@@ -1,21 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\Phrase;
 
 /**
- * Abstract resource model class
+ * Abstract resource model
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 abstract class AbstractDb extends AbstractResource
 {
@@ -131,13 +134,15 @@ abstract class AbstractDb extends AbstractResource
     protected $objectRelationProcessor;
 
     /**
-     * Class constructor
+     * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
      */
-    public function __construct(\Magento\Framework\Model\ResourceModel\Db\Context $context, $connectionName = null)
-    {
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        $connectionName = null
+    ) {
         $this->transactionManager = $context->getTransactionManager();
         $this->_resources = $context->getResources();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
@@ -167,7 +172,7 @@ abstract class AbstractDb extends AbstractResource
     public function __wakeup()
     {
         $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()
-            ->get('Magento\Framework\App\ResourceConnection');
+            ->get(\Magento\Framework\App\ResourceConnection::class);
     }
 
     /**
@@ -332,6 +337,7 @@ abstract class AbstractDb extends AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
+        $object->beforeLoad($value, $field);
         if ($field === null) {
             $field = $this->getIdFieldName();
         }
@@ -348,7 +354,10 @@ abstract class AbstractDb extends AbstractResource
 
         $this->unserializeFields($object);
         $this->_afterLoad($object);
-
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
+        
         return $this;
     }
 
@@ -375,6 +384,7 @@ abstract class AbstractDb extends AbstractResource
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
+     * @throws AlreadyExistsException
      * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
@@ -409,6 +419,10 @@ abstract class AbstractDb extends AbstractResource
             }
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
+        } catch (DuplicateException $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
         } catch (\Exception $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
@@ -594,7 +608,7 @@ abstract class AbstractDb extends AbstractResource
                     }
                 }
 
-                if ($object->getId() || $object->getId() === '0') {
+                if ($object->getId() || (string)$object->getId() === '0') {
                     $select->where($this->getIdFieldName() . '!=?', $object->getId());
                 }
 
@@ -614,17 +628,6 @@ abstract class AbstractDb extends AbstractResource
             throw new AlreadyExistsException($error);
         }
         return $this;
-    }
-
-    /**
-     * After load
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return void
-     */
-    public function afterLoad(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $this->_afterLoad($object);
     }
 
     /**
@@ -850,5 +853,72 @@ abstract class AbstractDb extends AbstractResource
     protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
     {
         return $this;
+    }
+
+    /**
+     * Perform actions after entity load
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function afterLoad(\Magento\Framework\DataObject $object)
+    {
+        $this->_afterLoad($object);
+    }
+
+    /**
+     * Perform actions before entity save
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function beforeSave(\Magento\Framework\DataObject $object)
+    {
+        $this->_beforeSave($object);
+    }
+
+    /**
+     * Perform actions after entity save
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function afterSave(\Magento\Framework\DataObject $object)
+    {
+        $this->_afterSave($object);
+    }
+
+    /**
+     * Perform actions before entity delete
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function beforeDelete(\Magento\Framework\DataObject $object)
+    {
+        $this->_beforeDelete($object);
+    }
+
+    /**
+     * Perform actions after entity delete
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function afterDelete(\Magento\Framework\DataObject $object)
+    {
+        $this->_afterDelete($object);
+    }
+
+    /**
+     * Serialize serializable fields of the object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Model\AbstractModel|void
+     */
+    public function serializeFields(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->_serializeFields($object);
+        return $object;
     }
 }

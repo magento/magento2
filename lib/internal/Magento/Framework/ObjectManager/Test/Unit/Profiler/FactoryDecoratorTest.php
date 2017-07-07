@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,17 +11,17 @@ class FactoryDecoratorTest extends \PHPUnit_Framework_TestCase
     /**
      * Name of the base class to wrap in logger
      */
-    const CLASS_NAME = 'Magento\Test\Di\WrappedClass';
+    const CLASS_NAME = \Magento\Test\Di\WrappedClass::class;
 
     /**
      * Name of the wrapper class that does logging
      */
-    const LOGGER_NAME = 'Magento\Test\Di\WrappedClass\Logger';
+    const LOGGER_NAME = \Magento\Test\Di\WrappedClass\Logger::class;
 
     /**
      * Name of the class that generates wrappers - should not be wrapped by logger
      */
-    const GENERATOR_NAME = 'Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger';
+    const GENERATOR_NAME = \Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger::class;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\ObjectManager\FactoryInterface*/
     private $objectManagerMock;
@@ -29,18 +29,18 @@ class FactoryDecoratorTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\ObjectManager\Profiler\FactoryDecorator */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/../_files/logger_classes.php';
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\FactoryInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\FactoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         // Instantiate SUT
         $this->model = $objectManager->getObject(
-            'Magento\Framework\ObjectManager\Profiler\FactoryDecorator',
+            \Magento\Framework\ObjectManager\Profiler\FactoryDecorator::class,
             ['subject' => $this->objectManagerMock]
         );
     }

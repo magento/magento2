@@ -1,33 +1,41 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * @method \Magento\Config\Block\System\Config\Form getForm()
  */
 namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
 
+/**
+ * Displays a list of <select> tags with names of the modules on tab Stores > Configuration > Advanced / Advanced
+ * on the store settings page.
+ *
+ * @method \Magento\Config\Block\System\Config\Form getForm()
+ * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
+ * @api
+ */
 class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
      * @var \Magento\Framework\DataObject
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_dummyElement;
 
     /**
      * @var \Magento\Config\Block\System\Config\Form\Field
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_fieldRenderer;
 
     /**
      * @var array
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_values;
 
     /**
      * @var \Magento\Framework\Module\ModuleListInterface
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     protected $_moduleList;
 
@@ -50,8 +58,8 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * {@inheritdoc}
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -80,6 +88,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return \Magento\Framework\DataObject
      */
     protected function _getDummyElement()
@@ -91,19 +100,21 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getFieldRenderer()
     {
         if (empty($this->_fieldRenderer)) {
             $this->_fieldRenderer = $this->_layout->getBlockSingleton(
-                'Magento\Config\Block\System\Config\Form\Field'
+                \Magento\Config\Block\System\Config\Form\Field::class
             );
         }
         return $this->_fieldRenderer;
     }
 
     /**
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return array
      */
     protected function _getValues()
@@ -120,6 +131,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
      * @param string $moduleName
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      * @return mixed
      */
     protected function _getFieldHtml($fieldset, $moduleName)

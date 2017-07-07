@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\ResourceModel;
 
 /**
  * Backend translate resource model
+ * @api
  */
 class Translate extends \Magento\Translation\Model\ResourceModel\Translate
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -15,7 +15,7 @@ class EventConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_schemaFile = $objectManager->get('Magento\Framework\Event\Config\SchemaLocator')->getSchema();
+        $this->_schemaFile = $objectManager->get(\Magento\Framework\Event\Config\SchemaLocator::class)->getSchema();
     }
 
     /**
@@ -25,7 +25,13 @@ class EventConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function testEventConfigFiles($file)
     {
         $errors = [];
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $dom = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);

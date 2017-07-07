@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component;
 
+/**
+ * @api
+ */
 class ColumnFactory
 {
     /**
@@ -18,6 +21,7 @@ class ColumnFactory
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
         'select' => 'Magento_Ui/js/grid/columns/select',
+        'multiselect' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
@@ -29,7 +33,7 @@ class ColumnFactory
         'text' => 'text',
         'boolean' => 'select',
         'select' => 'select',
-        'multiselect' => 'select',
+        'multiselect' => 'multiselect',
         'date' => 'date',
     ];
 

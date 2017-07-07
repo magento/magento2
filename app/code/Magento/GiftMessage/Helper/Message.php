@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 namespace Magento\GiftMessage\Helper;
+
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
  * Gift Message helper
@@ -112,7 +114,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
         if (!$this->skipPage($type) && !$this->isMessagesAllowed($type, $entity)) {
             return '';
         }
-        return $this->_layoutFactory->create()->createBlock('Magento\GiftMessage\Block\Message\Inline')
+        return $this->_layoutFactory->create()->createBlock(\Magento\GiftMessage\Block\Message\Inline::class)
             ->setId('giftmessage_form_' . $this->_nextId++)
             ->setDontDisplayContainer($dontDisplayContainer)
             ->setEntity($entity)
@@ -193,20 +195,20 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check availablity of gift messages from store config if flag eq 2.
      *
-     * @param bool $productGiftMessageAllow
+     * @param bool $productConfig
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
      */
-    protected function _getDependenceFromStoreConfig($productGiftMessageAllow, $store = null)
+    protected function _getDependenceFromStoreConfig($productConfig, $store = null)
     {
         $result = $this->scopeConfig->getValue(
             self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
         );
-        if ($productGiftMessageAllow === '' || is_null($productGiftMessageAllow)) {
+        if ($productConfig === null || '' === $productConfig || $productConfig == Boolean::VALUE_USE_CONFIG) {
             return $result;
         } else {
-            return $productGiftMessageAllow;
+            return $productConfig;
         }
     }
 

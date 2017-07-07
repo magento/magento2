@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model;
@@ -13,6 +13,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Tax extends \Magento\Framework\Model\AbstractModel
 {
@@ -134,7 +135,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Weee\Model\ResourceModel\Tax');
+        $this->_init(\Magento\Weee\Model\ResourceModel\Tax::class);
     }
 
     /**
@@ -344,7 +345,9 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 }
 
                 $one = new \Magento\Framework\DataObject();
-                $one->setName(__($attribute['label_value'] ? $attribute['label_value'] : $attribute['frontend_label']))
+                $one->setName(
+                    $attribute['label_value'] ? __($attribute['label_value']) : __($attribute['frontend_label'])
+                )
                     ->setAmount($amount)
                     ->setTaxAmount($taxAmount)
                     ->setAmountExclTax($amountExclTax)

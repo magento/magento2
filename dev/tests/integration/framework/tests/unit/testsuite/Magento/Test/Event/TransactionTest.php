@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,19 +29,19 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_eventManager = $this->getMock(
-            'Magento\TestFramework\EventManager',
+            \Magento\TestFramework\EventManager::class,
             ['fireEvent'],
             [[]]
         );
         $this->_adapter = $this->getMock(
-            '\Magento\TestFramework\Db\Adapter\Mysql',
+            \Magento\TestFramework\Db\Adapter\Mysql::class,
             ['beginTransaction', 'rollBack'],
             [],
             '',
             false
         );
         $this->_object = $this->getMock(
-            'Magento\TestFramework\Event\Transaction',
+            \Magento\TestFramework\Event\Transaction::class,
             ['_getConnection'],
             [$this->_eventManager]
         );

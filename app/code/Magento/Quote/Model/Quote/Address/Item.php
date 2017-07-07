@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Address;
@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote;
 
 /**
+ * @api
  * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item _getResource()
  * @method \Magento\Quote\Model\ResourceModel\Quote\Address\Item getResource()
  * @method int getParentItemId()
@@ -105,7 +106,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address\Item');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Address\Item::class);
     }
 
     /**

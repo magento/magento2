@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -21,7 +21,7 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new CopyConstructorFactory($this->_objectManagerMock);
     }
 
@@ -32,7 +32,7 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\DataObject does not implement \Magento\Catalog\Model\Product\CopyConstructorInterface'
         );
         $this->_objectManagerMock->expects($this->never())->method('create');
-        $this->_model->create('Magento\Framework\DataObject');
+        $this->_model->create(\Magento\Framework\DataObject::class);
     }
 
     public function testCreateWithValidType()
@@ -42,13 +42,13 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Catalog\Model\Product\CopyConstructor\Composite'
+            \Magento\Catalog\Model\Product\CopyConstructor\Composite::class
         )->will(
             $this->returnValue('object')
         );
         $this->assertEquals(
             'object',
-            $this->_model->create('Magento\Catalog\Model\Product\CopyConstructor\Composite')
+            $this->_model->create(\Magento\Catalog\Model\Product\CopyConstructor\Composite::class)
         );
     }
 }

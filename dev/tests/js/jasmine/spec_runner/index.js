@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,38 +13,14 @@ function init(grunt, options) {
         stripJsonComments   = require('strip-json-comments'),
         path                = require('path'),
         config,
-        themes;
-        
+        themes,
+        file;
+
     config = grunt.file.read(__dirname + '/settings.json');
     config = stripJsonComments(config);
     config = JSON.parse(config);
 
-    //themes = require(path.resolve(process.cwd(), config.themes));
-    //TODO: MAGETWO-39843
-    themes = {
-        blank: {
-            area: 'frontend',
-            name: 'Magento/blank',
-            locale: 'en_US',
-            files: [
-                'css/styles-m',
-                'css/styles-l',
-                'css/email',
-                'css/email-inline'
-            ],
-            dsl: 'less'
-        },
-        backend: {
-            area: 'adminhtml',
-            name: 'Magento/backend',
-            locale: 'en_US',
-            files: [
-                'css/styles-old',
-                'css/styles'
-            ],
-            dsl: 'less'
-        }
-    }
+    themes = require(path.resolve(process.cwd(), config.themes));
 
     if (options.theme) {
         themes = _.pick(themes, options.theme);
@@ -53,6 +29,12 @@ function init(grunt, options) {
     tasks = Object.keys(themes);
 
     config.themes = themes;
+
+    file = grunt.option('file');
+
+    if (file) {
+        config.singleTest = file;
+    }
 
     enableTasks(grunt, config);
 }

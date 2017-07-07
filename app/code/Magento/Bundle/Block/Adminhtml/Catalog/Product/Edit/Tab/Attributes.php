@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($specialPrice) {
             $specialPrice->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Special'
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Special::class
                 )->setDisableChild(
                     false
                 )
@@ -50,7 +50,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($sku) {
             $sku->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend'
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class
                 )->setDisableChild(
                     false
                 )
@@ -61,7 +61,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($price) {
             $price->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend',
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class,
                     'adminhtml.catalog.product.bundle.edit.tab.attributes.price'
                 )->setDisableChild(
                     true
@@ -107,7 +107,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($weight) {
             $weight->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend'
+                    \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class
                 )->setDisableChild(
                     true
                 )
@@ -118,7 +118,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
         if ($tier_price) {
             $tier_price->setRenderer(
                 $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier'
+                    \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier::class
                 )->setPriceColumnHeader(
                     __('Percent Discount')
                 )->setPriceValidation(

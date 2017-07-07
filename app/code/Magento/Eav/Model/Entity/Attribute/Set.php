@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,9 +19,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -123,7 +123,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
     }
 
     /**
@@ -173,6 +173,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param array $data
      * @return $this
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -190,16 +191,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         }
         if ($data['groups']) {
             foreach ($data['groups'] as $group) {
-                $modelGroup = $this->_attrGroupFactory->create();
-                $modelGroup->setId(
-                    is_numeric($group[0]) && $group[0] > 0 ? $group[0] : null
-                )->setAttributeGroupName(
-                    $group[1]
-                )->setAttributeSetId(
-                    $this->getId()
-                )->setSortOrder(
-                    $group[2]
-                );
+                $modelGroup = $this->initGroupModel($group);
 
                 if ($data['attributes']) {
                     foreach ($data['attributes'] as $attribute) {
@@ -229,10 +221,17 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
         if ($data['not_attributes']) {
             $modelAttributeArray = [];
-            foreach ($data['not_attributes'] as $attributeId) {
-                $modelAttribute = $this->_attributeFactory->create();
-
-                $modelAttribute->setEntityAttributeId($attributeId);
+            $data['not_attributes'] = array_filter($data['not_attributes']);
+            foreach ($data['not_attributes'] as $entityAttributeId) {
+                $entityAttribute = $this->_resourceAttribute->getEntityAttribute($entityAttributeId);
+                if (!$entityAttribute) {
+                    throw new LocalizedException(__('Entity attribute with id "%1" not found', $entityAttributeId));
+                }
+                $modelAttribute = $this->_eavConfig->getAttribute(
+                    $this->getEntityTypeId(),
+                    $entityAttribute['attribute_id']
+                );
+                $modelAttribute->setEntityAttributeId($entityAttributeId);
                 $modelAttributeArray[] = $modelAttribute;
             }
             $this->setRemoveAttributes($modelAttributeArray);
@@ -251,6 +250,31 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         $this->setAttributeSetName($data['attribute_set_name'])->setEntityTypeId($this->getEntityTypeId());
 
         return $this;
+    }
+
+    /**
+     * @param array $group
+     * @return Group
+     */
+    private function initGroupModel($group)
+    {
+        $modelGroup = $this->_attrGroupFactory->create();
+        $modelGroup->setId(
+            is_numeric($group[0]) && $group[0] > 0 ? $group[0] : null
+        )->setAttributeGroupName(
+            $group[1]
+        )->setAttributeSetId(
+            $this->getId()
+        )->setSortOrder(
+            $group[2]
+        );
+        if ($modelGroup->getId()) {
+            $group = $this->_attrGroupFactory->create()->load($modelGroup->getId());
+            if ($group->getId()) {
+                $modelGroup->setAttributeGroupCode($group->getAttributeGroupCode());
+            }
+        }
+        return $modelGroup;
     }
 
     /**
@@ -463,5 +487,6 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

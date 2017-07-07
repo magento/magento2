@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -19,10 +19,12 @@
         .lib-css(background, @sidebar__background-color);
         margin-bottom: @indent__m;
         padding: 1px 15px @indent__m;
+
         > .title {
             display: block;
             .lib-heading(h3);
         }
+
         .block {
             &:extend(.abs-discount-block all);
             margin-bottom: 0;
@@ -36,6 +38,7 @@
 
                 .field {
                     margin: 0 0 @indent__s;
+
                     &.note {
                         font-size: @font-size__s;
                     }
@@ -72,6 +75,7 @@
         border-top: 1px solid @border-color__base;
         padding-top: @indent__s;
         &:extend(.abs-sidebar-totals all);
+
         .table-wrapper {
             margin-bottom: 0;
             overflow: inherit;
@@ -84,29 +88,35 @@
             thead + .item {
                 border-top: @border-width__base solid @border-color__base;
             }
+
             > .item {
                 border-bottom: @border-width__base solid @border-color__base;
                 position: relative;
             }
         }
+
         .col {
             padding-top: @indent__base;
+
             &.qty {
                 .input-text {
                     margin-top: -5px;
                     &:extend(.abs-input-qty all);
                 }
+
                 .label {
                     &:extend(.abs-visually-hidden all);
                 }
             }
         }
+
         .item {
             &-actions td {
                 padding-bottom: @indent__s;
                 text-align: center;
                 white-space: normal;
             }
+
             .col {
                 &.item {
                     display: block;
@@ -116,24 +126,29 @@
                 }
             }
         }
+
         .actions-toolbar {
             &:extend(.abs-add-clearfix all);
+
             > .action {
                 &:extend(button all);
                 .lib-link-as-button();
                 margin-bottom: @indent__s;
                 margin-right: @indent__s;
+
                 &:last-child {
                     margin-right: 0;
                 }
             }
         }
+
         .action {
             &.help.map {
                 &:extend(.abs-action-button-as-link all);
                 font-weight: @font-weight__regular;
             }
         }
+
         .product {
             &-item-photo {
                 display: block;
@@ -144,20 +159,24 @@
                 top: 15px;
                 width: 100%;
             }
+
             &-item-details {
                 white-space: normal;
             }
+
             &-item-name {
                 display: inline-block;
                 font-weight: @font-weight__regular;
                 margin-top: -6px;
             }
         }
+
         .gift-registry-name-label {
             &:after {
                 content: ':';
             }
         }
+
         //  Product options
         .item-options {
             font-size: @font-size__s;
@@ -173,6 +192,7 @@
         .product-image-wrapper {
             &:extend(.abs-reset-image-wrapper all);
         }
+
         .action.configure {
             display: inline-block;
             margin: 0 0 @indent__base;
@@ -183,14 +203,17 @@
         .form-cart {
             &:extend(.abs-shopping-cart-items all);
         }
+
         .checkout-methods-items {
             &:extend(.abs-reset-list all);
             margin-top: @indent__base;
             text-align: center;
+
             .action.primary {
                 &:extend(.abs-button-l all);
                 width: 100%;
             }
+
             .item {
                 & + .item {
                     margin-top: @indent__base;
@@ -199,12 +222,53 @@
         }
     }
 
+    //  Products pager
+    .cart-products-toolbar {
+        .toolbar-amount {
+            margin: @indent__m 0 15px;
+            padding: 0;
+            text-align: center;
+        }
+
+        .pages {
+            margin: 0 0 @indent__m;
+            text-align: center;
+
+            .items {
+                > .item {
+                    border-bottom: 0;
+                }
+            }
+        }
+    }
+
+    .cart-products-toolbar-top {
+        border-bottom: @border-width__base solid @border-color__base;
+    }
+
     //
     //  Cross sell
     //  ---------------------------------------------
 
     .block.crosssell {
         margin-top: 70px;
+    }
+
+    .cart-tax-info,
+    .cart .cart-tax-info {
+        + .cart-tax-total {
+            display: block;
+        }
+    }
+
+    .cart.table-wrapper,
+    .order-items.table-wrapper {
+        .col.price,
+        .col.qty,
+        .col.subtotal,
+        .col.msrp {
+            text-align: right;
+        }
     }
 }
 
@@ -216,6 +280,7 @@
     .cart {
         &.table-wrapper {
             overflow: inherit;
+
             thead {
                 .col {
                     &:not(.item) {
@@ -223,6 +288,7 @@
                     }
                 }
             }
+
             .col {
                 &.qty,
                 &.price,
@@ -234,6 +300,7 @@
                     text-align: center;
                     white-space: nowrap;
                     width: 33%;
+
                     &:before {
                         content: attr(data-th) ':';
                         display: block;
@@ -241,10 +308,12 @@
                         padding-bottom: @indent__s;
                     }
                 }
+
                 &.msrp {
                     white-space: normal;
                 }
             }
+
             .item {
                 .col.item {
                     padding-bottom: 0;
@@ -270,6 +339,7 @@
         .form-cart {
             &:extend(.abs-shopping-cart-items-desktop all);
         }
+
         .widget {
             float: left;
         }
@@ -279,6 +349,7 @@
         float: right;
         position: relative;
         width: 23%;
+
         .actions-toolbar {
             .column.main & {
                 &:extend(.abs-reset-left-margin-desktop all);
@@ -287,6 +358,7 @@
                 }
             }
         }
+
         .block {
             .fieldset {
                 .field {
@@ -303,18 +375,21 @@
                 min-width: 100%;
                 width: auto;
             }
+
             .item {
                 .col {
                     &.item {
                         padding: 27px 8px @indent__s;
                     }
                 }
+
                 &-actions {
                     td {
                         text-align: right;
                     }
                 }
             }
+
             .product {
                 &-item-photo {
                     display: table-cell;
@@ -324,6 +399,7 @@
                     vertical-align: top;
                     width: 1%;
                 }
+
                 &-item-details {
                     display: table-cell;
                     vertical-align: top;
@@ -331,11 +407,56 @@
                     width: 99%;
                 }
             }
+
             .item-actions {
                 .actions-toolbar {
                     text-align: left;
                     &:extend(.abs-reset-left-margin-desktop all);
                 }
+            }
+        }
+
+        .action {
+            margin-bottom: @indent__s;
+        }
+    }
+
+    //  Products pager
+    .cart-products-toolbar {
+        .toolbar-amount {
+            line-height: 30px;
+            margin: 0;
+        }
+
+        .pages {
+            float: right;
+            margin: 0 0 1px;
+
+            .item {
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .cart.table-wrapper {
+        .cart-products-toolbar {
+            + .cart {
+                thead {
+                    tr {
+                        th.col {
+                            padding-bottom: 7px;
+                            padding-top: 8px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cart {
+            + .cart-products-toolbar {
+                margin-top: @indent__m;
             }
         }
     }

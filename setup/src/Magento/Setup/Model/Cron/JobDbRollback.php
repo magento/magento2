@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron;
@@ -54,11 +54,13 @@ class JobDbRollback extends AbstractJob
             $rollbackHandler = $this->backupRollbackFactory->create($this->output);
             $dbBackupFile = $this->params['backup_file_name'];
             if (!empty($dbBackupFile)) {
+                $this->setAreaCode();
                 $rollbackHandler->dbRollback(basename($dbBackupFile));
             } else {
                 $this->status->add(
                     'No available DB backup file found. Please refer to documentation specified '
-                    . 'in <a href=""> doc link </a> to rollback database to a previous version to '
+                    . 'in <a href=""> doc link </a> to rollback database to a previous version to ',
+                    \Psr\Log\LogLevel::INFO
                 );
             }
         } catch (\Exception $e) {
@@ -69,5 +71,21 @@ class JobDbRollback extends AbstractJob
                 $e
             );
         }
+    }
+
+    /**
+     * Sets area code to start a session for database backup and rollback
+     *
+     * @return void
+     */
+    private function setAreaCode()
+    {
+        $areaCode = 'adminhtml';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
+        $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

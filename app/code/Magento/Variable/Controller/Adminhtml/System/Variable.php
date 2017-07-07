@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Controller\Adminhtml\System;
@@ -9,11 +9,16 @@ use Magento\Backend\App\Action;
 
 /**
  * Custom Variables admin controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class Variable extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Variable::variable';
+
     /**
      * Core registry
      *
@@ -89,21 +94,11 @@ abstract class Variable extends Action
         $variableId = $this->getRequest()->getParam('variable_id', null);
         $storeId = (int)$this->getRequest()->getParam('store', 0);
         /* @var $variable \Magento\Variable\Model\Variable */
-        $variable = $this->_objectManager->create('Magento\Variable\Model\Variable');
+        $variable = $this->_objectManager->create(\Magento\Variable\Model\Variable::class);
         if ($variableId) {
             $variable->setStoreId($storeId)->load($variableId);
         }
         $this->_coreRegistry->register('current_variable', $variable);
         return $variable;
-    }
-
-    /**
-     * Check current user permission
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Variable::variable');
     }
 }

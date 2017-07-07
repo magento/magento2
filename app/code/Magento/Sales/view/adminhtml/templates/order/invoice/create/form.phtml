@@ -1,43 +1,43 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 ?>
-<form id="edit_form" class="order-invoice-edit" method="post" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>">
-    <?php echo $block->getBlockHtml('formkey')?>
+<form id="edit_form" class="order-invoice-edit" method="post" action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>">
+    <?= $block->getBlockHtml('formkey') ?>
     <?php $_order = $block->getInvoice()->getOrder() ?>
-    <?php echo $block->getChildHtml('order_info') ?>
+    <?= $block->getChildHtml('order_info') ?>
 
     <section class="admin__page-section">
         <div class="admin__page-section-title">
-            <span class="title"><?php /* @escapeNotVerified */ echo __('Payment &amp; Shipping Method') ?></span>
+            <span class="title"><?= /* @escapeNotVerified */ __('Payment &amp; Shipping Method') ?></span>
         </div>
         <div class="admin__page-section-content">
             <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?>">
                 <div class="admin__page-section-item-title">
-                    <span class="title"><?php /* @escapeNotVerified */ echo __('Payment Information') ?></span>
+                    <span class="title"><?= /* @escapeNotVerified */ __('Payment Information') ?></span>
                 </div>
                 <div class="admin__page-section-item-content">
-                    <div class="order-payment-method-title"><?php echo $block->getChildHtml('order_payment') ?></div>
-                    <div class="order-payment-currency"><?php /* @escapeNotVerified */ echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
-                    <div class="order-payment-additional"><?php echo $block->getChildHtml('order_payment_additional'); ?></div>
+                    <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
+                    <div class="order-payment-currency"><?= /* @escapeNotVerified */ __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+                    <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
                 </div>
             </div>
             <?php if (!$_order->getIsVirtual()): ?>
             <div class="admin__page-section-item order-shipping-address">
                 <?php /*Shipping Address */ ?>
                 <div class="admin__page-section-item-title">
-                    <span class="title"><?php /* @escapeNotVerified */ echo __('Shipping Information') ?></span>
+                    <span class="title"><?= /* @escapeNotVerified */ __('Shipping Information') ?></span>
                 </div>
                 <div class="admin__page-section-item-content">
                     <div class="shipping-description-wrapper">
-                        <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
+                        <div class="shipping-description-title"><?= $block->escapeHtml($_order->getShippingDescription()) ?></div>
                         <div class="shipping-description-content">
-                            <?php /* @escapeNotVerified */ echo __('Total Shipping Charges'); ?>:
+                            <?= /* @escapeNotVerified */ __('Total Shipping Charges') ?>:
 
                             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
                                 <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
@@ -46,24 +46,24 @@
                             <?php endif; ?>
                             <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
-                            <?php /* @escapeNotVerified */ echo $_excl; ?>
+                            <?= /* @escapeNotVerified */ $_excl ?>
                             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                (<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?> <?php /* @escapeNotVerified */ echo $_incl; ?>)
+                                (<?= /* @escapeNotVerified */ __('Incl. Tax') ?> <?= /* @escapeNotVerified */ $_incl ?>)
                             <?php endif; ?>
                         </div>
                     </div>
                     <?php if ($block->canCreateShipment() && $block->canShipPartiallyItem()): ?>
                     <div class="admin__field admin__field-option">
                         <input type="checkbox" name="invoice[do_shipment]" id="invoice_do_shipment" value="1"
-                               class="admin__control-checkbox" <?php echo $block->hasInvoiceShipmentTypeMismatch() ? ' disabled="disabled"' : '' ?> />
+                               class="admin__control-checkbox" <?= $block->hasInvoiceShipmentTypeMismatch() ? ' disabled="disabled"' : '' ?> />
                         <label for="invoice_do_shipment"
-                               class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Create Shipment') ?></span></label>
+                               class="admin__field-label"><span><?= /* @escapeNotVerified */ __('Create Shipment') ?></span></label>
                     </div>
                     <?php if ($block->hasInvoiceShipmentTypeMismatch()): ?>
-                        <small><?php /* @escapeNotVerified */ echo __('Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.') ?></small>
+                        <small><?= /* @escapeNotVerified */ __('Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.') ?></small>
                         <?php endif; ?>
                     <?php endif; ?>
-                    <div id="tracking" style="display:none;"><?php echo $block->getChildHtml('tracking', false) ?></div>
+                    <div id="tracking" style="display:none;"><?= $block->getChildHtml('tracking', false) ?></div>
                 </div>
             </div>
             <?php endif; ?>
@@ -71,7 +71,7 @@
     </section>
 
     <section id="invoice_item_container">
-        <?php echo $block->getChildHtml('order_items') ?>
+        <?= $block->getChildHtml('order_items') ?>
     </section>
 </form>
 <script>
@@ -90,7 +90,7 @@ require(['prototype'], function(){
     }
 
     /*forced creating of shipment*/
-    var forcedShipmentCreate = <?php /* @escapeNotVerified */ echo $block->getForcedShipmentCreate() ?>;
+    var forcedShipmentCreate = <?= /* @escapeNotVerified */ $block->getForcedShipmentCreate() ?>;
     var shipmentElement = $('invoice_do_shipment');
     if (forcedShipmentCreate && shipmentElement) {
         shipmentElement.checked = true;

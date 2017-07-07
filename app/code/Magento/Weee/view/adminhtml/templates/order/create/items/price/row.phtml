@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,9 +15,9 @@ $_item = $block->getItem();
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices()): ?>
-        <span class="label"><?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>:</span>
+        <span class="label"><?= /* @escapeNotVerified */ __('Excl. Tax') ?>:</span>
     <?php endif; ?>
-    <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getRowDisplayPriceExclTax()); ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice($block->getRowDisplayPriceExclTax()) ?>
 
 
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
@@ -25,15 +25,15 @@ $_item = $block->getItem();
         <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                    <span class="nobr"><?php /* @escapeNotVerified */ echo $tax['title']; ?>: <?php /* @escapeNotVerified */ echo $block->formatPrice($tax['row_amount'], true, true); ?></span><br />
+                    <span class="nobr"><?= /* @escapeNotVerified */ $tax['title'] ?>: <?= /* @escapeNotVerified */ $block->formatPrice($tax['row_amount'], true, true) ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
         <?php if ($block->displayFinalPrice()): ?>
             <br />
-            <span class="nobr"><?php /* @escapeNotVerified */ echo __('Total'); ?>:<br />
-                <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getFinalRowDisplayPriceExclTax()); ?>
+            <span class="nobr"><?= /* @escapeNotVerified */ __('Total') ?>:<br />
+                <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalRowDisplayPriceExclTax()) ?>
             </span>
         <?php endif; ?>
     <?php endif; ?>
@@ -41,22 +41,22 @@ $_item = $block->getItem();
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices()): ?>
-        <br /><span class="label"><?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>:</span>
+        <br /><span class="label"><?= /* @escapeNotVerified */ __('Incl. Tax') ?>:</span>
     <?php endif; ?>
-    <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getRowDisplayPriceInclTax()); ?>
+    <?= /* @escapeNotVerified */ $block->formatPrice($block->getRowDisplayPriceInclTax()) ?>
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
         <br />
         <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                    <span class="nobr"><?php /* @escapeNotVerified */ echo $tax['title']; ?>: <?php /* @escapeNotVerified */ echo $block->formatPrice($tax['row_amount_incl_tax'], true, true); ?></span><br />
+                    <span class="nobr"><?= /* @escapeNotVerified */ $tax['title'] ?>: <?= /* @escapeNotVerified */ $block->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
         <?php if ($block->displayFinalPrice()): ?>
-            <span class="nobr"><?php /* @escapeNotVerified */ echo __('Total Incl. Tax'); ?>:<br />
-                <?php /* @escapeNotVerified */ echo $block->formatPrice($block->getFinalRowDisplayPriceInclTax()); ?>
+            <span class="nobr"><?= /* @escapeNotVerified */ __('Total Incl. Tax') ?>:<br />
+                <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?>
             </span>
         <?php endif; ?>
     <?php endif; ?>

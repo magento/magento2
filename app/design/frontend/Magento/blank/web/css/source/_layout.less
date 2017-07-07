@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,39 +7,43 @@
 @layout-column__additional-sidebar-offset: @layout-column-main__sidebar-offset;
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-.columns {
-    #lib-layout-columns();
-    .column.main {
-        &:extend(.abs-add-box-sizing all);
-        .lib-vendor-prefix-flex-grow(1);
-        .lib-vendor-prefix-flex-basis(100%);
-        .lib-css(padding-bottom, @indent__xl);
-        .lib-vendor-prefix-order(1);
-    }
-    .sidebar-main {
-        &:extend(.abs-add-box-sizing all);
-        .lib-vendor-prefix-flex-grow(1);
-        .lib-vendor-prefix-flex-basis(100%);
-        .lib-vendor-prefix-order(1);
-    }
-    .sidebar-additional {
-        &:extend(.abs-add-box-sizing all);
-        .lib-vendor-prefix-flex-grow(1);
-        .lib-vendor-prefix-flex-basis(100%);
-        .lib-vendor-prefix-order(2);
-    }
-}
+    .columns {
+        #lib-layout-columns();
 
+        .column.main {
+            &:extend(.abs-add-box-sizing all);
+            .lib-css(padding-bottom, @indent__xl);
+            .lib-vendor-prefix-flex-basis(100%);
+            .lib-vendor-prefix-flex-grow(1);
+            .lib-vendor-prefix-order(1);
+            width: 100%;
+        }
+
+        .sidebar-main {
+            &:extend(.abs-add-box-sizing all);
+            .lib-vendor-prefix-flex-grow(1);
+            .lib-vendor-prefix-flex-basis(100%);
+            .lib-vendor-prefix-order(1);
+        }
+
+        .sidebar-additional {
+            &:extend(.abs-add-box-sizing all);
+            .lib-vendor-prefix-flex-grow(1);
+            .lib-vendor-prefix-flex-basis(100%);
+            .lib-vendor-prefix-order(2);
+        }
+    }
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .navigation,
     .breadcrumbs,
@@ -54,18 +58,20 @@
         padding-left: @layout__width-xs-indent;
         padding-right: @layout__width-xs-indent;
     }
+
     .page-main {
         .account &,
         .cms-privacy-policy & {
-            position: relative;
             padding-top: 41px;
+            position: relative;
         }
     }
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .navigation,
     .breadcrumbs,
@@ -77,19 +83,22 @@
     .block.category.event,
     .top-container,
     .page-main {
-        padding-left: @layout-indent__width;
-        padding-right: @layout-indent__width;
+        box-sizing: border-box;
         margin-left: auto;
         margin-right: auto;
-        width: auto;
         max-width: @layout__max-width;
-        box-sizing: border-box;
+        padding-left: @layout-indent__width;
+        padding-right: @layout-indent__width;
+        width: auto;
     }
+
     .page-main {
         width: 100%;
+
         .lib-vendor-prefix-flex-grow(1);
         .lib-vendor-prefix-flex-shrink(0);
         .lib-vendor-prefix-flex-basis(auto);
+
         .ie9 & {
             width: auto;
         }
@@ -112,23 +121,23 @@
     }
 
     .page-layout-2columns-right .sidebar-main {
-        padding-right: 0;
         padding-left: @layout-column-main__sidebar-offset;
+        padding-right: 0;
     }
 
     .sidebar-additional {
         #lib-layout-columns > .right();
-        padding-left: @layout-column__additional-sidebar-offset;
         clear: right;
+        padding-left: @layout-column__additional-sidebar-offset;
         &:extend(.abs-add-box-sizing-desktop all);
     }
 
     .page-layout-2columns-left {
         .sidebar-additional {
-            padding-right: @layout-column__additional-sidebar-offset;
-            padding-left: 0;
             clear: left;
             float: left;
+            padding-left: 0;
+            padding-right: @layout-column__additional-sidebar-offset;
         }
     }
 

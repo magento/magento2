@@ -1,11 +1,11 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
 //  Page components
-//  ---------------------------------------------
+//  _____________________________________________
 
 @import 'order/_address.less';
 @import 'order/_discounts.less';
@@ -20,7 +20,7 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @order-create-icon-refresh__font-size: 2rem;
 @order-create-icon-refresh__color: @color-gray83;
@@ -242,7 +242,21 @@
             display: block;
             font-size: 1.3rem;
             &:before {
-                content: attr(data-label) ": ";
+                content: attr(data-label) ': ';
+            }
+        }
+    }
+}
+
+.options-list {
+    &.nested {
+        .admin__field-option {
+            .admin__field-label {
+                > span {
+                    &:after {
+                        content: none;
+                    }
+                }
             }
         }
     }
@@ -256,14 +270,14 @@
 //        &:before {
 //            @iconsize: 16px;
 //
+//            -webkit-font-smoothing: antialiased;
 //            background: #f2ebde;
-//            border: 1px solid #ada89e;
 //            border-radius: 2px;
+//            border: 1px solid #ada89e;
 //            color: #816063;
 //            content: '+';
 //            display: inline-block;
 //            font-size: @iconsize;
-//            -webkit-font-smoothing: antialiased;
 //            font-style: normal;
 //            font-weight: normal;
 //            height: @iconsize;

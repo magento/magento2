@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Fill in data according to data set
  * 5. Perform all assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-24768
  */
 class UpdateAdminUserRoleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -91,6 +90,7 @@ class UpdateAdminUserRoleEntityTest extends Injectable
         Role $role,
         User $user
     ) {
+
         // Preconditions
         $roleInit->persist();
         if (!$user->hasData('user_id')) {

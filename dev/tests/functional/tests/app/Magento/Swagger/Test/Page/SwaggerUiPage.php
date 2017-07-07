@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,7 +60,7 @@ class SwaggerUiPage
      */
     public function open()
     {
-        $this->browser->open($this->url);
+        $this->openSwaggerUrl();
         $this->waitForPageToLoad();
     }
 
@@ -206,6 +206,31 @@ class SwaggerUiPage
             function () use ($browser, $selector, $strategy) {
                 $element = $browser->find($selector, $strategy);
                 return $element->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait to open swagger url
+     *
+     * This is to work around an issue with selenium web driver randomly returns browser url as "about:blank"
+     * when open swagger page
+     *
+     * @return bool|null
+     */
+    private function openSwaggerUrl()
+    {
+        $browser = $this->browser;
+        $pattern = self::MCA;
+        return $browser->waitUntil(
+            function () use ($browser, $pattern) {
+                try {
+                    $url = $_ENV['app_frontend_url'] . $pattern;
+                    $browser->open($url);
+                    return true;
+                } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+                    return false;
+                }
             }
         );
     }

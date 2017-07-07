@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block\Transparent;
@@ -20,9 +20,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $block Iframe */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Payment\Block\Transparent\Iframe'
+            \Magento\Payment\Block\Transparent\Iframe::class
         );
 
         $block->setTemplate('transparent/iframe.phtml');

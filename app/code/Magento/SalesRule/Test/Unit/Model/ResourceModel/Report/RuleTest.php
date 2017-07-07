@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
@@ -25,7 +25,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUniqRulesNamesList()
     {
-        $dbAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $dbAdapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->setMethods(['_connect', 'quote'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -38,7 +38,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock]);
+        $selectRenderer = $this->getMockBuilder(\Magento\Framework\DB\Select\SelectRenderer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, ['from'], [$dbAdapterMock, $selectRenderer]);
         $select->expects(
             $this->once()
         )->method(
@@ -51,7 +54,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'fetchAll'],
             [],
             '',
@@ -69,7 +72,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -78,16 +81,16 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $resourceMock->expects($this->once())->method('getTableName')->will($this->returnValue(self::TABLE_NAME));
 
-        $flagFactory = $this->getMock('Magento\Reports\Model\FlagFactory', [], [], '', false);
+        $flagFactory = $this->getMock(\Magento\Reports\Model\FlagFactory::class, [], [], '', false);
         $createdatFactoryMock = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory',
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule\CreatedatFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $updatedatFactoryMock = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory',
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule\UpdatedatFactory::class,
             ['create'],
             [],
             '',
@@ -96,7 +99,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectHelper->getObject(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule',
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule::class,
             [
                 'resource' => $resourceMock,
                 'reportsFlagFactory' => $flagFactory,

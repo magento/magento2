@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Controller;
@@ -24,7 +24,7 @@ abstract class Download extends \Magento\Framework\App\Action\Action
     protected function _processDownload($path, $resourceType)
     {
         /* @var $helper DownloadHelper */
-        $helper = $this->_objectManager->get('Magento\Downloadable\Helper\Download');
+        $helper = $this->_objectManager->get(\Magento\Downloadable\Helper\Download::class);
 
         $helper->setResource($path, $resourceType);
         $fileName = $helper->getFilename();
@@ -67,6 +67,6 @@ abstract class Download extends \Magento\Framework\App\Action\Action
      */
     protected function _getLink()
     {
-        return $this->_objectManager->get('Magento\Downloadable\Model\Link');
+        return $this->_objectManager->get(\Magento\Downloadable\Model\Link::class);
     }
 }

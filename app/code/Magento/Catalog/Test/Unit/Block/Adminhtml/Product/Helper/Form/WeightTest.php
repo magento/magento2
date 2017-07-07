@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
@@ -34,11 +34,8 @@ class WeightTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (version_compare('5.5.28', phpversion(), '=')) {
-            $this->markTestSkipped('MAGETWO-43290: This test fails with Segmentation fault on PHP 5.5.28');
-        }
         $this->weightSwitcher = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Radios',
+            \Magento\Framework\Data\Form\Element\Radios::class,
             ['setId', 'setName', 'setLabel', 'setForm'],
             [],
             '',
@@ -48,7 +45,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
         $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
 
-        $this->factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
+        $this->factory = $this->getMock(\Magento\Framework\Data\Form\Element\Factory::class, [], [], '', false);
         $this->factory->expects(
             $this->once()
         )->method(
@@ -59,7 +56,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->weightSwitcher)
         );
         $this->localeFormat = $this->getMock(
-            '\Magento\Framework\Locale\Format',
+            \Magento\Framework\Locale\Format::class,
             [],
             [],
             '',
@@ -67,7 +64,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->collectionFactory = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
+            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -75,7 +72,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
+            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::class,
             [
                 'factoryElement' => $this->factory,
                 'factoryCollection' => $this->collectionFactory,
@@ -86,7 +83,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
 
     public function testSetForm()
     {
-        $form = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
+        $form = $this->getMock(\Magento\Framework\Data\Form::class, [], [], '', false);
         $this->weightSwitcher->expects(
             $this->any()
         )->method(

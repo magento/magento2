@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
@@ -69,52 +69,58 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $statementMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->coreEntityFactoryMock = $this->getMock(
-            'Magento\Framework\Data\Collection\EntityFactory',
+            \Magento\Framework\Data\Collection\EntityFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class,
             [],
             [],
             '',
             false
         );
         $this->eventManagerMock = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->configMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->configMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $this->coreResourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
             false
         );
-        $this->resourceHelperMock = $this->getMock('Magento\Eav\Model\ResourceModel\Helper', [], [], '', false);
+        $this->resourceHelperMock = $this->getMock(\Magento\Eav\Model\ResourceModel\Helper::class, [], [], '', false);
         $this->validatorFactoryMock = $this->getMock(
-            'Magento\Framework\Validator\UniversalFactory',
+            \Magento\Framework\Validator\UniversalFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->entityFactoryMock = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
+        $this->entityFactoryMock = $this->getMock(\Magento\Eav\Model\EntityFactory::class, [], [], '', false);
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->statementMock = $this->getMock('Magento\Framework\DB\Statement\Pdo\Mysql', ['fetch'], [], '', false);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $this->statementMock = $this->getMock(
+            \Magento\Framework\DB\Statement\Pdo\Mysql::class,
+            ['fetch'],
+            [],
+            '',
+            false
+        );
         /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->coreEntityFactoryMock->expects(
             $this->any()
         )->method(
@@ -132,7 +138,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($connectionMock)
         );
-        $entityMock = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
+        $entityMock = $this->getMock(\Magento\Eav\Model\Entity\AbstractEntity::class, [], [], '', false);
         $entityMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
 

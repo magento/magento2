@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -51,7 +51,7 @@ class Grid extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultRaw = $this->resultRawFactory->create();
         return $resultRaw->setContents(
             $this->layoutFactory->create()->createBlock(
-                'Magento\Catalog\Block\Adminhtml\Category\Tab\Product',
+                \Magento\Catalog\Block\Adminhtml\Category\Tab\Product::class,
                 'category.product.grid'
             )->toHtml()
         );

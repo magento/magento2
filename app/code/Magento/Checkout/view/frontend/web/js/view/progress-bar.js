@@ -1,45 +1,56 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
-define(
-    [
-        'jquery',
-        "underscore",
-        'ko',
-        'uiComponent',
-        'Magento_Checkout/js/model/step-navigator',
-        'jquery/jquery.hashchange'
-    ],
-    function ($, _, ko, Component, stepNavigator) {
-        var steps = stepNavigator.steps;
 
-        return Component.extend({
-            defaults: {
-                template: 'Magento_Checkout/progress-bar',
-                visible: true
-            },
-            steps: steps,
+define([
+    'jquery',
+    'underscore',
+    'ko',
+    'uiComponent',
+    'Magento_Checkout/js/model/step-navigator',
+    'jquery/jquery.hashchange'
+], function ($, _, ko, Component, stepNavigator) {
+    'use strict';
 
-            initialize: function() {
-                this._super();
-                $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
-                stepNavigator.handleHash();
-            },
+    var steps = stepNavigator.steps;
 
-            sortItems: function(itemOne, itemTwo) {
-                return stepNavigator.sortItems(itemOne, itemTwo);
-            },
+    return Component.extend({
+        defaults: {
+            template: 'Magento_Checkout/progress-bar',
+            visible: true
+        },
+        steps: steps,
 
-            navigateTo: function(step) {
-                stepNavigator.navigateTo(step.code);
-            },
+        /** @inheritdoc */
+        initialize: function () {
+            this._super();
+            $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
+            stepNavigator.handleHash();
+        },
 
-            isProcessed: function(item) {
-                return stepNavigator.isProcessed(item.code);
-            }
-        });
-    }
-);
+        /**
+         * @param {*} itemOne
+         * @param {*} itemTwo
+         * @return {*|Number}
+         */
+        sortItems: function (itemOne, itemTwo) {
+            return stepNavigator.sortItems(itemOne, itemTwo);
+        },
+
+        /**
+         * @param {Object} step
+         */
+        navigateTo: function (step) {
+            stepNavigator.navigateTo(step.code);
+        },
+
+        /**
+         * @param {Object} item
+         * @return {*|Boolean}
+         */
+        isProcessed: function (item) {
+            return stepNavigator.isProcessed(item.code);
+        }
+    });
+});

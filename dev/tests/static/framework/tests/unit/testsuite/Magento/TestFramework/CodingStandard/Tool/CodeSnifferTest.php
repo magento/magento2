@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
@@ -29,7 +29,7 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_wrapper = $this->getMock('Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper');
+        $this->_wrapper = $this->getMock(\Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper::class);
         $this->_tool = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
             self::RULE_SET,
             self::REPORT_FILE,
@@ -48,9 +48,8 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
             'files' => $whiteList,
             'standard' => [self::RULE_SET],
             'extensions' => $extensions,
-            'reportFile' => self::REPORT_FILE,
             'warningSeverity' => 0,
-            'reports' => ['checkstyle' => null],
+            'reports' => ['full' => self::REPORT_FILE],
         ];
 
         $this->_tool->setExtensions($extensions);

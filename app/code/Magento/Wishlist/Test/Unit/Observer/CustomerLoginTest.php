@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,9 +20,9 @@ class CustomerLoginTest extends \PHPUnit_Framework_TestCase
      */
     protected $helper;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->helper = $this->getMockBuilder('Magento\Wishlist\Helper\Data')
+        $this->helper = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -31,7 +31,7 @@ class CustomerLoginTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $event = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $event = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var $event \Magento\Framework\Event\Observer */

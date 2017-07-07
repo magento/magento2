@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
@@ -68,7 +68,7 @@ class XmlScanner implements ScannerInterface
             $isClassExists = false;
             try {
                 $isClassExists = class_exists($className);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (\RuntimeException $e) {
             }
             if (false === $isClassExists) {
                 if (class_exists($entityName) || interface_exists($entityName)) {

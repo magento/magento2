@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
@@ -8,19 +8,26 @@ namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
-use \Magento\Framework\View\Design\Fallback\Rule\Theme;
+use Magento\Framework\View\Design\Fallback\Rule\Theme;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $rule;
+    private $ruleMock;
 
     /**
      * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $componentRegistrar;
+    private $componentRegistrarMock;
+
+    /**
+     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $directoryListMock;
 
     /**
      * @var Theme
@@ -29,12 +36,19 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rule = $this->getMockForAbstractClass('\Magento\Framework\View\Design\Fallback\Rule\RuleInterface');
-        $this->componentRegistrar = $this->getMockForAbstractClass(
-            '\Magento\Framework\Component\ComponentRegistrarInterface'
+        $this->ruleMock = $this->getMockForAbstractClass(RuleInterface::class);
+        $this->componentRegistrarMock = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
+        $this->directoryListMock = $this->getMockBuilder(DirectoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model = new Theme($this->ruleMock, $this->componentRegistrarMock);
+        (new ObjectManager($this))->setBackwardCompatibleProperty(
+            $this->model,
+            'directoryList',
+            $this->directoryListMock
         );
-        $this->model = new Theme($this->rule, $this->componentRegistrar);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Parameter "theme" should be specified and should implement the theme interface
@@ -46,37 +60,54 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPatternDirs()
     {
-        $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $parentTheme->expects($this->any())->method('getFullPath')->will($this->returnValue('package/parent_theme'));
+        $parentTheme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $parentTheme->expects($this->exactly(2))->method('getFullPath')->willReturn('package/parent_theme');
+        $parentTheme->expects($this->never())->method('getArea');
+        $parentTheme->expects($this->never())->method('getCode');
 
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->any())->method('getFullPath')->will($this->returnValue('package/current_theme'));
-        $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme->expects($this->exactly(2))->method('getFullPath')->willReturn('package/current_theme');
+        $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
+        $theme->expects($this->once())->method('getArea')->willReturn('frontend');
+        $theme->expects($this->once())->method('getCode')->willReturn('luma');
 
-        $this->componentRegistrar->expects($this->any())
+        $this->componentRegistrarMock->expects($this->atLeastOnce())
             ->method('getPath')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [ComponentRegistrar::THEME, 'package/parent_theme', '/path/to/parent/theme'],
                 [ComponentRegistrar::THEME, 'package/current_theme', '/path/to/current/theme'],
-            ]));
+            ]);
+
+        $this->directoryListMock->expects($this->atLeastOnce())
+            ->method('getPath')
+            ->with(DirectoryList::STATIC_VIEW)
+            ->willReturn('/pub/static');
 
         $ruleDirsMap = [
             [
-                ['theme_dir' => '/path/to/current/theme'],
+                [
+                    'file' => 'test.css',
+                    'theme_dir' => '/path/to/current/theme',
+                    'theme_pubstatic_dir' => '/pub/static/frontend/luma'
+                ],
                 ['package/current_theme/path/one', 'package/current_theme/path/two'],
             ],
             [
-                ['theme_dir' => '/path/to/parent/theme'],
+                [
+                    'file' => 'test.css',
+                    'theme_dir' => '/path/to/parent/theme',
+                    'theme_pubstatic_dir' => '/pub/static/frontend/luma'
+                ],
                 ['package/parent_theme/path/one', 'package/parent_theme/path/two']
             ],
         ];
-        $this->rule->expects($this->any())->method('getPatternDirs')->will($this->returnValueMap($ruleDirsMap));
+        $this->ruleMock->expects($this->atLeastOnce())->method('getPatternDirs')->willReturnMap($ruleDirsMap);
         $expectedResult = [
             'package/current_theme/path/one',
             'package/current_theme/path/two',
             'package/parent_theme/path/one',
             'package/parent_theme/path/two',
         ];
-        $this->assertEquals($expectedResult, $this->model->getPatternDirs(['theme' => $theme]));
+        $this->assertEquals($expectedResult, $this->model->getPatternDirs(['theme' => $theme, 'file' => 'test.css']));
     }
 }

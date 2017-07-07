@@ -1,22 +1,12 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-
-<ul
-    class="action-submenu"
-    data-bind="foreach: {data: action.actions, as: 'action'},
-    css: { _active: action.visible }">
-    <li data-bind="css: { '_visible': $data.visible}">
-        <span
-            class="action-menu-item"
-            data-bind="text: label,
-            click: $parent.applyAction.bind($parent, type)"></span>
-            <!-- ko if: $data.actions-->
-                <!-- ko template: {name: $parent.submenuTemplate, data: $parent} -->
-                <!-- /ko -->
-            <!-- /ko -->
+<ul class="action-submenu" each="data: action.actions, as: 'action'" css="_active: action.visible">
+    <li css="_visible: $data.visible">
+        <span class="action-menu-item" text="label" click="$parent.applyAction.bind($parent, type)"/>
+        <render args="name: $parent.submenuTemplate, data: $parent" if="$data.actions"/>
     </li>
 </ul>

@@ -1,17 +1,36 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Setup\CategorySetup::class
+);
 require __DIR__ . '/categories.php';
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$categoryLinkRepository = $objectManager->create(
+    \Magento\Catalog\Api\CategoryLinkRepositoryInterface::class,
+    [
+        'productRepository' => $productRepository
+    ]
+);
+
+/** @var Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagement */
+$categoryLinkManagement = $objectManager->create(
+    \Magento\Catalog\Api\CategoryLinkManagementInterface::class,
+    [
+        'productRepository' => $productRepository,
+        'categoryLinkRepository' => $categoryLinkRepository
+    ]
+);
+
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(1)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
     ->setStoreId(1)
     ->setWebsiteIds([1])
@@ -20,14 +39,13 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setPrice(10)
     ->setWeight(18)
     ->setStockData(['use_config_manage_stock' => 0])
-    ->setCategoryIds([2, 3, 4])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();
+$categoryLinkManagement->assignProductToCategories($product->getSku(), [2, 3, 4]);
 
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(2)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
     ->setStoreId(1)
     ->setWebsiteIds([1])
@@ -36,7 +54,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setPrice(45.67)
     ->setWeight(56)
     ->setStockData(['use_config_manage_stock' => 0])
-    ->setCategoryIds([5])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();
+$categoryLinkManagement->assignProductToCategories($product->getSku(), [5]);

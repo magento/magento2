@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit;
@@ -20,22 +20,22 @@ class TemplateEngineFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = new TemplateEngineFactory(
             $this->_objectManagerMock,
-            ['test' => 'Fixture\Module\Model\TemplateEngine']
+            ['test' => \Fixture\Module\Model\TemplateEngine::class]
         );
     }
 
     public function testCreateKnownEngine()
     {
-        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
+        $engine = $this->getMock(\Magento\Framework\View\TemplateEngineInterface::class);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            'Fixture\Module\Model\TemplateEngine'
+            \Fixture\Module\Model\TemplateEngine::class
         )->will(
             $this->returnValue($engine)
         );
@@ -63,7 +63,7 @@ class TemplateEngineFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Fixture\Module\Model\TemplateEngine'
+            \Fixture\Module\Model\TemplateEngine::class
         )->will(
             $this->returnValue(new \stdClass())
         );

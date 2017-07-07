@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
@@ -20,13 +20,19 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
-        $this->messageFactoryMock = $this->getMockBuilder('\Magento\GiftMessage\Model\MessageFactory')
+        $productRepositoryMock = $this->getMock(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->messageFactoryMock = $this->getMockBuilder(\Magento\GiftMessage\Model\MessageFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $sessionMock = $this->getMock('\Magento\Backend\Model\Session\Quote', [], [], '', false);
-        $giftMessageHelperMock = $this->getMock('\Magento\GiftMessage\Helper\Message', [], [], '', false);
+        $sessionMock = $this->getMock(\Magento\Backend\Model\Session\Quote::class, [], [], '', false);
+        $giftMessageHelperMock = $this->getMock(\Magento\GiftMessage\Helper\Message::class, [], [], '', false);
         $this->model = new \Magento\GiftMessage\Model\Save(
             $productRepositoryMock,
             $this->messageFactoryMock,
@@ -47,8 +53,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         ];
         $this->model->setGiftmessages($message);
 
-        $messageMock = $this->getMock('\Magento\GiftMessage\Model\Message', [], [], '', false);
-        $entityModelMock = $this->getMock('\Magento\Sales\Model\Order', [], [], '', false);
+        $messageMock = $this->getMock(\Magento\GiftMessage\Model\Message::class, [], [], '', false);
+        $entityModelMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
 
         $this->messageFactoryMock->expects($this->once())->method('create')->willReturn($messageMock);
         $messageMock->expects($this->once())->method('getEntityModelByType')->with('order')->willReturnSelf();

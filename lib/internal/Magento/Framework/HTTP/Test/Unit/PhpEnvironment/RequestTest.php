@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
@@ -38,9 +38,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->cookieReader = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
-        $this->converter = $this->getMock('Magento\Framework\Stdlib\StringUtils');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->cookieReader = $this->getMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class);
+        $this->converter = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
     }
@@ -213,7 +213,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getAlias(''));
     }
 
-
     public function testGetCookie()
     {
         $key = "cookieName";
@@ -226,7 +225,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->getModel()->getCookie($key, $default);
     }
-
 
     public function testGetCookieDefault()
     {

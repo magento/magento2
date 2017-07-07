@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -23,7 +23,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payment\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Availability option
@@ -437,14 +437,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
             $this->_getFormattedCcExpirationDate($payment->getCcExpMonth(), $payment->getCcExpYear())
         )->setCreditCardCvv2(
             $payment->getCcCid()
-        )->setMaestroSoloIssueNumber(
-            $payment->getCcSsIssue()
         );
-
-        if ($payment->getCcSsStartMonth() && $payment->getCcSsStartYear()) {
-            $year = sprintf('%02d', substr($payment->getCcSsStartYear(), -2, 2));
-            $api->setMaestroSoloIssueDate($this->_getFormattedCcExpirationDate($payment->getCcSsStartMonth(), $year));
-        }
 
         // add shipping and billing addresses
         if ($order->getIsVirtual()) {

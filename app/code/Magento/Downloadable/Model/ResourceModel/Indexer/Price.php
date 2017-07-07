@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\ResourceModel\Indexer;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Downloadable products Price indexer resource model
@@ -12,37 +14,6 @@ namespace Magento\Downloadable\Model\ResourceModel\Indexer;
  */
 class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
-    /**
-     * Reindex temporary (price result data) for all products
-     *
-     * @throws \Exception
-     * @return $this
-     */
-    public function reindexAll()
-    {
-        $this->tableStrategy->setUseIdxTable(true);
-        $this->beginTransaction();
-        try {
-            $this->reindex();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
-        return $this;
-    }
-
-    /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return $this
-     */
-    public function reindexEntity($entityIds)
-    {
-        return $this->reindex($entityIds);
-    }
-
     /**
      * @param null|int|array $entityIds
      * @return \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
@@ -95,6 +66,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $this->_prepareDownloadableLinkPriceTable();
 
         $dlType = $this->_getAttribute('links_purchased_separately');
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         $ifPrice = $connection->getIfNullSql('dlpw.price_id', 'dlpd.price');
 
@@ -103,7 +75,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['dl' => $dlType->getBackend()->getTable()],
-            "dl.entity_id = i.entity_id AND dl.attribute_id = {$dlType->getAttributeId()}" . " AND dl.store_id = 0",
+            "dl.{$linkField} = i.entity_id AND dl.attribute_id = {$dlType->getAttributeId()}" . " AND dl.store_id = 0",
             []
         )->join(
             ['dll' => $this->getTable('downloadable_link')],

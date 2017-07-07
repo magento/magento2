@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,9 +46,11 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderItemMock;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->invoiceItemResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice\Item')
+        $this->invoiceItemResourceMock = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Order\Invoice\Item::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -57,7 +59,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $this->invoiceCommentResourceMock =
-            $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Invoice\Comment')
+            $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -65,7 +67,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+        $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -75,15 +77,15 @@ class RelationTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->invoiceItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice\Item')
+        $this->invoiceItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\Item::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->invoiceCommentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice\Comment')
+        $this->invoiceCommentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\Comment::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+        $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

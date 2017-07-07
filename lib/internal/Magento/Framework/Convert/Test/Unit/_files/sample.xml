@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -29,6 +29,9 @@
                 <Cell><Data ss:Type="String">Header0ZIP</Data></Cell>
                 <Cell><Data ss:Type="String">HeaderCountry</Data></Cell>
                 <Cell><Data ss:Type="String">HeaderRegion</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderSymbol=</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderSymbol-</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderSymbol+</Data></Cell>
             </Row>
             <Row>
                 <Cell><Data ss:Type="String">ID</Data></Cell>
@@ -36,11 +39,14 @@
                 <Cell><Data ss:Type="String">Email</Data></Cell>
                 <Cell><Data ss:Type="String">Group</Data></Cell>
                 <Cell><Data ss:Type="String">Telephone</Data></Cell>
-                <Cell><Data ss:Type="String">+Telephone</Data></Cell>
+                <Cell><Data ss:Type="String"> +Telephone</Data></Cell>
                 <Cell><Data ss:Type="String">ZIP</Data></Cell>
                 <Cell><Data ss:Type="String">0ZIP</Data></Cell>
                 <Cell><Data ss:Type="String">Country</Data></Cell>
                 <Cell><Data ss:Type="String">State/Province</Data></Cell>
+                <Cell><Data ss:Type="String">Symbol=</Data></Cell>
+                <Cell><Data ss:Type="String">Symbol-</Data></Cell>
+                <Cell><Data ss:Type="String">Symbol+</Data></Cell>
             </Row>
             <Row>
                 <Cell><Data ss:Type="Number">1</Data></Cell>
@@ -48,11 +54,14 @@
                 <Cell><Data ss:Type="String">jon.doe@magento.com</Data></Cell>
                 <Cell><Data ss:Type="String">General</Data></Cell>
                 <Cell><Data ss:Type="String">310-111-1111</Data></Cell>
-                <Cell><Data ss:Type="String">+310-111-1111</Data></Cell>
+                <Cell><Data ss:Type="String"> +310-111-1111</Data></Cell>
                 <Cell><Data ss:Type="Number">90232</Data></Cell>
                 <Cell><Data ss:Type="String">090232</Data></Cell>
                 <Cell><Data ss:Type="String">United States</Data></Cell>
                 <Cell><Data ss:Type="String">California</Data></Cell>
+                <Cell><Data ss:Type="String"> =</Data></Cell>
+                <Cell><Data ss:Type="String"> -</Data></Cell>
+                <Cell><Data ss:Type="String"> +</Data></Cell>
             </Row>
             <Row>
                 <Cell><Data ss:Type="String">FooterID</Data></Cell>
@@ -65,6 +74,9 @@
                 <Cell><Data ss:Type="String">Footer0ZIP</Data></Cell>
                 <Cell><Data ss:Type="String">FooterCountry</Data></Cell>
                 <Cell><Data ss:Type="String">FooterRegion</Data></Cell>
+                <Cell><Data ss:Type="String">FooterSymbol=</Data></Cell>
+                <Cell><Data ss:Type="String">FooterSymbol-</Data></Cell>
+                <Cell><Data ss:Type="String">FooterSymbol+</Data></Cell>
             </Row>
         </Table>
     </Worksheet>

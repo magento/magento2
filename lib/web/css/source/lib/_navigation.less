@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -57,13 +57,16 @@
         .lib-css(background, @_nav-background-color);
         .lib-css(border, @_nav-border);
         box-sizing: border-box;
+
         ul {
             margin: 0;
             padding: 0;
         }
+
         li {
             margin: 0;
         }
+
         a {
             display: block;
             .lib-css(padding-top, @_submenu-item__padding-top);
@@ -71,11 +74,13 @@
             .lib-css(padding-bottom, @_submenu-item__padding-bottom);
             .lib-css(padding-left, @_submenu-item__padding-left);
         }
+
         a,
         a:hover {
             .lib-css(color, @_nav-level0-item-color);
             .lib-css(text-decoration, @_nav-level0-item-text-decoration);
         }
+
         .level0 {
             .lib-css(border-top, @_nav-level0-item-border);
             .lib-font-size(@_nav-level0-font-size);
@@ -88,6 +93,7 @@
                 .lib-css(text-transform, @_nav-level0-text-transform);
                 word-wrap: break-word;
             }
+
             &.active {
                 .all-category {
                     .ui-state-focus {
@@ -102,9 +108,11 @@
                     }
                 }
             }
+
             > .level1 {
-                font-weight: @font-weight__semibold;
+                .lib-css(font-weight, @font-weight__semibold);
             }
+
             &.active,
             &.has-active { // ToDo UI: remove "has_active" here, when mobile navigation default open state is implemented
                 > a:not(.ui-state-active) {
@@ -114,21 +122,25 @@
                     .lib-css(border-width, @_nav-level0-item__active__border-width);
                     .lib-css(color, @_nav-level0-item-color-active);
                     .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
+
                     span:not(.ui-menu-icon) {
-                        margin-left: -@_submenu-item__active__border;
+                        .lib-css(margin-left, -@_submenu-item__active__border);
                     }
                 }
             }
         }
+
         li.level0 {
             &:last-child {
                 .lib-css(border-bottom, @_nav-level0-item-border);
             }
         }
+
         .submenu {
             > li {
                 word-wrap: break-word;
             }
+
             &:not(:first-child) {
                 .lib-css(background, @_submenu-background-color);
                 .lib-css(border, @_submenu-border);
@@ -141,19 +153,24 @@
                 position: relative;
                 top: auto !important;
                 transition: left .3s ease-out;
+
                 > li {
                     > a {
-                        padding-left: @_nav__indent-side;
+                        .lib-css(padding-left, @_nav__indent-side);
                     }
+
                     &:last-child {
                         margin-bottom: 0;
                     }
                 }
+
                 ul {
                     display: block;
                     .lib-css(padding-left, @_submenu-item__padding-left);
+
                     > li {
                         margin: 0;
+
                         a {
                             .lib-css(background, @_submenu-item-background-color);
                             .lib-css(border, @_submenu-item-border);
@@ -164,11 +181,13 @@
                         }
                     }
                 }
+
                 &.expanded {
                     display: block !important;
                     padding-right: 0;
                     top: 0 !important;
                 }
+
                 .active {
                     > a {
                         .lib-css(background, @_submenu-item-background-color-active);
@@ -180,10 +199,11 @@
                         .lib-css(text-decoration, @_submenu-item-text-decoration-active);
                     }
                 }
+
                 .level1 {
                     &.active {
                         > a {
-                            padding-left: @_nav__indent-side - @_submenu-item__active__border;
+                            .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
                         }
                     }
                 }
@@ -269,18 +289,22 @@
         top: 0;
         width: 100%;
         z-index: 3;
+
         &:empty {
             display: none;
         }
+
         ul {
             margin-top: 0;
             margin-bottom: 0;
             padding: 0;
             position: relative;
         }
+
         li.level0 {
             .lib-css(border-top, none);
         }
+
         .level0 {
             .lib-css(margin, @_nav-level0-item-margin);
             display: inline-block;
@@ -290,6 +314,7 @@
                 margin-right: 0;
                 padding-right: 0;
             }
+
             > .level-top {
                 .lib-css(background, @_nav-level0-item-background-color);
                 .lib-css(border, @_nav-level0-item-border);
@@ -299,6 +324,7 @@
                 .lib-css(text-decoration, @_nav-level0-item-text-decoration);
                 box-sizing: border-box;
                 position: relative;
+
                 &:hover, &.ui-state-focus {
                     .lib-css(background, @_nav-level0-item-background-color-hover);
                     .lib-css(border, @_nav-level0-item-border-hover);
@@ -306,6 +332,7 @@
                     .lib-css(text-decoration, @_nav-level0-item-text-decoration-hover);
                 }
             }
+
             &.active,
             &.has-active {
                 > .level-top {
@@ -318,9 +345,11 @@
                     display: inline-block;
                 }
             }
+
             &.parent:hover > .submenu {
                 overflow: visible !important;
             }
+
             .submenu {
                 .lib-css(background, @_submenu-background-color);
                 .lib-css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
@@ -335,6 +364,7 @@
                 padding: 0;
                 position: absolute;
                 z-index: 1;
+
                 ._lib-submenu-arrow(
                     @_submenu-arrow,
                     @_bg: @_submenu-background-color,
@@ -342,6 +372,7 @@
                     @_size: @_submenu-arrow-size,
                     @_left: @_submenu-arrow-left
                 );
+
                 a {
                     display: block;
                     line-height: inherit;
@@ -350,6 +381,7 @@
                     .lib-css(color, @_submenu-item-color);
                     .lib-css(padding, @_submenu-item-padding);
                     .lib-css(text-decoration, @_submenu-item-text-decoration);
+
                     &:hover,
                     &.ui-state-focus {
                         .lib-css(background, @_submenu-item__hover__background-color);
@@ -358,6 +390,7 @@
                         .lib-css(text-decoration, @_submenu-item-text-decoration-hover);
                     }
                 }
+
                 .active > a {
                     .lib-css(background, @_submenu-item-background-color-active);
                     .lib-css(border-color, @_submenu-item__active__border-color);
@@ -366,15 +399,18 @@
                     .lib-css(color, @_submenu-item-color-active);
                     .lib-css(text-decoration, @_submenu-item-text-decoration-active);
                 }
+
                 .submenu {
                     top: 0 !important;
                     left: 100% !important;
                 }
+
                 .submenu-reverse{
                     left: auto !important;
                     right: 100%;
                 }
             }
+
             &.more {
                 position: relative;
                 .lib-icon-font(
@@ -382,18 +418,22 @@
                     @_icon-font-size: 26px,
                     @_icon-font-position: after
                 );
+
                 &:before {
                     display: none;
                 }
+
                 &:after {
                     cursor: pointer;
                     padding: 8px 12px;
                     position: relative;
                     z-index: 1;
                 }
+
                 &:hover > .submenu {
                     overflow: visible !important;
                 }
+
                 li {
                     display: block;
                 }
@@ -414,8 +454,10 @@
         @_outer-size: @_size + 1;
         @_outer-left: @_left - 1;
         .lib-css(margin-top, @_outer-size);
+
         > ul {
             .lib-css(margin-top, @_outer-size);
+
             &:before,
             &:after {
                 content: '';
@@ -423,6 +465,7 @@
                 overflow: hidden;
                 position: absolute;
             }
+
             &:before {
                 .lib-css(color, @_bg);
                 .lib-css(left, @_left);
@@ -430,6 +473,7 @@
                 .lib-arrow(up, @_size, @_bg);
                 z-index: 4;
             }
+
             &:after {
                 .lib-arrow(up, @_outer-size, @_border);
                 .lib-css(color, @_border);
@@ -441,8 +485,10 @@
     }
     & when (iscolor(@_bg)) and not (iscolor(@_border)) {
         .lib-css(margin-top, -@_size);
+
         > ul {
             .lib-css(margin-top, @_size);
+
             &:before {
                 .lib-arrow(up, @_size, @_bg);
                 .lib-css(color, @_bg);
@@ -458,8 +504,10 @@
     }
     & when (iscolor(@_border)) and not (iscolor(@_bg)) {
         .lib-css(margin-top, -@_size);
+
         > ul {
             .lib-css(margin-top, @_size);
+
             &:before {
                 .lib-arrow(up, @_size, @_border);
                 .lib-css(color, @_border);

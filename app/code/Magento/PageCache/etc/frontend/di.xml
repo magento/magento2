@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,6 @@
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
         <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
-        <plugin name="front-controller-message-box" type="Magento\PageCache\Model\App\FrontController\MessageBox" sortOrder="0"/>
     </type>
     <type name="Magento\Framework\Controller\ResultInterface">
         <plugin name="result-builtin-cache" type="Magento\PageCache\Model\Controller\Result\BuiltinPlugin"/>
@@ -19,6 +18,9 @@
         <plugin name="layout-model-caching-unique-name" type="Magento\PageCache\Model\Layout\LayoutPlugin"/>
         <plugin name="core-session-depersonalize"
                 type="Magento\PageCache\Model\Layout\DepersonalizePlugin" sortOrder="1"/>
+    </type>
+    <type name="Magento\Framework\View\Model\Layout\Merge">
+        <plugin name="layout-merge-plugin" type="Magento\PageCache\Model\Layout\MergePlugin"/>
     </type>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="response-http-page-cache" type="Magento\PageCache\Model\App\Response\HttpPlugin"/>

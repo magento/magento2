@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
@@ -25,15 +25,15 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validationRules = $this->getMockBuilder('Magento\Customer\Ui\Component\Listing\Column\ValidationRules')
+        $this->validationRules = $this->getMockBuilder(
+            \Magento\Customer\Ui\Component\Listing\Column\ValidationRules::class
+        )->disableOriginalConstructor()->getMock();
+
+        $this->validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->column = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $this->column = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -45,7 +45,6 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->column->expects($this->once())
             ->method('getConfiguration')
             ->willReturn([
-                'dataType' => 'text',
                 'visible' => true,
             ]);
         $this->validationRules->expects($this->once())
@@ -60,7 +59,6 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'config',
                 [
-                    'dataType' => 'text',
                     'visible' => true,
                     'editor' => [
                         'editorType' => 'text',

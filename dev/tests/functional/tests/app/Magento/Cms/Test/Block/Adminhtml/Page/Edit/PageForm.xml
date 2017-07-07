@@ -1,40 +1,46 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <tabs>
     <page_information>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#page_tabs_main_section</selector>
-        <strategy>css selector</strategy>
+        <selector>//div[div/strong/span[text()="Page Information"]]</selector>
+        <strategy>xpath</strategy>
         <fields>
             <title />
-            <identifier />
-            <store_id>
-                <selector>[name='stores[]']</selector>
-                <input>multiselectgrouplist</input>
-            </store_id>
             <is_active>
-                <input>select</input>
+                <input>switcher</input>
             </is_active>
         </fields>
     </page_information>
     <content>
         <class>\Magento\Cms\Test\Block\Adminhtml\Page\Edit\Tab\Content</class>
-        <selector>#page_tabs_content_section</selector>
-        <strategy>css selector</strategy>
+        <selector>//div[div/strong/span[text()="Content"]]</selector>
+        <strategy>xpath</strategy>
         <fields>
             <content_heading />
             <content />
         </fields>
     </content>
+    <page_in_websites>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>//div[div/strong/span[text()="Page in Websites"]]</selector>
+        <strategy>xpath</strategy>
+        <fields>
+            <store_id>
+                <selector>[name='store_id']</selector>
+                <input>multiselectgrouplist</input>
+            </store_id>
+        </fields>
+    </page_in_websites>
     <design>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#page_tabs_design_section</selector>
-        <strategy>css selector</strategy>
+        <selector>//div[div/strong/span[text()="Design"]]</selector>
+        <strategy>xpath</strategy>
         <fields>
             <page_layout>
                 <input>select</input>
@@ -43,6 +49,13 @@
                 <selector>#page_layout_update_xml</selector>
                 <input>textarea</input>
             </layout_update_xml>
+        </fields>
+    </design>
+    <custom_design>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>//div[div/strong/span[text()="Custom Design Update"]]</selector>
+        <strategy>xpath</strategy>
+        <fields>
             <custom_theme_from />
             <custom_theme_to />
             <custom_theme>
@@ -51,17 +64,14 @@
             <custom_page_layout>
                 <input>select</input>
             </custom_page_layout>
-            <custom_layout_update_xml>
-                <selector>#page_custom_layout_update_xml</selector>
-                <input>textarea</input>
-            </custom_layout_update_xml>
         </fields>
-    </design>
-    <meta_data>
+    </custom_design>
+    <seo>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#page_tabs_meta_section</selector>
-        <strategy>css selector</strategy>
+        <selector>//div[div/strong/span[text()="Search Engine Optimisation"]]</selector>
+        <strategy>xpath</strategy>
         <fields>
+            <identifier />
             <meta_keywords>
                 <selector>#page_meta_keywords</selector>
                 <input>textarea</input>
@@ -71,5 +81,5 @@
                 <input>textarea</input>
             </meta_description>
         </fields>
-    </meta_data>
+    </seo>
 </tabs>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,5 +40,15 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
     protected function getDisplayString()
     {
         return '<info>Disabled maintenance mode</info>';
+    }
+
+    /**
+     * Return if IP addresses effective for maintenance mode were set
+     *
+     * @return bool
+     */
+    public function isSetAddressInfo()
+    {
+        return count($this->maintenanceMode->getAddressInfo()) > 0;
     }
 }

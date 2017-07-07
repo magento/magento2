@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Setup;
@@ -23,7 +23,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->object = new ConfigOptionsList();
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
     }
 
     public function testGetOptions()
@@ -31,7 +31,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $options = $this->object->getOptions();
         $this->assertInternalType('array', $options);
         foreach ($options as $option) {
-            $this->assertInstanceOf('\Magento\Framework\Setup\Option\AbstractConfigOption', $option);
+            $this->assertInstanceOf(\Magento\Framework\Setup\Option\AbstractConfigOption::class, $option);
         }
     }
 
@@ -53,7 +53,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $actualConfig);
         /** @var \Magento\Framework\Config\Data\ConfigData $config */
         foreach ($actualConfig as $i => $config) {
-            $this->assertInstanceOf('\Magento\Framework\Config\Data\ConfigData', $config);
+            $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $config);
             $this->assertSame($expectedData[$i]['file'], $config->getFileKey());
             $this->assertSame($expectedData[$i]['data'], $config->getData());
         }

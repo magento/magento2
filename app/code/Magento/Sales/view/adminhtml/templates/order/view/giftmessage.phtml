@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,54 +9,54 @@
 ?>
 <?php if ($block->canDisplayGiftmessage()): ?>
 <?php $_required = $block->getMessage()->getMessage() != ''?>
-<div id="<?php echo $block->getHtmlId() ?>" class="admin__page-section-content giftmessage-whole-order-container">
-    <form class="entry-edit form-inline" id="<?php /* @escapeNotVerified */ echo $block->getFieldId('form') ?>" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>">
+<div id="<?= $block->getHtmlId() ?>" class="admin__page-section-content giftmessage-whole-order-container">
+    <form class="entry-edit form-inline" id="<?= /* @escapeNotVerified */ $block->getFieldId('form') ?>" action="<?= /* @escapeNotVerified */ $block->getSaveUrl() ?>">
         <fieldset class="admin__fieldset">
-            <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Gift Message for the Entire Order'); ?></span></legend>
+            <legend class="admin__legend"><span><?= /* @escapeNotVerified */ __('Gift Message for the Entire Order') ?></span></legend>
             <br/>
 
-            <input type="hidden" id="<?php /* @escapeNotVerified */ echo $block->getFieldId('type'); ?>"
-                   name="<?php /* @escapeNotVerified */ echo $block->getFieldName('type'); ?>"
+            <input type="hidden" id="<?= /* @escapeNotVerified */ $block->getFieldId('type') ?>"
+                   name="<?= /* @escapeNotVerified */ $block->getFieldName('type') ?>"
                    value="order"/>
 
-            <div class="admin__field field-from-name<?php echo $_required ? ' required' : ''; ?>">
+            <div class="admin__field field-from-name<?= $_required ? ' required' : '' ?>">
                 <label class="admin__field-label"
-                       for="<?php /* @escapeNotVerified */ echo $block->getFieldId('sender'); ?>"><span><?php /* @escapeNotVerified */ echo __('From Name'); ?></span></label>
+                       for="<?= /* @escapeNotVerified */ $block->getFieldId('sender') ?>"><span><?= /* @escapeNotVerified */ __('From Name') ?></span></label>
 
                 <div class="admin__field-control">
-                    <input class="admin__control-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text"
-                           id="<?php /* @escapeNotVerified */ echo $block->getFieldId('sender'); ?>"
-                           name="<?php /* @escapeNotVerified */ echo $block->getFieldName('sender'); ?>"
-                           value="<?php echo $block->escapeHtml($block->getMessage()->getSender()); ?>"/>
+                    <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
+                           id="<?= /* @escapeNotVerified */ $block->getFieldId('sender') ?>"
+                           name="<?= /* @escapeNotVerified */ $block->getFieldName('sender') ?>"
+                           value="<?= $block->escapeHtml($block->getMessage()->getSender()) ?>"/>
                 </div>
             </div>
 
-            <div class="admin__field field-to-name<?php echo $_required ? ' required' : ''; ?>">
+            <div class="admin__field field-to-name<?= $_required ? ' required' : '' ?>">
                 <label class="admin__field-label"
-                       for="<?php /* @escapeNotVerified */ echo $block->getFieldId('recipient'); ?>"><span><?php /* @escapeNotVerified */ echo __('To Name'); ?></span></label>
+                       for="<?= /* @escapeNotVerified */ $block->getFieldId('recipient') ?>"><span><?= /* @escapeNotVerified */ __('To Name') ?></span></label>
 
                 <div class="admin__field-control">
-                    <input class="admin__control-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text"
-                           id="<?php /* @escapeNotVerified */ echo $block->getFieldId('recipient'); ?>"
-                           name="<?php /* @escapeNotVerified */ echo $block->getFieldName('recipient'); ?>"
-                           value="<?php echo $block->escapeHtml($block->getMessage()->getRecipient()); ?>"/>
+                    <input class="admin__control-text <?= $_required ? 'required-entry' : '' ?>" type="text"
+                           id="<?= /* @escapeNotVerified */ $block->getFieldId('recipient') ?>"
+                           name="<?= /* @escapeNotVerified */ $block->getFieldName('recipient') ?>"
+                           value="<?= $block->escapeHtml($block->getMessage()->getRecipient()) ?>"/>
                 </div>
             </div>
 
             <div class="admin__field field-gift-message">
                 <label class="admin__field-label"
-                       for="<?php /* @escapeNotVerified */ echo $block->getFieldId('message'); ?>"><span><?php /* @escapeNotVerified */ echo __('Gift Message'); ?></span></label>
+                       for="<?= /* @escapeNotVerified */ $block->getFieldId('message') ?>"><span><?= /* @escapeNotVerified */ __('Gift Message') ?></span></label>
                 <div class="admin__field-control">
-                    <textarea id="<?php /* @escapeNotVerified */ echo $block->getFieldId('message'); ?>"
-                              name="<?php /* @escapeNotVerified */ echo $block->getFieldName('message') ?>"
+                    <textarea id="<?= /* @escapeNotVerified */ $block->getFieldId('message') ?>"
+                              name="<?= /* @escapeNotVerified */ $block->getFieldName('message') ?>"
                               class="admin__control-textarea"
                               rows="2"
-                              cols="15"><?php echo $block->escapeHtml($block->getMessage()->getMessage()); ?></textarea>
+                              cols="15"><?= $block->escapeHtml($block->getMessage()->getMessage()) ?></textarea>
                 </div>
             </div>
 
             <div class="actions">
-                <?php echo $block->getSaveButtonHtml(); ?>
+                <?= $block->getSaveButtonHtml() ?>
             </div>
         </fieldset>
     </form>

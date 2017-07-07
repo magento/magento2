@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,18 +46,24 @@ class LinkPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->saleableItemMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->amountMock = $this->getMock('Magento\Framework\Pricing\Amount\Base', [], [], '', false);
-        $this->calculatorMock = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->saleableItemMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->amountMock = $this->getMock(\Magento\Framework\Pricing\Amount\Base::class, [], [], '', false);
+        $this->calculatorMock = $this->getMock(
+            \Magento\Framework\Pricing\Adjustment\Calculator::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->linkMock = $this->getMock(
-            'Magento\Downloadable\Model\Link',
+            \Magento\Downloadable\Model\Link::class,
             ['getPrice', 'getProduct', '__wakeup'],
             [],
             '',
             false
         );
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->linkPrice = new \Magento\Downloadable\Pricing\Price\LinkPrice(
             $this->saleableItemMock,

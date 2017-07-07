@@ -1,18 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
+
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="sales_order_shipment_save_after">
-        <observer name="braintree" instance="Magento\Braintree\Observer\ProcessBraintreePayment" />
+    <event name="payment_method_assign_data_braintree">
+        <observer name="braintree_gateway_data_assign" instance="Magento\Braintree\Observer\DataAssignObserver" />
     </event>
-    <event name="customer_delete_commit_after">
-        <observer name="braintree" instance="Magento\Braintree\Observer\DeleteBraintreeCustomer" />
-    </event>
-    <event name="checkout_submit_before">
-        <observer name="braintree" instance="Magento\Braintree\Observer\ProcessBraintreeAddress" />
+    <event name="payment_method_assign_data_braintree_paypal">
+        <observer name="braintree_paypal_gateway_data_assign" instance="Magento\Braintree\Observer\DataAssignObserver" />
     </event>
 </config>

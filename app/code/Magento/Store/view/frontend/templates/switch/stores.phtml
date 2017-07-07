@@ -1,44 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
-/**
- * Store switcher template
- *
- * @see \Magento\Store\Block\Store\Switcher
- */
+/** @var \Magento\Store\Block\Switcher $block */
 ?>
 <?php if (count($block->getGroups())>1): ?>
 <div class="switcher store switcher-store" id="switcher-store">
-    <strong class="label switcher-label"><span><?php /* @escapeNotVerified */ echo __('Select Store') ?></span></strong>
+    <strong class="label switcher-label"><span><?= $block->escapeHtml(__('Select Store')) ?></span></strong>
     <div class="actions dropdown options switcher-options">
         <?php foreach ($block->getGroups() as $_group): ?>
         <?php if ($_group->getId() == $block->getCurrentGroupId()): ?>
-            <div class="action toggle switcher-trigger" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" id="switcher-store-trigger">
+            <div class="action toggle switcher-trigger"
+                 role="button"
+                 tabindex="0"
+                 data-mage-init='{"dropdown":{}}'
+                 data-toggle="dropdown"
+                 data-trigger-keypress-button="true"
+                 id="switcher-store-trigger">
                 <strong>
-                    <span><?php echo $block->escapeHtml($_group->getName()) ?></span>
+                    <span><?= $block->escapeHtml($_group->getName()) ?></span>
                 </strong>
             </div>
         <?php endif; ?>
         <?php endforeach; ?>
-        <ul class="dropdown switcher-dropdown" data-mage-init='{"dropdownDialog":{
-            "appendTo":"#switcher-store > .options",
-            "triggerTarget":"#switcher-store-trigger",
-            "closeOnMouseLeave": false,
-            "triggerClass":"active",
-            "parentClass":"active",
-            "buttons":null}}'>
+        <ul class="dropdown switcher-dropdown" data-target="dropdown">
             <?php foreach ($block->getGroups() as $_group): ?>
             <?php if (!($_group->getId() == $block->getCurrentGroupId())): ?>
                 <li class="switcher-option">
-                    <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getTargetStorePostData($_group->getDefaultStore()); ?>'>
-                        <?php echo $block->escapeHtml($_group->getName()) ?>
+                    <a href="#" data-post='<?= /* @noEscape */ $block->getTargetStorePostData($_group->getDefaultStore()) ?>'>
+                        <?= $block->escapeHtml($_group->getName()) ?>
                     </a>
                 </li>
             <?php endif; ?>

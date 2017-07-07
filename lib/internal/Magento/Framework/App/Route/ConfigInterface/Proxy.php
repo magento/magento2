@@ -2,7 +2,7 @@
 /**
  * Routes configuration model proxy
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Route\ConfigInterface;
@@ -10,7 +10,9 @@ namespace Magento\Framework\App\Route\ConfigInterface;
 /**
  * Proxy class for \Magento\Framework\App\ResourceConnection
  */
-class Proxy implements \Magento\Framework\App\Route\ConfigInterface
+class Proxy implements
+    \Magento\Framework\App\Route\ConfigInterface,
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -49,7 +51,7 @@ class Proxy implements \Magento\Framework\App\Route\ConfigInterface
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\App\Route\ConfigInterface',
+        $instanceName = \Magento\Framework\App\Route\ConfigInterface::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;

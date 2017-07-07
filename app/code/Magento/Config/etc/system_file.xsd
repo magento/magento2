@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -61,6 +61,7 @@
         <xs:attribute name="showInDefault" type="xs:int" use="optional" />
         <xs:attribute name="showInStore" type="xs:int" use="optional" />
         <xs:attribute name="showInWebsite" type="xs:int" use="optional" />
+        <xs:attribute name="canRestore" type="xs:int" use="optional" />
         <xs:attribute name="advanced" type="xs:boolean" use="optional" />
         <xs:attribute name="extends" type="xs:string" use="optional" />
     </xs:attributeGroup>
@@ -106,6 +107,7 @@
                     <xs:element name="resource" type="typeAclResourceId" />
                     <xs:element ref="group" />
                     <xs:element name="include" type="includeType"/>
+                    <xs:element name="frontend_model" type="typeModel" />
                 </xs:choice>
             </xs:sequence>
 
@@ -176,7 +178,7 @@
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="label" type="xs:string" />
-                    <xs:element name="comment" type="xs:string" />
+                    <xs:element ref="comment" />
                     <xs:element name="tooltip" type="xs:string" />
                     <xs:element name="hint" type="xs:string" />
                     <xs:element name="frontend_class" type="xs:string" />
@@ -353,6 +355,11 @@
         <xs:anyAttribute processContents="lax"/>
     </xs:attributeGroup>
 
+    <xs:attributeGroup name="commentAttributeGroup">
+        <xs:attribute name="model" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax"/>
+    </xs:attributeGroup>
+
     <xs:element name="depends">
         <xs:annotation>
             <xs:documentation>
@@ -467,10 +474,25 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z0-9\\\\:]+" />
+            <xs:pattern value="[A-Za-z0-9\\:]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:element name="comment">
+        <xs:annotation>
+            <xs:documentation>
+                Comment type
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="1" processContents="lax" />
+            </xs:sequence>
+            <xs:attributeGroup ref="commentAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
 
     <xs:simpleType name="typeConfigPath">
         <xs:annotation>

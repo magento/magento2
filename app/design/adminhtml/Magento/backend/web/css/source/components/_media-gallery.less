@@ -1,0 +1,478 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Image Management Variables
+//  _____________________________________________
+
+@image-gallery__margin-bottom: 3rem;
+
+@image-gallery-image-hidden__z-index: @image-gallery-image__z-index + 1;
+@image-gallery-image__margin: 1.2rem;
+@image-gallery-image__z-index: 1;
+@image-gallery-image-title__font-size: 1.3rem;
+@image-gallery-image-resolution__color: @color-very-dark-gray;
+@image-gallery-image-resolution__font-size: @font-size__s;
+
+@image-gallery-placeholder-icon__color: @color-gray80;
+@image-gallery-placeholder-icon__size: 6rem;
+@image-gallery-placeholder__background: @color-white;
+@image-gallery-placeholder__border: 1px solid @color-gray80;
+@image-gallery-placeholder__height: 150px;
+@image-gallery-placeholder__width: @image-gallery-placeholder__height;
+
+@image-gallery-icons__color: @color-gray62;
+@image-gallery-icons__hover__color: @color-gray52;
+
+@image-gallery-action__z-index: @image-gallery-image-hidden__z-index + 1;
+
+@image-gallery-fade__z-index: @image-gallery-action__z-index + 1;
+
+//
+//  Image Management
+//  _____________________________________________
+
+.gallery {
+    &:extend(.abs-clearfix all);
+    overflow: hidden;
+}
+
+.image {
+    background: @image-gallery-placeholder__background;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 1.2rem;
+    position: relative;
+    vertical-align: top;
+    width: @image-gallery-placeholder__width;
+
+    .product-image-wrapper {
+        background: @image-gallery-placeholder__background;
+        border: @image-gallery-placeholder__border;
+        box-sizing: border-box;
+        cursor: pointer;
+        height: @image-gallery-placeholder__height;
+        line-height: 1;
+        margin-bottom: @indent__s;
+        overflow: hidden;
+        position: relative;
+        width: @image-gallery-placeholder__width;
+
+        &:hover {
+            .product-image {
+                opacity: .5;
+            }
+        }
+    }
+
+    .product-image {
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        max-height: 100%;
+        max-width: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: @image-gallery-image__z-index;
+    }
+
+    //  Image Placeholder
+    &.image-placeholder {
+        height: @image-gallery-placeholder__height;
+
+        .product-image-wrapper {
+            .lib-icon-font(
+                @icon-camera__content,
+                @_icon-font: @icons-admin__font-name,
+                @_icon-font-size: @image-gallery-placeholder-icon__size,
+                @_icon-font-color: @image-gallery-placeholder-icon__color,
+                @_icon-font-text-hide: true
+            );
+
+            &:before {
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 20px;
+                z-index: @image-gallery-image__z-index;
+            }
+        }
+
+        .fileinput-button {
+            margin: 0;
+        }
+
+        .fileinput-button,
+        .image-browse { // TODO UI: remove after check on configurable product
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            > span {
+                display: none;
+            }
+        }
+
+        input[type='file'] {
+            border: 500px solid transparent;
+            bottom: 0;
+            cursor: pointer;
+            font-size: 10em;
+            height: 100%;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+            z-index: @image-gallery-action__z-index;
+        }
+
+        .spinner {
+            display: none;
+        }
+
+        &.loading,
+        .file-row {
+            .spinner {
+                background: @color-white;
+                display: block;
+                height: 100%;
+                left: 0;
+                margin: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+                z-index: @image-gallery-fade__z-index;
+
+                > span {
+                    left: 50%;
+                    margin: 0 0 0 -@indent__base;
+                    top: 50%;
+                }
+            }
+        }
+
+        .file-row {
+            background: @color-white url("@{baseDir}mui/images/ajax-loader-big.gif") no-repeat 50% 50%; // TODO UI: remove after new uploader implemented
+            bottom: 0;
+            height: 100%;
+            left: 0;
+            margin: auto;
+            overflow: hidden;
+            position: absolute;
+            right: 0;
+            text-indent: -999em;
+            top: 0;
+            width: 100%;
+            z-index: 5;
+        }
+    }
+
+    .image-placeholder-text {
+        bottom: 0;
+        color: @color-blue-dodger;
+        font-size: @image-gallery-image-title__font-size;
+        left: 0;
+        line-height: 1.333;
+        margin-bottom: 15%;
+        padding: 0 @indent__s;
+        position: absolute;
+        right: 0;
+        text-align: center;
+    }
+
+    &.ui-sortable-placeholder {
+        background: @color-blue-clear-sky;
+        border: 1px solid @color-blue-dodger;
+        visibility: visible !important;
+    }
+
+    //  Actions
+    .action-remove {
+        &:extend(.abs-action-reset all);
+        bottom: 12px;
+        cursor: pointer;
+        height: 20px;
+        left: 6px;
+        position: absolute;
+        width: 20px;
+        z-index: @image-gallery-action__z-index;
+
+        .lib-icon-font(
+            @icon-delete__content,
+            @_icon-font: @icons-admin__font-name,
+            @_icon-font-size: 2rem,
+            @_icon-font-color: @image-gallery-icons__color,
+            @_icon-font-color-hover: @image-gallery-icons__hover__color,
+            @_icon-font-text-hide: true,
+            @_icon-font-display: block
+        );
+    }
+
+    .draggable-handle {
+        cursor: move;
+        height: 20px;
+        left: 2px;
+        margin: 0;
+        position: absolute;
+        top: 4px;
+        width: 20px;
+        z-index: @image-gallery-action__z-index;
+
+        .lib-icon-font(
+            @icon-gripper__content,
+            @_icon-font: @icons-admin__font-name,
+            @_icon-font-size: 1.8rem,
+            @_icon-font-color: @image-gallery-icons__color,
+            @_icon-font-color-hover: @image-gallery-icons__hover__color
+        );
+    }
+
+    .image-fade {
+        .lib-font-size(18);
+        background: rgba(255, 255, 255, .8);
+        bottom: 0;
+        color: @color-gray62;
+        content: attr(data-image-hidden-label);
+        font-weight: @font-weight__semibold;
+        left: 0;
+        line-height: @image-gallery-placeholder__height;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        text-transform: uppercase;
+        top: 0;
+        visibility: hidden;
+        z-index: @image-gallery-image-hidden__z-index;
+    }
+
+    &.hidden-for-front {
+        .image-fade {
+            visibility: visible;
+        }
+    }
+
+    .item-description {
+        margin-bottom: @indent__s;
+    }
+
+    .item-title {
+        .lib-text-overflow();
+        font-size: @image-gallery-image-title__font-size;
+    }
+
+    .item-size {
+        color: @image-gallery-image-resolution__color;
+        font-size: @image-gallery-image-resolution__font-size;
+    }
+
+    .item-roles {
+        .lib-list-inline();
+        font-size: 0;
+    }
+
+    .item-role {
+        background: @color-gray89;
+        color: @color-brownie;
+        font-size: @font-size__s;
+        line-height: 1;
+        margin: 0 .4rem .4rem 0;
+        padding: .6rem;
+    }
+}
+
+//
+//  Gallery image panel
+//  ---------------------------------------------
+
+.image-panel {
+    .lib-vendor-prefix-display(flex);
+    .lib-vendor-prefix-flex-direction(row);
+    background: @color-white;
+    border-bottom: 1px solid @color-gray76;
+    box-shadow: inset 0 1px 3px @color-gray80;
+    margin: 0 0 1.5rem;
+    padding: @indent__base 1.5rem;
+
+    .admin__fieldset {
+        .admin__field:not(.admin__field-inline) {
+            &:extend(.abs-field-rows all);
+        }
+    }
+
+    .admin__field-inline {
+        .admin__field-label {
+            text-align: left;
+            width: 30%;
+        }
+
+        .admin__field-value {
+            overflow: hidden;
+            padding-left: @indent__base;
+        }
+    }
+}
+
+.image-panel-controls,
+.image-panel-preview {
+    -ms-flex: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+.image-panel-preview {
+    -ms-flex-item-align: center;
+    -webkit-align-self: center;
+    align-self: center;
+
+    img {
+        display: block;
+        margin: auto;
+    }
+}
+
+.image-panel-controls {
+    -ms-flex: 0 0 33%;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 33%;
+    flex: 0 0 33%;
+    padding-left: @indent__l;
+
+    .image-name {
+        .lib-font-size(16);
+        color: @color-gray40;
+        display: block;
+    }
+
+    .action-delete,
+    .action-remove {
+        &:extend(.abs-action-reset all);
+        margin: 0 0 35px;
+
+        .lib-icon-font(
+            @icon-delete__content,
+            @_icon-font: @icons-admin__font-name,
+            @_icon-font-size: 1.8rem,
+            @_icon-font-color: @image-gallery-icons__color,
+            @_icon-font-color-hover: @image-gallery-icons__hover__color,
+            @_icon-font-text-hide: true
+        );
+    }
+
+    .fieldset-image-panel {
+        padding: @indent__base @indent__xs 0 0;
+
+        .field {
+            margin-bottom: @indent__s;
+        }
+
+        .label {
+            margin-bottom: @indent__s;
+            padding-top: 0;
+            text-align: left;
+            width: 100%;
+        }
+    }
+
+    .fieldset-image-panel .field > .control,
+    .image-panel-controls textarea {
+        resize: vertical;
+        width: 100%;
+    }
+}
+
+.image-file-params {
+    .lib-font-size(11);
+    color: @color-gray40;
+    margin: 0 0 @indent__s;
+}
+
+//
+//  Custom Multiselect
+//  _____________________________________________
+
+.image-panel-controls,
+.gallery {
+    //  ToDo UI: remove after new gallery images editing design implementation
+    .multiselect-alt {
+        border: 1px solid @color-gray80;
+        border-radius: 5px;
+        color: @color-gray20;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        .item {
+            border-top: 1px solid @color-white;
+            cursor: pointer;
+            position: relative;
+
+            &:first-child {
+                border-top: 0;
+            }
+
+            &.selected {
+                background: @color-blue-clear-sky;
+
+                &:hover {
+                    background: darken(@color-blue-clear-sky, 10%);
+                }
+
+                label {
+                    .lib-icon-font(
+                    @icon-check-mage__content,
+                    @_icon-font: @icons-admin__font-name,
+                    @_icon-font-size: 1.4rem,
+                    @_icon-font-color: @color-blue-dodger
+                    );
+
+                    &:before {
+                        left: 8px;
+                        position: absolute;
+                        top: 6px;
+                        width: 17px;
+                    }
+                }
+            }
+        }
+
+        label {
+            cursor: pointer;
+            display: block;
+            padding: 6px @indent__m @indent__xs;
+        }
+
+        input[type='checkbox'] {
+            height: 0;
+            margin: 0;
+            opacity: 0;
+            padding: 0;
+            width: 0;
+        }
+    }
+}
+
+//
+//  Restore default value
+//  _____________________________________________
+
+.admin__field-service-gallery {
+    float: right;
+
+    &[data-config-scope] {
+        &:before {
+            color: @field-scope__color;
+            content: attr(data-config-scope);
+            display: block;
+            font-size: @font-size__s;
+            line-height: 3.2rem;
+        }
+    }
+}

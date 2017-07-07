@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -9,7 +9,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Customer\Model\Customer;
 
 /**
  * Adminhtml customer view personal information sales block.
@@ -45,6 +45,13 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * @var \Magento\Customer\Model\Logger
      */
     protected $customerLogger;
+
+    /**
+     * Customer registry
+     *
+     * @var \Magento\Customer\Model\CustomerRegistry
+     */
+    protected $customerRegistry;
 
     /**
      * Account management
@@ -143,6 +150,37 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Set customer registry
+     *
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @return void
+     * @deprecated
+     */
+    public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
+    {
+
+        $this->customerRegistry = $customerRegistry;
+    }
+
+    /**
+     * Get customer registry
+     *
+     * @return \Magento\Customer\Model\CustomerRegistry
+     * @deprecated
+     */
+    public function getCustomerRegistry()
+    {
+
+        if (!($this->customerRegistry instanceof \Magento\Customer\Model\CustomerRegistry)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Customer\Model\CustomerRegistry::class
+            );
+        } else {
+            return $this->customerRegistry;
+        }
+    }
+
+    /**
      * Retrieve customer object
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -151,10 +189,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         if (!$this->customer) {
             $this->customer = $this->customerDataFactory->create();
+            $data = $this->_backendSession->getCustomerData();
             $this->dataObjectHelper->populateWithArray(
                 $this->customer,
-                $this->_backendSession->getCustomerData()['account'],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                $data['account'],
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
         }
         return $this->customer;
@@ -195,8 +234,12 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         $createdAt = $this->getCustomer()->getCreatedAt();
         try {
-            $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $createdAt, true);
-            return $this->formatDate($date, \IntlDateFormatter::MEDIUM, true);
+            return $this->formatDate(
+                $createdAt,
+                \IntlDateFormatter::MEDIUM,
+                true,
+                $this->getStoreCreateDateTimezone()
+            );
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             return '';
@@ -419,5 +462,20 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+    }
+
+    /**
+     * Get customer account lock status
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getAccountLock()
+    {
+        $customerModel = $this->getCustomerRegistry()->retrieve($this->getCustomerId());
+        $customerStatus = __('Unlocked');
+        if ($customerModel->isCustomerLocked()) {
+            $customerStatus = __('Locked');
+        }
+        return $customerStatus;
     }
 }

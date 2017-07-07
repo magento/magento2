@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
@@ -17,7 +17,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     protected function setUp()
     {
         $this->currencyRate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Directory\Model\Currency'
+            \Magento\Directory\Model\Currency::class
         );
         parent::setUp();
     }
@@ -84,7 +84,9 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->dispatch('backend/admin/system_currency/saveRates');
 
         $this->assertSessionMessages(
-            $this->contains((string)__('Please correct the input data for %1 => %2 rate', $currencyCode, $currencyTo)),
+            $this->contains(
+                (string)__('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
+            ),
             \Magento\Framework\Message\MessageInterface::TYPE_WARNING
         );
     }

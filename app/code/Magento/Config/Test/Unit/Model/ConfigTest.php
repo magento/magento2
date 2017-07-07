@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -60,21 +63,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_eventManagerMock = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             [],
             '',
             false
         );
         $this->_structureReaderMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Reader',
+            \Magento\Config\Model\Config\Structure\Reader::class,
             [],
             [],
             '',
             false
         );
         $this->_configStructure = $this->getMock(
-            'Magento\Config\Model\Config\Structure',
+            \Magento\Config\Model\Config\Structure::class,
             [],
             [],
             '',
@@ -90,29 +93,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_transFactoryMock = $this->getMock(
-            'Magento\Framework\DB\TransactionFactory',
+            \Magento\Framework\DB\TransactionFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->_appConfigMock = $this->getMock('Magento\Framework\App\Config\ReinitableConfigInterface');
+        $this->_appConfigMock = $this->getMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $this->_configLoaderMock = $this->getMock(
-            'Magento\Config\Model\Config\Loader',
+            \Magento\Config\Model\Config\Loader::class,
             ['getConfigByPath'],
             [],
             '',
             false
         );
         $this->_dataFactoryMock = $this->getMock(
-            'Magento\Framework\App\Config\ValueFactory',
+            \Magento\Framework\App\Config\ValueFactory::class,
             [],
             [],
             '',
             false
         );
 
-        $this->_storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->_model = new \Magento\Config\Model\Config(
             $this->_appConfigMock,
@@ -145,7 +148,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveToCheckAdminSystemConfigChangedSectionEvent()
     {
-        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', [], [], '', false);
+        $transactionMock = $this->getMock(\Magento\Framework\DB\Transaction::class, [], [], '', false);
 
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 
@@ -175,7 +178,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveToCheckScopeDataSet()
     {
-        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', [], [], '', false);
+        $transactionMock = $this->getMock(\Magento\Framework\DB\Transaction::class, [], [], '', false);
 
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 
@@ -199,9 +202,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->arrayHasKey('store')
         );
 
-        $group = $this->getMock('Magento\Config\Model\Config\Structure\Element\Group', [], [], '', false);
+        $group = $this->getMock(\Magento\Config\Model\Config\Structure\Element\Group::class, [], [], '', false);
 
-        $field = $this->getMock('Magento\Config\Model\Config\Structure\Element\Field', [], [], '', false);
+        $field = $this->getMock(\Magento\Config\Model\Config\Structure\Element\Field::class, [], [], '', false);
 
         $this->_configStructure->expects(
             $this->at(0)
@@ -223,7 +226,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($field)
         );
 
-        $website = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
+        $website = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
         $website->expects($this->any())->method('getCode')->will($this->returnValue('website_code'));
         $this->_storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));
         $this->_storeManager->expects($this->any())->method('getWebsites')->will($this->returnValue([$website]));
@@ -234,7 +237,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_model->setGroups(['1' => ['fields' => ['key' => ['data']]]]);
 
         $backendModel = $this->getMock(
-            'Magento\Framework\App\Config\Value',
+            \Magento\Framework\App\Config\Value::class,
             ['setPath', 'addData', '__sleep', '__wakeup'],
             [],
             '',

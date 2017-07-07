@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
@@ -45,21 +45,21 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderDataFactoryMock = $this->getMock(
-            'Magento\Sales\Api\Data\OrderInterfaceFactory',
+            \Magento\Sales\Api\Data\OrderInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->objectCopyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $this->objectCopyMock = $this->getMock(\Magento\Framework\DataObject\Copy::class, [], [], '', false);
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->dataObjectHelper = $this->getMock('\Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
-            'Magento\Quote\Model\Quote\Address\ToOrder',
+            \Magento\Quote\Model\Quote\Address\ToOrder::class,
             [
                 'orderFactory' => $this->orderDataFactoryMock,
                 'objectCopyService' => $this->objectCopyMock,
@@ -76,18 +76,18 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
         $storeId = 777;
 
-        $object = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
-        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $object = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $object->expects($this->exactly(5))->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('getId')->willReturn($quoteId);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order',
             $object
         )->willReturn($orderData);
         $this->dataObjectHelper->expects($this->once())->method('populateWithArray')
-            ->with($this->orderMock, ['test' => 'beer'], '\Magento\Sales\Api\Data\OrderInterface')
+            ->with($this->orderMock, ['test' => 'beer'], \Magento\Sales\Api\Data\OrderInterface::class)
             ->willReturnSelf();
         $this->orderMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $this->orderMock->expects($this->once())->method('setQuoteId')->with($quoteId)->willReturnSelf();

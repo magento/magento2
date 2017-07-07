@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
@@ -21,7 +21,7 @@ class NodeMergingConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->nodePathMatcher = $this->getMock('\Magento\Framework\Config\Dom\NodePathMatcher');
+        $this->nodePathMatcher = $this->getMock(\Magento\Framework\Config\Dom\NodePathMatcher::class);
         $this->object = new NodeMergingConfig(
             $this->nodePathMatcher,
             ['/root/one' => 'name', '/root/two' => 'id', '/root/three' => 'key']

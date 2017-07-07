@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
@@ -8,6 +8,7 @@ namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 /**
  * Files uploader block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Uploader extends \Magento\Backend\Block\Media\Uploader

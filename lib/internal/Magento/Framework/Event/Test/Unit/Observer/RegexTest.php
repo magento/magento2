@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Test\Unit\Observer;
@@ -36,7 +36,7 @@ class RegexTest extends \PHPUnit_Framework_TestCase
     public function testIsValidFor($pattern, $name, $expectedResult)
     {
         $this->regex->setEventRegex($pattern);
-        $eventMock = $this->getMock('Magento\Framework\Event', [], [], '', false);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, [], [], '', false);
         $eventMock->expects($this->any())
             ->method('getName')
             ->will($this->returnValue($name));

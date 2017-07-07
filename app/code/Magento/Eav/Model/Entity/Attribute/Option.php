@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute;
@@ -16,7 +16,7 @@ use Magento\Framework\Model\AbstractModel;
  * @method int getAttributeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @codeCoverageIgnore
  */
 class Option extends AbstractModel implements AttributeOptionInterface
@@ -28,7 +28,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      */
     public function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option::class);
     }
 
     /**
@@ -70,6 +70,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     {
         return $this->getData(AttributeOptionInterface::STORE_LABELS);
     }
+
     /**
      * Set option label
      *

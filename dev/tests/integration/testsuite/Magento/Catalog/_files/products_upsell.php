@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setId(
@@ -28,7 +28,16 @@ $product->setTypeId(
     ['qty' => 100, 'is_in_stock' => 1]
 )->save();
 
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+/** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+$productLink = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Api\Data\ProductLinkInterface::class
+);
+$productLink->setSku('simple_with_upsell');
+$productLink->setLinkedProductSku('simple');
+$productLink->setPosition(1);
+$productLink->setLinkType('upsell');
+
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setId(
@@ -49,6 +58,6 @@ $product->setTypeId(
     [1]
 )->setStockData(
     ['qty' => 100, 'is_in_stock' => 1]
-)->setUpSellLinkData(
-    [1 => ['position' => 1]]
+)->setProductLinks(
+    [$productLink]
 )->save();

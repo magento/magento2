@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,23 +18,23 @@ class SetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resource = $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set', [], [], '', false);
+        $resource = $this->getMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class, [], [], '', false);
         $attrGroupFactory = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\GroupFactory',
+            \Magento\Eav\Model\Entity\Attribute\GroupFactory::class,
             [],
             [],
             '',
             false,
             false
         );
-        $attrFactory = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', [], [], '', false, false);
+        $attrFactory = $this->getMock(\Magento\Eav\Model\Entity\AttributeFactory::class, [], [], '', false, false);
         $arguments = [
             'attrGroupFactory' => $attrGroupFactory,
             'attributeFactory' => $attrFactory,
             'resource' => $resource,
         ];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $objectManagerHelper->getObject('Magento\Eav\Model\Entity\Attribute\Set', $arguments);
+        $this->_model = $objectManagerHelper->getObject(\Magento\Eav\Model\Entity\Attribute\Set::class, $arguments);
     }
 
     protected function tearDown()
@@ -51,7 +51,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->getResource()->expects($this->any())->method('validate')->will($this->returnValue(false));
 
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', $exceptionMessage);
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
         $this->_model->setAttributeSetName($attributeSetName);
         $this->_model->validate();
     }

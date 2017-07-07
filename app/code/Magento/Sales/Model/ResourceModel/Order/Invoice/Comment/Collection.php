@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Comment;
@@ -11,6 +11,7 @@ use Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollectio
 /**
  * Flat sales order invoice comment collection
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements InvoiceCommentSearchResultInterface
@@ -38,8 +39,8 @@ class Collection extends AbstractCollection implements InvoiceCommentSearchResul
     {
         parent::_construct();
         $this->_init(
-            'Magento\Sales\Model\Order\Invoice\Comment',
-            'Magento\Sales\Model\ResourceModel\Order\Invoice\Comment'
+            \Magento\Sales\Model\Order\Invoice\Comment::class,
+            \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment::class
         );
     }
 

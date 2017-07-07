@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -8,6 +8,9 @@ namespace Magento\Sales\Service\V1;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderCreateTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/orders';
@@ -28,25 +31,30 @@ class OrderCreateTest extends WebapiAbstract
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function prepareOrder()
     {
         /** @var \Magento\Sales\Model\Order $orderBuilder */
-        $orderFactory = $this->objectManager->get('Magento\Sales\Model\OrderFactory');
+        $orderFactory = $this->objectManager->get(\Magento\Sales\Model\OrderFactory::class);
         /** @var \Magento\Sales\Api\Data\OrderItemFactory $orderItemFactory */
-        $orderItemFactory = $this->objectManager->get('Magento\Sales\Model\Order\ItemFactory');
+        $orderItemFactory = $this->objectManager->get(\Magento\Sales\Model\Order\ItemFactory::class);
         /** @var \Magento\Sales\Api\Data\OrderPaymentFactory $orderPaymentFactory */
-        $orderPaymentFactory = $this->objectManager->get('Magento\Sales\Model\Order\PaymentFactory');
+        $orderPaymentFactory = $this->objectManager->get(\Magento\Sales\Model\Order\PaymentFactory::class);
         /** @var \Magento\Sales\Model\Order\AddressRepository $orderAddressRepository */
-        $orderAddressRepository = $this->objectManager->get('Magento\Sales\Model\Order\AddressRepository');
+        $orderAddressRepository = $this->objectManager->get(\Magento\Sales\Model\Order\AddressRepository::class);
+        /** @var  \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
 
         $order = $orderFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderInterface')]
+            ['data' => $this->getDataStructure(\Magento\Sales\Api\Data\OrderInterface::class)]
         );
         $orderItem = $orderItemFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderItemInterface')]
+            ['data' => $this->getDataStructure(\Magento\Sales\Api\Data\OrderItemInterface::class)]
         );
         $orderPayment = $orderPaymentFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderPaymentInterface')]
+            ['data' => $this->getDataStructure(\Magento\Sales\Api\Data\OrderPaymentInterface::class)]
         );
 
         $email = uniqid() . 'email@example.com';
@@ -65,6 +73,32 @@ class OrderCreateTest extends WebapiAbstract
         $order->setCustomerEmail($email);
         $order->setBaseGrandTotal(100);
         $order->setGrandTotal(100);
+        $order->setShippingDescription('Flat Rate - Fixed');
+        $order->setIsVirtual(0);
+        $order->setStoreId($storeManager->getDefaultStoreView()->getId());
+        $order->setBaseDiscountAmount(0);
+        $order->setBaseShippingAmount(5);
+        $order->setBaseShippingTaxAmount(0);
+        $order->setBaseSubtotal(100);
+        $order->setBaseTaxAmount(0);
+        $order->setBaseToGlobalRate(1);
+        $order->setBaseToOrderRate(1);
+        $order->setDiscountAmount(0);
+        $order->setShippingAmount(0);
+        $order->setShippingTaxAmount(0);
+        $order->setStoreToOrderRate(0);
+        $order->setBaseToOrderRate(0);
+        $order->setSubtotal(100);
+        $order->setTaxAmount(0);
+        $order->setTotalQtyOrdered(1);
+        $order->setCustomerIsGuest(1);
+        $order->setCustomerNoteNotify(0);
+        $order->setCustomerGroupId(0);
+        $order->setBaseSubtotalInclTax(100);
+        $order->setWeight(1);
+        $order->setBaseCurrencyCode('USD');
+        $order->setShippingInclTax(5);
+        $order->setBaseShippingInclTax(5);
 
         $this->addProductOption($orderItem);
 
@@ -79,12 +113,39 @@ class OrderCreateTest extends WebapiAbstract
         $orderAddressBilling->setFirstname('First Name');
         $orderAddressBilling->setTelephone('+00(000)-123-45-57');
         $orderAddressBilling->setStreet(['Street']);
-        $orderAddressBilling->setCountryId(1);
+        $orderAddressBilling->setCountryId('US');
+        $orderAddressBilling->setRegion('California');
         $orderAddressBilling->setAddressType('billing');
+        $orderAddressBilling->setRegionId(12);
+
+        $orderAddressShipping = $orderAddressRepository->create();
+        $orderAddressShipping->setCity('City2');
+        $orderAddressShipping->setPostcode('12345');
+        $orderAddressShipping->setLastname('Last Name2');
+        $orderAddressShipping->setFirstname('First Name2');
+        $orderAddressShipping->setTelephone('+00(000)-123-45-57');
+        $orderAddressShipping->setStreet(['Street']);
+        $orderAddressShipping->setCountryId('US');
+        $orderAddressShipping->setRegion('California');
+        $orderAddressShipping->setAddressType('shipping');
+        $orderAddressShipping->setRegionId(12);
 
         $orderData = $order->getData();
         $orderData['billing_address'] = $orderAddressBilling->getData();
         $orderData['billing_address']['street'] = ['Street'];
+        $address = $orderAddressShipping->getData();
+        $address['street'] = ['Street'];
+        $orderData['extension_attributes']['shipping_assignments'] =
+            [
+                [
+                    'shipping' => [
+                        'address' => $address,
+                        'method' => 'Flat Rate - Fixed'
+                    ],
+                    'items' => [$orderItem->getData()],
+                    'stock_id' => null,
+                ]
+            ];
         return $orderData;
     }
 
@@ -104,7 +165,7 @@ class OrderCreateTest extends WebapiAbstract
     protected function addProductOption($orderItem)
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get('simple');
         $options = [];
         foreach ($product->getOptions() as $option) {
@@ -148,7 +209,6 @@ class OrderCreateTest extends WebapiAbstract
      */
     public function testOrderCreate()
     {
-        $this->markTestSkipped('MAGETWO-44643');
         $order = $this->prepareOrder();
 
         $serviceInfo = [
@@ -165,10 +225,13 @@ class OrderCreateTest extends WebapiAbstract
         $this->assertNotEmpty($this->_webApiCall($serviceInfo, ['entity' => $order]));
 
         /** @var \Magento\Sales\Model\Order $model */
-        $model = $this->objectManager->get('Magento\Sales\Model\Order');
+        $model = $this->objectManager->get(\Magento\Sales\Model\Order::class);
         $model->load($order['customer_email'], 'customer_email');
         $this->assertTrue((bool)$model->getId());
         $this->assertEquals($order['base_grand_total'], $model->getBaseGrandTotal());
         $this->assertEquals($order['grand_total'], $model->getGrandTotal());
+        $this->assertNotNull($model->getShippingAddress());
+        $this->assertTrue((bool)$model->getShippingAddress()->getId());
+        $this->assertEquals('Flat Rate - Fixed', $model->getShippingMethod());
     }
 }

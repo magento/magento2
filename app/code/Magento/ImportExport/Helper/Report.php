@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * ImportExport history reports helper
+ *
+ * @api
  */
 class Report extends \Magento\Framework\App\Helper\AbstractHelper
 {

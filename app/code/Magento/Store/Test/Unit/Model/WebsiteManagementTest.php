@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -20,7 +20,7 @@ class WebsiteManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->websitesFactoryMock = $this->getMock(
-            'Magento\Store\Model\ResourceModel\Website\CollectionFactory',
+            \Magento\Store\Model\ResourceModel\Website\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -33,7 +33,7 @@ class WebsiteManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCount()
     {
-        $websitesMock = $this->getMock('\Magento\Store\Model\ResourceModel\Website\Collection', [], [], '', false);
+        $websitesMock = $this->getMock(\Magento\Store\Model\ResourceModel\Website\Collection::class, [], [], '', false);
 
         $this->websitesFactoryMock
             ->expects($this->once())

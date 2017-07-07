@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,14 +25,14 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface');
-        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $context = $objectHelper->getObject(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
                 'appState' => $this->appStateMock,
@@ -40,7 +40,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->additonalBlock = $objectHelper->getObject(
-            'Magento\Backend\Block\Cache\Additional',
+            \Magento\Backend\Block\Cache\Additional::class,
             ['context' => $context]
         );
     }

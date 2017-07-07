@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,30 +41,30 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderSenderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->historyCollectionFactory = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->order = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             ['__wakeUp', 'getEmailSent'],
             [],
             '',
             false
         );
         $this->orderSenderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender\OrderSender',
+            \Magento\Sales\Model\Order\Email\Sender\OrderSender::class,
             ['send'],
             [],
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->notifier = new OrderNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -78,14 +78,14 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
     public function testNotifySuccess()
     {
         $historyCollection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\History\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection::class,
             ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified'],
             [],
             '',
             false
         );
         $historyItem = $this->getMock(
-            'Magento\Sales\Model\Order\Status\History',
+            \Magento\Sales\Model\Order\Status\History::class,
             ['setIsCustomerNotified', 'save', '__wakeUp'],
             [],
             '',

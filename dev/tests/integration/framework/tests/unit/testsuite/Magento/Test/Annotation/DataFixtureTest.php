@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Annotation;
@@ -20,7 +20,7 @@ class DataFixtureTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = $this->getMock(
-            'Magento\TestFramework\Annotation\DataFixture',
+            \Magento\TestFramework\Annotation\DataFixture::class,
             ['_applyOneFixture'],
             [__DIR__ . '/_files']
         );

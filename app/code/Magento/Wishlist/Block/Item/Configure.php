@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@
  */
 namespace Magento\Wishlist\Block\Item;
 
+/**
+ * @api
+ */
 class Configure extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -52,7 +55,7 @@ class Configure extends \Magento\Framework\View\Element\Template
      */
     public function getWishlistOptions()
     {
-        return ['productType' => $this->getProduct()->getTypeId()];
+        return ['productType' => $this->escapeHtml($this->getProduct()->getTypeId())];
     }
 
     /**

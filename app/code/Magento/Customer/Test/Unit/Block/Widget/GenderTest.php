@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,12 +36,12 @@ class GenderTest extends \PHPUnit_Framework_TestCase
     /** @var Gender */
     private $block;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->attribute = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
 
-        $this->customerMetadata = $this->getMockBuilder('\Magento\Customer\Api\CustomerMetadataInterface')
+        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
@@ -49,13 +49,13 @@ class GenderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->attribute));
 
         $this->customerRepository = $this
-            ->getMockBuilder('\Magento\Customer\Api\CustomerRepositoryInterface')
+            ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
 
         $this->block = new \Magento\Customer\Block\Widget\Gender(
-            $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false),
-            $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
+            $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false),
+            $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false),
             $this->customerMetadata,
             $this->customerRepository,
             $this->customerSession
@@ -95,7 +95,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -136,7 +136,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -150,7 +150,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomer()
     {
-        $customerData = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterface')
+        $customerData = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->getMockForAbstractClass();
         $this->customerSession->expects($this->once())->method('getCustomerId')->will($this->returnValue(1));
         $this->customerRepository

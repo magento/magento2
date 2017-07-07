@@ -1,22 +1,26 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Checkout\Test\Fixture\Cart;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\TestStep\Utils\CompareQtyTrait;
 
 /**
  * Create credit memo from order on backend.
  */
 class CreateCreditMemoStep implements TestStepInterface
 {
+    use CompareQtyTrait;
+
     /**
      * Orders Page.
      *
@@ -46,32 +50,31 @@ class CreateCreditMemoStep implements TestStepInterface
     protected $order;
 
     /**
-     * Credit memo data.
+     * Checkout Cart fixture.
      *
-     * @var array|null
+     * @var Cart
      */
-    protected $data;
+    private $cart;
 
     /**
-     * @construct
+     * @param Cart $cart
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
      * @param OrderInjectable $order
      * @param OrderCreditMemoNew $orderCreditMemoNew
-     * @param array|null $data [optional]
      */
     public function __construct(
+        Cart $cart,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
         OrderInjectable $order,
-        OrderCreditMemoNew $orderCreditMemoNew,
-        $data = null
+        OrderCreditMemoNew $orderCreditMemoNew
     ) {
+        $this->cart = $cart;
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
         $this->order = $order;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
-        $this->data = $data;
     }
 
     /**
@@ -83,18 +86,24 @@ class CreateCreditMemoStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->orderCreditMemo();
-        if (!empty($this->data)) {
-            $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                $this->data,
-                $this->order->getEntityId()['products']
-            );
-            $this->orderCreditMemoNew->getFormBlock()->updateQty();
-            $this->orderCreditMemoNew->getFormBlock()->fillFormData($this->data);
-        }
-        $this->orderCreditMemoNew->getFormBlock()->submit();
+        $refundsData = $this->order->getRefund() !== null ? $this->order->getRefund() : ['refundData' => []];
+        foreach ($refundsData as $refundData) {
+            $this->salesOrderView->getPageActions()->orderCreditMemo();
 
-        return ['creditMemoIds' => $this->getCreditMemoIds()];
+            $items = $this->cart->getItems();
+            $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
+            if ($this->compare($items, $refundData)) {
+                $this->orderCreditMemoNew->getFormBlock()->updateQty();
+            }
+
+            $this->orderCreditMemoNew->getFormBlock()->fillFormData($refundData);
+            $this->orderCreditMemoNew->getFormBlock()->submit();
+        }
+
+        return [
+            'ids' => ['creditMemoIds' => $this->getCreditMemoIds()],
+            'customer' => $this->order->getDataFieldConfig('customer_id')['source']->getCustomer()
+        ];
     }
 
     /**

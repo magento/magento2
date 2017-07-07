@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,14 +34,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->repositoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction\Repository',
+            \Magento\Sales\Model\Order\Payment\Transaction\Repository::class,
             [],
             [],
             '',
             false
         );
         $this->paymentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
+            \Magento\Sales\Model\Order\Payment::class,
             [
                 'hasIsTransactionClosed',
                 'getIsTransactionClosed',
@@ -54,14 +54,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [],
             [],
             '',
             false
         );
         $this->builder = $objectManager->getObject(
-            'Magento\Sales\Model\Order\Payment\Transaction\Builder',
+            \Magento\Sales\Model\Order\Payment\Transaction\Builder::class,
             ['transactionRepository' => $this->repositoryMock]
         );
     }
@@ -194,7 +194,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-
     /**
      * @param int $orderId
      * @param int $paymentId
@@ -203,7 +202,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function expectTransaction($orderId, $paymentId)
     {
         $newTransaction = $this->getMock(
-            'Magento\Sales\Model\Order\Payment\Transaction',
+            \Magento\Sales\Model\Order\Payment\Transaction::class,
             [
                 'getId',
                 'setOrderId',
@@ -239,7 +238,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function expectDocument($transactionId)
     {
         $document = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 'setTransactionId'
             ],

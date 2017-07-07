@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,9 +33,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     {
         $componentRegistrar = new ComponentRegistrar();
         $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Component\DirSearch');
+            ->create(\Magento\Framework\Component\DirSearch::class);
         $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\View\Design\Theme\ThemePackageList');
+            ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
         $this->model = new Files($componentRegistrar, $dirSearch, $themePackageList);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';

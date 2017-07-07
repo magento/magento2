@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,7 @@ use Magento\Sales\Setup\SalesSetupFactory;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallData implements InstallDataInterface
 {
@@ -38,7 +39,6 @@ class InstallData implements InstallDataInterface
      * @var SalesSetupFactory
      */
     protected $salesSetupFactory;
-
 
     /**
      * Init
@@ -89,19 +89,19 @@ class InstallData implements InstallDataInterface
             'gift_message_available',
             [
                 'group' => 'Gift Options',
-                'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Boolean',
+                'backend' => \Magento\Catalog\Model\Product\Attribute\Backend\Boolean::class,
                 'frontend' => '',
                 'label' => 'Allow Gift Message',
                 'input' => 'select',
                 'class' => '',
-                'source' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+                'source' => \Magento\Catalog\Model\Product\Attribute\Source\Boolean::class,
                 'global' => true,
                 'visible' => true,
                 'required' => false,
                 'user_defined' => false,
                 'default' => '',
                 'apply_to' => '',
-                'input_renderer' => 'Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form\Config',
+                'input_renderer' => \Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form\Config::class,
                 'visible_on_front' => false,
                 'is_used_in_grid' => true,
                 'is_visible_in_grid' => false,
@@ -122,10 +122,6 @@ class InstallData implements InstallDataInterface
                 $attribute['attribute_id'],
                 60
             );
-        }
-
-        if (!$catalogSetup->getAttributesNumberInGroup($entityTypeId, $attributeSetId, 'Gift Options')) {
-            $catalogSetup->removeAttributeGroup($entityTypeId, $attributeSetId, 'Gift Options');
         }
     }
 }

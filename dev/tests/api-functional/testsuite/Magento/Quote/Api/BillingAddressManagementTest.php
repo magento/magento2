@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class BillingAddressManagementTest extends WebapiAbstract
      */
     public function testGetAddress()
     {
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         /** @var \Magento\Quote\Model\Quote\Address $address */
@@ -85,7 +85,7 @@ class BillingAddressManagementTest extends WebapiAbstract
     public function testSetAddress()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -104,7 +104,7 @@ class BillingAddressManagementTest extends WebapiAbstract
             'firstname' => 'John',
             'lastname' => 'Smith',
             'email' => '',
-            'company' => 'eBay Inc',
+            'company' => 'Magento Commerce Inc.',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
             'region_id' => 12,
@@ -123,7 +123,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressId = $this->_webApiCall($serviceInfo, $requestData);
 
         //reset $quote to reload data
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $address = $quote->getBillingAddress();
         $address->getRegionCode();
@@ -152,11 +152,11 @@ class BillingAddressManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         /** @var \Magento\Quote\Model\Quote\Address $address */
@@ -208,12 +208,12 @@ class BillingAddressManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -227,7 +227,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'company' => 'eBay Inc',
+            'company' => 'Magento Commerce Inc.',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
             'region_id' => 12,
@@ -245,7 +245,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressId = $this->_webApiCall($serviceInfo, $requestData);
 
         //reset $quote to reload data
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $address = $quote->getBillingAddress();
         $address->getRegionCode();

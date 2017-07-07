@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Observer;
@@ -30,11 +30,11 @@ class NoRouteObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->observerMock = $this
-            ->getMockBuilder('Magento\Framework\Event\Observer')
+            ->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventMock = $this
-            ->getMockBuilder('Magento\Framework\Event')
+            ->getMockBuilder(\Magento\Framework\Event::class)
             ->setMethods(
                 [
                     'getStatus',
@@ -44,7 +44,7 @@ class NoRouteObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectMock = $this
-            ->getMockBuilder('Magento\Framework\DataObject')
+            ->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
                     'setLoaded',
@@ -62,7 +62,7 @@ class NoRouteObserverTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->noRouteObserver = $objectManager->getObject(
-            'Magento\Cms\Observer\NoRouteObserver',
+            \Magento\Cms\Observer\NoRouteObserver::class,
             []
         );
     }

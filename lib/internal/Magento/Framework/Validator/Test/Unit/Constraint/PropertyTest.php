@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_validatorMock = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
+        $this->_validatorMock = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $this->_constraint = new \Magento\Framework\Validator\Constraint\Property(
             $this->_validatorMock,
             self::PROPERTY_NAME

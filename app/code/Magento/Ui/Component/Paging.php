@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component;
 
 /**
- * Class Paging
+ * @api
  */
 class Paging extends AbstractComponent
 {
@@ -65,7 +65,11 @@ class Paging extends AbstractComponent
     {
         $this->prepareOptions();
         $paging = $this->getContext()->getRequestParam('paging');
-        $this->getContext()->getDataProvider()->setLimit($this->getOffset($paging), $this->getSize($paging));
+        if (!isset($paging['notLimits'])) {
+            $this->getContext()
+                ->getDataProvider()
+                ->setLimit($this->getOffset($paging), $this->getSize($paging));
+        }
 
         parent::prepare();
     }

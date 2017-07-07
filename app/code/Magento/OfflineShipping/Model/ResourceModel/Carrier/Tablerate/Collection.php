@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
@@ -8,7 +8,7 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 /**
  * Shipping table rates collection
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -34,8 +34,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\OfflineShipping\Model\Carrier\Tablerate',
-            'Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate'
+            \Magento\OfflineShipping\Model\Carrier\Tablerate::class,
+            \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate::class
         );
         $this->_countryTable = $this->getTable('directory_country');
         $this->_regionTable = $this->getTable('directory_country_region');

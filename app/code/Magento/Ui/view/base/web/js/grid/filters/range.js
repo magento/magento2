@@ -1,13 +1,18 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ */
+
+/**
+ * @api
  */
 define([
     'underscore',
     'uiLayout',
     'mageUtils',
-    'Magento_Ui/js/form/components/group'
-], function (_, layout, utils, Group) {
+    'Magento_Ui/js/form/components/group',
+    'mage/translate'
+], function (_, layout, utils, Group, $t) {
     'use strict';
 
     return Group.extend({
@@ -17,24 +22,23 @@ define([
             templates: {
                 base: {
                     parent: '${ $.$data.group.name }',
-                    provider: '${ $.$data.group.provider }'
+                    provider: '${ $.$data.group.provider }',
+                    template: 'ui/grid/filters/field'
                 },
                 date: {
                     component: 'Magento_Ui/js/form/element/date',
-                    template: 'ui/grid/filters/elements/date',
                     dateFormat: 'MM/dd/YYYY'
                 },
                 text: {
-                    component: 'Magento_Ui/js/form/element/abstract',
-                    template: 'ui/grid/filters/elements/input'
+                    component: 'Magento_Ui/js/form/element/abstract'
                 },
                 ranges: {
                     from: {
-                        label: 'from',
+                        label: $t('from'),
                         dataScope: 'from'
                     },
                     to: {
-                        label: 'to',
+                        label: $t('to'),
                         dataScope: 'to'
                     }
                 }

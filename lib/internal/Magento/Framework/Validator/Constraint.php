@@ -2,11 +2,14 @@
 /**
  * Validator constraint delegates validation to wrapped validator.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * @api
+ */
 class Constraint extends \Magento\Framework\Validator\AbstractValidator
 {
     /**

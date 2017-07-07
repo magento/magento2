@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
@@ -19,7 +19,7 @@ class CreatedatTest extends \PHPUnit_Framework_TestCase
     public function testTotals($orderParams)
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001')
             ->setBaseGrandTotal($orderParams['base_subtotal'])
             ->setSubtotal($orderParams['base_subtotal'])
@@ -37,12 +37,12 @@ class CreatedatTest extends \PHPUnit_Framework_TestCase
         // refresh report statistics
         /** @var \Magento\SalesRule\Model\ResourceModel\Report\Rule $reportResource */
         $reportResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule'
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule::class
         );
         $reportResource->aggregate();
         /** @var \Magento\SalesRule\Model\ResourceModel\Report\Collection $reportCollection */
         $reportCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\SalesRule\Model\ResourceModel\Report\Collection'
+            \Magento\SalesRule\Model\ResourceModel\Report\Collection::class
         );
         $salesRuleReportItem = $reportCollection->getFirstItem();
         $this->assertEquals($this->getTotalAmount($order), $salesRuleReportItem['total_amount']);

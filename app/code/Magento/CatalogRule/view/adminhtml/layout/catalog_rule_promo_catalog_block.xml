@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -45,6 +45,7 @@
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Start</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="index" xsi:type="string">from_date</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
@@ -54,6 +55,7 @@
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">End</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="default" xsi:type="string">--</argument>
                             <argument name="index" xsi:type="string">to_date</argument>
                             <argument name="column_css_class" xsi:type="string">col-date</argument>

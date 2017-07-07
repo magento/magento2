@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Message;
@@ -23,7 +23,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create('Magento\Framework\Message\Manager');
+        $this->model = $this->objectManager->create(\Magento\Framework\Message\Manager::class);
     }
 
     /**
@@ -31,12 +31,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddMessage()
     {
-        $errorMessage = $this->objectManager->create('Magento\Framework\Message\Error', ['text' => 'some text']);
+        $errorMessage = $this->objectManager->create(\Magento\Framework\Message\Error::class, ['text' => 'some text']);
         $this->model->addMessage($errorMessage);
 
         $customGroup = 'custom-group';
         $errorMessageCustom = $this->objectManager->create(
-            'Magento\Framework\Message\Error',
+            \Magento\Framework\Message\Error::class,
             ['text' => 'some custom group']
         );
         $this->model->addMessage($errorMessageCustom, $customGroup);
@@ -59,10 +59,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     {
         $customGroup = 'custom-group';
         $messages = [
-            $this->objectManager->create('Magento\Framework\Message\Error', ['text' => 'some text 1']),
-            $this->objectManager->create('Magento\Framework\Message\Error', ['text' => 'some text 2']),
-            $this->objectManager->create('Magento\Framework\Message\Error', ['text' => 'some text 3']),
-            $this->objectManager->create('Magento\Framework\Message\Error', ['text' => 'some text 4']),
+            $this->objectManager->create(\Magento\Framework\Message\Error::class, ['text' => 'some text 1']),
+            $this->objectManager->create(\Magento\Framework\Message\Error::class, ['text' => 'some text 2']),
+            $this->objectManager->create(\Magento\Framework\Message\Error::class, ['text' => 'some text 3']),
+            $this->objectManager->create(\Magento\Framework\Message\Error::class, ['text' => 'some text 4']),
         ];
 
         $this->model->addMessages($messages);
@@ -78,9 +78,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function testAddUniqueMessages()
     {
         $errorMessageFirst = $this->objectManager
-            ->create('Magento\Framework\Message\Error', ['text' => 'some text']);
+            ->create(\Magento\Framework\Message\Error::class, ['text' => 'some text']);
         $errorMessageSecond = $this->objectManager
-            ->create('Magento\Framework\Message\Error', ['text' => 'some text']);
+            ->create(\Magento\Framework\Message\Error::class, ['text' => 'some text']);
         $this->model->addUniqueMessages([$errorMessageFirst]);
         $this->model->addUniqueMessages([$errorMessageSecond]);
 

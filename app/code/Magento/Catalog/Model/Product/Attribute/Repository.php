@@ -1,11 +1,12 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -112,20 +113,21 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 throw NoSuchEntityException::singleField('attribute_code', $existingModel->getAttributeCode());
             }
 
+            // Attribute code must not be changed after attribute creation
+            $attribute->setAttributeCode($existingModel->getAttributeCode());
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
 
             if (is_array($attribute->getFrontendLabels())) {
-                $frontendLabel[0] = $existingModel->getDefaultFrontendLabel();
+                $defaultFrontendLabel = $attribute->getDefaultFrontendLabel();
+                $frontendLabel[0] = !empty($defaultFrontendLabel)
+                    ? $defaultFrontendLabel
+                    : $existingModel->getDefaultFrontendLabel();
                 foreach ($attribute->getFrontendLabels() as $item) {
                     $frontendLabel[$item->getStoreId()] = $item->getLabel();
                 }
                 $attribute->setDefaultFrontendLabel($frontendLabel);
-            }
-            if (!$attribute->getIsUserDefined()) {
-                // Unset attribute field for system attributes
-                $attribute->setApplyTo(null);
             }
         } else {
             $attribute->setAttributeId(null);
@@ -170,8 +172,32 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             );
             $attribute->setIsUserDefined(1);
         }
+        if (!empty($attribute->getData(AttributeInterface::OPTIONS))) {
+            $options = [];
+            $sortOrder = 0;
+            $default = [];
+            $optionIndex = 0;
+            foreach ($attribute->getOptions() as $option) {
+                $optionIndex++;
+                $optionId = $option->getValue() ?: 'option_' . $optionIndex;
+                $options['value'][$optionId][0] = $option->getLabel();
+                $options['order'][$optionId] = $option->getSortOrder() ?: $sortOrder++;
+                if (is_array($option->getStoreLabels())) {
+                    foreach ($option->getStoreLabels() as $label) {
+                        $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
+                    }
+                }
+                if ($option->getIsDefault()) {
+                    $default[] = $optionId;
+                }
+            }
+            $attribute->setDefault($default);
+            if (count($options)) {
+                $attribute->setOption($options);
+            }
+        }
         $this->attributeResource->save($attribute);
-        return $attribute;
+        return $this->get($attribute->getAttributeCode());
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,27 +10,27 @@
 
 <?php /* @var $block \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
-<div id="catalog_product_composite_configure_fields_grouped" class="<?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
-    <h4><?php /* @escapeNotVerified */ echo __('Associated Products') ?></h4>
+<div id="catalog_product_composite_configure_fields_grouped" class="<?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+    <h4><?= /* @escapeNotVerified */ __('Associated Products') ?></h4>
     <div class="product-options">
         <?php $_product = $block->getProduct(); ?>
         <?php $block->setPreconfiguredValue(); ?>
         <?php $_associatedProducts = $block->getAssociatedProducts(); ?>
         <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
         <?php if ((!$_product->isAvailable() && !$_skipSaleableCheck) || !$_hasAssociatedProducts): ?>
-            <p class="availability out-of-stock"><?php /* @escapeNotVerified */ echo __('Availability:') ?> <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></p>
+            <p class="availability out-of-stock"><?= /* @escapeNotVerified */ __('Availability:') ?> <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></p>
         <?php endif; ?>
         <table class="data-table admin__table-primary grouped-items-table" id="super-product-table">
             <thead>
                 <tr class="headings">
-                    <th class="col-id"><?php /* @escapeNotVerified */ echo __('ID') ?></th>
-                    <th class="col-sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                    <th class="col-name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                    <th class="col-id"><?= /* @escapeNotVerified */ __('ID') ?></th>
+                    <th class="col-sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                    <th class="col-name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
                     <?php if ($block->getCanShowProductPrice($_product)): ?>
-                    <th class="col-price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                    <th class="col-price"><?= /* @escapeNotVerified */ __('Price') ?></th>
                     <?php endif; ?>
                     <?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>
-                    <th class="col-qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                    <th class="col-qty"><?= /* @escapeNotVerified */ __('Qty') ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>
@@ -38,14 +38,14 @@
             <?php if ($_hasAssociatedProducts): ?>
                 <?php $i = 0 ?>
             <?php foreach ($_associatedProducts as $_item): ?>
-                <tr class="<?php /* @escapeNotVerified */ echo(++$i % 2) ? 'even' : 'odd' ?>">
-                    <td class="col-id"><?php /* @escapeNotVerified */ echo $_item->getId() ?></td>
-                    <td class="col-sku"><?php echo $block->escapeHtml($_item->getSku()) ?></td>
-                    <td class="col-name"><?php echo $block->escapeHtml($_item->getName()) ?></td>
+                <tr class="<?= /* @escapeNotVerified */ (++$i % 2) ? 'even' : 'odd' ?>">
+                    <td class="col-id"><?= /* @escapeNotVerified */ $_item->getId() ?></td>
+                    <td class="col-sku"><?= $block->escapeHtml($_item->getSku()) ?></td>
+                    <td class="col-name"><?= $block->escapeHtml($_item->getName()) ?></td>
                     <?php if ($block->getCanShowProductPrice($_product)): ?>
                     <td class="col-price">
                         <?php if ($block->getCanShowProductPrice($_item)): ?>
-                        <?php /* @escapeNotVerified */ echo $block->getProductPrice($_item) ?>
+                        <?= /* @escapeNotVerified */ $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                     </td>
                     <?php endif; ?>
@@ -53,15 +53,15 @@
                     <td class="col-qty">
                     <?php if ($_item->isSaleable() || $_skipSaleableCheck) : ?>
                         <input type="text"
-                               name="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]"
-                               id="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]"
+                               name="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]"
+                               id="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]"
                                maxlength="12"
-                               value="<?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>"
-                               title="<?php /* @escapeNotVerified */ echo __('Qty') ?>"
+                               value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"
+                               title="<?= /* @escapeNotVerified */ __('Qty') ?>"
                                class="input-text admin__control-text qty" />
-                        <input type="hidden" value="1" price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?php /* @escapeNotVerified */ echo $_item->getId() ?>]" />
+                        <input type="hidden" value="1" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?= /* @escapeNotVerified */ $_item->getId() ?>]" />
                     <?php else: ?>
-                        <p class="availability out-of-stock"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></p>
+                        <p class="availability out-of-stock"><span><?= /* @escapeNotVerified */ __('Out of stock') ?></span></p>
                     <?php endif; ?>
                     </td>
                     <?php endif; ?>
@@ -69,7 +69,7 @@
             <?php endforeach; ?>
             <?php else: ?>
                <tr>
-                   <td class="empty-text" colspan="<?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>4<?php else : ?>3<?php endif; ?>"><?php /* @escapeNotVerified */ echo __('No options of this product are available.') ?></td>
+                   <td class="empty-text" colspan="<?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>4<?php else : ?>3<?php endif; ?>"><?= /* @escapeNotVerified */ __('No options of this product are available.') ?></td>
                </tr>
             <?php endif; ?>
             </tbody>

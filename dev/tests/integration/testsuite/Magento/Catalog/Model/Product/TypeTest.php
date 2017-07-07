@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -15,7 +15,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Type'
+            \Magento\Catalog\Model\Product\Type::class
         );
     }
 
@@ -40,13 +40,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function factoryDataProvider()
     {
         return [
-            [null, 'Magento\Catalog\Model\Product\Type\Simple'],
-            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Simple'],
-            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Virtual'],
-            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Type'],
+            [null, \Magento\Catalog\Model\Product\Type\Simple::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, \Magento\Catalog\Model\Product\Type\Simple::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, \Magento\Catalog\Model\Product\Type\Virtual::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, \Magento\Bundle\Model\Product\Type::class],
             [
                 \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
-                'Magento\Downloadable\Model\Product\Type'
+                \Magento\Downloadable\Model\Product\Type::class
             ]
         ];
     }
@@ -95,13 +95,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function priceFactoryDataProvider()
     {
         return [
-            [null, 'Magento\Catalog\Model\Product\Type\Price'],
-            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Price'],
-            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Price'],
-            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Price'],
+            [null, \Magento\Catalog\Model\Product\Type\Price::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, \Magento\Catalog\Model\Product\Type\Price::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, \Magento\Catalog\Model\Product\Type\Price::class],
+            [\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, \Magento\Bundle\Model\Product\Price::class],
             [
                 \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
-                'Magento\Downloadable\Model\Product\Price'
+                \Magento\Downloadable\Model\Product\Price::class
             ]
         ];
     }

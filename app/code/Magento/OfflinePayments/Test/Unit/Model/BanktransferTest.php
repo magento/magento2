@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
@@ -20,11 +20,17 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $paymentDataMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
+        $this->_scopeConfig = $this->getMock(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->_object = $objectManagerHelper->getObject(
-            'Magento\OfflinePayments\Model\Banktransfer',
+            \Magento\OfflinePayments\Model\Banktransfer::class,
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
@@ -35,6 +41,6 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
 
     public function testGetInfoBlockType()
     {
-        $this->assertEquals('Magento\Payment\Block\Info\Instructions', $this->_object->getInfoBlockType());
+        $this->assertEquals(\Magento\Payment\Block\Info\Instructions::class, $this->_object->getInfoBlockType());
     }
 }

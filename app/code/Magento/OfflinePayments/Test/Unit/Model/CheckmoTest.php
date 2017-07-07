@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
@@ -20,17 +20,17 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $paymentDataMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
         $this->_scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             ['getValue', 'isSetFlag'],
             [],
             '',
             false
         );
         $this->_object = $objectManagerHelper->getObject(
-            'Magento\OfflinePayments\Model\Checkmo',
+            \Magento\OfflinePayments\Model\Checkmo::class,
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,

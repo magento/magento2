@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Controller\Product;
@@ -10,6 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PostTest extends \PHPUnit_Framework_TestCase
 {
@@ -101,33 +102,33 @@ class PostTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
-        $this->redirect = $this->getMock('\Magento\Framework\App\Response\RedirectInterface');
-        $this->request = $this->getMock('\Magento\Framework\App\Request\Http', ['getParam'], [], '', false);
-        $this->response = $this->getMock('\Magento\Framework\App\Response\Http', ['setRedirect'], [], '', false);
+        $this->redirect = $this->getMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getParam'], [], '', false);
+        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, ['setRedirect'], [], '', false);
         $this->formKeyValidator = $this->getMock(
-            'Magento\Framework\Data\Form\FormKey\Validator',
+            \Magento\Framework\Data\Form\FormKey\Validator::class,
             ['validate'],
             [],
             '',
             false
         );
         $this->reviewSession = $this->getMock(
-            '\Magento\Framework\Session\Generic',
+            \Magento\Framework\Session\Generic::class,
             ['getFormData', 'getRedirectUrl'],
             [],
             '',
             false
         );
-        $this->eventManager = $this->getMock('\Magento\Framework\Event\ManagerInterface');
-        $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->coreRegistry = $this->getMock('\Magento\Framework\Registry');
+        $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->coreRegistry = $this->getMock(\Magento\Framework\Registry::class);
         $this->review = $this->getMock(
-            '\Magento\Review\Model\Review',
+            \Magento\Review\Model\Review::class,
             [
                 'setData', 'validate', 'setEntityId', 'getEntityIdByCode', 'setEntityPkValue', 'setStatusId',
-                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate'
+                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate', 'unsetData'
             ],
             [],
             '',
@@ -135,7 +136,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $reviewFactory = $this->getMock(
-            '\Magento\Review\Model\ReviewFactory',
+            \Magento\Review\Model\ReviewFactory::class,
             ['create'],
             [],
             '',
@@ -144,7 +145,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         );
         $reviewFactory->expects($this->once())->method('create')->willReturn($this->review);
         $this->customerSession = $this->getMock(
-            '\Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             ['getCustomerId'],
             [],
             '',
@@ -152,7 +153,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->rating = $this->getMock(
-            '\Magento\Review\Model\Rating',
+            \Magento\Review\Model\Rating::class,
             ['setRatingId', 'setReviewId', 'setCustomerId', 'addOptionVote'],
             [],
             '',
@@ -160,7 +161,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $ratingFactory = $this->getMock(
-            '\Magento\Review\Model\RatingFactory',
+            \Magento\Review\Model\RatingFactory::class,
             ['create'],
             [],
             '',
@@ -168,16 +169,16 @@ class PostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $ratingFactory->expects($this->once())->method('create')->willReturn($this->rating);
-        $this->messageManager = $this->getMock('\Magento\Framework\Message\ManagerInterface');
+        $this->messageManager = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
 
-        $this->store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
-        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
+        $this->store = $this->getMock(\Magento\Store\Model\Store::class, ['getId'], [], '', false);
+        $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
-        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -188,7 +189,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $objectManagerHelper->getObject(
-            'Magento\Framework\App\Action\Context',
+            \Magento\Framework\App\Action\Context::class,
             [
                 'request' => $this->request,
                 'resultFactory' => $this->resultFactoryMock,
@@ -196,7 +197,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Review\Controller\Product\Post',
+            \Magento\Review\Controller\Product\Post::class,
             [
                 'response' => $this->response,
                 'redirect' => $this->redirect,
@@ -219,7 +220,10 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $ratingsData = ['ratings' => [1 => 1]];
+        $reviewData = [
+            'ratings' => [1 => 1],
+            'review_id' => 2
+        ];
         $productId = 1;
         $customerId = 1;
         $storeId = 1;
@@ -230,7 +234,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)
-            ->willReturn($ratingsData);
+            ->willReturn($reviewData);
         $this->request->expects($this->at(0))->method('getParam')
             ->with('category', false)
             ->willReturn(false);
@@ -238,7 +242,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->with('id')
             ->willReturn(1);
         $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId'],
             [],
             '',
@@ -260,7 +264,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->with('product', $product)
             ->willReturnSelf();
         $this->review->expects($this->once())->method('setData')
-            ->with($ratingsData)
+            ->with($reviewData)
             ->willReturnSelf();
         $this->review->expects($this->once())->method('validate')
             ->willReturn(true);
@@ -270,6 +274,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->review->expects($this->once())->method('setEntityId')
             ->with(1)
             ->willReturnSelf();
+        $this->review->expects($this->once())->method('unsetData')->with('review_id');
         $product->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($productId);

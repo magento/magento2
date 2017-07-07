@@ -1,23 +1,37 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 
-<aside class="modal-<%= data.type %> <%= data.modalClass %>
-       <% if(data.responsive){ %><%= data.responsiveClass %><% } %>
-       <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
-    data-role="modal"
-    data-type="<%= data.type %>"
-    tabindex="0">
+<aside role="dialog"
+       class="modal-<%- data.type %> <%- data.modalClass %>
+       <% if(data.responsive){ %><%- data.responsiveClass %><% } %>
+       <% if(data.innerScroll){ %><%- data.innerScrollClass %><% } %>"
+       <% if(data.title){ %> aria-labelledby="modal-title-<%- data.id %>"<% } %>
+       aria-describedby="modal-content-<%- data.id %>"
+       data-role="modal"
+       data-type="<%- data.type %>"
+       tabindex="0">
     <div data-role="focusable-start" tabindex="0"></div>
     <div class="modal-inner-wrap"
          data-role="focusable-scope">
         <header class="modal-header">
-            <% if(data.title){ %>
-            <h1 class="modal-title"
-                data-role="title"><%= data.title %></h1>
+            <% if(data.title || data.subTitle){ %>
+            <h1 id="modal-title-<%- data.id %>" class="modal-title"
+                data-role="title">
+                <% if(data.title){ %>
+                    <%= data.title %>
+                <% } %>
+
+                <% if(data.subTitle){ %>
+                <span class="modal-subtitle"
+                      data-role="subtitle">
+                    <%= data.subTitle %>
+                </span>
+                <% } %>
+            </h1>
             <% } %>
             <button
                 class="action-close"
@@ -26,14 +40,15 @@
                 <span><%= data.closeText %></span>
             </button>
         </header>
-        <div class="modal-content" data-role="content"></div>
+        <div id="modal-content-<%- data.id %>" class="modal-content" data-role="content"></div>
         <% if(data.buttons.length > 0){ %>
         <footer class="modal-footer">
             <% _.each(data.buttons, function(button) { %>
-            <button
-                    class="<%= button.class %>"
+            <button class="<%- button.class %>"
                     type="button"
-                    data-role="action"><span><%= button.text %></span></button>
+                    data-role="action">
+                <span><%= button.text %></span>
+            </button>
             <% }); %>
         </footer>
         <% } %>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller;
@@ -14,12 +14,12 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
     {
         parent::setUp();
 
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
         $order->load('100000001', 'increment_id');
         $order->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_PAYFLOWADVANCED);
 
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\Quote'
+            \Magento\Quote\Model\Quote::class
         )->setStoreId(
             $order->getStoreId()
         )->save();
@@ -27,7 +27,7 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
         $order->setQuoteId($quote->getId());
         $order->save();
 
-        $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
+        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
         $session->setLastRealOrderId($order->getRealOrderId())->setLastQuoteId($order->getQuoteId());
     }
 
@@ -39,7 +39,7 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
 
     public function testReturnurlActionIsContentGenerated()
     {
-        $checkoutHelper = $this->_objectManager->create('Magento\Paypal\Helper\Checkout');
+        $checkoutHelper = $this->_objectManager->create(\Magento\Paypal\Helper\Checkout::class);
         $checkoutHelper->cancelCurrentOrder('test');
         $this->dispatch('paypal/payflowadvanced/returnurl');
         $this->assertContains("goToSuccessPage = ''", $this->getResponse()->getBody());
@@ -61,10 +61,10 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
      */
     public function testCancelAction()
     {
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order');
-        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
+        $session = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
 
-        $quote = $this->_objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test02', 'reserved_order_id');
         $order->load('100000001', 'increment_id')->setQuoteId($quote->getId())->save();
         $session->setQuoteId($quote->getId());

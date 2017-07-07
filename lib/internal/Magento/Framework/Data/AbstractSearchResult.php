@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
-
 
 /**
  * Class AbstractSearchResult
@@ -16,7 +15,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      *
      * @var string
      */
-    protected $dataInterface = 'Magento\Framework\DataObject';
+    protected $dataInterface = \Magento\Framework\DataObject::class;
 
     /**
      * Name prefix of events that are dispatched by model
@@ -59,7 +58,13 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     protected $entityFactory;
 
     /**
+     * @var \Magento\Framework\DB\QueryInterface
+     */
+    protected $query;
+    
+    /**
      * @var \Magento\Framework\DB\Select
+     * @deprecated
      */
     protected $select;
 
@@ -262,7 +267,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
         if ($itemId !== null) {
             if (isset($this->data['items'][$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->data['items'][$itemId] = $item;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -13,14 +13,14 @@ class CacheFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testCacheConfig($area)
     {
-        $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $validationStateMock = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Cache\Config\Reader $reader */
         $reader = $objectManager->create(
-            'Magento\Framework\Cache\Config\Reader',
+            \Magento\Framework\Cache\Config\Reader::class,
             ['validationState' => $validationStateMock]
         );
         try {

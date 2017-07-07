@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -8,7 +8,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .form.wishlist.items {
         .actions-toolbar {
             &:extend(.abs-reset-left-margin all);
@@ -39,43 +38,55 @@
         .lib-table-bordered(
             @_table_type: horizontal
         );
+
         thead > tr > th {
             border-bottom: 0;
         }
+
         tbody > tr:last-child > td {
             border-bottom: 1px solid @table__border-color;
         }
+
         .product.name {
             display: inline-block;
             margin-bottom: @indent__s;
         }
+
         .box-tocart {
             margin: @indent__s 0;
+
             .qty {
                 vertical-align: middle;
                 &:extend(.abs-input-qty all);
             }
         }
+
         .col {
             &.item {
                 width: 50%;
             }
+
             &.photo {
                 max-width: 150px;
             }
+
             &.selector {
                 max-width: 15px;
             }
         }
+
         textarea {
             margin: @indent__s 0;
         }
+
         .input-text.qty {
             margin-bottom: @indent__s;
         }
+
         .action.primary {
             vertical-align: top;
         }
+
         .price {
             font-weight: @font-weight__bold;
         }
@@ -85,9 +96,11 @@
         .block-title {
             &:extend(.abs-block-title all);
         }
+
         .counter {
             &:extend(.abs-block-items-counter all);
         }
+
         .product-item-name {
             margin-right: @indent__m;
         }
@@ -100,32 +113,40 @@
                     display: block;
                     margin-bottom: @indent__s;
                 }
+
                 &-name {
                     margin-top: 0;
                 }
+
                 .price-box {
                     margin: 0;
                 }
+
                 &-tooltip {
                 }
+
                 .comment-box {
                     .label {
                         &:extend(.abs-visually-hidden all);
                     }
                 }
+
                 &-comment {
                     display: block;
                     height: 42px;
                     margin: @indent__s 0;
                 }
+
                 &-actions {
                     > * {
                         margin-right: 15px;
+
                         &:last-child {
                             margin-right: 0;
                         }
                     }
                 }
+
                 .box-tocart {
                     input.qty {
                         height: 32px;
@@ -160,50 +181,63 @@
             &-item {
                 padding: @indent__base @indent__s @indent__base @indent__base;
                 position: relative;
+
                 &-photo {
                     float: left;
                     margin-right: @indent__base;
                 }
+
                 &-name {
                     .lib-font-size(16);
                 }
+
                 &-actions {
                     display: block;
+
                     .action {
                         margin-right: 15px;
+
                         &:last-child {
                             margin-right: 0;
                         }
+
                         &.edit {
                             float: left;
                         }
+
                         &.delete {
                             float: right;
                         }
+
                         &.edit,
                         &.delete {
                             margin-top: 7px;
                         }
                     }
                 }
+
                 &-name,
                 &-description,
                 .price-box,
                 &-tooltip {
                     margin-left: 95px;
                 }
+
                 .box-tocart {
                     float: left;
                     margin-right: @indent__base;
+
                     .stock {
                         margin-top: 7px;
                     }
                 }
+
                 .giftregisty-dropdown,
                 .field.qty {
                     display: none;
                 }
             }
+
             &-image-container {
                 max-width: 80px;
             }
@@ -231,8 +265,8 @@
         .products-grid {
             .product-item {
                 margin-bottom: @indent__base;
-                width: 50%;
             }
+
             .product-item-actions {
                 margin: 0;
             }
@@ -251,22 +285,27 @@
                 &-tooltip {
                     display: inline-block;
                 }
+
                 &-actions {
                     margin: @indent__s 0 0;
                 }
+
                 .fieldset {
                     .field.qty {
                         margin-bottom: @indent__s;
                         padding-right: @indent__s;
+
                         .label {
                             width: auto;
                         }
                     }
                 }
+
                 .box-tocart {
                     .actions-primary {
                         margin: 0;
                     }
+
                     .stock {
                         margin: @indent__base 0 0;
                     }
@@ -274,6 +313,7 @@
             }
         }
     }
+
     .wishlist-index-index {
         .product {
             &-item {
@@ -282,6 +322,7 @@
                 }
             }
         }
+
         .main {
             .form-wishlist-items {
                 .actions-toolbar {
@@ -298,11 +339,13 @@
             .product-items {
                 margin: 0;
             }
+
             .product-item {
-                margin-left: calc(~"(100% - 4 * 24.439%) / 3");
+                margin-left: calc(~'(100% - 4 * 24.439%) / 3');
                 padding: 0;
                 width: 24.439%;
-                &:nth-child(4n+1) {
+
+                &:nth-child(4n + 1) {
                     margin-left: 0;
                 }
             }

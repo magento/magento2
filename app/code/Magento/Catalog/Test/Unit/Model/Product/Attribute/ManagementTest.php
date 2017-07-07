@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attrManagementMock = $this->getMock('\Magento\Eav\Api\AttributeManagementInterface');
+        $this->attrManagementMock = $this->getMock(\Magento\Eav\Api\AttributeManagementInterface::class);
         $this->model = new \Magento\Catalog\Model\Product\Attribute\Management($this->attrManagementMock);
     }
 
@@ -62,7 +62,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributes()
     {
         $attributeSetId = 1;
-        $attributeMock = $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeInterface');
+        $attributeMock = $this->getMock(\Magento\Catalog\Api\Data\ProductAttributeInterface::class);
 
         $this->attrManagementMock->expects($this->once())
             ->method('getAttributes')

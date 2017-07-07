@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Block\Sales\Order;
 
+/**
+ * @api
+ */
 class Totals extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -48,6 +51,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         $store = $this->getSource()->getStore();
 
         $weeeTotal = $this->weeeData->getTotalAmounts($items, $store);
+        $weeeBaseTotal = $this->weeeData->getBaseTotalAmounts($items, $store);
         if ($weeeTotal) {
             // Add our total information to the set of other totals
             $total = new \Magento\Framework\DataObject(
@@ -55,6 +59,7 @@ class Totals extends \Magento\Framework\View\Element\Template
                     'code' => $this->getNameInLayout(),
                     'label' => __('FPT'),
                     'value' => $weeeTotal,
+                    'base_value' => $weeeBaseTotal
                 ]
             );
             if ($this->getBeforeCondition()) {
