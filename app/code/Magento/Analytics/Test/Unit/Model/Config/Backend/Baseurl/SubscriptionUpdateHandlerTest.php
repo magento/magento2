@@ -76,7 +76,6 @@ class SubscriptionUpdateHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->subscriptionUpdateHandler = $this->objectManagerHelper->getObject(
