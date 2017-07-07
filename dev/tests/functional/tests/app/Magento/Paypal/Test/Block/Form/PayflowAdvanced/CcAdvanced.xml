@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <cc_number>
+            <selector>#cc_number</selector>
+        </cc_number>
+        <cc_exp_month>
+            <selector>#expdate_month</selector>
+        </cc_exp_month>
+        <cc_exp_year>
+            <selector>#expdate_year</selector>
+        </cc_exp_year>
+        <cc_cid>
+            <selector>#cvv2_number</selector>
+        </cc_cid>
+    </fields>
+</mapping>

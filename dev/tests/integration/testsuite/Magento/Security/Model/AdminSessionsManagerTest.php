@@ -38,6 +38,13 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * Session Manager.
+     *
+     * @var \Magento\Framework\Session\SessionManager
+     */
+    private $sessionManager;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -45,14 +52,15 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->objectManager->get('Magento\Framework\Config\ScopeInterface')
+        $this->sessionManager = $this->objectManager->create(\Magento\Framework\Session\SessionManager::class);
+        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $this->auth = $this->objectManager->create('Magento\Backend\Model\Auth');
-        $this->authSession = $this->objectManager->create('Magento\Backend\Model\Auth\Session');
-        $this->adminSessionInfo = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
+        $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
+        $this->adminSessionInfo = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
         $this->auth->setAuthStorage($this->authSession);
-        $this->messageManager = $this->objectManager->get('Magento\Framework\Message\ManagerInterface');
-        $this->adminSessionsManager = $this->objectManager->create('Magento\Security\Model\AdminSessionsManager');
+        $this->messageManager = $this->objectManager->get(\Magento\Framework\Message\ManagerInterface::class);
+        $this->adminSessionsManager = $this->objectManager->create(\Magento\Security\Model\AdminSessionsManager::class);
     }
 
     /**
@@ -111,7 +119,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testTerminateOtherSessionsProcessLogin()
     {
-        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $session = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
         $session->setSessionId('669e2e3d752e8')
             ->setUserId(1)
             ->setStatus(1)
@@ -158,7 +166,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     public function testLogoutOtherUserSessions()
     {
         /** @var \Magento\Security\Model\AdminSessionInfo $session */
-        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $session = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
         $session->setSessionId('669e2e3d752e8')
             ->setUserId(1)
             ->setStatus(1)
@@ -207,7 +215,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     public function testCleanExpiredSessions()
     {
         /** @var \Magento\Security\Model\AdminSessionInfo $session */
-        $session = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $session = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
         $collection = $this->getCollectionForCleanExpiredSessions($session);
         $sizeBefore = $collection->getSize();
         $this->adminSessionsManager->cleanExpiredSessions();
