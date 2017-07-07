@@ -14,10 +14,11 @@ define([
 
     /**
     * Free method filter
-    * @param {Object} method
+    * @param {Object} paymentMethod
+    * @returns boolean
     */
-    var isFreeMethod = function (method) {
-        return method.method === 'free';
+    var isFreePaymentMethod = function (paymentMethod) {
+        return paymentMethod.method === 'free';
     };
 
     return {
@@ -33,7 +34,7 @@ define([
                 methodIsAvailable,
                 methodNames;
 
-            freeMethod = _.find(methods, isFreeMethod);
+            freeMethod = _.find(methods, isFreePaymentMethod);
             this.isFreeAvailable = !!freeMethod;
 
             if (freeMethod && quote.totals()['grand_total'] <= 0) {
@@ -84,10 +85,10 @@ define([
             }
 
             if (grandTotalOverZero) {
-                return _.filter(allMethods, _.negate(isFreeMethod));
+                return _.filter(allMethods, _.negate(isFreePaymentMethod));
             }
 
-            return _.filter(allMethods, isFreeMethod);
+            return _.filter(allMethods, isFreePaymentMethod);
         }
     };
 });
