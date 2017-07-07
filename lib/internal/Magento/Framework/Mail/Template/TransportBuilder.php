@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 
 /**
  * @api
@@ -279,9 +280,9 @@ class TransportBuilder
                 $this->message->setBodyHtml($body);
                 break;
 
-            default;
+            default:
                 throw new LocalizedException(
-                    __('Unknown template type')
+                    new Phrase('Unknown template type')
                 );
             break;
         }
