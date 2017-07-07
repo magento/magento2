@@ -16,7 +16,7 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
      *
      * @var SearchCollection
      */
-    protected $searchCollection;
+    private $searchCollection;
 
     /*
      * Construct
@@ -31,7 +31,7 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
     /**
      * {@inheritdoc}
      *
-     * @SuppressWarnings("unused")
+     * @SuppressWarnings("UnusedFormalParam")
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
