@@ -28,7 +28,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * Looping regular expression
      */
-    const LOOP_PATTERN = '/{{loop(.*?)}}(.*?){{\/loop}}/si';
+    const LOOP_PATTERN = '/{{for(.*? )(in)(.*?)}}(.*?){{\/for}}/si';
 
     /**#@-*/
 
@@ -136,7 +136,7 @@ class Template implements \Zend_Filter_Interface
             }
         }
 
-        $value = $this->filterLoop($value);
+        $value = $this->filterFor($value);
 
         if (preg_match_all(self::CONSTRUCTION_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
@@ -383,21 +383,30 @@ class Template implements \Zend_Filter_Interface
      * Filter the string as template.
      *
      * @param string $value
+     * @example syntax {{for item in order.all_visible_items}} sku: {{var item.sku}}<br>name: {{var item.name}}<br> {{/for}} order items collection.
+     * @example syntax {{for thing in things}} {{var thing.whatever}} {{/for}} e.g.:custom collection.
      * @return string
      */
-    protected function filterLoop($value)
+    protected function filterFor($value)
     {
         if (preg_match_all(self::LOOP_PATTERN, $value, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
 
+                if (sizeof($construction) < 5) {
+                    return $value;
+                }
+
                 $full_text_to_replace = $construction[0];
-                $objectArrayData = $this->getVariable($construction[1], '');
-                $loop_text_to_replace = $construction[2];
+                $objectArrayData = $this->getVariable($construction[3], '');
+                $loop_text_to_replace = $construction[4];
+                $vName = preg_replace('/\s+/', '', $construction[1]);
 
                 if (is_array($objectArrayData) || $objectArrayData instanceof \Traversable) {
 
                     $loopText = [];
                     $indexCount = 1;
+                    $loop = new \Magento\Framework\DataObject;
+
                     foreach ($objectArrayData as $k => $objectData) {
 
                         if (!$objectData instanceof \Magento\Framework\DataObject) { // is array?
@@ -411,9 +420,11 @@ class Template implements \Zend_Filter_Interface
                             $objectData = $_item;
                         }
 
-                        $objectData->setData('indexCount', $indexCount++);
+                        $loop->setData('index', $indexCount++);
+                        $loop->setData('loop');
+                        $this->templateVars['loop'] = $loop;
 
-                        $this->templateVars['item'] = $objectData;
+                        $this->templateVars[$vName] = $objectData;
 
                         if (preg_match_all(self::CONSTRUCTION_PATTERN, $loop_text_to_replace, $attributes, PREG_SET_ORDER)) {
 
@@ -424,7 +435,7 @@ class Template implements \Zend_Filter_Interface
                             }
                             $loopText[] = $subText;
                         }
-                        unset($this->templateVars['item']);
+                        unset($this->templateVars[$vName]);
 
                     }
                     $replaceText = implode('', $loopText);
