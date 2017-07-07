@@ -21,7 +21,6 @@ class Index extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @codeCoverageIgnore
      */
@@ -32,7 +31,6 @@ class Index extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Checkout\Model\Cart $cart,
-        \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         parent::__construct(
@@ -41,8 +39,7 @@ class Index extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart,            
-            $escaper
+            $cart
         );
         $this->resultPageFactory = $resultPageFactory;
     }
