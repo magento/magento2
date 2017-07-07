@@ -137,16 +137,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         $this->messageMock->expects(
             $this->once()
         )->method(
-            'setMessageType'
-        )->with(
-            $this->equalTo($messageType)
-        )->will(
-            $this->returnSelf()
-        );
-        $this->messageMock->expects(
-            $this->once()
-        )->method(
-            'setBody'
+            'setBodyHtml'
         )->with(
             $this->equalTo($bodyText)
         )->will(

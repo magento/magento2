@@ -270,13 +270,12 @@ class TransportBuilder
     {
         $template = $this->getTemplate();
         $body = $template->processTemplate();
-
         switch ($template->getType()) {
-            case MessageInterface::TYPE_TEXT:
+            case TemplateTypesInterface::TYPE_TEXT:
                 $this->message->setBodyText($body);
                 break;
 
-            case MessageInterface::TYPE_HTML:
+            case TemplateTypesInterface::TYPE_HTML:
                 $this->message->setBodyHtml($body);
                 break;
 

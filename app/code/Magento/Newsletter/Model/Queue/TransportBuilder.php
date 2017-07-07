@@ -6,7 +6,6 @@
 namespace Magento\Newsletter\Model\Queue;
 
 use Magento\Email\Model\AbstractTemplate;
-use Magento\Framework\Exception\LocalizedException;
 
 class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 {
@@ -49,24 +48,11 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
         $template = $this->getTemplate()->setData($this->templateData);
         $this->setTemplateFilter($template);
 
-        $body = $template->getProcessedTemplate($this->templateVars);
-        switch ($template->getType()) {
-            case \Magento\Framework\Mail\MessageInterface::TYPE_TEXT:
-                $this->message->setBodyText($body);
-                break;
-
-            case \Magento\Framework\Mail\MessageInterface::TYPE_HTML:
-                $this->message->setBodyHtml($body);
-                break;
-
-            default;
-                throw new LocalizedException(
-                    __('Unknown template type')
-                );
-                break;
-        }
-
-        $this->message->setSubject($template->getSubject());
+        $this->message->setBodyHtml(
+            $template->getProcessedTemplate($this->templateVars)
+        )->setSubject(
+            $template->getSubject()
+        );
 
         return $this;
     }
