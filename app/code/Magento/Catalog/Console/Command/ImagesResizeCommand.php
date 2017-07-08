@@ -7,6 +7,7 @@ namespace Magento\Catalog\Console\Command;
 
 use Magento\Catalog\Console\ImageResizeOptions as Options;
 use Magento\Catalog\Model\Product\Image\Process\QueueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Console\Cli;
 
 class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
@@ -22,6 +23,16 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     protected $productCollectionFactory;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Image\CacheFactory
+     */
+    protected $imageCacheFactory;
+
+    /**
      * @var QueueFactory
      */
     protected $queueFactory;
@@ -34,19 +45,27 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
     /**
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param QueueFactory $queueFactory
-     * @param Options $options
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory
+     * @param null|QueueFactory $queueFactory
+     * @param null|Options $options
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        QueueFactory $queueFactory,
-        Options $options
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Model\Product\Image\CacheFactory $imageCacheFactory,
+        $queueFactory = null,
+        $options = null
     ) {
         $this->appState = $appState;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->queueFactory = $queueFactory;
-        $this->options = $options;
+        $this->productRepository = $productRepository;
+        $this->imageCacheFactory = $imageCacheFactory;
+
+        $this->queueFactory = $queueFactory ?: ObjectManager::getInstance()->get(QueueFactory::class);
+        $this->options = $options ?: ObjectManager::getInstance()->get(Options::class);
+
         parent::__construct();
     }
 
