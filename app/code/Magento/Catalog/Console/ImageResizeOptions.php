@@ -32,12 +32,12 @@ class ImageResizeOptions
     const DEFAULT_JOBS_AMOUNT = 0;
 
     /**
-     * Default jobs amount
+     * Default product offset for the number of products processed
      */
     const DEFAULT_PRODUCT_OFFSET = 0;
 
     /**
-     * Default jobs amount
+     * Default product limit for the number of products processed
      */
     const DEFAULT_PRODUCT_LIMIT = 0;
 
