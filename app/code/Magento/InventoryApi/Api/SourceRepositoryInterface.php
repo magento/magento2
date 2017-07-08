@@ -11,8 +11,7 @@ namespace Magento\InventoryApi\Api;
 interface SourceRepositoryInterface
 {
     /**
-     * Save Source data. If you want to create plugin on get method, also you need to create separate plugin
-     * on getList method, because entity loading way is different for these methods
+     * Save Source data
      *
      * @param \Magento\InventoryApi\Api\Data\SourceInterface $source
      * @return int
@@ -21,7 +20,8 @@ interface SourceRepositoryInterface
     public function save(\Magento\InventoryApi\Api\Data\SourceInterface $source);
 
     /**
-     * Get Source data by given sourceId.
+     * Get Source data by given sourceId. If you want to create plugin on get method, also you need to create separate
+     * plugin on getList method, because entity loading way is different for these methods
      *
      * @param int $sourceId
      * @return \Magento\InventoryApi\Api\Data\SourceInterface
