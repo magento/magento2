@@ -108,7 +108,6 @@ class Queue
         $this->output = $output;
         $this->imageCacheFactory = $imageCacheFactory;
         $this->maxProcesses = $maxProcesses;
-        $this->imageCache = $this->imageCacheFactory->create();
     }
 
     /**
@@ -136,6 +135,7 @@ class Queue
      */
     public function process()
     {
+        $this->imageCache = $this->imageCacheFactory->create();
         if ($this->isCanBeParalleled()) {
             $this->imageCache->preloadData();
         }
