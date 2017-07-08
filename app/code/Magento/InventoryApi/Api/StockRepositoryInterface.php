@@ -30,6 +30,15 @@ interface StockRepositoryInterface
     public function get($stockId);
 
     /**
+     * Delte the Stock data by given stockId.
+     *
+     * @param int $stockId
+     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException | \Magento\Framework\Exception\CouldNotDeleteException
+     */
+    public function delete($stockId);
+
+    /**
      * Load Stock data collection by given search criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

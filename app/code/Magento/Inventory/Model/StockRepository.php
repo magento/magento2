@@ -115,6 +115,14 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
+    public function delete($stockId)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
         $collection = $this->stockCollectionFactory->create();
