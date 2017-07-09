@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Cms\Test\Constraint;
+namespace Magento\CatalogUrlRewrite\Test\Constraint;
 
-use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Cms\Test\Fixture\CmsPage;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
- * Verify that page has not been created.
+ * Class AssertCategoryUrlDuplicateErrorMessage
  */
-class AssertCmsPageDuplicateErrorMessage extends AbstractConstraint
+class AssertCategoryUrlDuplicateErrorMessage extends AbstractConstraint
 {
     /**
      * Text title of the error message to be checked.
@@ -21,16 +21,17 @@ class AssertCmsPageDuplicateErrorMessage extends AbstractConstraint
     const ERROR_MESSAGE_TITLE = 'The value specified in the URL Key field would generate a URL that already exists.';
 
     /**
-     * Verify that page has not been created.
+     * Assert that success message is displayed after category save.
      *
-     * @param CmsPageIndex $cmsIndex
-     * @param CmsPage $cmsPage
+     * @param CatalogCategoryEdit $productPage
+     * @param Category $category
      * @return void
      */
-    public function processAssert(CmsPageIndex $cmsIndex, CmsPage $cmsPage)
-    {
-        $actualMessage = $cmsIndex->getMessagesBlock()->getErrorMessage();
-
+    public function processAssert(
+        CatalogCategoryEdit $productPage,
+        Category $category
+    ) {
+        $actualMessage = $productPage->getMessagesBlock()->getErrorMessage();
         \PHPUnit_Framework_Assert::assertContains(
             self::ERROR_MESSAGE_TITLE,
             $actualMessage,
@@ -40,21 +41,21 @@ class AssertCmsPageDuplicateErrorMessage extends AbstractConstraint
         );
 
         \PHPUnit_Framework_Assert::assertContains(
-            $cmsPage->getIdentifier(),
+            $category->getUrlKey(),
             $actualMessage,
-            'CMS page url is not present on error message.'
+            'Category url is not present on error message.'
             . "\nExpected: " . self::ERROR_MESSAGE_TITLE
             . "\nActual:\n" . $actualMessage
         );
     }
 
     /**
-     * Page with duplicated identifier has not been created.
+     * Returns a string representation of the object
      *
      * @return string
      */
     public function toString()
     {
-        return 'Assert that page with duplicated identifier has not been created.';
+        return 'Category url duplication error on save message is present.';
     }
 }
