@@ -59,6 +59,7 @@ class VclGenerator implements VclGeneratorInterface
      * @param int $backendPort
      * @param array $accessList
      * @param int $gracePeriod
+     * @param string $normalizeParams
      * @param string $sslOffloadedHeader
      * @param array $designExceptions
      */
@@ -118,13 +119,13 @@ class VclGenerator implements VclGeneratorInterface
 
     /**
      * turn a comma separated list of string parameters that Varnish should strip off incoming requests
-     * into a varnish regular expresion command
+     * into a varnish regular expression command
      *
      * @return string
      */
     private function getNormalizeParams()
     {
-        if (empty($this->normalizeParams)) {
+        if (empty(trim($this->normalizeParams))) {
             return false;
         }
 
@@ -132,12 +133,11 @@ class VclGenerator implements VclGeneratorInterface
         $normalizeParams = preg_replace("/(\r|\n)*|\|$/","",str_replace(",","|",$this->normalizeParams));
 
         # add parameters into regular expression
-        $tpl  = "    # strip normalized parameters from query string \n";
+        $tpl  = "# strip normalized parameters from query string \n";
         $tpl .= "    set req.url = regsuball(req.url, \"((\?)|&)(%s)=[^&]*\", \"\2\"); \n";
         $tpl .= "    set req.url = regsub(req.url, \"(\?&|\?|&)$\", \"\"); \n";
 
         return sprintf($tpl, $normalizeParams);
-
     }
 
     /**

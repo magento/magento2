@@ -43,6 +43,8 @@ class Config
 
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
+    const XML_VARNISH_PAGECACHE_NORMALIZE_PARAMS = 'system/full_page_cache/varnish/normalize_params';
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -158,6 +160,7 @@ class Config
             'designExceptions' => $designExceptions ? $this->serializer->unserialize($designExceptions) : [],
             'sslOffloadedHeader' => $sslOffloadedHeader,
             'gracePeriod' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD),
+            'normalizeParams' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_NORMALIZE_PARAMS)
         ]);
         return $vclGenerator->generateVcl($version);
     }
