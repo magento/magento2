@@ -1,24 +1,18 @@
 //  Copyright © Magento, Inc. All rights reserved.
 //  See COPYING.txt for license details.
-    example.com:8080
+    /* {{ host }} */:/* {{ port }} */
 
     by ips:
-    "127.0.0.1";
-    "192.168.0.1";
-    "127.0.0.2";
+/* {{ ips }} */
 
     design exceptions:
-    if (req.http.user-agent ~ "(?pattern)?i") {
-        hash_data("value_for_pattern");
-    }
+    /* {{ design_exceptions_code }} */
 
     ssl offloaded header:
-    X-Forwarded-Proto: https
+    /* {{ ssl_offloaded_header }} */
 
     grace:
-    120
+    /* {{ grace_period }} */
 
     normalize parameters:
-    # strip normalized parameters from query string
-    set req.url = regsuball(req.url, "((\?)|&)(gclid|gclsrc|utm_content|utm_term|utm_campaign|utm_medium|utm_source|_ga)=[^&]*", "");
-    set req.url = regsub(req.url, "(\?&|\?|&)$", "");
+    /* {{ normalize_params }} */

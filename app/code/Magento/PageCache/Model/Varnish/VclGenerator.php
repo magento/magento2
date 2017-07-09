@@ -133,9 +133,9 @@ class VclGenerator implements VclGeneratorInterface
         $normalizeParams = preg_replace("/(\r|\n)*|\|$/","",str_replace(",","|",$this->normalizeParams));
 
         # add parameters into regular expression
-        $tpl  = "# strip normalized parameters from query string \n";
-        $tpl .= "    set req.url = regsuball(req.url, \"((\?)|&)(%s)=[^&]*\", \"\2\"); \n";
-        $tpl .= "    set req.url = regsub(req.url, \"(\?&|\?|&)$\", \"\"); \n";
+        $tpl  = "# strip normalized parameters from query string\n";
+        $tpl .= "    set req.url = regsuball(req.url, \"((\?)|&)(%s)=[^&]*\", \"\2\");\n";
+        $tpl .= "    set req.url = regsub(req.url, \"(\?&|\?|&)$\", \"\");\n";
 
         return sprintf($tpl, $normalizeParams);
     }
