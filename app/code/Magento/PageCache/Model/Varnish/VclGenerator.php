@@ -130,7 +130,7 @@ class VclGenerator implements VclGeneratorInterface
         }
 
         # convert comma separated list of normalised params into a pipe separated list ready for the regular expression
-        $normalizeParams = preg_replace("/(\r|\n)*|\|$/","",str_replace(",","|",$this->normalizeParams));
+        $normalizeParams = preg_replace("/(\r|\n)*|\|$/", "", str_replace(",", "|", $this->normalizeParams));
 
         # add parameters into regular expression
         $tpl  = "# strip normalized parameters from query string\n";
