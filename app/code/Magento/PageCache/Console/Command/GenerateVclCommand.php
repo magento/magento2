@@ -289,5 +289,4 @@ class GenerateVclCommand extends Command
 
         return $expressions ? $this->serializer->unserialize($expressions) : [];
     }
-
 }
