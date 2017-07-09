@@ -6,6 +6,8 @@
 namespace Magento\InventoryApi\Api;
 
 /**
+ * Interface to get assign sources by stock.
+ *
  * @api
  */
 interface SourceStockLinkManagementInterface

@@ -6,7 +6,7 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * Add Api functionality to handle source and stock link assignment.  
+ * Interface to assign specific source to particular stock.
  *
  * @api
  */
