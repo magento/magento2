@@ -7,13 +7,13 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
-use Magento\InventoryApi\Api\SourceItemSaveCommandInterface;
+use Magento\InventoryApi\Api\SourceItemSaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class SourceItemSave
  */
-class SourceItemSaveCommand implements SourceItemSaveCommandInterface
+class SourceItemSave implements SourceItemSaveInterface
 {
     /**
      * @var ResourceSource

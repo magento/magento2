@@ -13,7 +13,7 @@ use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemSaveCommandInterface;
+use Magento\InventoryApi\Api\SourceItemSaveInterface;
 
 /**
  * Class CarrierRequestDataHydrator
@@ -41,9 +41,9 @@ class SourceItemsProcessor
     private $dataObjectHelper;
 
     /**
-     * @var SourceItemSaveCommandInterface
+     * @var SourceItemSaveInterface
      */
-    private $sourceItemSaveCommand;
+    private $sourceItemSave;
 
     /**
      * SourceItemsProcessor constructor
@@ -52,20 +52,20 @@ class SourceItemsProcessor
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param SourceItemSaveCommandInterface $sourceItemSaveCommand
+     * @param SourceItemSaveCommandInterface $sourceItemSave
      */
     public function __construct(
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         SourceItemRepositoryInterface $sourceItemRepository,
         SourceItemInterfaceFactory $sourceItemFactory,
         DataObjectHelper $dataObjectHelper,
-        SourceItemSaveCommandInterface $sourceItemSaveCommand
+        SourceItemSaveInterface $sourceItemSave
     ) {
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->sourceItemRepository = $sourceItemRepository;
         $this->sourceItemFactory = $sourceItemFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->sourceItemSaveCommand = $sourceItemSaveCommand;
+        $this->sourceItemSave = $sourceItemSave;
     }
 
     /**
@@ -142,7 +142,7 @@ class SourceItemsProcessor
      */
     private function saveSourceItems(array $sourceItems)
     {
-        $this->sourceItemSaveCommand->execute($sourceItems);
+        $this->sourceItemSave->execute($sourceItems);
     }
 
     /**

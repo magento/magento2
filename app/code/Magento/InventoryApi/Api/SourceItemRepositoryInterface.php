@@ -6,7 +6,7 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * SourceItemRepositoryInterface has not method save, use SourceItemSaveCommandInterface instead
+ * SourceItemRepositoryInterface has not method save, use SourceItemSaveInterface instead
  *
  * @api
  */

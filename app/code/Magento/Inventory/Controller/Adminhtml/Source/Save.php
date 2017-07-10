@@ -28,11 +28,6 @@ class Save extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::source';
 
     /**
-     * Registry source_id key
-     */
-    const REGISTRY_SOURCE_ID_KEY = 'source_id';
-
-    /**
      * @var SourceInterfaceFactory
      */
     private $sourceFactory;
@@ -48,11 +43,6 @@ class Save extends Action
     private $dataObjectHelper;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * @var CarrierRequestDataHydrator
      */
     private $carrierRequestDataHydrator;
@@ -62,7 +52,6 @@ class Save extends Action
      * @param SourceInterfaceFactory $sourceFactory
      * @param SourceRepositoryInterface $sourceRepository
      * @param DataObjectHelper $dataObjectHelper
-     * @param Registry $registry
      * @param CarrierRequestDataHydrator $carrierRequestDataHydrator
      */
     public function __construct(
@@ -70,14 +59,12 @@ class Save extends Action
         SourceInterfaceFactory $sourceFactory,
         SourceRepositoryInterface $sourceRepository,
         DataObjectHelper $dataObjectHelper,
-        Registry $registry,
         CarrierRequestDataHydrator $carrierRequestDataHydrator
     ) {
         parent::__construct($context);
         $this->sourceFactory = $sourceFactory;
         $this->sourceRepository = $sourceRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->registry = $registry;
         $this->carrierRequestDataHydrator = $carrierRequestDataHydrator;
     }
 
@@ -94,8 +81,6 @@ class Save extends Action
                     ? $requestData['general'][SourceInterface::SOURCE_ID] : null;
 
                 $sourceId = $this->processSave($sourceId, $requestData);
-                // Keep data for plugins on Save controller. Now we can not call separate services from one form.
-                $this->registry->register(self::REGISTRY_SOURCE_ID_KEY, $sourceId);
 
                 $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
                 $this->processRedirectAfterSuccessSave($resultRedirect, $sourceId);
