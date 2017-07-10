@@ -39,7 +39,7 @@ class MultipleSave
     public function multipleSave(array $sourceItems)
     {
         if (!empty($sourceItems)) {
-            $connection = $connection = $this->connection->getConnection();
+            $connection = $this->connection->getConnection();
             $tableName = $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM);
 
             $columnsSql = $this->buildColumnsSqlPart([
@@ -73,7 +73,7 @@ class MultipleSave
      */
     private function buildColumnsSqlPart(array $columns)
     {
-        $connection = $connection = $this->connection->getConnection();
+        $connection = $this->connection->getConnection();
         $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
         $sql = implode(', ', $processedColumns);
         return $sql;
@@ -106,7 +106,7 @@ class MultipleSave
      */
     private function buildOnDuplicateSqlPart(array $fields)
     {
-        $connection = $connection = $this->connection->getConnection();
+        $connection = $this->connection->getConnection();
         $processedFields = [];
         foreach ($fields as $field) {
             $processedFields[] = sprintf('%1$s = VALUES(%1$s)', $connection->quoteIdentifier($field));

@@ -38,6 +38,13 @@ interface SourceInterface extends ExtensibleDataInterface
     const CARRIER_LINKS = 'carrier_links';
     /**#@-*/
 
+    /**#@+
+     * Source items status values
+     */
+    const SOURCE_ITEM_STATUS_OUT_OF_STOCK = 0;
+    const SOURCE_ITEM_STATUS_IN_STOCK = 1;
+    /**#@-*/
+
     /**
      * Get source id.
      *

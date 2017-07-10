@@ -30,7 +30,7 @@ interface SourceRepositoryInterface
     public function get($sourceId);
 
     /**
-     * Load Source data collection by given search criteria.
+     * Load Source data collection by given search criteria
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface

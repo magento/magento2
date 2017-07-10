@@ -24,7 +24,7 @@ class SourceItem extends AbstractDb
     /**
      * @param Context $context
      * @param MultipleSave $multipleSave
-     * @param null $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         Context $context,

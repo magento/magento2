@@ -52,7 +52,7 @@ class SourceItemsProcessor
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param SourceItemSaveCommandInterface $sourceItemSave
+     * @param SourceItemSaveInterface $sourceItemSave
      */
     public function __construct(
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
