@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Block\Adminhtml\Grid;
 
 use Magento\Backend\Block\Widget\Grid\Column as GridColumn;
@@ -25,7 +26,7 @@ class Column extends GridColumn
     {
         $renderedValue = parent::getRowField($row);
 
-        if($row->getData('child_items_sku') != null) {
+        if ($row->getData('child_items_sku') != null) {
             $renderedValue .= ' (' . $row->getData('child_items_sku') . ')';
         }
 
@@ -42,7 +43,7 @@ class Column extends GridColumn
     {
         $renderedValue = parent::getRowFieldExport($row);
 
-        if($row->getData('child_items_sku') != null) {
+        if ($row->getData('child_items_sku') != null) {
             $renderedValue .= ' (' . $row->getData('child_items_sku') . ')';
         }
 
