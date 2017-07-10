@@ -5,8 +5,44 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\View\Result\PageFactory;
+use \Magento\Sales\Model\Order\Reorder\HasUnavailableProduct;
+
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
+    /**
+     * @var HasUnavailableProduct
+     */
+    private $hasUnavailableProduct;
+
+    /**
+     * @param HasUnavailableProduct $hasUnavailableProduct
+     * @param Action\Context $context
+     * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Framework\Escaper $escaper
+     * @param PageFactory $resultPageFactory
+     * @param ForwardFactory $resultForwardFactory
+     */
+    public function __construct(
+        HasUnavailableProduct $hasUnavailableProduct,
+        Action\Context $context,
+        \Magento\Catalog\Helper\Product $productHelper,
+        \Magento\Framework\Escaper $escaper,
+        PageFactory $resultPageFactory,
+        ForwardFactory $resultForwardFactory
+    ) {
+        $this->hasUnavailableProduct = $hasUnavailableProduct;
+        parent::__construct(
+            $context,
+            $productHelper,
+            $escaper,
+            $resultPageFactory,
+            $resultForwardFactory
+        );
+    }
+
     /**
      * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
      */
@@ -21,15 +57,25 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($order->getId()) {
+        if (!$order->getId()) {
+            $resultRedirect->setPath('sales/order/');
+        }
+
+        $unavailableProducts = $this->hasUnavailableProduct->hasUnavailableProducts($order);
+        if (count($unavailableProducts) > 0) {
+            foreach ($unavailableProducts as $sku) {
+                $this->messageManager->addNoticeMessage(
+                    sprintf('Product "%s" not found. This product is no longer available.', $sku)
+                );
+            }
+            $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
+        } else {
             $order->setReordered(true);
             $this->_getSession()->setUseOldShippingMethod(true);
             $this->_getOrderCreateModel()->initFromOrder($order);
-
             $resultRedirect->setPath('sales/*');
-        } else {
-            $resultRedirect->setPath('sales/order/');
         }
+
         return $resultRedirect;
     }
 }
