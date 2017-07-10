@@ -76,8 +76,8 @@ abstract class AbstractJob
         $this->params = $params;
 
         $this->objectManager = $objectManagerProvider->get();
-        $this->cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $this->objectManager->get('Magento\Framework\App\Cache');
+        $this->cleanupFiles = $this->objectManager->get(\Magento\Framework\App\State\CleanupFiles::class);
+        $this->cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
     }
 
     /**

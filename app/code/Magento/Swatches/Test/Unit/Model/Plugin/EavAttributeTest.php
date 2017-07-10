@@ -134,7 +134,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->swatchHelper->expects($this->never())->method('isTextSwatch');
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     public function testBeforeSaveTextSwatch()
@@ -179,7 +179,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->with($this->attribute)
             ->willReturn(true);
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     /**
@@ -220,11 +220,11 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     /**
-     * @covers \Magento\Swatches\Model\Plugin\EavAttribute::beforeSave()
+     * @covers \Magento\Swatches\Model\Plugin\EavAttribute::beforeBeforeSave()
      */
     public function testBeforeSaveWithDeletedOption()
     {
@@ -262,7 +262,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                     false
                 )
             );
-         $this->eavAttribute->beforeSave($this->attribute);
+         $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     public function testBeforeSaveNotSwatch()
@@ -300,7 +300,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->with($this->attribute)
             ->willReturn(false);
 
-        $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attribute);
     }
 
     public function visualSwatchProvider()

@@ -71,7 +71,7 @@ class EavAttribute
      * @param Attribute $attribute
      * @return void
      */
-    public function beforeSave(Attribute $attribute)
+    public function beforeBeforeSave(Attribute $attribute)
     {
         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
             $this->setProperOptionsArray($attribute);

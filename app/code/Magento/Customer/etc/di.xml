@@ -318,4 +318,15 @@
             <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">customer_entity</item>
+                    <item name="eavEntityType" xsi:type="string">customer</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
