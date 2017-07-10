@@ -14,6 +14,9 @@ use Magento\Framework\DataObject;
 
 /**
  * Class for reading translations from DB
+ *
+ * @deprecated translation config source was removed. This class is not used anymore
+ * @see app/code/Magento/Translation/Model/ResourceModel/Translate.php
  */
 class InitialTranslationSource implements ConfigSourceInterface
 {
