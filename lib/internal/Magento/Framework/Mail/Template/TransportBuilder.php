@@ -284,7 +284,6 @@ class TransportBuilder
                 throw new LocalizedException(
                     new Phrase('Unknown template type')
                 );
-            break;
         }
         $this->message->setSubject(html_entity_decode($template->getSubject(), ENT_QUOTES));
         return $this;

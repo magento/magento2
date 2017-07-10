@@ -25,7 +25,7 @@ class Message implements MailMessageInterface
      *
      * @var string
      */
-    protected $messageType = self::TYPE_TEXT;
+    private $messageType = self::TYPE_TEXT;
 
     /**
      * Initialize dependencies.
@@ -68,8 +68,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @param string $subject
-     * @return $this
+     * {@inheritdoc}
      */
     public function setSubject($subject)
     {
@@ -78,7 +77,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getSubject()
     {
@@ -94,8 +93,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @param array|string $fromAddress
-     * @return $this
+     * {@inheritdoc}
      */
     public function setFrom($fromAddress)
     {
@@ -104,8 +102,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @param array|string $toAddress
-     * @return $this
+     * {@inheritdoc}
      */
     public function addTo($toAddress)
     {
@@ -114,8 +111,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @param array|string $ccAddress
-     * @return $this
+     * {@inheritdoc}
      */
     public function addCc($ccAddress)
     {
@@ -124,8 +120,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @param array|string $bccAddress
-     * @return $this
+     * {@inheritdoc}
      */
     public function addBcc($bccAddress)
     {
@@ -134,8 +129,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @param array|string $replyToAddress
-     * @return $this
+     * {@inheritdoc}
      */
     public function setReplyTo($replyToAddress)
     {
@@ -144,7 +138,7 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getRawMessage()
     {
@@ -152,6 +146,8 @@ class Message implements MailMessageInterface
     }
 
     /**
+     * Create HTML mime message from the string.
+     *
      * @param string $htmlBody
      * @return \Zend\Mime\Message
      */

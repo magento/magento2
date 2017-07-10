@@ -9,7 +9,7 @@ namespace Magento\Framework\Mail;
  * Mail Message interface
  *
  * @api
- * @deprecated
+ * @deprecated in favor of MailMessageInterface to avoid temporal coupling (setMessageType + setBody)
  * @see \Magento\Framework\Mail\MailMessageInterface
  */
 interface MessageInterface

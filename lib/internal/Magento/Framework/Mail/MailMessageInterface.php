@@ -13,19 +13,23 @@ namespace Magento\Framework\Mail;
 interface MailMessageInterface extends MessageInterface
 {
     /**
+     * Set mail message body in HTML format.
+     *
      * @param string $html
      * @return $this
      */
     public function setBodyHtml($html);
 
     /**
+     * Set mail message body in text format.
+     *
      * @param string $text
      * @return $this
      */
     public function setBodyText($text);
 
     /**
-     * Get message source code
+     * Get message source code.
      *
      * @return string
      */

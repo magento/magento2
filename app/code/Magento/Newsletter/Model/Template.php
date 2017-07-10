@@ -38,6 +38,13 @@ namespace Magento\Newsletter\Model;
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
+    /**
+     * Mail object
+     * 
+     * @deprecated Unused property
+     *
+     */
+    protected $_mail;
 
     /**
      * Store manager to emulate design
