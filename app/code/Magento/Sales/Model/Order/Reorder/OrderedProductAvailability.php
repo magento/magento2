@@ -21,6 +21,9 @@ class OrderedProductAvailability implements OrderedProductAvailabilityInterface
      */
     private $productAvailabilityChecks;
 
+    /**
+     * @param array $productAvailabilityChecks
+     */
     public function __construct(array $productAvailabilityChecks)
     {
         $this->productAvailabilityChecks = $productAvailabilityChecks;

@@ -33,7 +33,7 @@ class HasUnavailableProduct
     }
 
     /**
-     *  Check if configurable child product exists as a part of configurable and thus can be reordered
+     *  Check if order has products that unavailable for now.
      *
      * @param \Magento\Sales\Model\Order $order
      * @return array
