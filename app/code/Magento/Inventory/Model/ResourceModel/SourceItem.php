@@ -35,7 +35,6 @@ class SourceItem extends AbstractDb
         $this->multipleSave = $multipleSave;
     }
 
-
     /**
      * @inheritdoc
      */

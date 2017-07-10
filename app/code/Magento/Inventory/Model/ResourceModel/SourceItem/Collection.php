@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace  Magento\Inventory\Model\ResourceModel\SourceItem;
+namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
 use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
