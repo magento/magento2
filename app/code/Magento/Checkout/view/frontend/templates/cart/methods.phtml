@@ -15,7 +15,7 @@
 <ul class="checkout methods items checkout-methods-items">
 <?php foreach ($methods as $method): ?>
     <?php if ($methodHtml = $block->getMethodHtml($method)): ?>
-    <li class="item"><?php /* @escapeNotVerified */ echo $methodHtml; ?></li>
+    <li class="item"><?= /* @escapeNotVerified */ $methodHtml ?></li>
     <?php endif; ?>
 <?php endforeach; ?>
 </ul>

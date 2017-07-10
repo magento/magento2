@@ -411,10 +411,6 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
             }
             try {
                 $this->getActionInstance()->executeFull();
-                $tableSuffix = ($state->getTableSuffix() === '')
-                    ? StateInterface::ADDITIONAL_TABLE_SUFFIX
-                    : '';
-                $state->setTableSuffix($tableSuffix);
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();

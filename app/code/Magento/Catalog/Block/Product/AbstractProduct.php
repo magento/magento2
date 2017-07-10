@@ -7,6 +7,8 @@ namespace Magento\Catalog\Block\Product;
 
 /**
  * Class AbstractProduct
+ * @api
+ * @deprecated
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -93,6 +95,11 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
     protected $stockRegistry;
+
+    /**
+     * @var ImageBuilder
+     */
+    protected $imageBuilder;
 
     /**
      * @param Context $context

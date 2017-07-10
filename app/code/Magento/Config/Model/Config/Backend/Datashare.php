@@ -11,6 +11,9 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+/**
+ * @api
+ */
 class Datashare extends \Magento\Framework\App\Config\Value
 {
     /**
