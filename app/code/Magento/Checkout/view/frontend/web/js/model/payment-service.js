@@ -14,7 +14,7 @@ define([
     /**
     * Free method filter
     * @param {Object} paymentMethod
-    * @returns {Boolean}
+    * @return {Boolean}
     */
     var isFreePaymentMethod = function (paymentMethod) {
             return paymentMethod.method === 'free';
@@ -22,7 +22,7 @@ define([
 
         /**
          * Grabs the grand total from quote
-         * @returns {Number}
+         * @return {Number}
          */
         getGrandTotal = function () {
             return quote.totals()['grand_total'];
@@ -81,7 +81,7 @@ define([
 
         /**
          * Get the list of available payment methods.
-         * @returns {Array}
+         * @return {Array}
          */
         getAvailablePaymentMethods: function () {
             var allMethods = methodList().slice(),
