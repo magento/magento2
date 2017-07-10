@@ -43,7 +43,7 @@
                     <item name="componentType" xsi:type="string">dynamicRows</item>
                     <item name="recordTemplate" xsi:type="string">record</item>
                     <item name="deleteButtonLabel" xsi:type="string">Remove</item>
-                    <item name="addButtonLabel" xsi:type="string">Add New User Agent Rule</item>
+                    <item name="addButtonLabel" xsi:type="string" translate="true">Add New User Agent Rule</item>
                     <item name="deleteProperty" xsi:type="boolean">false</item>
                     <item name="dndConfig" xsi:type="array">
                         <item name="enabled" xsi:type="boolean">false</item>
@@ -67,7 +67,7 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="dataScope" xsi:type="string">search</item>
                             <item name="fit" xsi:type="boolean">false</item>
-                            <item name="label" xsi:type="string">Search String</item>
+                            <item name="label" xsi:type="string" translate="true">Search String</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>
                         </item>
                     </argument>
@@ -80,7 +80,7 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="dataScope" xsi:type="string">value</item>
                             <item name="fit" xsi:type="boolean">false</item>
-                            <item name="label" xsi:type="string">Theme Name</item>
+                            <item name="label" xsi:type="string" translate="true">Theme Name</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>
                         </item>
                     </argument>
@@ -91,7 +91,7 @@
                             <item name="componentType" xsi:type="string">actionDelete</item>
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="fit" xsi:type="boolean">false</item>
-                            <item name="label" xsi:type="string">Actions</item>
+                            <item name="label" xsi:type="string" translate="true">Actions</item>
                             <item name="sortOrder" xsi:type="string">50</item>
                             <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>
                             <item name="template" xsi:type="string">Magento_Backend/dynamic-rows/cells/action-delete</item>
