@@ -128,7 +128,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $context;
 
     /**
-     * Shows what user is used dataProvider
+     * Allow to manage attributes, even they are hidden on storefront
      *
      * @var bool
      */
@@ -359,7 +359,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Check whether we can show attribute in admin or not
+     * Detect can we show attribute on specific form or not
      *
      * @param Attribute $customerAttribute
      * @return bool
