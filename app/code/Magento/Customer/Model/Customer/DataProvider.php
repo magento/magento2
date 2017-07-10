@@ -42,16 +42,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     const MAX_FILE_SIZE = 2097152;
 
     /**
-     * Says that data is provided to admin and admin user will see customer account
-     */
-    const ADMIN_SCOPE = "admin";
-
-    /**
-     * Says that data is provided to customer
-     */
-    const FRONTEND_SCOPE = "frontend";
-
-    /**
      * @var Collection
      */
     protected $collection;
@@ -138,12 +128,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $context;
 
     /**
-     * Enum: can be frontend or admin
      * Shows what user is used dataProvider
      *
-     * @var string
+     * @var bool
      */
-    private $userScope;
+    private $allowToShowHiddenAttributes;
 
     /**
      * @param string $name
@@ -170,7 +159,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ContextInterface $context = null,
         array $meta = [],
         array $data = [],
-        $userScope = self::ADMIN_SCOPE
+        $allowToShowHiddenAttributes = true
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->eavValidationRules = $eavValidationRules;
@@ -180,7 +169,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->filterPool = $filterPool;
         $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->context = $context ?: ObjectManager::getInstance()->get(ContextInterface::class);
-        $this->userScope = $userScope;
+        $this->allowToShowHiddenAttributes = $allowToShowHiddenAttributes;
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
@@ -395,8 +384,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 in_array('customer_address_edit', $customerAttribute->getUsedInForms());
         }
 
-        return ($this->userScope === self::ADMIN_SCOPE && $canShowOnForm) ||
-            ($this->userScope === self::FRONTEND_SCOPE && $canShowOnForm && $customerAttribute->getIsVisible());
+        return ($this->allowToShowHiddenAttributes && $canShowOnForm) ||
+            (!$this->allowToShowHiddenAttributes && $canShowOnForm && $customerAttribute->getIsVisible());
     }
 
     /**
