@@ -315,6 +315,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($connectionInterfaceMock)
         );
 
+        $abstractModelMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
         $abstractModelMock->expects($this->once())->method('getData')->willReturn(['data' => 'value']);
         $connectionMock = $this->getMock(AdapterInterface::class);
         $this->transactionManagerMock->expects($this->once())

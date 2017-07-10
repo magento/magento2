@@ -87,7 +87,7 @@ class UpdateConfigurations
     protected function getConfigurations()
     {
         $result = [];
-        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', []);
+        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
         if ($configurableMatrix != null && !empty($configurableMatrix)) {
             $configurableMatrix = json_decode($configurableMatrix, true);
         }
