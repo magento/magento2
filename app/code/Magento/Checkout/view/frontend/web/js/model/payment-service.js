@@ -25,7 +25,7 @@ define([
          * @returns {Number}
          */
         getGrandTotal = function () {
-            return quote.totals().grand_total; // jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+            return quote.totals()['grand_total'];
         };
 
     return {
