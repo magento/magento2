@@ -14,6 +14,8 @@ use Magento\Framework\DataObject;
 
 /**
  * @covers \Magento\Translation\App\Config\Type\Translation
+ *
+ * @deprecated translation config source was removed.
  */
 class TranslationTest extends \PHPUnit_Framework_TestCase
 {

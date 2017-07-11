@@ -28,6 +28,7 @@ View,View
 Edit,Edit
 Activate,Activate
 Reauthorize,Reauthorize
+"Integration not secure","Integration not secure"
 "Uninstall the extension to remove integration '%1'.","Uninstall the extension to remove integration '%1'."
 "This integration no longer exists.","This integration no longer exists."
 "The integration '%1' has been deleted.","The integration '%1' has been deleted."
@@ -37,23 +38,26 @@ Reauthorize,Reauthorize
 "Edit ""%1"" Integration","Edit ""%1"" Integration"
 "Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information","Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information"
 "Cannot edit integrations created via config file.","Cannot edit integrations created via config file."
-"The integration \'%1\' has been saved.","The integration \'%1\' has been saved."
+"The integration '%1' has been saved.","The integration '%1' has been saved."
 "The integration was not saved.","The integration was not saved."
 "The integration '%1' has been re-authorized.","The integration '%1' has been re-authorized."
 "The integration '%1' has been activated.","The integration '%1' has been activated."
 "Integration '%1' has been sent for re-authorization.","Integration '%1' has been sent for re-authorization."
 "Integration '%1' has been sent for activation.","Integration '%1' has been sent for activation."
+"A consumer with ID %1 does not exist","A consumer with ID %1 does not exist"
+title,title
 "You did not sign in correctly or your account is temporarily disabled.","You did not sign in correctly or your account is temporarily disabled."
 "This user has no tokens.","This user has no tokens."
 "The tokens could not be revoked.","The tokens could not be revoked."
 "Sorry, something went wrong granting permissions. You can find out more in the exceptions log.","Sorry, something went wrong granting permissions. You can find out more in the exceptions log."
 "Something went wrong while deleting roles and permissions. You can find out more in the exceptions log.","Something went wrong while deleting roles and permissions. You can find out more in the exceptions log."
+"%fieldName is a required field.","%fieldName is a required field."
 "This customer has no tokens.","This customer has no tokens."
 Inactive,Inactive
 Active,Active
 Reset,Reset
-"Integration with name \'%1\' exists.","Integration with name \'%1\' exists."
-"Integration with ID \'%1\' does not exist.","Integration with ID \'%1\' does not exist."
+"Integration with name '%1' exists.","Integration with name '%1' exists."
+"Integration with ID '%1' does not exist.","Integration with ID '%1' does not exist."
 "One or more <a href=""%1"">integrations</a> have been reset because of a change to their xml configs.","One or more <a href=""%1"">integrations</a> have been reset because of a change to their xml configs."
 "Invalid Callback URL","Invalid Callback URL"
 "Invalid Rejected Callback URL","Invalid Rejected Callback URL"
@@ -80,12 +84,9 @@ Reset,Reset
 "A token with consumer ID %1 does not exist","A token with consumer ID %1 does not exist"
 "Unexpected error. Unable to create oAuth consumer account.","Unexpected error. Unable to create oAuth consumer account."
 "Unexpected error. Unable to load oAuth consumer account.","Unexpected error. Unable to load oAuth consumer account."
-"A consumer with ID %1 does not exist","A consumer with ID %1 does not exist"
 "Unable to post data to consumer due to an unexpected error","Unable to post data to consumer due to an unexpected error"
-"Consumer with ID \'%1\' does not exist.","Consumer with ID \'%1\' does not exist."
+"Consumer with ID '%1' does not exist.","Consumer with ID '%1' does not exist."
 "Invalid token to except","Invalid token to except"
-"The integration \'%1\' has been deleted.","The integration \'%1\' has been deleted."
-"Uninstall the extension to remove integration \'%1\'.","Uninstall the extension to remove integration \'%1\'."
 "Integration with ID '%1' doesn't exist.","Integration with ID '%1' doesn't exist."
 "Your account is temporarily disabled.","Your account is temporarily disabled."
 "You have entered an invalid password for current user.","You have entered an invalid password for current user."
@@ -101,16 +102,23 @@ Custom,Custom
 All,All
 Resources,Resources
 "Sorry, something went wrong. Please try again later.","Sorry, something went wrong. Please try again later."
+"Popup Blocker is enabled! Please add this site to your exception list.","Popup Blocker is enabled! Please add this site to your exception list."
 Allow,Allow
 Done,Done
 Extensions,Extensions
 OAuth,OAuth
+"Access Token Expiration","Access Token Expiration"
+"Customer Token Lifetime (hours)","Customer Token Lifetime (hours)"
+"Admin Token Lifetime (hours)","Admin Token Lifetime (hours)"
 "Cleanup Settings","Cleanup Settings"
 "Cleanup Probability","Cleanup Probability"
 "Expiration Period","Expiration Period"
 "Consumer Settings","Consumer Settings"
 "OAuth consumer credentials HTTP Post maxredirects","OAuth consumer credentials HTTP Post maxredirects"
 "OAuth consumer credentials HTTP Post timeout","OAuth consumer credentials HTTP Post timeout"
+"Authentication Locks","Authentication Locks"
+"Maximum Login Failures to Lock Out Account","Maximum Login Failures to Lock Out Account"
+"Lockout Time (seconds)","Lockout Time (seconds)"
 "Integrations Configuration","Integrations Configuration"
 "Integration configuration file","Integration configuration file"
 "Integrations API Configuration","Integrations API Configuration"
