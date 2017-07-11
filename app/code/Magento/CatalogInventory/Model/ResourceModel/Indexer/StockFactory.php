@@ -9,6 +9,9 @@
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer;
 
+/**
+ * @api
+ */
 class StockFactory
 {
     /**

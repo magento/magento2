@@ -118,7 +118,7 @@ define([
                 component: node.component
             });
             loaded.resolve(node, constr);
-        }, function (err) {
+        }, function () {
             consoleLogger.error('componentLoadingFail', {
                 component: node.component
             });

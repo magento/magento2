@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Comments;
 /**
  * Invoice view  comments form
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class View extends \Magento\Backend\Block\Template

@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block;
 
+/**
+ * @api
+ */
 class Cache extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

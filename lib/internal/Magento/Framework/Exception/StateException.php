@@ -7,6 +7,8 @@ namespace Magento\Framework\Exception;
 
 /**
  * State Exception
+ *
+ * @api
  */
 class StateException extends LocalizedException
 {

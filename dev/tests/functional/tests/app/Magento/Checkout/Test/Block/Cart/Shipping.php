@@ -37,7 +37,7 @@ class Shipping extends Form
     protected $shippingMethod = '//span[text()="%s"]/following::label[contains(., "%s")]/../input';
 
     /**
-     * From with shipping available shipping methods.
+     * Form with shipping available shipping methods.
      *
      * @var string
      */
@@ -70,7 +70,7 @@ class Shipping extends Form
      *
      * @var string
      */
-    protected $commonShippingPriceSelector = '.shipping .price';
+    protected $commonShippingPriceSelector = '.totals.shipping .price';
 
     /**
      * Open estimate shipping and tax form.
@@ -132,6 +132,45 @@ class Shipping extends Form
             } else {
                 throw new \Exception("Unable to set value to field '$selector' as it's disabled.");
             }
+        }
+    }
+
+    /**
+     * Reset the address fields in the shipping and tax form.
+     *
+     * @return void
+     */
+    public function resetAddress()
+    {
+        $this->openEstimateShippingAndTax();
+        $fields = [
+           'country_id' => [
+               'selector' => '[name=country_id]',
+               'strategy' => 'css selector',
+               'input' => 'select',
+               'class' => null,
+               'value' => 'United States'
+           ],
+            'region_id' => [
+                'selector' => '[name=region_id]',
+                'strategy' => 'css selector',
+                'input' => 'select',
+                'class' => null,
+                'value' => 'Please select a region, state or province.'
+            ],
+            'postcode' => [
+                'selector' => '[name=postcode]',
+                'strategy' => 'css selector',
+                'input' => null,
+                'class' => null,
+                'value' => ''
+            ]
+        ];
+        // Test environment may become unstable when form fields are filled in a default manner.
+        // Imitating behavior closer to the real user.
+        foreach ($fields as $field) {
+            $this->_fill([$field], $this->_rootElement);
+            $this->waitForUpdatedShippingMethods();
         }
     }
 

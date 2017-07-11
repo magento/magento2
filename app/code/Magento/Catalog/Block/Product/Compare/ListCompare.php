@@ -12,6 +12,7 @@ use Magento\Framework\App\Action\Action;
 
 /**
  * Catalog products compare block
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct

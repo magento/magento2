@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Model;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 
 /**
@@ -35,9 +35,9 @@ class SubscriptionStatusProvider
     const DISABLED = "Disabled";
 
     /**
-     * @var System
+     * @var ScopeConfigInterface
      */
-    private $systemConfig;
+    private $scopeConfig;
 
     /**
      * @var AnalyticsToken
@@ -50,16 +50,16 @@ class SubscriptionStatusProvider
     private $flagManager;
 
     /**
-     * @param System $systemConfig
+     * @param ScopeConfigInterface $scopeConfig
      * @param AnalyticsToken $analyticsToken
      * @param FlagManager $flagManager
      */
     public function __construct(
-        System $systemConfig,
+        ScopeConfigInterface $scopeConfig,
         AnalyticsToken $analyticsToken,
         FlagManager $flagManager
     ) {
-        $this->systemConfig = $systemConfig;
+        $this->scopeConfig = $scopeConfig;
         $this->analyticsToken = $analyticsToken;
         $this->flagManager = $flagManager;
     }
@@ -77,7 +77,7 @@ class SubscriptionStatusProvider
      */
     public function getStatus()
     {
-        $isSubscriptionEnabledInConfig = $this->systemConfig->get('default/analytics/subscription/enabled');
+        $isSubscriptionEnabledInConfig = $this->scopeConfig->getValue('analytics/subscription/enabled');
         if ($isSubscriptionEnabledInConfig) {
             return $this->getStatusForEnabledSubscription();
         }

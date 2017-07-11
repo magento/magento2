@@ -9,7 +9,9 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
- * Class Rule
+ * Rule for catalog widget
+ *
+ * @api
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {

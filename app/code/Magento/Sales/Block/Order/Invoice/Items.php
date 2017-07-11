@@ -11,6 +11,9 @@
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
+/**
+ * @api
+ */
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**

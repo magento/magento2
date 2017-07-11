@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * AdminNotification Inbox model
  *
@@ -18,7 +16,7 @@ class Collection extends \Magento\AdminNotification\Model\ResourceModel\Inbox\Co
     /**
      * Add remove filter
      *
-     * @return \Magento\AdminNotification\Model\ResourceModel\Grid\Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return Collection|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected function _initSelect()
     {

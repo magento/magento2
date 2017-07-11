@@ -125,13 +125,23 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
             return [];
         }
         $itemTable = $this->getTable('cataloginventory_stock_item');
-        $productTable = $this->getTable('catalog_product_entity');
         $select = $this->getConnection()->select()->from(['si' => $itemTable])
-            ->join(['p' => $productTable], 'p.entity_id=si.product_id', ['type_id'])
             ->where('website_id=?', $websiteId)
             ->where('product_id IN(?)', $productIds)
             ->forUpdate(true);
-        return $this->getConnection()->fetchAll($select);
+
+        $productTable = $this->getTable('catalog_product_entity');
+        $selectProducts = $this->getConnection()->select()->from(['p' => $productTable], [])
+            ->where('entity_id IN (?)', $productIds)
+            ->columns(
+                [
+                    'product_id' => 'entity_id',
+                    'type_id' => 'type_id'
+                ]
+            );
+        $this->getConnection()->query($select);
+
+        return $this->getConnection()->fetchAll($selectProducts);
     }
 
     /**

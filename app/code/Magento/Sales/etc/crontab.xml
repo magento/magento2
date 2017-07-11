@@ -28,28 +28,28 @@
             <schedule>0 0 * * *</schedule>
         </job>
         <job name="sales_grid_order_async_insert" instance="SalesOrderIndexGridAsyncInsertCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_grid_order_invoice_async_insert" instance="SalesInvoiceIndexGridAsyncInsertCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_grid_order_shipment_async_insert" instance="SalesShipmentIndexGridAsyncInsertCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_grid_order_creditmemo_async_insert" instance="SalesCreditmemoIndexGridAsyncInsertCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_send_order_emails" instance="SalesOrderSendEmailsCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_send_order_invoice_emails" instance="SalesInvoiceSendEmailsCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_send_order_shipment_emails" instance="SalesShipmentSendEmailsCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
         <job name="sales_send_order_creditmemo_emails" instance="SalesCreditmemoSendEmailsCron" method="execute">
-            <schedule>*/1 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
     </group>
 </config>

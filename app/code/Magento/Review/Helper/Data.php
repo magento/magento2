@@ -10,6 +10,8 @@ namespace Magento\Review\Helper;
 
 /**
  * Default review helper
+ *
+ * @api
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

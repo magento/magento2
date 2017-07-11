@@ -45,7 +45,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     }
 
     /**
-     * Returns the first found number from an string
+     * Returns the first found number from a string
      * Parsing depends on given locale (grouping and decimal)
      *
      * Examples for input:
@@ -92,7 +92,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     }
 
     /**
-     * Functions returns array with price formatting info
+     * Returns an array with price formatting info
      *
      * @param string $localeCode Locale code.
      * @param string $currencyCode Currency code.

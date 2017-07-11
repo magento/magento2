@@ -10,6 +10,8 @@ use Magento\Framework\Filesystem;
 
 /**
  * Base html block
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

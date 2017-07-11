@@ -14,6 +14,9 @@ namespace Magento\Downloadable\Block\Checkout\Cart\Item;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
+/**
+ * @api
+ */
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
     /**

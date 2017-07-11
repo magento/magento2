@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 
 /**
  * Catalog Layer Price Filter resource model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -92,7 +94,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $rangeExpr = new \Zend_Db_Expr("FLOOR(({$priceExpression}) / {$range}) + 1");
 
         $select->columns(['range' => $rangeExpr, 'count' => $countExpr]);
-        $select->group($rangeExpr)->order("({$rangeExpr}) ASC");
+        $select->group($rangeExpr)->order(new \Zend_Db_Expr("({$rangeExpr}) ASC"));
 
         return $this->getConnection()->fetchPairs($select);
     }

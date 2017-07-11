@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\Framework\DB\Select;
-
 /**
  * Interface for a mysql data type of a map
  *

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+
 /**
  * Catalog product option date type
  *
@@ -153,7 +155,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
             if ($this->_dateExists()) {
                 if ($this->useCalendar()) {
-                    $timestamp += (new \DateTime($value['date']))->getTimestamp();
+                    $timestamp += $this->_localeDate->date($value['date'], null, true, false)->getTimestamp();
                 } else {
                     $timestamp += mktime(0, 0, 0, $value['month'], $value['day'], $value['year']);
                 }
@@ -197,7 +199,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            if ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE) {
+            if ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE) {
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::MEDIUM,
@@ -205,7 +207,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     null,
                     'UTC'
                 );
-            } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
+            } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::SHORT,
@@ -213,7 +215,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     null,
                     'UTC'
                 );
-            } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
+            } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME) {
                 $result = $this->_localeDate->formatDateTime(
                     new \DateTime($optionValue),
                     \IntlDateFormatter::NONE,
@@ -371,8 +373,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         return in_array(
             $this->getOption()->getType(),
             [
-                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE,
-                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
+                ProductCustomOptionInterface::OPTION_TYPE_DATE,
+                ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
             ]
         );
     }
@@ -387,8 +389,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         return in_array(
             $this->getOption()->getType(),
             [
-                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME,
-                \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME
+                ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME,
+                ProductCustomOptionInterface::OPTION_TYPE_TIME
             ]
         );
     }

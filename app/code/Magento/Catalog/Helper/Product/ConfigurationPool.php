@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+/**
+ * @api
+ */
 class ConfigurationPool
 {
     /**

@@ -15,6 +15,8 @@ namespace Magento\Security\Model;
  * @method PasswordResetRequestEvent setRequestType(int $requestType)
  * @method string getIp()
  * @method PasswordResetRequestEvent setIp(int $ip)
+ *
+ * @api
  */
 class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
 {

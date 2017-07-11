@@ -5,6 +5,11 @@
  */
 namespace Magento\Directory\Model\Config\Source;
 
+/**
+ * Options provider for regions list
+ *
+ * @api
+ */
 class Allregion implements \Magento\Framework\Option\ArrayInterface
 {
     /**

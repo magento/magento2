@@ -10,8 +10,9 @@ define([
     'uiElement',
     'uiRegistry',
     'uiLayout',
-    'mageUtils'
-], function (Element, registry, layout, utils) {
+    'mageUtils',
+    'underscore'
+], function (Element, registry, layout, utils, _) {
     'use strict';
 
     return Element.extend({

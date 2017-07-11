@@ -32,6 +32,7 @@
                     <form
                         name="auth"
                         role="form"
+                        autocomplete="off"
                     >
                         <fieldset class="fieldset">
                             <legend ng-show="errors==false" class="legend">
@@ -62,6 +63,7 @@
                                                || (auth.username.$error.required && user.submitted) }"
                                            autofocus
                                            required
+                                           autocomplete="off"
                                     >
                                     <div class="error-container">
                                         This is a required field.
@@ -83,6 +85,7 @@
                                                && !auth.password.$pristine)
                                                || (auth.password.$error.required && user.submitted) }"
                                            required
+                                           autocomplete="new-password"
                                     >
                                     <div class="error-container">
                                         This is a required field.

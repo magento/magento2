@@ -10,7 +10,7 @@ use Magento\Bundle\Api\Data\LinkInterface;
 /**
  * Extended Attributes Source Model
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {

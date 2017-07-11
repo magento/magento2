@@ -36,22 +36,33 @@ class ExclusionStrategy implements FilterStrategyInterface
     private $indexerFrontendResource;
 
     /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
+     */
+    private $categoryProductIndexerFrontend;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AliasResolver $aliasResolver
      * @param FrontendResource $indexerFrontendResource
+     * @param FrontendResource $categoryProductIndexerFrontend
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         AliasResolver $aliasResolver,
-        FrontendResource $indexerFrontendResource = null
+        FrontendResource $indexerFrontendResource = null,
+        FrontendResource $categoryProductIndexerFrontend = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->storeManager = $storeManager;
         $this->aliasResolver = $aliasResolver;
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+        );
+        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource::class
         );
     }
 
@@ -81,12 +92,15 @@ class ExclusionStrategy implements FilterStrategyInterface
             $isApplied = true;
         } elseif ('category_ids' === $field) {
             $alias = $this->aliasResolver->getAlias($filter);
-            $tableName = $this->resourceConnection->getTableName('catalog_category_product_index');
+            $tableName = $this->categoryProductIndexerFrontend->getMainTable();
             $select->joinInner(
                 [
                     $alias => $tableName
                 ],
-                'search_index.entity_id = category_ids_index.product_id',
+                $this->resourceConnection->getConnection()->quoteInto(
+                    'search_index.entity_id = category_ids_index.product_id AND category_ids_index.store_id = ?',
+                    $this->storeManager->getStore()->getId()
+                ),
                 []
             );
             $isApplied = true;

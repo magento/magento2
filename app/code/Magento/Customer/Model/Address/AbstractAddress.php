@@ -30,6 +30,8 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
 {

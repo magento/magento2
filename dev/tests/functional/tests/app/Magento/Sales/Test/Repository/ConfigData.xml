@@ -24,5 +24,23 @@
                 <item name="value" xsi:type="string">Pending</item>
             </field>
         </dataset>
+
+        <dataset name="enable_charts">
+            <field name="admin/dashboard/enable_charts" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="enable_charts_rollback">
+            <field name="admin/dashboard/enable_charts" xsi:type="array">
+                <item name="scope" xsi:type="string">admin</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="string">0</item>
+            </field>
+        </dataset>
     </repository>
 </config>
