@@ -37,7 +37,7 @@ Home,Home
 "Go to Home Page","Go to Home Page"
 CMS,CMS
 "You deleted the block.","You deleted the block."
-"We can\'t find a block to delete.","We can\'t find a block to delete."
+"We can't find a block to delete.","We can't find a block to delete."
 "This block no longer exists.","This block no longer exists."
 "Edit Block","Edit Block"
 "New Block","New Block"
@@ -47,7 +47,7 @@ Blocks,Blocks
 "You saved the block.","You saved the block."
 "Something went wrong while saving the block.","Something went wrong while saving the block."
 "The page has been deleted.","The page has been deleted."
-"We can\'t find a page to delete.","We can\'t find a page to delete."
+"We can't find a page to delete.","We can't find a page to delete."
 "This page no longer exists.","This page no longer exists."
 "Edit Page","Edit Page"
 "New Page","New Page"
@@ -64,6 +64,9 @@ Pages,Pages
 "Enabled by Default","Enabled by Default"
 "Disabled by Default","Disabled by Default"
 "Disabled Completely","Disabled Completely"
+"This identifier is reserved for ""CMS No Route Page"" in configuration.","This identifier is reserved for ""CMS No Route Page"" in configuration."
+"This identifier is reserved for ""CMS Home Page"" in configuration.","This identifier is reserved for ""CMS Home Page"" in configuration."
+"This identifier is reserved for ""CMS No Cookies Page"" in configuration.","This identifier is reserved for ""CMS No Cookies Page"" in configuration."
 "Could not save the page: %1","Could not save the page: %1"
 "CMS Page with id ""%1"" does not exist.","CMS Page with id ""%1"" does not exist."
 "Could not delete the page: %1","Could not delete the page: %1"
@@ -74,18 +77,19 @@ Pages,Pages
 "We found a directory with the same name. Please try another folder name.","We found a directory with the same name. Please try another folder name."
 "We cannot create a new directory.","We cannot create a new directory."
 "We cannot delete directory %1.","We cannot delete directory %1."
-"We can\'t upload the file right now.","We can\'t upload the file right now."
-"We can\'t delete root directory %1 right now.","We can\'t delete root directory %1 right now."
+"We can't upload the file right now.","We can't upload the file right now."
+"We can't delete root directory %1 right now.","We can't delete root directory %1 right now."
 "Directory %1 is not under storage root path.","Directory %1 is not under storage root path."
+"Privacy and Cookie Policy","Privacy and Cookie Policy"
 LocalizedException,LocalizedException
 RuntimeException,RuntimeException
 Exception,Exception
 "Could not create a directory.","Could not create a directory."
-"All Store Views","All Store Views"
 Edit,Edit
 Delete,Delete
 "Delete %1","Delete %1"
 "Are you sure you want to delete a %1 record?","Are you sure you want to delete a %1 record?"
+"All Store Views","All Store Views"
 View,View
 px.,px.
 "No files found","No files found"
@@ -123,13 +127,14 @@ Block,Block
 "General Information","General Information"
 "Enable Block","Enable Block"
 "Block Title","Block Title"
-"Delete items","Delete items"
 "Are you sure you want to delete selected items?","Are you sure you want to delete selected items?"
+"Delete items","Delete items"
 "Page Information","Page Information"
 "Enable Page","Enable Page"
 Content,Content
 "Content Heading","Content Heading"
 "Search Engine Optimisation","Search Engine Optimisation"
+"Meta Title","Meta Title"
 "Meta Keywords","Meta Keywords"
 "Meta Description","Meta Description"
 "Page in Websites","Page in Websites"
@@ -147,4 +152,3 @@ Enable,Enable
 "Custom design to","Custom design to"
 "Custom Theme","Custom Theme"
 "Custom Layout","Custom Layout"
-"Meta Title","Meta Title"
