@@ -52,11 +52,6 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     private $appEmulation;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
      * @param PriceCurrencyInterface $priceCurrency
@@ -75,7 +70,6 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
         $this->imageBuilder = $imageBuilder;
         $this->priceCurrency = $priceCurrency;
         $this->_maliciousCode = $maliciousCode;
-        $this->storeManager = $context->getStoreManager();
         $this->appEmulation = $appEmulation
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Store\Model\App\Emulation::class);
 
@@ -239,7 +233,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     public function getImage($product, $imageId, $attributes = [])
     {
         $this->appEmulation->startEnvironmentEmulation(
-            $this->storeManager->getStore()->getId(),
+            $this->_storeManager->getStore()->getId(),
             \Magento\Framework\App\Area::AREA_FRONTEND,
             true
         );
