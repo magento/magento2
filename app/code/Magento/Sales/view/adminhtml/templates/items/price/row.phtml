@@ -14,5 +14,5 @@ $_item = $block->getItem();
 ?>
 
 <div class="price-excl-tax">
-    <?php /* @escapeNotVerified */ echo $block->displayPrices($_item->getBaseRowTotal(), $_item->getRowTotal()) ?>
+    <?= /* @escapeNotVerified */ $block->displayPrices($_item->getBaseRowTotal(), $_item->getRowTotal()) ?>
 </div>

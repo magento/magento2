@@ -12,10 +12,10 @@
         <step name="openOrder" module="Magento_Sales" next="reorder" />
         <step name="reorder" module="Magento_Sales" next="fillBillingAddress" />
         <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress" />
-        <step name="fillShippingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
-        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
-        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
-        <step name="submitOrder" module="Magento_Sales" />
+        <step name="fillShippingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrderWithoutAdditionalInfo" />
+        <step name="submitOrderWithoutAdditionalInfo" module="Magento_Sales" />
     </scenario>
     <scenario name="FrontendOrderPagerTest" firstStep="createOrder">
         <step name="createOrder" module="Magento_Sales" />

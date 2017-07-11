@@ -6,7 +6,7 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class Textarea
+ * @api
  */
 class Textarea extends AbstractElement
 {
