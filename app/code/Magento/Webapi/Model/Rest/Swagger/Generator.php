@@ -204,14 +204,14 @@ class Generator extends AbstractSchemaGenerator
     protected function generatePathInfo($methodName, $httpMethodData, $tagName)
     {
         $methodData = $httpMethodData[Converter::KEY_METHOD];
+        $operationId = $this->typeProcessor->getOperationName($tagName, $methodData[Converter::KEY_METHOD]) . ucfirst($methodName);
         $pathInfo = [
             'tags' => [$tagName],
             'description' => $methodData['documentation'],
-            'operationId' => $this->typeProcessor->getOperationName($tagName, $methodData[Converter::KEY_METHOD]) .
-                ucfirst($methodName)
+            'operationId' => $operationId,
         ];
 
-        $parameters = $this->generateMethodParameters($httpMethodData);
+        $parameters = $this->generateMethodParameters($httpMethodData, $operationId);
         if ($parameters) {
             $pathInfo['parameters'] = $parameters;
         }
@@ -265,11 +265,12 @@ class Generator extends AbstractSchemaGenerator
      * Generate parameters based on method data
      *
      * @param array $httpMethodData
+     * @param string $operationId
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function generateMethodParameters($httpMethodData)
+    private function generateMethodParameters($httpMethodData, $operationId)
     {
         $bodySchema = [];
         $parameters = [];
@@ -335,7 +336,7 @@ class Generator extends AbstractSchemaGenerator
 
         if ($bodySchema) {
             $bodyParam = [];
-            $bodyParam['name'] = '$body';
+            $bodyParam['name'] = $operationId . 'Body';
             $bodyParam['in'] = 'body';
             $bodyParam['schema'] = $bodySchema;
             $parameters[] = $bodyParam;
