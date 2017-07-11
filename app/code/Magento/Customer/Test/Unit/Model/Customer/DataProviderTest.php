@@ -425,11 +425,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $attributeMock->expects($this->any())
             ->method('getDataUsingMethod')
-            ->willReturnCallback(
-                function ($origName) {
-                    return $origName;
-                }
-            );
+            ->willReturnCallback($this->attributeGetUsingMethodCallback());
 
         $attributeMock->expects($this->any())
             ->method('usesSource')
@@ -460,11 +456,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn('boolean');
         $attributeBooleanMock->expects($this->any())
             ->method('getDataUsingMethod')
-            ->willReturnCallback(
-                function ($origName) {
-                    return $origName;
-                }
-            );
+            ->willReturnCallback($this->attributeGetUsingMethodCallback());
 
         $attributeBooleanMock->expects($this->once())
             ->method('usesSource')
@@ -490,6 +482,18 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $mocks[] = $this->getCountryAttrMock();
         }
         return $mocks;
+    }
+
+    /**
+     * Callback for ::getDataUsingMethod
+     *
+     * @return \Closure
+     */
+    private function attributeGetUsingMethodCallback()
+    {
+        return function ($origName) {
+            return $origName;
+        };
     }
 
     private function getCountryAttrMock()
