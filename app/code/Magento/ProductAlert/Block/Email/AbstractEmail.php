@@ -47,22 +47,37 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     protected $imageBuilder;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    private $appEmulation;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
-     * @param array $data
+     * @param \Magento\Framework\Filter\Input\MaliciousCode    $maliciousCode
+     * @param PriceCurrencyInterface                           $priceCurrency
+     * @param \Magento\Catalog\Block\Product\ImageBuilder      $imageBuilder
+     * @param \Magento\Store\Model\App\Emulation               $appEmulation
+     * @param array                                            $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         array $data = []
     ) {
         $this->imageBuilder = $imageBuilder;
         $this->priceCurrency = $priceCurrency;
         $this->_maliciousCode = $maliciousCode;
+        $this->appEmulation = $appEmulation;
+        $this->storeManager = $context->getStoreManager();
+
         parent::__construct($context, $data);
     }
 
@@ -212,18 +227,29 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve product image
+     * Retrieve product image.
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param string $imageId
+     * @param       $product
+     * @param       $imageId
      * @param array $attributes
+     *
      * @return \Magento\Catalog\Block\Product\Image
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        return $this->imageBuilder->setProduct($product)
+        $this->appEmulation->startEnvironmentEmulation(
+            $this->storeManager->getStore()->getId(),
+            \Magento\Framework\App\Area::AREA_FRONTEND,
+            true
+        );
+
+        $image = $this->imageBuilder->setProduct($product)
             ->setImageId($imageId)
             ->setAttributes($attributes)
             ->create();
+
+        $this->appEmulation->stopEnvironmentEmulation();
+
+        return $image;
     }
 }
