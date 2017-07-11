@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Controller\Category;
+namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
 use Magento\Catalog\Controller\Adminhtml\Category\Move;
 use Magento\Framework\Message\ManagerInterface;
@@ -142,7 +142,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
                 __('Some exception')
             ));
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('There was a category move error.'));
         $this->messageManager->expects($this->once())
             ->method('getMessages')
@@ -211,8 +211,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
         $this->messageManager->expects($this->once())
-            ->method('addError')
-            ->with($exceptionMessage);
+            ->method('addExceptionMessage');
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true)
@@ -306,7 +305,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You moved the category.'));
         $categoryMock->expects($this->once())
             ->method('move')
