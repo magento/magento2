@@ -338,20 +338,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         return $typeAddressMock;
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $attributeMock
+     * @param \PHPUnit_Framework_MockObject_MockObject $attributeBooleanMock
+     * @param array $options
+     */
     private function injectVisibilityProps(
         \PHPUnit_Framework_MockObject_MockObject $attributeMock,
         \PHPUnit_Framework_MockObject_MockObject $attributeBooleanMock,
         array $options = []
     ) {
-        $attributeCode = self::ATTRIBUTE_CODE;
-        if (isset($options[self::ATTRIBUTE_CODE]['specific_code_prefix'])) {
-            $attributeCode = $attributeCode . $options[self::ATTRIBUTE_CODE]['specific_code_prefix'];
-        }
-
-        $attributeMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
-
         if (isset($options[self::ATTRIBUTE_CODE]['visible'])) {
             $attributeMock->expects($this->any())
                 ->method('getIsVisible')
@@ -369,15 +365,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 ->method('getUsedInForms')
                 ->willReturn($options[self::ATTRIBUTE_CODE]['is_used_in_forms']);
         }
-
-        $booleanAttributeCode = 'test-code-boolean';
-        if (isset($options['test-code-boolean']['specific_code_prefix'])) {
-            $booleanAttributeCode = $booleanAttributeCode . $options['test-code-boolean']['specific_code_prefix'];
-        }
-
-        $attributeBooleanMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn($booleanAttributeCode);
 
         if (isset($options['test-code-boolean']['visible'])) {
             $attributeBooleanMock->expects($this->any())
@@ -422,6 +409,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $sourceMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $attributeCode = self::ATTRIBUTE_CODE;
+        if (isset($options[self::ATTRIBUTE_CODE]['specific_code_prefix'])) {
+            $attributeCode = $attributeCode . $options[self::ATTRIBUTE_CODE]['specific_code_prefix'];
+        }
+
+        $attributeMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
 
         $sourceMock->expects($this->any())
             ->method('getAllOptions')
@@ -473,6 +469,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $attributeBooleanMock->expects($this->once())
             ->method('usesSource')
             ->willReturn(false);
+        $booleanAttributeCode = 'test-code-boolean';
+        if (isset($options['test-code-boolean']['specific_code_prefix'])) {
+            $booleanAttributeCode = $booleanAttributeCode . $options['test-code-boolean']['specific_code_prefix'];
+        }
+
+        $attributeBooleanMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn($booleanAttributeCode);
 
         $this->eavValidationRulesMock->expects($this->any())
             ->method('build')
