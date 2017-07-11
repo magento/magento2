@@ -1,0 +1,84 @@
+"Subscription status","Subscription status"
+"Sorry, there has been an error processing your request. Please try again later.","Sorry, there has been an error processing your request. Please try again later."
+"Sorry, there was an error processing your registration request to Magento Analytics. Please try again later.","Sorry, there was an error processing your registration request to Magento Analytics. Please try again later."
+"Error occurred during postponement notification","Error occurred during postponement notification"
+"Time value has an unsupported format","Time value has an unsupported format"
+"Cron settings can't be saved","Cron settings can't be saved"
+"There was an error save new configuration value.","There was an error save new configuration value."
+"Please select a vertical.","Please select a vertical."
+"--Please Select--","--Please Select--"
+"Command was not found.","Command was not found."
+"Input data must be string or convertible into string.","Input data must be string or convertible into string."
+"Input data must be non-empty string.","Input data must be non-empty string."
+"Not valid cipher method.","Not valid cipher method."
+"Encryption key can't be empty.","Encryption key can't be empty."
+"Source ""%1"" is not exist","Source ""%1"" is not exist"
+"These arguments can't be empty ""%1""","These arguments can't be empty ""%1"""
+"Cannot find predefined integration user!","Cannot find predefined integration user!"
+"File is not ready yet.","File is not ready yet."
+"Failed to synchronize data to the Magento Business Intelligence service. ","Failed to synchronize data to the Magento Business Intelligence service. "
+"<a href=""%1"">Retry Synchronization</a>","<a href=""%1"">Retry Synchronization</a>"
+TestMessage,TestMessage
+"Error message","Error message"
+"Apps and Games","Apps and Games"
+"Athletic/Sporting Goods","Athletic/Sporting Goods"
+"Art and Design","Art and Design"
+"Advanced Reporting","Advanced Reporting"
+"Gain new insights and take command of your business' performance, using our dynamic product, order, and customer reports tailored to your customer data.","Gain new insights and take command of your business' performance, using our dynamic product, order, and customer reports tailored to your customer data."
+"View details","View details"
+"Go to Advanced Reporting","Go to Advanced Reporting"
+"An error occurred while subscription process.","An error occurred while subscription process."
+Analytics,Analytics
+API,API
+Configuration,Configuration
+"Business Intelligence","Business Intelligence"
+"BI Essentials","BI Essentials"
+"This service provides a suite of dynamic reports based on your product, order and
+                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
+                separate from your Admin Panel.</br> For more information, <a href=""#"">view details</a> or see our
+                <a href=""#"">terms and conditions</a>.","This service provides a suite of dynamic reports based on your product, order and
+                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
+                separate from your Admin Panel.</br> For more information, <a href=""#"">view details</a> or see our
+                <a href=""#"">terms and conditions</a>."
+"Advanced Reporting Service","Advanced Reporting Service"
+Industry,Industry
+"Time of day to send data","Time of day to send data"
+"<strong>Get more insights from Magento Business Intelligence</strong>","<strong>Get more insights from Magento Business Intelligence</strong>"
+"Magento Business Intelligence provides you with a simple and clear path to
+                    becoming more data driven.</br> Learn more about <a target=""_blank""
+                    href=""https://dashboard.rjmetrics.com/v2/magento/signup/"">BI Essentials</a> tier.","Magento Business Intelligence provides you with a simple and clear path to
+                    becoming more data driven.</br> Learn more about <a target=""_blank""
+                    href=""https://dashboard.rjmetrics.com/v2/magento/signup/"">BI Essentials</a> tier."
+"Analytics Subscription","Analytics Subscription"
+"powered by Magento Business Intelligence","powered by Magento Business Intelligence"
+"<p>When you turn on Advanced
+                        Reporting, you'll have access to a suite of dynamic reports tailored to your business. Example
+                        of the new data and trend reports, listed by category, include:</p><ul class=""list"">
+                        <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
+                        </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
+                        </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
+                        personalized dashboard includes all reports - separate from your Admin Panel, yet still at your
+                        fingertips.</p><p>We're excited to offer these valuable tools that can help your business become
+                        more data-driven. For more information, <a href=""#"" target=""_blank"">view details</a> or see our
+                        <a href=""#"" target=""_blank"">terms and conditions</a>.</p>
+                        ","<p>When you turn on Advanced
+                        Reporting, you'll have access to a suite of dynamic reports tailored to your business. Example
+                        of the new data and trend reports, listed by category, include:</p><ul class=""list"">
+                        <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
+                        </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
+                        </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
+                        personalized dashboard includes all reports - separate from your Admin Panel, yet still at your
+                        fingertips.</p><p>We're excited to offer these valuable tools that can help your business become
+                        more data-driven. For more information, <a href=""#"" target=""_blank"">view details</a> or see our
+                        <a href=""#"" target=""_blank"">terms and conditions</a>.</p>
+                        "
+"Are you sure you want to opt out?","Are you sure you want to opt out?"
+Cancel,Cancel
+"Opt out","Opt out"
+"<p>Advanced Reporting in included,
+                    free of charge, in your Magento software. When you opt out, we collect no product, order, and
+                    customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advanced
+                    Reporting in you Admin Panel.</p>","<p>Advanced Reporting in included,
+                    free of charge, in your Magento software. When you opt out, we collect no product, order, and
+                    customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advanced
+                    Reporting in you Admin Panel.</p>"

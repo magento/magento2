@@ -531,9 +531,42 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
      */
-    public function testReplaceIfThrewDuplicateEntryException()
+    public function testReplaceIfThrewExceptionOnDuplicateUrl()
+    {
+        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+
+        $url->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue(['row1']));
+
+        $this->connectionMock->expects($this->once())
+            ->method('insertMultiple')
+            ->will(
+                $this->throwException(
+                    new \Exception('SQLSTATE[23000]: test: 1062 test', DbStorage::ERROR_CODE_DUPLICATE_ENTRY)
+                )
+            );
+        $conflictingUrl = [
+            UrlRewrite::URL_REWRITE_ID => 'conflicting-url'
+        ];
+        $this->connectionMock->expects($this->any())
+            ->method('fetchRow')
+            ->willReturn($conflictingUrl);
+
+        $this->storage->replace([$url]);
+    }
+
+    /**
+     * Validates a case when DB errors on duplicate entry, but calculated URLs are not really duplicated
+     *
+     * An example is when URL length exceeds length of the DB field, so URLs are trimmed and become conflicting
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage SQLSTATE[23000]: test: 1062 test
+     */
+    public function testReplaceIfThrewExceptionOnDuplicateEntry()
     {
         $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
 
