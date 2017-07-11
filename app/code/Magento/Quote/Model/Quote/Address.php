@@ -206,7 +206,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateFactory
      */
-    private $_addressRateFactory;
+    protected $_addressRateFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory
