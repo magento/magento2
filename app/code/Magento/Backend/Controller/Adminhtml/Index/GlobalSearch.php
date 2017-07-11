@@ -6,6 +6,11 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Index;
 
+use Magento\Backend\Model\Search\ItemsFactory;
+
+/**
+ * @api
+ */
 class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**
@@ -25,7 +30,12 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
      *
      * @var array
      */
-    protected $previewModules;
+    private $previewModules;
+
+    /**
+     * @var ItemsFactory
+     */
+    private $itemsFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -35,10 +45,12 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
+        ItemsFactory $itemsFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         array $searchModules = [],
         array $previewModules = []
     ) {
+        $this->itemsFactory = $itemsFactory;
         $this->_searchModules = $searchModules;
         $this->previewModules = $previewModules;
         parent::__construct($context);
@@ -84,9 +96,11 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     }
 
     /**
+     * retrieve links to certain entities in the global search
+     *
      * @return array
      */
-    protected function getPreviewItems()
+    private function getPreviewItems()
     {
         $result = [];
         $query = $this->getRequest()->getParam('query', '');
@@ -106,9 +120,11 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     }
 
     /**
+     * retrieve all entity items that should appear in global search
+     *
      * @return array
      */
-    protected function getSearchItems()
+    private function getSearchItems()
     {
         $items = [];
         $start = $this->getRequest()->getParam('start', 1);
@@ -123,15 +139,20 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
             if (empty($className)) {
                 continue;
             }
-            $searchInstance = $this->_objectManager->create($className);
-            $results = $searchInstance->setStart(
-                $start
-            )->setLimit(
-                $limit
-            )->setQuery(
-                $query
-            )->load()->getResults();
-            $items = array_merge_recursive($items, $results);
+            try {
+                $searchInstance = $this->itemsFactory->create($className);
+                $results = $searchInstance->setStart(
+                    $start
+                )->setLimit(
+                    $limit
+                )->setQuery(
+                    $query
+                )->getResults();
+                $items = array_merge_recursive($items, $results);
+
+            } catch (\LogicException $exception) {
+                continue;
+            }
         }
         return $items;
     }

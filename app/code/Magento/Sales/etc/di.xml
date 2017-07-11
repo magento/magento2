@@ -119,7 +119,7 @@
         <arguments>
             <argument name="searchModules" xsi:type="array">
                 <item name="sales" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Order</item>
+                    <item name="class" xsi:type="string">Magento\Sales\Model\Backend\Search\Order</item>
                     <item name="acl" xsi:type="string">Magento_Sales::sales</item>
                 </item>
             </argument>

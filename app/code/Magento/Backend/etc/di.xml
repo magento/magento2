@@ -89,12 +89,6 @@
             <argument name="identifier" xsi:type="string">Magento_Backend::all</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
-        <arguments>
-            <argument name="searchModules" xsi:type="array" />
-            <argument name="previewModules" xsi:type="array" />
-        </arguments>
-    </type>
     <virtualType name="Magento\Backend\Model\Auth\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">admin</argument>

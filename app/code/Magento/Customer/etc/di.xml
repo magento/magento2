@@ -94,7 +94,7 @@
         <arguments>
             <argument name="searchModules" xsi:type="array">
                 <item name="customers" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Customer</item>
+                    <item name="class" xsi:type="string">Magento\Customer\Model\Backend\Search\Customer</item>
                     <item name="acl" xsi:type="string">Magento_Customer::customer</item>
                 </item>
             </argument>
