@@ -258,6 +258,25 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     }
 
     /**
+     * Test filtering by two attributes.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @dataProvider filterByAttributeValuesDataProvider
+     * @param string $requestName
+     * @param array $additionalData
+     * @return void
+     */
+    public function testFilterByAttributeValues($requestName, $additionalData)
+    {
+        // Reindex Elastic Search since filterable_attribute data fixture added new fields to be indexed
+        $this->reindexAll();
+        parent::testFilterByAttributeValues($requestName, $additionalData);
+    }
+
+    /**
      * Advanced search request using date product attribute
      *
      * @param $rangeFilter
