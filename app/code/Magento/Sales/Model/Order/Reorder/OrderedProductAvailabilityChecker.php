@@ -11,13 +11,13 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 /**
  * @api
  *
- * Class OrderedProductAvailability
+ * Class OrderedProductAvailabilityChecker
  */
-class OrderedProductAvailability implements OrderedProductAvailabilityInterface
+class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityCheckerInterface
 {
 
     /**
-     * @var OrderedProductAvailabilityInterface[]
+     * @var OrderedProductAvailabilityCheckerInterface[]
      */
     private $productAvailabilityChecks;
 
@@ -32,14 +32,13 @@ class OrderedProductAvailability implements OrderedProductAvailabilityInterface
     /**
      * @inheritdoc
      */
-    public function checkAvailability(Item $item)
+    public function isAvailable(Item $item)
     {
         if ($item->getParentItem()
             && isset($this->productAvailabilityChecks[$item->getParentItem()->getProductType()])
         ) {
-
             $checkForType = $this->productAvailabilityChecks[$item->getParentItem()->getProductType()];
-            if (!$checkForType instanceof OrderedProductAvailabilityInterface) {
+            if (!$checkForType instanceof OrderedProductAvailabilityCheckerInterface) {
                 throw new ConfigurationMismatchException(__('Received check doesn\'t match interface'));
             }
             return $checkForType->checkAvailability($item);

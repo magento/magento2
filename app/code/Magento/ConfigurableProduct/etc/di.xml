@@ -185,10 +185,10 @@
             <argument name="connectionName" xsi:type="string">indexer</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailability">
+    <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
         <arguments>
             <argument name="productAvailabilityChecks" xsi:type="array">
-                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Order\Reorder\OrderedProductAvailability</item>
+                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Order\Reorder\OrderedProductAvailabilityChecker</item>
             </argument>
         </arguments>
     </type>

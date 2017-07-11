@@ -8,17 +8,17 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
-use \Magento\Sales\Model\Order\Reorder\HasUnavailableProduct;
+use \Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
 
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
-     * @var HasUnavailableProduct
+     * @var UnavailableProductsProvider
      */
-    private $hasUnavailableProduct;
+    private $unavailableProductsProvider;
 
     /**
-     * @param HasUnavailableProduct $hasUnavailableProduct
+     * @param UnavailableProductsProvider $unavailableProductsProvider
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
@@ -26,14 +26,14 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
-        HasUnavailableProduct $hasUnavailableProduct,
+        UnavailableProductsProvider $unavailableProductsProvider,
         Action\Context $context,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory
     ) {
-        $this->hasUnavailableProduct = $hasUnavailableProduct;
+        $this->unavailableProductsProvider = $unavailableProductsProvider;
         parent::__construct(
             $context,
             $productHelper,
@@ -61,7 +61,7 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $resultRedirect->setPath('sales/order/');
         }
 
-        $unavailableProducts = $this->hasUnavailableProduct->hasUnavailableProducts($order);
+        $unavailableProducts = $this->unavailableProductsProvider->getForOrder($order);
         if (count($unavailableProducts) > 0) {
             foreach ($unavailableProducts as $sku) {
                 $this->messageManager->addNoticeMessage(

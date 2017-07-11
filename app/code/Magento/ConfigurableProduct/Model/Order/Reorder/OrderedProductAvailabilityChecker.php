@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Order\Reorder;
 
-use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityInterface;
+use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityCheckerInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -13,9 +13,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 
 /**
- * Class OrderedProductAvailability
+ * Class OrderedProductAvailabilityChecker
  */
-class OrderedProductAvailability implements OrderedProductAvailabilityInterface
+class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityCheckerInterface
 {
     /**
      * @var ResourceConnection
@@ -42,7 +42,7 @@ class OrderedProductAvailability implements OrderedProductAvailabilityInterface
     /**
      * @inheritdoc
      */
-    public function checkAvailability(Item $item)
+    public function isAvailable(Item $item)
     {
         $buyRequest = $item->getBuyRequest();
         $superAttribute = $buyRequest->getData()['super_attribute'];
@@ -94,7 +94,7 @@ class OrderedProductAvailability implements OrderedProductAvailabilityInterface
                     $attributeValue
                 );
         }
-        return $connection->fetchCol($select);
+        return (bool)$connection->fetchCol($select);
     }
 
     /**

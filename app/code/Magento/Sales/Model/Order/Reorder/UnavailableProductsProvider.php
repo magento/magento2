@@ -7,7 +7,10 @@ namespace Magento\Sales\Model\Order\Reorder;
 
 use Magento\Sales\Model\Config;
 
-class HasUnavailableProduct
+/**
+ * Class UnavailableProductsProvider
+ */
+class UnavailableProductsProvider
 {
     /**
      * @var Config
@@ -15,35 +18,34 @@ class HasUnavailableProduct
     private $salesConfig;
 
     /**
-     * @var OrderedProductAvailability
+     * @var OrderedProductAvailabilityChecker
      */
-    private $orderedProductAvailability;
+    private $orderedProductAvailabilityChecker;
 
     /**
      * @param Config $salesConfig
-     * @param OrderedProductAvailability $orderedProductAvailability
+     * @param OrderedProductAvailabilityChecker $orderedProductAvailabilityChecker
      */
     public function __construct(
         Config $salesConfig,
-        OrderedProductAvailability $orderedProductAvailability
-
+        OrderedProductAvailabilityChecker $orderedProductAvailabilityChecker
     ) {
         $this->salesConfig = $salesConfig;
-        $this->orderedProductAvailability = $orderedProductAvailability;
+        $this->orderedProductAvailabilityChecker = $orderedProductAvailabilityChecker;
     }
 
     /**
-     *  Check if order has products that unavailable for now.
+     * Gets products that are unavailable for the order.
      *
      * @param \Magento\Sales\Model\Order $order
      * @return array
      */
-    public function hasUnavailableProducts($order)
+    public function getForOrder($order)
     {
         $unavailableProducts = [];
         foreach ($order->getItemsCollection($this->salesConfig->getAvailableProductTypes(), false) as $orderItem) {
             /** @var \Magento\Sales\Model\Order\Item $orderItem */
-            if (!$this->orderedProductAvailability->checkAvailability($orderItem)) {
+            if (!$this->orderedProductAvailabilityChecker->isAvailable($orderItem)) {
                 $unavailableProducts[] = $orderItem->getSku();
             }
         }
