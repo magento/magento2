@@ -17,6 +17,12 @@ define([
         }, config);
 
         if (typeof _config.element === 'string') {
+            var msg = '';
+
+            var messager = function() {
+                return msg;
+            };
+
             jQuery.validator.addMethod(
                 _config.element,
 
@@ -25,21 +31,27 @@ define([
                             .closest('table')
                             .find('.' + _config.uniqueClass + ':visible'),
                         valuesHash = {},
-                        isValid = true;
+                        isValid = true,
+                        duplicates = [];
 
                     inputs.each(function (el) {
                         var inputValue = inputs[el].value;
 
                         if (typeof valuesHash[inputValue] !== 'undefined') {
                             isValid = false;
+                            duplicates.push(inputValue);
                         }
                         valuesHash[inputValue] = el;
                     });
 
+                    if (!isValid) {
+                        msg = _config.message.replace('%1', duplicates.join(', '));
+                    }
+
                     return isValid;
                 },
 
-                _config.message
+                messager
             );
         }
     };
