@@ -204,7 +204,10 @@ class Generator extends AbstractSchemaGenerator
     protected function generatePathInfo($methodName, $httpMethodData, $tagName)
     {
         $methodData = $httpMethodData[Converter::KEY_METHOD];
-        $operationId = $this->typeProcessor->getOperationName($tagName, $methodData[Converter::KEY_METHOD]) . ucfirst($methodName);
+
+        $operationId = $this->typeProcessor->getOperationName($tagName, $methodData[Converter::KEY_METHOD]);
+        $operationId .= ucfirst($methodName);
+
         $pathInfo = [
             'tags' => [$tagName],
             'description' => $methodData['documentation'],
