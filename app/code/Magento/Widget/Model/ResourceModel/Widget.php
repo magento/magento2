@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Preconfigured widget
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Widget\Model\ResourceModel;
 
 /**

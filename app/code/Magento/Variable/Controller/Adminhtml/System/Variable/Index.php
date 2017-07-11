@@ -6,6 +6,10 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+/**
+ * Display Variables list page
+ * @api
+ */
 class Index extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**

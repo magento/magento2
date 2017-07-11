@@ -60,6 +60,20 @@ class Bundle extends Section
     protected $deleteOption = './tr[%d]//*[@data-index="delete_button"]';
 
     /**
+     * Selector for attribute sku.
+     *
+     * @var string
+     */
+    private $attributeSku = 'span[data-index="sku"]';
+
+    /**
+     * Option title selector
+     *
+     * @var string
+     */
+    private $optionTitle = ' [name="bundle_options[bundle_options][%s][title]"]';
+
+    /**
      * Get bundle options block.
      *
      * @param int $rowNumber
@@ -165,5 +179,28 @@ class Bundle extends Section
         }
 
         return $newFields;
+    }
+
+    /**
+     * Get attribute sku.
+     *
+     * @return string
+     */
+    public function getAttributeSku()
+    {
+        return $this->_rootElement->find($this->attributeSku)->getText();
+    }
+
+    /**
+     * Change option title
+     *
+     * @param string $optionTitle
+     * @param string $optionNumber
+     * @return void
+     */
+    public function changeOptionTitle($optionTitle, $optionNumber)
+    {
+        $context = $this->_rootElement->find(sprintf($this->optionTitle, $optionNumber));
+        $context->setValue($optionTitle);
     }
 }

@@ -2,6 +2,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @api
+ */
 define([
     'underscore',
     './column'
@@ -9,8 +13,6 @@ define([
     'use strict';
 
     return Column.extend({
-
-        /*eslint-disable eqeqeq*/
         /**
          * Retrieves label associated with a provided value.
          *
@@ -25,7 +27,7 @@ define([
                 values = values.split(',');
             }
 
-            if (!Array.isArray(values)) {
+            if (!_.isArray(values)) {
                 values = [values];
             }
 
@@ -53,17 +55,19 @@ define([
         flatOptions: function (options) {
             var self = this;
 
-            return options.reduce(function (options, option) {
+            if (!_.isArray(options)) {
+                options = _.values(options);
+            }
+
+            return options.reduce(function (opts, option) {
                 if (_.isArray(option.value)) {
-                    options = options.concat(self.flatOptions(option.value));
+                    opts = opts.concat(self.flatOptions(option.value));
                 } else {
-                    options.push(option);
+                    opts.push(option);
                 }
 
-                return options;
+                return opts;
             }, []);
         }
-
-        /*eslint-enable eqeqeq*/
     });
 });

@@ -6,7 +6,9 @@
 namespace Magento\Contact\Model;
 
 use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Mail implements MailInterface
 {
@@ -26,18 +28,29 @@ class Mail implements MailInterface
     private $inlineTranslation;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param ConfigInterface $contactsConfig
      * @param TransportBuilder $transportBuilder
      * @param StateInterface $inlineTranslation
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         ConfigInterface $contactsConfig,
         TransportBuilder $transportBuilder,
-        StateInterface $inlineTranslation
+        StateInterface $inlineTranslation,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->contactsConfig = $contactsConfig;
         $this->transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
+        $this->storeManager = $storeManager ?:
+            ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -49,20 +62,23 @@ class Mail implements MailInterface
      */
     public function send($replyTo, array $variables)
     {
+        /** @see \Magento\Contact\Controller\Index\Post::validatedParams() */
+        $replyToName = !empty($variables['data']['name']) ? $variables['data']['name'] : null;
+
         $this->inlineTranslation->suspend();
         try {
             $transport = $this->transportBuilder
                 ->setTemplateIdentifier($this->contactsConfig->emailTemplate())
                 ->setTemplateOptions(
                     [
-                        'area' => 'adminhtml',
-                        'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                        'area' => 'frontend',
+                        'store' => $this->storeManager->getStore()->getId()
                     ]
                 )
                 ->setTemplateVars($variables)
                 ->setFrom($this->contactsConfig->emailSender())
                 ->addTo($this->contactsConfig->emailRecipient())
-                ->setReplyTo($replyTo)
+                ->setReplyTo($replyTo, $replyToName)
                 ->getTransport();
 
             $transport->sendMessage();

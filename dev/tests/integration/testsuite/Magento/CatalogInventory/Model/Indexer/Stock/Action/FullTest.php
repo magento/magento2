@@ -45,7 +45,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $productCollection = $layer->getProductCollection();
         $productCollection->joinField(
             'qty',
-            'cataloginventory_stock_status_idx',
+            'cataloginventory_stock_status',
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

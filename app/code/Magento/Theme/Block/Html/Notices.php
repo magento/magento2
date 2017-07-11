@@ -7,6 +7,8 @@ namespace Magento\Theme\Block\Html;
 
 /**
  * Html page notices block
+ *
+ * @api
  */
 class Notices extends \Magento\Framework\View\Element\Template
 {

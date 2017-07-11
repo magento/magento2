@@ -9,7 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Exception\CouldNotRefundExceptionInterface;
 
 /**
- * Class CouldNotRefundException
+ * @api
  */
 class CouldNotRefundException extends LocalizedException implements CouldNotRefundExceptionInterface
 {

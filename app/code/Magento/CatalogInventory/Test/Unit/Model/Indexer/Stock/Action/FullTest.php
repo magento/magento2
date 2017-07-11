@@ -24,15 +24,19 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
         $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
-        $exceptionMessage = 'exception message';
+        $productTypeMock
+            ->method('getTypesByPriority')
+            ->willReturn([]);
 
-        $connectionMock->expects($this->once())
-            ->method('delete')
-            ->will($this->throwException(new \Exception($exceptionMessage)));
+        $exceptionMessage = 'exception message';
 
         $resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connectionMock));
+
+        $resourceMock->expects($this->any())
+            ->method('getTableName')
+            ->will($this->throwException(new \Exception($exceptionMessage)));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManager->getObject(

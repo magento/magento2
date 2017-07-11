@@ -11,6 +11,11 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Data Provider for 'design_config_form' and 'design_config_listing' components
+ *
+ * @api
+ */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**

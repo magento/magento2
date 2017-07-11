@@ -17,6 +17,7 @@ use Magento\User\Api\Data\UserInterface;
 /**
  * Admin user model
  *
+ * @api
  * @method \Magento\User\Model\ResourceModel\User _getResource()
  * @method \Magento\User\Model\ResourceModel\User getResource()
  * @method string getLogdate()
@@ -31,6 +32,7 @@ use Magento\User\Api\Data\UserInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @api
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {

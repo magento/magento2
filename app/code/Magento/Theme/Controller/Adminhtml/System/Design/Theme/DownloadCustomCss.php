@@ -9,6 +9,10 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * Class DownloadCustomCss
+ * @deprecated
+ */
 class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**

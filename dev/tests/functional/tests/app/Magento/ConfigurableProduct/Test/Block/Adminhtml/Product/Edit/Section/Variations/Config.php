@@ -84,14 +84,16 @@ class Config extends Section
             ? $fields['configurable_attributes_data']['value']
             : [];
 
-        $attributesValue = isset($fields['configurable_attributes_data']['source'])
-            ? $fields['configurable_attributes_data']['source']->getAttributesData()
-            : [];
+        $attributeSource = isset($fields['configurable_attributes_data']['source'])
+            ? $fields['configurable_attributes_data']['source']
+            : null;
+        $attributesValue = $attributeSource !== null ? $attributeSource->getAttributesData() : [];
+
         foreach ($attributesValue as $key => $value) {
             $attributesValue[$key] = array_merge($value, $attributes['attributes_data'][$key]);
         }
         $this->createConfigurations();
-        $this->getAttributeBlock()->fillAttributes($attributesValue);
+        $this->getAttributeBlock()->fillAttributes($attributesValue, $attributeSource);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
             $this->getVariationsBlock()->fillVariations($attributes['matrix']);

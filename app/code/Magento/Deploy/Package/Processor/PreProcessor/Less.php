@@ -5,7 +5,7 @@
  */
 namespace Magento\Deploy\Package\Processor\PreProcessor;
 
-use Magento\Deploy\Console\Command\DeployStaticOptions;
+use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
@@ -127,23 +127,34 @@ class Less implements ProcessorInterface
             $parentFile->getPackage()->getPath(),
             $parentFile->getExtension()
         );
-        $parentFiles = $this->collectFileMap($parentFile->getFileName(), $map);
-        $currentPackageLessFiles = $package->getFilesByType('less');
-        $currentPackageCssFiles = $package->getFilesByType('css');
         /** @var PackageFile[] $currentPackageFiles */
-        $currentPackageFiles = array_merge($currentPackageLessFiles, $currentPackageCssFiles);
+        $currentPackageFiles = array_merge($package->getFilesByType('less'), $package->getFilesByType('css'));
 
         foreach ($currentPackageFiles as $file) {
-            if (in_array($file->getDeployedFileName(), $parentFiles)) {
+            if ($this->inParentFiles($file->getDeployedFileName(), $parentFile->getFileName(), $map)) {
                 return true;
             }
         }
+        return false;
+    }
 
-        $intersections = array_intersect($parentFiles, array_keys($currentPackageFiles));
-        if ($intersections) {
-            return true;
+    /**
+     * @param string  $fileName
+     * @param string  $parentFile
+     * @param array $map
+     * @return bool
+     */
+    private function inParentFiles($fileName, $parentFile, $map)
+    {
+        if (isset($map[$parentFile])) {
+            if (in_array($fileName, $map[$parentFile])) {
+                return true;
+            } else {
+                foreach ($map[$parentFile] as $pFile) {
+                    return $this->inParentFiles($fileName, $pFile, $map);
+                }
+            }
         }
-
         return false;
     }
 
@@ -184,25 +195,6 @@ class Less implements ProcessorInterface
             preg_replace_callback(Import::REPLACE_PATTERN, $replaceCallback, $content);
         }
         return $this->map;
-    }
-
-    /**
-     * Flatten map tree into simple array
-     *
-     * Original map file information structure in form of tree,
-     * and to have checking of overridden files simpler we need to flatten that tree
-     *
-     * @param string $fileName
-     * @param array $map
-     * @return array
-     */
-    private function collectFileMap($fileName, array $map)
-    {
-        $result = isset($map[$fileName]) ? $map[$fileName] : [];
-        foreach ($result as $fName) {
-            $result = array_merge($result, $this->collectFileMap($fName, $map));
-        }
-        return array_unique($result);
     }
 
     /**

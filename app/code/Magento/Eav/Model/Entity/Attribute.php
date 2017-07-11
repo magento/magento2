@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * EAV Entity attribute model
  *
+ * @api
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,7 +23,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * Attribute code max length
      */
-    const ATTRIBUTE_CODE_MAX_LENGTH = 30;
+    const ATTRIBUTE_CODE_MAX_LENGTH = 255;
 
     /**
      * Cache tag

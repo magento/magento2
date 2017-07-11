@@ -11,11 +11,9 @@ use Magento\Deploy\Package\PackageFactory;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
- * Class Collector
+ * Deployable files collector
  *
- * Default implementation uses Source Pool object which provides collection of static files sources
- *
- * @see SourcePool
+ * Default implementation uses Source Pool object (@see SourcePool)
  */
 class Collector implements CollectorInterface
 {

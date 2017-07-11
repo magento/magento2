@@ -73,7 +73,6 @@ class CommandList
             \Magento\Setup\Console\Command\UpgradeCommand::class,
             \Magento\Setup\Console\Command\UninstallCommand::class,
             \Magento\Setup\Console\Command\DeployStaticContentCommand::class,
-            \Magento\Setup\Console\Command\Deploy\StaticContentCommand::class,
         ];
     }
 
@@ -89,7 +88,7 @@ class CommandList
 
         foreach ($this->getCommandsClasses() as $class) {
             if (class_exists($class)) {
-                $commands[] = $this->serviceManager->create($class);
+                $commands[] = $this->serviceManager->get($class);
             } else {
                 throw new \Exception('Class ' . $class . ' does not exist');
             }

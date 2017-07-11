@@ -201,6 +201,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
         $resourceModel->save($model);
     }
@@ -250,7 +251,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'beginTransaction',
                 'commit',
                 'rollback',
-                'select'
+                'select',
+                'getTransactionLevel'
             ],
             [],
             '',

@@ -9,6 +9,9 @@ use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\View\Element\Text;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 
+/**
+ * @api
+ */
 class Actions extends Text
 {
     /**

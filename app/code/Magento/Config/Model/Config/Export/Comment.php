@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Comment. Is used to retrieve comment for config dump file
+ * @api
  */
 class Comment implements CommentInterface
 {
@@ -35,28 +36,18 @@ class Comment implements CommentInterface
     private $typePool;
 
     /**
-     * Contains list of config fields which should be excluded from config export file.
-     *
-     * @var ExcludeList
-     */
-    private $excludeList;
-
-    /**
      * @param PlaceholderFactory $placeholderFactory
      * @param DumpConfigSourceInterface $source
-     * @param TypePool|null $typePool
-     * @param ExcludeList|null $excludeList
+     * @param TypePool|null $typePool The checker for config type
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
         DumpConfigSourceInterface $source,
-        TypePool $typePool = null,
-        ExcludeList $excludeList = null
+        TypePool $typePool = null
     ) {
         $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
         $this->source = $source;
         $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
-        $this->excludeList = $excludeList ?: ObjectManager::getInstance()->get(ExcludeList::class);
     }
 
     /**
@@ -69,30 +60,22 @@ class Comment implements CommentInterface
      */
     public function get()
     {
-        $comment = '';
-        $fields = $this->source->getExcludedFields();
-        foreach ($fields as $path) {
-            if ($this->isSensitive($path)) {
-                $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
+        $comments = [];
+
+        foreach ($this->source->getExcludedFields() as $path) {
+            if ($this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE)) {
+                $comments[] = $this->placeholder->generate($path) . ' for ' . $path;
             }
         }
-        if ($comment) {
-            $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '
-                . 'Sensitive data can be stored in the following environment variables:'
-                . $comment;
-        }
-        return $comment;
-    }
 
-    /**
-     * Checks whether the field path is sensitive.
-     *
-     * @param string $path Configuration field path
-     * @return bool
-     */
-    private function isSensitive($path)
-    {
-        return $this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE)
-            || $this->excludeList->isPresent($path);
+        if (!empty($comments)) {
+            $comments = array_merge([
+                'Shared configuration was written to config.php and system-specific configuration to env.php.',
+                'Shared configuration file (config.php) doesn\'t contain sensitive data for security reasons.',
+                'Sensitive data can be stored in the following environment variables:'
+            ], $comments);
+        }
+
+        return implode(PHP_EOL, $comments);
     }
 }

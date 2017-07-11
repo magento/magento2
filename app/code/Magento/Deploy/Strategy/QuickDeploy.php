@@ -10,9 +10,7 @@ use Magento\Deploy\Package\Package;
 use Magento\Deploy\Process\Queue;
 
 /**
- * Class QuickDeploy
- *
- * @api
+ * Quick deployment strategy implementation
  */
 class QuickDeploy implements StrategyInterface
 {

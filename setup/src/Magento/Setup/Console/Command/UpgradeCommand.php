@@ -82,15 +82,18 @@ class UpgradeCommand extends AbstractSetupCommand
             $installer->updateModulesSequence($keepGenerated);
             $installer->installSchema();
             $installer->installDataFixtures();
+
+            if ($this->deploymentConfig->isAvailable()) {
+                $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
+                $arrayInput = new ArrayInput([]);
+                $arrayInput->setInteractive($input->isInteractive());
+                $importConfigCommand->run($arrayInput, $output);
+            }
+
             if (!$keepGenerated) {
                 $output->writeln(
                     '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
                 );
-            }
-
-            if ($this->deploymentConfig->isAvailable()) {
-                $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
-                $importConfigCommand->run(new ArrayInput([]), $output);
             }
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());

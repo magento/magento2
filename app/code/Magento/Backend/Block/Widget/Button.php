@@ -8,7 +8,9 @@ namespace Magento\Backend\Block\Widget;
 /**
  * Button widget
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Button extends \Magento\Backend\Block\Widget
 {

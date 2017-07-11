@@ -10,9 +10,7 @@ use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Psr\Log\LoggerInterface;
 
 /**
- * Service to deploy translations dictionary file for JavaScript
- *
- * @api
+ * Deploy translation dictionaries service
  */
 class DeployTranslationsDictionary
 {

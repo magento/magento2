@@ -5,12 +5,15 @@
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
+use Magento\Analytics\Model\Connector\Http\ClientInterface;
+use Magento\Analytics\Model\Connector\Http\JsonConverter;
+use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\Connector\SignUpCommand;
-use Magento\Analytics\Model\Connector\SignUpRequest;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
+use Magento\Config\Model\Config;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SignUpCommandTest
@@ -38,9 +41,24 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
     private $integrationToken;
 
     /**
-     * @var SignUpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $signUpRequestMock;
+    private $configMock;
+
+    /**
+     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $httpClientMock;
+
+    /**
+     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
+    /**
+     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $responseResolverMock;
 
     protected function setUp()
     {
@@ -52,22 +70,27 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->integrationToken = $this->getMockBuilder(IntegrationToken::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getToken'])
             ->getMock();
-        $this->integrationToken->expects($this->any())
-            ->method('getToken')
-            ->willReturn('IntegrationToken');
-        $this->signUpRequestMock = $this->getMockBuilder(SignUpRequest::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->signUpCommand = $objectManagerHelper->getObject(
-            SignUpCommand::class,
-            [
-                'analyticsToken' => $this->analyticsTokenMock,
-                'integrationManager' => $this->integrationManagerMock,
-                'signUpRequest' => $this->signUpRequestMock
-            ]
+        $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->signUpCommand = new SignUpCommand(
+            $this->analyticsTokenMock,
+            $this->integrationManagerMock,
+            $this->configMock,
+            $this->httpClientMock,
+            $this->loggerMock,
+            $this->responseResolverMock
         );
     }
 
@@ -79,13 +102,27 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->integrationManagerMock->expects($this->once())
             ->method('activateIntegration')
             ->willReturn(true);
-        $this->signUpRequestMock->expects($this->once())
-            ->method('call')
-            ->with('IntegrationToken')
-            ->willReturn('MAToken');
-        $this->analyticsTokenMock->expects($this->once())
-            ->method('storeToken')
-            ->with('MAToken')
+        $data = $this->getTestData();
+
+        $this->configMock->expects($this->any())
+            ->method('getConfigDataValue')
+            ->willReturn($data['url']);
+        $this->integrationToken->expects($this->any())
+            ->method('getData')
+            ->with('token')
+            ->willReturn($data['integration-token']);
+        $httpResponse = new \Zend_Http_Response(201, [], '{"access-token": "' . $data['access-token'] . '"}');
+        $this->httpClientMock->expects($this->once())
+            ->method('request')
+            ->with(
+                $data['method'],
+                $data['url'],
+                $data['body']
+            )
+            ->willReturn($httpResponse);
+        $this->responseResolverMock->expects($this->any())
+            ->method('getResult')
+            ->with($httpResponse)
             ->willReturn(true);
         $this->assertTrue($this->signUpCommand->execute());
     }
@@ -96,14 +133,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
             ->method('generateToken')
             ->willReturn(false);
         $this->integrationManagerMock->expects($this->never())
-            ->method('activateIntegration')
-            ->willReturn(true);
-        $this->signUpRequestMock->expects($this->never())
-            ->method('call')
-            ->willReturn('MAToken');
-        $this->analyticsTokenMock->expects($this->never())
-            ->method('storeToken')
-            ->willReturn(true);
+            ->method('activateIntegration');
         $this->assertFalse($this->signUpCommand->execute());
     }
 
@@ -115,12 +145,30 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->integrationManagerMock->expects($this->once())
             ->method('activateIntegration')
             ->willReturn(true);
-        $this->signUpRequestMock->expects($this->once())
-            ->method('call')
-            ->with('IntegrationToken')
+        $httpResponse = new \Zend_Http_Response(0, []);
+        $this->httpClientMock->expects($this->once())
+            ->method('request')
+            ->willReturn($httpResponse);
+        $this->responseResolverMock->expects($this->any())
+            ->method('getResult')
             ->willReturn(false);
-        $this->analyticsTokenMock->expects($this->never())
-            ->method('storeToken');
         $this->assertFalse($this->signUpCommand->execute());
+    }
+
+    /**
+     * Returns test parameters for request.
+     *
+     * @return array
+     */
+    private function getTestData()
+    {
+        return [
+            'url' => 'http://www.mystore.com',
+            'access-token' => 'thisisaccesstoken',
+            'integration-token' => 'thisisintegrationtoken',
+            'headers' => [JsonConverter::CONTENT_TYPE_HEADER],
+            'method' => \Magento\Framework\HTTP\ZendClient::POST,
+            'body'=> ['token' => 'thisisintegrationtoken','url' => 'http://www.mystore.com'],
+        ];
     }
 }

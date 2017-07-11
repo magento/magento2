@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
- * Class DataSource
+ * @api
  */
 class DataSource extends AbstractComponent implements DataSourceInterface
 {

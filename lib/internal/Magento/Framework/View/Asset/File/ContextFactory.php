@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Asset\File;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory class for \Magento\Framework\View\Asset\File\Context
+ * Factory class for @see \Magento\Framework\View\Asset\File\Context
  */
 class ContextFactory
 {

@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem;
  *
  * It is used to parse config paths from
  * comment section in provided configuration file.
+ * @api
  */
 class Comment implements CommentParserInterface
 {
@@ -55,7 +56,6 @@ class Comment implements CommentParserInterface
      *      //...
      *  ],
      * // ...
-     * // The configuration file doesn't contain sensitive data for security reasons.
      * // Sensitive data can be stored in the following environment variables:
      * // CONFIG__DEFAULT__SOME__CONF__PATH_ONE for some/conf/path_one
      *  'system' => [],

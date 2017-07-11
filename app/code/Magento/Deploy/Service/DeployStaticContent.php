@@ -7,15 +7,15 @@ namespace Magento\Deploy\Service;
 
 use Magento\Deploy\Strategy\DeployStrategyFactory;
 use Magento\Deploy\Process\QueueFactory;
-use Magento\Deploy\Console\Command\DeployStaticOptions as Options;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class DeployStaticContent
+ * Main service for static content deployment
  *
- * @api
+ * Aggregates services to deploy static files, static files bundles, translations and minified templates
  */
 class DeployStaticContent
 {
@@ -75,6 +75,16 @@ class DeployStaticContent
      */
     public function deploy(array $options)
     {
+        $version = !empty($options[Options::CONTENT_VERSION]) && is_string($options[Options::CONTENT_VERSION])
+            ? $options[Options::CONTENT_VERSION]
+            : (new \DateTime())->getTimestamp();
+        $this->versionStorage->save($version);
+
+        if ($this->isRefreshContentVersionOnly($options)) {
+            $this->logger->warning("New content version: " . $version);
+            return;
+        }
+
         $queue = $this->queueFactory->create(
             [
                 'logger' => $this->logger,
@@ -96,9 +106,6 @@ class DeployStaticContent
             ]
         );
 
-        $version = (new \DateTime())->getTimestamp();
-        $this->versionStorage->save($version);
-
         $packages = $deployStrategy->deploy($options);
 
         if ($options[Options::NO_JAVASCRIPT] !== true) {
@@ -113,7 +120,7 @@ class DeployStaticContent
             ]);
             foreach ($packages as $package) {
                 if (!$package->isVirtual()) {
-                    $deployRjsConfig->deploy($package->getArea(), $package->getTheme());
+                    $deployRjsConfig->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                     $deployI18n->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                     $deployBundle->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                 }
@@ -132,5 +139,15 @@ class DeployStaticContent
     private function getProcessesAmount(array $options)
     {
         return isset($options[Options::JOBS_AMOUNT]) ? (int)$options[Options::JOBS_AMOUNT] : 0;
+    }
+
+    /**
+     * @param array $options
+     * @return bool
+     */
+    private function isRefreshContentVersionOnly(array $options)
+    {
+        return isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
+            && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
     }
 }

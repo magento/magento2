@@ -39,11 +39,12 @@ class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuild
     private $baseSelectProcessor;
 
     /**
+     * LinkedProductSelectBuilderByIndexPrice constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param BaseSelectProcessorInterface $baseSelectProcessor
+     * @param BaseSelectProcessorInterface|null $baseSelectProcessor
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,

@@ -50,12 +50,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock->expects(static::any())
-            ->method('getProcessor')
-            ->willReturn($processor);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -79,6 +73,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
+        $this->contextMock->expects(static::never())->method('getProcessor');
         $date = new Date(
             $this->contextMock,
             $this->uiComponentFactory,
@@ -101,6 +96,10 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare($name, $filterData, $expectedCondition)
     {
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects(static::atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var FormDate $uiComponent */
         $uiComponent = $this->getMockBuilder(FormDate::class)
             ->disableOriginalConstructor()
@@ -126,52 +125,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->dataProviderMock);
 
         if ($expectedCondition !== null) {
-            if (is_string($filterData[$name])) {
-                $uiComponent->expects(static::once())
-                    ->method('convertDate')
-                    ->with($filterData[$name])
-                    ->willReturn(new \DateTime($filterData[$name]));
-            } else {
-                $uiComponent->method('convertDate')
-                    ->willReturnMap([
-                        [$filterData[$name]['from'], 0, 0, 0, new \DateTime($filterData[$name]['from'])],
-                        [$filterData[$name]['to'], 23, 59, 59, new \DateTime($filterData[$name]['to'] . ' 23:59:59')],
-                    ]);
-            }
-
-            $i=0;
-            switch (true) {
-                case is_string($filterData[$name]):
-                case isset($filterData[$name]['from']) && !isset($filterData[$name]['to']):
-                case !isset($filterData[$name]['from']) && isset($filterData[$name]['to']):
-                    $filterMock = $this->getFilterMock(
-                        $name,
-                        $expectedCondition['type'],
-                        $expectedCondition['date'],
-                        $i
-                    );
-                    $this->dataProviderMock->expects(static::once())
-                        ->method('addFilter')
-                        ->with($filterMock);
-                    break;
-                case isset($filterData[$name]['from']) && isset($filterData[$name]['to']):
-                    $this->getFilterMock(
-                        $name,
-                        $expectedCondition['type_from'],
-                        $expectedCondition['date_from'],
-                        $i
-                    );
-                    $filterMock = $this->getFilterMock(
-                        $name,
-                        $expectedCondition['type_to'],
-                        $expectedCondition['date_to'],
-                        $i
-                    );
-                    $this->dataProviderMock->expects(static::exactly(2))
-                        ->method('addFilter')
-                        ->with($filterMock);
-                    break;
-            }
+            $this->processFilters($name, $filterData, $expectedCondition, $uiComponent);
         }
 
         $this->uiComponentFactory->expects($this->any())
@@ -258,5 +212,63 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 null,
             ],
         ];
+    }
+
+    /**
+     * @param $name
+     * @param $filterData
+     * @param $expectedCondition
+     * @param $uiComponent
+     */
+    private function processFilters($name, $filterData, $expectedCondition, $uiComponent)
+    {
+        if (is_string($filterData[$name])) {
+            $uiComponent->expects(static::once())
+                ->method('convertDate')
+                ->with($filterData[$name])
+                ->willReturn(new \DateTime($filterData[$name]));
+        } else {
+            $from = new \DateTime($filterData[$name]['from']);
+            $to = new \DateTime($filterData[$name]['to'] . ' 23:59:59');
+            $uiComponent->method('convertDate')
+                ->willReturnMap([
+                    [$filterData[$name]['from'], 0, 0, 0, true, $from],
+                    [$filterData[$name]['to'], 23, 59, 59, true, $to],
+                ]);
+        }
+
+        $i = 0;
+        switch (true) {
+            case is_string($filterData[$name]):
+            case isset($filterData[$name]['from']) && !isset($filterData[$name]['to']):
+            case !isset($filterData[$name]['from']) && isset($filterData[$name]['to']):
+                $filterMock = $this->getFilterMock(
+                    $name,
+                    $expectedCondition['type'],
+                    $expectedCondition['date'],
+                    $i
+                );
+                $this->dataProviderMock->expects(static::once())
+                    ->method('addFilter')
+                    ->with($filterMock);
+                break;
+            case isset($filterData[$name]['from']) && isset($filterData[$name]['to']):
+                $this->getFilterMock(
+                    $name,
+                    $expectedCondition['type_from'],
+                    $expectedCondition['date_from'],
+                    $i
+                );
+                $filterMock = $this->getFilterMock(
+                    $name,
+                    $expectedCondition['type_to'],
+                    $expectedCondition['date_to'],
+                    $i
+                );
+                $this->dataProviderMock->expects(static::exactly(2))
+                    ->method('addFilter')
+                    ->with($filterMock);
+                break;
+        }
     }
 }

@@ -2,6 +2,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
@@ -326,7 +330,7 @@ define([
 
             if (allowed.passed) {
                 target.on('fileuploadsend', function (event, postData) {
-                    postData.data.set('param_name', this.paramName);
+                    postData.data.append('param_name', this.paramName);
                 }.bind(data));
 
                 target.fileupload('process', data).done(function () {
@@ -385,8 +389,8 @@ define([
         onPreviewLoad: function (file, e) {
             var img = e.currentTarget;
 
-            file.previewWidth = img.naturalHeight;
-            file.previewHeight = img.naturalWidth;
+            file.previewWidth = img.naturalWidth;
+            file.previewHeight = img.naturalHeight;
         },
 
         /**

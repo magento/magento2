@@ -10,6 +10,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Exception class for merge conflict during inserting and updating synonym groups
+ *
+ * @api
  */
 class MergeConflictException extends LocalizedException
 {
@@ -26,10 +28,11 @@ class MergeConflictException extends LocalizedException
      * @param array $conflictingSynonyms
      * @param Phrase|null $phrase
      * @param \Exception|null $cause
+     * @param int $code
      */
-    public function __construct(array $conflictingSynonyms, Phrase $phrase = null, \Exception $cause = null)
+    public function __construct(array $conflictingSynonyms, Phrase $phrase = null, \Exception $cause = null, $code = 0)
     {
-        parent::__construct($phrase, $cause);
+        parent::__construct($phrase, $cause, $code);
         $this->conflictingSynonyms = $conflictingSynonyms;
     }
 

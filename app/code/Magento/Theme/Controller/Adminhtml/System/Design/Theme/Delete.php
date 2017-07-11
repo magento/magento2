@@ -8,6 +8,10 @@ namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class Delete
+ * @deprecated
+ */
 class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {
     /**

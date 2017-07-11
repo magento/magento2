@@ -9,8 +9,11 @@
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+use Magento\Catalog\Model\ProductCategoryList;
+
 /**
  * Class Product
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -42,6 +45,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
+     * @param ProductCategoryList $categoryList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -54,7 +58,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        array $data = []
+        array $data = [],
+        ProductCategoryList $categoryList = null
     ) {
         $this->storeManager = $storeManager;
         parent::__construct(
@@ -66,7 +71,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $productResource,
             $attrSetCollection,
             $localeFormat,
-            $data
+            $data,
+            $categoryList
         );
     }
 
@@ -210,7 +216,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getMappedSqlField()
     {
         $result = '';
-        if ($this->getAttribute() == 'category_ids') {
+        if (in_array($this->getAttribute(), ['category_ids', 'sku'])) {
             $result = parent::getMappedSqlField();
         } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
             $result = $this->joinedAttributes[$this->getAttribute()];

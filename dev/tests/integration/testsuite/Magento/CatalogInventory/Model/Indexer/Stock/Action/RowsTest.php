@@ -59,6 +59,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ProductRepository::class
         );
+
         $product = $productRepository->get('simple');
 
         $stockItem = $stockRegistry->getStockItem($product->getId(), 1);

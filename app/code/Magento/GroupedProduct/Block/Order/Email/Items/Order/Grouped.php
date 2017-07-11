@@ -7,6 +7,9 @@
  */
 namespace Magento\GroupedProduct\Block\Order\Email\Items\Order;
 
+/**
+ * @api
+ */
 class Grouped extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder
 {
     /**

@@ -8,6 +8,7 @@ namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\CommentParser;
 use Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -63,8 +64,16 @@ class WriterTest extends \PHPUnit_Framework_TestCase
      */
     private $filesystem;
 
+    /**
+     * @var CommentParser|Mock
+     */
+    private $commentParserMock;
+
     protected function setUp()
     {
+        $this->commentParserMock = $this->getMockBuilder(CommentParser::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->reader = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -86,7 +95,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->configFilePool,
             $this->deploymentConfig,
-            $this->formatter
+            $this->formatter,
+            $this->commentParserMock
         );
     }
 
@@ -122,6 +132,19 @@ class WriterTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
         ];
+        $testComments = [
+            'baz' => 'Baz comment2',
+            'bar' => 'Bar comment'
+        ];
+        $existedComments = [
+            'foo' => 'Foo comment',
+            'baz' => 'Baz comment',
+        ];
+        $expectedComments = [
+            'foo' => 'Foo comment',
+            'baz' => 'Baz comment2',
+            'bar' => 'Bar comment'
+        ];
 
         $this->deploymentConfig->expects($this->once())
             ->method('resetData');
@@ -134,9 +157,13 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())
             ->method('load')
             ->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('config.php')
+            ->willReturn($existedComments);
         $this->formatter->expects($this->once())
             ->method('format')
-            ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
+            ->with($testSetExpected[ConfigFilePool::APP_CONFIG], $expectedComments)
             ->willReturn([]);
         $this->dirWrite->expects($this->once())
             ->method('writeFile')
@@ -155,7 +182,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::CONFIG)
             ->willReturn($this->dirRead);
 
-        $this->object->saveConfig($testSetUpdate);
+        $this->object->saveConfig($testSetUpdate, false, null, $testComments);
     }
 
     public function testSaveConfigOverride()
@@ -186,6 +213,10 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->dirWrite->expects($this->any())
             ->method('isExist')
             ->willReturn(true);
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('config.php')
+            ->willReturn([]);
         $this->formatter->expects($this->once())
             ->method('format')
             ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
@@ -220,6 +251,10 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
         $this->configFilePool->method('getPaths')
             ->willReturn([ConfigFilePool::APP_ENV => 'env.php']);
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('env.php')
+            ->willReturn([]);
         $this->dirWrite->method('writeFile')
             ->willThrowException($exception);
         $this->reader->expects($this->any())

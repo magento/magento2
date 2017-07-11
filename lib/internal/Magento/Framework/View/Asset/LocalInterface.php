@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * Interface of an asset with locally accessible source file
+ * @api
  */
 interface LocalInterface extends AssetInterface
 {

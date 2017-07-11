@@ -7,7 +7,7 @@
 namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Subscription;
 
 use Magento\Analytics\Controller\Adminhtml\Subscription\Retry;
-use Magento\Analytics\Model\Subscription;
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -31,9 +31,9 @@ class RetryTest extends \PHPUnit_Framework_TestCase
     private $resultRedirectMock;
 
     /**
-     * @var Subscription|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionHandler|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $subscriptionMock;
+    private $subscriptionHandlerMock;
 
     /**
      * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -63,7 +63,7 @@ class RetryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->subscriptionMock = $this->getMockBuilder(Subscription::class)
+        $this->subscriptionHandlerMock = $this->getMockBuilder(SubscriptionHandler::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,7 +77,7 @@ class RetryTest extends \PHPUnit_Framework_TestCase
             Retry::class,
             [
                 'resultFactory' => $this->resultFactoryMock,
-                'subscription'  => $this->subscriptionMock,
+                'subscriptionHandler'  => $this->subscriptionHandlerMock,
                 'messageManager' => $this->messageManagerMock,
             ]
         );
@@ -98,9 +98,9 @@ class RetryTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('adminhtml')
             ->willReturnSelf();
-        $this->subscriptionMock
+        $this->subscriptionHandlerMock
             ->expects($this->once())
-            ->method('retry')
+            ->method('processEnabled')
             ->with()
             ->willReturn(true);
         $this->assertSame(
@@ -127,9 +127,9 @@ class RetryTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('adminhtml')
             ->willReturnSelf();
-        $this->subscriptionMock
+        $this->subscriptionHandlerMock
             ->expects($this->once())
-            ->method('retry')
+            ->method('processEnabled')
             ->with()
             ->willThrowException($exception);
         $this->messageManagerMock

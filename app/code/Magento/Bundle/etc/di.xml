@@ -81,6 +81,9 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
     </type>
+    <type name="Magento\Sales\Model\Order\Item">
+        <plugin name="bundle" type="Magento\Bundle\Model\Sales\Order\Plugin\Item" sortOrder="100" />
+    </type>
     <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
@@ -130,10 +133,67 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice">
+        <arguments>
+            <argument name="excludeAdjustments" xsi:type="array">
+                <item name="weee" xsi:type="string">weee</item>
+                <item name="weee_tax" xsi:type="string">weee_tax</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="bundle_price" xsi:type="object">\Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
         <arguments>
             <argument name="allowedProductTypes" xsi:type="array">
                 <item name="2" xsi:type="string">bundle</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
+        <arguments>
+            <argument name="estimators" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Model\ResourceModel\Indexer\Price">
+        <arguments>
+            <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
+            <argument name="connectionName" xsi:type="string">indexer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <arguments>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="bundle" xsi:type="number">136</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Bundle\Api\Data\OptionInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_bundle_option</item>
+                    <item name="identifierField" xsi:type="string">option_id</item>
+                </item>
+                <item name="Magento\Bundle\Model\Selection" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_bundle_selection</item>
+                    <item name="identifierField" xsi:type="string">selection_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\Bundle\Api\Data\OptionInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Bundle\Model\Selection" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
             </argument>
         </arguments>
     </type>

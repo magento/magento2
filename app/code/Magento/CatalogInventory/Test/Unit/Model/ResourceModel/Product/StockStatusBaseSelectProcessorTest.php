@@ -37,7 +37,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
         $this->stockStatusBaseSelectProcessor =  (new ObjectManager($this))->getObject(
             StockStatusBaseSelectProcessor::class,
             [
-                'resource' => $this->resource,
+                'resource' => $this->resource
             ]
         );
     }
@@ -46,10 +46,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $tableName = 'table_name';
 
-        $this->resource->expects($this->once())
-            ->method('getTableName')
-            ->with('cataloginventory_stock_status')
-            ->willReturn($tableName);
+        $this->resource->expects($this->once())->method('getTableName')->willReturn($tableName);
 
         $this->select->expects($this->once())
             ->method('join')

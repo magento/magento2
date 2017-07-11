@@ -10,6 +10,11 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverPool;
 
+/**
+ * Scope information block
+ *
+ * @api
+ */
 class Scope extends Template
 {
     /**
@@ -49,7 +54,7 @@ class Scope extends Template
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function toHtml()
     {

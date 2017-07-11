@@ -73,7 +73,7 @@ class CacheCleanerTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resourceMock,
                 'stockConfiguration' => $this->stockConfigurationMock,
                 'cacheContext' => $this->cacheContextMock,
-                'eventManager' => $this->eventManagerMock,
+                'eventManager' => $this->eventManagerMock
             ]
         );
     }

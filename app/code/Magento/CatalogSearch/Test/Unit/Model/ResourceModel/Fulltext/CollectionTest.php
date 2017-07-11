@@ -105,7 +105,7 @@ class CollectionTest extends BaseCollectionTest
                 'universalFactory' => $this->universalFactory,
                 'scopeConfig' => $this->scopeConfig,
                 'temporaryStorageFactory' => $temporaryStorageFactory,
-                'productLimitationFactory' => $productLimitationFactoryMock
+                'productLimitationFactory' => $productLimitationFactoryMock,
             ]
         );
 

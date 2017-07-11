@@ -11,8 +11,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Merge and hold scopes data from different sources
- *
- * @package Magento\Store\App\Config\Type
  */
 class Scopes implements ConfigTypeInterface
 {
@@ -36,6 +34,7 @@ class Scopes implements ConfigTypeInterface
         ConfigSourceInterface $source
     ) {
         $this->source = $source;
+        $this->data = new DataObject();
     }
 
     /**
@@ -43,8 +42,10 @@ class Scopes implements ConfigTypeInterface
      */
     public function get($path = '')
     {
-        if (!$this->data) {
-            $this->data = new DataObject($this->source->get());
+        $patchChunks = explode("/", $path);
+
+        if (!$this->data->getData($path) || count($patchChunks) == 1) {
+            $this->data->addData($this->source->get($path));
         }
 
         return $this->data->getData($path);
@@ -57,6 +58,6 @@ class Scopes implements ConfigTypeInterface
      */
     public function clean()
     {
-        $this->data = null;
+        $this->data = new DataObject();
     }
 }

@@ -9,8 +9,9 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <uiComponent name="analytics_subscription_form" acl="Magento_Analytics::analytics_settings"
-                         condition="analytics::can-view-notification"/>
+            <uiComponent name="analytics_subscription_form" aclResource="Magento_Analytics::analytics_settings">
+                <visibilityCondition name="can_view_notification" className="Magento\Analytics\Model\Condition\CanViewNotification"/>
+            </uiComponent>
             <block template="Magento_Analytics::dashboard/section.phtml"
                    class="Magento\Backend\Block\Template"
                    name="analytics_service_external_link"

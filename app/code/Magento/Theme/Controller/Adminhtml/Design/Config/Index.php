@@ -9,6 +9,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * Design Config Settings index page action controller
+ */
 class Index extends Action
 {
     /**

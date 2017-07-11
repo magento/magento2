@@ -13,6 +13,8 @@ use Magento\Vault\Block\AbstractTokenRenderer;
 
 /**
  * Class VaultTokenRenderer
+ *
+ * @api
  */
 class VaultTokenRenderer extends AbstractTokenRenderer
 {

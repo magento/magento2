@@ -7,7 +7,9 @@ namespace Magento\Theme\Block\Html;
 
 /**
  * Html pager block
+ *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @api
  */
 class Pager extends \Magento\Framework\View\Element\Template
 {

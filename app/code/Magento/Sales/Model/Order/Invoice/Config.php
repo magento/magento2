@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order\Invoice;
 
 /**
  * Order invoice configuration model
+ *
+ * @api
  */
 class Config extends \Magento\Sales\Model\Order\Total\Config\Base
 {

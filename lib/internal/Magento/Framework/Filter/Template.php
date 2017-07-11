@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\Filter;
 
+/**
+ * @api
+ */
 class Template implements \Zend_Filter_Interface
 {
     /**

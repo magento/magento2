@@ -97,11 +97,9 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->builder = $this->getMock(\Magento\Rule\Model\Condition\Sql\Builder::class, [], [], '', false);
         $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
         $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
-        $this->widgetConditionsHelper = $this->getMock(
-            \Magento\Widget\Helper\Conditions::class,
-            [],
-            ['serializer' => $this->serializer]
-        );
+        $this->widgetConditionsHelper = $this->getMockBuilder(\Magento\Widget\Helper\Conditions::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->design = $this->getMock(\Magento\Framework\View\DesignInterface::class);
 
@@ -271,6 +269,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'addStoreFilter',
                 'setPageSize',
                 'setCurPage',
+                'distinct'
             ])->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())->method('setVisibility')
@@ -284,6 +283,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
         $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
         $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
+        $collection->expects($this->once())->method('distinct')->willReturnSelf();
 
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');

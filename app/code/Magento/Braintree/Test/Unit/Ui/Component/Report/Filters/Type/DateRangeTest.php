@@ -53,7 +53,7 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects(static::any())
+        $this->contextMock->expects(static::atLeastOnce())
             ->method('getProcessor')
             ->willReturn($processor);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
@@ -68,6 +68,13 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['applyFilterModifier'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->contextMock->expects($this->any())
+            ->method('getNamespace')
+            ->willReturn(DateRange::NAME);
+        $this->contextMock->expects($this->any())
+            ->method('addComponentDefinition')
+            ->with(DateRange::NAME, ['extends' => DateRange::NAME]);
 
         $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
     }
@@ -85,20 +92,11 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
     public function testPrepare($name, $filterData, $expectedCondition)
     {
         /** @var FormDate PHPUnit_Framework_MockObject_MockObject|$uiComponent */
-        $uiComponent = $this->getMockBuilder(FormDate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uiComponent = $this->getMockBuilder(FormDate::class)->disableOriginalConstructor()->getMock();
 
         $uiComponent->expects($this->any())
             ->method('getContext')
             ->willReturn($this->contextMock);
-
-        $this->contextMock->expects($this->any())
-            ->method('getNamespace')
-            ->willReturn(DateRange::NAME);
-        $this->contextMock->expects($this->any())
-            ->method('addComponentDefinition')
-            ->with(DateRange::NAME, ['extends' => DateRange::NAME]);
 
         $this->contextMock->expects($this->any())
             ->method('getFiltersParams')
@@ -118,11 +116,11 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
                 $uiComponent->method('convertDate')
                     ->willReturnMap([
                         [
-                            $filterData[$name]['from'], 0, 0, 0,
+                            $filterData[$name]['from'], 0, 0, 0, true,
                             new \DateTime($filterData[$name]['from'], new \DateTimeZone('UTC'))
                         ],
                         [
-                            $filterData[$name]['to'], 23, 59, 59,
+                            $filterData[$name]['to'], 23, 59, 59, true,
                             new \DateTime($filterData[$name]['to'] . ' 23:59:00', new \DateTimeZone('UTC'))
                         ],
                     ]);

@@ -14,6 +14,7 @@ use Magento\Framework\Indexer\StateInterface;
 /**
  * Customer address model
  *
+ * @api
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -376,5 +377,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             );
         }
         return $this->attributeList;
+    }
+
+    /**
+     * Retrieve attribute set id for customer address.
+     *
+     * @return int
+     */
+    public function getAttributeSetId()
+    {
+        return parent::getAttributeSetId() ?: AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS;
     }
 }

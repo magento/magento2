@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 /**
  * Catalog Layer Decimal attribute Filter Resource Model
  *
+ * @api
+ *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb

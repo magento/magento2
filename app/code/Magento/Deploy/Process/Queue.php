@@ -13,9 +13,9 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 
 /**
- * Class Queue
+ * Deployment Queue
  *
- * @api
+ * Deploy packages in parallel forks (if available)
  */
 class Queue
 {
@@ -187,24 +187,15 @@ class Queue
     {
         /** @var Package $package */
         $package = $packageJob['package'];
-        $parentPackagesDeployed = true;
         if ($package->getParent() && $package->getParent() !== $package) {
-            if (!$this->isDeployed($package->getParent())) {
-                $parentPackagesDeployed = false;
-            } else {
-                $dependencies = $packageJob['dependencies'];
-                foreach ($dependencies as $parentPackage) {
-                    if (!$this->isDeployed($parentPackage)) {
-                        $parentPackagesDeployed = false;
-                        break;
-                    }
+            foreach ($packageJob['dependencies'] as $dependencyName => $dependency) {
+                if (!$this->isDeployed($dependency)) {
+                    $this->assertAndExecute($dependencyName, $packages, $packages[$dependencyName]);
                 }
             }
         }
-        if (
-            $parentPackagesDeployed
-            && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
-        ) {
+        if (!$this->isDeployed($package)
+            && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))) {
             unset($packages[$name]);
             $this->execute($package);
         }

@@ -8,12 +8,15 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AbstractAction
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
@@ -164,6 +167,9 @@ abstract class AbstractAction
 
     /**
      * Return main index table name
+     *
+     * This table should be used on frontend(clients)
+     * The name is switched between 'catalog_category_product_index' and 'catalog_category_product_index_replica'
      *
      * @return string
      */

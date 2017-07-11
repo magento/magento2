@@ -6,7 +6,6 @@
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
 use Magento\Framework\ObjectManager\Config\Compiled;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 class CompiledTest extends \PHPUnit_Framework_TestCase
@@ -17,11 +16,6 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serializerMock;
-
-    /**
      * @var \Magento\Framework\ObjectManager\Config\Compiled
      */
     private $compiled;
@@ -29,15 +23,14 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
 
         $initialData = [
             'arguments' => [
                 'type1' => 'initial serialized configuration for type1',
                 'class_with_no_arguments_serialized' => null,
-                'class_with_arguments_serialized' => 'serialized arguments',
-                'class_with_arguments_unserialized' => ['unserialized', 'arguments'],
-                'class_with_no_arguments_unserialized' => [],
+                'class_with_arguments_string' => 'string arguments',
+                'class_with_arguments_array' => ['unserialized', 'arguments'],
+                'class_with_no_arguments_empty_array' => [],
             ],
             'instanceTypes' => [
                 'instanceType1' => 'instanceTypeValue1',
@@ -53,58 +46,79 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             Compiled::class,
             [
                 'data' => $initialData,
-                'serializer' => $this->serializerMock
             ]
         );
     }
 
-    public function testExtend()
+    /**
+     * Test is it possible extend/overwrite arguments for the DI.
+     *
+     */
+    public function testExtendArguments()
     {
         $configuration = [
             'arguments' => [
-                'type1' => 'serialized configuration for type1',
-                'type2' => 'serialized configuration for type2'
+                'type1' => 'configuration for type1',
+                'type2' => [
+                    'argument2_1' => 'newArgumentValue2_1',
+                ]
             ],
             'instanceTypes' => [
                 'instanceType2' => 'newInstanceTypeValue2',
-                'instanceType3' => 'newInstanceTypeValue3'
+                'instanceType3' => 'newInstanceTypeValue3',
             ],
             'preferences' => [
-                'preference1' => 'newPreferenceValue1'
-            ]
+                'preference1' => 'newPreferenceValue1',
+            ],
         ];
         $expectedArguments = [
-            'type1' => [
-                'argument1_1' => 'newArgumentValue1_1'
-            ],
+            'type1' => 'configuration for type1',
             'type2' => [
-                'argument2_1' => 'newArgumentValue2_1'
+                'argument2_1' => 'newArgumentValue2_1',
             ]
         ];
-        $expectedVirtualTypes = [
-            'instanceType1' => 'instanceTypeValue1',
-            'instanceType2' => 'newInstanceTypeValue2',
-            'instanceType3' => 'newInstanceTypeValue3'
-        ];
-        $expectedPreferences = [
-            'preference1' => 'newPreferenceValue1',
-            'preference2' => 'preferenceValue2'
-        ];
-
-        $this->serializerMock->expects($this->at(0))
-            ->method('unserialize')
-            ->with($configuration['arguments']['type1'])
-            ->willReturn($expectedArguments['type1']);
-        $this->serializerMock->expects($this->at(1))
-            ->method('unserialize')
-            ->with($configuration['arguments']['type2'])
-            ->willReturn($expectedArguments['type2']);
 
         $this->compiled->extend($configuration);
         foreach ($expectedArguments as $type => $arguments) {
             $this->assertEquals($arguments, $this->compiled->getArguments($type));
         }
-        $this->assertEquals($expectedVirtualTypes, $this->compiled->getVirtualTypes());
+    }
+
+    /**
+     * Test getting virtual types from the DI.
+     */
+    public function testVirtualTypes()
+    {
+        $configuration = [
+            'instanceTypes' => [
+                'instanceType2' => 'newInstanceTypeValue2',
+                'instanceType3' => 'newInstanceTypeValue3'
+            ],
+        ];
+        $expectedTypes = [
+            'instanceType1' => 'instanceTypeValue1',
+            'instanceType2' => 'newInstanceTypeValue2',
+            'instanceType3' => 'newInstanceTypeValue3'
+        ];
+        $this->compiled->extend($configuration);
+        $this->assertEquals($expectedTypes, $this->compiled->getVirtualTypes());
+    }
+
+    /**
+     * Test getting preferences from the DI.
+     */
+    public function testPreferences()
+    {
+        $configuration = [
+            'preferences' => [
+                'preference1' => 'newPreferenceValue1'
+            ]
+        ];
+        $expectedPreferences = [
+            'preference1' => 'newPreferenceValue1',
+            'preference2' => 'preferenceValue2'
+        ];
+        $this->compiled->extend($configuration);
         $this->assertEquals($expectedPreferences, $this->compiled->getPreferences());
     }
 
@@ -113,15 +127,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetArgumentsSerialized()
     {
-        $unserializedArguments = ['unserialized', 'arguments'];
+        $unserializedArguments = 'string arguments';
 
-        // method called twice but after one unserialization, unserialized version should be stored
-        $this->serializerMock->expects($this->once())->method('unserialize')
-            ->with('serialized arguments')
-            ->willReturn($unserializedArguments);
-
-        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_serialized'));
-        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_serialized'));
+        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_string'));
+        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_string'));
     }
 
     /**
@@ -129,7 +138,6 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetArgumentsSerializedEmpty()
     {
-        $this->serializerMock->expects($this->never())->method('unserialize');
         $this->assertSame([], $this->compiled->getArguments('class_with_no_arguments_serialized'));
     }
 
@@ -139,8 +147,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     public function testGetArgumentsUnserialized()
     {
         $unserializedArguments = ['unserialized', 'arguments'];
-        $this->serializerMock->expects($this->never())->method('unserialize');
-        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_unserialized'));
+        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_array'));
     }
 
     /**
@@ -148,8 +155,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetArgumentsUnserializedEmpty()
     {
-        $this->serializerMock->expects($this->never())->method('unserialize');
-        $this->assertSame([], $this->compiled->getArguments('class_with_no_arguments_unserialized'));
+        $this->assertSame([], $this->compiled->getArguments('class_with_no_arguments_empty_array'));
     }
 
     /**
@@ -157,7 +163,124 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetArgumentsNotDefined()
     {
-        $this->serializerMock->expects($this->never())->method('unserialize');
         $this->assertSame(null, $this->compiled->getArguments('class_not_stored_in_config'));
+    }
+
+    /**
+     * Test that $arguments, $virtualTypes and $preferences initializing in construct must be array.
+     *
+     * @param $data
+     * @param array $expectedResult
+     *
+     * @dataProvider constructorFieldsValidation
+     */
+    public function testConstructorFieldsValidation($data, $expectedResult)
+    {
+        /** @var Compiled $compiled */
+        $compiled = $this->objectManager->getObject(
+            Compiled::class,
+            [
+                'data' => $data,
+            ]
+        );
+
+        $reflection = new \ReflectionClass(Compiled::class);
+        $arguments = $reflection->getProperty('arguments');
+        $arguments->setAccessible(true);
+
+        $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
+        $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
+        $this->assertEquals($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
+    }
+
+    /**
+     * Data provider for testConstructorFieldsValidation.
+     *
+     * @return array
+     */
+    public function constructorFieldsValidation()
+    {
+        return [
+            [
+                'no array',
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [],
+                    'preferences' => [],
+                ],
+            ],
+            [
+                [
+                    'arguments' => 1,
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => 'test',
+                ],
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => [],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test that $arguments, $virtualTypes and $preferences initializing in extend must be array.
+     *
+     * @param $data
+     * @param array $expectedResult
+     *
+     * @dataProvider extendFieldsValidation
+     */
+    public function testExtendFieldsValidation($data, $expectedResult)
+    {
+        /** @var Compiled $compiled */
+        $compiled = $this->objectManager->getObject(
+            Compiled::class,
+            [
+                'data' => $data,
+            ]
+        );
+
+        $compiled->extend($data);
+
+        $reflection = new \ReflectionClass(Compiled::class);
+        $arguments = $reflection->getProperty('arguments');
+        $arguments->setAccessible(true);
+
+        $this->assertEquals($expectedResult['arguments'], $arguments->getValue($compiled));
+        $this->assertEquals($expectedResult['preferences'], $compiled->getPreferences());
+        $this->assertEquals($expectedResult['instanceTypes'], $compiled->getVirtualTypes());
+    }
+
+    /**
+     * Data provider for testExtendFieldsValidation.
+     *
+     * @return array
+     */
+    public function extendFieldsValidation()
+    {
+        return [
+            [
+                [],
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [],
+                    'preferences' => [],
+                ],
+            ],
+            [
+                [
+                    'arguments' => 1,
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => 'test',
+                ],
+                [
+                    'arguments' => [],
+                    'instanceTypes' => [1, 2, 3],
+                    'preferences' => [],
+                ],
+            ],
+        ];
     }
 }

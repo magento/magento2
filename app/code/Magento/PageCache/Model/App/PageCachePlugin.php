@@ -6,8 +6,6 @@
 
 namespace Magento\PageCache\Model\App;
 
-use Magento\Framework\Exception\LocalizedException;
-
 class PageCachePlugin
 {
     /**

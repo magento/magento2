@@ -7,6 +7,9 @@ namespace Magento\Framework\Indexer;
 
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 
+/**
+ * @api Implement custom Handler
+ */
 interface HandlerInterface
 {
     /**

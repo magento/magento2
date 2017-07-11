@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'underscore',
     'uiCollection',
@@ -108,11 +111,11 @@ define([
          * @param {Number} position - element position
          */
         initPosition: function (position) {
-            var pos = ~~position;
+            var pos = parseInt(position, 10);
 
             this.parentComponent().setMaxPosition(pos, this);
 
-            if (!pos) {
+            if (!pos && pos !== 0) {
                 this.position = this.parentComponent().maxPosition;
             }
         },
