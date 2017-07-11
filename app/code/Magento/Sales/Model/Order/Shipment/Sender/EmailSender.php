@@ -11,6 +11,8 @@ use Magento\Framework\DataObject;
 
 /**
  * Email notification sender for Shipment.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailSender extends Sender implements SenderInterface
 {
