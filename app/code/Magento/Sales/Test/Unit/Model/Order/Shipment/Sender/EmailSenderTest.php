@@ -270,7 +270,8 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
                     'email_shipment_set_template_vars_before',
                     [
                         'sender' => $this->subject,
-                        'transport' => $transport,
+                        'transport' => $transport->getData(),
+                        'transportObject' => $transport,
                     ]
                 );
 
