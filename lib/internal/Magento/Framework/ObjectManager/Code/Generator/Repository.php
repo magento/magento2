@@ -223,13 +223,13 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         /** @var ParameterReflection $parameterReflection */
         $parameterReflection = $methodReflection->getParameters()[0];
         $body = "if (!\$id) {\n"
-            . "    throw new " . InputException::class . "('ID required');\n"
+            . "    throw new \\" . InputException::class . "('ID required');\n"
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
             . "    \$entity = \$this->" . $this->_getSourcePersistorPropertyName()
             . "->loadEntity(\$id);\n"
             . "    if (!\$entity->getId()) {\n"
-            . "        throw new " . NoSuchEntityException::class . "('Requested entity doesn\\'t exist');\n"
+            . "        throw new \\" . NoSuchEntityException::class . "('Requested entity doesn\\'t exist');\n"
             . "    }\n"
             . "    \$this->registry[\$id] = \$entity;\n"
             . "}\n"
@@ -257,11 +257,11 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'throws',
-                        'description' => InputException::class,
+                        'description' => '\\' . InputException::class,
                     ],
                     [
                         'name' => 'throws',
-                        'description' => NoSuchEntityException::class,
+                        'description' => '\\' . NoSuchEntityException::class,
                     ],
                 ],
             ]
@@ -510,7 +510,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'searchCriteria',
-                    'type' => SearchCriteriaInterface::class,
+                    'type' => '\\' . SearchCriteriaInterface::class,
                 ],
             ],
             'body' => $body,
@@ -519,7 +519,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => SearchCriteriaInterface::class . ' $searchCriteria',
+                        'description' => '\\' . SearchCriteriaInterface::class . ' $searchCriteria',
                     ],
                     [
                         'name' => 'return',
