@@ -43,6 +43,19 @@ define([
         emailCheckTimeout: 0,
 
         /**
+         * Initializes regular properties of instance.
+         *
+         * @returns {Object} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+
+            this.isPasswordVisible = this.resolveInitialPasswordVisibility();
+
+            return this;
+        },
+
+        /**
          * Initializes observable properties of instance
          *
          * @returns {Object} Chainable.
@@ -92,6 +105,7 @@ define([
                 self.isPasswordVisible(false);
             }).fail(function () {
                 self.isPasswordVisible(true);
+                checkoutData.setCheckedEmailValue(self.email());
             }).always(function () {
                 self.isLoading(false);
             });
@@ -153,6 +167,19 @@ define([
                     fullScreenLoader.stopLoader();
                 });
             }
+        },
+
+        /**
+         * Resolves an initial sate of a login form.
+         *
+         * @returns {Boolean} - initial visibility state.
+         */
+        resolveInitialPasswordVisibility: function () {
+            if (checkoutData.getInputFieldEmailValue() != '') {
+                return (checkoutData.getInputFieldEmailValue() == checkoutData.getCheckedEmailValue())
+            }
+
+            return false;
         }
     });
 });
