@@ -22,8 +22,8 @@ Preview,Preview
 Unknown,Unknown
 "You deleted the email template.","You deleted the email template."
 "The email template is currently being used.","The email template is currently being used."
-"We can\'t delete email template data right now. Please review log and try again.","We can\'t delete email template data right now. Please review log and try again."
-"We can\'t find an email template to delete.","We can\'t find an email template to delete."
+"We can't delete email template data right now. Please review log and try again.","We can't delete email template data right now. Please review log and try again."
+"We can't find an email template to delete.","We can't find an email template to delete."
 "Edit Template","Edit Template"
 "Edit System Template","Edit System Template"
 "New Template","New Template"
@@ -68,7 +68,7 @@ City,City
 "<pre> %1 </pre>","<pre> %1 </pre>"
 "CSS inlining error:","CSS inlining error:"
 "Error filtering template: %s","Error filtering template: %s"
-"We're sorry, an error has occurred while generating this email.","We're sorry, an error has occurred while generating this email."
+"We're sorry, an error has occurred while generating this content.","We're sorry, an error has occurred while generating this content."
 "Invalid sender data","Invalid sender data"
 Title,Title
 "Load default template","Load default template"
@@ -76,7 +76,9 @@ Template,Template
 "Are you sure you want to strip tags?","Are you sure you want to strip tags?"
 "Are you sure you want to delete this template?","Are you sure you want to delete this template?"
 "The template did not load. Please review the log for details.","The template did not load. Please review the log for details."
+Footer,Footer
 "Thank you, %store_name","Thank you, %store_name"
+Header,Header
 Communications,Communications
 "No Templates Found","No Templates Found"
 ID,ID
@@ -85,13 +87,13 @@ Updated,Updated
 Subject,Subject
 "Template Type","Template Type"
 Action,Action
-"Logo Image","Logo Image"
 "Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in the width/height fields below.","Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in the width/height fields below."
+"Logo Image","Logo Image"
 "Logo Image Alt","Logo Image Alt"
-"Logo Width","Logo Width"
 "Necessary only if an image has been uploaded above. Enter number of pixels, without appending ""px"".","Necessary only if an image has been uploaded above. Enter number of pixels, without appending ""px""."
-"Logo Height","Logo Height"
+"Logo Width","Logo Width"
 "Necessary only if an image has been uploaded above. Enter image height size in pixels without appending ""px"".","Necessary only if an image has been uploaded above. Enter image height size in pixels without appending ""px""."
-"Header Template","Header Template"
+"Logo Height","Logo Height"
 "Email template chosen based on theme fallback, when the ""Default"" option is selected.","Email template chosen based on theme fallback, when the ""Default"" option is selected."
+"Header Template","Header Template"
 "Footer Template","Footer Template"
