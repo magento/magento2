@@ -143,8 +143,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Config $eavConfig
      * @param FilterPool $filterPool
      * @param FileProcessorFactory $fileProcessorFactory
+     * @param ContextInterface $context
      * @param array $meta
      * @param array $data
+     * @param bool $allowToShowHiddenAttributes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -350,12 +352,33 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $meta[$code]['arguments']['data']['config']['componentType'] = Field::NAME;
             $meta[$code]['arguments']['data']['config']['visible'] = $this->canShowAttribute($attribute);
 
-
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
 
         $this->processWebsiteMeta($meta);
         return $meta;
+    }
+
+    /**
+     * Check whether the specific attribute can be shown in form: customer registration, customer edit, etc...
+     *
+     * @param Attribute $customerAttribute
+     * @return bool
+     */
+    private function canShowAttributeInForm(AbstractAttribute $customerAttribute)
+    {
+        $isRegistration = $this->context->getRequestParam($this->getRequestFieldName()) === null;
+
+        if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
+            return is_array($customerAttribute->getUsedInForms()) &&
+                (
+                    (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
+                    (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
+                );
+        } else {
+            return is_array($customerAttribute->getUsedInForms()) &&
+                in_array('customer_address_edit', $customerAttribute->getUsedInForms());
+        }
     }
 
     /**
@@ -366,23 +389,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function canShowAttribute(AbstractAttribute $customerAttribute)
     {
-        $isRegistration = is_null($this->context->getRequestParam($this->getRequestFieldName()));
         $userDefined = (bool) $customerAttribute->getIsUserDefined();
-
         if (!$userDefined) {
             return $customerAttribute->getIsVisible();
         }
 
-        if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
-            $canShowOnForm = is_array($customerAttribute->getUsedInForms()) &&
-                (
-                    (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
-                    (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
-                );
-        } else {
-            $canShowOnForm = is_array($customerAttribute->getUsedInForms()) &&
-                in_array('customer_address_edit', $customerAttribute->getUsedInForms());
-        }
+        $canShowOnForm = $this->canShowAttributeInForm($customerAttribute);
 
         return ($this->allowToShowHiddenAttributes && $canShowOnForm) ||
             (!$this->allowToShowHiddenAttributes && $canShowOnForm && $customerAttribute->getIsVisible());

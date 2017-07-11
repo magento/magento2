@@ -338,6 +338,66 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         return $typeAddressMock;
     }
 
+    private function injectVisibilityProps(
+        \PHPUnit_Framework_MockObject_MockObject $attributeMock,
+        \PHPUnit_Framework_MockObject_MockObject $attributeBooleanMock,
+        array $options = []
+    ) {
+        $attributeCode = self::ATTRIBUTE_CODE;
+        if (isset($options[self::ATTRIBUTE_CODE]['specific_code_prefix'])) {
+            $attributeCode = $attributeCode . $options[self::ATTRIBUTE_CODE]['specific_code_prefix'];
+        }
+
+        $attributeMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+
+        if (isset($options[self::ATTRIBUTE_CODE]['visible'])) {
+            $attributeMock->expects($this->any())
+                ->method('getIsVisible')
+                ->willReturn($options[self::ATTRIBUTE_CODE]['visible']);
+        }
+
+        if (isset($options[self::ATTRIBUTE_CODE]['user_defined'])) {
+            $attributeMock->expects($this->any())
+                ->method('getIsUserDefined')
+                ->willReturn($options[self::ATTRIBUTE_CODE]['user_defined']);
+        }
+
+        if (isset($options[self::ATTRIBUTE_CODE]['is_used_in_forms'])) {
+            $attributeMock->expects($this->any())
+                ->method('getUsedInForms')
+                ->willReturn($options[self::ATTRIBUTE_CODE]['is_used_in_forms']);
+        }
+
+        $booleanAttributeCode = 'test-code-boolean';
+        if (isset($options['test-code-boolean']['specific_code_prefix'])) {
+            $booleanAttributeCode = $booleanAttributeCode . $options['test-code-boolean']['specific_code_prefix'];
+        }
+
+        $attributeBooleanMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn($booleanAttributeCode);
+
+        if (isset($options['test-code-boolean']['visible'])) {
+            $attributeBooleanMock->expects($this->any())
+                ->method('getIsVisible')
+                ->willReturn($options['test-code-boolean']['visible']);
+        }
+
+        if (isset($options['test-code-boolean']['user_defined'])) {
+            $attributeBooleanMock->expects($this->any())
+                ->method('getIsUserDefined')
+                ->willReturn($options['test-code-boolean']['user_defined']);
+        }
+
+        if (isset($options['test-code-boolean']['is_used_in_forms'])) {
+            $attributeBooleanMock->expects($this->any())
+                ->method('getUsedInForms')
+                ->willReturn($options['test-code-boolean']['is_used_in_forms']);
+        }
+    }
+
     /**
      * @return AbstractAttribute[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
@@ -363,18 +423,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $attributeCode = self::ATTRIBUTE_CODE;
-        if (isset($options[self::ATTRIBUTE_CODE]['specific_code_prefix'])) {
-            $attributeCode = $attributeCode . $options[self::ATTRIBUTE_CODE]['specific_code_prefix'];
-        }
-
         $sourceMock->expects($this->any())
             ->method('getAllOptions')
             ->willReturn(self::OPTIONS_RESULT);
-
-        $attributeMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
 
         $attributeMock->expects($this->any())
             ->method('getDataUsingMethod')
@@ -383,24 +434,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                     return $origName;
                 }
             );
-
-        if (isset($options[self::ATTRIBUTE_CODE]['visible'])) {
-            $attributeMock->expects($this->any())
-                ->method('getIsVisible')
-                ->willReturn($options[self::ATTRIBUTE_CODE]['visible']);
-        }
-
-        if (isset($options[self::ATTRIBUTE_CODE]['user_defined'])) {
-            $attributeMock->expects($this->any())
-                ->method('getIsUserDefined')
-                ->willReturn($options[self::ATTRIBUTE_CODE]['user_defined']);
-        }
-
-        if (isset($options[self::ATTRIBUTE_CODE]['is_used_in_forms'])) {
-            $attributeMock->expects($this->any())
-                ->method('getUsedInForms')
-                ->willReturn($options[self::ATTRIBUTE_CODE]['is_used_in_forms']);
-        }
 
         $attributeMock->expects($this->any())
             ->method('usesSource')
@@ -425,14 +458,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $booleanAttributeCode = 'test-code-boolean';
-        if (isset($options['test-code-boolean']['specific_code_prefix'])) {
-            $booleanAttributeCode = $booleanAttributeCode . $options['test-code-boolean']['specific_code_prefix'];
-        }
 
-        $attributeBooleanMock->expects($this->exactly(2))
-            ->method('getAttributeCode')
-            ->willReturn($booleanAttributeCode);
         $attributeBooleanMock->expects($this->any())
             ->method('getFrontendInput')
             ->willReturn('boolean');
@@ -443,24 +469,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                     return $origName;
                 }
             );
-
-        if (isset($options['test-code-boolean']['visible'])) {
-            $attributeBooleanMock->expects($this->any())
-                ->method('getIsVisible')
-                ->willReturn($options['test-code-boolean']['visible']);
-        }
-
-        if (isset($options['test-code-boolean']['user_defined'])) {
-            $attributeBooleanMock->expects($this->any())
-                ->method('getIsUserDefined')
-                ->willReturn($options['test-code-boolean']['user_defined']);
-        }
-
-        if (isset($options['test-code-boolean']['is_used_in_forms'])) {
-            $attributeBooleanMock->expects($this->any())
-                ->method('getUsedInForms')
-                ->willReturn($options['test-code-boolean']['is_used_in_forms']);
-        }
 
         $attributeBooleanMock->expects($this->once())
             ->method('usesSource')
@@ -473,7 +481,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 [$attributeBooleanMock, $this->logicalNot($this->isEmpty()), []],
             ]);
         $mocks = [$attributeMock, $attributeBooleanMock];
-
+        $this->injectVisibilityProps($attributeMock, $attributeBooleanMock, $options);
         if ($type == "address") {
             $mocks[] = $this->getCountryAttrMock();
         }
@@ -1144,7 +1152,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetDataWithVisibleAttributes()
     {
 
-        $firstAttributesBundle = $this->getAttributeMock('customer',
+        $firstAttributesBundle = $this->getAttributeMock(
+            'customer',
             [
                 self::ATTRIBUTE_CODE => [
                     'visible' => true,
@@ -1160,7 +1169,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        $secondAttributesBundle = $this->getAttributeMock('customer',
+        $secondAttributesBundle = $this->getAttributeMock(
+            'customer',
             [
                 self::ATTRIBUTE_CODE => [
                     'visible' => true,
@@ -1207,7 +1217,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDataWithVisibleAttributesWithAccountEdit()
     {
-        $firstAttributesBundle = $this->getAttributeMock('customer',
+        $firstAttributesBundle = $this->getAttributeMock(
+            'customer',
             [
                 self::ATTRIBUTE_CODE => [
                     'visible' => true,
@@ -1223,7 +1234,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        $secondAttributesBundle = $this->getAttributeMock('customer',
+        $secondAttributesBundle = $this->getAttributeMock(
+            'customer',
             [
                 self::ATTRIBUTE_CODE => [
                     'visible' => true,
@@ -1271,100 +1283,112 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Retrieve all customer variations of attributes with all variations of visibility
+     *
+     * @param bool $isRegistration
+     * @return array
+     */
+    private function getCustomerAttributeExpectations($isRegistration)
+    {
+        return [
+            self::ATTRIBUTE_CODE . "_1" => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'options' => 'test-options',
+                            'visible' => !$isRegistration,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                        ],
+                    ],
+                ],
+            ],
+            self::ATTRIBUTE_CODE . "_2" => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'options' => 'test-options',
+                            'visible' => true,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                        ],
+                    ],
+                ],
+            ],
+            'test-code-boolean_1' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'visible' => $isRegistration,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                            'prefer' => 'toggle',
+                            'valueMap' => [
+                                'true' => 1,
+                                'false' => 0,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'test-code-boolean_2' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => 'frontend_input',
+                            'formElement' => 'frontend_input',
+                            'visible' => $isRegistration,
+                            'required' => 'is_required',
+                            'label' => __('frontend_label'),
+                            'sortOrder' => 'sort_order',
+                            'notice' => 'note',
+                            'default' => 'default_value',
+                            'size' => 'multiline_count',
+                            'componentType' => Field::NAME,
+                            'prefer' => 'toggle',
+                            'valueMap' => [
+                                'true' => 1,
+                                'false' => 0,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Retrieve all variations of attributes with all variations of visibility
      *
+     * @param bool $isRegistration
      * @return  array
      */
     private function getExpectationForVisibleAttributes($isRegistration = true)
     {
         return [
             'customer' => [
-                'children' => [
-                    self::ATTRIBUTE_CODE . "_1" => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => 'frontend_input',
-                                    'formElement' => 'frontend_input',
-                                    'options' => 'test-options',
-                                    'visible' => !$isRegistration,
-                                    'required' => 'is_required',
-                                    'label' => __('frontend_label'),
-                                    'sortOrder' => 'sort_order',
-                                    'notice' => 'note',
-                                    'default' => 'default_value',
-                                    'size' => 'multiline_count',
-                                    'componentType' => Field::NAME,
-                                ],
-                            ],
-                        ],
-                    ],
-                    self::ATTRIBUTE_CODE . "_2" => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => 'frontend_input',
-                                    'formElement' => 'frontend_input',
-                                    'options' => 'test-options',
-                                    'visible' => true,
-                                    'required' => 'is_required',
-                                    'label' => __('frontend_label'),
-                                    'sortOrder' => 'sort_order',
-                                    'notice' => 'note',
-                                    'default' => 'default_value',
-                                    'size' => 'multiline_count',
-                                    'componentType' => Field::NAME,
-                                ],
-                            ],
-                        ],
-                    ],
-                    'test-code-boolean_1' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => 'frontend_input',
-                                    'formElement' => 'frontend_input',
-                                    'visible' => $isRegistration,
-                                    'required' => 'is_required',
-                                    'label' => __('frontend_label'),
-                                    'sortOrder' => 'sort_order',
-                                    'notice' => 'note',
-                                    'default' => 'default_value',
-                                    'size' => 'multiline_count',
-                                    'componentType' => Field::NAME,
-                                    'prefer' => 'toggle',
-                                    'valueMap' => [
-                                        'true' => 1,
-                                        'false' => 0,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'test-code-boolean_2' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => 'frontend_input',
-                                    'formElement' => 'frontend_input',
-                                    'visible' => $isRegistration,
-                                    'required' => 'is_required',
-                                    'label' => __('frontend_label'),
-                                    'sortOrder' => 'sort_order',
-                                    'notice' => 'note',
-                                    'default' => 'default_value',
-                                    'size' => 'multiline_count',
-                                    'componentType' => Field::NAME,
-                                    'prefer' => 'toggle',
-                                    'valueMap' => [
-                                        'true' => 1,
-                                        'false' => 0,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
+                'children' => $this->getCustomerAttributeExpectations($isRegistration),
             ],
             'address' => [
                 'children' => [
