@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class InvoiceCommentSender
@@ -71,13 +72,14 @@ class InvoiceCommentSender extends NotifySender
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
         ];
+        $transport = new DataObject($transport);
 
         $this->eventManager->dispatch(
             'email_invoice_comment_set_template_vars_before',
             ['sender' => $this, 'transport' => $transport]
         );
 
-        $this->templateContainer->setTemplateVars($transport);
+        $this->templateContainer->setTemplateVars($transport->getData());
 
         return $this->checkAndSend($order, $notify);
     }

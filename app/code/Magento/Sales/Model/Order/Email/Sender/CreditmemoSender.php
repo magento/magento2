@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class CreditmemoSender
@@ -113,13 +114,14 @@ class CreditmemoSender extends Sender
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
             ];
+            $transport = new DataObject($transport);
 
             $this->eventManager->dispatch(
                 'email_creditmemo_set_template_vars_before',
                 ['sender' => $this, 'transport' => $transport]
             );
 
-            $this->templateContainer->setTemplateVars($transport);
+            $this->templateContainer->setTemplateVars($transport->getData());
 
             if ($this->checkAndSend($order)) {
                 $creditmemo->setEmailSent(true);
