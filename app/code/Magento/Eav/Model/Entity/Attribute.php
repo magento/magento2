@@ -23,7 +23,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * Attribute code max length
      */
-    const ATTRIBUTE_CODE_MAX_LENGTH = 255;
+    const ATTRIBUTE_CODE_MAX_LENGTH = 60;
 
     /**
      * Cache tag
