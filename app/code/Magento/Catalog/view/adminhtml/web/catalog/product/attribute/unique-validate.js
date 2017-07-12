@@ -10,6 +10,7 @@ define([
     'use strict';
 
     return function (config) {
+        var msg = '';
         var _config = jQuery.extend({
             element: null,
             message: '',
@@ -17,9 +18,7 @@ define([
         }, config);
 
         if (typeof _config.element === 'string') {
-            var msg = '';
-
-            var messager = function() {
+            var messager = function () {
                 return msg;
             };
 
