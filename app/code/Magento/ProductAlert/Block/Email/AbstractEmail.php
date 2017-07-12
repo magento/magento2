@@ -72,12 +72,12 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
         parent::__construct($context, $data);
     }
 
-   /**
-    * Filter malicious code before insert content to email
-    *
-    * @param string|array $content
-    * @return string|array
-    */
+    /**
+     * Filter malicious code before insert content to email
+     *
+     * @param string|array $content
+     * @return string|array
+     */
     public function getFilteredContent($content)
     {
         return $this->_maliciousCode->filter($content);
