@@ -45,10 +45,12 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     private $searchCriteriaFactory;
 
     /**
-     * GlobalSearch constructor.
+     * Initialize dependencies
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param ItemFactory $itemFactory
+     * @param SearchCriteriaFactory $searchCriteriaFactory
      * @param array $searchModules
      * @param array $previewModules
      */

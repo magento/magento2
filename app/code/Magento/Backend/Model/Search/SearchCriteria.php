@@ -33,6 +33,7 @@ class SearchCriteria
 
     /**
      * @param int $limit
+     * @return void
      */
     public function setLimit($limit)
     {
@@ -58,7 +59,6 @@ class SearchCriteria
 
     /**
      * @return string
-     * @return @void
      */
     public function getQuery()
     {
