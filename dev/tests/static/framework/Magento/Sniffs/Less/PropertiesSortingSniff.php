@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class PropertiesSortingSniff
@@ -16,7 +16,7 @@ use PHP_CodeSniffer_Sniff;
  * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#sorting
  *
  */
-class PropertiesSortingSniff implements PHP_CodeSniffer_Sniff
+class PropertiesSortingSniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -59,7 +59,7 @@ class PropertiesSortingSniff implements PHP_CodeSniffer_Sniff
     /**
      * {@inheritdoc}
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
         $currentToken = $tokens[$stackPtr];
@@ -92,13 +92,13 @@ class PropertiesSortingSniff implements PHP_CodeSniffer_Sniff
     /**
      * Validate sorting of properties of class
      *
-     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param File $phpcsFile
      * @param int $stackPtr
      * @param array $properties
      *
      * @return void
      */
-    private function validatePropertiesSorting(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $properties)
+    private function validatePropertiesSorting(File $phpcsFile, $stackPtr, array $properties)
     {
 
         $originalProperties = $properties;
@@ -106,7 +106,7 @@ class PropertiesSortingSniff implements PHP_CodeSniffer_Sniff
 
         if ($originalProperties !== $properties) {
             $delimiter = $phpcsFile->findPrevious(T_SEMICOLON, $stackPtr);
-            $phpcsFile->addError('Properties sorted not alphabetically', $delimiter);
+            $phpcsFile->addError('Properties sorted not alphabetically', $delimiter, 'PropertySorting');
         }
     }
 }

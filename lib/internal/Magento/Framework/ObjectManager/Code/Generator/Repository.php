@@ -8,6 +8,9 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
 
@@ -20,13 +23,6 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * Entity type
      */
     const ENTITY_TYPE = 'repository';
-
-    /**
-     * No Such Entity Exception
-     */
-    const NO_SUCH_ENTITY_EXCEPTION = '\\Magento\Framework\Exception\NoSuchEntityException';
-    const INPUT_EXCEPTION = '\\Magento\Framework\Exception\InputException';
-    const SEARCH_CRITERIA = '\\Magento\Framework\Api\SearchCriteriaInterface';
 
     /**
      * The namespace of repository interface
@@ -227,13 +223,13 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         /** @var ParameterReflection $parameterReflection */
         $parameterReflection = $methodReflection->getParameters()[0];
         $body = "if (!\$id) {\n"
-            . "    throw new " . self::INPUT_EXCEPTION . "('ID required');\n"
+            . "    throw new \\" . InputException::class . "('ID required');\n"
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
             . "    \$entity = \$this->" . $this->_getSourcePersistorPropertyName()
             . "->loadEntity(\$id);\n"
             . "    if (!\$entity->getId()) {\n"
-            . "        throw new " . self::NO_SUCH_ENTITY_EXCEPTION . "('Requested entity doesn\\'t exist');\n"
+            . "        throw new \\" . NoSuchEntityException::class . "('Requested entity doesn\\'t exist');\n"
             . "    }\n"
             . "    \$this->registry[\$id] = \$entity;\n"
             . "}\n"
@@ -261,11 +257,11 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'throws',
-                        'description' => self::INPUT_EXCEPTION,
+                        'description' => '\\' . InputException::class,
                     ],
                     [
                         'name' => 'throws',
-                        'description' => self::NO_SUCH_ENTITY_EXCEPTION,
+                        'description' => '\\' . NoSuchEntityException::class,
                     ],
                 ],
             ]
@@ -514,7 +510,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'searchCriteria',
-                    'type' => self::SEARCH_CRITERIA,
+                    'type' => '\\' . SearchCriteriaInterface::class,
                 ],
             ],
             'body' => $body,
@@ -523,7 +519,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => self::SEARCH_CRITERIA . ' $searchCriteria',
+                        'description' => '\\' . SearchCriteriaInterface::class . ' $searchCriteria',
                     ],
                     [
                         'name' => 'return',
