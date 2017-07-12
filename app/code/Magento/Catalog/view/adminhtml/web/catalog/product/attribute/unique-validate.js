@@ -10,18 +10,17 @@ define([
     'use strict';
 
     return function (config) {
-        var msg = '';
-        var _config = jQuery.extend({
-            element: null,
-            message: '',
-            uniqueClass: 'required-unique'
-        }, config);
-
-        if (typeof _config.element === 'string') {
-            var messager = function () {
+        var msg = '',
+            _config = jQuery.extend({
+                element: null,
+                message: '',
+                uniqueClass: 'required-unique'
+            }, config),
+            messager = function () {
                 return msg;
             };
 
+        if (typeof _config.element === 'string') {
             jQuery.validator.addMethod(
                 _config.element,
 
