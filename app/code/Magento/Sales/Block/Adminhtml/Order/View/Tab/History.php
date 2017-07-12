@@ -207,7 +207,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @param string $label
      * @param bool $notified
-     * @param \DateTime $created
+     * @param \DateTimeInterface $created
      * @param string $comment
      * @return array
      */

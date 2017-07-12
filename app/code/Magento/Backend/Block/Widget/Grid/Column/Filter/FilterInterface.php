@@ -10,7 +10,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
 /**
  * Grid column filter interface
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface FilterInterface
 {

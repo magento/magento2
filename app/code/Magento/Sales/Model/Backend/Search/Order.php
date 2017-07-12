@@ -12,6 +12,7 @@ use Magento\Backend\Model\Search\ItemsAbstract;
  * Search Order Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Order extends ItemsAbstract implements ItemsInterface
 {

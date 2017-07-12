@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\ResourceModel;
 
 /**
  * Backend translate resource model
+ * @api
  */
 class Translate extends \Magento\Translation\Model\ResourceModel\Translate
 {

@@ -84,8 +84,8 @@ class Importer implements ImporterInterface
     public function import(array $data)
     {
         $actions = [
-            ProcessorFactory::TYPE_DELETE,
             ProcessorFactory::TYPE_CREATE,
+            ProcessorFactory::TYPE_DELETE,
             ProcessorFactory::TYPE_UPDATE
         ];
         $messages = ['Stores were processed'];

@@ -87,6 +87,29 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
                         'Please make sure that all global admin search modules are installed and activated.'
                     ),
                 ];
+            } else {
+                $start = $this->getRequest()->getParam('start', 1);
+                $limit = $this->getRequest()->getParam('limit', 10);
+                $query = $this->getRequest()->getParam('query', '');
+                foreach ($this->_searchModules as $searchConfig) {
+                    if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])) {
+                        continue;
+                    }
+
+                    $className = $searchConfig['class'];
+                    if (empty($className)) {
+                        continue;
+                    }
+                    $searchInstance = $this->_objectManager->create($className);
+                    $results = $searchInstance->setStart(
+                        $start
+                    )->setLimit(
+                        $limit
+                    )->setQuery(
+                        $query
+                    )->load()->getResults();
+                    $items = array_merge_recursive($items, $results);
+                }
             }
         }
 

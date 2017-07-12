@@ -11,6 +11,8 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Search model for backend search
+ *
+ * @deprecated
  */
 class Catalog extends ItemsAbstract implements ItemsInterface
 {

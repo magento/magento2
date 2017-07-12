@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\Menu\Config\Menu;
 
 /**
  * Menu configuration files handler
+ * @api
  */
 class Dom extends \Magento\Framework\Config\Dom
 {
