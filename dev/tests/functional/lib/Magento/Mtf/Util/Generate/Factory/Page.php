@@ -1,15 +1,14 @@
 <?php
 /**
- * @api
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Mtf\Util\Generate\Factory;
 
 /**
  * Page Factory generator.
  *
+ * @api
  */
 class Page extends AbstractFactory
 {

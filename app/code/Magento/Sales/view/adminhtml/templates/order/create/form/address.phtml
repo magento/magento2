@@ -16,8 +16,8 @@ if ($block->getIsShipping()):
     <script>
     require(["Magento_Sales/order/create/form"], function(){
 
-        order.shippingAddressContainer = '<?php /* @escapeNotVerified */ echo $_fieldsContainerId ?>';
-        order.setAddresses(<?php /* @escapeNotVerified */ echo $block->getAddressCollectionJson() ?>);
+        order.shippingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
+        order.setAddresses(<?= /* @escapeNotVerified */ $block->getAddressCollectionJson() ?>);
 
     });
     </script>
@@ -28,42 +28,42 @@ else:
     ?>
     <script>
         require(["Magento_Sales/order/create/form"], function(){
-            order.billingAddressContainer = '<?php /* @escapeNotVerified */ echo $_fieldsContainerId ?>';
+            order.billingAddressContainer = '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>';
         });
     </script>
     <?php
 endif; ?>
 
 <fieldset class="admin__fieldset">
-    <legend class="admin__legend <?php /* @escapeNotVerified */ echo $block->getHeaderCssClass() ?>">
-        <span><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></span>
+    <legend class="admin__legend <?= /* @escapeNotVerified */ $block->getHeaderCssClass() ?>">
+        <span><?= /* @escapeNotVerified */ $block->getHeaderText() ?></span>
     </legend><br>
 
-    <fieldset id="<?php /* @escapeNotVerified */ echo $_addressChoiceContainerId ?>" class="admin__fieldset order-choose-address">
+    <fieldset id="<?= /* @escapeNotVerified */ $_addressChoiceContainerId ?>" class="admin__fieldset order-choose-address">
     <?php if ($block->getIsShipping()): ?>
         <div class="admin__field admin__field-option admin__field-shipping-same-as-billing">
             <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing"
                    onclick="order.setShippingAsBilling(this.checked)" class="admin__control-checkbox"
                    <?php if ($block->getIsAsBilling()): ?>checked<?php endif; ?> />
             <label for="order-shipping_same_as_billing" class="admin__field-label">
-                <?php /* @escapeNotVerified */ echo __('Same As Billing Address') ?>
+                <?= /* @escapeNotVerified */ __('Same As Billing Address') ?>
             </label>
         </div>
     <?php endif; ?>
         <div class="admin__field admin__field-select-from-existing-address">
-            <label class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Select from existing customer addresses:') ?></label>
+            <label class="admin__field-label"><?= /* @escapeNotVerified */ __('Select from existing customer addresses:') ?></label>
             <?php $_id = $block->getForm()->getHtmlIdPrefix() . 'customer_address_id' ?>
             <div class="admin__field-control">
-                <select id="<?php /* @escapeNotVerified */ echo $_id ?>"
-                        name="<?php echo $block->getForm()->getHtmlNamePrefix() ?>[customer_address_id]"
-                        onchange="order.selectAddress(this, '<?php /* @escapeNotVerified */ echo $_fieldsContainerId ?>')"
+                <select id="<?= /* @escapeNotVerified */ $_id ?>"
+                        name="<?= $block->getForm()->getHtmlNamePrefix() ?>[customer_address_id]"
+                        onchange="order.selectAddress(this, '<?= /* @escapeNotVerified */ $_fieldsContainerId ?>')"
                         class="admin__control-select">
-                    <option value=""><?php /* @escapeNotVerified */ echo __('Add New Address') ?></option>
+                    <option value=""><?= /* @escapeNotVerified */ __('Add New Address') ?></option>
                     <?php foreach ($block->getAddressCollection() as $_address): ?>
                         <?php //if($block->getAddressAsString($_address)!=$block->getAddressAsString($block->getAddress())): ?>
                         <option
-                            value="<?php /* @escapeNotVerified */ echo $_address->getId() ?>"<?php if ($_address->getId() == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
-                            <?php /* @escapeNotVerified */ echo $block->getAddressAsString($_address) ?>
+                            value="<?= /* @escapeNotVerified */ $_address->getId() ?>"<?php if ($_address->getId() == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
+                            <?= /* @escapeNotVerified */ $block->getAddressAsString($_address) ?>
                         </option>
                         <?php //endif; ?>
                     <?php endforeach; ?>
@@ -72,28 +72,28 @@ endif; ?>
         </div>
     </fieldset>
 
-    <div class="order-address admin__fieldset" id="<?php /* @escapeNotVerified */ echo $_fieldsContainerId ?>">
-        <?php echo $block->getForm()->toHtml() ?>
+    <div class="order-address admin__fieldset" id="<?= /* @escapeNotVerified */ $_fieldsContainerId ?>">
+        <?= $block->getForm()->toHtml() ?>
 
         <div class="admin__field admin__field-option order-save-in-address-book">
-            <input name="<?php echo $block->getForm()->getHtmlNamePrefix() ?>[save_in_address_book]" type="checkbox"
-                   id="<?php echo $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
+            <input name="<?= $block->getForm()->getHtmlNamePrefix() ?>[save_in_address_book]" type="checkbox"
+                   id="<?= $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
                    value="1"
                    <?php if (!$block->getDontSaveInAddressBook() && $block->getAddress()->getSaveInAddressBook()): ?> checked="checked"<?php endif; ?>
                    class="admin__control-checkbox"/>
-            <label for="<?php echo $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
-                   class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Save in address book') ?></label>
+            <label for="<?= $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
+                   class="admin__field-label"><?= /* @escapeNotVerified */ __('Save in address book') ?></label>
         </div>
     </div>
     <?php $hideElement = 'address-' . ($block->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
-    <div style="display: none;" id="<?php /* @escapeNotVerified */ echo $hideElement ?>" class="order-methods-overlay">
-        <span><?php /* @escapeNotVerified */ echo __('You don\'t need to select a shipping address.') ?></span>
+    <div style="display: none;" id="<?= /* @escapeNotVerified */ $hideElement ?>" class="order-methods-overlay">
+        <span><?= /* @escapeNotVerified */ __('You don\'t need to select a shipping address.') ?></span>
     </div>
 
     <script>
         require(["Magento_Sales/order/create/form"], function(){
-                order.bindAddressFields('<?php /* @escapeNotVerified */ echo $_fieldsContainerId ?>');
-                order.bindAddressFields('<?php /* @escapeNotVerified */ echo $_addressChoiceContainerId ?>');
+                order.bindAddressFields('<?= /* @escapeNotVerified */ $_fieldsContainerId ?>');
+                order.bindAddressFields('<?= /* @escapeNotVerified */ $_addressChoiceContainerId ?>');
                 <?php if ($block->getIsShipping() && $block->getIsAsBilling()): ?>
                 order.disableShippingAddress(true);
                 <?php endif; ?>

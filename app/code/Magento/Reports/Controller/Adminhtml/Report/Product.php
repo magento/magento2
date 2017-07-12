@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+/**
+ * @api
+ */
 abstract class Product extends AbstractReport
 {
     /**

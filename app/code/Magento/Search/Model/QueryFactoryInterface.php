@@ -6,6 +6,9 @@
 
 namespace Magento\Search\Model;
 
+/**
+ * @deprecated
+ */
 interface QueryFactoryInterface
 {
     /**

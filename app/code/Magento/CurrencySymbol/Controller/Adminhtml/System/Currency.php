@@ -11,6 +11,9 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
+/**
+ * @api
+ */
 abstract class Currency extends \Magento\Backend\App\Action
 {
     /**

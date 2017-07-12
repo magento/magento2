@@ -9,6 +9,7 @@ use Magento\Framework\View\Layout\Condition\ConditionFactory;
 
 /**
  * Pool of generators for structural elements
+ * @api
  */
 class GeneratorPool
 {

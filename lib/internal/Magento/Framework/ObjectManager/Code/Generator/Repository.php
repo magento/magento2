@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;

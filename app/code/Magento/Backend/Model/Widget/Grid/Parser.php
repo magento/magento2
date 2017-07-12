@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Widget\Grid;
 
+/**
+ * @api
+ */
 class Parser
 {
     /**
