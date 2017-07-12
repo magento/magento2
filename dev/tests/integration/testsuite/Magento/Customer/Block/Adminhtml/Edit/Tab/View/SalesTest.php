@@ -86,7 +86,7 @@ class SalesTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSingleStoreMode()
     {
-        $this->assertFalse($this->block->isSingleStoreMode());
+        $this->assertTrue($this->block->isSingleStoreMode());
     }
 
     /**
@@ -122,6 +122,5 @@ class SalesTest extends \PHPUnit_Framework_TestCase
     public function testToHtml()
     {
         $this->assertContains('<span class="title">Sales Statistics</span>', $this->html);
-        $this->assertContains('<strong>All Store Views</strong>', $this->html);
     }
 }
