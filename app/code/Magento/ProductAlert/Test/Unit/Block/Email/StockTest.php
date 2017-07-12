@@ -24,6 +24,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $imageBuilder;
+
     /**
      * @var \Magento\ProductAlert\Block\Product\ImageProvider|\PHPUnit_Framework_MockObject_MockObject
      */
