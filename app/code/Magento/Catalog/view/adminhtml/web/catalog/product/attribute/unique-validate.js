@@ -16,6 +16,7 @@ define([
                 message: '',
                 uniqueClass: 'required-unique'
             }, config),
+
             /** @inheritdoc */
             messager = function () {
                 return msg;
