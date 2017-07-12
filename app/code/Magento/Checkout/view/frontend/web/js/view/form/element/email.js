@@ -174,7 +174,7 @@ define([
          */
         resolveInitialPasswordVisibility: function () {
             if (checkoutData.getInputFieldEmailValue() !== '') {
-                return (checkoutData.getInputFieldEmailValue() == checkoutData.getCheckedEmailValue())
+                return (checkoutData.getInputFieldEmailValue() === checkoutData.getCheckedEmailValue())
             }
 
             return false;
