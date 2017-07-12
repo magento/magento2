@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Model\Backend\Search;
+namespace Magento\Cms\Model\Backend\Search;
 
 use Magento\Backend\Api\Search\ItemsInterface;
 use Magento\Backend\Model\Search\SearchCriteria;
 
-class Customer implements ItemsInterface
+class Page implements ItemsInterface
 {
     /**
      * Adminhtml data
@@ -20,7 +20,7 @@ class Customer implements ItemsInterface
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $customerRepository;
+    protected $pageRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
@@ -33,31 +33,23 @@ class Customer implements ItemsInterface
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Customer\Helper\View
-     */
-    protected $_customerViewHelper;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Customer\Helper\View $customerViewHelper
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Customer\Helper\View $customerViewHelper
+        \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
         $this->_adminhtmlData = $adminhtmlData;
-        $this->customerRepository = $customerRepository;
+        $this->pageRepository = $pageRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
-        $this->_customerViewHelper = $customerViewHelper;
     }
 
     /**
@@ -72,7 +64,7 @@ class Customer implements ItemsInterface
 
         $this->searchCriteriaBuilder->setCurrentPage($searchCriteria->getStart());
         $this->searchCriteriaBuilder->setPageSize($searchCriteria->getLimit());
-        $searchFields = ['firstname', 'lastname', 'company', 'email'];
+        $searchFields = ['title', 'identifier', 'content'];
         $filters = [];
         foreach ($searchFields as $field) {
             $filters[] = $this->filterBuilder
@@ -83,24 +75,15 @@ class Customer implements ItemsInterface
         }
         $this->searchCriteriaBuilder->addFilters($filters);
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchResults = $this->customerRepository->getList($searchCriteria);
+        $searchResults = $this->pageRepository->getList($searchCriteria);
 
-        foreach ($searchResults->getItems() as $customer) {
-            $customerAddresses = $customer->getAddresses();
-            /** Look for a company name defined in default billing address */
-            $company = null;
-            foreach ($customerAddresses as $customerAddress) {
-                if ($customerAddress->getId() == $customer->getDefaultBilling()) {
-                    $company = $customerAddress->getCompany();
-                    break;
-                }
-            }
+        foreach ($searchResults->getItems() as $page) {
             $result[] = [
-                'id' => 'customer/1/' . $customer->getId(),
-                'type' => __('Customer'),
-                'name' => $this->_customerViewHelper->getCustomerName($customer),
-                'description' => $company,
-                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', ['id' => $customer->getId()]),
+                'id' => 'cms-page/1/' . $page->getId(),
+                'type' => __('CMS Page'),
+                'name' => $page->getTitle(),
+                'description' => $page->getIdentifier(),
+                'url' => $this->_adminhtmlData->getUrl('cms/page/edit', ['page_id' => $page->getId()]),
             ];
         }
         return $result;

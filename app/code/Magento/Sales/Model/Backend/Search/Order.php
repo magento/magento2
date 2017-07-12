@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Backend\Search;
 
 use Magento\Backend\Api\Search\ItemsInterface;
-use Magento\Backend\Model\Search\ItemsAbstract;
+use Magento\Backend\Model\Search\SearchCriteria;
 
 /**
  * Search Order Model
@@ -14,7 +14,7 @@ use Magento\Backend\Model\Search\ItemsAbstract;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  */
-class Order extends ItemsAbstract implements ItemsInterface
+class Order implements ItemsInterface
 {
     /**
      * Adminhtml data
@@ -31,29 +31,25 @@ class Order extends ItemsAbstract implements ItemsInterface
     /**
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param array $data
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        array $data = []
+        \Magento\Backend\Helper\Data $adminhtmlData
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_adminhtmlData = $adminhtmlData;
-        parent::__construct($data);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getResults()
+    public function getResults(SearchCriteria $searchCriteria)
     {
         $result = [];
-        if (!$this->hasData(self::START) || !$this->hasData(self::LIMIT) || !$this->hasData(self::QUERY)) {
+        if (!$searchCriteria->getStart() || !$searchCriteria->getLimit() || !$searchCriteria->getQuery()) {
             return $result;
         }
-
-        $query = $this->getData(self::QUERY);
+        $query = $searchCriteria->getQuery();
         //TODO: add full name logic
         $collection = $this->_collectionFactory->create()->addAttributeToSelect(
             '*'
@@ -70,9 +66,9 @@ class Order extends ItemsAbstract implements ItemsInterface
                 ['attribute' => 'shipping_postcode', 'like' => $query . '%'],
             ]
         )->setCurPage(
-            $this->getData(self::START)
+            $searchCriteria->getStart()
         )->setPageSize(
-            $this->getData(self::LIMIT)
+            $searchCriteria->getLimit()
         )->load();
 
         foreach ($collection as $order) {
@@ -81,7 +77,7 @@ class Order extends ItemsAbstract implements ItemsInterface
                 'id' => 'order/1/' . $order->getId(),
                 'type' => __('Order'),
                 'name' => __('Order #%1', $order->getIncrementId()),
-                'description' => $order->getFirstname() . ' ' . $order->getLastname(),
+                'description' => $order->getCustomerFirstname() . ' ' . $order->getCustomerLastname(),
                 'url' => $this->_adminhtmlData->getUrl('sales/order/view', ['order_id' => $order->getId()]),
             ];
         }

@@ -9,7 +9,7 @@ namespace Magento\Backend\Model\Search;
 use Magento\Backend\Api\Search\ItemsInterface;
 use Magento\Framework\ObjectManagerInterface;
 
-class ItemsFactory
+class ItemFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -33,12 +33,13 @@ class ItemsFactory
      */
     public function create($instanceName, array $data = [])
     {
-        $object =  $this->objectManager->create($instanceName, $data);
-        if ($object instanceof ItemsInterface) {
-            return $object;
+        $implements = class_implements($instanceName);
+        if (!isset($implements[ItemsInterface::class])) {
+            throw new \LogicException(
+                "The class '{$instanceName}' does not implement " . ItemsInterface::class
+            );
         }
-        throw new \LogicException(
-            "The class '{$instanceName}' does not implement ".ItemsInterface::class
-        );
+        $object =  $this->objectManager->get($instanceName, $data);
+        return $object;
     }
 }

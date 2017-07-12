@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Model\Search;
+namespace Magento\Customer\Model\Bakcend\Search;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -18,19 +18,20 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider loadDataProvider
      */
-    public function testLoad($query, $limit, $start, $expectedResult)
+    public function testGetResults($query, $limit, $start, $expectedResult)
     {
         /** Preconditions */
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Backend\Model\Search\Customer $customerSearch */
-        $customerSearch = $objectManager->create(\Magento\Backend\Model\Search\Customer::class);
-        $customerSearch->setQuery($query);
-        $customerSearch->setLimit($limit);
-        $customerSearch->setStart($start);
-        $customerSearch->load();
+        /** @var \Magento\Customer\Model\Backend\Search\Customer $customerSearch */
+        $customerSearch = $objectManager->create(\Magento\Customer\Model\Backend\Search\Customer::class);
+        /** @var \Magento\Backend\Model\Search\SearchCriteria $searchCriteria */
+        $searchCriteria = $objectManager->create(\Magento\Backend\Model\Search\SearchCriteria::class);
+        $searchCriteria->setStart($start);
+        $searchCriteria->setLimit($limit);
+        $searchCriteria->setQuery($query);
 
         /** SUT Execution */
-        $searchResults = $customerSearch->getResults();
+        $searchResults = $customerSearch->getResults($searchCriteria);
 
         /** Ensure that search results are correct */
         $this->assertCount(count($expectedResult), $searchResults, 'Quantity of search result items is invalid.');

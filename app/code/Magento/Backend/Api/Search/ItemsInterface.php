@@ -6,43 +6,18 @@
  */
 namespace Magento\Backend\Api\Search;
 
+use Magento\Backend\Model\Search\SearchCriteria;
+
 /**
  * @api
  */
 interface ItemsInterface
 {
-    const LIMIT = 'limit';
-    const START = 'start';
-    const QUERY = 'query';
-
     /**
-     * get the search result items
+     * Get the search result items
      *
+     * @param SearchCriteria $searchCriteria
      * @return array
      */
-    public function getResults();
-
-    /**
-     * set offset
-     *
-     * @param int $start
-     * @return ItemsInterface
-     */
-    public function setStart($start);
-
-    /**
-     * set search query
-     *
-     * @param string $query
-     * @return ItemsInterface
-     */
-    public function setQuery($query);
-
-    /**
-     * set limit
-     *
-     * @param int $limit
-     * @return ItemsInterface
-     */
-    public function setLimit($limit);
+    public function getResults(SearchCriteria $searchCriteria);
 }

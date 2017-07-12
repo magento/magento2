@@ -6,7 +6,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Index;
 
-use Magento\Backend\Model\Search\ItemsFactory;
+use Magento\Backend\Model\Search\ItemFactory;
+use Magento\Backend\Model\Search\SearchCriteria;
+use Magento\Backend\Model\Search\SearchCriteriaFactory;
 
 /**
  * @api
@@ -33,24 +35,33 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     private $previewModules;
 
     /**
-     * @var ItemsFactory
+     * @var ItemFactory
      */
-    private $itemsFactory;
+    private $itemFactory;
 
     /**
+     * @var SearchCriteriaFactory
+     */
+    private $searchCriteriaFactory;
+
+    /**
+     * GlobalSearch constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param ItemFactory $itemFactory
      * @param array $searchModules
      * @param array $previewModules
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        ItemsFactory $itemsFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        ItemFactory $itemFactory,
+        SearchCriteriaFactory $searchCriteriaFactory,
         array $searchModules = [],
         array $previewModules = []
     ) {
-        $this->itemsFactory = $itemsFactory;
+        $this->itemFactory = $itemFactory;
+        $this->searchCriteriaFactory = $searchCriteriaFactory;
         $this->_searchModules = $searchModules;
         $this->previewModules = $previewModules;
         parent::__construct($context);
@@ -87,29 +98,6 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
                         'Please make sure that all global admin search modules are installed and activated.'
                     ),
                 ];
-            } else {
-                $start = $this->getRequest()->getParam('start', 1);
-                $limit = $this->getRequest()->getParam('limit', 10);
-                $query = $this->getRequest()->getParam('query', '');
-                foreach ($this->_searchModules as $searchConfig) {
-                    if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])) {
-                        continue;
-                    }
-
-                    $className = $searchConfig['class'];
-                    if (empty($className)) {
-                        continue;
-                    }
-                    $searchInstance = $this->_objectManager->create($className);
-                    $results = $searchInstance->setStart(
-                        $start
-                    )->setLimit(
-                        $limit
-                    )->setQuery(
-                        $query
-                    )->load()->getResults();
-                    $items = array_merge_recursive($items, $results);
-                }
             }
         }
 
@@ -119,7 +107,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     }
 
     /**
-     * retrieve links to certain entities in the global search
+     * Retrieve links to certain entities in the global search
      *
      * @return array
      */
@@ -131,7 +119,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
             if ($previewConfig['acl'] && !$this->_authorization->isAllowed($previewConfig['acl'])) {
                 continue;
             }
-            if (!$previewConfig['url'] || !$previewConfig['text']) {
+            if (!isset($previewConfig['url']) || !isset($previewConfig['text'])) {
                 continue;
             }
             $result[] = [
@@ -153,6 +141,11 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
         $start = $this->getRequest()->getParam('start', 1);
         $limit = $this->getRequest()->getParam('limit', 10);
         $query = $this->getRequest()->getParam('query', '');
+        /** @var SearchCriteria $searchCriteria */
+        $searchCriteria = $this->searchCriteriaFactory->create();
+        $searchCriteria->setLimit($limit);
+        $searchCriteria->setStart($start);
+        $searchCriteria->setQuery($query);
         foreach ($this->_searchModules as $searchConfig) {
             if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])) {
                 continue;
@@ -162,20 +155,9 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
             if (empty($className)) {
                 continue;
             }
-            try {
-                $searchInstance = $this->itemsFactory->create($className);
-                $results = $searchInstance->setStart(
-                    $start
-                )->setLimit(
-                    $limit
-                )->setQuery(
-                    $query
-                )->getResults();
-                $items = array_merge_recursive($items, $results);
-
-            } catch (\LogicException $exception) {
-                continue;
-            }
+            $searchInstance = $this->itemFactory->create($className);
+            $results = $searchInstance->getResults($searchCriteria);
+            $items = array_merge_recursive($items, $results);
         }
         return $items;
     }

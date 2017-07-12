@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Backend\Api\Search\ItemsInterface;
-use Magento\Backend\Model\Search\ItemsAbstract;
+use Magento\Backend\Model\Search\SearchCriteria;
 use Magento\Search\Model\QueryFactory;
 
 /**
@@ -14,7 +14,7 @@ use Magento\Search\Model\QueryFactory;
  *
  * @deprecated
  */
-class Catalog extends ItemsAbstract implements ItemsInterface
+class Catalog implements ItemsInterface
 {
     /**
      * Catalog search data
@@ -41,27 +41,21 @@ class Catalog extends ItemsAbstract implements ItemsInterface
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param QueryFactory $queryFactory
-     * @param array $data
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminhtmlData,
         \Magento\Framework\Stdlib\StringUtils $string,
-        QueryFactory $queryFactory,
-        array $data = []
+        QueryFactory $queryFactory
     ) {
         $this->_adminhtmlData = $adminhtmlData;
         $this->string = $string;
         $this->queryFactory = $queryFactory;
-        parent::__construct($data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getResults()
+    public function getResults(SearchCriteria $searchCriteria)
     {
         $result = [];
-        if (!$this->hasData(self::START) || !$this->hasData(self::LIMIT) || !$this->hasData(self::QUERY)) {
+        if (!$searchCriteria->getStart() || !$searchCriteria->getLimit() || !$searchCriteria->getQuery()) {
             return $result;
         }
 
@@ -69,9 +63,9 @@ class Catalog extends ItemsAbstract implements ItemsInterface
             ->getSearchCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('description')
-            ->addBackendSearchFilter($this->getData(self::QUERY))
-            ->setCurPage($this->getData(self::START))
-            ->setPageSize($this->getData(self::LIMIT))
+            ->addBackendSearchFilter($searchCriteria->getQuery())
+            ->setCurPage($searchCriteria->getStart())
+            ->setPageSize($searchCriteria->getLimit())
             ->load();
 
         foreach ($collection as $product) {

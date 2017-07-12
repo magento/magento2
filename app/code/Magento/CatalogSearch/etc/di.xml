@@ -126,7 +126,7 @@
             <argument name="previewModules" xsi:type="array">
                 <item name="products" xsi:type="array">
                     <item name="url" xsi:type="string">catalog/product/index</item>
-                    <item name="text" xsi:type="string">'%1' in Products</item>
+                    <item name="text" xsi:type="string" translate="true">'%1' in Products</item>
                     <item name="acl" xsi:type="string">Magento_Catalog::product</item>
                 </item>
             </argument>
