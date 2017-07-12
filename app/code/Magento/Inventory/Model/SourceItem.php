@@ -9,7 +9,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Class SourceItem
+ * @inheritdoc
  */
 class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
 {

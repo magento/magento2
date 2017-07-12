@@ -1,10 +1,14 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * SourceItem interface represents amount of particular product on some particular physical storage
+ * Represents amount of product on physical storage
  *
  * @api
  */

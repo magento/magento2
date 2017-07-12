@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class SourceItemStatus
+ * Provide option values for UI
  *
  * @api
  */

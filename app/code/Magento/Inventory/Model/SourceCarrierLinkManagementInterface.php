@@ -9,9 +9,8 @@ use Magento\Framework\Exception\StateException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * SourceCarrierLinkManagementInterface
+ * Provide own implementation of this interface if you would like to replace storage (spi)
  *
- * It is extension point for carrier links storage replacing (spi)
  * @api
  */
 interface SourceCarrierLinkManagementInterface

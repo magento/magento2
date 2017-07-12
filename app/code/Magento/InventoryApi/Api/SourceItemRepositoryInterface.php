@@ -6,8 +6,10 @@
 namespace Magento\InventoryApi\Api;
 
 /**
- * SourceItemRepositoryInterface has not method save, use SourceItemSaveInterface instead
+ * This is Facade for basic operations with Source Item
+ * The method save is absent, due to different semantic (save multiple)
  *
+ * @see SourceItemSaveInterface
  * @api
  */
 interface SourceItemRepositoryInterface

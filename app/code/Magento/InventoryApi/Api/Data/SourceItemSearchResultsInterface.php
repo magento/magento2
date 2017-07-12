@@ -8,12 +8,14 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\SearchResultsInterface;
 
 /**
+ * Search results of Repository::getList method
+ *
  * @api
  */
 interface SourceItemSearchResultsInterface extends SearchResultsInterface
 {
     /**
-     * Get sources items list.
+     * Get sources items list
      *
      * @return \Magento\InventoryApi\Api\Data\SourceItemInterface[]
      */

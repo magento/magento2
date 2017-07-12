@@ -10,9 +10,10 @@ use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Class MultipleSave
+ * Implementation of Source Item save multiple operation for specific db layer
+ * Save Multiple used here for performance efficient purposes over single save operation
  */
-class MultipleSave
+class SaveMultiple
 {
     /**
      * @var ResourceConnection
@@ -36,35 +37,36 @@ class MultipleSave
      * @param SourceItemInterface[] $sourceItems
      * @return void
      */
-    public function multipleSave(array $sourceItems)
+    public function execute(array $sourceItems)
     {
-        if (!empty($sourceItems)) {
-            $connection = $this->connection->getConnection();
-            $tableName = $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM);
-
-            $columnsSql = $this->buildColumnsSqlPart([
-                SourceItemInterface::SOURCE_ID,
-                SourceItemInterface::SKU,
-                SourceItemInterface::QUANTITY,
-                SourceItemInterface::STATUS
-            ]);
-            $bind = [];
-            $valuesSql = $this->buildValuesSqlPart($sourceItems, $bind);
-            $onDuplicateSql = $this->buildOnDuplicateSqlPart([
-                SourceItemInterface::SKU,
-                SourceItemInterface::QUANTITY,
-                SourceItemInterface::STATUS,
-            ]);
-
-            $insertSql = sprintf(
-                'INSERT INTO %s (%s) VALUES %s %s',
-                $tableName,
-                $columnsSql,
-                $valuesSql,
-                $onDuplicateSql
-            );
-            $connection->query($insertSql, $bind);
+        if (empty($sourceItems)) {
+            return;
         }
+        $connection = $this->connection->getConnection();
+        $tableName = $connection->getTableName(InstallSchema::TABLE_NAME_SOURCE_ITEM);
+
+        $columnsSql = $this->buildColumnsSqlPart([
+            SourceItemInterface::SOURCE_ID,
+            SourceItemInterface::SKU,
+            SourceItemInterface::QUANTITY,
+            SourceItemInterface::STATUS
+        ]);
+        $valuesSql = $this->buildValuesSqlPart($sourceItems);
+        $onDuplicateSql = $this->buildOnDuplicateSqlPart([
+            SourceItemInterface::SKU,
+            SourceItemInterface::QUANTITY,
+            SourceItemInterface::STATUS,
+        ]);
+        $bind = $this->getSqlBindData($sourceItems);
+
+        $insertSql = sprintf(
+            'INSERT INTO %s (%s) VALUES %s %s',
+            $tableName,
+            $columnsSql,
+            $valuesSql,
+            $onDuplicateSql
+        );
+        $connection->query($insertSql, $bind);
     }
 
     /**
@@ -81,23 +83,30 @@ class MultipleSave
 
     /**
      * @param SourceItemInterface[] $sourceItems
-     * @param array $bind
      * @return string
      */
-    private function buildValuesSqlPart(array $sourceItems, array &$bind)
+    private function buildValuesSqlPart(array $sourceItems)
     {
-        $processedValues = [];
+        $sql = rtrim(str_repeat('(?, ?, ?, ?), ', count($sourceItems)), ', ');
+        return $sql;
+    }
+
+    /**
+     * @param SourceItemInterface[] $sourceItems
+     * @return string
+     */
+    private function getSqlBindData(array $sourceItems)
+    {
+        $bind = [];
         foreach ($sourceItems as $sourceItem) {
-            $bind = array_merge($bind, [
+            $bind[] = [
                 $sourceItem->getSourceId(),
                 $sourceItem->getSku(),
                 $sourceItem->getQuantity(),
                 $sourceItem->getStatus(),
-            ]);
-            $processedValues[] = '(?, ?, ?, ?)';
+            ];
         }
-        $sql = implode(', ', $processedValues);
-        return $sql;
+        return $bind;
     }
 
     /**

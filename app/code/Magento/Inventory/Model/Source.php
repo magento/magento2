@@ -9,9 +9,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use \Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Class Source
- *
- * @codeCoverageIgnore
+ * @inheritdoc
  */
 class Source extends AbstractExtensibleModel implements SourceInterface
 {

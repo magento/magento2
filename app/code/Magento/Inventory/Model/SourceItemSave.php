@@ -7,18 +7,19 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
+use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
 use Magento\InventoryApi\Api\SourceItemSaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SourceItemSave
+ * @inheritdoc
  */
 class SourceItemSave implements SourceItemSaveInterface
 {
     /**
-     * @var ResourceSource
+     * @var SaveMultiple
      */
-    private $resourceSource;
+    private $saveMultiple;
 
     /**
      * @var LoggerInterface
@@ -26,16 +27,16 @@ class SourceItemSave implements SourceItemSaveInterface
     private $logger;
 
     /**
-     * SourceItemMultipleSave constructor
+     * SourceItemSaveMultiple constructor
      *
-     * @param ResourceSource $resourceSource
+     * @param SaveMultiple $saveMultiple
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ResourceSource $resourceSource,
+        SaveMultiple $saveMultiple,
         LoggerInterface $logger
     ) {
-        $this->resourceSource = $resourceSource;
+        $this->saveMultiple = $saveMultiple;
         $this->logger = $logger;
     }
 
@@ -45,7 +46,7 @@ class SourceItemSave implements SourceItemSaveInterface
     public function execute(array $sourceItems)
     {
         try {
-            $this->resourceSource->multipleSave($sourceItems);
+            $this->saveMultiple->execute($sourceItems);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save source item'), $e);

@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Data provider that provide data about source items
+ * Product form modifier. Add to form source data
  */
 class Sources extends AbstractModifier
 {

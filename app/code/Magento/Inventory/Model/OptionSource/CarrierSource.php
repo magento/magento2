@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Shipping\Model\Config;
 
 /**
- * Class CarrierSource
+ * Provide option values for UI
  *
  * @api
  */
@@ -40,7 +40,7 @@ class CarrierSource implements OptionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

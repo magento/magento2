@@ -16,7 +16,6 @@
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
     <preference for="Magento\InventoryApi\Api\SourceItemSaveInterface" type="Magento\Inventory\Model\SourceItemSave"/>
-    <preference for="Magento\InventoryApi\Api\SourceItemMultipleSaveInterface" type="Magento\Inventory\Model\SourceItemMultipleSave"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
 </config>

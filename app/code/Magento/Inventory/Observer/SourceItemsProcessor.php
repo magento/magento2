@@ -16,7 +16,8 @@ use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemSaveInterface;
 
 /**
- * Class CarrierRequestDataHydrator
+ * At the time of processing Product save form this class used to save source item correctly
+ * Perform replace strategy of sources for the product
  */
 class SourceItemsProcessor
 {
@@ -96,7 +97,7 @@ class SourceItemsProcessor
             $sourceItemsForSave[] = $sourceItem;
             unset($sourceItemsForDelete[$sourceId]);
         }
-        $this->saveSourceItems($sourceItemsForSave);
+        $this->sourceItemSave->execute($sourceItemsForSave);
         $this->deleteSourceItems($sourceItemsForDelete);
     }
 
@@ -132,17 +133,8 @@ class SourceItemsProcessor
     private function validateSourceItemData(array $sourceItemData)
     {
         if (!isset($sourceItemData[SourceItemInterface::SOURCE_ID])) {
-            throw new InputException(__('Wrong Product to Source relation parameters.'));
+            throw new InputException(__('Wrong Product to Source relation parameters given.'));
         }
-    }
-
-    /**
-     * @param array $sourceItems
-     * @return void
-     */
-    private function saveSourceItems(array $sourceItems)
-    {
-        $this->sourceItemSave->execute($sourceItems);
     }
 
     /**

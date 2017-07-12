@@ -6,6 +6,8 @@
 namespace Magento\InventoryApi\Api;
 
 /**
+ * This is Facade for basic operations with Source
+ *
  * @api
  */
 interface SourceRepositoryInterface
