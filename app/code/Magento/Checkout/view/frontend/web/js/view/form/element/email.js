@@ -94,21 +94,19 @@ define([
          * Check email existing.
          */
         checkEmailAvailability: function () {
-            var self = this;
-
             this.validateRequest();
             this.isEmailCheckComplete = $.Deferred();
             this.isLoading(true);
             this.checkRequest = checkEmailAvailability(this.isEmailCheckComplete, this.email());
 
             $.when(this.isEmailCheckComplete).done(function () {
-                self.isPasswordVisible(false);
-            }).fail(function () {
-                self.isPasswordVisible(true);
-                checkoutData.setCheckedEmailValue(self.email());
-            }).always(function () {
-                self.isLoading(false);
-            });
+                this.isPasswordVisible(false);
+            }.bind(this)).fail(function () {
+                this.isPasswordVisible(true);
+                checkoutData.setCheckedEmailValue(this.email());
+            }.bind(this)).always(function () {
+                this.isLoading(false);
+            }.bind(this));
         },
 
         /**
@@ -175,7 +173,7 @@ define([
          * @returns {Boolean} - initial visibility state.
          */
         resolveInitialPasswordVisibility: function () {
-            if (checkoutData.getInputFieldEmailValue() != '') {
+            if (checkoutData.getInputFieldEmailValue() !== '') {
                 return (checkoutData.getInputFieldEmailValue() == checkoutData.getCheckedEmailValue())
             }
 
