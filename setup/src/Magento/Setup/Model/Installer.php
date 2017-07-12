@@ -458,11 +458,9 @@ class Installer
      */
     public function checkInstallationFilePermissions()
     {
-        $results = $this->filePermissions->getMissingWritablePathsForInstallation();
-        if ($results) {
-            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $results);
-            throw new \Exception($errorMsg);
-        }
+        $this->throwExceptionForNotWritablePaths(
+            $this->filePermissions->getMissingWritablePathsForInstallation()
+        );
     }
 
     /**
@@ -788,9 +786,37 @@ class Installer
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
-        $this->checkInstallationFilePermissions();
+        $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
+    }
+
+    /**
+     * Check permissions of directories that are expected to be writable for database upgrade
+     *
+     * @return void
+     * @throws \Exception If some of the required directories isn't writable
+     */
+    public function checkFilePermissionsForDbUpgrade()
+    {
+        $this->throwExceptionForNotWritablePaths(
+            $this->filePermissions->getMissingWritableDirectoriesForDbUpgrade()
+        );
+    }
+
+    /**
+     * Throws exception with appropriate message if given not empty array of paths that requires writing permission
+     *
+     * @param array $paths List of not writable paths
+     * @return void
+     * @throws \Exception If given not empty array of not writable paths
+     */
+    private function throwExceptionForNotWritablePaths(array $paths)
+    {
+        if ($paths) {
+            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $paths);
+            throw new \Exception($errorMsg);
+        }
     }
 
     /**
@@ -985,7 +1011,7 @@ class Installer
     {
         $this->assertDbConfigExists();
         $setup = $this->setupFactory->create($this->context->getResources());
-        $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
+        $adminAccount = $this->adminAccountFactory->create($setup->getConnection(), (array)$data);
         $adminAccount->save();
     }
 
@@ -1271,7 +1297,7 @@ class Installer
 
         // unload Magento autoloader because it may be using compiled definition
         foreach (spl_autoload_functions() as $autoloader) {
-            if ($autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
                 spl_autoload_unregister([$autoloader[0], $autoloader[1]]);
                 break;
             }

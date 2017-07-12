@@ -15,6 +15,9 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Search\Model\ResourceModel\Query\CollectionFactory;
 
+/**
+ * @api
+ */
 class Term extends Template
 {
     /**

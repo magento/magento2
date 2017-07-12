@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /* eslint-disable max-nested-callbacks */
@@ -59,7 +59,8 @@ define([
             it('has the "timestamp" field', function () {
                 var entry = new Entry('message', levels.INFO, {});
 
-                expect(typeof entry.timestamp).toBe('number');
+                expect(entry.timestamp).not.toBeLessThan(0);
+                expect(entry.timestamp).toBeLessThan(Date.now() + 1);
             });
         });
     });

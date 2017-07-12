@@ -56,7 +56,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains(
             'John Smith,',
-            $transportBuilder->getSentMessage()->getBodyHtml()->getRawContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
     }
 }

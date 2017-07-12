@@ -10,6 +10,8 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Abstract item
+ *
+ * @api
  */
 abstract class AbstractItem implements ItemInterface
 {

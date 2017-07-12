@@ -42,10 +42,45 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl'))
         );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTemplate'])
+            ->getMock();
+        $vclTemplateLocator->expects($this->any())
+            ->method('getTemplate')
+            ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $expectedParams = [
+            'backendHost' => 'example.com',
+            'backendPort' => '8080',
+            'accessList' =>  explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
+            'designExceptions' => json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true),
+            'sslOffloadedHeader' => 'X-Forwarded-Proto',
+            'gracePeriod' => null
+        ];
+        $vclGeneratorFactory->expects($this->any())
+            ->method('create')
+            ->with($expectedParams)
+            ->will($this->returnValue(new \Magento\PageCache\Model\Varnish\VclGenerator(
+                $vclTemplateLocator,
+                'example.com',
+                '8080',
+                explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
+                null,
+                'X-Forwarded-Proto',
+                json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true)
+            )));
         $this->config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\PageCache\Model\Config::class,
             [
-                'readFactory' => $readFactoryMock
+                'vclGeneratorFactory' => $vclGeneratorFactory
             ]
         );
     }

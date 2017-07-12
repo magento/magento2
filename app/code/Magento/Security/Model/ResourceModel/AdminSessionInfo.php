@@ -8,6 +8,8 @@ namespace Magento\Security\Model\ResourceModel;
 
 /**
  * Admin Session Info mysql resource
+ *
+ * @api
  */
 class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

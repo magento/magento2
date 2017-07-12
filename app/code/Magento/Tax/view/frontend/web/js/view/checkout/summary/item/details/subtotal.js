@@ -3,6 +3,10 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
+
 define([
     'Magento_Checkout/js/view/summary/item/details/subtotal'
 ], function (subtotal) {

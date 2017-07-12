@@ -7,6 +7,8 @@ namespace Magento\Security\Model\ResourceModel\AdminSessionInfo;
 
 /**
  * Admin Session Info collection
+ *
+ * @api
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

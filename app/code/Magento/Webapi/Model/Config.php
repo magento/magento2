@@ -12,9 +12,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
- * Web API Config Model.
+ * This class gives access to consolidated web API configuration from <Module_Name>/etc/webapi.xml files.
  *
- * This is a parent class for storing information about service configuration.
+ * @api
  */
 class Config
 {

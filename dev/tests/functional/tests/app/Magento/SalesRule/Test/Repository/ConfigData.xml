@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="freeshipping_minimum_order_amount_100000">
+            <field name="carriers/freeshipping/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="carriers/freeshipping/free_shipping_subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">100000</item>
+            </field>
+        </dataset>
+
+        <dataset name="freeshipping_minimum_order_amount_100000_rollback">
+            <field name="carriers/freeshipping/active" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="carriers/freeshipping/free_shipping_subtotal" xsi:type="array">
+                <item name="scope" xsi:type="string">carriers</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+    </repository>
+</config>

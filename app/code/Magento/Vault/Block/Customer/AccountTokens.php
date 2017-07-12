@@ -9,6 +9,8 @@ use Magento\Vault\Model\AccountPaymentTokenFactory;
 
 /**
  * Class AccountTokens
+ *
+ * @api
  */
 class AccountTokens extends PaymentTokens
 {

@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Action pager helper for iterating over search results
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Pager extends \Magento\Framework\App\Helper\AbstractHelper
 {

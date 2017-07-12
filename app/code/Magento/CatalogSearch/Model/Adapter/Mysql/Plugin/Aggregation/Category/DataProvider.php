@@ -8,7 +8,6 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
@@ -34,29 +33,19 @@ class DataProvider
     protected $categoryFactory;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource|null
-     */
-    private $categoryProductIndexerFrontend;
-
-    /**
      * DataProvider constructor.
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Resolver $layerResolver
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $categoryProductIndexerFrontend
      */
     public function __construct(
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
-        Resolver $layerResolver,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $categoryProductIndexerFrontend = null
+        Resolver $layerResolver
     ) {
         $this->resource = $resource;
         $this->scopeResolver = $scopeResolver;
         $this->layer = $layerResolver->get();
-        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource::class
-        );
     }
 
     /**
@@ -82,7 +71,7 @@ class DataProvider
 
             $derivedTable = $this->resource->getConnection()->select();
             $derivedTable->from(
-                ['main_table' => $this->categoryProductIndexerFrontend->getMainTable()],
+                ['main_table' => $this->resource->getTableName('catalog_category_product_index')],
                 [
                     'value' => 'category_id'
                 ]

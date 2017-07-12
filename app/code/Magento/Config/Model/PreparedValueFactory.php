@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\ScopeInterface;
+use Magento\Store\Model\ScopeTypeNormalizer;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\RuntimeException;
 
@@ -19,6 +20,7 @@ use Magento\Framework\Exception\RuntimeException;
  * Creates a prepared instance of Value.
  *
  * @see ValueInterface
+ * @api
  */
 class PreparedValueFactory
 {
@@ -52,34 +54,43 @@ class PreparedValueFactory
     private $config;
 
     /**
+     * The scope type normalizer.
+     *
+     * @var ScopeTypeNormalizer
+     */
+    private $scopeTypeNormalizer;
+
+    /**
      * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
      * @param StructureFactory $structureFactory The manager for system configuration structure
      * @param BackendFactory $valueFactory The factory for configuration value objects
      * @param ScopeConfigInterface $config The scope configuration
+     * @param ScopeTypeNormalizer $scopeTypeNormalizer The scope type normalizer
      */
     public function __construct(
         ScopeResolverPool $scopeResolverPool,
         StructureFactory $structureFactory,
         BackendFactory $valueFactory,
-        ScopeConfigInterface $config
+        ScopeConfigInterface $config,
+        ScopeTypeNormalizer $scopeTypeNormalizer
     ) {
         $this->scopeResolverPool = $scopeResolverPool;
         $this->structureFactory = $structureFactory;
         $this->valueFactory = $valueFactory;
         $this->config = $config;
+        $this->scopeTypeNormalizer = $scopeTypeNormalizer;
     }
 
     /**
      * Returns instance of Value with defined properties.
      *
-     * @param string $path The configuration path in format group/section/field_name
+     * @param string $path The configuration path in format section/group/field_name
      * @param string $value The configuration value
      * @param string $scope The configuration scope (default, website, or store)
      * @param string|int|null $scopeCode The scope code
      * @return ValueInterface
      * @throws RuntimeException If Value can not be created
      * @see ValueInterface
-     * @see Value
      */
     public function create($path, $value, $scope, $scopeCode = null)
     {
@@ -87,7 +98,7 @@ class PreparedValueFactory
             /** @var Structure $structure */
             $structure = $this->structureFactory->create();
             /** @var Structure\ElementInterface $field */
-            $field = $structure->getElement($path);
+            $field = $structure->getElementByConfigPath($path);
             $configPath = $path;
             /** @var string $backendModelName */
             if ($field instanceof Structure\Element\Field && $field->hasBackendModel()) {
@@ -105,14 +116,26 @@ class PreparedValueFactory
             if ($backendModel instanceof Value) {
                 $scopeId = 0;
 
+                $scope = $this->scopeTypeNormalizer->normalize($scope);
+
                 if ($scope !== ScopeInterface::SCOPE_DEFAULT) {
-                    $scopeResolver = $this->scopeResolverPool->get($scope);
-                    $scopeId = $scopeResolver->getScope($scopeCode)->getId();
+                    $scopeId = $this->scopeResolverPool->get($scope)
+                        ->getScope($scopeCode)
+                        ->getId();
+                }
+
+                if ($field instanceof Structure\Element\Field) {
+                    $groupPath = $field->getGroupPath();
+                    $group = $structure->getElement($groupPath);
+                    $backendModel->setField($field->getId());
+                    $backendModel->setGroupId($group->getId());
+                    $backendModel->setFieldConfig($field->getData());
                 }
 
                 $backendModel->setPath($configPath);
                 $backendModel->setScope($scope);
                 $backendModel->setScopeId($scopeId);
+                $backendModel->setScopeCode($scopeCode);
                 $backendModel->setValue($value);
             }
 

@@ -6,6 +6,9 @@
  */
 namespace Magento\Wishlist\Model;
 
+/**
+ * @api
+ */
 class LocaleQuantityProcessor
 {
     /**

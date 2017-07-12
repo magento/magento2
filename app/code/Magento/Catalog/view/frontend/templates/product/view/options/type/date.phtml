@@ -10,38 +10,38 @@
 <?php $_option = $block->getOption() ?>
 <?php $_optionId = $_option->getId() ?>
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
-<div class="field date<?php /* @escapeNotVerified */ echo $class; ?>"
+<div class="field date<?= /* @escapeNotVerified */ $class ?>"
     data-mage-init='{"priceOptionDate":{"fromSelector":"#product_addtocart_form"}}'>
-    <fieldset class="fieldset fieldset-product-options-inner<?php /* @escapeNotVerified */ echo $class; ?>">
+    <fieldset class="fieldset fieldset-product-options-inner<?= /* @escapeNotVerified */ $class ?>">
         <legend class="legend">
-            <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
-            <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
+            <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+            <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
         </legend>
         <div class="control">
-            <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
-                || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE): ?>
+            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+                || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
 
-                <?php echo $block->getDateHtml() ?>
+                <?= $block->getDateHtml() ?>
 
             <?php endif; ?>
 
-            <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
-                || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME): ?>
-                <?php echo $block->getTimeHtml() ?>
+            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+                || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
+                <?= $block->getTimeHtml() ?>
             <?php endif; ?>
 
             <?php if ($_option->getIsRequire()): ?>
                 <input type="hidden"
-                       name="validate_datetime_<?php /* @escapeNotVerified */ echo $_optionId ?>"
-                       class="validate-datetime-<?php /* @escapeNotVerified */ echo $_optionId ?>"
+                       name="validate_datetime_<?= /* @escapeNotVerified */ $_optionId ?>"
+                       class="validate-datetime-<?= /* @escapeNotVerified */ $_optionId ?>"
                        value=""
-                       data-validate="{'validate-required-datetime':<?php /* @escapeNotVerified */ echo $_optionId?>}"/>
+                       data-validate="{'validate-required-datetime':<?= /* @escapeNotVerified */ $_optionId ?>}"/>
             <?php else: ?>
                 <input type="hidden"
-                       name="validate_datetime_<?php /* @escapeNotVerified */ echo $_optionId ?>"
-                       class="validate-datetime-<?php /* @escapeNotVerified */ echo $_optionId ?>"
+                       name="validate_datetime_<?= /* @escapeNotVerified */ $_optionId ?>"
+                       class="validate-datetime-<?= /* @escapeNotVerified */ $_optionId ?>"
                        value=""
-                       data-validate="{'validate-optional-datetime':<?php /* @escapeNotVerified */ echo $_optionId?>}"/>
+                       data-validate="{'validate-optional-datetime':<?= /* @escapeNotVerified */ $_optionId ?>}"/>
             <?php endif; ?>
             <script type="text/x-magento-init">
             {

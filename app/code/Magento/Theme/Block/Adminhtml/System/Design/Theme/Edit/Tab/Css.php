@@ -10,6 +10,7 @@ use Magento\Theme\Helper\Storage;
 /**
  * Theme form, Css editor tab
  *
+ * @api
  * @method \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css setFiles(array $files)
  * @method array getFiles()
  *

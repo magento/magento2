@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     '../model/quote',
     'Magento_Checkout/js/model/shipping-save-processor'

@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ */
 define([
     'jquery',
     'underscore',
@@ -191,12 +194,25 @@ define([
          */
         init: function () {
             var countryData,
-                privateContent = $.cookieStorage.get('private_content_version');
+                privateContentVersion = 'private_content_version',
+                privateContent = $.cookieStorage.get(privateContentVersion),
+                localPrivateContent = $.localStorage.get(privateContentVersion),
+                needVersion = 'need_version';
 
-            if (_.isEmpty(storage.keys())) {
-                if (!_.isEmpty(privateContent)) {
-                    this.reload([], false);
+            if (privateContent &&
+                !$.cookieStorage.isSet(privateContentVersion) &&
+                !$.localStorage.isSet(privateContentVersion)
+            ) {
+                $.cookieStorage.set(privateContentVersion, needVersion);
+                $.localStorage.set(privateContentVersion, needVersion);
+                this.reload([], false);
+            } else if (localPrivateContent !== privateContent) {
+                if (!$.cookieStorage.isSet(privateContentVersion)) {
+                    privateContent = needVersion;
+                    $.cookieStorage.set(privateContentVersion, privateContent);
                 }
+                $.localStorage.set(privateContentVersion, privateContent);
+                this.reload([], false);
             } else if (this.needReload()) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -301,6 +317,7 @@ define([
          */
         reload: function (sectionNames, updateSectionId) {
             return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
+                $(document).trigger('customer-data-reload', [sectionNames]);
                 buffer.update(sections);
             });
         },
@@ -313,6 +330,7 @@ define([
                 sectionsNamesForInvalidation;
 
             sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            $(document).trigger('customer-data-invalidate', [sectionsNamesForInvalidation]);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
