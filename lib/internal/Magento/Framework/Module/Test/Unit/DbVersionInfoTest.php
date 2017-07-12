@@ -92,24 +92,21 @@ class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'version in config == version in db' => ['Module_One', '1', true],
-            'version in config < version in db' =>
-                [
-                    'Module_One',
-                    '2',
-                    false
-                ],
-            'version in config > version in db' =>
-                [
-                    'Module_Two',
-                    '1',
-                    false
-                ],
-            'no version in db' =>
-                [
-                    'Module_One',
-                    false,
-                    false
-                ],
+            'version in config < version in db' => [
+                'Module_One',
+                '2',
+                false
+            ],
+            'version in config > version in db' => [
+                'Module_Two',
+                '1',
+                false
+            ],
+            'no version in db' => [
+                'Module_One',
+                false,
+                false
+            ],
         ];
     }
 
