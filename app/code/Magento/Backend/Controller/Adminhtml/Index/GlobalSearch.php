@@ -131,7 +131,7 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
     }
 
     /**
-     * retrieve all entity items that should appear in global search
+     * Retrieve all entity items that should appear in global search
      *
      * @return array
      */
