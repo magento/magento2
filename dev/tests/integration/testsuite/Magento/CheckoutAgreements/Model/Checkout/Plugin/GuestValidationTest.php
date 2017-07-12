@@ -146,7 +146,6 @@ class GuestValidationTest extends \PHPUnit_Framework_TestCase
                 $e->getMessage()
             );
         }
-
     }
 
     public function dataProvider()

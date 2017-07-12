@@ -300,7 +300,6 @@ class Queue
                 }
                 return false;
             }
-
         }
         return $package->getState();
     }

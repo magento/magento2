@@ -149,8 +149,7 @@ class UrlRewriteHandler
             ->addAttributeToSelect('url_path');
 
         foreach ($productCollection as $product) {
-            if (
-                isset($this->isSkippedProduct[$category->getEntityId()]) &&
+            if (isset($this->isSkippedProduct[$category->getEntityId()]) &&
                 in_array($product->getId(), $this->isSkippedProduct[$category->getEntityId()])
             ) {
                 continue;
