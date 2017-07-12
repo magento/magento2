@@ -27,7 +27,7 @@ class ItemFactory
     /**
      * Create new search items provider instance
      *
-     * @param $instanceName
+     * @param string $instanceName
      * @param array $data
      * @return ItemsInterface
      */

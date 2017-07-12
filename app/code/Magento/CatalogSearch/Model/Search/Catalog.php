@@ -52,6 +52,9 @@ class Catalog implements ItemsInterface
         $this->queryFactory = $queryFactory;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getResults(SearchCriteria $searchCriteria)
     {
         $result = [];

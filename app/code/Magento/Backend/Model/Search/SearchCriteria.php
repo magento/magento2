@@ -49,6 +49,7 @@ class SearchCriteria
 
     /**
      * @param int $start
+     * @return void
      */
     public function setStart($start)
     {
@@ -57,6 +58,7 @@ class SearchCriteria
 
     /**
      * @return string
+     * @return @void
      */
     public function getQuery()
     {
@@ -65,11 +67,10 @@ class SearchCriteria
 
     /**
      * @param string $query
+     * @return void
      */
     public function setQuery($query)
     {
         $this->query = $query;
     }
-
-
 }
