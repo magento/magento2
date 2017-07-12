@@ -3,24 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\ProductAlert\Block\Email;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\ProductAlert\Block\Product\ImageProvider;
 
 /**
  * Product Alert Abstract Email Block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
 {
     /**
      * Product collection array
      *
-     * @var array
+     * @var \Magento\Catalog\Model\Product[]
      */
     protected $_products = [];
 
@@ -42,14 +39,14 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var \Magento\Catalog\Block\Product\ImageBuilder
      */
     protected $imageBuilder;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation
+     * @var ImageProvider
      */
-    private $appEmulation;
+    private $imageProvider;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -57,7 +54,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param array $data
-     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     * @param ImageProvider $imageProvider
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -65,21 +62,20 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         array $data = [],
-        \Magento\Store\Model\App\Emulation $appEmulation = null
+        ImageProvider $imageProvider = null
     ) {
         $this->imageBuilder = $imageBuilder;
         $this->priceCurrency = $priceCurrency;
         $this->_maliciousCode = $maliciousCode;
-        $this->appEmulation = $appEmulation
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Store\Model\App\Emulation::class);
+        $this->imageProvider = $imageProvider ?: ObjectManager::getInstance()->get(ImageProvider::class);
 
         parent::__construct($context, $data);
     }
 
-    /**
+   /**
     * Filter malicious code before insert content to email
     *
-    * @param  string|array $content
+    * @param string|array $content
     * @return string|array
     */
     public function getFilteredContent($content)
@@ -114,7 +110,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore();
         }
         return $this->_store;
@@ -124,9 +120,9 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * Convert price from default currency to current currency
      *
      * @param float $price
-     * @param boolean $format             Format price to currency format
-     * @param boolean $includeContainer   Enclose into <span class="price"><span>
-     * @return float
+     * @param bool $format Format price to currency format
+     * @param bool $includeContainer Enclose into <span class="price"><span>
+     * @return float|string
      */
     public function formatPrice($price, $format = true, $includeContainer = true)
     {
@@ -159,7 +155,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve product collection array
      *
-     * @return array
+     * @return \Magento\Catalog\Model\Product[]
      */
     public function getProducts()
     {
@@ -228,28 +224,9 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      * @param string $imageId
      * @param array $attributes
      * @return \Magento\Catalog\Block\Product\Image
-     * @throws \Exception
      */
     public function getImage($product, $imageId, $attributes = [])
     {
-        $this->appEmulation->startEnvironmentEmulation(
-            $this->_storeManager->getStore()->getId(),
-            \Magento\Framework\App\Area::AREA_FRONTEND,
-            true
-        );
-
-        try {
-            $image = $this->imageBuilder->setProduct($product)
-                ->setImageId($imageId)
-                ->setAttributes($attributes)
-                ->create();
-        } catch (\Exception $e) {
-            $this->appEmulation->stopEnvironmentEmulation();
-            throw $e;
-        }
-
-        $this->appEmulation->stopEnvironmentEmulation();
-
-        return $image;
+        return $this->imageProvider->getImage($product, $imageId, $attributes);
     }
 }
