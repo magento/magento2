@@ -12,15 +12,17 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\Stock as ResourceStock;
+use Magento\Inventory\Model\ResourceModel\Stock\Collection;
 use Magento\Inventory\Model\ResourceModel\Stock\CollectionFactory;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
+use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * The Repository Model for stock
+ * @inheritdoc
  */
 class StockRepository implements StockRepositoryInterface
 {
@@ -98,7 +100,7 @@ class StockRepository implements StockRepositoryInterface
             return $stock->getStockId();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save stock'), $e);
+            throw new CouldNotSaveException(__('Could not save Stock'), $e);
         }
     }
 
@@ -110,7 +112,7 @@ class StockRepository implements StockRepositoryInterface
         $stock = $this->stockFactory->create();
         $this->resourceStock->load($stock, $stockId, StockInterface::STOCK_ID);
 
-        if (!$stock->getStockId()) {
+        if (null === $stock->getStockId()) {
             throw NoSuchEntityException::singleField(StockInterface::STOCK_ID, $stockId);
         }
         return $stock;
@@ -127,7 +129,7 @@ class StockRepository implements StockRepositoryInterface
             $this->resourceStock->delete($stockItem);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete source item'), $e);
+            throw new CouldNotDeleteException(__('Could not delete Stock'), $e);
         }
 
     }
@@ -137,6 +139,7 @@ class StockRepository implements StockRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
+        /** @var Collection $collection */
         $collection = $this->stockCollectionFactory->create();
 
         if (null === $searchCriteria) {
@@ -145,6 +148,7 @@ class StockRepository implements StockRepositoryInterface
             $this->collectionProcessor->process($searchCriteria, $collection);
         }
 
+        /** @var StockSearchResultsInterface $searchResult */
         $searchResult = $this->stockSearchResultsFactory->create();
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());

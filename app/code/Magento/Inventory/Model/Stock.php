@@ -6,10 +6,12 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Inventory\Model\ResourceModel\Stock as StockResourceModel;
+use Magento\InventoryApi\Api\Data\StockExtensionInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
- * Class Source
+ * {@inheritdoc}
  *
  * @codeCoverageIgnore
  */
@@ -20,7 +22,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\ResourceModel\Stock::class);
+        $this->_init(StockResourceModel::class);
     }
 
     /**
@@ -71,9 +73,8 @@ class Stock extends AbstractExtensibleModel implements StockInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
-    ) {
+    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes)
+    {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

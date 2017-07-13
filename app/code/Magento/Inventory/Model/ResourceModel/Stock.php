@@ -6,10 +6,12 @@
 namespace Magento\Inventory\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
+/**
+ * Implementation of basic operations for Stock entity for specific db layer
+ */
 class Stock extends AbstractDb
 {
     /**

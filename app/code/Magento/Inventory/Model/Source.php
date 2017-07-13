@@ -6,10 +6,14 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
-use \Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
+use Magento\InventoryApi\Api\Data\SourceExtensionInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
+ *
+ * @codeCoverageIgnore
  */
 class Source extends AbstractExtensibleModel implements SourceInterface
 {
@@ -18,7 +22,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Inventory\Model\ResourceModel\Source::class);
+        $this->_init(SourceResourceModel::class);
     }
 
     /**
@@ -294,7 +298,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isUseDefaultCarrierConfig()
     {
@@ -302,7 +306,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUseDefaultCarrierConfig($useDefaultCarrierConfig)
     {
@@ -341,9 +345,8 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceExtensionInterface $extensionAttributes
-    ) {
+    public function setExtensionAttributes(SourceExtensionInterface $extensionAttributes)
+    {
         $this->_setExtensionAttributes($extensionAttributes);
     }
 }

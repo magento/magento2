@@ -7,6 +7,7 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\SourceItem as ResourceSource;
@@ -96,7 +97,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
         $sourceItem = $this->sourceItemFactory->create();
         $this->resourceSource->load($sourceItem, $sourceItemId, SourceItemInterface::SOURCE_ITEM_ID);
 
-        if (!$sourceItem->getSourceItemId()) {
+        if (null === $sourceItem->getSourceItemId()) {
             throw NoSuchEntityException::singleField(SourceItemInterface::SOURCE_ITEM_ID, $sourceItemId);
         }
 
@@ -106,7 +107,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         /** @var Collection $collection */
         $collection = $this->sourceItemCollectionFactory->create();
@@ -131,7 +132,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
             $this->resourceSource->delete($sourceItem);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete source item'), $e);
+            throw new CouldNotDeleteException(__('Could not delete Source Item'), $e);
         }
     }
 }

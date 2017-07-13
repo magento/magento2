@@ -49,7 +49,7 @@ class SourceItemSave implements SourceItemSaveInterface
             $this->saveMultiple->execute($sourceItems);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save source item'), $e);
+            throw new CouldNotSaveException(__('Could not save Source Item'), $e);
         }
     }
 }

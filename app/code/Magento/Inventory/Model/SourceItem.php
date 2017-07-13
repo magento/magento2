@@ -6,13 +6,25 @@
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
+use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * @inheritdoc
+ * {@inheritdoc}
+ *
+ * @codeCoverageIgnore
  */
 class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
 {
+    /**
+     * @inheritdoc
+     */
+    protected function _construct()
+    {
+        $this->_init(SourceItemResourceModel::class);
+    }
+
     /**
      * @inheritdoc
      */
@@ -101,9 +113,8 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(
-        \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface $extensionAttributes
-    ) {
+    public function setExtensionAttributes(SourceItemExtensionInterface $extensionAttributes)
+    {
         $this->_setExtensionAttributes($extensionAttributes);
     }
 }

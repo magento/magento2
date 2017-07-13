@@ -9,8 +9,8 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\Source as SourceModel;
 use Magento\Inventory\Model\SourceCarrierLinkManagementInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -64,7 +64,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(SourceModel::class, ResourceSource::class);
+        $this->_init(SourceModel::class, SourceResourceModel::class);
     }
 
     /**

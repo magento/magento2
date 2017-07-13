@@ -11,9 +11,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Inventory\Model\ResourceModel\Source as ResourceSource;
+use Magento\Inventory\Model\ResourceModel\Source\Collection;
 use Magento\Inventory\Model\ResourceModel\Source\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
+use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\SourceSearchResultsInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -97,7 +99,7 @@ class SourceRepository implements SourceRepositoryInterface
             return $source->getSourceId();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save source'), $e);
+            throw new CouldNotSaveException(__('Could not save Source'), $e);
         }
     }
 
@@ -109,7 +111,7 @@ class SourceRepository implements SourceRepositoryInterface
         $source = $this->sourceFactory->create();
         $this->resourceSource->load($source, $sourceId, SourceInterface::SOURCE_ID);
 
-        if (!$source->getSourceId()) {
+        if (null === $source->getSourceId()) {
             throw NoSuchEntityException::singleField(SourceInterface::SOURCE_ID, $sourceId);
         }
         return $source;
@@ -120,6 +122,7 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria = null)
     {
+        /** @var Collection $collection */
         $collection = $this->sourceCollectionFactory->create();
 
         if (null === $searchCriteria) {
@@ -128,6 +131,7 @@ class SourceRepository implements SourceRepositoryInterface
             $this->collectionProcessor->process($searchCriteria, $collection);
         }
 
+        /** @var SourceSearchResultsInterface $searchResult */
         $searchResult = $this->sourceSearchResultsFactory->create();
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
