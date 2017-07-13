@@ -9,7 +9,7 @@ namespace Magento\MysqlMq\Test\Unit\Model\Driver\Bulk;
 /**
  * Unit test for bulk Exchange model.
  */
-class ExchangeTest extends \PHPUnit_Framework_TestCase
+class ExchangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\MessageQueue\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
