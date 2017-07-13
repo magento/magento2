@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql\Field;
 
+/**
+ * @api
+ */
 class FieldFactory
 {
     /**

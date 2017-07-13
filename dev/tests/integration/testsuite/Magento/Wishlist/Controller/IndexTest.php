@@ -158,7 +158,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         );
 
         $actualResult = \Zend_Mime_Decode::decodeQuotedPrintable(
-            $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
+            $transportBuilder->getSentMessage()->getRawMessage()
         );
 
         $this->assertStringMatchesFormat(

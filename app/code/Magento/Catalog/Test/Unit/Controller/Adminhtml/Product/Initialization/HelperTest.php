@@ -165,11 +165,19 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      * @param array $links
      * @param array $linkTypes
      * @param array $expectedLinks
+     * @param array|null $tierPrice
      * @dataProvider initializeDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testInitialize($isSingleStore, $websiteIds, $expWebsiteIds, $links, $linkTypes, $expectedLinks)
-    {
+    public function testInitialize(
+        $isSingleStore,
+        $websiteIds,
+        $expWebsiteIds,
+        $links,
+        $linkTypes,
+        $expectedLinks,
+        $tierPrice = null
+    ) {
         $this->linkTypeProviderMock->expects($this->once())
             ->method('getItems')
             ->willReturn($this->assembleLinkTypes($linkTypes));
@@ -184,6 +192,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'options' => $optionsData,
             'website_ids' => $websiteIds
         ];
+        if (!empty($tierPrice)) {
+            $productData = array_merge($productData, ['tier_price' => $tierPrice]);
+        }
         $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -270,9 +281,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue('sku' == $option2->getData('product_sku'));
 
         $productLinks = $this->productMock->getProductLinks();
-
         $this->assertCount(count($expectedLinks), $productLinks);
         $resultLinks = [];
+
+        $this->assertEquals($tierPrice ?: [], $this->productMock->getData('tier_price'));
 
         foreach ($productLinks as $link) {
             $this->assertInstanceOf(ProductLink::class, $link);
@@ -297,6 +309,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
+                'tierPrice' => [1, 2, 3],
             ],
             [
                 'single_store' => false,
