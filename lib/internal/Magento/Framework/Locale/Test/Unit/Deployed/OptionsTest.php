@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Locale\Test\Unit\Deployed;
 
-use Magento\Framework\Locale\Deployed\Options;
-use Magento\Framework\View\Design\ThemeInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\App\State;
 use Magento\Framework\Locale\AvailableLocalesInterface;
+use Magento\Framework\Locale\Deployed\Options;
 use Magento\Framework\Locale\ListsInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for Options class.

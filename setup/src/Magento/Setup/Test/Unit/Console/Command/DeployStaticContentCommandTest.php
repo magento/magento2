@@ -1,166 +1,132 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\State;
+use Magento\Setup\Model\ObjectManagerProvider;
 
-require 'FunctionExistMock.php';
+use Magento\Deploy\Console\ConsoleLogger;
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Console\ConsoleLoggerFactory;
+use Magento\Deploy\Console\DeployStaticOptions;
+use Magento\Deploy\Service\DeployStaticContent;
+
+use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+use Symfony\Component\Console\Tester\CommandTester;
+
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Deploy\Model\DeployManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deployer;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManager;
-
-    /**
-     * @var \Magento\Framework\App\ObjectManagerFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManagerFactory;
-
-    /**
-     * @var \Magento\Framework\App\Utility\Files|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filesUtil;
-
     /**
      * @var DeployStaticContentCommand
      */
     private $command;
 
     /**
-     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputValidator|Mock
      */
-    private $validator;
+    private $inputValidator;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConsoleLogger|Mock
+     */
+    private $logger;
+
+    /**
+     * @var ConsoleLoggerFactory|Mock
+     */
+    private $consoleLoggerFactory;
+
+    /**
+     * @var DeployStaticContent|Mock
+     */
+    private $deployService;
+
+    /**
+     * Object manager to create various objects
+     *
+     * @var ObjectManagerInterface|Mock
+     *
+     */
+    private $objectManager;
+
+    /**
+     * @var State|Mock
      */
     private $appState;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->objectManagerFactory = $this->getMock(
-            \Magento\Framework\App\ObjectManagerFactory::class,
+        $this->inputValidator = $this->getMock(InputValidator::class, [], [], '', false);
+        $this->consoleLoggerFactory = $this->getMock(ConsoleLoggerFactory::class, [], [], '', false);
+        $this->logger = $this->getMock(ConsoleLogger::class, [], [], '', false);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->appState = $this->getMock(State::class, [], [], '', false);
+        $this->deployService = $this->getMock(DeployStaticContent::class, [], [], '', false);
+
+        $objectManagerProvider = $this->getMock(
+            ObjectManagerProvider::class,
             [],
             [],
             '',
             false
         );
-        $this->deployer = $this->getMock(\Magento\Deploy\Model\DeployManager::class, [], [], '', false);
-        $this->filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
-        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $objectManagerProvider->method('get')->willReturn($this->objectManager);
 
-        $this->validator = $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
         $this->command = (new ObjectManager($this))->getObject(DeployStaticContentCommand::class, [
-            'objectManagerFactory' => $this->objectManagerFactory,
-            'validator' => $this->validator,
-            'objectManager' => $this->objectManager,
+            'inputValidator' => $this->inputValidator,
+            'consoleLoggerFactory' => $this->consoleLoggerFactory,
+            'options' => new DeployStaticOptions(),
             'appState' => $this->appState,
+            'objectManagerProvider' => $objectManagerProvider
         ]);
     }
 
-    public function testExecute()
-    {
-        $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
-        $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->deployer->expects($this->once())->method('deploy');
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
-        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->deployer);
-
-        $tester = new CommandTester($this->command);
-        $tester->execute([]);
-    }
-
-    public function testExecuteValidateLanguages()
-    {
-        $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
-        $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->deployer->expects($this->once())->method('deploy');
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
-        $this->objectManager->expects($this->at(1))->method('create')->willReturn($this->deployer);
-        $this->validator->expects(self::exactly(2))->method('isValid')->willReturnMap([
-            ['en_US', true],
-            ['uk_UA', true],
-        ]);
-
-        $tester = new CommandTester($this->command);
-        $tester->execute(['languages' => ['en_US', 'uk_UA']]);
-    }
-
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage --language (-l) and --exclude-language cannot be used at the same tim
+     * @param array $input
+     * @see DeployStaticContentCommand::execute()
+     * @dataProvider executeDataProvider
      */
-    public function testExecuteIncludedExcludedLanguages()
+    public function testExecute($input)
     {
-        $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
-        $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
-        $this->validator->expects(self::exactly(2))->method('isValid')->willReturnMap([
-            ['en_US', true],
-            ['uk_UA', true],
-        ]);
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+
+        $this->inputValidator->expects($this->once())
+            ->method('validate');
+
+        $this->consoleLoggerFactory->expects($this->once())
+            ->method('getLogger')->willReturn($this->logger);
+        $this->logger->expects($this->exactly(2))->method('alert');
+
+        $this->objectManager->expects($this->once())->method('create')->willReturn($this->deployService);
+        $this->deployService->expects($this->once())->method('deploy');
 
         $tester = new CommandTester($this->command);
-        $tester->execute(['--language' => ['en_US', 'uk_UA'], '--exclude-language' => 'ru_RU']);
+        $tester->execute($input);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage --area (-a) and --exclude-area cannot be used at the same tim
-     */
-    public function testExecuteIncludedExcludedAreas()
+    public function executeDataProvider()
     {
-        $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
-        $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
-
-        $tester = new CommandTester($this->command);
-        $tester->execute(['--area' => ['a1', 'a2'], '--exclude-area' => 'a3']);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage --theme (-t) and --exclude-theme cannot be used at the same tim
-     */
-    public function testExecuteIncludedExcludedThemes()
-    {
-        $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
-        $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->filesUtil);
-
-        $tester = new CommandTester($this->command);
-        $tester->execute(['--theme' => ['t1', 't2'], '--exclude-theme' => 't3']);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ARG_IS_WRONG argument has invalid value, please run info:language:list
-     */
-    public function testExecuteInvalidLanguageArgument()
-    {
-        $this->appState->expects($this->once())->method('getMode')->willReturn(State::MODE_PRODUCTION);
-        $this->filesUtil->expects(self::any())->method('getStaticPreProcessingFiles')->willReturn([]);
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->willReturn($this->filesUtil);
-        $wrongParam = ['languages' => ['ARG_IS_WRONG']];
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute($wrongParam);
+        return [
+            'No options' => [
+                []
+            ],
+            'With static content version option' => [
+                ['--content-version' => '123456']
+            ]
+        ];
     }
 
     /**

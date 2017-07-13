@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid column widget for rendering action grid cells
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated in favour of UI component implementation
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
@@ -155,7 +154,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     break;
 
                 case 'popup':
-                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,scrollbars=1\');return false;';
+                    $action['onclick'] = 'popWin(this.href,\'_blank\',\'width=800,height=700,resizable=1,'
+                        . 'scrollbars=1\');return false;';
                     break;
             }
         }

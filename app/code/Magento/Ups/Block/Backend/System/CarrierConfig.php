@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ups\Block\Backend\System;
@@ -12,6 +12,8 @@ use Magento\Ups\Helper\Config as ConfigHelper;
 
 /**
  * Backend shipping UPS content block
+ *
+ * @api
  */
 class CarrierConfig extends Template
 {

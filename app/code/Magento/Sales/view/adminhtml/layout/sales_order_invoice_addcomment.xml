@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Comments" name="invoice_comments">
-            <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="order/comments/view.phtml"/>
+            <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="Magento_Sales::order/comments/view.phtml"/>
         </block>
     </body>
 </page>

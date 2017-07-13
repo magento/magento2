@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * EAV Attribute Abstract Data Model
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -306,10 +307,10 @@ abstract class AbstractData
             return true;
         }
 
-        $label = $this->getAttribute()->getStoreLabel();
         $validateRules = $this->getAttribute()->getValidateRules();
 
         if (!empty($validateRules['input_validation'])) {
+            $label = $this->getAttribute()->getStoreLabel();
             switch ($validateRules['input_validation']) {
                 case 'alphanumeric':
                     $validator = new \Zend_Validate_Alnum(true);

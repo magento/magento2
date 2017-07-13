@@ -1,15 +1,12 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
-/**
- * Class TableBuilder
- */
 class TableBuilder
 {
     /**
@@ -45,16 +42,22 @@ class TableBuilder
     protected $_isExecuted = false;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param BuilderInterfaceFactory|null $tableBuilderFactory
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        BuilderInterfaceFactory $tableBuilderFactory = null
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->resource = $resource;
         $this->_connection = $resource->getConnection();
+        $this->tableBuilderFactory = $tableBuilderFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(BuilderInterfaceFactory::class);
     }
 
     /**
@@ -131,13 +134,13 @@ class TableBuilder
         $valueTables = [];
         if (!empty($columns)) {
             $valueTableName = $tableName . $valueFieldSuffix;
-            $temporaryTableBuilder = $this->getTableBuilderFactory()->create(
+            $temporaryTableBuilder = $this->tableBuilderFactory->create(
                 [
                     'connection' => $this->_connection,
                     'tableName' => $tableName
                 ]
             );
-            $valueTemporaryTableBuilder = $this->getTableBuilderFactory()->create(
+            $valueTemporaryTableBuilder = $this->tableBuilderFactory->create(
                 [
                     'connection' => $this->_connection,
                     'tableName' => $valueTableName
@@ -353,20 +356,8 @@ class TableBuilder
     }
 
     /**
-     * @return BuilderInterfaceFactory
-     */
-    private function getTableBuilderFactory()
-    {
-        if (null === $this->tableBuilderFactory) {
-            $this->tableBuilderFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(BuilderInterfaceFactory::class);
-        }
-
-        return $this->tableBuilderFactory;
-    }
-
-    /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @deprecated
      */
     private function getMetadataPool()
     {

@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\ImportExport\Test\Constraint;
 
+use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\ImportExport\Test\Fixture\ImportData;
 
 /**
  * Check message after check data click.
@@ -29,8 +29,11 @@ class AssertImportCheckData extends AbstractConstraint
      */
     public function processAssert(AdminImportIndex $adminImportIndex, ImportData $import)
     {
-        $rowsCount = $import->getDataFieldConfig('import_file')['source']->getValue()['template']['count'];
-        $entitiesCount = count($import->getDataFieldConfig('import_file')['source']->getEntities());
+        $file = $import->getDataFieldConfig('import_file')['source'];
+        $rowsCount = $file->getValue()['template']['count'];
+        $entitiesCount = isset($file->getValue()['template']['entities'])
+            ? $file->getValue()['template']['entities']
+            : count($file->getEntities());
 
         $message = $adminImportIndex->getMessagesBlock()->getNoticeMessage();
         \PHPUnit_Framework_Assert::assertEquals(

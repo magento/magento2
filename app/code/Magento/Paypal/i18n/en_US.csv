@@ -183,8 +183,8 @@ Dispute,Dispute
 "N/A. Retry","N/A. Retry"
 "N/A. Service not Supported","N/A. Service not Supported"
 "N/A. Unavailable","N/A. Unavailable"
-"Matched whole nine-didgit ZIP (no Address)","Matched whole nine-didgit ZIP (no Address)"
-"Yes. Matched Address and five-didgit ZIP","Yes. Matched Address and five-didgit ZIP"
+"Matched whole nine-digit ZIP (no Address)","Matched whole nine-digit ZIP (no Address)"
+"Yes. Matched Address and five-digit ZIP","Yes. Matched Address and five-digit ZIP"
 "All the address information matched","All the address information matched"
 "None of the address information matched","None of the address information matched"
 "Part of the address information matched","Part of the address information matched"
@@ -658,7 +658,7 @@ User,User
 "Reject Transaction if:","Reject Transaction if:"
 "AVS Street Does Not Match","AVS Street Does Not Match"
 "AVS Zip Does Not Match","AVS Zip Does Not Match"
-"International AVS Indicator Does Not Match","International AVS Indicator Does Not Match"
+"Card Issuer Is Outside The United States","Card Issuer Is Outside The United States"
 "Card Security Code Does Not Match","Card Security Code Does Not Match"
 "Payflow Pro (Includes Express Checkout)","Payflow Pro (Includes Express Checkout)"
 "Payflow Pro and Express Checkout","Payflow Pro and Express Checkout"
@@ -666,7 +666,7 @@ User,User
                     <a href=""https:/financing.paypal.com/ppfinportal/content/whyUseFinancing"" target=""_blank"">Why Advertise Financing?</a><br/>
                                 <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
                                 from PayPal Credit&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
-                                Use PayPal’s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
+                                Use PayPal’ s free banner ads that let you advertise PayPal Credit&#174; financing as a payment option when your customers check out with PayPal.
                                 The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                                 or more. <a href=""https:/financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
                 ","

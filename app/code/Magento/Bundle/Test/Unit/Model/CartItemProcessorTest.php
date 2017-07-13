@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model;
@@ -178,6 +178,24 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $cartItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, ['getProductType'], [], '', false);
         $cartItemMock->expects($this->once())->method('getProductType')->willReturn(Type::TYPE_SIMPLE);
+        $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
+    }
+
+    public function testProcessProductOptionsifBundleOptionsNotExists()
+    {
+        $buyRequestMock = new \Magento\Framework\DataObject(
+            []
+        );
+        $methods = ['getProductType', 'getBuyRequest'];
+        $cartItemMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            $methods,
+            [],
+            '',
+            false
+        );
+        $cartItemMock->expects($this->once())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
+        $cartItemMock->expects($this->exactly(2))->method('getBuyRequest')->willReturn($buyRequestMock);
         $this->assertSame($cartItemMock, $this->model->processOptions($cartItemMock));
     }
 }

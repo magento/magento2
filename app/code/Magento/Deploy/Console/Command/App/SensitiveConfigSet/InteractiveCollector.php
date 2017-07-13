@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App\SensitiveConfigSet;
@@ -11,7 +11,7 @@ use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
 /**
- * Class InteractiveCollector collects configuration values from user input.
+ * Class InteractiveCollector collects configuration values from user input
  */
 class InteractiveCollector implements CollectorInterface
 {
@@ -38,7 +38,8 @@ class InteractiveCollector implements CollectorInterface
     }
 
     /**
-     * Collect list of configuration values from user input.
+     * Collect list of configuration values from user input
+     *
      * For example, this method will return
      *
      * ```php
@@ -48,7 +49,6 @@ class InteractiveCollector implements CollectorInterface
      *     'some/configuration/path3' => 'someValue3',
      * ]
      * ```
-     *
      * {@inheritdoc}
      */
     public function getValues(InputInterface $input, OutputInterface $output, array $configPaths)

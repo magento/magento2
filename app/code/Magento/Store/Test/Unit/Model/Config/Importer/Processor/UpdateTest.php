@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
@@ -18,6 +18,7 @@ use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Magento\Store\Model\Store;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Test for Update processor.
@@ -83,6 +84,11 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     private $storeResourceMock;
 
     /**
+     * @var ManagerInterface|Mock
+     */
+    private $eventManagerMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -120,6 +126,8 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->storeResourceMock = $this->getMockBuilder(StoreResource::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->getMockForAbstractClass();
 
         $this->storeMock->expects($this->any())
             ->method('getResource')
@@ -135,10 +143,14 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
             $this->dataDifferenceCalculatorMock,
             $this->websiteFactoryMock,
             $this->storeFactoryMock,
-            $this->groupFactoryMock
+            $this->groupFactoryMock,
+            $this->eventManagerMock
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testRun()
     {
         $data = $this->getData();
@@ -191,7 +203,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->groupFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->willReturn($this->groupMock);
-        $this->groupMock->expects($this->exactly(4))
+        $this->groupMock->expects($this->exactly(5))
             ->method('getResource')
             ->willReturn($this->groupResourceMock);
         $this->groupMock->expects($this->once())
@@ -207,13 +219,15 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->groupMock->expects($this->once())
             ->method('getDefaultStoreId')
             ->willReturn('2');
+        $updateGroupData = $updateData[ScopeInterface::SCOPE_GROUPS][2];
+        $updateGroupData['root_category_id'] = 2;
         $this->groupMock->expects($this->once())
             ->method('setData')
-            ->with($updateData[ScopeInterface::SCOPE_GROUPS][2]);
+            ->with($updateGroupData);
         $this->storeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->exactly(3))
+        $this->storeMock->expects($this->exactly(4))
             ->method('getResource')
             ->willReturn($this->storeResourceMock);
         $this->storeMock->expects($this->once())
@@ -233,6 +247,8 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $this->storeResourceMock->expects($this->once())
             ->method('save')
             ->with($this->storeMock);
+        $this->storeResourceMock->expects($this->once())
+            ->method('addCommitCallback');
 
         $this->model->run($data);
     }
@@ -255,7 +271,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                     'group_id' => '2',
                     'website_id' => '2',
                     'name' => 'Changed Test Website Store',
-                    'root_category_id' => '2',
+                    'root_category_id' => '3',
                     'default_store_id' => '2',
                     'code' => 'test_website_store',
                 ],
@@ -282,7 +298,6 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             ScopeInterface::SCOPE_GROUPS => [],
-            ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []
         ];
 

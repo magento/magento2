@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Sales\Test\Page\InvoiceView;
 use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Sales\Test\Page\CustomerOrderView;
 
 /**
  * Class AssertInvoicedAmountOnFrontend

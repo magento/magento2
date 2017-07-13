@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Model\Config\Backend\Image;
 
+/**
+ * @api
+ */
 class Favicon extends \Magento\Config\Model\Config\Backend\Image
 {
     /**
@@ -45,6 +48,6 @@ class Favicon extends \Magento\Config\Model\Config\Backend\Image
      */
     protected function _getAllowedExtensions()
     {
-        return ['ico', 'png', 'gif', 'jpg', 'jpeg', 'apng', 'svg'];
+        return ['ico', 'png', 'gif', 'jpg', 'jpeg', 'apng'];
     }
 }

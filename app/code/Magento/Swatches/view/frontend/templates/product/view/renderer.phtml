@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreFile
@@ -13,10 +13,10 @@
     {
         "[data-role=swatch-options]": {
             "Magento_Swatches/js/swatch-renderer": {
-                "jsonConfig": <?php /* @escapeNotVerified */ echo $swatchOptions = $block->getJsonConfig(); ?>,
+                "jsonConfig": <?= /* @escapeNotVerified */ $swatchOptions = $block->getJsonConfig() ?>,
                 "jsonSwatchConfig": <?php /* @escapeNotVerified */
                     echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
-                "mediaCallback": "<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>",
+                "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>",
                 "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
                     'Magento_ConfigurableProduct') ?: 'replace'; ?>"
             }

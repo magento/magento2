@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,8 @@ use Magento\Framework\App\RequestInterface;
  *
  * The class has only methods extended from CookieMetadata
  * as path and domain are only data to be exposed by SensitiveCookieMetadata
+ *
+ * @api
  */
 class SensitiveCookieMetadata extends CookieMetadata
 {

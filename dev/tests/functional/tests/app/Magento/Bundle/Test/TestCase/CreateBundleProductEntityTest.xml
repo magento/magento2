@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -172,7 +172,7 @@
             <data name="product/data/price/dataset" xsi:type="string">dynamic-50</data>
             <data name="product/data/weight_type" xsi:type="string">No</data>
             <data name="product/data/weight" xsi:type="string">10</data>
-            <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">custom_with_percentage_discount</data>
             <data name="product/data/price_view" xsi:type="string">As Low as</data>
             <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">No</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">No</data>
@@ -332,7 +332,7 @@
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
             <data name="product/data/shipment_type" xsi:type="string">Together</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">one_options_assigned_simple_big_qty</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" />
@@ -349,7 +349,7 @@
             <data name="product/data/price/dataset" xsi:type="string">fixed-100</data>
             <data name="product/data/weight_type" xsi:type="string">No</data>
             <data name="product/data/weight" xsi:type="string">10</data>
-            <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">custom_with_percentage_discount</data>
             <data name="product/data/price_view" xsi:type="string">As Low as</data>
             <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">No</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">No</data>
@@ -374,7 +374,7 @@
             <data name="product/data/price/dataset" xsi:type="string">dynamic-50</data>
             <data name="product/data/weight_type" xsi:type="string">No</data>
             <data name="product/data/weight" xsi:type="string">10</data>
-            <data name="product/data/tier_price/dataset" xsi:type="string">default</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">custom_with_percentage_discount</data>
             <data name="product/data/price_view" xsi:type="string">As Low as</data>
             <data name="product/data/stock_data/use_config_manage_stock" xsi:type="string">No</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">No</data>

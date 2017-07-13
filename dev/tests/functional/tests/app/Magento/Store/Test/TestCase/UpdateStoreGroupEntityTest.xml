@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -14,6 +14,7 @@
             <data name="storeGroup/data/name" xsi:type="string">store_name_updated_%isolation%</data>
             <data name="storeGroup/data/code" xsi:type="string">store_code_updated_%isolation%</data>
             <data name="storeGroup/data/root_category_id/dataset" xsi:type="string">default_category</data>
+            <data name="acceptAlert">0</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupForm" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupOnStoreViewForm" />
@@ -25,6 +26,7 @@
             <data name="storeGroup/data/name" xsi:type="string">store_name_updated_%isolation%</data>
             <data name="storeGroup/data/code" xsi:type="string">store_code_updated_%isolation%</data>
             <data name="storeGroup/data/root_category_id/dataset" xsi:type="string">root_category</data>
+            <data name="acceptAlert">1</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupInGrid" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupForm" />

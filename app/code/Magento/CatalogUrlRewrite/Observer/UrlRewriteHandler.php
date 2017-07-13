@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -80,11 +80,11 @@ class UrlRewriteHandler
     public function generateProductUrlRewrites(\Magento\Catalog\Model\Category $category)
     {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
-        $this->isSkippedProduct = [];
+        $this->isSkippedProduct[$category->getEntityId()] = [];
         $saveRewriteHistory = $category->getData('save_rewrites_history');
         $storeId = $category->getStoreId();
         if ($category->getAffectedProductIds()) {
-            $this->isSkippedProduct = $category->getAffectedProductIds();
+            $this->isSkippedProduct[$category->getEntityId()] = $category->getAffectedProductIds();
             $collection = $this->productCollectionFactory->create()
                 ->setStoreId($storeId)
                 ->addIdFilter($category->getAffectedProductIds())
@@ -137,17 +137,25 @@ class UrlRewriteHandler
         $rootCategoryId = null
     ) {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
-        $productCollection = $category->getProductCollection()
+        $productCollection = $this->productCollectionFactory->create();
+
+        $productCollection->addCategoriesFilter(['eq' => [$category->getEntityId()]])
+            ->setStoreId($storeId)
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('visibility')
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('url_path');
+
         foreach ($productCollection as $product) {
-            if (in_array($product->getId(), $this->isSkippedProduct)) {
+            if (
+                isset($this->isSkippedProduct[$category->getEntityId()]) &&
+                in_array($product->getId(), $this->isSkippedProduct[$category->getEntityId()])
+            ) {
                 continue;
             }
-            $this->isSkippedProduct[] = $product->getId();
+            $this->isSkippedProduct[$category->getEntityId()][] = $product->getId();
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
             $mergeDataProvider->merge(

@@ -1,71 +1,97 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model;
 
+use Magento\Config\Model\Config\BackendFactory;
 use Magento\Config\Model\PreparedValueFactory;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Config\Model\Config\StructureFactory;
 use Magento\Framework\App\Config\Value;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Framework\App\ScopeResolver;
+use Magento\Framework\App\ScopeResolverPool;
+use Magento\Store\Model\ScopeTypeNormalizer;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * @inheritdoc
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfigMock;
-
-    /**
-     * @var StructureFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StructureFactory|Mock
      */
     private $structureFactoryMock;
 
     /**
-     * @var ValueFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendFactory|Mock
      */
     private $valueFactoryMock;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|Mock
      */
     private $valueMock;
 
     /**
-     * @var Structure|\PHPUnit_Framework_MockObject_MockObject
+     * @var Structure|Mock
      */
     private $structureMock;
 
     /**
-     * @var Field|\PHPUnit_Framework_MockObject_MockObject
+     * @var Field|Mock
      */
     private $fieldMock;
 
     /**
+     * @var ScopeConfigInterface|Mock
+     */
+    private $configMock;
+
+    /**
+     * @var ScopeResolverPool|Mock
+     */
+    private $scopeResolverPoolMock;
+
+    /**
+     * @var ScopeResolver|Mock
+     */
+    private $scopeResolverMock;
+
+    /**
+     * @var ScopeInterface|Mock
+     */
+    private $scopeMock;
+
+    /**
+     * @var ScopeTypeNormalizer|Mock
+     */
+    private $scopeTypeNormalizer;
+
+    /**
      * @var PreparedValueFactory
      */
-    private $valueBuilder;
+    private $preparedValueFactory;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->valueFactoryMock = $this->getMockBuilder(ValueFactory::class)
+        $this->valueFactoryMock = $this->getMockBuilder(BackendFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -77,58 +103,112 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue'])
+            ->setMethods([
+                'setPath', 'setScope', 'setScopeId', 'setValue', 'setField',
+                'setGroupId', 'setFieldConfig', 'setScopeCode'
+            ])
+            ->getMock();
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
+        $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeResolverMock = $this->getMockBuilder(ScopeResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
+            ->getMockForAbstractClass();
+        $this->scopeTypeNormalizer = $this->getMockBuilder(ScopeTypeNormalizer::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $this->valueBuilder = new PreparedValueFactory(
-            $this->deploymentConfigMock,
+        $this->preparedValueFactory = new PreparedValueFactory(
+            $this->scopeResolverPoolMock,
             $this->structureFactoryMock,
-            $this->valueFactoryMock
+            $this->valueFactoryMock,
+            $this->configMock,
+            $this->scopeTypeNormalizer
         );
     }
 
     /**
-     * @param array $deploymentConfigIsAvailable
-     * @param array $structureGetElement
-     * @param array $field
-     * @param array $valueFactory
+     * @param string $path
+     * @param string|null $configPath
+     * @param string $value
+     * @param string $scope
+     * @param string|int|null $scopeCode
+     * @param int $scopeId
      * @dataProvider createDataProvider
      */
     public function testCreate(
-        array $deploymentConfigIsAvailable,
-        array $structureGetElement,
-        array $field,
-        array $valueFactory
+        $path,
+        $configPath,
+        $value,
+        $scope,
+        $scopeCode,
+        $scopeId
     ) {
-        $path = '/some/path';
-        $value = 'someValue';
-        $scope = 'someScope';
-        $scopeCode = 'someScopeCode';
+        $groupPath = 'some/group';
+        $groupId = 'some_group';
+        $fieldId = 'some_field';
+        $fieldData = ['backend_model' => 'some_model'];
+
+        if (ScopeInterface::SCOPE_DEFAULT !== $scope) {
+            $this->scopeResolverPoolMock->expects($this->once())
+                ->method('get')
+                ->with($scope)
+                ->willReturn($this->scopeResolverMock);
+            $this->scopeResolverMock->expects($this->once())
+                ->method('getScope')
+                ->with($scopeCode)
+                ->willReturn($this->scopeMock);
+            $this->scopeMock->expects($this->once())
+                ->method('getId')
+                ->willReturn($scopeId);
+        }
+        /** @var Group|Mock $groupMock */
+        $groupMock = $this->getMockBuilder(Group::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $groupMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($groupId);
+
+        $this->scopeTypeNormalizer->expects($this->once())
+            ->method('normalize')
+            ->with($scope, true)
+            ->willReturnArgument(0);
         $this->structureFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->structureMock);
-        $this->deploymentConfigMock
-            ->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn($deploymentConfigIsAvailable['return']);
-        $this->structureMock
-            ->expects($structureGetElement['expects'])
-            ->method('getElement')
+        $this->structureMock->expects($this->once())
+            ->method('getElementByConfigPath')
             ->willReturn($this->fieldMock);
-        $this->fieldMock
-            ->expects($field['hasBackendModel']['expects'])
+        $this->structureMock->expects($this->once())
+            ->method('getElement')
+            ->with($groupPath)
+            ->willReturn($groupMock);
+        $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
-            ->willReturn($field['hasBackendModel']['return']);
+            ->willReturn(true);
         $this->fieldMock
-            ->expects($field['getBackendModel']['expects'])
-            ->method('getBackendModel')
-            ->willReturn($this->valueMock);
-        $this->valueFactoryMock->expects($valueFactory['expects'])
+            ->method('getConfigPath')
+            ->willReturn($configPath);
+        $this->fieldMock
+            ->method('getId')
+            ->willReturn($fieldId);
+        $this->fieldMock
+            ->method('getData')
+            ->willReturn($fieldData);
+        $this->fieldMock->expects($this->once())
+            ->method('getGroupPath')
+            ->willReturn($groupPath);
+        $this->valueFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->valueMock);
         $this->valueMock->expects($this->once())
             ->method('setPath')
-            ->with($path)
+            ->with($configPath ?: $path)
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScope')
@@ -136,58 +216,181 @@ class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setScopeId')
+            ->with($scopeId)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setScopeCode')
             ->with($scopeCode)
             ->willReturnSelf();
         $this->valueMock->expects($this->once())
             ->method('setValue')
             ->with($value)
             ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setField')
+            ->with($fieldId)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setGroupId')
+            ->with($groupId)
+            ->willReturnSelf();
+        $this->valueMock->expects($this->once())
+            ->method('setFieldConfig')
+            ->with($fieldData)
+            ->willReturnSelf();
 
         $this->assertInstanceOf(
             Value::class,
-            $this->valueBuilder->create($path, $value, $scope, $scopeCode)
+            $this->preparedValueFactory->create($path, $value, $scope, $scopeCode)
         );
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [
-            [
-                'deploymentConfigIsAvailable' => ['return' => false],
-                'structureGetElement' => ['expects' => $this->never()],
-                'field' => [
-                    'hasBackendModel' => [
-                        'expects' => $this->never(),
-                        'return' => true
-                    ],
-                    'getBackendModel' => ['expects' => $this->never()]
-                ],
-                'valueFactory' => ['expects' => $this->once()]
+            'standard flow' => [
+                '/some/path',
+                null,
+                'someValue',
+                'someScope',
+                'someScopeCode',
+                1,
             ],
-            [
-                'deploymentConfigIsAvailable' => ['return' => true],
-                'structureGetElement' => ['expects' => $this->once()],
-                'field' => [
-                    'hasBackendModel' => [
-                        'expects' => $this->once(),
-                        'return' => true
-                    ],
-                    'getBackendModel' => ['expects' => $this->once()]
-                ],
-                'valueFactory' => ['expects' => $this->never()]
+            'standard flow with custom config path' => [
+                '/some/path',
+                '/custom/config_path',
+                'someValue',
+                'someScope',
+                'someScope',
+                'someScopeCode',
+                1,
             ],
-            [
-                'deploymentConfigIsAvailable' => ['return' => true],
-                'structureGetElement' => ['expects' => $this->once()],
-                'field' => [
-                    'hasBackendModel' => [
-                        'expects' => $this->once(),
-                        'return' => false
-                    ],
-                    'getBackendModel' => ['expects' => $this->never()]
-                ],
-                'valueFactory' => ['expects' => $this->once()]
+            'default scope flow' => [
+                '/some/path',
+                null,
+                'someValue',
+                ScopeInterface::SCOPE_DEFAULT,
+                ScopeInterface::SCOPE_DEFAULT,
+                null,
+                0,
+            ],
+            'website scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_WEBSITE,
+                StoreScopeInterface::SCOPE_WEBSITES,
+                null,
+                0,
+            ],
+            'websites scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_WEBSITES,
+                StoreScopeInterface::SCOPE_WEBSITES,
+                null,
+                0,
+            ],
+            'store scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_STORE,
+                StoreScopeInterface::SCOPE_STORES,
+                null,
+                0,
+            ],
+            'stores scope flow' => [
+                '/some/path',
+                'someValue',
+                StoreScopeInterface::SCOPE_STORES,
+                StoreScopeInterface::SCOPE_STORES,
+                null,
+                0,
             ],
         ];
+    }
+
+    /**
+     * @param string $path
+     * @param string $scope
+     * @param string|int|null $scopeCode
+     * @dataProvider createDataProvider
+     */
+    public function testCreateNotInstanceOfValue(
+        $path,
+        $scope,
+        $scopeCode
+    ) {
+        $this->scopeResolverPoolMock->expects($this->never())
+            ->method('get');
+        $this->scopeResolverMock->expects($this->never())
+            ->method('getScope');
+        $this->scopeMock->expects($this->never())
+            ->method('getId');
+
+        $value = new \stdClass();
+
+        $this->structureFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->structureMock);
+        $this->structureMock->expects($this->once())
+            ->method('getElementByConfigPath')
+            ->willReturn($this->fieldMock);
+        $this->fieldMock->expects($this->once())
+            ->method('hasBackendModel')
+            ->willReturn(false);
+        $this->fieldMock->expects($this->never())
+            ->method('getBackendModel');
+        $this->valueFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($value);
+        $this->valueMock->expects($this->never())
+            ->method('setPath');
+        $this->valueMock->expects($this->never())
+            ->method('setScope');
+        $this->valueMock->expects($this->never())
+            ->method('setScopeId');
+        $this->valueMock->expects($this->never())
+            ->method('setValue');
+
+        $this->assertSame(
+            $value,
+            $this->preparedValueFactory->create($path, $value, $scope, $scopeCode)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function createNotInstanceOfValueDataProvider()
+    {
+        return [
+            'standard flow' => [
+                '/some/path',
+                'someScope',
+                'someScopeCode',
+                1,
+            ],
+            'default scope flow' => [
+                '/some/path',
+                ScopeInterface::SCOPE_DEFAULT,
+                null,
+            ],
+        ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Some exception
+     */
+    public function testCreateWithException()
+    {
+        $this->structureFactoryMock->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception('Some exception'));
+
+        $this->preparedValueFactory->create('path', 'value', ScopeInterface::SCOPE_DEFAULT);
     }
 }

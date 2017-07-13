@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,7 +11,7 @@
     </head>
     <body>
         <referenceBlock name="category.product.type.details.renderers">
-            <block class="Magento\Swatches\Block\Product\Renderer\Listing\Configurable" as="configurable" template="Magento_Swatches::product/listing/renderer.phtml" />
+            <block class="Magento\Swatches\Block\Product\Renderer\Listing\Configurable" as="configurable" template="Magento_Swatches::product/listing/renderer.phtml" ifconfig="catalog/frontend/show_swatches_in_product_list"/>
         </referenceBlock>
     </body>
 </page>

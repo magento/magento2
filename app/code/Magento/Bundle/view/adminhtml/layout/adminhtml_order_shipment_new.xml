@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="order_items">
-            <block class="Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer" as="bundle" template="sales/shipment/create/items/renderer.phtml"/>
+            <block class="Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer" as="bundle" template="Magento_Bundle::sales/shipment/create/items/renderer.phtml"/>
         </referenceBlock>
     </body>
 </page>

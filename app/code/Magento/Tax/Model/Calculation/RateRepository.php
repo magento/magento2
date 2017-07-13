@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,6 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection;
 
@@ -263,7 +262,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             );
         }
 
-        if (!\Zend_Validate::is($taxRate->getRate(), 'NotEmpty')) {
+        if (!\Zend_Validate::is($taxRate->getRate(), 'Float')) {
             $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'percentage_rate']));
         }
 

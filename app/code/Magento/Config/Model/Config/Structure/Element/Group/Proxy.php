@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Model\Config\Structure\Element\Group;
 
+/**
+ * @api
+ */
 class Proxy extends \Magento\Config\Model\Config\Structure\Element\Group implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
 {

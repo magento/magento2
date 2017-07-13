@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,60 +14,60 @@
  * @var $block \Magento\Multishipping\Block\Checkout\Shipping
  */
 ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getPostActionUrl() ?>" method="post" id="shipping_method_form" class="form multicheckout shipping">
+<form action="<?= /* @escapeNotVerified */ $block->getPostActionUrl() ?>" method="post" id="shipping_method_form" class="form multicheckout shipping">
     <?php foreach ($block->getAddresses() as $_index => $_address): ?>
     <div class="block block-shipping">
-        <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Address %1 <span>of %2</span>', ($_index+1), $block->getAddressCount()) ?></strong></div>
+        <div class="block-title"><strong><?= /* @escapeNotVerified */ __('Address %1 <span>of %2</span>', ($_index+1), $block->getAddressCount()) ?></strong></div>
         <div class="block-content">
             <div class="box box-shipping-address">
                 <strong class="box-title">
-                    <span><?php /* @escapeNotVerified */ echo __('Shipping To') ?></span>
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getAddressEditUrl($_address) ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Change') ?></span></a>
+                    <span><?= /* @escapeNotVerified */ __('Shipping To') ?></span>
+                    <a href="<?= /* @escapeNotVerified */ $block->getAddressEditUrl($_address) ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Change') ?></span></a>
                 </strong>
                 <div class="box-content">
-                    <address><?php /* @escapeNotVerified */ echo $_address->format('html') ?></address>
+                    <address><?= /* @escapeNotVerified */ $_address->format('html') ?></address>
                 </div>
             </div>
             <div class="box box-shipping-method">
                 <strong class="box-title">
-                    <span><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></span>
+                    <span><?= /* @escapeNotVerified */ __('Shipping Method') ?></span>
                 </strong>
                 <div class="box-content">
                     <?php if (!($_shippingRateGroups = $block->getShippingRates($_address))): ?>
-                        <p><?php /* @escapeNotVerified */ echo __('Sorry, no quotes are available for this order right now.') ?></p>
+                        <p><?= /* @escapeNotVerified */ __('Sorry, no quotes are available for this order right now.') ?></p>
                     <?php else: ?>
                     <dl class="items methods-shipping">
                         <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-                            <dt class="item-title"><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></dt>
+                            <dt class="item-title"><?= $block->escapeHtml($block->getCarrierName($code)) ?></dt>
                             <dd class="item-content">
                                 <fieldset class="fieldset">
                                     <legend class="legend">
-                                        <span><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></span>
+                                        <span><?= $block->escapeHtml($block->getCarrierName($code)) ?></span>
                                     </legend><br>
                                     <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
                                     <div class="field choice">
                                     <?php if ($_rate->getErrorMessage()): ?>
-                                        <strong><?php echo $block->escapeHtml($_rate->getCarrierTitle()) ?>: <?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></strong>
+                                        <strong><?= $block->escapeHtml($_rate->getCarrierTitle()) ?>: <?= $block->escapeHtml($_rate->getErrorMessage()) ?></strong>
                                     <?php else: ?>
                                         <div class="control">
                                             <?php if ($_sole) : ?>
-                                                <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?php echo $block->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" class="radio solo method" checked="checked"/>
+                                                <input type="radio" name="shipping_method[<?= /* @escapeNotVerified */ $_address->getId() ?>]" value="<?= $block->escapeHtml($_rate->getCode()) ?>" id="s_method_<?= /* @escapeNotVerified */ $_address->getId() ?>_<?= /* @escapeNotVerified */ $_rate->getCode() ?>" class="radio solo method" checked="checked"/>
                                             <?php else: ?>
-                                                <input type="radio" name="shipping_method[<?php /* @escapeNotVerified */ echo $_address->getId() ?>]" value="<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>" id="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$block->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
+                                                <input type="radio" name="shipping_method[<?= /* @escapeNotVerified */ $_address->getId() ?>]" value="<?= /* @escapeNotVerified */ $_rate->getCode() ?>" id="s_method_<?= /* @escapeNotVerified */ $_address->getId() ?>_<?= /* @escapeNotVerified */ $_rate->getCode() ?>"<?php if($_rate->getCode()===$block->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
                                             <?php endif; ?>
                                         </div>
-                                        <label for="s_method_<?php /* @escapeNotVerified */ echo $_address->getId() ?>_<?php /* @escapeNotVerified */ echo $_rate->getCode() ?>"><?php echo $block->escapeHtml($_rate->getMethodTitle()) ?>
+                                        <label for="s_method_<?= /* @escapeNotVerified */ $_address->getId() ?>_<?= /* @escapeNotVerified */ $_rate->getCode() ?>"><?= $block->escapeHtml($_rate->getMethodTitle()) ?>
                                             <?php $_excl = $block->getShippingPrice($_address, $_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
                                             <?php $_incl = $block->getShippingPrice($_address, $_rate->getPrice(), true); ?>
                                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                            <span class="price-including-tax" data-label="<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>">
+                                            <span class="price-including-tax" data-label="<?= /* @escapeNotVerified */ __('Incl. Tax') ?>">
                                         <?php endif; ?>
-                                            <?php /* @escapeNotVerified */ echo $_incl; ?>
+                                            <?= /* @escapeNotVerified */ $_incl ?>
                                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
                                             </span>
                                         <?php endif; ?>
                                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                            <span class="price-excluding-tax" data-label="<?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>"><?php /* @escapeNotVerified */ echo $_excl; ?></span>
+                                            <span class="price-excluding-tax" data-label="<?= /* @escapeNotVerified */ __('Excl. Tax') ?>"><?= /* @escapeNotVerified */ $_excl ?></span>
                                         <?php endif; ?>
                                         </label>
                                     <?php endif ?>
@@ -78,29 +78,29 @@
                         <?php endforeach; ?>
                     </dl>
                     <?php endif; ?>
-                    <?php /* @escapeNotVerified */ echo $block->getItemsBoxTextAfter($_address); ?>
+                    <?= /* @escapeNotVerified */ $block->getItemsBoxTextAfter($_address) ?>
                 </div>
             </div>
             <div class="box box-items">
                 <strong class="box-title">
-                    <span><?php /* @escapeNotVerified */ echo __('Items') ?></span>
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getItemsEditUrl($_address) ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Edit Items') ?></span></a>
+                    <span><?= /* @escapeNotVerified */ __('Items') ?></span>
+                    <a href="<?= /* @escapeNotVerified */ $block->getItemsEditUrl($_address) ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Edit Items') ?></span></a>
                 </strong>
                 <div class="box-content">
                     <div class="table-wrapper">
-                        <table class="items data table" id="shipping-table-<?php /* @escapeNotVerified */ echo $_address->getId() ?>">
-                            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items') ?></caption>
+                        <table class="items data table" id="shipping-table-<?= /* @escapeNotVerified */ $_address->getId() ?>">
+                            <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items') ?></caption>
                             <thead>
                             <tr>
-                                <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                                <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                                <th class="col item" scope="col"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                                <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($block->getAddressItems($_address) as $_item): ?>
                                 <tr>
-                                    <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>"><?php echo $block->getItemHtml($_item->getQuoteItem()) ?></td>
-                                    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>"><?php /* @escapeNotVerified */ echo $_item->getQty() ?></td>
+                                    <td class="col item" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getItemHtml($_item->getQuoteItem()) ?></td>
+                                    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= /* @escapeNotVerified */ $_item->getQty() ?></td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -111,13 +111,13 @@
         </div>
     </div>
     <?php endforeach; ?>
-    <?php echo $block->getChildHtml('checkout_billing_items') ?>
+    <?= $block->getChildHtml('checkout_billing_items') ?>
     <div class="actions-toolbar">
         <div class="primary">
-            <button class="action primary continue" type="submit"><span><?php /* @escapeNotVerified */ echo __('Continue to Billing Information') ?></span></button>
+            <button class="action primary continue" type="submit"><span><?= /* @escapeNotVerified */ __('Continue to Billing Information') ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>" class="action back"><span><?php /* @escapeNotVerified */ echo __('Back to Select Addresses') ?></span></a>
+            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back"><span><?= /* @escapeNotVerified */ __('Back to Select Addresses') ?></span></a>
         </div>
     </div>
 </form>

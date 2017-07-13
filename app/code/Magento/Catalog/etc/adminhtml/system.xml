@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -32,6 +32,19 @@
                 <field id="meta_description" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Mask for Meta Description</label>
                     <comment>Use {{name}} and {{description}} as Product Name and Product Description placeholders</comment>
+                </field>
+            </group>
+            <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Recently Viewed/Compared Products</label>
+                <field id="recently_viewed_lifetime" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Lifetime of products in Recently Viewed Widget</label>
+                </field>
+                <field id="recently_compared_lifetime" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Lifetime of products in Recently Compared Widget</label>
+                </field>
+                <field id="synchronize_with_backend" translate="label" type="select" showInDefault="1" canRestore="1">
+                    <label>Synchronize widget products with backend storage</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
             <group id="frontend" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">

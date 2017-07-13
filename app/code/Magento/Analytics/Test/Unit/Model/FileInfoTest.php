@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
@@ -44,8 +44,8 @@ class FileInfoTest extends \PHPUnit_Framework_TestCase
             array_filter($constructorArguments)
         );
 
-        $this->assertSame($path?:'', $fileInfo->getPath());
-        $this->assertSame($initializationVector?:'', $fileInfo->getInitializationVector());
+        $this->assertSame($path ?: '', $fileInfo->getPath());
+        $this->assertSame($initializationVector ?: '', $fileInfo->getInitializationVector());
     }
 
     /**

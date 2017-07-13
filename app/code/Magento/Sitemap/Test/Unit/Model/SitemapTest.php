@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Test\Unit\Model;
@@ -535,6 +535,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+
+        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
         $this->_sitemapProductMock->expects(
             $this->any()
         )->method(
@@ -553,13 +555,16 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                                 [
                                     'collection' => [
                                         new \Magento\Framework\DataObject(
-                                            ['url' => 'image1.png', 'caption' => 'caption & > title < "']
+                                            [
+                                                'url' => $storeBaseMediaUrl.'i/m/image1.png',
+                                                'caption' => 'caption & > title < "'
+                                            ]
                                         ),
                                         new \Magento\Framework\DataObject(
-                                            ['url' => 'image_no_caption.png', 'caption' => null]
+                                            ['url' => $storeBaseMediaUrl.'i/m/image_no_caption.png', 'caption' => null]
                                         ),
                                     ],
-                                    'thumbnail' => 'thumbnail.jpg',
+                                    'thumbnail' => $storeBaseMediaUrl.'t/h/thumbnail.jpg',
                                     'title' => 'Product & > title < "',
                                 ]
                             ),

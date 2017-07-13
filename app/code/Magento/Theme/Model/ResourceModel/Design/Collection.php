@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Design;
@@ -60,7 +60,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Add date filter to collection
      *
-     * @param null|int|string|\DateTime $date
+     * @param null|int|string|\DateTimeInterface $date
      * @return $this
      */
     public function addDateFilter($date = null)

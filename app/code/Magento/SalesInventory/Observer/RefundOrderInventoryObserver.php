@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -90,11 +90,8 @@ class RefundOrderInventoryObserver implements ObserverInterface
                 $returnToStockItems[] = $item->getOrderItemId();
             }
         }
-        $this->returnProcessor->execute(
-            $creditmemo,
-            $order,
-            $returnToStockItems,
-            $this->stockConfiguration->isAutoReturnEnabled()
-        );
+        if (!empty($returnToStockItems)) {
+            $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems);
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -78,6 +78,7 @@ class TaxRuleCollection extends AbstractServiceCollection
         $collectionItem->setCalculateSubtotal($taxRule->getCalculateSubtotal() ? '1' : '0');
         $collectionItem->setCustomerTaxClasses($taxRule->getCustomerTaxClassIds());
         $collectionItem->setProductTaxClasses($taxRule->getProductTaxClassIds());
+        $collectionItem->setTaxRatesCodes($taxRule->getTaxRatesCodes());
         $collectionItem->setTaxRates($taxRule->getTaxRateIds());
         return $collectionItem;
     }

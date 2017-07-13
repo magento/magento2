@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute;
@@ -16,7 +16,7 @@ use Magento\Framework\Model\AbstractModel;
  * @method int getAttributeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @codeCoverageIgnore
  */
 class Option extends AbstractModel implements AttributeOptionInterface

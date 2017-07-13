@@ -1,18 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Plugin;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\State;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 class CustomerNotification
 {

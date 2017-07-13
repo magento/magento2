@@ -5,7 +5,7 @@
  * Provides information about what directories are available in the application
  * Serves as customizaiton point to specify different directories or add own
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem;

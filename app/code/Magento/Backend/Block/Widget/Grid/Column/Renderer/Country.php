@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- */
-
-/**
- * Country column renderer
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+/**
+ * Country column type renderer
+ *
+ * @api
+ * @deprecated in favour of UI component implementation
+ */
 class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**

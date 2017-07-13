@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -69,7 +69,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 'data' => [
                     'config' => [
                         'visible' => true,
-                        'validation' => ['validate-number' => true],
+                        'validation' => ['validate-zero-or-greater' => true],
                     ],
                 ],
             ],

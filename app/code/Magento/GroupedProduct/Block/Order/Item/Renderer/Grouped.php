@@ -2,13 +2,16 @@
 /**
  * Order item render block for grouped product type
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Block\Order\Item\Renderer;
 
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
+/**
+ * @api
+ */
 class Grouped extends DefaultRenderer
 {
     /**

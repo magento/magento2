@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code;
 
+use Magento\Framework\Code\Generator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Code\Generator as DIGenerator;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespace.php';
 require_once __DIR__ . '/GeneratorTest/ParentClassWithNamespace.php';
+require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
+
 /**
  * @magentoAppIsolation enabled
  */
@@ -51,6 +56,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             [
                 'ioObject' => $this->_ioObject,
                 'generatedEntities' => [
+                    ExtensionAttributesInterfaceFactoryGenerator::ENTITY_TYPE =>
+                        ExtensionAttributesInterfaceFactoryGenerator::class,
                     DIGenerator\Factory::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Factory::class,
                     DIGenerator\Proxy::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Proxy::class,
                     InterceptionGenerator\Interceptor::ENTITY_TYPE =>
@@ -147,5 +154,35 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             );
             $this->assertEquals($expectedContent, $content);
         }
+    }
+
+    /**
+     * Generates a new file with ExtensionInterfaceFactory class and compares with the sample from the
+     * SourceClassWithNamespaceExtensionInterfaceFactory.php.sample file.
+     */
+    public function testGenerateClassExtensionAttributesInterfaceFactoryWithNamespace()
+    {
+        $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory';
+        $this->varDirectory->create(
+            $this->varDirectory->getAbsolutePath('generation') . '/Magento/Framework/Code/GeneratorTest/'
+        );
+
+        $generatorResult = $this->_generator->generateClass($factoryClassName);
+
+        $factory = Bootstrap::getObjectManager()->create($factoryClassName);
+        $object = $factory->create();
+
+        $this->assertEquals($generatorResult, Generator::GENERATION_SUCCESS);
+        $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE . 'Extension', $object);
+
+        $content = $this->_clearDocBlock(
+            file_get_contents(
+                $this->_ioObject->generateResultFileName(self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory')
+            )
+        );
+        $expectedContent = $this->_clearDocBlock(
+            file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceExtensionInterfaceFactory.php.sample')
+        );
+        $this->assertEquals($expectedContent, $content);
     }
 }

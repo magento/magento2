@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,33 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 /**
  * Fixture generator for Order entities with configurable number of different types of order items.
  * Optionally generates inactive quotes for generated orders.
+ *
+ * Support the following format:
+ * <!-- Is is nescessary to enable quotes for orders -->
+ * <order_quotes_enable>{bool}</order_quotes_enable>
+ *
+ * <!-- Min number of simple products per each order -->
+ * <order_simple_product_count_from>{int}</order_simple_product_count_from>
+ *
+ * <!-- Max number of simple products per each order -->
+ * <order_simple_product_count_to>{int}</order_simple_product_count_to>
+ *
+ * <!-- Min number of configurable products per each order -->
+ * <order_configurable_product_count_from>{int}</order_configurable_product_count_from>
+ *
+ * <!-- Max number of configurable products per each order -->
+ * <order_configurable_product_count_to>{int}</order_configurable_product_count_to>
+ *
+ * <!-- Min number of big configurable products (with big amount of options) per each order -->
+ * <order_big_configurable_product_count_from>{int}</order_big_configurable_product_count_from>
+ *
+ * <!-- Max number of big configurable products (with big amount of options) per each order -->
+ * <order_big_configurable_product_count_to>{int}</order_big_configurable_product_count_to>
+ *
+ * <!-- Number of orders to generate -->
+ * <orders>{int}</orders>
+ *
+ * @see setup/performance-toolkit/profiles/ce/small.xml
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -536,6 +563,7 @@ class OrdersFixture extends Fixture
      * @param string $typeId
      * @param int $limit
      * @return array
+     * @throws \Exception
      */
     private function getProductIds(\Magento\Store\Api\Data\StoreInterface $store, $typeId, $limit = null)
     {
@@ -553,8 +581,11 @@ class OrdersFixture extends Fixture
             $productCollection->getSelect()->where(" type_id = '$typeId' ");
             $productCollection->getSelect()->where(" sku NOT LIKE 'Big%' ");
         }
-
-        return $productCollection->getAllIds($limit);
+        $ids = $productCollection->getAllIds($limit);
+        if ($limit && count($ids) < $limit) {
+            throw new \Exception('Not enough products of type: ' . $typeId);
+        }
+        return $ids;
     }
 
     /**
@@ -568,6 +599,7 @@ class OrdersFixture extends Fixture
     private function prepareSimpleProducts(array $productIds = [])
     {
         $productsResult = [];
+
         foreach ($productIds as $key => $simpleId) {
             $simpleProduct = $this->productRepository->getById($simpleId);
             $productsResult[$key]['id'] = $simpleId;
@@ -598,7 +630,8 @@ class OrdersFixture extends Fixture
         foreach ($productIds as $key => $configurableId) {
             $configurableProduct = $this->productRepository->getById($configurableId);
             $options = $this->optionRepository->getList($configurableProduct->getSku());
-            $configurableChild = $this->linkManagement->getChildren($configurableProduct->getSku())[0];
+            $configurableChild = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
+            $configurableChild = reset($configurableChild);
             $simpleSku = $configurableChild->getSku();
             $simpleId = $this->productRepository->get($simpleSku)->getId();
 

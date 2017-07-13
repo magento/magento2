@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Fixtures\AttributeSet;
 
-use Magento\Catalog\Model\Product\Media\Config;
-use Magento\Framework\Filesystem;
 use Magento\Setup\Fixtures\AttributeSet\SwatchesGenerator;
+use Magento\Setup\Fixtures\ImagesGenerator\ImagesGenerator;
+use Magento\Setup\Fixtures\ImagesGenerator\ImagesGeneratorFactory;
 use Magento\Swatches\Helper\Media;
 use Magento\Swatches\Model\Swatch;
 
@@ -19,35 +19,57 @@ class SwatchesGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $swatchesGeneratorMock;
 
+    /**
+     * @var array
+     */
+    private $imagePathFixture = [
+        'option_1' => '/<-o->',
+        'option_2' => '/>o<',
+        'option_3' => '/|o|'
+    ];
+
     public function setUp()
     {
-        // Mock Filesystem
-        $filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        // Mock Media Config
-        $mediaConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         // Mock Swatch Media Helper
         $swatchHelperMock = $this->getMockBuilder(Media::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        $swatchHelperMock
+            ->expects($this->any())
+            ->method('moveImageFromTmp')
+            ->willReturnOnConsecutiveCalls(...array_values($this->imagePathFixture));
+
+        // Mock image generator
+        $imageGeneratorMock = $this->getMockBuilder(ImagesGenerator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $imageGeneratorMock
+            ->expects($this->any())
+            ->method('generate');
+
+        // Mock image generator factory
+        $imageGeneratorFactoryMock = $this->getMockBuilder(ImagesGeneratorFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $imageGeneratorFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($imageGeneratorMock);
+
         $this->swatchesGeneratorMock = new SwatchesGenerator(
-            $filesystemMock,
-            $mediaConfigMock,
-            $swatchHelperMock
+            $swatchHelperMock,
+            $imageGeneratorFactoryMock
         );
     }
 
     public function testGenerateSwatchData()
     {
-
-        $attribute['swatch_input_type'] = Swatch::SWATCH_INPUT_TYPE_VISUAL;
-        $attribute['swatchvisual']['value'] = array_reduce(
+        $attributeColorType['swatch_input_type'] = Swatch::SWATCH_INPUT_TYPE_VISUAL;
+        $attributeColorType['swatchvisual']['value'] = array_reduce(
             range(1, 3),
             function ($values, $index) {
                 $values['option_' . $index] = '#' . str_repeat(dechex(255 * $index / 3), 3);
@@ -56,7 +78,7 @@ class SwatchesGeneratorTest extends \PHPUnit_Framework_TestCase
             []
         );
 
-        $attribute['optionvisual']['value'] = array_reduce(
+        $attributeColorType['optionvisual']['value'] = array_reduce(
             range(1, 3),
             function ($values, $index) {
                 $values['option_' . $index] = ['option ' . $index];
@@ -65,9 +87,22 @@ class SwatchesGeneratorTest extends \PHPUnit_Framework_TestCase
             []
         );
 
+        $attributeImageType = $attributeColorType;
+        $attributeImageType['swatchvisual']['value'] = array_map(
+            function ($item) {
+                return ltrim($item, '/');
+            },
+            $this->imagePathFixture
+        );
+
         $this->assertEquals(
-            $attribute,
+            $attributeColorType,
             $this->swatchesGeneratorMock->generateSwatchData(3, 'test', 'color')
+        );
+
+        $this->assertEquals(
+            $attributeImageType,
+            $this->swatchesGeneratorMock->generateSwatchData(3, 'test', 'image')
         );
     }
 }

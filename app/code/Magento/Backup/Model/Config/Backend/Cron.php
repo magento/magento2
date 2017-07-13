@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model\Config\Backend;
 
 /**
  * Backup by cron backend model
+ * @api
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {

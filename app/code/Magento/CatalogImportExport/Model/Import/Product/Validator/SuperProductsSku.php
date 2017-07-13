@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 class SuperProductsSku extends AbstractImportValidator implements RowValidatorInterface
@@ -22,14 +21,6 @@ class SuperProductsSku extends AbstractImportValidator implements RowValidatorIn
         \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor $skuProcessor
     ) {
         $this->skuProcessor = $skuProcessor;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init($context)
-    {
-        return parent::init($context);
     }
 
     /**

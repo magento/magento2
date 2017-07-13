@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -62,6 +62,38 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->login(1);
         $this->dispatch('customer/account/logout');
         $this->assertRedirect($this->stringContains('customer/account/logoutSuccess'));
+    }
+
+    /**
+     * Test that forgot password email message displays special characters correctly.
+     *
+     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
+     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
+     * @magentoConfigFixture current_store general/store_information/name Test special' characters
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testForgotPasswordEmailMessageWithSpecialCharacters()
+    {
+        $email = 'customer@example.com';
+
+        $this->getRequest()
+            ->setPostValue([
+                'email' => $email,
+            ]);
+
+        $this->dispatch('customer/account/forgotPasswordPost');
+        $this->assertRedirect($this->stringContains('customer/account/'));
+
+        /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
+        $transportBuilder = $this->_objectManager->get(
+            \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
+        );
+        $subject = $transportBuilder->getSentMessage()->getSubject();
+        $this->assertContains(
+            'Test special\' characters',
+            $subject
+        );
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
@@ -137,6 +137,8 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->setStoreId(3);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$current]));
+        $this->currentUrlRewritesRegenerator->expects($this->any())->method('generateAnchor')
+            ->will($this->returnValue([$current]));
         $anchorCategories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $anchorCategories->setRequestPath('category-4')
             ->setStoreId(4);
@@ -177,6 +179,8 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
+            ->will($this->returnValue([]));
+        $this->currentUrlRewritesRegenerator->expects($this->any())->method('generateAnchor')
             ->will($this->returnValue([]));
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));

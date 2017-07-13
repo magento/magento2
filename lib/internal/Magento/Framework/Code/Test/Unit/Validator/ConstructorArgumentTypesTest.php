@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
@@ -74,4 +72,3 @@ class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->validate($className));
     }
 }
-

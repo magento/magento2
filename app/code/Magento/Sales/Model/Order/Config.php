@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
 /**
  * Order configuration model
+ *
+ * @api
  */
 class Config
 {
@@ -249,6 +251,10 @@ class Config
     protected function _getStatuses($visibility)
     {
         if ($this->statuses == null) {
+            $this->statuses = [
+                true => [],
+                false => [],
+            ];
             foreach ($this->_getCollection() as $item) {
                 $visible = (bool) $item->getData('visible_on_front');
                 $this->statuses[$visible][] = $item->getData('status');

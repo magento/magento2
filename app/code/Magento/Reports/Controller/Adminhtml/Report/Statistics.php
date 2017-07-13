@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,9 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Backend\Model\Session;
 
+/**
+ * @api
+ */
 abstract class Statistics extends \Magento\Backend\App\Action
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * This strategy handles attributes which comply with two criteria:
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
- *
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {
@@ -52,6 +51,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
      * @param EavConfig $eavConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -81,7 +81,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
             'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
             $alias,
             $attribute->getId(),
-            $this->storeManager->getWebsite()->getId()
+            $this->storeManager->getStore()->getId()
         );
         $select->joinLeft(
             [$alias => $this->resourceConnection->getTableName('catalog_product_index_eav')],

@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Paypal\Test\TestStep;
 
+use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Paypal\Test\Page\OrderReviewExpress;
-use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**

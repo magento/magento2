@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -127,6 +127,10 @@ class ClassGenerator extends \Zend\Code\Generator\ClassGenerator implements
                 $this->_setDataToObject($docBlockObject, $methodOptions['docblock'], $this->_docBlockOptions);
 
                 $methodObject->setDocBlock($docBlockObject);
+            }
+
+            if (!empty($methodOptions['returnType'])) {
+                $methodObject->setReturnType($methodOptions['returnType']);
             }
 
             $this->addMethodFromGenerator($methodObject);

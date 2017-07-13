@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\View\DesignInterface;
-use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ThemeValidator

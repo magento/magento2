@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Category;
@@ -34,6 +34,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      * Test for method \Magento\UrlRewrite\Block\Catalog\Category\Tree::getTreeArray()
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_products.php
      */
     public function testGetTreeArray()
     {

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,6 +15,10 @@
         <bundle_products>2</bundle_products>
         <bundle_products_options>2</bundle_products_options>
         <bundle_products_variation>2</bundle_products_variation>
+        <product-images>
+            <images-count>3</images-count>
+            <images-per-product>1</images-per-product>
+        </product-images>
         <configurable_products>
             <config>
                 <attributeSet>Default</attributeSet>

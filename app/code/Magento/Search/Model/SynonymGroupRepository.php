@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
 
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Search\Api\Data\SynonymGroupInterface;
 use Magento\Search\Api\SynonymGroupRepositoryInterface;
 use Magento\Search\Model\ResourceModel\SynonymGroup as SynonymGroupResourceModel;
-use Magento\Framework\Exception\CouldNotDeleteException;
 
 /**
  * Synonym Group repository, provides implementation of saving and deleting synonym groups

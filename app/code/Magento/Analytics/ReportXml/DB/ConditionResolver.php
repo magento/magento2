@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -116,7 +116,7 @@ class ConditionResolver
         ) {
             $expression = $columns[$condition['attribute']];
         } else {
-            $expression = $tableName . '.' . $condition['attribute'];
+            $expression = $this->getConnection()->quoteIdentifier($tableName . '.' . $condition['attribute']);
         }
         return sprintf(
             $this->conditionMap[$condition['operator']],
@@ -161,6 +161,6 @@ class ConditionResolver
             }
             $filtersParts[] = '(' . implode(' ' . strtoupper($glue) . ' ', $parts) . ')';
         }
-        return implode(' AND ', $filtersParts);
+        return implode(' OR ', $filtersParts);
     }
 }

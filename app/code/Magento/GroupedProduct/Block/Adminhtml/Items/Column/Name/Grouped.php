@@ -2,13 +2,18 @@
 /**
  * Sales Order items name column renderer
  *
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Block\Adminhtml\Items\Column\Name;
 
+/**
+ * @api
+ */
 class Grouped extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 {
+    const COLUMN_NAME = 'name';
+
     /**
      * Prepare item html
      *
@@ -24,8 +29,13 @@ class Grouped extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
             $item = $this->getItem();
         }
         if ($productType = $item->getRealProductType()) {
-            $renderer = $this->getRenderedBlock()->getColumnHtml($this->getItem(), $productType);
-            return $renderer;
+            $renderer = $this->getRenderedBlock()->getColumnRenderer(self::COLUMN_NAME, $productType);
+            if ($renderer) {
+                $renderer->setItem($item);
+                $renderer->setField(self::COLUMN_NAME);
+                return $renderer->toHtml();
+            }
+            return '&nbsp;';
         }
         return parent::_toHtml();
     }

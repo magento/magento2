@@ -1,0 +1,53 @@
+namespace Magento\Framework\Interception\Code\Generator\Sample;
+
+/**
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\Sample
+ */
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\Sample implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct()
+    {
+        $this->___init();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
+        if (!$pluginInfo) {
+            return parent::getValue();
+        } else {
+            return $this->___callPlugins('getValue', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue($value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setValue');
+        if (!$pluginInfo) {
+            return parent::setValue($value);
+        } else {
+            return $this->___callPlugins('setValue', func_get_args(), $pluginInfo);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function & getReference()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getReference');
+        if (!$pluginInfo) {
+            return parent::getReference();
+        } else {
+            return $this->___callPlugins('getReference', func_get_args(), $pluginInfo);
+        }
+    }
+}

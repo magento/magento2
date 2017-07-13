@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="empty" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Shipping\Block\Tracking\Popup" name="shipping.tracking.popup" template="tracking/popup.phtml"/>
+            <block class="Magento\Shipping\Block\Tracking\Popup" name="shipping.tracking.popup" template="Magento_Shipping::tracking/popup.phtml"/>
         </referenceContainer>
     </body>
 </page>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,6 +37,11 @@ class Minsaleqty
      * @var Json
      */
     private $serializer;
+
+    /**
+     * @var array
+     */
+    private $minSaleQtyCache = [];
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -183,25 +188,29 @@ class Minsaleqty
      */
     public function getConfigValue($customerGroupId, $store = null)
     {
-        $value = $this->scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        );
-        $value = $this->unserializeValue($value);
-        if ($this->isEncodedArrayFieldValue($value)) {
-            $value = $this->decodeArrayFieldValue($value);
-        }
-        $result = null;
-        foreach ($value as $groupId => $qty) {
-            if ($groupId == $customerGroupId) {
-                $result = $qty;
-                break;
-            } elseif ($groupId == $this->getAllCustomersGroupId()) {
-                $result = $qty;
+        $key = $customerGroupId . '-' . $store;
+        if (!isset($this->minSaleQtyCache[$key])) {
+            $value = $this->scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            );
+            $value = $this->unserializeValue($value);
+            if ($this->isEncodedArrayFieldValue($value)) {
+                $value = $this->decodeArrayFieldValue($value);
             }
+            $result = null;
+            foreach ($value as $groupId => $qty) {
+                if ($groupId == $customerGroupId) {
+                    $result = $qty;
+                    break;
+                } elseif ($groupId == $this->getAllCustomersGroupId()) {
+                    $result = $qty;
+                }
+            }
+            $this->minSaleQtyCache[$key] = $this->fixQty($result);
         }
-        return $this->fixQty($result);
+        return $this->minSaleQtyCache[$key];
     }
 
     /**

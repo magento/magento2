@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -344,8 +344,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "link_type" => "related",
             "linked_product_sku" => "product_simple_500",
             "linked_product_type" => "simple",
-            "position" => 0,
-            "extension_attributes" => []
+            "position" => 0
         ];
         $productWithRelatedData = [
             ProductInterface::SKU => "product_simple_with_related_500",
@@ -373,8 +372,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "link_type" => "upsell",
             "linked_product_sku" => "product_simple_500",
             "linked_product_type" => "simple",
-            "position" => 0,
-            "extension_attributes" => []
+            "position" => 0
         ];
         $productWithUpsellData = [
             ProductInterface::SKU => "product_simple_with_related_500",
@@ -708,6 +706,132 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $expectedResult = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ? ['string' => '2'] : ['2'];
         $this->assertEquals($expectedResult, $response['items'][0]['custom_attributes'][$index]['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
+     * @return void
+     */
+    public function testGetListWithFilteringByWebsite()
+    {
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Website::class);
+        $website->load('test', 'code');
+        $searchCriteria = [
+            'searchCriteria' => [
+                'filter_groups' => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => 'website_id',
+                                'value' => $website->getId(),
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
+                'current_page' => 1,
+                'page_size' => 10,
+            ],
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+        $this->assertTrue(count($response['items']) == 1);
+        $this->assertTrue(isset($response['items'][0]['sku']));
+        $this->assertEquals('simple-2', $response['items'][0]['sku']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
+     * @dataProvider testGetListWithFilteringByStoreDataProvider
+     *
+     * @param array $searchCriteria
+     * @param array $skus
+     * @param int $expectedProductCount
+     * @return void
+     */
+    public function testGetListWithFilteringByStore(array $searchCriteria, array $skus, $expectedProductCount = null)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+        if ($expectedProductCount) {
+            $this->assertTrue(count($response['items']) == $expectedProductCount);
+        }
+
+        $isResultValid = false;
+        foreach ($skus as $sku) {
+            foreach ($response['items'] as $item) {
+                if ($item['sku'] == $sku) {
+                    $isResultValid = true;
+                }
+            }
+            $this->assertTrue($isResultValid);
+        }
+    }
+
+    public function testGetListWithFilteringByStoreDataProvider()
+    {
+        return [
+            [
+                [
+                    'searchCriteria' => [
+                        'filter_groups' => [
+                            [
+                                'filters' => [
+                                    [
+                                        'field' => 'store',
+                                        'value' => 'fixture_second_store',
+                                        'condition_type' => 'eq',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'current_page' => 1,
+                        'page_size' => 10,
+                    ],
+                ],
+                ['simple-2'],
+                1,
+            ],
+            [
+                [
+                    'searchCriteria' => [
+                        'filter_groups' => [],
+                        'current_page' => 1,
+                        'page_size' => 10,
+                    ],
+                ],
+                ['simple-2', 'simple-1'],
+                null
+            ]
+        ];
     }
 
     /**
@@ -1139,5 +1263,117 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $attributeCodes = array_column($customAttributes, 'attribute_code');
         $this->assertEquals(0, count(array_intersect($attributeCodes, $missingAttributes)));
         $this->assertEquals(2, count(array_intersect($attributeCodes, $expectedAttribute)));
+    }
+
+    public function testUpdateStatus()
+    {
+        // Create simple product
+        $productData = [
+            ProductInterface::SKU => "product_simple_502",
+            ProductInterface::NAME => "Product Simple 502",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 0,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+        ];
+
+        // Save product with status disabled
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertEquals(0, $response['status']);
+
+        // Update the product
+        $productData[ProductInterface::PRICE] = 200;
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        // Status should still be disabled
+        $this->assertEquals(0, $response['status']);
+        // Price should be updated
+        $this->assertEquals(200, $response['price']);
+    }
+
+    /**
+     * Test saving product with custom attribute of multiselect type
+     *
+     * 1. Create multi-select attribute
+     * 2. Create product and set 2 options out of 3 to multi-select attribute
+     * 3. Verify that 2 options are selected
+     * 4. Unselect all options
+     * 5. Verify that non options are selected
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiselect_attribute.php
+     */
+    public function testUpdateMultiselectAttributes()
+    {
+        $multiselectAttributeCode = 'multiselect_attribute';
+        $multiselectOptions = $this->getAttributeOptions($multiselectAttributeCode);
+        $option1 = $multiselectOptions[1]['value'];
+        $option2 = $multiselectOptions[2]['value'];
+
+        $productData = $this->getSimpleProductData();
+        $productData['custom_attributes'] = [
+            ['attribute_code' => $multiselectAttributeCode, 'value' => "{$option1},{$option2}"]
+        ];
+        $this->saveProduct($productData, 'all');
+
+        $this->assertMultiselectValue(
+            $productData[ProductInterface::SKU],
+            $multiselectAttributeCode,
+            "{$option1},{$option2}"
+        );
+
+        $productData['custom_attributes'] = [
+            ['attribute_code' => $multiselectAttributeCode, 'value' => ""]
+        ];
+        $this->saveProduct($productData, 'all');
+        $this->assertMultiselectValue(
+            $productData[ProductInterface::SKU],
+            $multiselectAttributeCode,
+            ""
+        );
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return array|bool|float|int|string
+     */
+    private function getAttributeOptions($attributeCode)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/attributes/' . $attributeCode . '/options',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'catalogProductAttributeOptionManagementV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'catalogProductAttributeOptionManagementV1getItems',
+            ],
+        ];
+
+        return $this->_webApiCall($serviceInfo, ['attributeCode' => $attributeCode]);
+    }
+
+    /**
+     * @param string $productSku
+     * @param string $multiselectAttributeCode
+     * @param string $expectedMultiselectValue
+     */
+    private function assertMultiselectValue($productSku, $multiselectAttributeCode, $expectedMultiselectValue)
+    {
+        $response = $this->getProduct($productSku, 'all');
+        $customAttributes = $response['custom_attributes'];
+        $this->assertNotEmpty($customAttributes);
+        $multiselectValue = null;
+        foreach ($customAttributes as $customAttribute) {
+            if ($customAttribute['attribute_code'] == $multiselectAttributeCode) {
+                $multiselectValue = $customAttribute['value'];
+                break;
+            }
+        }
+        $this->assertEquals($expectedMultiselectValue, $multiselectValue);
     }
 }
