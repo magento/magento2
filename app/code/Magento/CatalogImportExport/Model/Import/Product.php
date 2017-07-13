@@ -925,7 +925,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             foreach ($bunch as $rowNum => $rowData) {
                 if ($this->validateRow($rowData, $rowNum) && self::SCOPE_DEFAULT == $this->getRowScope($rowData)) {
-                    $idsToDelete[] = $this->_oldSku[strtolower($rowData[self::COL_SKU])]['entity_id'];
+                    $idsToDelete[] = $this->getExistSku($rowData[self::COL_SKU])['entity_id'];
                 }
             }
             if ($idsToDelete) {
@@ -1115,7 +1115,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $lastSku = $rowData[self::COL_SKU];
 
-        if (isset($this->_oldSku[strtolower($lastSku)])) {
+        if ($this->isSkuExist($lastSku)) {
             $newSku = $this->skuProcessor->getNewSku($lastSku);
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
             $rowData[self::COL_TYPE] = $newSku['type_id'];
@@ -1187,15 +1187,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             $linkedSku = trim($linkedSku);
                             if ((!is_null(
                                         $this->skuProcessor->getNewSku($linkedSku)
-                                    ) || isset(
-                                        $this->_oldSku[$linkedSku]
-                                    )) && $linkedSku != $sku
+                                    ) || $this->isSkuExist($linkedSku)
+                                ) && strtolower($linkedSku) != strtolower($sku)
                             ) {
                                 $newSku = $this->skuProcessor->getNewSku($linkedSku);
                                 if (!empty($newSku)) {
                                     $linkedId = $newSku['entity_id'];
                                 } else {
-                                    $linkedId = $this->_oldSku[strtolower($linkedSku)]['entity_id'];
+                                    $linkedId = $this->getExistSku($linkedSku)['entity_id'];
                                 }
 
                                 if ($linkedId == null) {
@@ -1582,7 +1581,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 // 1. Entity phase
-                if (isset($this->_oldSku[strtolower($rowSku)])) {
+                if ($this->isSkuExist($rowSku)) {
                     // existing row
                     if (isset($rowData['attribute_set_code'])) {
                         $attributeSetId = $this->catalogConfig->getAttributeSetId(
@@ -1606,7 +1605,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $entityRowsUp[] = [
                         'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
                         'attribute_set_id' => $attributeSetId,
-                        $this->getProductEntityLinkField() => $this->_oldSku[strtolower($rowSku)][$this->getProductEntityLinkField()]
+                        $this->getProductEntityLinkField() => $this->getExistSku($rowSku)[$this->getProductEntityLinkField()]
                     ];
                 } else {
                     if (!$productLimit || $productsQty < $productLimit) {
@@ -1770,7 +1769,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $rowData = $productTypeModel->prepareAttributesWithDefaultValueForSave(
                     $rowData,
-                    !isset($this->_oldSku[$rowSku])
+                    !$this->isSkuExist($rowSku)
                 );
                 $product = $this->_proxyProdFactory->create(['data' => $rowData]);
 
@@ -1812,7 +1811,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         } elseif (self::SCOPE_STORE == $attribute->getIsGlobal()) {
                             $storeIds = [$rowStore];
                         }
-                        if (!isset($this->_oldSku[$rowSku])) {
+                        if (!$this->isSkuExist($rowSku)) {
                             $storeIds[] = 0;
                         }
                     }
@@ -2192,7 +2191,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 $row = [];
-                $sku = strtolower($rowData[self::COL_SKU]);
+                $sku = $rowData[self::COL_SKU];
                 $row['product_id'] = $this->skuProcessor->getNewSku($sku)['entity_id'];
                 $productIdsToReindex[] = $row['product_id'];
 
@@ -2387,13 +2386,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         // BEHAVIOR_DELETE and BEHAVIOR_REPLACE use specific validation logic
         if (Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
-            if (self::SCOPE_DEFAULT == $rowScope && !isset($this->_oldSku[$sku])) {
+            if (self::SCOPE_DEFAULT == $rowScope && !$this->isSkuExist($sku)) {
                 $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
                 return false;
             }
         }
         if (Import::BEHAVIOR_DELETE == $this->getBehavior()) {
-            if (self::SCOPE_DEFAULT == $rowScope && !isset($this->_oldSku[$sku])) {
+            if (self::SCOPE_DEFAULT == $rowScope && !$this->isSkuExist($sku)) {
                 $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
                 return false;
             }
@@ -2406,9 +2405,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
 
-        if (null === $rowData[self::COL_SKU]) {
+        if (null === $sku) {
             $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
-        } elseif (false === $rowData[self::COL_SKU]) {
+        } elseif (false === $sku) {
             $this->addRowError(ValidatorInterface::ERROR_ROW_IS_ORPHAN, $rowNum);
         } elseif (self::SCOPE_STORE == $rowScope
             && !$this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])
@@ -2419,10 +2418,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         // SKU is specified, row is SCOPE_DEFAULT, new product block begins
         $this->_processedEntitiesCount++;
 
-        if (isset($this->_oldSku[$sku]) && Import::BEHAVIOR_REPLACE !== $this->getBehavior()) {
+        if ($this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior()) {
             // can we get all necessary data from existent DB product?
             // check for supported type of existing product
-            if (isset($this->_productTypeModels[$this->_oldSku[$sku]['type_id']])) {
+            if (isset($this->_productTypeModels[$this->getExistSku($sku)['type_id']])) {
                 $this->skuProcessor->addNewSku(
                     $sku,
                     $this->prepareNewSkuData($sku)
@@ -2471,7 +2470,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $rowAttributesValid = $productTypeValidator->isRowValid(
                 $rowData,
                 $rowNum,
-                !(isset($this->_oldSku[$sku]) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
+                !($this->isSkuExist($sku) && Import::BEHAVIOR_REPLACE !== $this->getBehavior())
             );
             if (!$rowAttributesValid && self::SCOPE_DEFAULT == $rowScope) {
                 // mark SCOPE_DEFAULT row as invalid for future child rows if product not in DB already
@@ -2534,11 +2533,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function prepareNewSkuData($sku)
     {
         $data = [];
-        foreach ($this->_oldSku[$sku] as $key => $value) {
+        foreach ($this->getExistSku($sku) as $key => $value) {
             $data[$key] = $value;
         }
 
-        $data['attr_set_code'] = $this->_attrSetIdToName[$this->_oldSku[$sku]['attr_set_id']];
+        $data['attr_set_code'] = $this->_attrSetIdToName[$this->getExistSku($sku)['attr_set_id']];
 
         return $data;
     }
@@ -2928,5 +2927,24 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $labelRow,
             $this->getMultipleValueSeparator()
         );
+    }
+
+    /**
+     * @param $sku
+     * @return bool
+     */
+    private function isSkuExist($sku)
+    {
+        $sku = strtolower($sku);
+        return isset($this->_oldSku[$sku]);
+    }
+
+    /**
+     * @param $sku
+     * @return mixed
+     */
+    private function getExistSku($sku)
+    {
+        return $this->_oldSku[strtolower($sku)];
     }
 }
