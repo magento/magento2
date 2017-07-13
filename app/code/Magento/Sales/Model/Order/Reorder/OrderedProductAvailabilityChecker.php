@@ -41,7 +41,7 @@ class OrderedProductAvailabilityChecker implements OrderedProductAvailabilityChe
             if (!$checkForType instanceof OrderedProductAvailabilityCheckerInterface) {
                 throw new ConfigurationMismatchException(__('Received check doesn\'t match interface'));
             }
-            return $checkForType->checkAvailability($item);
+            return $checkForType->isAvailable($item);
         } else {
             return true;
         }

@@ -8,7 +8,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
-use \Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
+use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Helper\Reorder as ReorderHelper;
 
 class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -18,7 +20,19 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
     private $unavailableProductsProvider;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var ReorderHelper
+     */
+    private $reorderHelper;
+
+    /**
      * @param UnavailableProductsProvider $unavailableProductsProvider
+     * @param OrderRepositoryInterface $orderRepository
+     * @param ReorderHelper $reorderHelper
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
@@ -27,6 +41,8 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
      */
     public function __construct(
         UnavailableProductsProvider $unavailableProductsProvider,
+        OrderRepositoryInterface $orderRepository,
+        ReorderHelper $reorderHelper,
         Action\Context $context,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
@@ -34,6 +50,8 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
         ForwardFactory $resultForwardFactory
     ) {
         $this->unavailableProductsProvider = $unavailableProductsProvider;
+        $this->orderRepository = $orderRepository;
+        $this->reorderHelper = $reorderHelper;
         parent::__construct(
             $context,
             $productHelper,
@@ -50,8 +68,9 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
     {
         $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');
-        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
-        if (!$this->_objectManager->get(\Magento\Sales\Helper\Reorder::class)->canReorder($order->getEntityId())) {
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->orderRepository->get($orderId);
+        if (!$this->reorderHelper->canReorder($order->getEntityId())) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
 
@@ -59,6 +78,7 @@ class Reorder extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!$order->getId()) {
             $resultRedirect->setPath('sales/order/');
+            return $resultRedirect;
         }
 
         $unavailableProducts = $this->unavailableProductsProvider->getForOrder($order);
