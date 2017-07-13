@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Controller\Adminhtml\Source;
+namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -12,8 +12,8 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
  * InlineEdit Controller
@@ -23,7 +23,7 @@ class InlineEdit extends Action
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Inventory::source';
+    const ADMIN_RESOURCE = 'Magento_Inventory::stock';
 
     /**
      * @var HydratorInterface
@@ -31,23 +31,23 @@ class InlineEdit extends Action
     private $hydrator;
 
     /**
-     * @var SourceRepositoryInterface
+     * @var StockRepositoryInterface
      */
-    private $sourceRepository;
+    private $stockRepository;
 
     /**
      * @param Context $context
      * @param HydratorInterface $hydrator
-     * @param SourceRepositoryInterface $sourceRepository
+     * @param StockRepositoryInterface $stockRepository
      */
     public function __construct(
         Context $context,
         HydratorInterface $hydrator,
-        SourceRepositoryInterface $sourceRepository
+        StockRepositoryInterface $stockRepository
     ) {
         parent::__construct($context);
         $this->hydrator = $hydrator;
-        $this->sourceRepository = $sourceRepository;
+        $this->stockRepository = $stockRepository;
     }
 
     /**
@@ -62,19 +62,19 @@ class InlineEdit extends Action
         if ($request->isXmlHttpRequest() && $request->isPost() && $requestData) {
             foreach ($requestData as $itemData) {
                 try {
-                    $source = $this->sourceRepository->get(
-                        $itemData[SourceInterface::SOURCE_ID]
+                    $stock = $this->stockRepository->get(
+                        $itemData[StockInterface::STOCK_ID]
                     );
-                    $source = $this->hydrator->hydrate($source, $itemData);
-                    $this->sourceRepository->save($source);
+                    $stock = $this->hydrator->hydrate($stock, $itemData);
+                    $this->stockRepository->save($stock);
                 } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
-                        '[ID: %1] The Source does not exist.',
-                        $itemData[SourceInterface::SOURCE_ID]
+                        '[ID: %1] The Stock does not exist.',
+                        $itemData[StockInterface::STOCK_ID]
                     );
                 } catch (CouldNotSaveException $e) {
                     $errorMessages[] =
-                        __('[ID: %1] ', $itemData[SourceInterface::SOURCE_ID])
+                        __('[ID: %1] ', $itemData[StockInterface::STOCK_ID])
                         . $e->getMessage();
                 }
             }

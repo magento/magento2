@@ -42,7 +42,7 @@ class Edit extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

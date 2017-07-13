@@ -69,7 +69,7 @@ class Save extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

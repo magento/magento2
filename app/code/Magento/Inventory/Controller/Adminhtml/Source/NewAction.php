@@ -21,7 +21,7 @@ class NewAction extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::source';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
