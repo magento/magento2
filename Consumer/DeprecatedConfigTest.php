@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\It
  *
  * @magentoCache config disabled
  */
-class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
+class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

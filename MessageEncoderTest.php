@@ -13,7 +13,7 @@ use Magento\Framework\Communication\Config;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MessageEncoderTest extends \PHPUnit_Framework_TestCase
+class MessageEncoderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var MessageEncoder */
     protected $encoder;

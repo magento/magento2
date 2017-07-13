@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\PublisherInterface;
 /**
  * Base test case for message queue tests.
  */
-abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
+abstract class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string[]

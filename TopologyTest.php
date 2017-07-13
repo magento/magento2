@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue;
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfigOverride
  */
-class TopologyTest extends \PHPUnit_Framework_TestCase
+class TopologyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of declared exchanges.

@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface
  *
  * @magentoCache config disabled
  */
-class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
+class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

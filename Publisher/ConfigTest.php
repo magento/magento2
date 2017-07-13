@@ -10,7 +10,7 @@ namespace Magento\Framework\MessageQueue\Publisher;
  *
  * @magentoCache config disabled
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
