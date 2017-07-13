@@ -8,11 +8,11 @@ namespace Magento\Framework\Amqp\Test\Unit;
 use Magento\Framework\Amqp\ConnectionTypeResolver;
 use Magento\Framework\App\DeploymentConfig;
 
-class ConnectionTypeResolverTest extends \PHPUnit_Framework_TestCase
+class ConnectionTypeResolverTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConnectionType()
     {
-        $config = $this->getMock(DeploymentConfig::class, [], [], '', false, false);
+        $config = $this->createMock(DeploymentConfig::class);
         $config->expects($this->once())
             ->method('getConfigData')
             ->with('queue')

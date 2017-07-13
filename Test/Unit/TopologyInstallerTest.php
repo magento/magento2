@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Unit tests for @see \Magento\Framework\Amqp\TopologyInstaller
  */
-class TopologyInstallerTest extends \PHPUnit_Framework_TestCase
+class TopologyInstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Amqp\TopologyInstaller
@@ -42,8 +42,8 @@ class TopologyInstallerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->topologyConfigMock = $this->getMock(ConfigInterface::class);
-        $this->loggerMock = $this->getMock(LoggerInterface::class);
+        $this->topologyConfigMock = $this->createMock(ConfigInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->topologyInstaller = $this->objectManager->getObject(
             TopologyInstaller::class,
             ['topologyConfig' => $this->topologyConfigMock, 'logger' => $this->loggerMock]

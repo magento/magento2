@@ -9,7 +9,7 @@ use Magento\Framework\Amqp\Topology\BindingInstallerType\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
 
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Queue
@@ -23,8 +23,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
     public function testInstall()
     {
-        $channel = $this->getMock(AMQPChannel::class, [], [], '', false, false);
-        $binding = $this->getMock(BindingInterface::class);
+        $channel = $this->createMock(AMQPChannel::class);
+        $binding = $this->createMock(BindingInterface::class);
         $binding->expects($this->once())->method('getDestination')->willReturn('queue01');
         $binding->expects($this->once())->method('getTopic')->willReturn('topic01');
         $binding->expects($this->once())->method('getArguments')->willReturn(['some' => 'value']);
