@@ -9,7 +9,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 
 /**
- * @codeCoverageIgnore
+ * @inheritdoc
  */
 class SourceCarrierLink extends AbstractExtensibleModel implements SourceCarrierLinkInterface
 {

@@ -13,6 +13,9 @@ use Magento\Inventory\Model\SourceCarrierLinkManagementInterface;
 use Magento\Inventory\Setup\InstallSchema;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
+/**
+ * Implementation of basic operations for Source entity for specific db layer
+ */
 class Source extends AbstractDb
 {
     /**

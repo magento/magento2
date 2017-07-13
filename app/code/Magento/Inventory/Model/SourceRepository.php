@@ -19,7 +19,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SourceRepository
+ * @inheritdoc
  */
 class SourceRepository implements SourceRepositoryInterface
 {

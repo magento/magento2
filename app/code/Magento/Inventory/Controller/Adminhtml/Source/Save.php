@@ -11,7 +11,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -29,11 +28,6 @@ class Save extends Action
     const ADMIN_RESOURCE = 'Magento_Inventory::source';
 
     /**
-     * Registry source_id key
-     */
-    const REGISTRY_SOURCE_ID_KEY = 'source_id';
-
-    /**
      * @var SourceInterfaceFactory
      */
     private $sourceFactory;
@@ -49,11 +43,6 @@ class Save extends Action
     private $dataObjectHelper;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * @var CarrierRequestDataHydrator
      */
     private $carrierRequestDataHydrator;
@@ -64,21 +53,18 @@ class Save extends Action
      * @param SourceRepositoryInterface $sourceRepository
      * @param DataObjectHelper $dataObjectHelper
      * @param CarrierRequestDataHydrator $carrierRequestDataHydrator
-     * @param Registry $registry
      */
     public function __construct(
         Context $context,
         SourceInterfaceFactory $sourceFactory,
         SourceRepositoryInterface $sourceRepository,
         DataObjectHelper $dataObjectHelper,
-        Registry $registry,
         CarrierRequestDataHydrator $carrierRequestDataHydrator
     ) {
         parent::__construct($context);
         $this->sourceFactory = $sourceFactory;
         $this->sourceRepository = $sourceRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->registry = $registry;
         $this->carrierRequestDataHydrator = $carrierRequestDataHydrator;
     }
 
@@ -88,15 +74,13 @@ class Save extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $requestData = $this->getRequest()->getParam('general');
-        if ($this->getRequest()->isPost() && $requestData) {
+        $requestData = $this->getRequest()->getParams();
+        if ($this->getRequest()->isPost() && !empty($requestData['general'])) {
             try {
-                $sourceId = !empty($requestData[SourceInterface::SOURCE_ID])
-                    ? $requestData[SourceInterface::SOURCE_ID] : null;
+                $sourceId = !empty($requestData['general'][SourceInterface::SOURCE_ID])
+                    ? $requestData['general'][SourceInterface::SOURCE_ID] : null;
 
                 $sourceId = $this->processSave($sourceId, $requestData);
-                // Keep data for plugins on Save controller. Now we can not call separate services from one form.
-                $this->registry->register(self::REGISTRY_SOURCE_ID_KEY, $sourceId);
 
                 $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
                 $this->processRedirectAfterSuccessSave($resultRedirect, $sourceId);
@@ -105,9 +89,6 @@ class Save extends Action
                 $this->messageManager->addErrorMessage(__('The Source does not exist.'));
                 $this->processRedirectAfterFailureSave($resultRedirect);
             } catch (CouldNotSaveException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
-                $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
-            } catch (InputException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
             } catch (Exception $e) {
@@ -134,7 +115,7 @@ class Save extends Action
             /** @var SourceInterface $source */
             $source = $this->sourceFactory->create();
         }
-        $this->dataObjectHelper->populateWithArray($source, $requestData, SourceInterface::class);
+        $this->dataObjectHelper->populateWithArray($source, $requestData['general'], SourceInterface::class);
         $source = $this->carrierRequestDataHydrator->hydrate($source, $requestData);
 
         $sourceId = $this->sourceRepository->save($source);

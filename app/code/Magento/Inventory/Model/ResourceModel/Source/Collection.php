@@ -16,6 +16,11 @@ use Magento\Inventory\Model\SourceCarrierLinkManagementInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Resource Collection of Sources entities
+ *
+ * @api
+ */
 class Collection extends AbstractCollection
 {
     /**
