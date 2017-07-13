@@ -5,7 +5,7 @@
  */
 namespace Magento\MysqlMq\Model;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

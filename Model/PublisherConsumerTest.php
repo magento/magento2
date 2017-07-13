@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\PublisherInterface;
  *
  * @magentoDbIsolation disabled
  */
-class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
+class PublisherConsumerTest extends \PHPUnit\Framework\TestCase
 {
     const MAX_NUMBER_OF_TRIALS = 3;
 
@@ -32,7 +32,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $configPath = __DIR__ . '/../etc/queue.xml';
-        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())
             ->method('get')
             ->willReturn([$configPath => file_get_contents(($configPath))]);

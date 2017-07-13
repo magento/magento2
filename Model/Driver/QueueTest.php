@@ -12,7 +12,7 @@ use Magento\MysqlMq\Model\Driver\Queue;
  *
  * @magentoDbIsolation disabled
  */
-class QueueTest extends \PHPUnit_Framework_TestCase
+class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Queue

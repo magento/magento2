@@ -10,7 +10,7 @@ use Magento\MysqlMq\Model\QueueManagement;
 /**
  * Test for Queue Management class.
  */
-class QueueManagementTest extends \PHPUnit_Framework_TestCase
+class QueueManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QueueManagement
